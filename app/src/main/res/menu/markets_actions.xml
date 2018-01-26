@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:auto="http://schemas.android.com/apk/res-auto"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        app:showAsAction="always"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:title="@string/dex.markets_search"/>
+
+    <item
+        android:id="@+id/action_add"
+        android:title="@string/dex.markets_add_market"/>
+
+    <item
+        android:id="@+id/action_show"
+        android:title="@string/dex.markets_show_assets"/>
+
+
+    <item
+        android:id="@+id/action_hide"
+        android:title="@string/dex.markets_hide_assets"/>
+
+</menu>

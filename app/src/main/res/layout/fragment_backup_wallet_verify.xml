@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blockchain_blue"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="72dp"
+            android:paddingRight="72dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:paddingBottom="16dp"
+                android:paddingTop="32dp"
+                android:text="@string/backup_verify_heading"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/etFirstRequest"
+                style="@style/RecoveryPhraseEditText">
+
+                <requestFocus />
+            </android.support.v7.widget.AppCompatEditText>
+
+            <View style="@style/RecoveryPhraseEditTextUnderline" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/etSecondRequest"
+                style="@style/RecoveryPhraseEditText" />
+
+            <View style="@style/RecoveryPhraseEditTextUnderline" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/etThirdRequest"
+                style="@style/RecoveryPhraseEditText" />
+
+            <View style="@style/RecoveryPhraseEditTextUnderline" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/verify_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/verify"
+            android:theme="@style/ButtonWhite" />
+
+    </LinearLayout>
+</layout>

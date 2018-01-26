@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/fingerprint_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:id="@+id/fingerprint_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:text="@string/fingerprint_description"
+            android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+            android:textColor="?android:attr/textColorSecondary" />
+
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/icon_fingerprint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/fingerprint_description"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="24dp"
+            android:src="@drawable/ic_fingerprint_logo" />
+
+        <TextView
+            android:id="@+id/fingerprint_status"
+            style="@android:style/TextAppearance.Material.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/icon_fingerprint"
+            android:layout_alignTop="@+id/icon_fingerprint"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/icon_fingerprint"
+            android:gravity="center_vertical"
+            android:paddingRight="24dp"
+            android:text="@string/fingerprint_hint"
+            android:textColor="@color/light_grey_text" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonPanel"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingBottom="4dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
+        android:paddingTop="4dp">
+
+        <Space
+            android:id="@+id/spacer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/action_cancel"
+            style="?android:attr/buttonBarPositiveButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blockchain_blue"
+            tools:text="USE PIN" />
+    </LinearLayout>
+
+</LinearLayout>

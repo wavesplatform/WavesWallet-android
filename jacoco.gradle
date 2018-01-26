@@ -1,0 +1,49 @@
+apply plugin: 'jacoco-android'
+apply plugin: 'com.github.kt3k.coveralls'
+
+task testDevDebugUnitTestCoverage(type: JacocoReport, dependsOn: "testDevDebugUnitTest") {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports on the devDebug build."
+
+    def excludedDirs = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/*$Lambda$*.*',
+            '**/*Module.*',
+            '**/*Dagger*.*',
+            '**/*MembersInjector*.*',
+            '**/*_Provide*Factory*.*',
+            '**/Manifest*.*',
+            '**/*Activity*.*',
+            '**/*Dialog.*',
+            '**/*Fragment*.*',
+            '**/*ViewHolder*.*',
+            '**/*Adapter*.*',
+            '**/*zxing**',
+            '**/*customviews**',
+            '**/*databinding**'
+    ]
+    classDirectories = fileTree(
+            dir: "${project.buildDir}/intermediates/classes/dev/debug",
+            excludes: excludedDirs)
+
+    def coverageSourceDirs = [
+            "src/main/java"
+    ]
+    additionalSourceDirs = files(coverageSourceDirs)
+    sourceDirectories = files(coverageSourceDirs)
+    executionData = files("${project.buildDir}/jacoco/testDevDebugUnitTest.exec")
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+coveralls {
+    jacocoReportPath = "${buildDir}/reports/jacoco/testDevDebugUnitTestCoverage/testDevDebugUnitTestCoverage.xml"
+}
+
+tasks.coveralls {
+    dependsOn 'testDevDebugUnitTestCoverage'
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blockchain_pearl_white"
+        android:orientation="vertical"
+        android:padding="32dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/backup_header"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="24dp"
+            android:text="@string/backup_header" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/backup_subheader"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/backup_explanation" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/backup_wallet_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/backup_button_start"
+            android:theme="@style/ButtonBlue" />
+    </LinearLayout>
+
+</layout>

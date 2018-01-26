@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:id="@+id/tx_row"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/expandable_layout_base_height"
+        android:clickable="true">
+
+        <View
+            android:id="@+id/top_seperator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="top"
+            android:background="@color/blockchain_light_grey" />
+
+        <View
+            android:id="@+id/tx_touch_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:foreground="?attr/selectableItemBackground"
+            android:theme="@style/PlainTheme" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    tools:text="April 2015" />
+
+                <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    android:id="@+id/counter_party"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/blockchain_grey"
+                    tools:text="3N5sUvKLnEUBwk7WFCSjJs8VoiLiuqTs29v"/>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:orientation="horizontal">
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:tint="@color/light_grey_text"
+                        android:paddingEnd="8dp"
+                        android:paddingStart="8dp"
+                        app:srcCompat="@drawable/ic_not_star" />
+                <TextView
+                    android:id="@+id/result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:background="@drawable/rounded_view_green"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:minWidth="120dp"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    tools:text="0.123456" />
+
+                    </LinearLayout>
+
+                <TextView
+                    android:id="@+id/units"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginRight="4dp"
+                    android:text="WAVES"
+                    android:textColor="@color/blockchain_grey"
+                    android:textSize="12sp"
+                    tools:text="0.123456" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </FrameLayout>
+</layout>

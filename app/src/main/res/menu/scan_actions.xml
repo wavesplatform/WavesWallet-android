@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:auto="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_flash_light"
+        android:icon="@drawable/ic_flare_white_24dp"
+        auto:showAsAction="always"
+        android:title="Light Me!" />
+</menu>

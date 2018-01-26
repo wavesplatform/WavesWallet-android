@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:auto="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_create_order"
+        android:icon="@drawable/ic_order_create"
+        auto:showAsAction="always"
+        android:title="@string/create_order" />
+</menu>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/submenu_1">
+
+        <item
+            android:id="@+id/nav_backup"
+            android:icon="@drawable/bad_backup"
+            android:title="@string/backup_wallet" />
+
+        <item
+            android:id="@+id/nav_addresses"
+            android:icon="@drawable/ic_assets"
+            android:title="@string/my_assets" />
+
+    </group>
+
+    <group android:id="@+id/submenu_2">
+
+        <item
+            android:id="@+id/nav_support"
+            android:icon="@drawable/ic_help_grey600_24dp"
+            android:title="@string/support" />
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/icon_logout"
+            android:title="@string/logout" />
+
+    </group>
+
+</menu>

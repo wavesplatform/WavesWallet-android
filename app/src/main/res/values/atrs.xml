@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FloatingActionButton">
+        <attr name="fab_colorPressed" format="color" />
+        <attr name="fab_colorNormal" format="color" />
+        <attr name="fab_icon" format="reference" />
+        <attr name="fab_size" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="mini" value="1" />
+        </attr>
+        <attr name="fab_stroke_visible" format="boolean" />
+    </declare-styleable>
+
+
+    <declare-styleable name="AutoResizeTextView">
+        <!-- Minimum size of the text. -->
+        <attr name="minTextSize" format="float" />
+    </declare-styleable>
+
+</resources>

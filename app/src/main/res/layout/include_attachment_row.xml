@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="sendModel"
+            type="com.wavesplatform.wallet.ui.send.SendModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/divider_grey" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/attachment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/attachment"
+                        android:lines="2"
+                        android:maxLength="140"
+                        android:inputType="textNoSuggestions|textMultiLine"
+                        android:text="@={sendModel.attachment}"
+                        android:lineSpacingMultiplier="0.8"
+                        android:textSize="16sp"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+<!--                /<TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/attachment"
+                    android:textColor="@color/blockchain_grey" />
+
+                <EditText
+                    android:id="@+id/attachment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@android:color/transparent"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:hint="@string/enter_attachment"
+                    android:maxLength="140"
+                    android:inputType="textNoSuggestions|textMultiLine"
+                    android:minHeight="48dp"
+                    android:text="@={sendModel.attachment}"
+                    android:gravity="top"
+                    android:selectAllOnFocus="true"
+                    android:lineSpacingMultiplier="0.8"
+                    android:textSize="16sp"
+                    android:textCursorDrawable="@null">
+
+                </EditText>-->
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

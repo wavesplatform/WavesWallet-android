@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="blockchain_blue">#4b7190</color>
+    <color name="blockchain_dark_blue">#37556e</color>
+    <color name="blockchain_send_red">#e27e82</color>
+    <color name="blockchain_receive_green">#85b45b</color>
+    <color name="blockchain_transfer_blue">#5bacd0</color>
+    <color name="blockchain_pearl_white">#fafafa</color>
+    <color name="blockchain_grey">#808080</color>
+    <color name="blockchain_light_grey">#FFf0f0f0</color>
+    <color name="blockchain_accent">#F0DABE</color>
+    <color name="tooltip_background">#eee1b47d</color>
+    <color name="blockchain_navigation_bar">#FF000000</color>
+    <color name="textColorPrimary">@color/primary_text_default_material_light</color>
+    <color name="favorite_yellow">#ffdd2d</color>
+    <color name="blockchain_transparent">#00000000</color>
+
+    <color name="blockchain_red_50">#80e27e82</color>
+    <color name="blockchain_green_50">#8085b45b</color>
+    <color name="blockchain_transfer_blue_50">#805bacd0</color>
+
+    <color name="white">#FFffff</color>
+    <color name="white_50">#80ffffff</color>
+
+    <color name="black">#000000</color>
+    <color name="backup_card_blue">#07537d</color>
+    <color name="backup_card_text">#676767</color>
+    <color name="dropshadow_grey">#CCCCCC</color>
+    <color name="light_grey_text">#b1b1b1</color>
+
+    <color name="toast_error_background">#EFD5D6</color>
+    <color name="toast_error_text">#963033</color>
+    <color name="toast_warning_background">#FBF7DB</color>
+    <color name="toast_warning_text">#775B2A</color>
+    <color name="toast_info_background">#D8F296</color>
+    <color name="toast_info_text">#4F772F</color>
+
+    <color name="blockchain_upgrade_wallet_bg">#22AFEC</color>
+
+    <color name="barcode_viewfinder_laser">#ffcc0000</color>
+    <color name="barcode_viewfinder_mask">#60000000</color>
+    <color name="barcode_possible_result_points">#FF1B8AC7</color>
+    <color name="barcode_result_view">#b0000000</color>
+
+    <color name="alert_green">#00C853</color>
+    <color name="alert_red">#af4f4e</color>
+
+    <color name="warning_color">#f4511e</color>
+
+    <color name="dex_bg">#fafafa</color>
+    <color name="dex_bg_toolbar">@color/blockchain_blue</color>
+
+    <color name="dex_card_item_bg">@color/white</color>
+    <color name="dex_card_item_text">@color/blockchain_grey</color>
+    <color name="dex_markets_checkbox">#80CBC4</color>
+    <color name="dex_watchlist_markets_up">#58a763</color>
+    <color name="dex_watchlist_markets_down">#e66a67</color>
+
+
+    <color name="dex_details_bg_lighter">#f0f0f0</color>
+    <color name="dex_details_bg">#e0e0e0</color>
+
+    <color name="dex_orderbook_left_block_bg">#fafafa</color>
+    <color name="dex_orderbook_left_bg">#58a763</color>
+    <color name="dex_orderbook_left_bg_lighter">#77bf82</color>
+
+    <color name="dex_orderbook_right_block_bg">#fafafa</color>
+    <color name="dex_orderbook_right_bg_lighter">#e97c79</color>
+    <color name="dex_orderbook_right_bg">#e66a67</color>
+
+    <color name="dex_place_order_dialog_bg">#424242</color>
+
+</resources>

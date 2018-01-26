@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/relative_offset"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/dex_orderbook_right_block_bg"
+                android:clickable="false"
+                android:orientation="vertical">
+
+</RelativeLayout>
