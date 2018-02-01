@@ -25,7 +25,7 @@ public class MyOrdersAdapter extends BaseQuickAdapter<MyOrder, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, MyOrder myOrder) {
-        int color = myOrder.type.equals("bye") ? ContextCompat.getColor(mContext, R.color.dex_orderbook_left_bg) : ContextCompat.getColor(mContext, R.color.dex_orderbook_right_bg);
+        int color = myOrder.type.equals("buy") ? ContextCompat.getColor(mContext, R.color.dex_orderbook_left_bg) : ContextCompat.getColor(mContext, R.color.dex_orderbook_right_bg);
         baseViewHolder
                 .setText(R.id.text_side, StringUtils.capitalize(myOrder.type))
                 .setText(R.id.text_price, MoneyUtil.getScaledPrice(myOrder.price, mWatchMarket.market.getAmountAssetInfo().decimals, mWatchMarket.market.getPriceAssetInfo().decimals))
