@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.wavesplatform.wallet.ui.transactions.ExchangeTransactionDetailViewModel" />
+        <import type="android.view.View"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar_general" />
+
+        <!-- MAIN LAYOUT -->
+        <ScrollView
+            android:id="@+id/main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+
+                <!-- MAIN DETAILS -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="16dp">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/transaction_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:textSize="20sp"
+                        android:text="@{viewModel.transactionType}"
+                        android:textColor="@{viewModel.transactionColor}"
+                        tools:text="Received"
+                        tools:textColor="@color/blockchain_receive_green" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                            android:id="@+id/transaction_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{viewModel.transactionAmount}"
+                            android:textColor="@{viewModel.transactionColor}"
+                            android:textSize="20sp"
+                            android:maxLines="1"
+                            tools:text="700,500.23456789 WAVES"
+                            tools:textColor="@color/blockchain_receive_green" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/transaction_fee"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/light_grey_text"
+                            android:textSize="14sp"
+                            android:text="@{viewModel.transactionFee}"
+                            tools:text="Transaction fee: 0.001 WAVES" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <include layout="@layout/divider_grey" />
+
+
+
+                <include layout="@layout/divider_grey" />
+
+                <!-- ASSET LAYOUT -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+                    <!--android:visibility="@{viewModel.paymentTransaction ? View.GONE : View.VISIBLE}"-->
+
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/asset"
+                        android:textColor="@color/blockchain_grey"
+                        android:textSize="14sp" />
+
+                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        android:id="@+id/priceAssetName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:maxLines="1"
+                        android:text="@{viewModel.assetName}"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:text="WCT" />
+
+                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        android:id="@+id/priceAssetId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:text="@{viewModel.priceAssetId}"
+                        android:textColor="@color/blockchain_grey"
+                        android:textSize="16sp"
+                        android:visibility="@{viewModel.priceAssetId != null ? View.VISIBLE : View.GONE}"
+                        tools:text="3NCwEeAeVKdPySfsTeAoroPHDUg54mSDY5w" />
+                </LinearLayout>
+
+                <include layout="@layout/divider_grey" />
+
+
+
+                <include layout="@layout/divider_grey" />
+
+
+                <!-- DATE LAYOUT -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/transaction_detail_date"
+                        android:textColor="@color/blockchain_grey"
+                        android:textSize="14sp" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:text="@{viewModel.transactionDate}"
+                        tools:text="August 18, 2016 @ 14:15.543" />
+
+                </LinearLayout>
+
+                <include layout="@layout/divider_grey" />
+
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

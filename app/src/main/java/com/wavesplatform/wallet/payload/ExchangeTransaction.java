@@ -12,8 +12,10 @@ import org.apache.commons.lang3.ObjectUtils;
 public class ExchangeTransaction extends Transaction {
 
 
-    public OrderRequest order1;
-    public OrderRequest order2;
+    private OrderRequest order1;
+    private OrderRequest order2;
+    public String amountAsset;
+    //private OrderRequest myOrder;
 
     public ExchangeTransaction() {
     }
@@ -26,14 +28,19 @@ public class ExchangeTransaction extends Transaction {
         this.fee = fee;
         this.order1 = order1;
         this.order2 = order2;
+        //  this.myOrder = getMyOrder();
     }
 
-    private OrderRequest getMyOrder() {
+    public OrderRequest getMyOrder() {
         return order1.senderPublicKey.equals(NodeManager.get().getPublicKeyStr()) ? order1 : order2;
     }
 
+    public String getAmountAssetId() {
+        return getMyOrder().assetPair.amountAsset == null ? "WAVES" : getMyOrder().assetPair.amountAsset;
+    }
+
     private AssetBalance getAssetBallance() {
-        return NodeManager.get().getAssetBalance(getMyOrder().assetPair.amountAsset);
+        return NodeManager.get().getAssetBalance(getAmountAssetId());
     }
 
     @Override
@@ -96,5 +103,9 @@ public class ExchangeTransaction extends Transaction {
 
     public boolean isOwn() {
         return ArrayUtils.isEquals(NodeManager.get().getAddress(), sender);
+    }
+
+    public String getPriceAssetId() {
+        return getMyOrder().assetPair.priceAsset == null ? "WAVES" : getMyOrder().assetPair.priceAsset;
     }
 }
