@@ -7,11 +7,9 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.content.ContextCompat;
 
 import com.wavesplatform.wallet.R;
-import com.wavesplatform.wallet.data.datamanagers.AddressBookManager;
 import com.wavesplatform.wallet.data.datamanagers.TransactionListDataManager;
 import com.wavesplatform.wallet.injection.Injector;
 import com.wavesplatform.wallet.payload.ExchangeTransaction;
-import com.wavesplatform.wallet.payload.PaymentTransaction;
 import com.wavesplatform.wallet.payload.Transaction;
 import com.wavesplatform.wallet.ui.base.BaseViewModel;
 import com.wavesplatform.wallet.util.MoneyUtil;
@@ -78,9 +76,9 @@ public class ExchangeTransactionDetailViewModel extends BaseViewModel {
     public String getTransactionType() {
         switch (mTransaction.getDirection()) {
             case Transaction.RECEIVED:
-                return mStringUtils.getString(R.string.RECEIVED);
+                return mStringUtils.getString(R.string.Buy);
             case Transaction.SENT:
-                return mStringUtils.getString(R.string.SENT);
+                return mStringUtils.getString(R.string.Sell);
         }
         return null;
     }
@@ -90,7 +88,7 @@ public class ExchangeTransactionDetailViewModel extends BaseViewModel {
 
     @Bindable
     public String getTransactionAmount() {
-        return MoneyUtil.getTextStripZeros(mTransaction.amount, mTransaction.getDecimals()) + " " + mTransaction.getAssetName();
+        return MoneyUtil.getTextStripZeros(mTransaction.amount, mTransaction.getDecimals()) + " " + mTransaction.getAmountAssetName();
     }
 
 
@@ -107,8 +105,20 @@ public class ExchangeTransactionDetailViewModel extends BaseViewModel {
 
     @Bindable
     public String getTransactionFee() {
-        return mStringUtils.getString(R.string.transaction_detail_fee) +
-                MoneyUtil.getWavesStripZeros(mTransaction.fee) + " WAVES";
+        return MoneyUtil.getWavesStripZeros(mTransaction.getTransactionFee()) + " WAVES";
+    }
+
+
+    @Bindable
+    public String getPrice() {
+        return mTransaction.getDisplayPrice();
+    }
+
+    @Bindable
+    public String getExchangeResult() {
+
+        return mStringUtils.getString(R.string.exchange_transaction_details_exchange_result) + " " +
+                MoneyUtil.getTextStripZeros(mTransaction.getDisplayPriceAmount()) + " " + mTransaction.getPriceAssetName();
     }
 
     @Bindable
@@ -118,8 +128,13 @@ public class ExchangeTransactionDetailViewModel extends BaseViewModel {
     }
 
     @Bindable
-    public String getAssetName() {
-        return mTransaction.getAssetName();
+    public String getAmountAssetName() {
+        return mTransaction.getAmountAssetName();
+    }
+
+    @Bindable
+    public String getPriceAssetName() {
+        return mTransaction.getPriceAssetName();
     }
 
     @Bindable

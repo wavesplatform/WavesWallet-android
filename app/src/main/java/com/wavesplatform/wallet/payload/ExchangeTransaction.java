@@ -9,26 +9,32 @@ import com.wavesplatform.wallet.util.MoneyUtil;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.math.BigInteger;
+
 public class ExchangeTransaction extends Transaction {
 
 
     private OrderRequest order1;
     private OrderRequest order2;
     public String amountAsset;
-    //private OrderRequest myOrder;
+    public long sellMatcherFee;
+    public long buyMatcherFee;
+    public long price;
 
     public ExchangeTransaction() {
     }
 
-    public ExchangeTransaction(int type, String id, String sender, long timestamp, long fee, OrderRequest order1, OrderRequest order2) {
+    public ExchangeTransaction(int type, String id, String sender, long timestamp, OrderRequest order1, OrderRequest order2,
+                               long sellMatcherFee, long buyMatcherFee, long price) {
         this.type = type;
         this.id = id;
         this.sender = sender;
         this.timestamp = timestamp;
-        this.fee = fee;
         this.order1 = order1;
         this.order2 = order2;
-        //  this.myOrder = getMyOrder();
+        this.sellMatcherFee = sellMatcherFee;
+        this.buyMatcherFee = buyMatcherFee;
+        this.price = price;
     }
 
     public OrderRequest getMyOrder() {
@@ -36,11 +42,48 @@ public class ExchangeTransaction extends Transaction {
     }
 
     public String getAmountAssetId() {
-        return getMyOrder().assetPair.amountAsset == null ? "WAVES" : getMyOrder().assetPair.amountAsset;
+        return getMyOrder().assetPair.amountAsset;
+    }
+
+    public String getPriceAssetId() {
+        return getMyOrder().assetPair.priceAsset;
+    }
+
+    @Override
+    public String getAssetName() {
+        return getAmountAssetName();
+    }
+
+    public String getAmountAssetName() {
+            return NodeManager.get().getAssetName(getMyOrder().assetPair.amountAsset);
+    }
+
+    public String getPriceAssetName() {
+            return NodeManager.get().getAssetName(getMyOrder().assetPair.priceAsset);
+
     }
 
     private AssetBalance getAssetBallance() {
         return NodeManager.get().getAssetBalance(getAmountAssetId());
+    }
+
+    public long getTransactionFee(){
+        if (getMyOrder().orderType.equals(OrderType.buy)){
+            return buyMatcherFee;
+        } else
+            return sellMatcherFee;
+    }
+
+    public String getDisplayPrice() {
+        return MoneyUtil.getScaledPrice(price, getDecimals(), getPriceDecimals());
+    }
+
+    public String getDisplayPriceAmount(){
+        return MoneyUtil.getTextStripZeros(MoneyUtil.getTextStripZeros(
+                BigInteger.valueOf(amount)
+                        .multiply(BigInteger.valueOf(price))
+                        .divide(BigInteger.valueOf(100000000)).longValue(),
+                getPriceDecimals()));
     }
 
     @Override
@@ -51,6 +94,13 @@ public class ExchangeTransaction extends Transaction {
         return MoneyUtil.getDisplayWaves(amount);
     }
 
+    public int getPriceDecimals() {
+        if (getMyOrder().assetPair.priceAsset == null) {
+            return 8;
+        }
+        return getAssetBallance().issueTransaction.decimals;
+    }
+
     @Override
     public int getDecimals() {
         if (getMyOrder().assetPair.priceAsset == null) {
@@ -59,6 +109,7 @@ public class ExchangeTransaction extends Transaction {
         return 8;
     }
 
+    @Override
     public int getDirection() {
         if (getMyOrder().orderType.equals(OrderType.buy))
             return RECEIVED;
@@ -68,15 +119,6 @@ public class ExchangeTransaction extends Transaction {
 
     public boolean isForAsset(String assetId) {
         return false;
-    }
-
-    @Override
-    public String getAssetName() {
-        if (getMyOrder().assetPair.priceAsset == null) {
-            return NodeManager.get().getAssetName(getMyOrder().assetPair.amountAsset);
-        } else {
-            return "WAVES";
-        }
     }
 
     public Optional<String> getConterParty() {
@@ -103,9 +145,5 @@ public class ExchangeTransaction extends Transaction {
 
     public boolean isOwn() {
         return ArrayUtils.isEquals(NodeManager.get().getAddress(), sender);
-    }
-
-    public String getPriceAssetId() {
-        return getMyOrder().assetPair.priceAsset == null ? "WAVES" : getMyOrder().assetPair.priceAsset;
     }
 }

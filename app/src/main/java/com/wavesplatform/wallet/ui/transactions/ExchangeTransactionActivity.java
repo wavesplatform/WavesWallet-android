@@ -30,7 +30,7 @@ public class ExchangeTransactionActivity extends BaseAuthActivity implements Exc
 
         mViewModel.onViewReady();
 
-        getSupportActionBar().setTitle(getString(R.string.unknown_detail_title));
+        getSupportActionBar().setTitle(getString(R.string.exchange_detail_tilte));
     }
 
     @Override

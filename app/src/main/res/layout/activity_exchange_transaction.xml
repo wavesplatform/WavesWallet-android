@@ -47,7 +47,7 @@
                         android:textSize="20sp"
                         android:text="@{viewModel.transactionType}"
                         android:textColor="@{viewModel.transactionColor}"
-                        tools:text="Received"
+                        tools:text="BUY"
                         tools:textColor="@color/blockchain_receive_green" />
 
                     <LinearLayout
@@ -68,14 +68,16 @@
                             tools:text="700,500.23456789 WAVES"
                             tools:textColor="@color/blockchain_receive_green" />
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/transaction_fee"
+                        <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                            android:id="@+id/exchange_result"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/light_grey_text"
+                            android:text="@{viewModel.exchangeResult}"
+                            android:textColor="@color/blockchain_grey"
                             android:textSize="14sp"
-                            android:text="@{viewModel.transactionFee}"
-                            tools:text="Transaction fee: 0.001 WAVES" />
+                            android:maxLines="1"
+                            tools:text="for 0.00076 WBTC"
+                            tools:textColor="@color/blockchain_grey" />
 
                     </LinearLayout>
 
@@ -83,12 +85,68 @@
                 </LinearLayout>
 
                 <include layout="@layout/divider_grey" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
 
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Price"
+                        android:textColor="@color/blockchain_grey"
+                        android:textSize="14sp" />
 
+                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        android:id="@+id/exchange_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:maxLines="1"
+                        android:text="@{viewModel.price}"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:text="0.001 WAVES" />
+                </LinearLayout>
+
+                <include layout="@layout/divider_grey" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Transaction fee"
+                        android:textColor="@color/blockchain_grey"
+                        android:textSize="14sp" />
+
+                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        android:id="@+id/transaction_fee"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:maxLines="1"
+                        android:text="@{viewModel.transactionFee}"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:text="0.001 WAVES" />
+                </LinearLayout>
 
                 <include layout="@layout/divider_grey" />
 
-                <!-- ASSET LAYOUT -->
+                <!--P ASSET LAYOUT -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -104,7 +162,52 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:text="@string/asset"
+                        android:text="Amount Asset"
+                        android:textColor="@color/blockchain_grey"
+                        android:textSize="14sp" />
+
+                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        android:id="@+id/amountAssetName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:maxLines="1"
+                        android:text="@{viewModel.amountAssetName}"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:text="WCT" />
+
+                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        android:id="@+id/amountAssetId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:text="@{viewModel.amountAssetId}"
+                        android:textColor="@color/blockchain_grey"
+                        android:textSize="16sp"
+                        android:visibility="@{viewModel.amountAssetId != null ? View.VISIBLE : View.GONE}"
+                        tools:text="3NCwEeAeVKdPySfsTeAoroPHDUg54mSDY5w" />
+                </LinearLayout>
+
+                <include layout="@layout/divider_grey" />
+
+                <!--P ASSET LAYOUT -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+                    <!--android:visibility="@{viewModel.paymentTransaction ? View.GONE : View.VISIBLE}"-->
+
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Price Asset"
                         android:textColor="@color/blockchain_grey"
                         android:textSize="14sp" />
 
@@ -114,7 +217,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
                         android:maxLines="1"
-                        android:text="@{viewModel.assetName}"
+                        android:text="@{viewModel.priceAssetName}"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         tools:text="WCT" />
