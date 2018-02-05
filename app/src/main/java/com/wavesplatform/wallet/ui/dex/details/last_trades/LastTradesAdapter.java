@@ -9,6 +9,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.payload.TradesMarket;
 import com.wavesplatform.wallet.util.DateUtil;
+import com.wavesplatform.wallet.util.MoneyUtil;
+
 import java.text.DecimalFormat;
 
 public class LastTradesAdapter extends BaseQuickAdapter<TradesMarket, BaseViewHolder> {
@@ -38,15 +40,9 @@ public class LastTradesAdapter extends BaseQuickAdapter<TradesMarket, BaseViewHo
         baseViewHolder.setText(R.id.text_time, mDateUtil.timestampToDateTime(Long.parseLong(market.timestamp)))
                 .setText(R.id.text_price, market.price)
                 .setText(R.id.text_amount, market.amount)
-                .setText(R.id.text_sum, sumToString(sum));
+                .setText(R.id.text_sum, MoneyUtil.getFormattedTotal(sum, priceDecimal));
     }
 
-
-    private String sumToString(Double sum){
-        DecimalFormat df = new DecimalFormat("0");
-        df.setMaximumFractionDigits(priceDecimal);
-        return df.format(sum);
-    }
 
     public void setPriceDecimal(int priceDecimal) {
         this.priceDecimal = priceDecimal;
