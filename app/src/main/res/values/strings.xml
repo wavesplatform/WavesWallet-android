@@ -24,6 +24,9 @@
 
     <string name="YESTERDAY">Yesterday</string>
 
+
+    <string name="Sell">Sell</string>
+    <string name="Buy">Buy</string>
     <string name="SENT">Sent</string>
     <string name="RECEIVED">Received</string>
     <string name="MOVED">Transferred</string>
@@ -462,6 +465,7 @@
 
     <!-- TRANSACTION DETAILS -->
     <string name="unknown_detail_title">Transaction</string>
+    <string name="exchange_detail_tilte">Exchange</string>
     <string name="transaction_detail_title">Transfer Transaction</string>
     <string name="payment_detail_title">Transfer Transaction</string>
     <string name="issue_detail_title">Issue Transaction</string>
@@ -481,6 +485,7 @@
     <string name="transaction_details_unknown">Unknown</string>
     <string name="transaction_detail_coinbase">No Inputs (Newly Generated Coins)</string>
     <string name="transaction_detail_double_spend">May be at risk for a double spend.</string>
+    <string name="exchange_transaction_details_exchange_result">for</string>
 
     <!-- SECURITY CENTRE -->
     <string name="security_centre_email_title">Check your email</string>

@@ -34,15 +34,20 @@ public class SendViewModel extends BaseViewModel {
 
     private final String TAG = getClass().getSimpleName();
 
-    @Thunk DataListener dataListener;
+    @Thunk
+    DataListener dataListener;
     private Context context;
 
     public SendModel sendModel;
 
-    @Inject PrefsUtil prefsUtil;
-    @Inject AssetsHelper assetsHelper;
-    @Inject SSLVerifyUtil sslVerifyUtil;
-    @Inject StringUtils stringUtils;
+    @Inject
+    PrefsUtil prefsUtil;
+    @Inject
+    AssetsHelper assetsHelper;
+    @Inject
+    SSLVerifyUtil sslVerifyUtil;
+    @Inject
+    StringUtils stringUtils;
 
     SendViewModel(Context context, DataListener dataListener) {
 
@@ -140,7 +145,7 @@ public class SendViewModel extends BaseViewModel {
             if (attachment != null) {
                 sendModel.setAttachment(attachment);
             }
-        }catch (UnsupportedOperationException e){
+        } catch (UnsupportedOperationException e) {
             // TODO: 09.08.17 What is means? Need to reproduce. Hot fix
         }
     }
@@ -153,11 +158,24 @@ public class SendViewModel extends BaseViewModel {
     }
 
 
+//    private boolean isSameSendingAndFeeAssets() {
+//        if (sendModel.feeAsset != null && sendModel.sendingAsset != null)
+//            return (sendModel.feeAsset.assetId == null && sendModel.sendingAsset.assetId == null) ||
+//                    sendModel.feeAsset.assetId.equals(sendModel.sendingAsset.assetId);
+//        else
+//            return false;
+//    }
+
     private boolean isSameSendingAndFeeAssets() {
-        if (sendModel.feeAsset != null && sendModel.sendingAsset != null)
-            return sendModel.feeAsset.assetId.equals(sendModel.sendingAsset.assetId);
-        else
-            return false;
+        if (sendModel.feeAsset != null && sendModel.sendingAsset != null) {
+            if (sendModel.feeAsset.assetId == null && sendModel.sendingAsset.assetId == null) {
+                return true;
+            } else {
+                if (sendModel.feeAsset.assetId != null && sendModel.sendingAsset.assetId != null)
+                    return sendModel.feeAsset.assetId.equals(sendModel.sendingAsset.assetId);
+            }
+        }
+        return false;
     }
 
     /**
@@ -252,7 +270,7 @@ public class SendViewModel extends BaseViewModel {
 
     public void submitPayment(TransferTransactionRequest signed) {
         NodeManager.get().broadcastTransfer(signed)
-            .compose(RxUtil.applySchedulersToObservable()).subscribe(tx -> {
+                .compose(RxUtil.applySchedulersToObservable()).subscribe(tx -> {
             if (dataListener != null)
                 dataListener.onShowTransactionSuccess(signed);
         }, err -> {

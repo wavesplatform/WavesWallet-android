@@ -87,6 +87,14 @@ public class ChartViewModel extends BaseViewModel {
         timer.cancel();
     }
 
+    public void pause() {
+        timer.cancel();
+    }
+
+    public void resume() {
+        startTimer();
+    }
+
     public interface DataListener {
 
         void onShowToast(@StringRes int message, @ToastCustom.ToastType String toastType);

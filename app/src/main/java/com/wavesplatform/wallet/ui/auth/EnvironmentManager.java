@@ -49,7 +49,7 @@ public class EnvironmentManager {
     }
 
     public enum Environment {
-        PRODUCTION(KEY_ENV_PROD, "https://nodes.wavesnodes.com", "https://nodes.wavesnodes.com/", "https://marketdata.wavesplatform.com/api/", 'W'),
+        PRODUCTION(KEY_ENV_PROD, "https://nodes.wavesplatform.com", "https://matcher.wavesplatform.com/", "https://marketdata.wavesplatform.com/api/", 'W'),
         TESTNET(KEY_ENV_TESTNET, "http://52.30.47.67:6869", "http://52.30.47.67:6886/", "https://marketdata.wavesplatform.com/api/", 'T');
 
         private String name;

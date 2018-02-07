@@ -87,7 +87,6 @@
 
 # Specific to Blockchain
 -keep class android.support.design.widget.NavigationView { *; }
--keep class com.wavesplatform.wallet.ui.customviews.AnimatedPasswordInputLayout { *; }
 
 # Retrolambda
 -dontwarn java.lang.invoke.*

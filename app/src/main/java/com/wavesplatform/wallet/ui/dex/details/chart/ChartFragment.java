@@ -471,6 +471,19 @@ public class ChartFragment extends Fragment implements ChartViewModel.DataListen
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+        viewModel.pause();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        viewModel.resume();
+    }
+
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         viewModel.destroy();
