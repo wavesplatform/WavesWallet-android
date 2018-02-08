@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.wavesplatform.wallet.BuildConfig;
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.api.NodeManager;
 import com.wavesplatform.wallet.data.access.AccessState;
@@ -46,7 +48,9 @@ import com.wavesplatform.wallet.ui.send.SendFragment;
 import com.wavesplatform.wallet.ui.zxing.CaptureActivity;
 import com.wavesplatform.wallet.util.AndroidUtils;
 import com.wavesplatform.wallet.util.AppUtil;
+import com.wavesplatform.wallet.util.DateUtil;
 import com.wavesplatform.wallet.util.PermissionUtil;
+import com.wavesplatform.wallet.util.StringBuilderPlus;
 import com.wavesplatform.wallet.util.ViewUtils;
 import com.wavesplatform.wallet.util.annotations.Thunk;
 
@@ -350,8 +354,10 @@ public class MainActivity extends BaseAuthActivity implements TransactionsFragme
             case R.id.nav_support:
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_EMAIL, SUPPORT_EMAIL);
-                startActivity(intent);
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{SUPPORT_EMAIL});
+                intent.putExtra(Intent.EXTRA_SUBJECT,  String.format("Android app. Support request (%s)", DateUtil.formattedCurrentDate()));
+                intent.putExtra(Intent.EXTRA_TEXT, getDeviceInfo());
+                startActivity(Intent.createChooser(intent, SUPPORT_EMAIL));
                 break;
             case R.id.nav_logout:
                 new AlertDialog.Builder(this, R.style.AlertDialogStyle)
@@ -363,6 +369,20 @@ public class MainActivity extends BaseAuthActivity implements TransactionsFragme
                 break;
         }
         binding.drawerLayout.closeDrawers();
+    }
+
+    private String getDeviceInfo(){
+        StringBuilderPlus sb = new StringBuilderPlus();
+        sb.appendLine("My Device Info: \n");
+        sb.appendLine("Manufacturer: ", Build.MANUFACTURER);
+        sb.appendLine("Build: ",  Build.DISPLAY);
+        sb.appendLine("Model: ", Build.PRODUCT);
+        sb.appendLine("Android: ", Build.VERSION.RELEASE);
+        sb.appendLine("App version: ", BuildConfig.VERSION_NAME);
+        sb.appendLine("");
+        sb.appendLine("Waves address: \n", NodeManager.get().getAddress());
+        sb.appendLine("");
+        return  sb.toString();
     }
 
     @Override

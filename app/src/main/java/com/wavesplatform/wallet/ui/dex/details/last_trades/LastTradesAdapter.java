@@ -11,6 +11,8 @@ import com.wavesplatform.wallet.payload.TradesMarket;
 import com.wavesplatform.wallet.util.DateUtil;
 import com.wavesplatform.wallet.util.MoneyUtil;
 
+import java.text.DecimalFormat;
+
 public class LastTradesAdapter extends BaseQuickAdapter<TradesMarket, BaseViewHolder> {
     private DateUtil mDateUtil;
     private int priceDecimal;
@@ -34,10 +36,11 @@ public class LastTradesAdapter extends BaseQuickAdapter<TradesMarket, BaseViewHo
             textPrice.setTextColor(ContextCompat.getColor(mContext, R.color.dex_watchlist_markets_up));
 
         double sum = Double.valueOf(market.price) * Double.valueOf(market.amount);
+
         baseViewHolder.setText(R.id.text_time, mDateUtil.timestampToDateTime(Long.parseLong(market.timestamp)))
                 .setText(R.id.text_price, market.price)
                 .setText(R.id.text_amount, market.amount)
-                .setText(R.id.text_sum, String.valueOf(MoneyUtil.round(sum, priceDecimal)));
+                .setText(R.id.text_sum, MoneyUtil.getFormattedTotal(sum, priceDecimal));
     }
 
 

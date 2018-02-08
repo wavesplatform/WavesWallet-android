@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.injection;
 
 import com.wavesplatform.wallet.data.datamanagers.AddressBookManager;
+import com.wavesplatform.wallet.payload.ExchangeTransaction;
 import com.wavesplatform.wallet.ui.assets.IssueViewModel;
 import com.wavesplatform.wallet.ui.auth.LandingViewModel;
 import com.wavesplatform.wallet.ui.auth.PinEntryViewModel;
@@ -20,6 +21,7 @@ import com.wavesplatform.wallet.ui.pairing.PairingViewModel;
 import com.wavesplatform.wallet.ui.dex.details.order.PlaceOrderViewModel;
 import com.wavesplatform.wallet.ui.receive.ReceiveViewModel;
 import com.wavesplatform.wallet.ui.send.SendViewModel;
+import com.wavesplatform.wallet.ui.transactions.ExchangeTransactionDetailViewModel;
 import com.wavesplatform.wallet.ui.transactions.IssueDetailViewModel;
 import com.wavesplatform.wallet.ui.transactions.ReissueDetailViewModel;
 import com.wavesplatform.wallet.ui.transactions.TransactionDetailViewModel;
@@ -73,6 +75,8 @@ public interface DataManagerComponent {
     void inject(IssueViewModel issueViewModel);
 
     void inject(ReissueDetailViewModel reissueDetailViewModel);
+
+    void inject(ExchangeTransactionDetailViewModel exchangeTransactionDetailViewModel);
 
     void inject(UnknownDetailViewModel unknownDetailViewModel);
 
