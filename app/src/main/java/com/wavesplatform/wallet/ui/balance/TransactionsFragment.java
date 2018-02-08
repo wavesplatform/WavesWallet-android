@@ -33,6 +33,7 @@ import com.wavesplatform.wallet.api.NodeManager;
 import com.wavesplatform.wallet.data.datamanagers.AddressBookManager;
 import com.wavesplatform.wallet.data.rxjava.RxUtil;
 import com.wavesplatform.wallet.databinding.FragmentTransactionsBinding;
+import com.wavesplatform.wallet.payload.ExchangeTransaction;
 import com.wavesplatform.wallet.payload.IssueTransaction;
 import com.wavesplatform.wallet.payload.PaymentTransaction;
 import com.wavesplatform.wallet.payload.ReissueTransaction;
@@ -42,6 +43,7 @@ import com.wavesplatform.wallet.ui.backup.BackupWalletActivity;
 import com.wavesplatform.wallet.ui.home.MainActivity;
 import com.wavesplatform.wallet.ui.home.SecurityPromptDialog;
 import com.wavesplatform.wallet.ui.home.TransactionSelectedListener;
+import com.wavesplatform.wallet.ui.transactions.ExchangeTransactionActivity;
 import com.wavesplatform.wallet.ui.transactions.IssueDetailActivity;
 import com.wavesplatform.wallet.ui.transactions.ReissueDetailActivity;
 import com.wavesplatform.wallet.ui.transactions.TransactionDetailActivity;
@@ -335,6 +337,8 @@ public class TransactionsFragment extends Fragment implements TransactionsViewMo
             intent = new Intent(getActivity(), IssueDetailActivity.class);
         else if (tx instanceof ReissueTransaction)
             intent = new Intent(getActivity(), ReissueDetailActivity.class);
+        else if (tx instanceof ExchangeTransaction)
+            intent = new Intent(getActivity(), ExchangeTransactionActivity.class);
         else
             intent = new Intent(getActivity(), UnknownDetailActivity.class);
 

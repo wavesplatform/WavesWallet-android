@@ -75,6 +75,11 @@ public class DateUtil {
         return new SimpleDateFormat("dd.MM.yy").format(date);
     }
 
+    public static String formattedCurrentDate(){
+        Date date = new Date();
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+    }
+
     private long parseDateTime(String time) {
         try {
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time).getTime();

@@ -6,10 +6,9 @@
     <data>
         <variable
             name="viewModel"
-            type="com.wavesplatform.wallet.ui.transactions.TransactionDetailViewModel" />
+            type="com.wavesplatform.wallet.ui.transactions.ExchangeTransactionDetailViewModel" />
         <import type="android.view.View"/>
     </data>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,7 +47,7 @@
                         android:textSize="20sp"
                         android:text="@{viewModel.transactionType}"
                         android:textColor="@{viewModel.transactionColor}"
-                        tools:text="Received"
+                        tools:text="BUY"
                         tools:textColor="@color/blockchain_receive_green" />
 
                     <LinearLayout
@@ -69,14 +68,16 @@
                             tools:text="700,500.23456789 WAVES"
                             tools:textColor="@color/blockchain_receive_green" />
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/transaction_fee"
+                        <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                            android:id="@+id/exchange_result"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/light_grey_text"
+                            android:text="@{viewModel.exchangeResult}"
+                            android:textColor="@color/blockchain_grey"
                             android:textSize="14sp"
-                            android:text="@{viewModel.transactionFee}"
-                            tools:text="Transaction fee: 0.001 WAVES" />
+                            android:maxLines="1"
+                            tools:text="for 0.00076 WBTC"
+                            tools:textColor="@color/blockchain_grey" />
 
                     </LinearLayout>
 
@@ -84,11 +85,7 @@
                 </LinearLayout>
 
                 <include layout="@layout/divider_grey" />
-
-
-                <!-- STATUS LAYOUT -->
                 <LinearLayout
-                    android:id="@+id/status_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -101,24 +98,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:text="@string/transaction_detail_status"
+                        android:text="Price"
                         android:textColor="@color/blockchain_grey"
                         android:textSize="14sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/status"
+                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        android:id="@+id/exchange_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/blockchain_blue"
+                        android:layout_marginBottom="4dp"
+                        android:maxLines="1"
+                        android:text="@{viewModel.price}"
+                        android:textColor="@color/black"
                         android:textSize="16sp"
-                        android:text="@{viewModel.confirmationStatus}"
-                        tools:text="Confirmed" />
-
+                        tools:text="0.001 WAVES" />
                 </LinearLayout>
 
                 <include layout="@layout/divider_grey" />
-
-                <!-- ASSET LAYOUT -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -126,43 +122,76 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:orientation="vertical"
-                    android:visibility="@{viewModel.paymentTransaction ? View.GONE : View.VISIBLE}">
+                    android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:text="@string/asset"
+                        android:text="Transaction fee"
                         android:textColor="@color/blockchain_grey"
                         android:textSize="14sp" />
 
                     <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
-                        android:id="@+id/assetName"
+                        android:id="@+id/transaction_fee"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:textColor="@color/black"
                         android:maxLines="1"
+                        android:text="@{viewModel.transactionFee}"
+                        android:textColor="@color/black"
                         android:textSize="16sp"
-                        android:text="@{viewModel.assetName}"
+                        tools:text="0.001 WAVES" />
+                </LinearLayout>
+
+                <include layout="@layout/divider_grey" />
+
+                <!--P ASSET LAYOUT -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+                    <!--android:visibility="@{viewModel.paymentTransaction ? View.GONE : View.VISIBLE}"-->
+
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Amount Asset"
+                        android:textColor="@color/blockchain_grey"
+                        android:textSize="14sp" />
+
+                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        android:id="@+id/amountAssetName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:maxLines="1"
+                        android:text="@{viewModel.amountAssetName}"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
                         tools:text="WCT" />
 
                     <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
-                        android:id="@+id/assetId"
+                        android:id="@+id/amountAssetId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:text="@{viewModel.amountAssetId}"
                         android:textColor="@color/blockchain_grey"
                         android:textSize="16sp"
-                        android:maxLines="1"
-                        android:text="@{viewModel.assetId}"
-                        android:visibility="@{viewModel.assetId != null ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{viewModel.amountAssetId != null ? View.VISIBLE : View.GONE}"
                         tools:text="3NCwEeAeVKdPySfsTeAoroPHDUg54mSDY5w" />
                 </LinearLayout>
 
                 <include layout="@layout/divider_grey" />
 
-                <!-- TO/FROM LAYOUT -->
+                <!--P ASSET LAYOUT -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -171,71 +200,43 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:orientation="vertical">
+                    <!--android:visibility="@{viewModel.paymentTransaction ? View.GONE : View.VISIBLE}"-->
+
 
                     <android.support.v7.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:text="@string/to"
+                        android:text="Price Asset"
                         android:textColor="@color/blockchain_grey"
                         android:textSize="14sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/to_address_name"
+                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        android:id="@+id/priceAssetName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:layout_marginEnd="16dp"
+                        android:maxLines="1"
+                        android:text="@{viewModel.priceAssetName}"
                         android:textColor="@color/black"
                         android:textSize="16sp"
-                        android:text="@{viewModel.toAddressLabel}"
-                        android:visibility="@{viewModel.toAddressLabel != null ? View.VISIBLE : View.GONE}"
-                        tools:text="My WAVES Wallet" />
+                        tools:text="WCT" />
 
                     <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
-                        android:id="@+id/to_address"
+                        android:id="@+id/priceAssetId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:paddingRight="16dp"
                         android:maxLines="1"
-                        android:textColor="@{viewModel.toAddressLabel != null ? @color/blockchain_grey : @color/black}"
-                        android:textSize="16sp"
-                        android:text="@{viewModel.toAddress}"
-                        tools:text="3N5sUvKLnEUBwk7WFCSjJs8VoiLiuqTs29v" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="@string/from"
+                        android:text="@{viewModel.priceAssetId}"
                         android:textColor="@color/blockchain_grey"
-                        android:textSize="14sp" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/from_address_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginEnd="16dp"
-                        android:textColor="@color/black"
                         android:textSize="16sp"
-                        android:text="@{viewModel.fromAddressLabel}"
-                        android:visibility="@{viewModel.fromAddressLabel != null ? View.VISIBLE : View.GONE}"
-                        tools:text="My WAVES Wallet" />
-
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
-                        android:id="@+id/from_address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="16dp"
-                        android:textColor="@{viewModel.fromAddressLabel != null ? @color/blockchain_grey : @color/black}"
-                        android:maxLines="1"
-                        android:textSize="16sp"
-                        android:text="@{viewModel.fromAddress}"
-                        tools:text="3N5sUvKLnEUBwk7WFCSjJs8VoiLiuqTs29v" />
-
+                        android:visibility="@{viewModel.priceAssetId != null ? View.VISIBLE : View.GONE}"
+                        tools:text="3NCwEeAeVKdPySfsTeAoroPHDUg54mSDY5w" />
                 </LinearLayout>
+
+                <include layout="@layout/divider_grey" />
+
+
 
                 <include layout="@layout/divider_grey" />
 
@@ -271,40 +272,6 @@
 
                 <include layout="@layout/divider_grey" />
 
-
-
-                <!-- ATTACHMENT -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:orientation="vertical"
-                    android:visibility="@{viewModel.paymentTransaction ? View.GONE : View.VISIBLE}">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/title_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="@string/attachment"
-                        android:textColor="@color/blockchain_grey"
-                        android:textSize="14sp" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/description_field"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:ellipsize="end"
-                        android:hint="@string/transaction_detail_attachment_hint"
-                        android:text="@{viewModel.attachment}"
-                        android:textColorHint="@color/light_grey_text"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
 
             </LinearLayout>
         </ScrollView>

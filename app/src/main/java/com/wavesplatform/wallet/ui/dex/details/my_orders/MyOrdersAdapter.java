@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.ui.dex.details.my_orders;
 
 import android.support.v4.content.ContextCompat;
+import android.view.OrientationEventListener;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -13,6 +14,7 @@ import com.wavesplatform.wallet.util.MoneyUtil;
 import com.wavesplatform.wallet.util.StringUtils;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 public class MyOrdersAdapter extends BaseQuickAdapter<MyOrder, BaseViewHolder> {
     WatchMarket mWatchMarket;
@@ -25,7 +27,7 @@ public class MyOrdersAdapter extends BaseQuickAdapter<MyOrder, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, MyOrder myOrder) {
-        int color = myOrder.type.equals("bye") ? ContextCompat.getColor(mContext, R.color.dex_orderbook_left_bg) : ContextCompat.getColor(mContext, R.color.dex_orderbook_right_bg);
+        int color = myOrder.type.equals("buy") ? ContextCompat.getColor(mContext, R.color.dex_orderbook_left_bg) : ContextCompat.getColor(mContext, R.color.dex_orderbook_right_bg);
         baseViewHolder
                 .setText(R.id.text_side, StringUtils.capitalize(myOrder.type))
                 .setText(R.id.text_price, MoneyUtil.getScaledPrice(myOrder.price, mWatchMarket.market.getAmountAssetInfo().decimals, mWatchMarket.market.getPriceAssetInfo().decimals))
@@ -35,7 +37,7 @@ public class MyOrdersAdapter extends BaseQuickAdapter<MyOrder, BaseViewHolder> {
                 .setText(R.id.text_sum, MoneyUtil.getTextStripZeros(MoneyUtil.getTextStripZeros(BigInteger.valueOf(myOrder.amount).multiply(BigInteger.valueOf(myOrder.price)).divide(BigInteger.valueOf(100000000)).longValue(), mWatchMarket.market.getPriceAssetInfo().decimals)))
                 .setText(R.id.text_status, myOrder.getStatus().getStatus())
                 .setText(R.id.text_failed_value, MoneyUtil.getTextStripZeros(MoneyUtil.getTextStripZeros(myOrder.filled, mWatchMarket.market.getAmountAssetInfo().decimals)))
-                .setVisible(R.id.text_failed_value, myOrder.getStatus() == OrderStatus.Filled || myOrder.getStatus() == OrderStatus.PartiallyFilled)
+                .setVisible(R.id.text_failed_value, Arrays.asList(OrderStatus.Filled, OrderStatus.Cancelled, OrderStatus.PartiallyFilled).contains(myOrder.getStatus()))
                 .setTextColor(R.id.text_failed_value, ContextCompat.getColor(mContext,myOrder.getStatus().getColor()))
                 .setTextColor(R.id.text_status, ContextCompat.getColor(mContext,myOrder.getStatus().getColor()))
                 .setTextColor(R.id.text_side, color)

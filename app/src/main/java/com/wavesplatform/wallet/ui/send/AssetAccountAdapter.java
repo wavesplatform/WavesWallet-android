@@ -55,7 +55,7 @@ public class AssetAccountAdapter extends ArrayAdapter<ItemAccount> {
             binding.tvLabel.setText(item.label);
 
             if (item.accountObject instanceof AssetBalance) {
-                AssetBalance ab = (AssetBalance) item.accountObject;
+                AssetBalance ab = item.accountObject;
                 binding.tvBalance.setText(ab.getDisplayBalance());
             }
 

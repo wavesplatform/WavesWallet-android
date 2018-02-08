@@ -102,7 +102,7 @@ public class PlaceOrderActivity extends BaseAuthActivity implements PlaceOrderVi
         setSupportActionBar(toolbar);
 
         binding.inputAmount.setHint(getString(R.string.place_order_amount) + " in " + placeOrderViewModel.placeOrderModel.getWatchMarket().market.amountAssetName);
-        binding.inputPrice.setHint(getString(R.string.place_order_amount) + " in " + placeOrderViewModel.placeOrderModel.getWatchMarket().market.priceAssetName);
+        binding.inputPrice.setHint(getString(R.string.place_order_price) + " in " + placeOrderViewModel.placeOrderModel.getWatchMarket().market.priceAssetName);
 
         binding.textPriceAsset.setText(placeOrderViewModel.placeOrderModel.getWatchMarket().market.priceAssetName);
         binding.totalAssetName.setText(placeOrderViewModel.placeOrderModel.getWatchMarket().market.priceAssetName);
