@@ -4,6 +4,11 @@ apply from: 'environment.gradle'
 apply plugin: 'realm-android'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'WavesWallet'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
     flavorDimensions "default"
@@ -13,7 +18,7 @@ android {
     defaultConfig {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 25
-        versionCode 325
+        versionCode 330
         versionName "1.1.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -48,7 +53,7 @@ android {
         prod {
             // For release and testing on <API21 devices
             minSdkVersion 14
-            //signingConfig signingConfigs.config
+            signingConfig signingConfigs.config
         }
         dev {
             // For everyday work, setting minSdkVersion to 21 bypasses MultiDex, resulting in
