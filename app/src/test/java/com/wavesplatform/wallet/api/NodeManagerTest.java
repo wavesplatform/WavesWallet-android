@@ -14,11 +14,14 @@ import org.junit.Test;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+
 import static com.wavesplatform.wallet.request.TransferTransactionRequest.SignatureLength;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class NodeManagerTest {
+
     @Before
     public void setUp() {
     }
@@ -104,4 +107,5 @@ public class NodeManagerTest {
             System.out.println(err);
         });
     }
+
 }

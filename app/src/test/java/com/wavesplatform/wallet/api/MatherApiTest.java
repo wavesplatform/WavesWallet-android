@@ -41,7 +41,7 @@ public class MatherApiTest {
     public void doubleRequest() throws Exception {
         Observable.zip(service.assetsBalance("3N5sUvKLnEUBwk7WFCSjJs8VoiLiuqTs29v"),
                 service.transactionList("3N5sUvKLnEUBwk7WFCSjJs8VoiLiuqTs29v", 50).map(r -> r.get(0)),
-                (abs, txs) -> abs.address + "txs: " + txs.size()).blockingSubscribe(res -> {
+                (abs, txs) -> abs.address + "txs: " + txs).blockingSubscribe(res -> {
             System.out.println(res);
         });
     }

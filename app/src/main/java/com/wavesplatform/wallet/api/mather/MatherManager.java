@@ -85,9 +85,7 @@ public class MatherManager {
         return service.getOrderBook(amountAsset, priceAsset);
     }
 
-    public Observable<TransactionsInfo> getTransactionsInfo(final String asset) {
-        return service.getTransactionsInfo(asset);
-    }
+
 
     public Observable<LinkedTreeMap<String, Long>> getBalanceFromAssetPair(final String amountAsset,
                                                                            final String priceAsset,
