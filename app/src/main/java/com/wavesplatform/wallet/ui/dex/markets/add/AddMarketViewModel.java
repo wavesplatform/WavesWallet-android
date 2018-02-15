@@ -5,6 +5,7 @@ import android.support.annotation.StringRes;
 import android.support.v4.util.Pair;
 
 import com.wavesplatform.wallet.R;
+import com.wavesplatform.wallet.api.NodeManager;
 import com.wavesplatform.wallet.api.mather.MatherManager;
 import com.wavesplatform.wallet.data.exception.RetrofitException;
 import com.wavesplatform.wallet.data.rxjava.RxUtil;
@@ -89,15 +90,15 @@ public class AddMarketViewModel extends BaseViewModel {
                 .flatMap(orderBook -> {
                     if (orderBook.pair.amountAsset.trim().equals(WAVES)) {
                         return Observable.zip(Observable.just(new TransactionsInfo(WAVES, WAVES, 8)),
-                                MatherManager.get().getTransactionsInfo(orderBook.pair.priceAsset),
+                                NodeManager.get().getTransactionsInfo(orderBook.pair.priceAsset),
                                 (BiFunction<TransactionsInfo, TransactionsInfo, Pair>) Pair::new);
                     } else if (orderBook.pair.priceAsset.trim().equals(WAVES)) {
-                        return Observable.zip(MatherManager.get().getTransactionsInfo(orderBook.pair.amountAsset),
+                        return Observable.zip(NodeManager.get().getTransactionsInfo(orderBook.pair.amountAsset),
                                 Observable.just(new TransactionsInfo(WAVES, WAVES, 8)),
                                 (BiFunction<TransactionsInfo, TransactionsInfo, Pair>) Pair::new);
                     } else {
-                        return Observable.zip(MatherManager.get().getTransactionsInfo(orderBook.pair.amountAsset),
-                                MatherManager.get().getTransactionsInfo(orderBook.pair.priceAsset),
+                        return Observable.zip(NodeManager.get().getTransactionsInfo(orderBook.pair.amountAsset),
+                                NodeManager.get().getTransactionsInfo(orderBook.pair.priceAsset),
                                 (BiFunction<TransactionsInfo, TransactionsInfo, Pair>) Pair::new);
                     }
                 })

@@ -31,9 +31,6 @@ public interface MatherApi {
                                        @Path("priceAsset") final String priceAsset);
 
 
-    @GET("transactions/info/{asset}")
-    Observable<TransactionsInfo> getTransactionsInfo(@Path("asset") final String asset);
-
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}/publicKey/{publicKey}")
     Observable<List<MyOrder>> getMyOrders(@Path("amountAsset") final String amountAsset,
                                           @Path("priceAsset") final String priceAsset,

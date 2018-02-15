@@ -7,9 +7,11 @@ import com.wavesplatform.wallet.payload.AssetBalance;
 import com.wavesplatform.wallet.payload.AssetBalances;
 import com.wavesplatform.wallet.payload.ExchangeTransaction;
 import com.wavesplatform.wallet.payload.IssueTransaction;
+import com.wavesplatform.wallet.payload.MassTransferTransaction;
 import com.wavesplatform.wallet.payload.PaymentTransaction;
 import com.wavesplatform.wallet.payload.ReissueTransaction;
 import com.wavesplatform.wallet.payload.Transaction;
+import com.wavesplatform.wallet.payload.TransactionsInfo;
 import com.wavesplatform.wallet.payload.TransferTransaction;
 import com.wavesplatform.wallet.request.IssueTransactionRequest;
 import com.wavesplatform.wallet.request.ReissueTransactionRequest;
@@ -65,6 +67,7 @@ public class NodeManager {
                 .registerSubtype(TransferTransaction.class, "4")
                 .registerSubtype(ReissueTransaction.class, "5")
                 .registerSubtype(ExchangeTransaction.class, "7")
+                .registerSubtype(MassTransferTransaction.class, "11")
                 .registerDefaultSubtype(Transaction.class, "0");
 
         gson = new GsonBuilder().registerTypeAdapterFactory(typeFactory).create();
@@ -139,6 +142,10 @@ public class NodeManager {
                 }
             }
         }
+    }
+
+    public Observable<TransactionsInfo> getTransactionsInfo(final String asset) {
+        return service.getTransactionsInfo(asset);
     }
 
     public List<AssetBalance> getAllAssets() {
