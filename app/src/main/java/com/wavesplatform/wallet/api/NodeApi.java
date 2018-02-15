@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.api;
 import com.wavesplatform.wallet.payload.AssetBalances;
 import com.wavesplatform.wallet.payload.Candle;
 import com.wavesplatform.wallet.payload.Transaction;
+import com.wavesplatform.wallet.payload.TransactionsInfo;
 import com.wavesplatform.wallet.payload.WavesBalance;
 import com.wavesplatform.wallet.request.IssueTransactionRequest;
 import com.wavesplatform.wallet.request.ReissueTransactionRequest;
@@ -26,6 +27,9 @@ public interface NodeApi {
 
     @GET("/transactions/address/{address}/limit/{limit}")
     Observable<List<List<Transaction>>> transactionList(@Path("address") String address, @Path("limit") int limit);
+
+    @GET("transactions/info/{asset}")
+    Observable<TransactionsInfo> getTransactionsInfo(@Path("asset") final String asset);
 
     @POST("/assets/broadcast/transfer")
     Observable<TransferTransactionRequest> broadcastTransfer(@Body TransferTransactionRequest tx);

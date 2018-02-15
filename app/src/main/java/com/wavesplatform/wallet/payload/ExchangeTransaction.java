@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.util.MoneyUtil;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigInteger;
 
@@ -117,8 +118,10 @@ public class ExchangeTransaction extends Transaction {
             return SENT;
     }
 
+    @Override
     public boolean isForAsset(String assetId) {
-        return false;
+       return StringUtils.equals(assetId, getMyOrder().assetPair.amountAsset)
+               || StringUtils.equals(assetId, getMyOrder().assetPair.priceAsset);
     }
 
     public Optional<String> getConterParty() {
