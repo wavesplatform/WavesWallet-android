@@ -645,4 +645,6 @@
         <item>4H</item>
         <item>1D</item>
     </string-array>
+
+    <string name="seed_like_address">It looks like you scan address QR-code instead of seed. Please use correct QR-code.</string>
 </resources>

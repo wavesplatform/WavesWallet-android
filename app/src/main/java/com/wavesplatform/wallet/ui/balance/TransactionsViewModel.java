@@ -128,12 +128,14 @@ public class TransactionsViewModel extends BaseObservable implements ViewModel {
                 null);
         activeAccountAndAddressList.add(all);
 
-        List<ItemAccount> assets = assetsHelper.getAccountItems();
+        if (assetsHelper != null) {
+            List<ItemAccount> assets = assetsHelper.getAccountItems();
 
-        for (ItemAccount itemAccount : assets) {
-            spinnerIndex++;
-            activeAccountAndAddressList.add(itemAccount);
-            activeAccountAndAddressBiMap.put((AssetBalance) itemAccount.accountObject, spinnerIndex);
+            for (ItemAccount itemAccount : assets) {
+                spinnerIndex++;
+                activeAccountAndAddressList.add(itemAccount);
+                activeAccountAndAddressBiMap.put((AssetBalance) itemAccount.accountObject, spinnerIndex);
+            }
         }
 
         //If we have multiple accounts/addresses we will show dropdown in toolbar, otherwise we will only display a static text

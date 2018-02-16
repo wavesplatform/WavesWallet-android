@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -70,7 +71,8 @@ public class ImportOrCreateWalletActivity extends BaseAuthActivity implements Pa
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == PAIRING_QR) {
             if (data != null && data.getStringExtra(CaptureActivity.SCAN_RESULT) != null) {
-                viewModel.pairWithQR(data.getStringExtra(CaptureActivity.SCAN_RESULT));
+                String seed = data.getStringExtra(CaptureActivity.SCAN_RESULT);
+                viewModel.pairWithQR(seed);
             }
         }
     }

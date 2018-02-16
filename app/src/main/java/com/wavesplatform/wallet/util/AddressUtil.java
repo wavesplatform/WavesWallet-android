@@ -63,6 +63,10 @@ public class AddressUtil {
         }
     }
 
+    public static boolean isWavesUri(String uri) {
+        return uri.startsWith("waves://");
+    }
+
     public static String generateReceiveUri(long amount, AssetBalance ab, String attachment) {
         List<String> params = new ArrayList<>();
         if (!ab.isWaves()) params.add("asset=" + ab.assetId);
