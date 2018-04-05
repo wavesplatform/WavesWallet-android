@@ -7,7 +7,7 @@
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground">
 
-    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
         android:id="@+id/text_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

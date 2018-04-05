@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.wavesplatform.wallet.ui.transactions.ExchangeTransactionDetailViewModel" />
+            type="com.wavesplatform.wallet.v1.ui.transactions.ExchangeTransactionDetailViewModel" />
         <import type="android.view.View"/>
     </data>
 
@@ -57,7 +57,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                             android:id="@+id/transaction_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                             tools:text="700,500.23456789 WAVES"
                             tools:textColor="@color/blockchain_receive_green" />
 
-                        <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                             android:id="@+id/exchange_result"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
                         android:textColor="@color/blockchain_grey"
                         android:textSize="14sp" />
 
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                         android:id="@+id/exchange_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                         android:textColor="@color/blockchain_grey"
                         android:textSize="14sp" />
 
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                         android:id="@+id/transaction_fee"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -166,7 +166,7 @@
                         android:textColor="@color/blockchain_grey"
                         android:textSize="14sp" />
 
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                         android:id="@+id/amountAssetName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -177,7 +177,7 @@
                         android:textSize="16sp"
                         tools:text="WCT" />
 
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                         android:id="@+id/amountAssetId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -211,7 +211,7 @@
                         android:textColor="@color/blockchain_grey"
                         android:textSize="14sp" />
 
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                         android:id="@+id/priceAssetName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -222,7 +222,7 @@
                         android:textSize="16sp"
                         tools:text="WCT" />
 
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                         android:id="@+id/priceAssetId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.wavesplatform.wallet.ui.transactions.UnknownDetailViewModel" />
+            type="com.wavesplatform.wallet.v1.ui.transactions.UnknownDetailViewModel" />
         <import type="android.view.View"/>
     </data>
 
@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                             android:id="@+id/transaction_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
                         android:visibility="@{viewModel.fromAddressLabel != null ? View.VISIBLE : View.GONE}"
                         tools:text="My WAVES Wallet" />
 
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                         android:id="@+id/from_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

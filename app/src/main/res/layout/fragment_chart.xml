@@ -8,13 +8,13 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <com.wavesplatform.wallet.ui.dex.details.chart.CustomCandleChart
+        <com.wavesplatform.wallet.v1.ui.dex.details.chart.CustomCandleChart
             android:id="@+id/candle_chart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <com.wavesplatform.wallet.ui.dex.details.chart.CustomBarChart
+        <com.wavesplatform.wallet.v1.ui.dex.details.chart.CustomBarChart
             android:id="@+id/bar_chart"
             android:layout_width="match_parent"
             android:layout_height="100dp"

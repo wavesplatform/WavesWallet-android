@@ -16,12 +16,13 @@
     <application
         android:name=".BlockchainApplication"
         android:allowBackup="false"
+        tools:replace="allowBackup"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.launcher.LauncherActivity"
+            android:name=".v1.ui.launcher.LauncherActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask">
             <intent-filter>
@@ -38,79 +39,80 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".ui.home.MainActivity"
+            android:name=".v1.ui.home.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.MainActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.dex.markets.add.AddMarketActivity"
+            android:name=".v1.ui.dex.markets.add.AddMarketActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".ui.auth.PinEntryActivity"
+            android:name=".v1.ui.auth.PinEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".ui.dex.markets.MarketsActivity"
+            android:name=".v1.ui.dex.markets.MarketsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".ui.auth.LandingActivity"
+            android:name=".v1.ui.auth.LandingActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".ui.pairing.ImportOrCreateWalletActivity"
+            android:name=".v1.ui.pairing.ImportOrCreateWalletActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.auth.PasswordWalletActivity"
+            android:name=".v1.ui.auth.PasswordWalletActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.auth.SeedWalletActivity"
+            android:name=".v1.ui.auth.SeedWalletActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.auth.ChooseWalletActivity"
+            android:name=".v1.ui.auth.ChooseWalletActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.assets.AssetsActivity"
+            android:name=".v1.ui.assets.AssetsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".ui.backup.BackupWalletActivity"
+            android:name=".v1.ui.backup.BackupWalletActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".ui.auth.LogoutActivity"
+            android:name=".v1.ui.auth.LogoutActivity"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:theme="@android:style/Theme.NoDisplay" />
         <activity
-            android:name=".ui.zxing.CaptureActivity"
+            android:name=".v1.ui.zxing.CaptureActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".ui.transactions.TransactionDetailActivity"
+            android:name=".v1.ui.transactions.TransactionDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.assets.IssueAssetsActivity"
+            android:name=".v1.ui.assets.IssueAssetsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.transactions.IssueDetailActivity"
+            android:name=".v1.ui.transactions.IssueDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.transactions.ReissueDetailActivity"
+            android:name=".v1.ui.transactions.ReissueDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.transactions.UnknownDetailActivity"
+            android:name=".v1.ui.transactions.UnknownDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.dex.details.DexDetailsActivity"
+            android:name=".v1.ui.dex.details.DexDetailsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.dex.details.order.PlaceOrderActivity"
+            android:name=".v1.ui.dex.details.order.PlaceOrderActivity"
             android:windowSoftInputMode="stateHidden" />
 
         <meta-data
@@ -127,7 +129,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".ui.transactions.ExchangeTransactionActivity"></activity>
+        <activity android:name=".v1.ui.transactions.ExchangeTransactionActivity"></activity>
     </application>
 
 </manifest>

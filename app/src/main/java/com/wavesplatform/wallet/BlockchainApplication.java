@@ -1,36 +1,41 @@
 package com.wavesplatform.wallet;
 
-import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
-import com.wavesplatform.wallet.data.access.AccessState;
-import com.wavesplatform.wallet.data.access.DexAccessState;
-import com.wavesplatform.wallet.data.connectivity.ConnectivityManager;
-import com.wavesplatform.wallet.data.services.PinStoreService;
-import com.wavesplatform.wallet.db.DBHelper;
-import com.wavesplatform.wallet.injection.Injector;
-import com.wavesplatform.wallet.ui.auth.EnvironmentManager;
-import com.wavesplatform.wallet.util.AppUtil;
-import com.wavesplatform.wallet.util.ApplicationLifeCycle;
-import com.wavesplatform.wallet.util.PrefsUtil;
-import com.wavesplatform.wallet.util.annotations.Thunk;
-import com.wavesplatform.wallet.util.exceptions.LoggingExceptionHandler;
+import com.wavesplatform.wallet.v1.data.access.AccessState;
+import com.wavesplatform.wallet.v1.data.access.DexAccessState;
+import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
+import com.wavesplatform.wallet.v1.data.services.PinStoreService;
+import com.wavesplatform.wallet.v1.db.DBHelper;
+import com.wavesplatform.wallet.v1.injection.Injector;
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
+import com.wavesplatform.wallet.v1.util.AppUtil;
+import com.wavesplatform.wallet.v1.util.ApplicationLifeCycle;
+import com.wavesplatform.wallet.v1.util.PrefsUtil;
+import com.wavesplatform.wallet.v1.util.annotations.Thunk;
+import com.wavesplatform.wallet.v1.util.exceptions.LoggingExceptionHandler;
+import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
 
 import javax.inject.Inject;
 
+import dagger.android.AndroidInjector;
+import dagger.android.DaggerApplication;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import pers.victor.ext.Ext;
 
-public class BlockchainApplication extends Application {
+public class BlockchainApplication extends DaggerApplication {
 
-    @Thunk static final String TAG = BlockchainApplication.class.getSimpleName();
+    @Thunk
+    static final String TAG = BlockchainApplication.class.getSimpleName();
     private static final String RX_ERROR_TAG = "RxJava Error";
-    @Inject PrefsUtil mPrefsUtil;
+    @Inject
+    PrefsUtil mPrefsUtil;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -47,9 +52,10 @@ public class BlockchainApplication extends Application {
         // Init objects first
         Injector.getInstance().init(this);
         // Inject into Application
-        Injector.getInstance().getAppComponent().inject(this);
+//        Injector.getInstance().getAppComponent().inject(this);
 
         Realm.init(this);
+        Ext.INSTANCE.setCtx(this);
 
         new LoggingExceptionHandler();
 
@@ -96,6 +102,11 @@ public class BlockchainApplication extends Application {
                 AccessState.getInstance().removeWavesWallet();
             }
         });
+    }
+
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerApplicationV2Component.builder().create(this);
     }
 
     /**

@@ -11,7 +11,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
 
-        <com.wavesplatform.wallet.ui.zxing.ViewfinderView
+        <com.wavesplatform.wallet.v1.ui.zxing.ViewfinderView
             android:id="@+id/viewfinder_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />

@@ -50,7 +50,7 @@
                     android:textSize="14sp"
                     tools:text="April 2015" />
 
-                <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                     android:id="@+id/counter_party"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.wavesplatform.wallet.ui.transactions.ReissueDetailViewModel" />
+            type="com.wavesplatform.wallet.v1.ui.transactions.ReissueDetailViewModel" />
         <import type="android.view.View"/>
     </data>
 
@@ -84,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                             android:id="@+id/transaction_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
                         android:textColor="@color/blockchain_grey"
                         android:textSize="14sp" />
 
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"

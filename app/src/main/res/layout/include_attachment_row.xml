@@ -3,7 +3,7 @@
     <data>
         <variable
             name="sendModel"
-            type="com.wavesplatform.wallet.ui.send.SendModel" />
+            type="com.wavesplatform.wallet.v1.ui.send.SendModel" />
     </data>
 
     <LinearLayout

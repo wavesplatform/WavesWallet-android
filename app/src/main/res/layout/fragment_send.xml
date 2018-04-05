@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.wavesplatform.wallet.ui.send.SendViewModel" />
+            type="com.wavesplatform.wallet.v1.ui.send.SendViewModel" />
     </data>
 
     <RelativeLayout
@@ -95,7 +95,7 @@
 
                     </android.support.design.widget.TextInputLayout>
 
-                    <com.wavesplatform.wallet.ui.customviews.ReselectSpinner
+                    <com.wavesplatform.wallet.v1.ui.customviews.ReselectSpinner
                         android:id="@+id/sp_destination"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -166,7 +166,7 @@
 
                     </android.support.design.widget.TextInputLayout>
 
-                    <com.wavesplatform.wallet.ui.customviews.ReselectSpinner
+                    <com.wavesplatform.wallet.v1.ui.customviews.ReselectSpinner
                         android:id="@+id/sp_fee"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.wavesplatform.wallet.ui.transactions.TransactionDetailViewModel" />
+            type="com.wavesplatform.wallet.v1.ui.transactions.TransactionDetailViewModel" />
         <import type="android.view.View"/>
     </data>
 
@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                        <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                             android:id="@+id/transaction_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -137,7 +137,7 @@
                         android:textColor="@color/blockchain_grey"
                         android:textSize="14sp" />
 
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                         android:id="@+id/assetName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                         android:text="@{viewModel.assetName}"
                         tools:text="WCT" />
 
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                         android:id="@+id/assetId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -192,7 +192,7 @@
                         android:visibility="@{viewModel.toAddressLabel != null ? View.VISIBLE : View.GONE}"
                         tools:text="My WAVES Wallet" />
 
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                         android:id="@+id/to_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -224,7 +224,7 @@
                         android:visibility="@{viewModel.fromAddressLabel != null ? View.VISIBLE : View.GONE}"
                         tools:text="My WAVES Wallet" />
 
-                    <com.wavesplatform.wallet.ui.customviews.AutoResizeTextView
+                    <com.wavesplatform.wallet.v1.ui.customviews.AutoResizeTextView
                         android:id="@+id/from_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

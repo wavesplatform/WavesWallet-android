@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.wavesplatform.wallet.ui.send.ItemSendAddressViewModel" />
+            type="com.wavesplatform.wallet.v1.ui.send.ItemSendAddressViewModel" />
     </data>
 
     <LinearLayout
