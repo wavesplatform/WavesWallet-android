@@ -71,7 +71,7 @@ android {
     productFlavors {
         prod {
             // For release and testing on <API21 devices
-            minSdkVersion 14
+            minSdkVersion 21
             signingConfig signingConfigs.config
         }
         dev {

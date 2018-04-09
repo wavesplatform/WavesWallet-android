@@ -27,7 +27,8 @@ public class AppUtil {
     private AlertDialog alertDialog;
     private String receiveQRFileName;
 
-    public AppUtil(Context context) {
+    @Inject
+    public AppUtil(@com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext Context context) {
         Injector.getInstance().getAppComponent().inject(this);
         this.context = context;
         this.receiveQRFileName = context.getExternalCacheDir() + File.separator + "qr.png";
@@ -39,13 +40,13 @@ public class AppUtil {
     }
 
     public void restartApp() {
-        Intent intent = new Intent(context, LauncherActivity.class);
+        Intent intent = new Intent(context, com.wavesplatform.wallet.v2.ui.splash.SplashActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
     public void restartAppWithVerifiedPin() {
-        Intent intent = new Intent(context, LauncherActivity.class);
+        Intent intent = new Intent(context, com.wavesplatform.wallet.v2.ui.splash.SplashActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("verified", true);
         context.startActivity(intent);

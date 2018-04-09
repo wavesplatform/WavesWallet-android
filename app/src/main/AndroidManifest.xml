@@ -16,15 +16,16 @@
     <application
         android:name=".BlockchainApplication"
         android:allowBackup="false"
-        tools:replace="allowBackup"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="allowBackup">
         <activity
-            android:name=".v1.ui.launcher.LauncherActivity"
+            android:name="com.wavesplatform.wallet.v2.ui.splash.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.Translucent.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,7 +40,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".v1.ui.home.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -129,7 +129,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".v1.ui.transactions.ExchangeTransactionActivity"></activity>
+        <activity android:name=".v1.ui.transactions.ExchangeTransactionActivity" />
     </application>
 
 </manifest>

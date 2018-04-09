@@ -182,7 +182,7 @@ inline fun <reified T : Any> Activity.launchActivity(
 
     intent.init()
     if (requestCode != -1) {
-        startActivityForResult(intent, requestCode, options)
+        startActivityForResult(intent, requestCode)
     } else {
         startActivity(intent)
     }
@@ -203,7 +203,7 @@ inline fun <reified T : Any> Fragment.launchActivity(
 
     intent.init()
     if (requestCode != -1) {
-        startActivityForResult(intent, requestCode, options)
+        startActivityForResult(intent, requestCode)
     } else {
         startActivity(intent)
     }

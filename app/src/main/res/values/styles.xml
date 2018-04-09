@@ -30,6 +30,23 @@
         <item name="autoCompleteTextViewStyle">@style/CursorColor</item>
     </style>
 
+    <style name="AppTheme.NoActionBar" parent="BaseTheme">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">false</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Translucent" parent="AppTheme.NoActionBar">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+
+    <style name="AppTheme.NoActionBar.Translucent.Splash" parent="AppTheme.NoActionBar.Translucent">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
+
     <style name="CursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable">@drawable/cursor</item>
     </style>
