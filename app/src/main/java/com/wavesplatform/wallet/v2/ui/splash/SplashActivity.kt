@@ -7,6 +7,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.auth.AuthUtil
 import com.wavesplatform.wallet.v1.ui.auth.LandingActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.choose_language.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import javax.inject.Inject
 
@@ -14,7 +15,8 @@ import javax.inject.Inject
 class SplashActivity : BaseActivity(), SplashView {
 
     override fun onNotLoggedIn() {
-        launchActivity<LandingActivity>(clear = true)
+        launchActivity<ChooseLanguageActivity>(clear = true)
+//        launchActivity<LandingActivity>(clear = true)
     }
 
     override fun onStartMainActivity(publicKey: String) {

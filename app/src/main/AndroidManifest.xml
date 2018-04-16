@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme"
         tools:replace="allowBackup">
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.splash.SplashActivity"
+            android:name=".v2.ui.splash.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar.Translucent.Splash">
@@ -130,6 +130,10 @@
         </provider>
 
         <activity android:name=".v1.ui.transactions.ExchangeTransactionActivity" />
+        <activity
+            android:name=".v2.ui.choose_language.ChooseLanguageActivity"
+            android:configChanges="orientation"
+            android:theme="@style/AppTheme.NoActionBar.Translucent" />
     </application>
 
 </manifest>

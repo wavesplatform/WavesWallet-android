@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:animateLayoutChanges="true"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:id="@+id/image_logo"
+        android:fitsSystemWindows="true"
+        app:srcCompat="@drawable/ic_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_language"
+        android:layout_marginTop="44dp"
+        android:layout_below="@+id/image_logo"
+        android:overScrollMode="never"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/button_continue"
+        android:layout_marginBottom="24dp"
+        android:layout_height="match_parent"/>
+    
+    <Button
+        android:id="@+id/button_continue"
+        style="@style/WavesButton"
+        android:visibility="invisible"
+        android:text="@string/choose_language_continue"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

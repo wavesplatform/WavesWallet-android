@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingBottom="16dp"
+    android:paddingEnd="32dp"
+    android:paddingStart="32dp"
+    android:paddingTop="16dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_flag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        tools:src="@drawable/ic_flag_18_britain"/>
+
+    <TextView
+        android:id="@+id/text_language"
+        android:layout_width="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@+id/image_flag"
+        tools:text="English" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/checkbox_choose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:button="@drawable/selector_checkbox" />
+
+</RelativeLayout>
