@@ -71,4 +71,6 @@
 
     <color name="dex_place_order_dialog_bg">#424242</color>
 
+    <color name="home_tab_inactive">#D3D3D3</color>
+    <color name="home_tab_active">#000000</color>
 </resources>
