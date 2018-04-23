@@ -1,0 +1,34 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relative_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/img_brand">
+
+    <com.yuyakaido.android.cardstackview.CardStackView
+        android:id="@+id/card_stack_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="48dp"
+        android:paddingBottom="48dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        app:visibleCount="4"
+        app:swipeThreshold="0.75"
+        app:translationDiff="13"
+        app:scaleDiff="0.02"
+        app:stackFrom="bottom"
+        app:elevationEnabled="true"
+        app:swipeEnabled="false" />
+
+    <View
+        android:layout_centerInParent="true"
+        android:id="@+id/white_block"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        />
+
+</RelativeLayout>

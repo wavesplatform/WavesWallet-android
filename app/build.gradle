@@ -223,6 +223,8 @@ dependencies {
     kapt 'com.arello-mobile:moxy-compiler:1.5.3'
 
     implementation "com.github.vicpinm:krealmextensions:2.2.0"
+    implementation "com.yuyakaido.android:card-stack-view:1.0.0-beta8"
+
 
     implementation 'com.intuit.sdp:sdp-android:1.0.5'
 

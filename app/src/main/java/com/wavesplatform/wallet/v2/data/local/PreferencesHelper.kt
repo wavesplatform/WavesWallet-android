@@ -11,7 +11,7 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     private val mPref: EncryptedPreferences
 
     init {
-        mPref = EncryptedPreferences.Builder(context).withPreferenceName(PREF_FILE_NAME).withEncryptionPassword("Example").build() // TODO: change Password
+        mPref = EncryptedPreferences.Builder(context).withPreferenceName(PREF_FILE_NAME).withEncryptionPassword("Waves").build()
     }
 
     fun clear() {
@@ -19,7 +19,7 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     }
 
     companion object {
-        val PREF_FILE_NAME = "android_boilerplate_pref_file"
+        val PREF_FILE_NAME = "android_waves_pref_file"
     }
 
 }

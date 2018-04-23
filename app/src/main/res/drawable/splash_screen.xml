@@ -8,7 +8,6 @@
     </item>
 
     <item
-
         android:gravity="center"
         android:drawable="@drawable/ic_logo"/>
 

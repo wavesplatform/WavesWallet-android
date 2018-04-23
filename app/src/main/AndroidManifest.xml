@@ -25,6 +25,7 @@
             android:name=".v2.ui.splash.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
+            android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar.Translucent.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -132,8 +133,12 @@
         <activity android:name=".v1.ui.transactions.ExchangeTransactionActivity" />
         <activity
             android:name=".v2.ui.choose_language.ChooseLanguageActivity"
+            android:noHistory="true"
             android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar.Translucent" />
+        <activity android:name=".v2.ui.tutorial.TutorialActivity"
+            android:configChanges="orientation"
+            android:theme="@style/AppTheme.NoActionBar.Translucent"/>
     </application>
 
 </manifest>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="2dp"
+    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardCornerRadius="2dp">
+
+    <RelativeLayout
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/card_1_title"
+            android:layout_marginTop="28dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="34sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:lineSpacingExtra="10sp"
+            android:text="@string/tutorial_card_1_title"
+            />
+
+        <TextView
+            android:layout_below="@+id/card_1_title"
+            android:layout_marginTop="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/tutorial_card_1_description"
+            />
+
+        <Button
+            android:id="@+id/button_continue"
+            style="@style/WavesButton"
+            android:textStyle="bold"
+            android:text="@string/card_tutorial_next"
+            android:enabled="false"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

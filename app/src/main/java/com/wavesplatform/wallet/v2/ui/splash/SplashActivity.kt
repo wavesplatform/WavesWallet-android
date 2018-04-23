@@ -15,7 +15,7 @@ import javax.inject.Inject
 class SplashActivity : BaseActivity(), SplashView {
 
     override fun onNotLoggedIn() {
-        launchActivity<ChooseLanguageActivity>(clear = true)
+        launchActivity<ChooseLanguageActivity>()
 //        launchActivity<LandingActivity>(clear = true)
     }
 

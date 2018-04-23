@@ -649,12 +649,31 @@
     <string name="seed_like_address">It looks like you scan address QR-code instead of seed. Please use correct QR-code.</string>
 
     <!-- ###################################################################  v2 ################################################################### -->
+
+    <!--Choose language-->
     <string name="choose_language_russia">Русский</string>
     <string name="choose_language_china">中文(简体)</string>
     <string name="choose_language_korea">한국어</string>
     <string name="choose_language_turkey">Türkçe</string>
     <string name="choose_language_english">English</string>
-
     <string name="choose_language_continue">Continue</string>
+
+    <!--Tutorial-->
+    <string name="card_tutorial_next">Next</string>
+    <string name="card_tutorial_understand">I Understand</string>
+    <string name="tutorial_card_1_title">Welcome to the\nWaves Platform!</string>
+    <string name="tutorial_card_1_description">Please take some time to understand some important things for your own safety. 🙏 \n\nWe cannot recover your funds or freeze your account if you visit a phishing site or lose your backup phrase (aka SEED phrase).\n\nBy continuing to use our platform, you agree to accept all risks associated with the loss of your SEED, including but not limited to the inability to obtain your funds and dispose of them. In case you lose your SEED, you agree and acknowledge that the Waves Platform would not be responsible for the negative consequences of this.</string>
+    <string name="tutorial_card_2_title">What you need to know about your SEED</string>
+    <string name="tutorial_card_2_description">When registering your account, you will be asked to save your secret phrase (Seed) and to protect your account with a password. On normal centralized servers, special attention is paid to the password, which can be changed and reset via email, if the need arises. However, on decentralized platforms such as Waves, everything is arranged differently:</string>
+    <string name="card_tutorial_3_description_anonim">You use your wallet anonymously, meaning your account is not connected to an email account or any other identifying data.</string>
+    <string name="card_tutorial_3_description_passbrowser">Your password protects your account when working on a certain device or browser. It is needed in order to ensure that your secret phrase is not saved in storage.</string>
+    <string name="card_tutorial_4_description_backuo">If you forget your password, you can easily create a new one by using the account recovery form via your secret phrase. If you lose your secret phrase, however, you will have no way to access your account.</string>
+    <string name="card_tutorial_4_description_shredder">You cannot change your secret phrase. If you accidentally sent it to someone or suspect that scammers have taken it over, then create a new Waves wallet immediately and transfer your funds to it.</string>
+    <string name="card_tutorial_5_title">How To Protect Yourself from Phishers</string>
+    <string name="card_tutorial_5_description">One of the most common forms of scamming is phishing, which is when scammers create fake communities on Facebook or other websites that look similar to the authentic ones.</string>
+    <string name="card_tutorial_6_description_mailopen">Do not open emails or links from unknown senders.</string>
+    <string name="card_tutorial_6_description_refreshbrowser">Regularly update your operating system.</string>
+    <string name="card_tutorial_7_description_os">Use official security software. Do not install unknown software which could be hacked.</string>
+    <string name="card_tutorial_7_description_wifi">Do not access your wallet when using public Wi-Fi or someone else’s device.</string>
 
 </resources>

@@ -4,22 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:animateLayoutChanges="true"
-    android:fitsSystemWindows="true"
+    android:id="@+id/relative_root"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:id="@+id/image_logo"
-        android:fitsSystemWindows="true"
+        android:layout_centerInParent="true"
         app:srcCompat="@drawable/ic_logo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp"
         android:layout_height="wrap_content" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_language"
-        android:layout_marginTop="44dp"
-        android:layout_below="@+id/image_logo"
+        android:layout_marginTop="160dp"
+        android:translationY="-40dp"
+        android:alpha="0"
         android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_above="@+id/button_continue"
@@ -33,6 +32,7 @@
         android:text="@string/choose_language_continue"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:textStyle="bold"
         android:layout_marginBottom="24dp"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
