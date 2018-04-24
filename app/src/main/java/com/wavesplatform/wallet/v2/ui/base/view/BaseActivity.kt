@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.base.view
 
 import android.app.ProgressDialog
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
@@ -63,6 +64,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(configLayoutRes())
 
         Timber.tag(javaClass.simpleName)
