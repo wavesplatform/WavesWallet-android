@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 import android.support.annotation.StringRes;
 import android.util.Log;
 
+import com.appsflyer.AppsFlyerLib;
 import com.google.common.base.Charsets;
 import com.google.common.primitives.Ints;
 import com.wavesplatform.wallet.BR;
@@ -18,6 +19,9 @@ import com.wavesplatform.wallet.request.IssueTransactionRequest;
 import com.wavesplatform.wallet.ui.base.BaseViewModel;
 import com.wavesplatform.wallet.ui.customviews.ToastCustom;
 import com.wavesplatform.wallet.util.MoneyUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @SuppressWarnings("WeakerAccess")
@@ -142,9 +146,17 @@ public class IssueViewModel extends BaseViewModel {
         }
     }
 
+    private void trackIssueAsset(IssueTransactionRequest request) {
+        Map<String, Object> eventValue = new HashMap<String, Object>();
+        eventValue.put("af_asset_name", request.name);
+        eventValue.put("af_asset_id", request.id);
+        AppsFlyerLib.getInstance().trackEvent(context, "af_issue_tx", eventValue);
+    }
+
     public void submitIssue() {
         NodeManager.get().broadcastIssue(request)
             .compose(RxUtil.applySchedulersToObservable()).subscribe(tx -> {
+            trackIssueAsset(tx);
             if (dataListener != null)
                 dataListener.onShowTransactionSuccess(request);
         }, err -> {

@@ -22,11 +22,15 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.appsflyer.AppsFlyerLib;
 import com.google.gson.internal.LinkedTreeMap;
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.databinding.ActivityPlaceOrderBinding;
+import com.wavesplatform.wallet.payload.AmountAssetInfo;
 import com.wavesplatform.wallet.payload.Price;
+import com.wavesplatform.wallet.payload.PriceAssetInfo;
 import com.wavesplatform.wallet.payload.WatchMarket;
+import com.wavesplatform.wallet.request.OrderRequest;
 import com.wavesplatform.wallet.request.OrderType;
 import com.wavesplatform.wallet.ui.auth.PinEntryActivity;
 import com.wavesplatform.wallet.ui.base.BaseAuthActivity;
@@ -38,6 +42,8 @@ import com.wavesplatform.wallet.util.annotations.Thunk;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -365,15 +371,23 @@ public class PlaceOrderActivity extends BaseAuthActivity implements PlaceOrderVi
     }
 
     @Override
-    public void showBalanceFromPair(LinkedTreeMap<String, Long> stringIntegerHashMap) {
-        ArrayList<Long> assets = new ArrayList<>(stringIntegerHashMap.values());
-        if (stringIntegerHashMap.keySet().toArray()[0].equals(placeOrderViewModel.placeOrderModel.getWatchMarket().market.amountAsset)) {
-            binding.textAmountAssetValue.setText(MoneyUtil.getTextStripZeros(MoneyUtil.getScaledText(assets.get(0), placeOrderViewModel.placeOrderModel.getWatchMarket().market.getAmountAssetInfo().decimals)));
-            binding.textPriceAssetValue.setText(MoneyUtil.getTextStripZeros(MoneyUtil.getScaledPrice(assets.get(1), placeOrderViewModel.placeOrderModel.getWatchMarket().market.getAmountAssetInfo().decimals, placeOrderViewModel.placeOrderModel.getWatchMarket().market.getPriceAssetInfo().decimals)));
-        } else {
-            binding.textAmountAssetValue.setText(MoneyUtil.getTextStripZeros(MoneyUtil.getScaledText(assets.get(1), placeOrderViewModel.placeOrderModel.getWatchMarket().market.getAmountAssetInfo().decimals)));
-            binding.textPriceAssetValue.setText(MoneyUtil.getTextStripZeros(MoneyUtil.getScaledPrice(assets.get(0), placeOrderViewModel.placeOrderModel.getWatchMarket().market.getAmountAssetInfo().decimals, placeOrderViewModel.placeOrderModel.getWatchMarket().market.getPriceAssetInfo().decimals)));
-        }
+    public void trackPlaceOrder(OrderRequest order) {
+        Map<String, Object> eventValue = new HashMap<String, Object>();
+        eventValue.put("af_order_pair", order.assetPair.getKey());
+        eventValue.put("af_order_type", order.orderType.toString());
+        eventValue.put("af_order_price", order.price);
+        eventValue.put("af_order_amount", order.amount);
+        AppsFlyerLib.getInstance().trackEvent(getApplicationContext(), "af_place_order", eventValue);
+    }
+
+    @Override
+    public void showBalanceFromPair(LinkedTreeMap<String, Long> balances) {
+        AmountAssetInfo amountAssetInfo = placeOrderViewModel.placeOrderModel.getWatchMarket().market.getAmountAssetInfo();
+        String amountAsset = placeOrderViewModel.placeOrderModel.getWatchMarket().market.amountAsset;
+        PriceAssetInfo priceAssetInfo = placeOrderViewModel.placeOrderModel.getWatchMarket().market.getPriceAssetInfo();
+        String priceAsset = placeOrderViewModel.placeOrderModel.getWatchMarket().market.priceAsset;
+        binding.textAmountAssetValue.setText(MoneyUtil.getTextStripZeros(MoneyUtil.getScaledText(balances.get(amountAsset), amountAssetInfo.decimals)));
+        binding.textPriceAssetValue.setText(MoneyUtil.getTextStripZeros(MoneyUtil.getScaledText(balances.get(priceAsset), priceAssetInfo.decimals)));
     }
 
     @Override

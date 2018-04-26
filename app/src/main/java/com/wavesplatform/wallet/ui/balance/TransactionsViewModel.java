@@ -8,6 +8,7 @@ import android.support.annotation.VisibleForTesting;
 import android.text.Spannable;
 import android.text.style.RelativeSizeSpan;
 
+import com.appsflyer.AppsFlyerLib;
 import com.google.common.collect.HashBiMap;
 import com.wavesplatform.wallet.BR;
 import com.wavesplatform.wallet.R;
@@ -59,6 +60,12 @@ public class TransactionsViewModel extends BaseObservable implements ViewModel {
         return prefsUtil;
     }
 
+    public void allowSendStats(boolean isAlow) {
+        prefsUtil.setValue(PrefsUtil.KEY_SEND_USAGE_STATS, isAlow ? 1 : 0);
+        AppsFlyerLib.getInstance().stopTracking(!isAlow, context);
+
+    }
+
     public interface DataListener {
         void onRefreshAccounts();
 
@@ -67,6 +74,8 @@ public class TransactionsViewModel extends BaseObservable implements ViewModel {
         void onRefreshBalanceAndTransactions();
 
         void showBackupPromptDialog(boolean showNeverAgain);
+
+        void showSendStatistics();
 
         void setTopBalance(Spannable spannable);
     }
@@ -91,8 +100,18 @@ public class TransactionsViewModel extends BaseObservable implements ViewModel {
         }
     }
 
+    private void showSendStatsIfNeeded() {
+        int sendStats = prefsUtil.getValue(PrefsUtil.KEY_SEND_USAGE_STATS, -1);
+        if (sendStats == -1) {
+            dataListener.showSendStatistics();
+        } else {
+            AppsFlyerLib.getInstance().stopTracking(sendStats == 0, context);
+        }
+    }
+
     public void onViewReady() {
         showBackupPromtIfNeede();
+        showSendStatsIfNeeded();
     }
 
     public void neverPromptBackup() {

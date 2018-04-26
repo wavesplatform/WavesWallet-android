@@ -7,8 +7,8 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.api.NodeManager;
 import com.wavesplatform.wallet.api.mather.MatherManager;
-import com.wavesplatform.wallet.data.access.AccessState;
 import com.wavesplatform.wallet.data.Events;
+import com.wavesplatform.wallet.data.access.AccessState;
 import com.wavesplatform.wallet.data.exception.RetrofitException;
 import com.wavesplatform.wallet.data.rxjava.RxUtil;
 import com.wavesplatform.wallet.injection.Injector;
@@ -77,6 +77,8 @@ public class PlaceOrderViewModel extends BaseViewModel {
         void showProgressDialog(@StringRes int messageId, @Nullable String suffix);
 
         void dismissProgressDialog();
+
+        void trackPlaceOrder(OrderRequest signed);
     }
 
     public void getMatcherKey() {
@@ -106,6 +108,7 @@ public class PlaceOrderViewModel extends BaseViewModel {
                 .subscribe(o -> {
                     if (dataListener != null){
                         mRxEventBus.post(new Events.NeedUpdateDataAfterPlaceOrder());
+                        dataListener.trackPlaceOrder(mOrderRequest);
                         dataListener.afterSuccessfullyPlaceOrder();
                         dataListener.dismissProgressDialog();
                     }

@@ -48,7 +48,7 @@ public class PrefsUtil implements PersistentPrefs {
     }
 
     private int getValueInternal(String name, int value) {
-        return preferenceManager.getInt(name, 0);
+        return preferenceManager.getInt(name, value);
     }
 
     public void setValue(String name, int value) {
@@ -66,7 +66,7 @@ public class PrefsUtil implements PersistentPrefs {
     }
 
     private long getValueInternal(String name, long value) {
-        return preferenceManager.getLong(name, 0L);
+        return preferenceManager.getLong(name, value);
     }
 
     public void setValue(String name, long value) {

@@ -20,6 +20,7 @@ interface PersistentPrefs {
     String KEY_LAST_BACKUP_PROMPT = "last_backup_prompt";
     String KEY_SECURITY_BACKUP_NEVER = "security_backup_never";
     String KEY_ENCRYPTED_PIN_CODE = "encrypted_pin_code";
+    String KEY_SEND_USAGE_STATS = "send_usage_stats";
 
     String KEY_FINGERPRINT_ENABLED = "fingerprint_enabled";
     String KEY_SHARED_KEY = "sharedKey";

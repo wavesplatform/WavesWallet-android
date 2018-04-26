@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.annotation.StringRes;
 import android.util.Log;
 
+import com.appsflyer.AppsFlyerLib;
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.api.NodeManager;
 import com.wavesplatform.wallet.data.access.AccessState;
@@ -25,7 +26,9 @@ import com.wavesplatform.wallet.util.StringUtils;
 import com.wavesplatform.wallet.util.annotations.Thunk;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -268,9 +271,17 @@ public class SendViewModel extends BaseViewModel {
         }
     }
 
+    private void trackSendPayment(TransferTransactionRequest request) {
+        Map<String, Object> eventValue = new HashMap<String, Object>();
+        eventValue.put("af_amount", request.amount);
+        eventValue.put("af_asset_id", request.assetId);
+        AppsFlyerLib.getInstance().trackEvent(context, "af_transfer_tx", eventValue);
+    }
+
     public void submitPayment(TransferTransactionRequest signed) {
         NodeManager.get().broadcastTransfer(signed)
                 .compose(RxUtil.applySchedulersToObservable()).subscribe(tx -> {
+            trackSendPayment(signed);
             if (dataListener != null)
                 dataListener.onShowTransactionSuccess(signed);
         }, err -> {

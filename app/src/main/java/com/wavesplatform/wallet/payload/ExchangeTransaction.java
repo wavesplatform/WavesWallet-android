@@ -68,6 +68,10 @@ public class ExchangeTransaction extends Transaction {
         return NodeManager.get().getAssetBalance(getAmountAssetId());
     }
 
+    private AssetBalance getPriceAssetBallance() {
+        return NodeManager.get().getAssetBalance(getPriceAssetId());
+    }
+
     public long getTransactionFee(){
         if (getMyOrder().orderType.equals(OrderType.buy)){
             return buyMatcherFee;
@@ -99,7 +103,7 @@ public class ExchangeTransaction extends Transaction {
         if (getMyOrder().assetPair.priceAsset == null) {
             return 8;
         }
-        return getAssetBallance().issueTransaction.decimals;
+        return getPriceAssetBallance().issueTransaction.decimals;
     }
 
     @Override

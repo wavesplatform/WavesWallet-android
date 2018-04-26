@@ -7,6 +7,8 @@ import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
+import com.appsflyer.AppsFlyerConversionListener;
+import com.appsflyer.AppsFlyerLib;
 import com.wavesplatform.wallet.data.access.AccessState;
 import com.wavesplatform.wallet.data.access.DexAccessState;
 import com.wavesplatform.wallet.data.connectivity.ConnectivityManager;
@@ -19,6 +21,8 @@ import com.wavesplatform.wallet.util.ApplicationLifeCycle;
 import com.wavesplatform.wallet.util.PrefsUtil;
 import com.wavesplatform.wallet.util.annotations.Thunk;
 import com.wavesplatform.wallet.util.exceptions.LoggingExceptionHandler;
+
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -96,6 +100,41 @@ public class BlockchainApplication extends Application {
                 AccessState.getInstance().removeWavesWallet();
             }
         });
+
+        initAppsFlyer();
+    }
+
+    private static final String AF_DEV_KEY = "4di8SsYap4CM4XYMdh8uT6";
+
+    void initAppsFlyer() {
+        AppsFlyerConversionListener conversionDataListener =
+                new AppsFlyerConversionListener() {
+                    @Override
+                    public void onInstallConversionDataLoaded(Map<String, String> conversionData) {
+                        for (String attrName : conversionData.keySet()) {
+                            Log.d(AppsFlyerLib.LOG_TAG, "attribute: " + attrName + " = " + conversionData.get(attrName));
+                        }
+                    }
+
+                    @Override
+                    public void onInstallConversionFailure(String errorMessage) {
+                        Log.d(AppsFlyerLib.LOG_TAG, "error getting conversion data: " + errorMessage);
+                    }
+
+                    @Override
+                    public void onAppOpenAttribution(Map<String, String> attributionData) {
+                        for (String attrName : attributionData.keySet()) {
+                            Log.d(AppsFlyerLib.LOG_TAG, "attribute: " + attrName + " = " + attributionData.get(attrName));
+                        }
+                    }
+
+                    @Override
+                    public void onAttributionFailure(String errorMessage) {
+                        Log.d(AppsFlyerLib.LOG_TAG, "error onAttributionFailure : " + errorMessage);
+                    }
+                };
+        AppsFlyerLib.getInstance().init(AF_DEV_KEY, conversionDataListener, getApplicationContext());
+        AppsFlyerLib.getInstance().startTracking(this);
     }
 
     /**

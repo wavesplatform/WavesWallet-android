@@ -50,6 +50,7 @@ import com.wavesplatform.wallet.ui.transactions.TransactionDetailActivity;
 import com.wavesplatform.wallet.ui.transactions.UnknownDetailActivity;
 import com.wavesplatform.wallet.util.DateUtil;
 import com.wavesplatform.wallet.util.ListUtil;
+import com.wavesplatform.wallet.util.PrefsUtil;
 import com.wavesplatform.wallet.util.ViewUtils;
 import com.wavesplatform.wallet.util.annotations.Thunk;
 
@@ -217,6 +218,31 @@ public class TransactionsFragment extends Fragment implements TransactionsViewMo
             if (securityPromptDialog.isChecked()) {
                 viewModel.neverPromptBackup();
             }
+        });
+
+        if (getActivity() != null && !getActivity().isFinishing() && isAdded()) {
+            securityPromptDialog.showDialog(getActivity().getSupportFragmentManager());
+        }
+    }
+
+    @Override
+    public void showSendStatistics() {
+        SecurityPromptDialog securityPromptDialog = SecurityPromptDialog.newInstance(
+                R.string.statistics_send_title,
+                getString(R.string.statistics_send_message),
+                R.drawable.bad_backup,
+                R.string.yes,
+                true,
+                false);
+
+        securityPromptDialog.setPositiveButtonListener(v -> {
+            viewModel.allowSendStats(true);
+            securityPromptDialog.dismiss();
+        });
+
+        securityPromptDialog.setNegativeButtonListener(v -> {
+            viewModel.allowSendStats(false);
+            securityPromptDialog.dismiss();
         });
 
         if (getActivity() != null && !getActivity().isFinishing() && isAdded()) {

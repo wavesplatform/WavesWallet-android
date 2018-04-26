@@ -116,6 +116,13 @@
 -keepclasseswithmembers class * {
     @retrofit.http.* <methods>;
 }
+# Platform calls Class.forName on types which do not exist on Android to determine platform.
+-dontnote retrofit2.Platform
+# Platform used when running on Java 8 VMs. Will not be used at runtime.
+-dontwarn retrofit2.Platform$Java8
+# Retain declared checked exceptions for use by a Proxy instance.
+-keepattributes Exceptions
+
 -keep class com.google.gson.** { *; }
 -keep class com.google.inject.** { *; }
 -keep class org.apache.http.** { *; }
@@ -134,7 +141,6 @@
 
 -keepattributes Signature
 -keepattributes *Annotation*
--keepattributes Signature
 
 # slf4j
 -dontwarn org.slf4j.**
@@ -155,8 +161,6 @@
 # Only necessary if you downloaded the SDK jar directly instead of from maven.
 -keep class com.shaded.fasterxml.jackson.** { *; }
 
--keepattributes Signature
--keepattributes *Annotation*
 -keepattributes EnclosingMethod
 -keepattributes InnerClasses
 
@@ -164,3 +168,9 @@
 -keepclassmembers class com.wavesplatform.wallet.data.services.** {*;}
 -keep class com.wavesplatform.wallet.data.access.** {*;}
 -keepclassmembers class com.wavesplatform.wallet.data.access.** {*;}
+
+-dontwarn com.android.installreferrerCopy
+-dontwarn com.appsflyer.*
+
+-keep class com.appsflyer.** { *; }
+-keep class om.android.installreferrerCopy.** { *; }

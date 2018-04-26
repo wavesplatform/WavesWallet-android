@@ -647,4 +647,9 @@
     </string-array>
 
     <string name="seed_like_address">It looks like you scan address QR-code instead of seed. Please use correct QR-code.</string>
+
+    <!-- Statistics -->
+    <string name="statistics_send_title">Send usage statistics</string>
+    <string name="statistics_send_message">Help to improve the Waves platform by sending anonymous usage statistics to the developers.</string>
+
 </resources>
