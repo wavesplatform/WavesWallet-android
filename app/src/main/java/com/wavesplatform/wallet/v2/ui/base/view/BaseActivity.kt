@@ -3,12 +3,14 @@ package com.wavesplatform.wallet.v2.ui.base.view
 import android.app.ProgressDialog
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.ActionBar
+import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
@@ -91,13 +93,20 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     @JvmOverloads
-    fun setupToolbar(toolbar: Toolbar, onClickListener: View.OnClickListener? = null, homeEnable: Boolean = false, @StringRes title: Int) {
+    fun setupToolbar(toolbar: Toolbar, onClickListener: View.OnClickListener? = null, homeEnable: Boolean = false,
+                     title: String = "", @DrawableRes icon: Int = R.drawable.ic_arrow_back_white_24dp) {
         this.toolbar = toolbar
         setSupportActionBar(toolbar)
         mActionBar = supportActionBar
 
         mActionBar?.setHomeButtonEnabled(homeEnable)
-        mActionBar?.title = getString(title);
+        mActionBar?.setDisplayHomeAsUpEnabled(homeEnable)
+
+
+        mActionBar?.setHomeAsUpIndicator(AppCompatResources.getDrawable(this, icon))
+
+        if (title.isNotEmpty()) mActionBar?.title = title
+        else mActionBar?.title = " "
 
         onClickListener?.let { toolbar.setNavigationOnClickListener(it) }
     }
@@ -136,13 +145,13 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     override fun showNetworkError() {
-//        showSnackbar(R.string.error_network_text)
+        showSnackbar(R.string.check_connectivity_exit)
     }
 
     fun showNetworkErrorWithRetry(retrySubject: PublishSubject<Events.RetryEvent>) {
-//        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network_text), Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(findViewById(android.R.id.content), getString(R.string.check_connectivity_exit), Snackbar.LENGTH_INDEFINITE)
 //                .setAction(getString(R.string.error_network_retry_text), { retrySubject.onNext(Events.RetryEvent()) })
-//                .show()
+                .show()
     }
 
     override fun showProgressBar(isShowProgress: Boolean) {

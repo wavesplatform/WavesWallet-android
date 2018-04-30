@@ -24,9 +24,9 @@
         <activity
             android:name=".v2.ui.splash.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Translucent.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -133,13 +133,21 @@
 
         <activity android:name=".v1.ui.transactions.ExchangeTransactionActivity" />
         <activity
-            android:name=".v2.ui.choose_language.ChooseLanguageActivity"
+            android:name=".v2.ui.language.choose.ChooseLanguageActivity"
+            android:configChanges="orientation"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar.Translucent" />
-        <activity android:name=".v2.ui.tutorial.TutorialActivity"
+        <activity
+            android:name=".v2.ui.tutorial.TutorialActivity"
             android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.Translucent" />
+        <activity
+            android:name=".v2.ui.welcome.WelcomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.Translucent" />
+        <activity android:name="com.wavesplatform.wallet.v2.ui.language.change.ChangeLanguageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Translucent"/>
     </application>

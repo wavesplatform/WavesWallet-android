@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.util
 
 import android.app.Activity
+import android.content.ClipData.newIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -10,6 +11,7 @@ import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.text.Html
@@ -39,6 +41,16 @@ fun Context.isNetworkConnection(): Boolean {
     val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val activeNetwork = cm.activeNetworkInfo
     return activeNetwork != null && activeNetwork.isConnectedOrConnecting
+}
+
+
+fun Activity.setSystemBarTheme(pIsDark: Boolean) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        // Fetch the current flags.
+        val lFlags = this.window.decorView.systemUiVisibility
+        // Update the SystemUiVisibility dependening on whether we want a Light or Dark theme.
+        this.window.decorView.systemUiVisibility = if (pIsDark) lFlags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv() else lFlags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+    }
 }
 
 fun <T : Any> T?.notNull(f: (it: T) -> Unit) {
@@ -86,7 +98,7 @@ fun ImageView.loadImage(url: String?, centerCrop: Boolean = true, name: String? 
             canvas.drawRoundRect(0f, 0f,
                     height.toFloat(), width.toFloat(), dp2px(8).toFloat(), dp2px(8).toFloat(), rectPaint)
 
-            canvas.drawText(name?.substring(0,1), (canvas.width / 2).toFloat(),
+            canvas.drawText(name?.substring(0, 1), (canvas.width / 2).toFloat(),
                     ((canvas.height / 2) - ((textPaint.descent() + textPaint.ascent()) / 2)), textPaint)
 
 
@@ -124,7 +136,7 @@ fun ImageView.loadImage(file: File?, centerCrop: Boolean = true, name: String? =
             canvas.drawRoundRect(0f, 0f,
                     height.toFloat(), width.toFloat(), dp2px(8).toFloat(), dp2px(8).toFloat(), rectPaint)
 
-            canvas.drawText(name?.substring(0,1), (canvas.width / 2).toFloat(),
+            canvas.drawText(name?.substring(0, 1), (canvas.width / 2).toFloat(),
                     ((canvas.height / 2) - ((textPaint.descent() + textPaint.ascent()) / 2)), textPaint)
 
 
@@ -170,6 +182,7 @@ fun Context.fromHtml(source: String): Spanned {
 inline fun <reified T : Any> Activity.launchActivity(
         requestCode: Int = -1,
         clear: Boolean = false,
+        withoutAnimation: Boolean = false,
         options: Bundle? = null,
         noinline init: Intent.() -> Unit = {}) {
 
@@ -186,11 +199,13 @@ inline fun <reified T : Any> Activity.launchActivity(
     } else {
         startActivity(intent)
     }
+    if (withoutAnimation) overridePendingTransition(0, 0)
 }
 
 inline fun <reified T : Any> Fragment.launchActivity(
         requestCode: Int = -1,
         clear: Boolean = false,
+        withoutAnimation: Boolean = false,
         options: Bundle? = null,
         noinline init: Intent.() -> Unit = {}) {
 
@@ -207,6 +222,7 @@ inline fun <reified T : Any> Fragment.launchActivity(
     } else {
         startActivity(intent)
     }
+    if (withoutAnimation) activity?.overridePendingTransition(0, 0)
 }
 
 inline fun <reified T : Any> Context.launchActivity(

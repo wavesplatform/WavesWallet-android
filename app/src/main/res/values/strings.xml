@@ -650,13 +650,21 @@
 
     <!-- ###################################################################  v2 ################################################################### -->
 
-    <!--Choose language-->
+    <string name="action_language_russia">Русский</string>
+    <string name="action_language_china">中文(简体)</string>
+    <string name="action_language_korea">한국어</string>
+    <string name="action_language_turkey">Türkçe</string>
+    <string name="action_language_english">Eng</string>
+
+    <!-- Language-->
     <string name="choose_language_russia">Русский</string>
     <string name="choose_language_china">中文(简体)</string>
     <string name="choose_language_korea">한국어</string>
     <string name="choose_language_turkey">Türkçe</string>
     <string name="choose_language_english">English</string>
     <string name="choose_language_continue">Continue</string>
+    <string name="choose_language_confirm">Confirm</string>
+    <string name="change_language_toolbar_title">Change language</string>
 
     <!--Tutorial-->
     <string name="card_tutorial_next">Next</string>
@@ -676,4 +684,12 @@
     <string name="card_tutorial_7_description_os">Use official security software. Do not install unknown software which could be hacked.</string>
     <string name="card_tutorial_7_description_wifi">Do not access your wallet when using public Wi-Fi or someone else’s device.</string>
 
+    <!-- Left Drawer -->
+    <string name="left_drawer_">Next</string>
+    <string name="left_drawer_description">Keep up with the latest news and articles, and find out all about events happening on the Waves Platform</string>
+    <string name="left_drawer_site">wavescommunity.com</string>
+    <string name="left_drawer_whitepaper">Whitepaper</string>
+    <string name="left_drawer_roadmap">Roadmap</string>
+    <string name="left_drawer_terms_and_conditions">Terms and conditions</string>
+    <string name="left_drawer_join_the_waves_community">Join the Waves Community</string>
 </resources>

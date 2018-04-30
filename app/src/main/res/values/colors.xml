@@ -71,4 +71,8 @@
 
     <color name="dex_place_order_dialog_bg">#424242</color>
 
+    <!-- Left Drawer  -->
+    <color name="left_drawer_grayed">#9ba6b2</color>
+    <color name="left_drawer_divider">#e9e9eb</color>
+
 </resources>

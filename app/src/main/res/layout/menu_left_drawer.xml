@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="24dp"
+    android:paddingTop="24dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_logo"
+        android:layout_width="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        app:srcCompat="@drawable/ic_logo" />
+
+    <TextView
+        android:id="@+id/text_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:layout_marginTop="14dp"
+        android:fontFamily="sans-serif"
+        android:lineSpacingExtra="4sp"
+        android:text="@string/left_drawer_description"
+        android:textColor="@color/left_drawer_grayed"
+        android:textSize="14sp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/text_site"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:layout_marginTop="14dp"
+        android:text="@string/left_drawer_site"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="41dp"
+        android:paddingBottom="13dp"
+        android:paddingTop="13dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:text="@string/left_drawer_whitepaper"
+        android:clickable="true"
+        android:background="?android:selectableItemBackground"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="48dp"
+        android:background="@color/left_drawer_divider" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/left_drawer_roadmap"
+        android:clickable="true"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:background="?android:selectableItemBackground"
+        android:paddingBottom="13dp"
+        android:paddingTop="13dp"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="48dp"
+        android:background="@color/left_drawer_divider" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/left_drawer_terms_and_conditions"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:paddingBottom="13dp"
+        android:clickable="true"
+        android:background="?android:selectableItemBackground"
+        android:paddingTop="13dp"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="48dp"
+        android:background="@color/left_drawer_divider" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:fontFamily="sans-serif"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:lineSpacingExtra="4sp"
+        android:text="@string/left_drawer_join_the_waves_community"
+        android:textColor="@color/left_drawer_grayed"
+        android:textSize="14sp"
+        android:textStyle="normal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/ic_s_github_28" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/ic_s_telegram_28" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/ic_s_discord_28" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/ic_s_twitter_28" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_s_facebook_28" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:layout_marginTop="54dp"
+        android:textStyle="normal"
+        android:textColor="#9ba6b2"
+        android:lineSpacingExtra="4sp"
+        android:text="© Waves Platform"
+        />
+
+</LinearLayout>

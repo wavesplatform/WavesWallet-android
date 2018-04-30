@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.choose_language
+package com.wavesplatform.wallet.v2.ui.language.choose
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -8,31 +8,38 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
+import com.wavesplatform.wallet.v2.ui.language.LanguageAdapter
+import com.wavesplatform.wallet.v2.ui.language.LanguagePresenter
+import com.wavesplatform.wallet.v2.ui.language.LanguageView
+import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_choose_language.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
-import pers.victor.ext.getStatusBarHeight
 import pers.victor.ext.visiable
 import javax.inject.Inject
+import android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+import android.app.Activity
+import android.os.Build
+import android.os.Build.VERSION_CODES
+import android.support.annotation.RequiresApi
+import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 
 
-class ChooseLanguageActivity : BaseActivity(), ChooseLanguageView {
+class ChooseLanguageActivity : BaseActivity(), LanguageView {
 
     @Inject
     @InjectPresenter
-    lateinit var presenter: ChooseLanguagePresenter
+    lateinit var presenter: LanguagePresenter
 
 
     @Inject
-    lateinit var adapter: ChooseLanguageAdapter
+    lateinit var adapter: LanguageAdapter
 
     @ProvidePresenter
-    fun providePresenter(): ChooseLanguagePresenter = presenter
+    fun providePresenter(): LanguagePresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_choose_language
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
 //        image_logo.translationY = getStatusBarHeight().toFloat()

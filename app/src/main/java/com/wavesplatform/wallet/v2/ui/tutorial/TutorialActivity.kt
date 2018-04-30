@@ -9,6 +9,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
+import com.yuyakaido.android.cardstackview.CardStackView
 import com.yuyakaido.android.cardstackview.SwipeDirection
 import kotlinx.android.synthetic.main.activity_tutorial.*
 import kotlinx.android.synthetic.main.item_tutorial_1_card.view.*
@@ -33,7 +36,26 @@ class TutorialActivity : BaseActivity(), TutorialView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         adapter.addAll(arrayListOf(1, 2, 3, 4, 5, 6, 7))
         card_stack_tutorial.setAdapter(adapter)
-//        adapter.notifyDataSetChanged()
+        card_stack_tutorial.setCardEventListener(object : CardStackView.CardEventListener {
+            override fun onCardDragging(percentX: Float, percentY: Float) {
+            }
+
+            override fun onCardSwiped(direction: SwipeDirection?) {
+                if (adapter.count == card_stack_tutorial.topIndex) {
+                    launchActivity<WelcomeActivity>(withoutAnimation = true)
+                }
+            }
+
+            override fun onCardReversed() {
+            }
+
+            override fun onCardMovedToOrigin() {
+            }
+
+            override fun onCardClicked(index: Int) {
+            }
+
+        })
 
         white_block.post({
             card_stack_tutorial.topView.post({

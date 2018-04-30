@@ -5,9 +5,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.auth.AuthUtil
-import com.wavesplatform.wallet.v1.ui.auth.LandingActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.choose_language.ChooseLanguageActivity
+import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import javax.inject.Inject
 
