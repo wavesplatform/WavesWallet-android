@@ -43,7 +43,7 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
         // initial position of animation
         card_content.translationY = screenHeight.toFloat()
 
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.change_language_toolbar_title), R.drawable.ic_toolbar_backwhite)
+        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.change_language_toolbar_title), R.drawable.ic_toolbar_back_white)
 
         recycle_language.layoutManager = LinearLayoutManager(this)
         recycle_language.adapter = adapter

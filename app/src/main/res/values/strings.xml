@@ -654,7 +654,7 @@
     <string name="action_language_china">中文(简体)</string>
     <string name="action_language_korea">한국어</string>
     <string name="action_language_turkey">Türkçe</string>
-    <string name="action_language_english">Eng</string>
+    <string name="action_language_english">EN</string>
 
     <!-- Language-->
     <string name="choose_language_russia">Русский</string>
@@ -692,4 +692,22 @@
     <string name="left_drawer_roadmap">Roadmap</string>
     <string name="left_drawer_terms_and_conditions">Terms and conditions</string>
     <string name="left_drawer_join_the_waves_community">Join the Waves Community</string>
+
+    <!-- Welcome -->
+    <string name="welcome_blockchain_title">Get Started with Blockchain</string>
+    <string name="welcome_blockchain_description">Become part of a fast-growing area of the crypto world. You are the only person who can access your crypto assets.</string>
+    <string name="welcome_wallet_title">Wallet</string>
+    <string name="welcome_wallet_description">Store, manage and receive interest on your digital assets balance, easily and securely.</string>
+    <string name="welcome_dex_title">Decentralised Exchange</string>
+    <string name="welcome_dex_description">Trade quickly and securely. You retain complete control over your funds when trading them on our decentralised exchange.</string>
+    <string name="welcome_token_title">Token Launcher</string>
+    <string name="welcome_token_description">Issue your own tokens. These can be integrated into your business not only as an internal currency but also as a token for decentralised voting, as a rating system, or loyalty program.</string>
+    <string name="welcome_create_new_acc">Create a new account</string>
+    <string name="welcome_create_sign_in_title">Sign in</string>
+    <string name="welcome_create_sign_in_description">to a saved account</string>
+    <string name="welcome_create_import_title">Import account</string>
+    <string name="welcome_create_import_description">via pairing code or manually</string>
+
+    <!-- New account -->
+    <string name="new_account_toolbar_title">New account</string>
 </resources>

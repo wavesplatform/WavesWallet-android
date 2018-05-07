@@ -28,19 +28,23 @@
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Translucent.Splash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
-                <data android:scheme="waves" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.VIEW" /> -->
+
+
+            <!-- <data android:scheme="waves" /> -->
+
+
+            <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+            <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".v1.ui.home.MainActivity"
@@ -146,10 +150,29 @@
         <activity
             android:name=".v2.ui.welcome.WelcomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Translucent" />
-        <activity android:name="com.wavesplatform.wallet.v2.ui.language.change.ChangeLanguageActivity"
+            android:theme="@style/AppTheme.NoActionBar.Translucent">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <data android:scheme="waves" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".v2.ui.language.change.ChangeLanguageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Translucent"/>
+            android:theme="@style/AppTheme.NoActionBar.Translucent" />
+        <activity android:name=".v2.ui.new_account.NewAccountActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.Translucent"
+            />
     </application>
 
 </manifest>

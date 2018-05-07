@@ -1,5 +1,8 @@
 package com.wavesplatform.wallet.v2.util
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.ClipData.newIntent
 import android.content.Context
@@ -78,33 +81,10 @@ fun String?.getAge(): String {
 }
 
 
-fun ImageView.loadImage(url: String?, centerCrop: Boolean = true, name: String? = "") {
+fun ImageView.loadImage(url: String?, centerCrop: Boolean = true) {
     this.post({
         val options = RequestOptions()
                 .override(this.width, this.height)
-
-        if (!name.isNullOrEmpty()) {
-            var placeholder = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-            var canvas = android.graphics.Canvas(placeholder)
-            val rectPaint = Paint()
-            val textPaint = Paint()
-
-            rectPaint.color = android.support.v4.content.ContextCompat.getColor(this.context, R.color.blockchain_blue)
-            textPaint.color = android.support.v4.content.ContextCompat.getColor(this.context, android.R.color.white)
-            textPaint.textSize = pers.victor.ext.sp2px(50).toFloat()
-            textPaint.textAlign = android.graphics.Paint.Align.CENTER
-
-
-            canvas.drawRoundRect(0f, 0f,
-                    height.toFloat(), width.toFloat(), dp2px(8).toFloat(), dp2px(8).toFloat(), rectPaint)
-
-            canvas.drawText(name?.substring(0, 1), (canvas.width / 2).toFloat(),
-                    ((canvas.height / 2) - ((textPaint.descent() + textPaint.ascent()) / 2)), textPaint)
-
-
-            options.error(BitmapDrawable(resources, placeholder))
-            options.placeholder(BitmapDrawable(resources, placeholder))
-        }
 
         if (centerCrop) options.transform(CenterCrop())
 
@@ -116,33 +96,51 @@ fun ImageView.loadImage(url: String?, centerCrop: Boolean = true, name: String? 
     })
 }
 
-fun ImageView.loadImage(file: File?, centerCrop: Boolean = true, name: String? = "", deleteImmediately: Boolean = true) {
+fun Context.getViewScaleAnimator(from: View, target: View, additionalPadding: Int = 0): Animator {
+    // height resize animation
+    val animatorSet = AnimatorSet()
+    val desiredHeight = from.height
+    val currentHeight = target.height
+    val heightAnimator = ValueAnimator.ofInt(currentHeight, desiredHeight - additionalPadding)
+    heightAnimator.addUpdateListener { animation ->
+        val params = target.layoutParams as ViewGroup.LayoutParams
+        params.height = animation.animatedValue as Int
+        target.layoutParams = params
+    }
+    animatorSet.play(heightAnimator)
+
+    // width resize animation
+    val desiredWidth = from.width
+    val currentWidth = target.width
+    val widthAnimator = ValueAnimator.ofInt(currentWidth, desiredWidth - additionalPadding)
+    widthAnimator.addUpdateListener { animation ->
+        val params = target.layoutParams as ViewGroup.LayoutParams
+        params.width = animation.animatedValue as Int
+        target.layoutParams = params
+    }
+    animatorSet.play(widthAnimator)
+    return animatorSet
+}
+
+fun ImageView.loadImage(drawableRes: Int?, centerCrop: Boolean = true) {
     this.post({
         val options = RequestOptions()
                 .override(this.width, this.height)
 
-        if (!name.isNullOrEmpty()) {
-            var placeholder = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-            var canvas = android.graphics.Canvas(placeholder)
-            val rectPaint = Paint()
-            val textPaint = Paint()
+        if (centerCrop) options.transform(CenterCrop())
 
-            rectPaint.color = android.support.v4.content.ContextCompat.getColor(this.context, R.color.blockchain_blue)
-            textPaint.color = android.support.v4.content.ContextCompat.getColor(this.context, android.R.color.white)
-            textPaint.textSize = pers.victor.ext.sp2px(50).toFloat()
-            textPaint.textAlign = android.graphics.Paint.Align.CENTER
+        Glide.with(this)
+                .asBitmap()
+                .load(drawableRes)
+                .apply(options)
+                .into(this)
+    })
+}
 
-
-            canvas.drawRoundRect(0f, 0f,
-                    height.toFloat(), width.toFloat(), dp2px(8).toFloat(), dp2px(8).toFloat(), rectPaint)
-
-            canvas.drawText(name?.substring(0, 1), (canvas.width / 2).toFloat(),
-                    ((canvas.height / 2) - ((textPaint.descent() + textPaint.ascent()) / 2)), textPaint)
-
-
-            options.error(BitmapDrawable(resources, placeholder))
-            options.placeholder(BitmapDrawable(resources, placeholder))
-        }
+fun ImageView.loadImage(file: File?, centerCrop: Boolean = true, deleteImmediately: Boolean = true) {
+    this.post({
+        val options = RequestOptions()
+                .override(this.width, this.height)
 
         if (centerCrop) options.transform(CenterCrop())
 

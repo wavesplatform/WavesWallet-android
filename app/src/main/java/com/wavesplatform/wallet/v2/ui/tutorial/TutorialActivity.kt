@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
+import com.wavesplatform.wallet.v2.util.getViewScaleAnimator
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.yuyakaido.android.cardstackview.CardStackView
 import com.yuyakaido.android.cardstackview.SwipeDirection
@@ -59,7 +60,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
 
         white_block.post({
             card_stack_tutorial.topView.post({
-                val animator = getViewScaleAnimator(card_stack_tutorial.topView, white_block)
+                val animator = getViewScaleAnimator(card_stack_tutorial.topView, white_block, dp2px(10))
                 animator.addListener(object : Animator.AnimatorListener {
                     override fun onAnimationRepeat(p0: Animator?) {
                     }
@@ -111,32 +112,6 @@ class TutorialActivity : BaseActivity(), TutorialView {
         runDelayed(600, {
             card_stack_tutorial.topView.button_continue.isEnabled = true
         })
-    }
-
-    private fun getViewScaleAnimator(from: View, target: View): Animator {
-        // height resize animation
-        val animatorSet = AnimatorSet()
-        val desiredHeight = from.height
-        val currentHeight = target.height
-        val heightAnimator = ValueAnimator.ofInt(currentHeight, desiredHeight - dp2px(10))
-        heightAnimator.addUpdateListener { animation ->
-            val params = target.layoutParams as RelativeLayout.LayoutParams
-            params.height = animation.animatedValue as Int
-            target.layoutParams = params
-        }
-        animatorSet.play(heightAnimator)
-
-        // width resize animation
-        val desiredWidth = from.width
-        val currentWidth = target.width
-        val widthAnimator = ValueAnimator.ofInt(currentWidth, desiredWidth - dp2px(10))
-        widthAnimator.addUpdateListener { animation ->
-            val params = target.layoutParams as RelativeLayout.LayoutParams
-            params.width = animation.animatedValue as Int
-            target.layoutParams = params
-        }
-        animatorSet.play(widthAnimator)
-        return animatorSet
     }
 
 }
