@@ -264,10 +264,7 @@ dependencies {
 //
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 
-
-
-
-
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
 
     // UI/Instrumentation Tests
     androidTestCompile 'junit:junit:4.12'

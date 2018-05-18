@@ -75,4 +75,9 @@
     <color name="left_drawer_grayed">#9ba6b2</color>
     <color name="left_drawer_divider">#e9e9eb</color>
 
+    <color name="home_tab_inactive">#D3D3D3</color>
+    <color name="home_tab_active">#000000</color>
+    <color name="submit400">#1f5af6</color>
+    <color name="basic500">#9ba6b2</color>
+
 </resources>

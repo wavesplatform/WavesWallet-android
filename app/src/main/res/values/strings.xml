@@ -683,6 +683,8 @@
     <string name="card_tutorial_6_description_refreshbrowser">Regularly update your operating system.</string>
     <string name="card_tutorial_7_description_os">Use official security software. Do not install unknown software which could be hacked.</string>
     <string name="card_tutorial_7_description_wifi">Do not access your wallet when using public Wi-Fi or someone else’s device.</string>
+    <string name="assets">Assets</string>
+    <string name="leasing">Leasing</string>
 
     <!-- Left Drawer -->
     <string name="left_drawer_">Next</string>
