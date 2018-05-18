@@ -656,5 +656,7 @@
     <string name="choose_language_english">English</string>
 
     <string name="choose_language_continue">Continue</string>
+    <string name="assets">Assets</string>
+    <string name="leasing">Leasing</string>
 
 </resources>

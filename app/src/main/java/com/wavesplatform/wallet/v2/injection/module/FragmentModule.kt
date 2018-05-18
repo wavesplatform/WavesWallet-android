@@ -1,12 +1,29 @@
 package com.wavesplatform.wallet.v2.injection.module
 
+import com.wavesplatform.wallet.v2.injection.scope.PerFragment
+import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
+import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
+import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class FragmentModule {
 
-//    @PerFragment
-//    @ContributesAndroidInjector
-//    internal abstract fun baseFragment(): BaseFragment
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun walletFragment(): WalletFragment
 
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun dexFragment(): DexFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun historyFragment(): HistoryFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun profileFragment(): ProfileFragment
 }

@@ -10,6 +10,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
+import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
+import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.toolbar_general.*
 import javax.inject.Inject
@@ -20,6 +24,8 @@ class MainActivity : BaseActivity(), MainView, TabLayout.OnTabSelectedListener {
     //
     private val TAG_NOT_CENTRAL_TAB = "not_central_tab"
     private val TAG_CENTRAL_TAB = "central_tab"
+    private val TAG_WALLET_FRAGMENT = "wallet_fragment"
+    private val TAG_DEX_FRAGMENT = "dex_fragment"
 
     @Inject
     @InjectPresenter
@@ -30,7 +36,8 @@ class MainActivity : BaseActivity(), MainView, TabLayout.OnTabSelectedListener {
     fun providePresenter(): MainPresenter = presenter
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_general, View.OnClickListener { }, true, R.string.common_pin_dialog_title)
+        setSupportActionBar(toolbar_general)
+//        setupToolbar(toolbar_general, View.OnClickListener { }, true, R.string.common_pin_dialog_title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         setupBottomNavigation()
@@ -63,7 +70,29 @@ class MainActivity : BaseActivity(), MainView, TabLayout.OnTabSelectedListener {
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
-        selectedTabs(tab)
+        when (tab?.position) {
+//            Wallet screen
+            0 -> {
+                openFragment(R.id.frame_fragment_container, TAG_WALLET_FRAGMENT, WalletFragment.newInstance())
+            }
+//            DEX screen
+            1 -> {
+                openFragment(R.id.frame_fragment_container, TAG_DEX_FRAGMENT, DexFragment.newInstance())
+            }
+//            History screen
+            3 -> {
+                openFragment(R.id.frame_fragment_container, TAG_DEX_FRAGMENT, HistoryFragment.newInstance())
+            }
+//            Profile screen
+            4 -> {
+                openFragment(R.id.frame_fragment_container, TAG_DEX_FRAGMENT, ProfileFragment.newInstance())
+            }
+        }
+
+//        tab?.position = 2 where center tab
+        if (tab?.position != 2) {
+            selectedTabs(tab)
+        }
     }
 
     /**
