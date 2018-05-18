@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.flyco.tablayout.SegmentTabLayout
         android:id="@+id/stl_wallet"
@@ -19,4 +20,8 @@
         tl:tl_textSelectColor="@color/white"
         tl:tl_textUnselectColor="@color/basic500" />
 
-</RelativeLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

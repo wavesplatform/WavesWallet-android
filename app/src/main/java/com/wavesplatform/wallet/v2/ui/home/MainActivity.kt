@@ -15,7 +15,6 @@ import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import kotlinx.android.synthetic.main.activity_main_v2.*
-import kotlinx.android.synthetic.main.toolbar_general.*
 import javax.inject.Inject
 
 
