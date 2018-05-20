@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_main_v2.*
 import javax.inject.Inject
 
 
-class MainActivity : BaseActivity(), MainView, TabLayout.OnTabSelectedListener {
+class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedListener {
 
     //
     private val TAG_NOT_CENTRAL_TAB = "not_central_tab"
@@ -35,9 +36,7 @@ class MainActivity : BaseActivity(), MainView, TabLayout.OnTabSelectedListener {
     fun providePresenter(): MainPresenter = presenter
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setSupportActionBar(toolbar_general)
-//        setupToolbar(toolbar_general, View.OnClickListener { }, true, R.string.common_pin_dialog_title)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setupToolbar(toolbar_general)
 
         setupBottomNavigation()
 

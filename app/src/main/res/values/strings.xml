@@ -712,4 +712,5 @@
 
     <!-- New account -->
     <string name="new_account_toolbar_title">New account</string>
+    <string name="hidden_assets">Hidden assets (%1$s)</string>
 </resources>

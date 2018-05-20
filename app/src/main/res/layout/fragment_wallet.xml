@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
         android:layout_gravity="center_horizontal"
+        android:layout_margin="16dp"
         tl:tl_bar_stroke_width="0dp"
         tl:tl_indicator_anim_enable="true"
         tl:tl_indicator_bounce_enable="false"

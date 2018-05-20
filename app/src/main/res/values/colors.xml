@@ -79,5 +79,9 @@
     <color name="home_tab_active">#000000</color>
     <color name="submit400">#1f5af6</color>
     <color name="basic500">#9ba6b2</color>
+    <color name="basic50">#f8f9fb</color>
+    <color name="basic100">#edf0f4</color>
+    <color name="disabled500">#999999</color>
+    <color name="info500">#7995b9</color>
 
 </resources>
