@@ -5,4 +5,5 @@
     <dimen name="tab_width">100dp</dimen>
     <dimen name="asset_item_radius">2dp</dimen>
     <dimen name="asset_icon_size">48dp</dimen>
+    <dimen name="dex_icon_size">22dp</dimen>
 </resources>
