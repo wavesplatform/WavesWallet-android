@@ -83,5 +83,10 @@
     <color name="basic100">#edf0f4</color>
     <color name="disabled500">#999999</color>
     <color name="info500">#7995b9</color>
+    <color name="accent50">#e9e9eb</color>
+    <color name="submit300">#5a81ea</color>
+    <color name="info50">#dfeaf8</color>
+    <color name="submit200">#bacaf4</color>
+    <color name="disabled900">#2d2d2d</color>
 
 </resources>

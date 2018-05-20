@@ -26,85 +26,68 @@
             android:paddingRight="14dp"
             android:paddingTop="10dp">
 
+            <ImageView
+                android:id="@+id/image_startlease"
+                android:layout_width="@dimen/asset_icon_size"
+                android:layout_height="@dimen/asset_icon_size"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_startlease" />
+
             <RelativeLayout
-                android:id="@+id/container_asset_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/image_asset_icon"
-                    android:layout_width="@dimen/asset_icon_size"
-                    android:layout_height="@dimen/asset_icon_size"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/asset_gray_icon" />
-
-                <ImageView
-                    android:id="@+id/image_down_arrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/image_asset_icon"
-                    android:src="@drawable/ic_circle_down_arrow" />
-
-            </RelativeLayout>
-
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
-                android:layout_toRightOf="@+id/container_asset_icon"
+                android:layout_toRightOf="@+id/image_startlease"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/text_leasing_status"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/text_asset_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="@color/disabled500"
-                        tools:text="Waves" />
-
-                    <ImageView
-                        android:id="@+id/image_favourite"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="4dp"
-                        android:src="@drawable/ic_favorite_mini" />
-                </LinearLayout>
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Started Leasing"
+                    android:textColor="@color/disabled500" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_leasing_status"
+                    android:layout_marginTop="4dp"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/text_asset_value"
+                        android:id="@+id/text_leasing_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="Waves"
-                        android:textColor="@color/disabled500"
+                        android:text="1.99800118"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
 
                     <TextView
-                        android:id="@+id/text_bitcoin_value"
+                        android:id="@+id/text_leasing_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="4dp"
                         android:background="@drawable/asset_price_border"
                         android:padding="4dp"
-                        android:text="$ 00.00"
+                        android:text="WAVES"
                         android:textColor="@color/info500"
                         android:textSize="12sp" />
                 </LinearLayout>
-            </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/icon_info_basic_300" />
+            </RelativeLayout>
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

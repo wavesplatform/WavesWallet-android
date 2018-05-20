@@ -713,4 +713,15 @@
     <!-- New account -->
     <string name="new_account_toolbar_title">New account</string>
     <string name="hidden_assets">Hidden assets (%1$s)</string>
+    <string name="active_now">Active now (%1$s)</string>
+    <string name="total_balance">Total balance</string>
+    <string name="available">Available</string>
+    <string name="leased">Leased</string>
+    <string name="leased_in">Leased in</string>
+    <string name="start_lease">Start Lease</string>
+    <string name="view_history">View history</string>
+    <string name="quick_note">Quick note</string>
+    <string name="quick_note_1">You can only transfer or trade WAVES that aren’t leased. The leased amount cannot be transferred or traded by you or anyone else.</string>
+    <string name="quick_note_2">You can cancel a leasing transaction as soon as it appears in the blockchain which usually occurs in a minute or less.</string>
+    <string name="quick_note_3">The generating balance will be updated after 1000 blocks.</string>
 </resources>
