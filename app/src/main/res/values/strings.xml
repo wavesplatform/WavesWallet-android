@@ -724,4 +724,7 @@
     <string name="quick_note_1">You can only transfer or trade WAVES that aren’t leased. The leased amount cannot be transferred or traded by you or anyone else.</string>
     <string name="quick_note_2">You can cancel a leasing transaction as soon as it appears in the blockchain which usually occurs in a minute or less.</string>
     <string name="quick_note_3">The generating balance will be updated after 1000 blocks.</string>
+    <string name="all">All</string>
+    <string name="sent">Sent</string>
+    <string name="received">Received</string>
 </resources>

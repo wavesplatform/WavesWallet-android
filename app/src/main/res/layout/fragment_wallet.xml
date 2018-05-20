@@ -17,7 +17,7 @@
         tl:tl_indicator_color="@color/submit400"
         tl:tl_indicator_corner_radius="@dimen/tab_corner_radius"
         tl:tl_tab_space_equal="true"
-        tl:tl_tab_width="@dimen/_100sdp"
+        tl:tl_tab_width="100dp"
         tl:tl_textSelectColor="@color/white"
         tl:tl_textUnselectColor="@color/basic500" />
 
