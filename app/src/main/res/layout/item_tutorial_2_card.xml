@@ -14,31 +14,29 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/card_1_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:fontFamily="sans-serif"
+            android:fontFamily="@font/roboto_bold"
             android:lineSpacingExtra="10sp"
             android:text="@string/tutorial_card_2_title"
             android:textColor="@color/black"
-            android:textSize="34sp"
-            android:textStyle="bold" />
+            android:textSize="34sp" />
 
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/card_1_title"
+            android:fontFamily="@font/roboto"
             android:layout_marginTop="24dp"
-            android:fontFamily="sans-serif"
             android:lineSpacingExtra="4sp"
             android:text="@string/tutorial_card_2_description"
             android:textColor="@color/black"
-            android:textSize="13sp"
-            android:textStyle="normal" />
+            android:textSize="13sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,15 +71,14 @@
 
         </LinearLayout>
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/button_continue"
             style="@style/WavesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:enabled="false"
+            android:clickable="false"
             android:layout_alignParentBottom="true"
-            android:text="@string/card_tutorial_next"
-            android:textStyle="bold" />
+            android:text="@string/card_tutorial_next" />
 
 
     </RelativeLayout>

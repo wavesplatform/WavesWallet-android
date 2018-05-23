@@ -15,17 +15,16 @@
         android:padding="16dp">
 
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_title"
             android:text="@string/card_tutorial_5_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:fontFamily="sans-serif"
+            android:fontFamily="@font/roboto_bold"
             android:lineSpacingExtra="10sp"
-            android:textColor="#999999"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textColor="@color/disabled500"
+            android:textSize="14sp" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/view_dashed"
@@ -44,16 +43,15 @@
             android:layout_marginTop="44dp"
             app:srcCompat="@drawable/ic_mailopen" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:layout_below="@+id/image_mailopen"
             android:layout_width="wrap_content"
             android:layout_marginTop="14dp"
             android:id="@+id/text_mailopen_description"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
+            android:textSize="13sp"
             android:textColor="@color/black"
+            android:fontFamily="@font/roboto"
             android:lineSpacingExtra="4sp"
             android:text="@string/card_tutorial_6_description_mailopen"
             />
@@ -66,29 +64,27 @@
             android:layout_marginTop="44dp"
             app:srcCompat="@drawable/ic_refreshbrowser" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:layout_below="@+id/image_refreshbrowser"
             android:layout_width="wrap_content"
             android:layout_marginTop="14dp"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
+            android:textSize="13sp"
             android:textColor="@color/black"
+            android:fontFamily="@font/roboto"
             android:lineSpacingExtra="4sp"
             android:text="@string/card_tutorial_6_description_refreshbrowser"
             />
 
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/button_continue"
             style="@style/WavesButton"
-            android:enabled="false"
+            android:clickable="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="@string/card_tutorial_next"
-            android:textStyle="bold" />
+            android:text="@string/card_tutorial_next"/>
 
 
     </RelativeLayout>

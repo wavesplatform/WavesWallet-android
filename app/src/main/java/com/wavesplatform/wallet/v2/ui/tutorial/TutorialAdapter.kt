@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.tutorial
 
 import android.content.Context
+import android.support.v7.widget.AppCompatButton
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,12 +37,13 @@ class TutorialAdapter @Inject constructor(@ApplicationContext context: Context, 
         view.button_continue.click {
             listener.onButtonClicked(view.button_continue)
         }
+        view.button_continue.isClickable = false
 
         return view
     }
 
     interface OnNextButtonClicked {
-        fun onButtonClicked(button: Button)
+        fun onButtonClicked(button: AppCompatButton)
     }
 
 }

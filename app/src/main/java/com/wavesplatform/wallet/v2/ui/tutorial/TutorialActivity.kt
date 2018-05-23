@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.tutorial
 
 import android.animation.*
 import android.os.Bundle
+import android.support.v7.widget.AppCompatButton
 import android.view.View
 import android.widget.Button
 import android.widget.RelativeLayout
@@ -43,6 +44,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
 
             override fun onCardSwiped(direction: SwipeDirection?) {
                 if (adapter.count == card_stack_tutorial.topIndex) {
+                    preferencesHelper.setTutorialPassed(true)
                     launchActivity<WelcomeActivity>(withoutAnimation = true)
                 }
             }
@@ -67,7 +69,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
 
                     override fun onAnimationEnd(p0: Animator?) {
                         white_block.animate().alpha(0f).setDuration(350).start()
-                        card_stack_tutorial.topView.button_continue.isEnabled = true
+                        card_stack_tutorial.topView.button_continue.isClickable = true
                     }
 
                     override fun onAnimationCancel(p0: Animator?) {
@@ -83,9 +85,9 @@ class TutorialActivity : BaseActivity(), TutorialView {
         })
 
         adapter.listener = object : TutorialAdapter.OnNextButtonClicked {
-            override fun onButtonClicked(button: Button) {
+            override fun onButtonClicked(button: AppCompatButton) {
                 // fix library bug with fast swipe
-                button.isEnabled = false
+                button.isClickable = false
                 swipeLeft()
             }
         }
@@ -110,7 +112,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
 
         // fix library bug with fast swipe
         runDelayed(600, {
-            card_stack_tutorial.topView.button_continue.isEnabled = true
+            card_stack_tutorial.topView.button_continue.isClickable = true
         })
     }
 

@@ -71,8 +71,54 @@
 
     <color name="dex_place_order_dialog_bg">#424242</color>
 
+    <!-- V2 -->
+
     <!-- Left Drawer  -->
-    <color name="left_drawer_grayed">#9ba6b2</color>
-    <color name="left_drawer_divider">#e9e9eb</color>
+
+    <color name="disabled50">#FAFAFA</color>
+    <color name="disabled100">#F0F0F0</color>
+    <color name="disabled400">#BCBCBC</color>
+    <color name="disabled500">#999999</color>
+    <color name="disabled700">#777777</color>
+    <color name="disabled900">#2D2D2D</color>
+    <color name="basic50">#F8F9FB</color>
+    <color name="basic100">#EDF0F4</color>
+    <color name="basic200">#DAE1E9</color>
+    <color name="basic300">#C5D0DE</color>
+    <color name="basic500">#9BA6B2</color>
+    <color name="basic700">#4E5C6E</color>
+    <color name="basic900">#263241</color>
+    <color name="accent50">#E9E9EB</color>
+    <color name="accent100">#CED0DA</color>
+    <color name="info50">#DFEAF8</color>
+    <color name="info200">#C5D9E8</color>
+    <color name="info300">#A8C6DF</color>
+    <color name="info400">#8DABC4</color>
+    <color name="info500">#7995B9</color>
+    <color name="submit50">#EEF5FE</color>
+    <color name="submit100">#C4D0EF</color>
+    <color name="submit200">#BACAF4</color>
+    <color name="submit300">#5A81EA</color>
+    <color name="submit400">#1F5AF6</color>
+    <color name="submit500">#1751EC</color>
+    <color name="submit700">#1A4AC8</color>
+    <color name="success50">#DBF5D3</color>
+    <color name="success100">#A4EC9B</color>
+    <color name="success300">#4ECE3D</color>
+    <color name="success400">#4AAD02</color>
+    <color name="success500">#39A12C</color>
+    <color name="successLime">#81C926</color>
+    <color name="warning50">#FFF5DF</color>
+    <color name="warning100">#FFEBC0</color>
+    <color name="warning400">#F8B700</color>
+    <color name="warning600">#F89300</color>
+    <color name="error100">#FFE4E4</color>
+    <color name="error200">#F4B1A5</color>
+    <color name="error400">#E5494D</color>
+    <color name="error500">#EF4829</color>
+    <color name="error700">#B72125</color>
+    <color name="mixElton">#00AEF9</color>
+    <color name="mixOcean">#26C1C9</color>
+    <color name="mixUnicorn">#AB7DF6</color>
 
 </resources>

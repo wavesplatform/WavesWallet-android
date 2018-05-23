@@ -7,5 +7,5 @@ import javax.inject.Inject
 
 @InjectViewState
 class WelcomePresenter @Inject constructor() : BasePresenter<WelcomeView>() {
-
+    var state = 0
 }

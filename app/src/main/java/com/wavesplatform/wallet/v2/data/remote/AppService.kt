@@ -8,10 +8,5 @@ import retrofit2.http.POST
 
 interface AppService{
 
-    @GET("users")
-    fun getCompanies() : Observable<List<Any>>
-
-    @POST("posts")
-    fun addPost(@Body posts: Posts) : Observable<Any>
 
 }

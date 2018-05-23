@@ -29,22 +29,22 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Translucent.Splash">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
 
 
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.VIEW" /> -->
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+             <intent-filter>
+             <action android:name="android.intent.action.VIEW" />
 
 
-            <!-- <data android:scheme="waves" /> -->
+             <data android:scheme="waves" />
 
 
-            <!-- <category android:name="android.intent.category.DEFAULT" /> -->
-            <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
-            <!-- </intent-filter> -->
+             <category android:name="android.intent.category.DEFAULT" />
+             <category android:name="android.intent.category.BROWSABLE" />
+             </intent-filter>
         </activity>
         <activity
             android:name=".v1.ui.home.MainActivity"
@@ -124,6 +124,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -144,6 +147,7 @@
             android:theme="@style/AppTheme.NoActionBar.Translucent" />
         <activity
             android:name=".v2.ui.tutorial.TutorialActivity"
+            android:noHistory="true"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Translucent" />
@@ -151,19 +155,19 @@
             android:name=".v2.ui.welcome.WelcomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Translucent">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
 
-                <data android:scheme="waves" />
+                <!--<data android:scheme="waves" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".v2.ui.language.change.ChangeLanguageActivity"

@@ -129,90 +129,81 @@ kapt {
 
 
 ext {
-    supportVersion = '27.1.0'
+    supportVersion = '27.1.1'
     googleServicesVersion = '12.0.1'
     rxJavaVersion = '2.1.12'
     rxAndroidVersion = '2.0.2'
     daggerVersion = '2.15'
     retrofitVersion = '2.3.0'
     okHttpVersion = '3.10.0'
+    glideVersion = '4.4.0'
+    timberVersion = '4.6.0'
+    daggerVersion = '2.14.1'
 }
 
 dependencies {
-    final PLAY_SERVICES_VERSION = '11.6.2'
-    final SUPPORT_LIBRARY_VERSION = '27.0.2'
-    final RETROFIT_VERSION = '2.2.0'
-    final RXJAVA_VERSION = '2.1.7'
-    final RXANDROID_VERSION = '2.0.1'
-    final GLIDE_VERSION = '4.4.0'
-    final TIMBER_VERSION = '4.6.0'
-    final DEXMAKER_VERSION = '1.4'
-    final HAMCREST_VERSION = '1.3'
-    final ESPRESSO_VERSION = '2.2.1'
-    final RUNNER_VERSION = '0.4'
-    final DAGGER_VERSION = '2.11'
-    final ROBOLECTRIC_VERSION = '3.1.2'
-    final POWER_MOCK = '1.6.5'
+
+
 
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:recyclerview-v7:$supportVersion"
-    compile "com.android.support:cardview-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
-    compile "com.android.support:support-v13:$supportVersion"
-    compile "com.android.support:preference-v7:$supportVersion"
-    compile "com.android.support:preference-v14:$supportVersion"
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:recyclerview-v7:$supportVersion"
+    implementation "com.android.support:cardview-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:support-v13:$supportVersion"
+    implementation "com.android.support:preference-v7:$supportVersion"
+    implementation "com.android.support:preference-v14:$supportVersion"
     // Enable crash reporting only for release version
-    compile "com.google.firebase:firebase-database:$googleServicesVersion"
-    releaseCompile "com.google.firebase:firebase-crash:$googleServicesVersion"
-    compile "com.google.firebase:firebase-messaging:$googleServicesVersion"
-    compile 'commons-io:commons-io:2.4'
+    implementation "com.google.firebase:firebase-database:$googleServicesVersion"
+    releaseImplementation "com.google.firebase:firebase-crash:$googleServicesVersion"
+    implementation "com.google.firebase:firebase-messaging:$googleServicesVersion"
+    implementation 'commons-io:commons-io:2.4'
     // Keep at 1.3 to match Android implementation
-    compile 'commons-codec:commons-codec:1.3'
-    compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'com.android.support:multidex:1.0.3'
-    compile 'org.thoughtcrime.ssl.pinning:AndroidPinning:1.0.0'
-    compile 'com.neovisionaries:nv-websocket-client:1.19'
-    compile('com.google.zxing:core:3.3.0') { transitive = true }
-    compile 'com.github.mukeshsolanki:country-picker-android:1.1.6'
-    compile 'com.aurelhubert:ahbottomnavigation:2.0.2'
+    implementation 'commons-codec:commons-codec:1.3'
+    implementation 'org.apache.commons:commons-lang3:3.4'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'org.thoughtcrime.ssl.pinning:AndroidPinning:1.0.0'
+    implementation 'com.neovisionaries:nv-websocket-client:1.19'
+    implementation('com.google.zxing:core:3.3.0') { transitive = true }
+    implementation 'com.github.mukeshsolanki:country-picker-android:1.1.6'
+    implementation 'com.aurelhubert:ahbottomnavigation:2.0.2'
     // RxJava
-    compile "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-    compile "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
-    compile 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
     // Retrofit
-    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    compile "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
-    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
 
-    compile "org.whispersystems:curve25519-java:0.3.0"
-    compile 'com.bignerdranch.android:recyclerview-multiselect:0.2'
+    implementation "org.whispersystems:curve25519-java:0.3.0"
+    implementation 'com.bignerdranch.android:recyclerview-multiselect:0.2'
 
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35'
 
     // OkHttp
-    compile "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
-    compile 'com.github.ihsanbal:LoggingInterceptor:2.0.2'
-    compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    implementation 'com.github.ihsanbal:LoggingInterceptor:2.0.2'
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     // Dagger2
-//    compile "com.google.dagger:dagger:$daggerVersion"
+//    implementation "com.google.dagger:dagger:$daggerVersion"
 
-    compile 'com.github.rubensousa:bottomsheetbuilder:1.6.0'
+    implementation 'com.github.rubensousa:bottomsheetbuilder:1.6.0'
 
-    compile 'com.github.vihtarb:tooltip:0.1.9'
-    compile 'com.madgag.spongycastle:core:1.52.0.0'
-    compile 'com.google.guava:guava:20.0'
+    implementation 'com.github.vihtarb:tooltip:0.1.9'
+    implementation 'com.madgag.spongycastle:core:1.52.0.0'
+    implementation 'com.google.guava:guava:20.0'
 
 //    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     annotationProcessor 'com.google.guava:guava:20.0'
 
     // Fingerprint authentication
-    compile 'com.mtramin:rxfingerprint:2.0.1'
+    implementation 'com.mtramin:rxfingerprint:2.0.1'
 
 
-    implementation 'ren.yale.android:retrofitcachelibrx2:1.0.5'
+    implementation 'ren.yale.android:retrofitcachelibrx2:1.0.7'
     implementation 'com.github.franmontiel:LocaleChanger:0.9.2'
 //
     implementation 'org.fingerlinks.mobile.android:Navigator:0.1.5'
@@ -223,10 +214,10 @@ dependencies {
     implementation 'com.arello-mobile:moxy-app-compat:1.5.3'
     kapt 'com.arello-mobile:moxy-compiler:1.5.3'
 
-    implementation 'com.asksira.android:loopingviewpager:1.1.0'
     implementation "com.github.vicpinm:krealmextensions:2.2.0"
     implementation "com.yuyakaido.android:card-stack-view:1.0.0-beta8"
     implementation 'com.yarolegovich:sliding-root-nav:1.1.0'
+    implementation 'io.github.anderscheow:validator:1.1.5'
 
 
     implementation 'com.intuit.sdp:sdp-android:1.0.5'
@@ -236,16 +227,16 @@ dependencies {
 
     implementation 'com.github.thepacific:divider:0.0.2'
 //
-    implementation 'com.github.WindSekirun:RichUtilsKt:2.0.6'
+    implementation 'com.github.WindSekirun:RichUtilsKt:2.1.5'
     implementation 'com.github.VictorChow:kotlin-android-lib:1.2.2'
 
-    implementation "com.google.dagger:dagger:$DAGGER_VERSION"
-    annotationProcessor "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
-    kapt "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
-    implementation "com.google.dagger:dagger-android:$DAGGER_VERSION"
-    implementation "com.google.dagger:dagger-android-support:$DAGGER_VERSION"
-    kapt "com.google.dagger:dagger-android-processor:$DAGGER_VERSION"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$DAGGER_VERSION"
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     implementation 'com.pddstudio:encrypted-preferences:1.3.0'
 
@@ -256,41 +247,37 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
 
-    implementation "com.github.bumptech.glide:glide:$GLIDE_VERSION"
-//    implementation "io.reactivex.rxjava2:rxandroid:$RXANDROID_VERSION"
-//    implementation "io.reactivex.rxjava2:rxjava:$RXJAVA_VERSION"
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
 
-    implementation "com.jakewharton.timber:timber:$TIMBER_VERSION"
+    implementation "com.jakewharton.timber:timber:$timberVersion"
 //
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
-
-
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
 
 
 
     // UI/Instrumentation Tests
-    androidTestCompile 'junit:junit:4.12'
-    androidTestCompile 'org.mockito:mockito-core:1.9.5'
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.6.3'
-    androidTestCompile "com.android.support:support-annotations:$supportVersion"
-    androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile('com.android.support.test:runner:0.5') {
+    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation 'org.mockito:mockito-core:1.9.5'
+    androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.6.3'
+    androidTestImplementation "com.android.support:support-annotations:$supportVersion"
+    androidTestImplementation 'com.android.support.test:rules:0.5'
+    androidTestImplementation('com.android.support.test:runner:0.5') {
         exclude module: 'support-annotations'
     }
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2') {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2') {
         exclude group: 'javax.inject', module: 'support-annotations'
     }
     // Unit Tests
-    testCompile 'org.json:json:20140107'
-    testCompile 'org.mockito:mockito-core:1.9.5'
-    testCompile 'org.hamcrest:hamcrest-junit:2.0.0.0'
-    testCompile('org.robolectric:robolectric:3.1.4') {
+    testImplementation 'org.json:json:20140107'
+    testImplementation 'org.mockito:mockito-core:1.9.5'
+    testImplementation 'org.hamcrest:hamcrest-junit:2.0.0.0'
+    testImplementation('org.robolectric:robolectric:3.1.4') {
         exclude group: 'com.google.guava'
         exclude group: 'com.google.protobuf'
     }
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 buildscript {

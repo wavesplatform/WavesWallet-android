@@ -15,7 +15,10 @@ class LanguagePresenter @Inject constructor() : BasePresenter<LanguageView>() {
                 Language(R.drawable.ic_flag_18_rus, R.string.choose_language_russia, false),
                 Language(R.drawable.ic_flag_18_china, R.string.choose_language_china, false),
                 Language(R.drawable.ic_flag_18_korea, R.string.choose_language_korea, false),
-                Language(R.drawable.ic_flag_18_turkey, R.string.choose_language_turkey, false))
+                Language(R.drawable.ic_flag_18_turkey, R.string.choose_language_turkey, false),
+                Language(R.drawable.ic_flag_18_hindi, R.string.choose_language_hindi, false),
+                Language(R.drawable.ic_flag_18_danish, R.string.choose_language_dansk, false),
+                Language(R.drawable.ic_flag_18_nederland, R.string.choose_language_nederlands, false))
     }
 
 }

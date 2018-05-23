@@ -14,38 +14,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/card_1_title"
-            android:layout_marginTop="28dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="34sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="bold"
-            android:textColor="@color/black"
+            android:layout_marginTop="28dp"
+            android:fontFamily="@font/roboto_bold"
             android:lineSpacingExtra="10sp"
             android:text="@string/tutorial_card_1_title"
+            android:textColor="@color/black"
+            android:textSize="34sp"
             />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:layout_below="@+id/card_1_title"
             android:layout_marginTop="24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="13sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
+            android:fontFamily="@font/roboto"
             android:textColor="@color/black"
             android:lineSpacingExtra="4sp"
             android:text="@string/tutorial_card_1_description"
             />
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/button_continue"
             style="@style/WavesButton"
-            android:textStyle="bold"
             android:text="@string/card_tutorial_next"
-            android:enabled="false"
+            android:clickable="false"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

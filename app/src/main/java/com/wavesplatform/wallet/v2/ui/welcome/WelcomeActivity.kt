@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import android.support.v4.view.ViewPager.SCROLL_STATE_DRAGGING
+import android.support.v4.view.ViewPager.SCROLL_STATE_IDLE
 import android.view.Menu
 import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -54,7 +56,8 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
                         .setDuration(500)
                         .setStartDelay(0)
                         .withEndAction {
-                           launchActivity<NewAccountActivity>(REQUEST_NEW_ACCOUNT, withoutAnimation = true)
+                            launchActivity<NewAccountActivity>(REQUEST_NEW_ACCOUNT)
+                            overridePendingTransition(0,0)
                         }
                         .start()
             })
@@ -68,6 +71,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         view_pager.setPageTransformer(false, AlphaScalePageTransformer())
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
+                presenter.state = state
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -85,7 +89,9 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         })
 
         fixedRateTimer(initialDelay = 5000, period = 5000, action = {
-            runOnUiThread { view_pager.setCurrentItem(nextItemPosition, true) }
+            if (presenter.state == SCROLL_STATE_IDLE){
+                runOnUiThread { view_pager.setCurrentItem(nextItemPosition, true) }
+            }
         })
 
         enterAnimation()
@@ -122,8 +128,8 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_NEW_ACCOUNT){
-            if (resultCode == Activity.RESULT_CANCELED){
+        if (requestCode == REQUEST_NEW_ACCOUNT) {
+            if (resultCode == Activity.RESULT_CANCELED) {
                 white_block.animate()
                         .scaleX(1f)
                         .scaleY(1f)

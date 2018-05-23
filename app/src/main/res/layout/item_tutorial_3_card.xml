@@ -15,17 +15,16 @@
         android:padding="16dp">
 
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_title"
             android:text="@string/tutorial_card_2_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:fontFamily="sans-serif"
+            android:fontFamily="@font/roboto_bold"
             android:lineSpacingExtra="10sp"
-            android:textColor="#999999"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textColor="@color/disabled500"
+            android:textSize="14sp"/>
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/view_dashed"
@@ -44,15 +43,14 @@
             android:layout_marginTop="44dp"
             app:srcCompat="@drawable/ic_anonim" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:layout_below="@+id/image_anonim"
             android:layout_width="wrap_content"
             android:layout_marginTop="14dp"
+            android:fontFamily="@font/roboto"
             android:id="@+id/text_anonim_description"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
             android:textColor="@color/black"
             android:lineSpacingExtra="4sp"
             android:text="@string/card_tutorial_3_description_anonim"
@@ -66,29 +64,27 @@
             android:layout_marginTop="44dp"
             app:srcCompat="@drawable/ic_passbrowser" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:layout_below="@+id/image_passbrowser"
             android:layout_width="wrap_content"
             android:layout_marginTop="14dp"
+            android:fontFamily="@font/roboto"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
             android:textColor="@color/black"
             android:lineSpacingExtra="4sp"
             android:text="@string/card_tutorial_3_description_passbrowser"
             />
 
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/button_continue"
             style="@style/WavesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:enabled="false"
-            android:text="@string/card_tutorial_next"
-            android:textStyle="bold" />
+            android:clickable="false"
+            android:text="@string/card_tutorial_next" />
 
 
     </RelativeLayout>

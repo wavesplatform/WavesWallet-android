@@ -25,6 +25,15 @@ import com.wavesplatform.wallet.v2.util.setSystemBarTheme
 import com.yarolegovich.slidingrootnav.callback.DragStateListener
 import kotlinx.android.synthetic.main.menu_left_drawer.*
 import kotlinx.android.synthetic.main.menu_left_drawer.view.*
+import android.content.Intent
+import android.net.Uri
+import com.wavesplatform.wallet.R.string.click
+import com.wavesplatform.wallet.v2.data.Constants
+import pers.victor.ext.click
+import android.content.pm.PackageManager
+import android.content.pm.ApplicationInfo
+
+
 
 
 abstract class BaseDrawerActivity : BaseActivity(), WelcomeView {
@@ -51,6 +60,48 @@ abstract class BaseDrawerActivity : BaseActivity(), WelcomeView {
 
 
         slidingRootNav.layout.text_site.paintFlags = text_site.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        slidingRootNav.layout.text_site.click { openUrl(Constants.URL_WAVES_COMMUNITY) }
+        slidingRootNav.layout.text_whitepaper.click { openUrl(Constants.URL_WHITEPAPER) }
+//        slidingRootNav.layout.text_roadmap.click { openUrl(Constants.u) }
+        slidingRootNav.layout.text_terms.click { openUrl(Constants.URL_TERMS) }
+        slidingRootNav.layout.image_discord.click { openUrl(Constants.URL_DISCORD) }
+        slidingRootNav.layout.image_facebook.click { openFacebook(Constants.URL_FACEBOOK) }
+        slidingRootNav.layout.image_github.click { openUrl(Constants.URL_GITHUB) }
+        slidingRootNav.layout.image_telegram.click { openUrl(Constants.URL_TELEGRAM) }
+        slidingRootNav.layout.image_twitter.click { openTwitter(Constants.ACC_TWITTER) }
     }
 
+    fun openUrl(url : String){
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browserIntent)
+    }
+
+    fun openFacebook(url: String) {
+        var uri = Uri.parse(url)
+        try {
+            val applicationInfo = packageManager.getApplicationInfo("com.facebook.katana", 0)
+            if (applicationInfo.enabled) {
+                // http://stackoverflow.com/a/24547437/1048340
+                uri = Uri.parse("fb://facewebmodal/f?href=$url")
+            }
+        } catch (ignored: PackageManager.NameNotFoundException) {
+        }
+
+        startActivity(Intent(Intent.ACTION_VIEW, uri))
+    }
+
+    fun openTwitter(url: String) {
+        var intent: Intent? = null
+        try {
+            // get the Twitter app if possible
+            this.packageManager.getPackageInfo("com.twitter.android", 0)
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?user_id=$url"))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        } catch (e: Exception) {
+            // no Twitter app, revert to browser
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/$url"))
+        }
+
+        this.startActivity(intent)
+    }
 }

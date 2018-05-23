@@ -13,6 +13,7 @@
         app:titleTextColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:titleTextAppearance="@style/Toolbar.Title"
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true" />
 
@@ -42,7 +43,7 @@
                 android:layout_marginBottom="24dp"
                 android:layout_height="match_parent"/>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/button_confirm"
                 style="@style/WavesButton"
                 android:layout_gravity="bottom"
@@ -50,7 +51,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_alignParentBottom="true"
-                android:textStyle="bold"
                 android:layout_marginBottom="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

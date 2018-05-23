@@ -1,17 +1,188 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relative_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/relative_root"
     android:background="@color/white">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        app:titleTextAppearance="@style/Toolbar.Title"
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_margin="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_account_avatar_title"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/basic700"
+            android:lineSpacingExtra="2sp"
+            android:text="@string/new_account_avatar_description"
+            />
+
+        <LinearLayout
+            android:layout_marginTop="16dp"
+            android:id="@+id/linear_images"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_avatar_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:layout_marginStart="3dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@drawable/shape_outline"
+                android:padding="4dp" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_avatar_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:layout_marginStart="3dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@drawable/shape_outline" />
+
+            <android.support.v7.widget.AppCompatImageView
+
+                android:id="@+id/image_avatar_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:layout_marginStart="3dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@drawable/shape_outline" />
+
+            <android.support.v7.widget.AppCompatImageView
+
+                android:id="@+id/image_avatar_4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:layout_marginStart="3dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@drawable/shape_outline" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_avatar_5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:layout_marginStart="3dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@drawable/shape_outline"/>
+
+        </LinearLayout>
+
+
+        <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
+            android:id="@+id/til_account_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            app:hintTextAppearance="@style/TextLabel"
+            android:textColorHint="@color/basic500"
+            app:errorEnabled="true">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/edit_account_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/new_account_account_name_hint"
+                android:imeOptions="actionNext"
+                android:textColorHint="@color/basic500"
+                android:backgroundTint="@color/accent50"
+                android:inputType="text"
+                android:paddingBottom="20dp"
+                android:singleLine="true" />
+        </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
+
+        <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
+            android:id="@+id/til_create_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
+            android:layout_marginTop="-12dp"
+            android:textColorHint="@color/basic500"
+            app:hintTextAppearance="@style/TextLabel"
+            app:passwordToggleDrawable="@drawable/ic_eyeopen_24"
+            app:passwordToggleEnabled="true">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/edit_create_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/new_account_create_password_hint"
+                android:imeOptions="actionNext"
+                android:textColorHint="@color/basic500"
+                android:backgroundTint="@color/accent50"
+                android:inputType="textPassword"
+                android:paddingBottom="20dp"
+                android:singleLine="true" />
+        </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
+
+        <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
+            android:id="@+id/til_confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
+            android:layout_marginTop="-12dp"
+            android:textColorHint="@color/basic500"
+            app:hintTextAppearance="@style/TextLabel"
+            app:passwordToggleDrawable="@drawable/ic_eyeopen_24"
+            app:passwordToggleEnabled="true">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/edit_confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/new_account_confirm_password_hint"
+                android:backgroundTint="@color/accent50"
+                android:textColorHint="@color/basic500"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:paddingBottom="20dp"
+                android:singleLine="true" />
+        </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
+
+
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_create_account"
+        style="@style/WavesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/new_account_continue" />
 
 
 </RelativeLayout>

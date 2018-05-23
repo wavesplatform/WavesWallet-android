@@ -662,6 +662,9 @@
     <string name="choose_language_korea">한국어</string>
     <string name="choose_language_turkey">Türkçe</string>
     <string name="choose_language_english">English</string>
+    <string name="choose_language_hindi">हिन्दी</string>
+    <string name="choose_language_dansk">Dansk</string>
+    <string name="choose_language_nederlands">Nederlands</string>
     <string name="choose_language_continue">Continue</string>
     <string name="choose_language_confirm">Confirm</string>
     <string name="change_language_toolbar_title">Change language</string>
@@ -692,6 +695,7 @@
     <string name="left_drawer_roadmap">Roadmap</string>
     <string name="left_drawer_terms_and_conditions">Terms and conditions</string>
     <string name="left_drawer_join_the_waves_community">Join the Waves Community</string>
+    <string name="left_drawer_waves_platform">© Waves Platform</string>
 
     <!-- Welcome -->
     <string name="welcome_blockchain_title">Get Started with Blockchain</string>
@@ -709,5 +713,15 @@
     <string name="welcome_create_import_description">via pairing code or manually</string>
 
     <!-- New account -->
-    <string name="new_account_toolbar_title">New account</string>
+    <string name="new_account_toolbar_title">New Account</string>
+    <string name="new_account_account_name_hint">Account name</string>
+    <string name="new_account_account_name_validation_length_error">Max: 20 symbols</string>
+    <string name="new_account_account_name_validation_required_error">Name is required</string>
+    <string name="new_account_create_password_hint">Create a password</string>
+    <string name="new_account_create_password_validation_length_error">at least 8 characters</string>
+    <string name="new_account_confirm_password_hint">Confirm password</string>
+    <string name="new_account_confirm_password_validation_match_error">Passwords do not match</string>
+    <string name="new_account_continue">Continue</string>
+    <string name="new_account_avatar_title">Choose your address avatar</string>
+    <string name="new_account_avatar_description">This avatar is unique. You cannot change it later.</string>
 </resources>
