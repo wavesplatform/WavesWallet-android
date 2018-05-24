@@ -1,42 +1,27 @@
 package com.wavesplatform.wallet.v2.ui.base.view
 
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import javax.inject.Inject
-
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.wavesplatform.wallet.v2.ui.welcome.WelcomeView
-import com.wavesplatform.wallet.v2.ui.welcome.WelcomePresenter
-
-import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import android.support.v4.content.ContextCompat
+import android.view.ViewGroup
+import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.util.setSystemBarTheme
 import com.yarolegovich.slidingrootnav.SlidingRootNav
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
-import kotlinx.android.synthetic.main.activity_welcome.*
+import com.yarolegovich.slidingrootnav.callback.DragStateListener
+import kotlinx.android.synthetic.main.menu_left_drawer.view.*
+import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.px2dp
 import pers.victor.ext.screenWidth
-import android.graphics.Paint.UNDERLINE_TEXT_FLAG
-import com.wavesplatform.wallet.R.id.toolbar_view
-import com.wavesplatform.wallet.v2.util.setSystemBarTheme
-import com.yarolegovich.slidingrootnav.callback.DragStateListener
-import kotlinx.android.synthetic.main.menu_left_drawer.*
-import kotlinx.android.synthetic.main.menu_left_drawer.view.*
-import android.content.Intent
-import android.net.Uri
-import com.wavesplatform.wallet.R.string.click
-import com.wavesplatform.wallet.v2.data.Constants
-import pers.victor.ext.click
-import android.content.pm.PackageManager
-import android.content.pm.ApplicationInfo
 
 
-
-
-abstract class BaseDrawerActivity : BaseActivity(), WelcomeView {
+abstract class BaseDrawerActivity : BaseActivity() {
 
     protected lateinit var slidingRootNav: SlidingRootNav
 
@@ -48,30 +33,65 @@ abstract class BaseDrawerActivity : BaseActivity(), WelcomeView {
                 .withRootViewScale(0.87f)
                 .withRootViewElevation(10)
                 .withToolbarMenuToggle(toolbar)
+                .addDragStateListener(object: DragStateListener{
+                    override fun onDragEnd(isMenuOpened: Boolean) {
+                        if (isMenuOpened){
+                            slidingRootNav.layout.findViewById<ViewGroup>(R.id.root).click{
+                                slidingRootNav.closeMenu(true)
+                            }
+                        }else{
+                            slidingRootNav.layout.findViewById<ViewGroup>(R.id.root).setOnClickListener(null)
+                        }
+                    }
+
+                    override fun onDragStart() {
+                    }
+                })
                 .addDragListener { progress ->
+                    slidingRootNav.layout.linear_drawer.scaleX = 1.5f - (progress / 2)
+                    slidingRootNav.layout.linear_drawer.scaleY = 1.5f - (progress / 2)
+
                     if (progress > 0.5) setSystemBarTheme(false)
                     else setSystemBarTheme(true)
                 }
                 .withMenuOpened(false)
-                .withContentClickableWhenMenuOpened(false)
+//                .withContentClickableWhenMenuOpened(false)
                 .withSavedState(savedInstanceState)
                 .withMenuLayout(R.layout.menu_left_drawer)
                 .inject()
 
-
-        slidingRootNav.layout.text_site.paintFlags = text_site.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        slidingRootNav.layout.text_site.click { openUrl(Constants.URL_WAVES_COMMUNITY) }
-        slidingRootNav.layout.text_whitepaper.click { openUrl(Constants.URL_WHITEPAPER) }
-//        slidingRootNav.layout.text_roadmap.click { openUrl(Constants.u) }
-        slidingRootNav.layout.text_terms.click { openUrl(Constants.URL_TERMS) }
-        slidingRootNav.layout.image_discord.click { openUrl(Constants.URL_DISCORD) }
+        slidingRootNav.layout.linear_drawer.scaleX = 1.5f
+        slidingRootNav.layout.linear_drawer.scaleY = 1.5f
+        slidingRootNav.layout.text_site.paintFlags = slidingRootNav.layout.text_site.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        slidingRootNav.layout.text_site.click { openUrlWithChromeTab(Constants.URL_WAVES_COMMUNITY) }
+        slidingRootNav.layout.text_whitepaper.click { openPdfUrlWithIntent(Constants.URL_WHITEPAPER) }
+        slidingRootNav.layout.text_terms.click { openPdfUrlWithIntent(Constants.URL_TERMS) }
+        slidingRootNav.layout.image_discord.click { openDiscord(Constants.URL_DISCORD) }
         slidingRootNav.layout.image_facebook.click { openFacebook(Constants.URL_FACEBOOK) }
-        slidingRootNav.layout.image_github.click { openUrl(Constants.URL_GITHUB) }
-        slidingRootNav.layout.image_telegram.click { openUrl(Constants.URL_TELEGRAM) }
+        slidingRootNav.layout.image_github.click { openUrlWithChromeTab(Constants.URL_GITHUB) }
+        slidingRootNav.layout.image_telegram.click { openTelegram(Constants.ACC_TELEGRAM) }
         slidingRootNav.layout.image_twitter.click { openTwitter(Constants.ACC_TWITTER) }
     }
 
-    fun openUrl(url : String){
+
+    fun openUrlWithChromeTab(url: String) {
+        SimpleChromeCustomTabs.getInstance()
+                .withFallback({
+                    openUrlWithIntent(url)
+                }).withIntentCustomizer({
+                    it.withToolbarColor(ContextCompat.getColor(this, R.color.submit400))
+                })
+                .navigateTo(Uri.parse(url), this)
+
+    }
+
+    fun openPdfUrlWithIntent(url: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browserIntent)
+
+    }
+
+    fun openUrlWithIntent(url: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browserIntent)
     }
@@ -84,10 +104,10 @@ abstract class BaseDrawerActivity : BaseActivity(), WelcomeView {
                 // http://stackoverflow.com/a/24547437/1048340
                 uri = Uri.parse("fb://facewebmodal/f?href=$url")
             }
+            startActivity(Intent(Intent.ACTION_VIEW, uri))
         } catch (ignored: PackageManager.NameNotFoundException) {
+            openUrlWithChromeTab(url)
         }
-
-        startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
     fun openTwitter(url: String) {
@@ -97,11 +117,51 @@ abstract class BaseDrawerActivity : BaseActivity(), WelcomeView {
             this.packageManager.getPackageInfo("com.twitter.android", 0)
             intent = Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?user_id=$url"))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(intent)
         } catch (e: Exception) {
             // no Twitter app, revert to browser
-            intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/$url"))
+            openUrlWithChromeTab(Constants.URL_TWITTER)
         }
+    }
 
-        this.startActivity(intent)
+    fun openDiscord(url: String) {
+        var intent: Intent? = null
+        try {
+            this.packageManager.getPackageInfo("com.discord", 0)
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(intent)
+        } catch (e: Exception) {
+            openUrlWithChromeTab(Constants.URL_DISCORD)
+        }
+    }
+
+    fun openTelegram(url: String) {
+        var intent: Intent? = null
+        try {
+            this.packageManager.getPackageInfo("org.telegram.messenger", 0)
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=$url"))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        } catch (e: Exception) {
+            try {
+                this.packageManager.getPackageInfo("org.thunderdog.challegram", 0)
+                intent = Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=$url"))
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }catch (e: Exception){
+                openUrlWithChromeTab(Constants.URL_TELEGRAM)
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        SimpleChromeCustomTabs.getInstance().connectTo(this);
+    }
+
+    override fun onPause() {
+        SimpleChromeCustomTabs.getInstance().disconnectFrom(this)
+        super.onPause()
     }
 }

@@ -6,6 +6,7 @@ import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
+import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.wavesplatform.wallet.v1.data.access.AccessState;
 import com.wavesplatform.wallet.v1.data.access.DexAccessState;
 import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
@@ -88,6 +89,7 @@ public class BlockchainApplication extends DaggerApplication {
 
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        SimpleChromeCustomTabs.initialize(this);
 
         ApplicationLifeCycle.getInstance().addListener(new ApplicationLifeCycle.LifeCycleListener() {
             @Override

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/linear_drawer"
     android:orientation="vertical"
     android:paddingBottom="24dp"
     android:paddingTop="24dp">
@@ -65,27 +66,6 @@
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/left_drawer_roadmap"
-        android:clickable="true"
-        android:paddingStart="24dp"
-        android:id="@+id/text_roadmap"
-        android:paddingEnd="48dp"
-        android:background="?android:selectableItemBackground"
-        android:paddingBottom="13dp"
-        android:paddingTop="13dp"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="48dp"
-        android:background="@color/accent50" />
-
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="@string/left_drawer_terms_and_conditions"
         android:paddingStart="24dp"
         android:paddingEnd="48dp"
@@ -107,7 +87,7 @@
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="86dp"
         android:paddingStart="24dp"
         android:paddingEnd="48dp"
         android:lineSpacingExtra="4sp"

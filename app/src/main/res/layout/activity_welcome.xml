@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/relative_root"
+    android:id="@+id/root"
+    android:clickable="true"
     android:background="@drawable/img_brand">
 
     <android.support.v7.widget.Toolbar
