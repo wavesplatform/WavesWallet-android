@@ -11,11 +11,14 @@ import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.id.*
+import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.language.change.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_welcome.*
 import pers.victor.ext.*
 import java.util.*
@@ -32,7 +35,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     @Inject
     lateinit var adapter: WelcomeItemsPagerAdapter
 
-    var nextItemPosition = 1
+    private var menu: Menu? = null
 
     @ProvidePresenter
     fun providePresenter(): WelcomePresenter = presenter
@@ -78,9 +81,9 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             }
 
             override fun onPageSelected(position: Int) {
-                nextItemPosition = position
-                nextItemPosition++
-                if (nextItemPosition == 4) nextItemPosition = 0
+                presenter.nextItemPosition = position
+                presenter.nextItemPosition++
+                if (presenter.nextItemPosition == 4) presenter.nextItemPosition = 0
 
                 val item = adapter.items[position]
                 text_title.setText(item.title)
@@ -90,7 +93,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
         fixedRateTimer(initialDelay = 5000, period = 5000, action = {
             if (presenter.state == SCROLL_STATE_IDLE){
-                runOnUiThread { view_pager.setCurrentItem(nextItemPosition, true) }
+                runOnUiThread { view_pager.setCurrentItem(presenter.nextItemPosition, true) }
             }
         })
 
@@ -156,8 +159,20 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        this.menu = menu
         menuInflater.inflate(R.menu.menu_language, menu)
+        updateMenuTitle()
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun updateMenuTitle() {
+        val bedMenuItem = menu?.findItem(R.id.action_change_language)
+        bedMenuItem?.title = getString(Language.getLanguageByCode(preferencesHelper.getLanguage()).code)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        menu.notNull { updateMenuTitle() }
     }
 
 }

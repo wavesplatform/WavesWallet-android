@@ -11,19 +11,15 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.language.LanguageAdapter
 import com.wavesplatform.wallet.v2.ui.language.LanguagePresenter
 import com.wavesplatform.wallet.v2.ui.language.LanguageView
-import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import pers.victor.ext.dp2px
+import javax.inject.Inject
+import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
+import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_choose_language.*
 import pers.victor.ext.click
-import pers.victor.ext.dp2px
 import pers.victor.ext.visiable
-import javax.inject.Inject
-import android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-import android.app.Activity
-import android.os.Build
-import android.os.Build.VERSION_CODES
-import android.support.annotation.RequiresApi
-import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 
 
 class ChooseLanguageActivity : BaseActivity(), LanguageView {
@@ -50,7 +46,7 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
         adapter.setNewData(presenter.getLanguages())
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as Language
+            val item = adapter.getItem(position) as LanguageItem
 
             if (presenter.currentLanguagePosition == position) return@OnItemClickListener
 
@@ -62,7 +58,7 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
                 adapter.setData(position, item)
             } else {
                 // uncheck old item
-                val currentCheckedItem = adapter.getItem(presenter.currentLanguagePosition) as Language
+                val currentCheckedItem = adapter.getItem(presenter.currentLanguagePosition) as LanguageItem
                 currentCheckedItem.checked = false
                 adapter.setData(presenter.currentLanguagePosition, currentCheckedItem)
 
@@ -74,6 +70,8 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
         }
 
         button_continue.click {
+            val item = adapter.getItem(presenter.currentLanguagePosition)
+            item.notNull { presenter.saveLanguage(it.language.code) }
             exitAnimation()
         }
 

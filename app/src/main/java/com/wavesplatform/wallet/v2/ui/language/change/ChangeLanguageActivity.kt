@@ -20,8 +20,10 @@ import pers.victor.ext.dp2px
 import pers.victor.ext.screenHeight
 import pers.victor.ext.visiable
 import android.util.TypedValue
-
-
+import com.wavesplatform.wallet.R.id.*
+import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
+import com.wavesplatform.wallet.v2.util.notNull
+import pers.victor.ext.click
 
 
 class ChangeLanguageActivity : BaseActivity(), LanguageView {
@@ -49,9 +51,10 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
         recycle_language.adapter = adapter
 
         adapter.setNewData(presenter.getLanguages())
+        markCurrentSelectedLanguage()
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as Language
+            val item = adapter.getItem(position) as LanguageItem
 
             if (presenter.currentLanguagePosition == position) return@OnItemClickListener
 
@@ -63,7 +66,7 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
                 adapter.setData(position, item)
             } else {
                 // uncheck old item
-                val currentCheckedItem = adapter.getItem(presenter.currentLanguagePosition) as Language
+                val currentCheckedItem = adapter.getItem(presenter.currentLanguagePosition) as LanguageItem
                 currentCheckedItem.checked = false
                 adapter.setData(presenter.currentLanguagePosition, currentCheckedItem)
 
@@ -74,7 +77,22 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
             }
         }
 
+        button_confirm.click {
+            val item = adapter.getItem(presenter.currentLanguagePosition)
+            item.notNull { presenter.saveLanguage(it.language.code) }
+            onBackPressed()
+        }
+
         enterAnimation()
+    }
+
+    private fun markCurrentSelectedLanguage() {
+        val languageItemByCode = Language.getLanguageItemByCode(preferencesHelper.getLanguage())
+        val position = adapter.data.indexOf(languageItemByCode)
+        presenter.currentLanguagePosition = position
+        val languageItem = adapter.getItem(position) as LanguageItem
+        languageItem.checked = true
+        adapter.setData(position, languageItem)
     }
 
     override fun onBackPressed() {

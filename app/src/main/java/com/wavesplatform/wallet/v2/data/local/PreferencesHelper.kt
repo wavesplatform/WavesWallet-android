@@ -21,14 +21,23 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     companion object {
         val PREF_FILE_NAME = "android_waves_pref_file"
         val KEY_TUTORIAL = "keyTutorial"
+        val KEY_LANGUAGE = "keyLanguage"
     }
 
-    fun setTutorialPassed(value: Boolean){
+    fun setTutorialPassed(value: Boolean) {
         mPref.edit().putBoolean(KEY_TUTORIAL, value).apply()
     }
 
-    fun isTutorialPassed() : Boolean{
+    fun isTutorialPassed(): Boolean {
         return mPref.getBoolean(KEY_TUTORIAL, false)
+    }
+
+    fun getLanguage(): Int {
+        return mPref.getInt(KEY_LANGUAGE, 0)
+    }
+
+    fun setLanguage(lang: Int) {
+        mPref.edit().putInt(KEY_LANGUAGE, lang).apply()
     }
 
 }

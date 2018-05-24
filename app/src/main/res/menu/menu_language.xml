@@ -4,5 +4,5 @@
     <item
         android:id="@+id/action_change_language"
         auto:showAsAction="always"
-        android:title="@string/action_language_english" />
+        android:title="" />
 </menu>
