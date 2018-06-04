@@ -7,8 +7,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.util.setSystemBarTheme
+import com.wavesplatform.wallet.v2.ui.new_account.backup_info.BackupInfoActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_secret_phrase.*
+import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.toast
 import javax.inject.Inject
 
@@ -27,6 +29,11 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view)
+
+
+        button_confirm.click {
+            launchActivity<BackupInfoActivity> {  }
+        }
     }
 
 

@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:lineSpacingExtra="10sp"
-            android:fontFamily="@font/roboto_bold"
+            app:fontFamily="@font/roboto_bold"
             android:text="@string/card_tutorial_5_title"
             android:textColor="@color/black"
             android:textSize="34sp" />
@@ -33,7 +33,7 @@
             android:layout_below="@+id/card_1_title"
             android:layout_marginTop="24dp"
             android:lineSpacingExtra="4sp"
-            android:fontFamily="@font/roboto"
+            app:fontFamily="@font/roboto"
             android:text="@string/card_tutorial_5_description"
             android:textColor="@color/black"
             android:textSize="13sp" />

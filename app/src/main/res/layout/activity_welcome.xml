@@ -40,7 +40,7 @@
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
             android:layout_marginTop="24dp"
-            android:fontFamily="@font/roboto_bold"
+            app:fontFamily="@font/roboto_bold"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="8sp"
             android:text="Get Started with Blockchain"
@@ -118,28 +118,22 @@
                 android:paddingRight="16dp"
                 android:paddingTop="14dp">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_sign_in_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:lineSpacingExtra="4sp"
                     android:text="@string/welcome_create_sign_in_title"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal" />
+                    android:textSize="14sp" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_sign_in_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/text_sign_in_title"
-                    android:fontFamily="sans-serif"
-                    android:lineSpacingExtra="4sp"
                     android:text="@string/welcome_create_sign_in_description"
                     android:textColor="@color/basic500"
-                    android:textSize="14sp"
-                    android:textStyle="normal" />
+                    android:textSize="14sp" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="wrap_content"
@@ -167,28 +161,22 @@
                 android:paddingRight="16dp"
                 android:paddingTop="14dp">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_import_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:lineSpacingExtra="4sp"
                     android:text="@string/welcome_create_import_title"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal" />
+                    android:textSize="14sp" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_import_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/text_import_title"
-                    android:fontFamily="sans-serif"
-                    android:lineSpacingExtra="4sp"
                     android:text="@string/welcome_create_import_description"
                     android:textColor="@color/basic500"
-                    android:textSize="14sp"
-                    android:textStyle="normal" />
+                    android:textSize="14sp" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="wrap_content"

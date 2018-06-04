@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:fontFamily="@font/roboto_bold"
+            app:fontFamily="@font/roboto_bold"
             android:lineSpacingExtra="10sp"
             android:textColor="@color/disabled500"
             android:textSize="14sp"/>
@@ -52,7 +52,7 @@
             android:textSize="14sp"
             android:textColor="@color/black"
             android:lineSpacingExtra="4sp"
-            android:fontFamily="@font/roboto"
+            app:fontFamily="@font/roboto"
             android:text="@string/card_tutorial_7_description_os"
             />
 
@@ -72,7 +72,7 @@
             android:textSize="14sp"
             android:textColor="@color/black"
             android:lineSpacingExtra="4sp"
-            android:fontFamily="@font/roboto"
+            app:fontFamily="@font/roboto"
             android:text="@string/card_tutorial_7_description_wifi"
             />
 

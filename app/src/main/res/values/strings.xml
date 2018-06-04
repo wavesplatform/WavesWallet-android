@@ -731,8 +731,17 @@
     <string name="new_account_continue">Continue</string>
     <string name="new_account_avatar_title">Choose your address avatar</string>
     <string name="new_account_avatar_description">This avatar is unique. You cannot change it later.</string>
+
+    <!-- Secret Phrase -->
     <string name="secret_phrase_no_backup_no_money">No Backup, No Money</string>
     <string name="secret_phrase_you_must_save_the_secret_phrase_it_is_crucial_for_accessing_your_account">You must save the secret phrase. It is crucial for accessing your account.</string>
     <string name="secret_phrase_back_up_now">Back Up Now</string>
     <string name="secret_phrase_do_it_later">Do it later</string>
+
+
+    <!-- Backup Info -->
+    <string name="backup_info_title">Treat your backup phrase with care!</string>
+    <string name="backup_info_subtitle">Waves Platform would like to warn you about the increased frequency of scam and phishing attacks over the last month. Fraudsters are hiding their malware in their own versions of the Waves client and promising bonuses and discounts to lure in users.\n\nPlease be careful and never input your SEED into these \'clients\', because your account will be compromised and you will lose all of your funds.\n\nYou should ONLY use the official Waves client.</string>
+    <string name="backup_info_button">I understand</string>
+
 </resources>

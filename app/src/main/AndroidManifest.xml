@@ -176,9 +176,13 @@
         <activity
             android:name=".v2.ui.new_account.NewAccountActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Translucent.DarkStatusBar"/>
+            android:theme="@style/AppTheme.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.new_account.secret_phrase.SecretPhraseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
+            android:name=".v2.ui.new_account.backup_info.BackupInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Translucent.DarkStatusBar" />
     </application>
