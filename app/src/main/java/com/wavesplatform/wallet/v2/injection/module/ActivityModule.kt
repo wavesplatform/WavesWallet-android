@@ -4,6 +4,7 @@ import com.wavesplatform.wallet.v2.injection.scope.PerActivity
 import com.wavesplatform.wallet.v2.ui.language.change.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.new_account.NewAccountActivity
+import com.wavesplatform.wallet.v2.ui.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
@@ -36,5 +37,9 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun changeLanguageActivity(): ChangeLanguageActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun secretPhraseActivity(): SecretPhraseActivity
 
 }

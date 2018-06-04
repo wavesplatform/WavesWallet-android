@@ -650,11 +650,9 @@
 
     <!-- ###################################################################  v2 ################################################################### -->
 
-    <string name="action_language_russia">Русский</string>
-    <string name="action_language_china">中文(简体)</string>
-    <string name="action_language_korea">한국어</string>
-    <string name="action_language_turkey">Türkçe</string>
-    <string name="action_language_english">EN</string>
+    <!-- Common -->
+    <string name="action_close">Close</string>
+
 
     <!-- Language-->
     <string name="choose_language_russia">Русский</string>
@@ -733,4 +731,8 @@
     <string name="new_account_continue">Continue</string>
     <string name="new_account_avatar_title">Choose your address avatar</string>
     <string name="new_account_avatar_description">This avatar is unique. You cannot change it later.</string>
+    <string name="secret_phrase_no_backup_no_money">No Backup, No Money</string>
+    <string name="secret_phrase_you_must_save_the_secret_phrase_it_is_crucial_for_accessing_your_account">You must save the secret phrase. It is crucial for accessing your account.</string>
+    <string name="secret_phrase_back_up_now">Back Up Now</string>
+    <string name="secret_phrase_do_it_later">Do it later</string>
 </resources>

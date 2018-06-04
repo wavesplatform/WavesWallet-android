@@ -14,6 +14,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.R.id.*
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
+import com.wavesplatform.wallet.v2.ui.new_account.secret_phrase.SecretPhraseActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.setSystemBarTheme
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -43,9 +45,13 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     override fun configLayoutRes() = R.layout.activity_new_account
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setSystemBarTheme(false)
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.new_account_toolbar_title), R.drawable.ic_toolbar_back_black)
         isFieldsValid()
+
+        button_create_account.click {
+            launchActivity<SecretPhraseActivity> {  }
+        }
+
 
         var nameValidation = Validation(til_account_name)
                 .and(NotEmptyRule(R.string.new_account_account_name_validation_required_error))

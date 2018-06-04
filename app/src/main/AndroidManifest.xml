@@ -28,23 +28,19 @@
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Translucent.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <data android:scheme="waves" />
 
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
-             <intent-filter>
-             <action android:name="android.intent.action.VIEW" />
-
-
-             <data android:scheme="waves" />
-
-
-             <category android:name="android.intent.category.DEFAULT" />
-             <category android:name="android.intent.category.BROWSABLE" />
-             </intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".v1.ui.home.MainActivity"
@@ -147,36 +143,44 @@
             android:theme="@style/AppTheme.NoActionBar.Translucent" />
         <activity
             android:name=".v2.ui.tutorial.TutorialActivity"
-            android:noHistory="true"
             android:configChanges="orientation"
+            android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Translucent" />
         <activity
             android:name=".v2.ui.welcome.WelcomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Translucent">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.VIEW" />-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
-                <!--<data android:scheme="waves" />-->
 
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-                <!--<category android:name="android.intent.category.BROWSABLE" />-->
-            <!--</intent-filter>-->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.VIEW" /> -->
+
+
+            <!-- <data android:scheme="waves" /> -->
+
+
+            <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+            <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".v2.ui.language.change.ChangeLanguageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Translucent" />
-        <activity android:name=".v2.ui.new_account.NewAccountActivity"
+        <activity
+            android:name=".v2.ui.new_account.NewAccountActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Translucent"
-            />
+            android:theme="@style/AppTheme.NoActionBar.Translucent.DarkStatusBar"/>
+        <activity
+            android:name=".v2.ui.new_account.secret_phrase.SecretPhraseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.Translucent.DarkStatusBar" />
     </application>
 
 </manifest>
