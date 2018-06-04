@@ -44,10 +44,7 @@ class RxErrorHandlingCallAdapterFactory(private val mErrorManager: ErrorManager)
         override fun adapt(call: Call<R>): Observable<*> {
             val retrySubject = PublishSubject.create<Events.RetryEvent>()
             var observable = convert(wrapped.adapt(call))
-                    .observeOn(Schedulers.io())
                     .onErrorResumeNext { t: Throwable -> Observable.error(handleErrorToShow(t, retrySubject)) }
-                    .retryWhen { t -> t.flatMap {t -> retrySubject}.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()) }
-                    .subscribeOn(Schedulers.io())
             return observable
         }
 
