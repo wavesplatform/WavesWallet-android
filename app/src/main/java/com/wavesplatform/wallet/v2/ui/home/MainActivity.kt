@@ -38,6 +38,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_general)
 
+        presenter.loadBalancesAndTransactions()
+
         setupBottomNavigation()
 
 //        select the first tab

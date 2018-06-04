@@ -90,6 +90,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         text_hidden_assets.text = getString(R.string.hidden_assets,adapterHiddenAssets.data.size.toString())
+
+        presenter.getActiveAccountAndAddressList()
     }
 
 }

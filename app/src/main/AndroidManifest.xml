@@ -50,17 +50,23 @@
             android:name=".v1.ui.home.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.MainActivity"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".v2.ui.home.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.MainActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".v2.ui.home.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.MainActivity"
+            android:windowSoftInputMode="adjustResize">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".v1.ui.dex.markets.add.AddMarketActivity"
