@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
 
-class WalletFragmentPageAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
+class WalletFragmentPageAdapter(fm: FragmentManager?, var titles: Array<String>) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         return if (position == 0) {
@@ -17,4 +17,8 @@ class WalletFragmentPageAdapter(fm: FragmentManager?) : FragmentStatePagerAdapte
     }
 
     override fun getCount(): Int = 2
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return titles[position]
+    }
 }

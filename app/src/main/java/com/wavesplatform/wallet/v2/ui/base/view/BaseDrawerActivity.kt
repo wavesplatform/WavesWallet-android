@@ -24,6 +24,7 @@ import pers.victor.ext.screenWidth
 abstract class BaseDrawerActivity : BaseActivity() {
 
     protected lateinit var slidingRootNav: SlidingRootNav
+    private var changeStatusBarColor = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,8 +52,10 @@ abstract class BaseDrawerActivity : BaseActivity() {
                     slidingRootNav.layout.linear_drawer.scaleX = 1.5f - (progress / 2)
                     slidingRootNav.layout.linear_drawer.scaleY = 1.5f - (progress / 2)
 
-                    if (progress > 0.5) setSystemBarTheme(false)
-                    else setSystemBarTheme(true)
+                    if (changeStatusBarColor){
+                        if (progress > 0.5) setSystemBarTheme(false)
+                        else setSystemBarTheme(true)
+                    }
                 }
                 .withMenuOpened(false)
 //                .withContentClickableWhenMenuOpened(false)
@@ -157,11 +160,15 @@ abstract class BaseDrawerActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        SimpleChromeCustomTabs.getInstance().connectTo(this);
+        SimpleChromeCustomTabs.getInstance().connectTo(this)
     }
 
     override fun onPause() {
         SimpleChromeCustomTabs.getInstance().disconnectFrom(this)
         super.onPause()
+    }
+
+    fun needChangeStatusBarColorOnMenuOpen(change: Boolean){
+        changeStatusBarColor = change
     }
 }

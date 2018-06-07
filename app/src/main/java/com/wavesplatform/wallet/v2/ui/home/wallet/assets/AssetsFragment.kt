@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -11,7 +10,6 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.adapter.AssetsAdapter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.adapter.TestObject
 import kotlinx.android.synthetic.main.fragment_assets.*
 import pers.victor.ext.click
-import pers.victor.ext.hideInputMethod
 import java.util.*
 import javax.inject.Inject
 
@@ -89,7 +87,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
             }
         }
 
-        text_hidden_assets.text = getString(R.string.hidden_assets,adapterHiddenAssets.data.size.toString())
+        text_hidden_assets.text = getString(R.string.wallet_assets_hidden,adapterHiddenAssets.data.size.toString())
 
         presenter.getActiveAccountAndAddressList()
     }

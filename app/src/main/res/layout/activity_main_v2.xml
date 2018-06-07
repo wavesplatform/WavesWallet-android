@@ -1,58 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f8f9fb"
-    android:fitsSystemWindows="true"
-    app:insetForeground="@color/white">
+    android:background="@color/basic50">
 
-    <android.support.design.widget.CoordinatorLayout
+    <!-- The Toolbar wrapped in an AppBar -->
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:background="@android:color/transparent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:elevation="0dp">
 
-        <!-- The Toolbar wrapped in an AppBar -->
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbar_layout"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_general"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:elevation="0dp">
+            app:titleTextAppearance="@style/Toolbar.Title"
+            android:background="@android:color/transparent"
+            android:fitsSystemWindows="true"
+            app:titleTextColor="@color/black" />
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_general"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:fitsSystemWindows="true"
-                app:titleTextColor="@color/white" />
+    </android.support.design.widget.AppBarLayout>
 
-        </android.support.design.widget.AppBarLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
+        <FrameLayout
+            android:id="@+id/frame_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_above="@+id/tab_navigation"
+            android:background="@color/blockchain_pearl_white" />
 
-            <FrameLayout
-                android:id="@+id/frame_fragment_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_above="@+id/tab_navigation"
-                android:background="@color/blockchain_pearl_white" />
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tab_navigation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/white"
-                android:elevation="5dp"
-                app:tabGravity="fill"
-                app:tabIndicatorHeight="0dp"
-                app:tabMode="fixed" />
-        </RelativeLayout>
-    </android.support.design.widget.CoordinatorLayout>
-
-</android.support.v4.widget.DrawerLayout>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:elevation="5dp"
+            app:tabGravity="fill"
+            app:tabIndicatorHeight="0dp"
+            app:tabMode="fixed" />
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:auto="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_sorting"
+        android:icon="@drawable/ic_toolbar_sort"
+        auto:showAsAction="always"
+        android:title="@string/dex_sorting_toolbar_title" />
+
+    <item
+        android:id="@+id/action_add_market"
+        android:icon="@drawable/ic_toolbar_addmarkets"
+        auto:showAsAction="always"
+        android:title="@string/dex_market_toolbar_title" />
+</menu>

@@ -7,6 +7,9 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.new_account.backup_info .BackupInfoPresenter
 import com.wavesplatform.wallet.v2.ui.new_account.backup_info .BackupInfoView
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.util.notAvailable
+import kotlinx.android.synthetic.main.activity_backup_info.*
+import pers.victor.ext.click
 import javax.inject.Inject
 
 
@@ -23,7 +26,9 @@ class BackupInfoActivity : BaseActivity(), BackupInfoView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-
+        button_confirm.click {
+            notAvailable()
+        }
     }
 
 }

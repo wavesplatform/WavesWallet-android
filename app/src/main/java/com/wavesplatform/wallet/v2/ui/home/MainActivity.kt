@@ -24,8 +24,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     //
     private val TAG_NOT_CENTRAL_TAB = "not_central_tab"
     private val TAG_CENTRAL_TAB = "central_tab"
-    private val TAG_WALLET_FRAGMENT = "wallet_fragment"
-    private val TAG_DEX_FRAGMENT = "dex_fragment"
 
     @Inject
     @InjectPresenter
@@ -37,8 +35,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_general)
-
-        presenter.loadBalancesAndTransactions()
+        needChangeStatusBarColorOnMenuOpen(false)
+//        presenter.loadBalancesAndTransactions()
 
         setupBottomNavigation()
 
@@ -73,19 +71,23 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         when (tab?.position) {
 //            Wallet screen
             0 -> {
-                openFragment(R.id.frame_fragment_container, TAG_WALLET_FRAGMENT, WalletFragment.newInstance())
+                openFragment(R.id.frame_fragment_container, WalletFragment.newInstance())
+                toolbar_general.title = getString(R.string.wallet_toolbar_title)
             }
 //            DEX screen
             1 -> {
-                openFragment(R.id.frame_fragment_container, TAG_DEX_FRAGMENT, DexFragment.newInstance())
+                openFragment(R.id.frame_fragment_container, DexFragment.newInstance())
+                toolbar_general.title = getString(R.string.dex_toolbar_title)
             }
 //            History screen
             3 -> {
-                openFragment(R.id.frame_fragment_container, TAG_DEX_FRAGMENT, HistoryFragment.newInstance())
+                openFragment(R.id.frame_fragment_container, HistoryFragment.newInstance())
+                toolbar_general.title = getString(R.string.history_toolbar_title)
             }
 //            Profile screen
             4 -> {
-                openFragment(R.id.frame_fragment_container, TAG_DEX_FRAGMENT, ProfileFragment.newInstance())
+                openFragment(R.id.frame_fragment_container, ProfileFragment.newInstance())
+                toolbar_general.title = getString(R.string.profile_toolbar_title)
             }
         }
 

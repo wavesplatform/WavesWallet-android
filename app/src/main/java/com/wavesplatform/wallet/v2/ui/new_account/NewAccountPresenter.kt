@@ -8,10 +8,11 @@ import javax.inject.Inject
 @InjectViewState
 class NewAccountPresenter @Inject constructor() : BasePresenter<NewAccountView>() {
     var accountNameFieldValid = false
+    var avatarValid = false
     var createPasswrodFieldValid = false
     var confirmPasswordFieldValid = false
 
     fun isAllFieldsValid(): Boolean {
-        return accountNameFieldValid && createPasswrodFieldValid && confirmPasswordFieldValid
+        return accountNameFieldValid && createPasswrodFieldValid && confirmPasswordFieldValid && avatarValid
     }
 }

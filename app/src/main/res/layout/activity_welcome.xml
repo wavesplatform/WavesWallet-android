@@ -108,6 +108,7 @@
                 android:src="@drawable/bg_dashed" />
 
             <RelativeLayout
+                android:id="@+id/relative_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -151,6 +152,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/relative_import_acc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"

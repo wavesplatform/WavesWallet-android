@@ -180,19 +180,19 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         }
     }
 
-    fun openFragment(fragmentContainer: Int, tag: String, fragment: Fragment) {
+    fun openFragment(fragmentContainer: Int, fragment: Fragment) {
         val canGoBack = Navigator.with(this).utils()
-                .canGoBackToSpecificPoint(tag, fragmentContainer, supportFragmentManager)
+                .canGoBackToSpecificPoint(fragment::class.java.simpleName, fragmentContainer, supportFragmentManager)
         if (canGoBack) {
             Navigator.with(this)
                     .utils()
-                    .goBackToSpecificPoint(tag)
+                    .goBackToSpecificPoint(fragment::class.java.simpleName)
         } else {
             Navigator.with(this)
                     .build()
                     .goTo(fragment, fragmentContainer)
                     .addToBackStack()
-                    .tag(tag)
+                    .tag(fragment::class.java.simpleName)
                     .replace()
                     .commit()
         }

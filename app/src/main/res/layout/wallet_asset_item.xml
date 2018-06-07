@@ -31,19 +31,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_asset_icon"
                     android:layout_width="@dimen/asset_icon_size"
                     android:layout_height="@dimen/asset_icon_size"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/asset_gray_icon" />
+                    app:srcCompat="@drawable/asset_gray_icon" />
 
-                <ImageView
+                <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_down_arrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/image_asset_icon"
-                    android:src="@drawable/ic_circle_down_arrow" />
+                    app:srcCompat="@drawable/ic_circle_down_arrow" />
 
             </RelativeLayout>
 
@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_asset_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -68,13 +68,13 @@
                         android:textColor="@color/disabled500"
                         tools:text="Waves" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/image_favourite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="4dp"
-                        android:src="@drawable/ic_favorite_mini" />
+                        app:srcCompat="@drawable/ic_favorite_mini" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_asset_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
                         android:textSize="16sp" />
 
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_bitcoin_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -51,7 +51,7 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/roboto_bold</item>
         <item name="android:textSize">20sp</item>
-        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="fontFamily">@font/roboto_medium</item>
     </style>
 
     <style name="MyMenuTextAppearance" parent="android:TextAppearance.Holo.Widget.ActionBar.Menu">
@@ -64,26 +64,35 @@
         <item name="color">@color/white</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="AppThemeV2">
+    <style name="DrawerIconBlack" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/black</item>
+    </style>
+
+    <style name="AppThemeV2.NoActionBar" parent="AppThemeV2">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">false</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Translucent" parent="AppTheme.NoActionBar">
+    <style name="AppThemeV2.NoActionBar.Translucent" parent="AppThemeV2.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Translucent.DarkStatusBar" parent="AppTheme.NoActionBar.Translucent">
+    <style name="AppThemeV2.NoActionBar.Translucent.DarkStatusBar" parent="AppThemeV2.NoActionBar.Translucent">
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Translucent.WhiteStatusBar" parent="AppTheme.NoActionBar.Translucent">
+    <style name="AppThemeV2.MainActivity" parent="AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
+        <item name="drawerArrowStyle">@style/DrawerIconBlack</item>
+        <item name="actionMenuTextColor">@color/disabled900</item>
+    </style>
+
+    <style name="AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" parent="AppThemeV2.NoActionBar.Translucent">
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Translucent.Splash" parent="AppTheme.NoActionBar.Translucent">
+    <style name="AppThemeV2.NoActionBar.Translucent.Splash" parent="AppThemeV2.NoActionBar.Translucent">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 

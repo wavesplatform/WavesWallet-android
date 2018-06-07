@@ -8,7 +8,7 @@ import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment.
 import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment.Companion.received
 import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment.Companion.send
 
-class HistoryFragmentPageAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
+class HistoryFragmentPageAdapter(fm: FragmentManager?, var titles: Array<String>) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         when (position) {
@@ -26,5 +26,9 @@ class HistoryFragmentPageAdapter(fm: FragmentManager?) : FragmentStatePagerAdapt
     }
 
     override fun getCount(): Int = 3
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return titles[position]
+    }
 }
 

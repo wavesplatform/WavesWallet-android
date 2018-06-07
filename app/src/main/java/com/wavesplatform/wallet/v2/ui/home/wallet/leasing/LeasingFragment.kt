@@ -86,7 +86,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
                 TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
                 TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble())))
 
-        text_active_leasing.text = getString(R.string.active_now, adapter.data.size.toString())
+        text_active_leasing.text = getString(R.string.wallet_leasing_active_now, adapter.data.size.toString())
 
         view_line_1.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         view_line_2.setLayerType(View.LAYER_TYPE_SOFTWARE, null)

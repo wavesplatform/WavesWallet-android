@@ -32,6 +32,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.wavesplatform.wallet.R
 import pers.victor.ext.dp2px
+import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,6 +45,10 @@ fun Context.isNetworkConnection(): Boolean {
     val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val activeNetwork = cm.activeNetworkInfo
     return activeNetwork != null && activeNetwork.isConnectedOrConnecting
+}
+
+fun Context.notAvailable() {
+    toast(getString(R.string.msg_in_development))
 }
 
 

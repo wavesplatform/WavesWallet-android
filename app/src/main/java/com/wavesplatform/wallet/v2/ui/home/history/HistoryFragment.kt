@@ -2,6 +2,9 @@ package com.wavesplatform.wallet.v2.ui.home.history
 
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.flyco.tablayout.listener.OnTabSelectListener
@@ -9,10 +12,10 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryFragmentPageAdapter
 import kotlinx.android.synthetic.main.fragment_history.*
-import pers.victor.ext.addOnPageChangeListener
+import pers.victor.ext.toast
 import javax.inject.Inject
 
-class HistoryFragment : BaseFragment(), HistoryView, OnTabSelectListener, ViewPager.OnPageChangeListener {
+class HistoryFragment : BaseFragment(), HistoryView {
 
     @Inject
     @InjectPresenter
@@ -38,28 +41,24 @@ class HistoryFragment : BaseFragment(), HistoryView, OnTabSelectListener, ViewPa
     }
 
     private fun setupUI() {
-        stl_history.setTabData(arrayOf(getString(R.string.all), getString(R.string.sent),getString(R.string.received)))
+        viewpager_history.adapter = HistoryFragmentPageAdapter(childFragmentManager, arrayOf(getString(R.string.history_all), getString(R.string.history_sent),getString(R.string.history_received)))
 
-        viewpager_history.adapter = HistoryFragmentPageAdapter(childFragmentManager)
-
-        stl_history.setOnTabSelectListener(this)
-        viewpager_history.addOnPageChangeListener(this)
-
-        stl_history.currentTab = 0
+        stl_history.setViewPager(viewpager_history)
     }
 
-    override fun onTabSelect(position: Int) {
-        viewpager_history.currentItem = position
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_history, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onPageSelected(position: Int) {
-        stl_history.currentTab = position
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.action_sorting -> {
+                toast(item.title)
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
-
-    override fun onTabReselect(position: Int) {}
-
-    override fun onPageScrollStateChanged(state: Int) {}
-
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
 }

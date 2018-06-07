@@ -146,7 +146,8 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     }
 
     private fun avatarIsSelected(bitmap: Bitmap) {
-
+        presenter.avatarValid = true
+        isFieldsValid()
     }
 
     override fun onBackPressed() {

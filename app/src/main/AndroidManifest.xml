@@ -27,7 +27,7 @@
             android:launchMode="singleTask"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Translucent.Splash">
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,7 +56,7 @@
         <activity
             android:name=".v2.ui.home.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.MainActivity"
+            android:theme="@style/AppThemeV2.MainActivity"
             android:windowSoftInputMode="adjustResize">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
@@ -157,17 +157,17 @@
             android:configChanges="orientation"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Translucent" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.tutorial.TutorialActivity"
             android:configChanges="orientation"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Translucent" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
             android:name=".v2.ui.welcome.WelcomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Translucent">
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -189,19 +189,19 @@
         <activity
             android:name=".v2.ui.language.change.ChangeLanguageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Translucent" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
             android:name=".v2.ui.new_account.NewAccountActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Translucent.DarkStatusBar" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.new_account.secret_phrase.SecretPhraseActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Translucent.DarkStatusBar" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.new_account.backup_info.BackupInfoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Translucent.DarkStatusBar" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
     </application>
 
 </manifest>

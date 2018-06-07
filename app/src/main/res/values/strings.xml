@@ -652,6 +652,7 @@
 
     <!-- Common -->
     <string name="action_close">Close</string>
+    <string name="msg_in_development">Sorry, this feature will be available in the near future</string>
 
 
     <!-- Language-->
@@ -744,21 +745,54 @@
     <string name="backup_info_subtitle">Waves Platform would like to warn you about the increased frequency of scam and phishing attacks over the last month. Fraudsters are hiding their malware in their own versions of the Waves client and promising bonuses and discounts to lure in users.\n\nPlease be careful and never input your SEED into these \'clients\', because your account will be compromised and you will lose all of your funds.\n\nYou should ONLY use the official Waves client.</string>
     <string name="backup_info_button">I understand</string>
 
-    <string name="assets">Assets</string>
-    <string name="leasing">Leasing</string>
-    <string name="hidden_assets">Hidden assets (%1$s)</string>
-    <string name="active_now">Active now (%1$s)</string>
-    <string name="total_balance">Total balance</string>
-    <string name="available">Available</string>
-    <string name="leased">Leased</string>
-    <string name="leased_in">Leased in</string>
-    <string name="start_lease">Start Lease</string>
-    <string name="view_history">View history</string>
-    <string name="quick_note">Quick note</string>
-    <string name="quick_note_1">You can only transfer or trade WAVES that aren’t leased. The leased amount cannot be transferred or traded by you or anyone else.</string>
-    <string name="quick_note_2">You can cancel a leasing transaction as soon as it appears in the blockchain which usually occurs in a minute or less.</string>
-    <string name="quick_note_3">The generating balance will be updated after 1000 blocks.</string>
-    <string name="all">All</string>
-    <string name="sent">Sent</string>
-    <string name="received">Received</string>
+    <!-- Wallet -->
+    <string name="wallet_toolbar_title">Wallet</string>
+    <string name="wallet_assets">Assets</string>
+    <string name="wallet_leasing">Leasing</string>
+
+    <!-- Wallet Assets -->
+    <string name="wallet_assets_hidden">Hidden assets (%1$s)</string>
+
+    <!-- Wallet Leasing -->
+    <string name="wallet_leasing_active_now">Active now (%1$s)</string>
+    <string name="wallet_leasing_total_balance">Total balance</string>
+    <string name="wallet_leasing_available">Available</string>
+    <string name="wallet_leasing_leased">Leased</string>
+    <string name="wallet_leasing_leased_in">Leased in</string>
+    <string name="wallet_leasing_start_lease">Start Lease</string>
+    <string name="wallet_leasing_view_history">View history</string>
+    <string name="wallet_leasing_quick_note">Quick note</string>
+    <string name="wallet_leasing_quick_note_1">You can only transfer or trade WAVES that aren’t leased. The leased amount cannot be transferred or traded by you or anyone else.</string>
+    <string name="wallet_leasing_quick_note_2">You can cancel a leasing transaction as soon as it appears in the blockchain which usually occurs in a minute or less.</string>
+    <string name="wallet_leasing_quick_note_3">The generating balance will be updated after 1000 blocks.</string>
+
+    <!-- History -->
+    <string name="history_toolbar_title">History</string>
+    <string name="history_all">All</string>
+    <string name="history_sent">Sent</string>
+    <string name="history_received">Received</string>
+
+    <!-- History Sorting -->
+    <string name="history_sorting_toolbar_title">Sorting</string>
+
+    <!-- DEX -->
+    <string name="dex_toolbar_title">DEX</string>
+
+    <!-- Profile -->
+    <string name="profile_toolbar_title">Profile</string>
+    <string name="profile_toolbar_logout">Logout</string>
+
+    <!-- Your Address -->
+    <string name="your_address_toolbar_title">Your address</string>
+
+    <!-- Wallet Sorting -->
+    <string name="wallet_sorting_toolbar_title">Sorting</string>
+
+    <!-- DEX Sorting -->
+    <string name="dex_sorting_toolbar_title">Sorting</string>
+
+    <!-- Markets -->
+    <string name="dex_market_toolbar_title">Markets</string>
+
+
 </resources>

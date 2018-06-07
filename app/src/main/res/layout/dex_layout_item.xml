@@ -21,17 +21,17 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
+            android:paddingBottom="14dp"
             android:paddingLeft="14dp"
             android:paddingRight="14dp"
-            android:paddingTop="10dp">
+            android:paddingTop="14dp">
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/image_dex_trade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_chartarrow_success_400" />
+                app:srcCompat="@drawable/ic_chartarrow_success_400" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,18 +46,18 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_asset_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
-                        android:fontFamily="@font/roboto_bold"
+                        app:fontFamily="@font/roboto_bold"
                         android:text="WAVES / BTC"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/image_verified"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -65,15 +65,15 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="4dp"
                         android:layout_toRightOf="@+id/text_asset_name"
-                        android:src="@drawable/ic_verified_multy" />
+                        app:srcCompat="@drawable/ic_verified_multy" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
-                        android:fontFamily="@font/roboto_bold"
+                        app:fontFamily="@font/roboto_bold"
                         android:text="0.000769330"
                         android:textColor="@color/disabled500"
                         android:textSize="12sp" />
@@ -85,23 +85,23 @@
                     android:layout_marginTop="6dp"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_asset_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:fontFamily="@font/roboto_regular"
+                        android:fontFamily="@font/roboto"
                         android:text="+ 24.14%"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
 
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center_vertical"
-                        android:fontFamily="@font/roboto_regular"
+                        android:fontFamily="@font/roboto"
                         android:text="Price WAVES"
                         android:textColor="@color/disabled500"
                         android:textSize="12sp" />
