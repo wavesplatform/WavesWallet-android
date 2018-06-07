@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.base.view
 
+import android.app.FragmentContainer
 import android.app.ProgressDialog
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -29,6 +30,7 @@ import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import org.fingerlinks.mobile.android.navigator.Navigator
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -43,15 +45,21 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     val fragmentContainer: Int
         @IdRes get() = 0
 
-    @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject lateinit var frameworkFragmentInjector: DispatchingAndroidInjector<android.app.Fragment>
+    @Inject
+    lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject
+    lateinit var frameworkFragmentInjector: DispatchingAndroidInjector<android.app.Fragment>
 
 
-    @Inject lateinit var mRxEventBus: RxEventBus
-    @Inject lateinit var mErrorManager: ErrorManager
-    @Inject lateinit var dataManager: DataManager
-    @Inject lateinit var preferencesHelper: PreferencesHelper
-    var  progressDialog: ProgressDialog? = null
+    @Inject
+    lateinit var mRxEventBus: RxEventBus
+    @Inject
+    lateinit var mErrorManager: ErrorManager
+    @Inject
+    lateinit var dataManager: DataManager
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
+    var progressDialog: ProgressDialog? = null
 
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
@@ -169,6 +177,24 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                 progressDialog?.dismiss()
                 progressDialog = null
             }
+        }
+    }
+
+    fun openFragment(fragmentContainer: Int, tag: String, fragment: Fragment) {
+        val canGoBack = Navigator.with(this).utils()
+                .canGoBackToSpecificPoint(tag, fragmentContainer, supportFragmentManager)
+        if (canGoBack) {
+            Navigator.with(this)
+                    .utils()
+                    .goBackToSpecificPoint(tag)
+        } else {
+            Navigator.with(this)
+                    .build()
+                    .goTo(fragment, fragmentContainer)
+                    .addToBackStack()
+                    .tag(tag)
+                    .replace()
+                    .commit()
         }
     }
 
