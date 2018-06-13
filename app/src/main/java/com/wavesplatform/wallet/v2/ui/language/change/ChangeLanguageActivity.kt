@@ -24,6 +24,9 @@ import com.wavesplatform.wallet.R.id.*
 import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
 import com.wavesplatform.wallet.v2.util.notNull
 import pers.victor.ext.click
+import com.franmontiel.localechanger.utils.ActivityRecreationHelper
+import com.franmontiel.localechanger.LocaleChanger
+import java.util.*
 
 
 class ChangeLanguageActivity : BaseActivity(), LanguageView {
@@ -79,7 +82,10 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
 
         button_confirm.click {
             val item = adapter.getItem(presenter.currentLanguagePosition)
-            item.notNull { presenter.saveLanguage(it.language.code) }
+            item.notNull {
+                presenter.saveLanguage(it.language.code)
+                LocaleChanger.setLocale(Locale(getString(it.language.code).toLowerCase()))
+            }
             onBackPressed()
         }
 

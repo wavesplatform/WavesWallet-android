@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.base.view
 
 import android.app.FragmentContainer
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.support.annotation.DrawableRes
@@ -16,6 +17,8 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.franmontiel.localechanger.LocaleChanger
+import com.franmontiel.localechanger.utils.ActivityRecreationHelper
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
@@ -70,6 +73,12 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         return frameworkFragmentInjector
     }
 
+    override fun attachBaseContext(newBase: Context?) {
+        val baseContext = LocaleChanger.configureBaseContext(newBase)
+        super.attachBaseContext(baseContext)
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -84,6 +93,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     public override fun onResume() {
         super.onResume()
+        ActivityRecreationHelper.onResume(this)
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)
                 .compose(RxUtil.applyDefaultSchedulers())
                 .subscribe({ errorEvent -> mErrorManager.showError(this, errorEvent.retrofitException, errorEvent.retrySubject) },
@@ -91,13 +101,14 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        ActivityRecreationHelper.onDestroy(this);
         eventSubscriptions.clear()
+        super.onDestroy()
     }
 
     public override fun onPause() {
-        super.onPause()
         mCompositeDisposable.clear()
+        super.onPause()
     }
 
     @JvmOverloads

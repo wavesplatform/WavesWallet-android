@@ -2,11 +2,18 @@ package com.wavesplatform.wallet.v2.ui.base.view
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.startActivity
+import android.util.TypedValue
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
@@ -15,16 +22,14 @@ import com.yarolegovich.slidingrootnav.SlidingRootNav
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 import com.yarolegovich.slidingrootnav.callback.DragStateListener
 import kotlinx.android.synthetic.main.menu_left_drawer.view.*
-import pers.victor.ext.click
-import pers.victor.ext.dp2px
-import pers.victor.ext.px2dp
-import pers.victor.ext.screenWidth
+import pers.victor.ext.*
 
 
 abstract class BaseDrawerActivity : BaseActivity() {
 
     protected lateinit var slidingRootNav: SlidingRootNav
     private var changeStatusBarColor = true
+    private var view: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +42,9 @@ abstract class BaseDrawerActivity : BaseActivity() {
                 .addDragStateListener(object: DragStateListener{
                     override fun onDragEnd(isMenuOpened: Boolean) {
                         if (isMenuOpened){
-                            slidingRootNav.layout.findViewById<ViewGroup>(R.id.root).click{
-                                slidingRootNav.closeMenu(true)
-                            }
+                            view?.visiable()
                         }else{
-                            slidingRootNav.layout.findViewById<ViewGroup>(R.id.root).setOnClickListener(null)
+                            view?.gone()
                         }
                     }
 
@@ -63,6 +66,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
                 .withMenuLayout(R.layout.menu_left_drawer)
                 .inject()
 
+        createCloseView()
         slidingRootNav.layout.linear_drawer.scaleX = 1.5f
         slidingRootNav.layout.linear_drawer.scaleY = 1.5f
         slidingRootNav.layout.text_site.paintFlags = slidingRootNav.layout.text_site.paintFlags or Paint.UNDERLINE_TEXT_FLAG
@@ -74,6 +78,23 @@ abstract class BaseDrawerActivity : BaseActivity() {
         slidingRootNav.layout.image_github.click { openUrlWithChromeTab(Constants.URL_GITHUB) }
         slidingRootNav.layout.image_telegram.click { openTelegram(Constants.ACC_TELEGRAM) }
         slidingRootNav.layout.image_twitter.click { openTwitter(Constants.ACC_TWITTER) }
+    }
+
+    private fun createCloseView() {
+        view = View(this@BaseDrawerActivity)
+
+        val params : ViewGroup.LayoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, // This will define text view width
+                ViewGroup.LayoutParams.MATCH_PARENT // This will define text view height
+        )
+        view?.layoutParams = params
+        view?.setBackgroundColor(Color.TRANSPARENT)
+        view?.click{
+            slidingRootNav.closeMenu(true)
+        }
+        slidingRootNav.layout.findViewById<ViewGroup>(R.id.root).addView(view)
+
+        view?.gone()
     }
 
 

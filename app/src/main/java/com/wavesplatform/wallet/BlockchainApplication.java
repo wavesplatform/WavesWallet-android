@@ -1,11 +1,13 @@
 package com.wavesplatform.wallet;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
+import com.franmontiel.localechanger.LocaleChanger;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.wavesplatform.wallet.v1.data.access.AccessState;
 import com.wavesplatform.wallet.v1.data.access.DexAccessState;
@@ -21,6 +23,10 @@ import com.wavesplatform.wallet.v1.util.annotations.Thunk;
 import com.wavesplatform.wallet.v1.util.exceptions.LoggingExceptionHandler;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
@@ -35,8 +41,8 @@ public class BlockchainApplication extends DaggerApplication {
     @Thunk
     static final String TAG = BlockchainApplication.class.getSimpleName();
     private static final String RX_ERROR_TAG = "RxJava Error";
-    @Inject
-    PrefsUtil mPrefsUtil;
+    @Inject PrefsUtil mPrefsUtil;
+
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -50,6 +56,20 @@ public class BlockchainApplication extends DaggerApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        List<Locale> SUPPORTED_LOCALES =
+                Arrays.asList(
+                        new Locale(getString(R.string.choose_language_russia_code).toLowerCase()),
+                        new Locale(getString(R.string.choose_language_china_code).toLowerCase()),
+                        new Locale(getString(R.string.choose_language_korea_code).toLowerCase()),
+                        new Locale(getString(R.string.choose_language_turkey_code).toLowerCase()),
+                        new Locale(getString(R.string.choose_language_english_code).toLowerCase()),
+                        new Locale(getString(R.string.choose_language_hindi_code).toLowerCase()),
+                        new Locale(getString(R.string.choose_language_dansk_code).toLowerCase()),
+                        new Locale(getString(R.string.choose_language_nederlands_code).toLowerCase())
+                );
+
+        LocaleChanger.initialize(getApplicationContext(), SUPPORTED_LOCALES);
         // Init objects first
         Injector.getInstance().init(this);
         // Inject into Application
@@ -119,5 +139,12 @@ public class BlockchainApplication extends DaggerApplication {
     void onProviderInstallerNotAvailable() {
         // TODO: 05/08/2016 Decide if we should take action here or not
         Log.wtf(TAG, "Security Provider Installer not available");
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        LocaleChanger.onConfigurationChanged();
     }
 }

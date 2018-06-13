@@ -1,18 +1,19 @@
 package com.wavesplatform.wallet.v2.ui.home.history
 
 import android.os.Bundle
-import android.support.v4.view.ViewPager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.flyco.tablayout.listener.OnTabSelectListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryFragmentPageAdapter
 import kotlinx.android.synthetic.main.fragment_history.*
+import pers.victor.ext.dp2px
+import pers.victor.ext.gone
 import pers.victor.ext.toast
+import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class HistoryFragment : BaseFragment(), HistoryView {
@@ -42,8 +43,18 @@ class HistoryFragment : BaseFragment(), HistoryView {
 
     private fun setupUI() {
         viewpager_history.adapter = HistoryFragmentPageAdapter(childFragmentManager, arrayOf(getString(R.string.history_all), getString(R.string.history_sent),getString(R.string.history_received)))
-
         stl_history.setViewPager(viewpager_history)
+        appbar_layout.addOnOffsetChangedListener({ appBarLayout, verticalOffset ->
+            val offsetForShowShadow = appbar_layout.totalScrollRange - dp2px(9)
+            if (-verticalOffset > offsetForShowShadow) {
+                viewpager_history.setPagingEnabled(false)
+                view_shadow.visiable()
+            } else {
+                viewpager_history.setPagingEnabled(true)
+                view_shadow.gone()
+            }
+        })
+        stl_history.currentTab = 0
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

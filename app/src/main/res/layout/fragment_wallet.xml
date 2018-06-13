@@ -1,32 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <com.flyco.tablayout.SlidingTabLayout
-        android:id="@+id/stl_wallet"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        tl:tl_bar_stroke_width="0dp"
-        tl:tl_indicator_anim_enable="true"
-        tl:tl_indicator_bounce_enable="false"
-        tl:tl_indicator_color="@color/submit400"
-        tl:tl_indicator_corner_radius="@dimen/tab_corner_radius"
-        tl:tl_tab_width="100dp"
-        tl:tl_indicator_style="BLOCK"
-        tl:tl_textSelectColor="@color/white"
-        tl:tl_textUnselectColor="@color/basic500" />
+        android:layout_height="wrap_content"
+        android:background="@color/basic50"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:elevation="0dp">
 
-    <android.support.v4.view.ViewPager
-        android:overScrollMode="never"
+        <com.flyco.tablayout.SlidingTabLayout
+            android:id="@+id/stl_wallet"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
+            tl:tl_bar_stroke_width="0dp"
+            tl:tl_indicator_anim_enable="true"
+            tl:tl_indicator_bounce_enable="false"
+            tl:tl_indicator_color="@color/submit400"
+            tl:tl_indicator_corner_radius="@dimen/tab_corner_radius"
+            tl:tl_indicator_style="BLOCK"
+            tl:tl_tab_width="100dp"
+            tl:tl_textSelectColor="@color/white"
+            tl:tl_textUnselectColor="@color/basic500" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <com.wavesplatform.wallet.v2.ui.custom.SwipeDisableViewPager
+        android:layout_marginTop="3dp"
         android:id="@+id/viewpager_wallet"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <View
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="3dp"
+        android:id="@+id/view_shadow"
+        android:background="@drawable/toolbar_dropshadow"
+        app:layout_anchor="@+id/appbar_layout"
+        app:layout_anchorGravity="bottom" />
+</android.support.design.widget.CoordinatorLayout>

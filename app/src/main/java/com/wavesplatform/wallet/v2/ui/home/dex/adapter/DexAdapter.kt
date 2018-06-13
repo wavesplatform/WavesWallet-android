@@ -31,5 +31,6 @@ class DexAdapter @Inject constructor() : BaseQuickAdapter<TestObject, BaseViewHo
         }
         helper.setImageDrawable(R.id.image_dex_trade, tradeIcon)
         helper.setImageDrawable(R.id.image_verified, verifyIcon)
+                .setGone(R.id.image_verified, false)
     }
 }
