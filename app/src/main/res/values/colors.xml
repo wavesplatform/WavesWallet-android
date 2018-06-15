@@ -73,7 +73,8 @@
 
     <!-- V2 -->
 
-    <!-- Left Drawer  -->
+    <color name="av_default_border">@android:color/white</color>
+    <color name="av_bitmap_background_color">#424242</color>
 
     <color name="disabled50">#FAFAFA</color>
     <color name="disabled100">#F0F0F0</color>
@@ -123,5 +124,33 @@
 
     <color name="home_tab_inactive">#D3D3D3</color>
     <color name="home_tab_active">#000000</color>
+
+    <color name="a">#38a12d</color>
+    <color name="b">#69727b</color>
+    <color name="c">#e49516</color>
+    <color name="d">#008ca7</color>
+    <color name="e">#ff5b38</color>
+    <color name="f">#ff6a00</color>
+    <color name="g">#c74124</color>
+    <color name="h">#00a78e</color>
+    <color name="i">#b01e53</color>
+    <color name="j">#e0c61b</color>
+    <color name="k">#5a81ea</color>
+    <color name="l">#72b7d2</color>
+    <color name="m">#a5b5c3</color>
+    <color name="n">#81c926</color>
+    <color name="o">#86a3bd</color>
+    <color name="p">#c1d82f</color>
+    <color name="q">#5c84a8</color>
+    <color name="r">#267e1b</color>
+    <color name="s">#fcb034</color>
+    <color name="t">#ff846a</color>
+    <color name="u">#47c1ff</color>
+    <color name="v">#00a0af</color>
+    <color name="w">#85d7c6</color>
+    <color name="x">#8a7967</color>
+    <color name="y">#26c1c9</color>
+    <color name="z">#72d28b</color>
+    <color name="persist">#96bca0</color>
 
 </resources>

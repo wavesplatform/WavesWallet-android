@@ -17,4 +17,8 @@
         <attr name="minTextSize" format="float" />
     </declare-styleable>
 
+    <declare-styleable name="AvatarView">
+        <attr name="av_border_color" format="color" />
+        <attr name="av_border_width" format="dimension" />/>
+    </declare-styleable>
 </resources>

@@ -37,19 +37,19 @@
     </android.support.design.widget.AppBarLayout>
 
     <com.wavesplatform.wallet.v2.ui.custom.SwipeDisableViewPager
-        android:layout_marginTop="3dp"
         android:id="@+id/viewpager_wallet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="3dp"
         android:overScrollMode="never"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <View
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="3dp"
         android:id="@+id/view_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
         android:background="@drawable/toolbar_dropshadow"
+        android:visibility="gone"
         app:layout_anchor="@+id/appbar_layout"
         app:layout_anchorGravity="bottom" />
 </android.support.design.widget.CoordinatorLayout>

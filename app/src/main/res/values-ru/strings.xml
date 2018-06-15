@@ -751,7 +751,7 @@
     <string name="wallet_leasing">Leasing</string>
 
     <!-- Wallet Assets -->
-    <string name="wallet_assets_hidden">Hidden assets (%1$s)</string>
+    <string name="wallet_assets_hidden_category">Hidden assets (%1$s)</string>
 
     <!-- Wallet Leasing -->
     <string name="wallet_leasing_active_now">Active now (%1$s)</string>

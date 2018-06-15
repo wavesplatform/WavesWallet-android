@@ -1,5 +1,7 @@
 package com.wavesplatform.wallet.v2.data
 
+import com.wavesplatform.wallet.R
+
 object Constants {
 
     // Production
@@ -14,6 +16,35 @@ object Constants {
 
     val ACC_TWITTER = "wavesplatform"
     val ACC_TELEGRAM = "wavesnews"
+
+    var alphabetColor = hashMapOf<String, Int>(
+            Pair("a", R.color.a),
+            Pair("b", R.color.b),
+            Pair("c", R.color.c),
+            Pair("d", R.color.d),
+            Pair("e", R.color.e),
+            Pair("f", R.color.f),
+            Pair("g", R.color.g),
+            Pair("h", R.color.h),
+            Pair("i", R.color.i),
+            Pair("j", R.color.j),
+            Pair("k", R.color.k),
+            Pair("l", R.color.l),
+            Pair("m", R.color.m),
+            Pair("n", R.color.n),
+            Pair("o", R.color.o),
+            Pair("p", R.color.p),
+            Pair("q", R.color.q),
+            Pair("r", R.color.r),
+            Pair("s", R.color.s),
+            Pair("t", R.color.t),
+            Pair("u", R.color.u),
+            Pair("v", R.color.v),
+            Pair("w", R.color.w),
+            Pair("x", R.color.x),
+            Pair("y", R.color.y),
+            Pair("z", R.color.z),
+            Pair("persist", R.color.persist))
 
 //    val URL_ROADMAP = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
 

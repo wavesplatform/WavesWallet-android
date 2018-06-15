@@ -5,6 +5,7 @@ class TestObject(
         val isFavourite: Boolean,
         val isOut: Boolean,
         val assetValue: Double,
-        val bitcoinValue: Double
+        val bitcoinValue: Double,
+        val isSpam: Boolean = false
 )
 

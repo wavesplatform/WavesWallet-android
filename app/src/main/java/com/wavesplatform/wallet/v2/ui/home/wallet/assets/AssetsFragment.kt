@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.adapter.AssetsAdapter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.adapter.TestObject
 import kotlinx.android.synthetic.main.fragment_assets.*
 import pers.victor.ext.click
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.*
 import javax.inject.Inject
 
@@ -28,6 +29,9 @@ class AssetsFragment : BaseFragment(), AssetsView {
     @Inject
     lateinit var adapterHiddenAssets: AssetsAdapter
 
+    @Inject
+    lateinit var spamAssetsAdapter: AssetsAdapter
+
     companion object {
 
         /**
@@ -45,6 +49,13 @@ class AssetsFragment : BaseFragment(), AssetsView {
     }
 
     private fun setupUI() {
+        swipe_container.setColorSchemeResources(R.color.submit400)
+        swipe_container.setOnRefreshListener {
+            runDelayed(3000, {
+                swipe_container.isRefreshing = false
+            })
+        }
+
         recycle_assets_not_hidden.layoutManager = LinearLayoutManager(baseActivity)
         recycle_assets_not_hidden.adapter = adapter
         recycle_assets_not_hidden.isNestedScrollingEnabled = false
@@ -53,14 +64,18 @@ class AssetsFragment : BaseFragment(), AssetsView {
         recycle_assets_hidden.adapter = adapterHiddenAssets
         recycle_assets_hidden.isNestedScrollingEnabled = false
 
+        recycle_spam_assets.layoutManager = LinearLayoutManager(baseActivity)
+        recycle_spam_assets.adapter = spamAssetsAdapter
+        recycle_spam_assets.isNestedScrollingEnabled = false
+
         adapter.setNewData(arrayListOf(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble())))
+                TestObject("Bitcoin", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
+                TestObject("Ethereum", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
+                TestObject("Euro", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
+                TestObject("Dollar", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
+                TestObject("Litecoin", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
+                TestObject("Dash", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
+                TestObject("Monero", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble())))
 
         adapterHiddenAssets.setNewData(arrayListOf(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
                 TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
@@ -70,6 +85,12 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
                 TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
                 TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble())))
+
+        spamAssetsAdapter.setNewData(arrayListOf(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble(), true),
+                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble(), true),
+                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble(), true),
+                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble(), true),
+                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble(), true)))
 
         text_hidden_assets.click {
             if (expandable_layout.isExpanded) {
@@ -87,7 +108,24 @@ class AssetsFragment : BaseFragment(), AssetsView {
             }
         }
 
-        text_hidden_assets.text = getString(R.string.wallet_assets_hidden,adapterHiddenAssets.data.size.toString())
+        text_spam_assets.click {
+            if (expandable_layout_spam.isExpanded) {
+                expandable_layout_spam.collapse()
+                image_arrowup_spam.animate()
+                        .rotation(180f)
+                        .setDuration(500)
+                        .start()
+            } else {
+                expandable_layout_spam.expand()
+                image_arrowup_spam.animate()
+                        .rotation(0f)
+                        .setDuration(500)
+                        .start()
+            }
+        }
+
+        text_hidden_assets.text = getString(R.string.wallet_assets_hidden_category, adapterHiddenAssets.data.size.toString())
+        text_spam_assets.text = getString(R.string.wallet_assets_spam_category, spamAssetsAdapter.data.size.toString())
 
         presenter.getActiveAccountAndAddressList()
     }

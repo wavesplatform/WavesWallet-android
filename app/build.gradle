@@ -225,6 +225,7 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.thepacific:divider:0.0.2'
     implementation 'com.github.WindSekirun:RichUtilsKt:2.1.5'
     implementation 'com.github.VictorChow:kotlin-android-lib:1.2.2'
