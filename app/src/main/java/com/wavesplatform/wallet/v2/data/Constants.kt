@@ -57,7 +57,8 @@ object Constants {
             AssetBalance("HZk1mbfuJpmxU1Fs4AX5MWLVYtctsNcg6e2C6VKqK8zk", quantity = 8400000000000000, issueTransaction = IssueTransaction(assetId = "HZk1mbfuJpmxU1Fs4AX5MWLVYtctsNcg6e2C6VKqK8zk", id = "HZk1mbfuJpmxU1Fs4AX5MWLVYtctsNcg6e2C6VKqK8zk", name = "LTC", decimals = 8)),
             AssetBalance("zMFqXuoyrn5w17PFurTqxB7GsS71fp9dfk6XFwxbPCy", quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = "zMFqXuoyrn5w17PFurTqxB7GsS71fp9dfk6XFwxbPCy", id = "zMFqXuoyrn5w17PFurTqxB7GsS71fp9dfk6XFwxbPCy", name = "BCH", decimals = 8)),
             AssetBalance("2mX5DzVKWrAJw8iwdJnV2qtoeVG9h5nTDpTqC1wb1WEN", quantity = 100000000, issueTransaction = IssueTransaction(assetId = "2mX5DzVKWrAJw8iwdJnV2qtoeVG9h5nTDpTqC1wb1WEN", id = "2mX5DzVKWrAJw8iwdJnV2qtoeVG9h5nTDpTqC1wb1WEN", name = "TRY", decimals = 3)),
-            AssetBalance("B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", quantity = 1890000000000000, issueTransaction = IssueTransaction(assetId = "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", id = "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", name = "DASH", decimals = 8)))
+            AssetBalance("B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", quantity = 1890000000000000, issueTransaction = IssueTransaction(assetId = "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", id = "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", name = "DASH", decimals = 8)),
+            AssetBalance("5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3", quantity = 1603984700000000, issueTransaction = IssueTransaction(assetId = "5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3", id = "5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3", name = "XMR", decimals = 8)))
 
     var defaultAssetsAvatar = hashMapOf<String, Int>(
             Pair("", R.drawable.logo_waves_48),
@@ -66,7 +67,7 @@ object Constants {
             Pair("Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck", R.drawable.logo_usd_48),
             Pair("Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU", R.drawable.logo_euro_48),
             Pair("HZk1mbfuJpmxU1Fs4AX5MWLVYtctsNcg6e2C6VKqK8zk", R.drawable.logo_ltc_48),
-//            Pair("BrjUWjndUanm5VsJkbUip8VRYy6LWJePtxya3FNv4TQa", R.drawable.logo),
+            Pair("5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3", R.drawable.logo_monero_48),
             Pair("zMFqXuoyrn5w17PFurTqxB7GsS71fp9dfk6XFwxbPCy", R.drawable.logo_bitcoincash_48),
             Pair("2mX5DzVKWrAJw8iwdJnV2qtoeVG9h5nTDpTqC1wb1WEN", R.drawable.logo_lira_48),
             Pair("B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", R.drawable.logo_dash_48))
