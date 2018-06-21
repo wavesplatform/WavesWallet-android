@@ -11,6 +11,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import org.spongycastle.asn1.x509.ObjectDigestInfo.publicKey
 import javax.inject.Inject
 
 
@@ -20,6 +21,7 @@ class SplashActivity : BaseActivity(), SplashView {
     lateinit var authHelper: AuthHelper
 
     override fun onNotLoggedIn() {
+        authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, "changeit")
         if (preferencesHelper.isTutorialPassed()){
             launchActivity<WelcomeActivity>()
         }else{
@@ -30,6 +32,12 @@ class SplashActivity : BaseActivity(), SplashView {
 
     override fun onStartMainActivity(publicKey: String) {
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, publicKey)
+        authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, "changeit")
+        if (preferencesHelper.isTutorialPassed()){
+            launchActivity<WelcomeActivity>()
+        }else{
+            launchActivity<ChooseLanguageActivity>()
+        }
 //        AuthUtil.startMainActivity(this, publicKey)
     }
 

@@ -41,14 +41,14 @@ class LeasingFragment : BaseFragment(), LeasingView {
     override fun onViewReady(savedInstanceState: Bundle?) {
 
         container_quick_note.click {
-            if (expandable_layout.isExpanded) {
-                expandable_layout.collapse()
+            if (expandable_layout_hidden.isExpanded) {
+                expandable_layout_hidden.collapse()
                 image_arrowup.animate()
                         .rotation(180f)
                         .setDuration(500)
                         .start()
             } else {
-                expandable_layout.expand()
+                expandable_layout_hidden.expand()
                 image_arrowup.animate()
                         .rotation(0f)
                         .setDuration(500)

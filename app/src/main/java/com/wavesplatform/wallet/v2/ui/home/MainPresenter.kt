@@ -8,13 +8,4 @@ import javax.inject.Inject
 @InjectViewState
 class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
 
-    fun loadBalancesAndTransactions() {
-        addSubscription(dataManager.loadBalancesAndTransactions()
-                .compose(RxUtil.applyDefaultSchedulers())
-                .subscribe({
-                    val test =""
-                }, {
-                    it.printStackTrace()
-                }))
-    }
 }

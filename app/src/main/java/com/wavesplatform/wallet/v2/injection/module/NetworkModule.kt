@@ -75,7 +75,7 @@ class NetworkModule {
     @Provides
     internal fun provideBaseRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl("https://matcher.wavesplatform.com/")
+                .baseUrl("https://nodes.wavesplatform.com")
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -94,6 +94,6 @@ class NetworkModule {
     @Named("timeout")
     @Provides
     internal fun provideTimeoutConstant(): Int {
-        return 15
+        return 30
     }
 }

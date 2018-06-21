@@ -2,7 +2,9 @@ package com.wavesplatform.wallet.v2.data.helpers
 
 import com.wavesplatform.wallet.v1.crypto.PublicKeyAccount
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class PublicKeyAccountHelper @Inject constructor() {
     var publicKeyAccount: PublicKeyAccount? = null
 

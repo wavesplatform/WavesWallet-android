@@ -1,12 +1,12 @@
 package com.wavesplatform.wallet.v2.data.remote
 
-import com.wavesplatform.wallet.v1.payload.AssetBalances
 import com.wavesplatform.wallet.v1.payload.Transaction
 import com.wavesplatform.wallet.v1.payload.TransactionsInfo
 import com.wavesplatform.wallet.v1.payload.WavesBalance
 import com.wavesplatform.wallet.v1.request.IssueTransactionRequest
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalances
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -16,13 +16,13 @@ import retrofit2.http.Path
 interface AppService {
 
     @GET("/assets/balance/{address}")
-    fun assetsBalance(@Path("address") address: String): Observable<AssetBalances>
+    fun assetsBalance(@Path("address") address: String?): Observable<AssetBalances>
 
     @GET("/addresses/balance/{address}")
-    fun wavesBalance(@Path("address") address: String): Observable<WavesBalance>
+    fun wavesBalance(@Path("address") address: String?): Observable<WavesBalance>
 
     @GET("/transactions/address/{address}/limit/{limit}")
-    fun transactionList(@Path("address") address: String, @Path("limit") limit: Int): Observable<List<List<Transaction>>>
+    fun transactionList(@Path("address") address: String?, @Path("limit") limit: Int): Observable<List<List<Transaction>>>
 
     @GET("transactions/info/{asset}")
     fun getTransactionsInfo(@Path("asset") asset: String): Observable<TransactionsInfo>

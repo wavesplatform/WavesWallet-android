@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.base.view
 
-import android.app.FragmentContainer
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.pm.ActivityInfo
@@ -22,7 +21,7 @@ import com.franmontiel.localechanger.utils.ActivityRecreationHelper
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.v2.data.manager.DataManager
+import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.RxUtil
@@ -59,7 +58,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     @Inject
     lateinit var mErrorManager: ErrorManager
     @Inject
-    lateinit var dataManager: DataManager
+    lateinit var nodeDataManager: NodeDataManager
     @Inject
     lateinit var preferencesHelper: PreferencesHelper
     var progressDialog: ProgressDialog? = null

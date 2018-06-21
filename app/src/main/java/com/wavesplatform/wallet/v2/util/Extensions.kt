@@ -32,7 +32,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.custom.AvatarPlaceholder
 import pers.victor.ext.dp2px
 import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
@@ -88,14 +87,12 @@ fun String?.getAge(): String {
 }
 
 
-fun ImageView.loadImage(url: String?, text: String? = null, textSize: Int = AvatarPlaceholder.DEFAULT_TEXT_SIZE, centerCrop: Boolean = true) {
+fun ImageView.loadImage(url: String?, centerCrop: Boolean = true) {
     this.post({
         val options = RequestOptions()
                 .override(this.width, this.height)
 
         if (centerCrop) options.transform(CenterCrop())
-        text.notNull { options.placeholder(com.wavesplatform.wallet.v2.ui.custom.AvatarPlaceholder(context, it, textSize)) }
-
 
         Glide.with(this)
                 .asBitmap()
@@ -131,7 +128,7 @@ fun Context.getViewScaleAnimator(from: View, target: View, additionalPadding: In
     return animatorSet
 }
 
-fun ImageView.loadImage(drawableRes: Int?, text: String? = null, textSize: Int = AvatarPlaceholder.DEFAULT_TEXT_SIZE, centerCrop: Boolean = true) {
+fun ImageView.loadImage(drawableRes: Int?, centerCrop: Boolean = true) {
     this.post({
         val options = RequestOptions()
                 .override(this.width, this.height)

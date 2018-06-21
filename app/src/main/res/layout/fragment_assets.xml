@@ -29,6 +29,8 @@
                     android:overScrollMode="never" />
 
                 <RelativeLayout
+                    android:visibility="gone"
+                    android:id="@+id/relative_hidden_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -53,7 +55,8 @@
                 </RelativeLayout>
 
                 <net.cachapa.expandablelayout.ExpandableLayout
-                    android:id="@+id/expandable_layout"
+                    android:id="@+id/expandable_layout_hidden"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:el_duration="500"
@@ -69,6 +72,8 @@
                 </net.cachapa.expandablelayout.ExpandableLayout>
 
                 <RelativeLayout
+                    android:visibility="gone"
+                    android:id="@+id/relative_spam_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -95,6 +100,7 @@
                 <net.cachapa.expandablelayout.ExpandableLayout
                     android:id="@+id/expandable_layout_spam"
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     app:el_duration="500"
                     app:el_expanded="true"

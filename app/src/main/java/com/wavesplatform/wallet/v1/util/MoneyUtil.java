@@ -98,6 +98,10 @@ public class MoneyUtil {
         return getScaledText(amount, ab != null ? ab.getDecimals() : 8);
     }
 
+    public static String getScaledText(long amount, com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance ab) {
+        return getScaledText(amount, ab != null ? ab.getDecimals() : 8);
+    }
+
     public static String getDisplayWaves(long amount) {
         return get().wavesFormat.format(BigDecimal.valueOf(amount, 8));
     }

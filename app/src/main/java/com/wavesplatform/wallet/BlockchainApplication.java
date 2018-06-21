@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.franmontiel.localechanger.LocaleChanger;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
+import com.vicpin.krealmextensions.RealmConfigStore;
 import com.wavesplatform.wallet.v1.data.access.AccessState;
 import com.wavesplatform.wallet.v1.data.access.DexAccessState;
 import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
@@ -21,6 +22,8 @@ import com.wavesplatform.wallet.v1.util.ApplicationLifeCycle;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 import com.wavesplatform.wallet.v1.util.annotations.Thunk;
 import com.wavesplatform.wallet.v1.util.exceptions.LoggingExceptionHandler;
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
+import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
 
 import java.util.Arrays;
@@ -84,6 +87,8 @@ public class BlockchainApplication extends DaggerApplication {
                 .name(String.format("%s.realm", mPrefsUtil.getValue(PrefsUtil.KEY_PUB_KEY, "")))
                 .deleteRealmIfMigrationNeeded()
                 .build();
+        RealmConfigStore.Companion.init(AssetBalance.class, config);
+        RealmConfigStore.Companion.init(IssueTransaction.class, config);
         DBHelper.getInstance().setRealmConfig(config);
 
         RxJavaPlugins.setErrorHandler(throwable -> Log.e(RX_ERROR_TAG, throwable.getMessage(), throwable));
