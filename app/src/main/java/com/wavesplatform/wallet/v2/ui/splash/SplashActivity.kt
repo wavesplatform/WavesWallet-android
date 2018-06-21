@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.splash
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.auth.AuthUtil
 import com.wavesplatform.wallet.v1.ui.auth.LandingActivity
@@ -21,7 +22,7 @@ class SplashActivity : BaseActivity(), SplashView {
     lateinit var authHelper: AuthHelper
 
     override fun onNotLoggedIn() {
-        authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, "changeit")
+        authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
         if (preferencesHelper.isTutorialPassed()){
             launchActivity<WelcomeActivity>()
         }else{
@@ -32,7 +33,7 @@ class SplashActivity : BaseActivity(), SplashView {
 
     override fun onStartMainActivity(publicKey: String) {
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, publicKey)
-        authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, "changeit")
+        authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
         if (preferencesHelper.isTutorialPassed()){
             launchActivity<WelcomeActivity>()
         }else{

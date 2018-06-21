@@ -25,6 +25,7 @@ open class AssetBalance(
         @SerializedName("quantity") var quantity: Long? = 0,
         @SerializedName("issueTransaction") var issueTransaction: IssueTransaction? = IssueTransaction(),
         var isHidden: Boolean = false,
+        var configureVisibleState: Boolean = false,
         var isFavorite: Boolean = false
 ) : RealmModel {
     fun getDecimals(): Int? {

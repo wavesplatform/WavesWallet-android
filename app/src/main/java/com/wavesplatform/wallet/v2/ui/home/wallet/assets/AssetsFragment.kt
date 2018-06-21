@@ -2,15 +2,18 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.id.*
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.adapter.AssetsAdapter
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
 import pers.victor.ext.click
-import pers.victor.ext.goneIf
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import pers.victor.ext.visiableIf
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
@@ -54,9 +57,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
     private fun setupUI() {
         swipe_container.setColorSchemeResources(R.color.submit400)
         swipe_container.setOnRefreshListener {
-            runDelayed(3000, {
-                swipe_container?.isRefreshing = false
-            })
+            presenter.loadAssetsBalance()
         }
 
         recycle_assets_not_hidden.layoutManager = LinearLayoutManager(baseActivity)
@@ -70,30 +71,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
         recycle_spam_assets.layoutManager = LinearLayoutManager(baseActivity)
         recycle_spam_assets.adapter = spamAssetsAdapter
         recycle_spam_assets.isNestedScrollingEnabled = false
-//
-//        adapter.setNewData(arrayListOf(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Bitcoin", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Ethereum", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Euro", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Dollar", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Litecoin", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Dash", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Monero", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble())))
-//
-//        adapterHiddenAssets.setNewData(arrayListOf(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-//                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble())))
-//
-//        spamAssetsAdapter.setNewData(arrayListOf(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble(), true),
-//                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble(), true),
-//                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble(), true),
-//                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble(), true),
-//                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble(), true)))
 
         text_hidden_assets.click {
             if (expandable_layout_hidden.isExpanded) {
@@ -131,20 +108,41 @@ class AssetsFragment : BaseFragment(), AssetsView {
         text_spam_assets.text = getString(R.string.wallet_assets_spam_category, spamAssetsAdapter.data.size.toString())
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item = menu.findItem(R.id.action_sorting)
+        item.isVisible = true
+    }
+
     override fun afterSuccessLoadAssets(assets: List<AssetBalance>) {
+        runDelayed(1000, {
+            swipe_container.notNull { swipe_container.isRefreshing = false }
+        })
         adapter.setNewData(assets)
     }
 
     override fun afterSuccessLoadHiddenAssets(assets: List<AssetBalance>) {
-        expandable_layout_hidden.visiableIf { assets.isNotEmpty() }
-        relative_hidden_block.visiableIf { assets.isNotEmpty() }
+        if (assets.isNotEmpty()) {
+            expandable_layout_hidden.visiable()
+            relative_hidden_block.visiable()
+        } else {
+            expandable_layout_hidden.gone()
+            relative_hidden_block.gone()
+        }
+
         adapterHiddenAssets.setNewData(assets)
+        text_hidden_assets.text = getString(R.string.wallet_assets_hidden_category, assets.size.toString())
     }
 
     override fun afterSuccessLoadSpamAssets(assets: List<AssetBalance>) {
-        expandable_layout_spam.visiableIf { assets.isNotEmpty() }
-        relative_spam_block.visiableIf { assets.isNotEmpty() }
+        if (assets.isNotEmpty()) {
+            expandable_layout_spam.visiable()
+            relative_spam_block.visiable()
+        } else {
+            expandable_layout_spam.gone()
+            relative_spam_block.gone()
+        }
         spamAssetsAdapter.setNewData(assets)
+        text_spam_assets.text = getString(R.string.wallet_assets_spam_category, assets.size.toString())
     }
 
 

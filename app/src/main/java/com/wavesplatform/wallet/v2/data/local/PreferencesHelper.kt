@@ -22,6 +22,7 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         val PREF_FILE_NAME = "android_waves_pref_file"
         val KEY_TUTORIAL = "keyTutorial"
         val KEY_LANGUAGE = "keyLanguage"
+        val KEY_DEFAULT_ASSETS = "key_default_assets"
     }
 
     fun setTutorialPassed(value: Boolean) {
@@ -38,6 +39,14 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
 
     fun setLanguage(lang: Int) {
         mPref.edit().putInt(KEY_LANGUAGE, lang).apply()
+    }
+
+    fun isDefaultAssetsAlreadyExist(): Boolean {
+        return mPref.getBoolean(KEY_DEFAULT_ASSETS, false)
+    }
+
+    fun setDefaultAssetsAlreadyExist(value: Boolean) {
+        mPref.edit().putBoolean(KEY_DEFAULT_ASSETS, value).apply()
     }
 
 }

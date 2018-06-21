@@ -1,13 +1,14 @@
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.vicpin.krealmextensions.queryAllAsFlowable
-import com.vicpin.krealmextensions.saveAll
+import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.v1.payload.AssetBalances
 import com.wavesplatform.wallet.v1.payload.Transaction
 import com.wavesplatform.wallet.v1.payload.TransactionsInfo
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
+import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
@@ -21,10 +22,22 @@ class NodeDataManager @Inject constructor() : DataManager() {
 
     fun loadAssetsBalance(): Observable<List<AssetBalance>> {
         return Observable.mergeDelayError(queryAllAsFlowable<AssetBalance>().toObservable(), appService.assetsBalance(getAddress())
-                        .map({
-                            it.balances.saveAll()
-                            return@map it.balances
-                        }))
+                .map({ assets ->
+
+                    // merge db data and API data
+//                    executeTransaction {
+//                        assets.balances.forEachIndexed({ index, assetBalance ->
+//                            val dbAsset = queryFirst<AssetBalance>({ equalTo("assetId", assetBalance.assetId) })
+//                            dbAsset.notNull {
+//                                assetBalance.isHidden = it.isHidden
+//                                assetBalance.isFavorite = it.isFavorite
+//                            }
+//                        })
+//                        assets.balances.saveAll()
+//                    }
+
+                    return@map queryAll<AssetBalance>()
+                }).compose(RxUtil.applyDefaultSchedulers()))
 
     }
 

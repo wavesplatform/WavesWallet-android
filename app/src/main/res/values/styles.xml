@@ -88,6 +88,15 @@
         <item name="actionMenuTextColor">@color/disabled900</item>
     </style>
 
+    <style name="AppThemeV2.AssetsSoring" parent="AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
+        <item name="actionMenuTextColor">@color/disabled900</item>
+        <item name="actionButtonStyle">@style/AppTheme.Widget.ActionButton</item>
+    </style>
+
+    <style name="AppTheme.Widget.ActionButton" parent="@style/Widget.AppCompat.ActionButton">
+        <item name="textAllCaps">false</item>
+    </style>
+
     <style name="AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" parent="AppThemeV2.NoActionBar.Translucent">
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>

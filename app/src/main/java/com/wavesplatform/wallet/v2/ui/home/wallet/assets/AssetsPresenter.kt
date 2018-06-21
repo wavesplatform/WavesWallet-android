@@ -13,11 +13,14 @@ class AssetsPresenter @Inject constructor() :BasePresenter<AssetsView>(){
         addSubscription(nodeDataManager.loadAssetsBalance()
                 .compose(RxUtil.applyDefaultSchedulers())
                 .subscribe({
-                    val hiddenList = it.filter { it.isHidden }
+                    val hiddenList = it.filter({ it.isHidden })
+                    val sortedToFirstFavoriteList = it.sortedByDescending({ it.isFavorite })
 
-                    viewState.afterSuccessLoadAssets(it)
-                    viewState.afterSuccessLoadSpamAssets(listOf<AssetBalance>())
+                    viewState.afterSuccessLoadAssets(sortedToFirstFavoriteList)
                     viewState.afterSuccessLoadHiddenAssets(hiddenList)
+
+                    // TODO: implement spam assets
+                    viewState.afterSuccessLoadSpamAssets(listOf<AssetBalance>())
                 }, {
                     it.printStackTrace()
                 }))

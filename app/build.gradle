@@ -51,6 +51,13 @@ android {
         debug {
             multiDexEnabled true
             buildConfigField "boolean", "DOGFOOD", "false"
+            def propsFile = file('wallet.properties')
+            if (propsFile.exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                def wallet = props['publicKey'].toString()
+                buildConfigField "String", "PUBLIC_KEY", "\"${wallet}\""
+            }
         }
     }
 
@@ -142,9 +149,6 @@ ext {
 }
 
 dependencies {
-
-
-
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$supportVersion"
@@ -182,6 +186,7 @@ dependencies {
     implementation 'com.bignerdranch.android:recyclerview-multiselect:0.2'
 
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35'
+    implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
 
     // OkHttp
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"

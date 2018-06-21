@@ -2,12 +2,13 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.adapter.TestObject
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.adapter.AdapterActiveLeasing
 import kotlinx.android.synthetic.main.fragment_leasing.*
 import pers.victor.ext.click
@@ -93,5 +94,10 @@ class LeasingFragment : BaseFragment(), LeasingView {
         view_line_3.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         view_line_4.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         view_line_5.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item = menu.findItem(R.id.action_sorting)
+        item.isVisible = false
     }
 }

@@ -15,6 +15,7 @@ import android.util.TypedValue;
 
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.v2.data.Constants;
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
 
 
 public class MaterialLetterIcon extends RoundedImageViewWithBorder {
@@ -116,10 +117,15 @@ public class MaterialLetterIcon extends RoundedImageViewWithBorder {
         return mText;
     }
 
-    public void setText(String text) {
-        computeText(text);
-        computeColor(text);
-        updateDrawable();
+    public void setAsset(AssetBalance asset) {
+        Integer avatar = Constants.INSTANCE.getDefaultAssetsAvatar().get(asset.getAssetId());
+        if (avatar != null){
+            setImageResource(avatar);
+        }else {
+            computeText(asset.getName());
+            computeColor(asset.getName());
+            updateDrawable();
+        }
     }
 
     public int getTextSize() {

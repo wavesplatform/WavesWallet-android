@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.injection.module
 
 import com.wavesplatform.wallet.v2.injection.scope.PerActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.ui.language.change.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.new_account.NewAccountActivity
@@ -51,4 +52,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun mainActivity(): MainActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun assetsSortingActivity(): AssetsSortingActivity
 }

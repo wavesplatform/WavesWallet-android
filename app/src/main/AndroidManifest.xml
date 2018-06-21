@@ -46,23 +46,27 @@
             android:name=".v1.ui.home.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.MainActivity"
-            android:windowSoftInputMode="adjustResize" >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            android:windowSoftInputMode="adjustResize">
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".v2.ui.home.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.MainActivity"
             android:windowSoftInputMode="adjustResize">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".v1.ui.dex.markets.add.AddMarketActivity"
@@ -202,6 +206,9 @@
             android:name=".v2.ui.new_account.backup_info.BackupInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity android:name=".v2.ui.home.wallet.assets.sorting.AssetsSortingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.AssetsSoring"/>
     </application>
 
 </manifest>

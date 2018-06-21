@@ -15,7 +15,9 @@ import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
+import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.activity_main_v2.*
+import pers.victor.ext.dp2px
 import javax.inject.Inject
 
 
@@ -68,6 +70,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
+//        toolbar_general.setMargins(0, 0, 0, 0)
         when (tab?.position) {
 //            Wallet screen
             0 -> {
@@ -86,6 +89,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             }
 //            Profile screen
             4 -> {
+//                toolbar_general.setMargins(0, 0, dp2px(8), 0)
                 openFragment(R.id.frame_fragment_container, ProfileFragment.newInstance())
                 toolbar_general.title = getString(R.string.profile_toolbar_title)
             }

@@ -10,7 +10,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.adapter.DexAdapter
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.adapter.TestObject
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
 import kotlinx.android.synthetic.main.fragment_dex_new.*
 import pers.victor.ext.toast
 import java.util.*

@@ -1,119 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/basic50">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_container"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
 
-
-        <android.support.v4.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never">
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycle_assets_not_hidden"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:descendantFocusability="blocksDescendants"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:overScrollMode="never" />
+
+            <RelativeLayout
+                android:id="@+id/relative_hidden_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_hidden_assets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:padding="16dp"
+                    android:text="Hidden assets (2)"
+                    android:textColor="@color/basic500" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_arrowup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="16dp"
+                    app:srcCompat="@drawable/ic_arrowup_basic_300" />
+            </RelativeLayout>
+
+            <net.cachapa.expandablelayout.ExpandableLayout
+                android:id="@+id/expandable_layout_hidden"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:el_duration="500"
+                app:el_expanded="true"
+                app:el_parallax="0.5">
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycle_assets_not_hidden"
+                    android:id="@+id/recycle_assets_hidden"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:overScrollMode="never" />
 
-                <RelativeLayout
-                    android:visibility="gone"
-                    android:id="@+id/relative_hidden_block"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+            </net.cachapa.expandablelayout.ExpandableLayout>
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_hidden_assets"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:padding="16dp"
-                        android:text="Hidden assets (2)"
-                        android:textColor="@color/basic500" />
+            <RelativeLayout
+                android:id="@+id/relative_spam_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/image_arrowup"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="16dp"
-                        app:srcCompat="@drawable/ic_arrowup_basic_300" />
-                </RelativeLayout>
-
-                <net.cachapa.expandablelayout.ExpandableLayout
-                    android:id="@+id/expandable_layout_hidden"
-                    android:visibility="gone"
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_spam_assets"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:el_duration="500"
-                    app:el_expanded="true"
-                    app:el_parallax="0.5">
+                    android:clickable="true"
+                    android:padding="16dp"
+                    android:text="Spam assets (2)"
+                    android:textColor="@color/basic500" />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycle_assets_hidden"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:overScrollMode="never" />
-
-                </net.cachapa.expandablelayout.ExpandableLayout>
-
-                <RelativeLayout
-                    android:visibility="gone"
-                    android:id="@+id/relative_spam_block"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_spam_assets"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:padding="16dp"
-                        android:text="Spam assets (2)"
-                        android:textColor="@color/basic500" />
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/image_arrowup_spam"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="16dp"
-                        app:srcCompat="@drawable/ic_arrowup_basic_300" />
-                </RelativeLayout>
-
-                <net.cachapa.expandablelayout.ExpandableLayout
-                    android:id="@+id/expandable_layout_spam"
-                    android:layout_width="match_parent"
-                    android:visibility="gone"
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_arrowup_spam"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:el_duration="500"
-                    app:el_expanded="true"
-                    app:el_parallax="0.5">
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="16dp"
+                    app:srcCompat="@drawable/ic_arrowup_basic_300" />
+            </RelativeLayout>
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycle_spam_assets"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:overScrollMode="never" />
+            <net.cachapa.expandablelayout.ExpandableLayout
+                android:id="@+id/expandable_layout_spam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:el_duration="500"
+                app:el_expanded="true"
+                app:el_parallax="0.5">
 
-                </net.cachapa.expandablelayout.ExpandableLayout>
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
-</FrameLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycle_spam_assets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never" />
+
+            </net.cachapa.expandablelayout.ExpandableLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

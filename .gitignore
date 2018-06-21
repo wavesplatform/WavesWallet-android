@@ -44,5 +44,8 @@ captures
 # Firebase config
 google-services.json
 
+# Test Wallet config
+wallet.properties
+
 # Environment URLs
 urls.properties

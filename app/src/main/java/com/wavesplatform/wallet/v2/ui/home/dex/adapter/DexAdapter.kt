@@ -4,7 +4,7 @@ import android.support.v4.content.ContextCompat
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.adapter.TestObject
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
 import java.util.*
 import javax.inject.Inject
 

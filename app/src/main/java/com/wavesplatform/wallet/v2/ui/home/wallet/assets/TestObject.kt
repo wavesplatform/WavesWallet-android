@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.home.wallet.assets.adapter
+package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 class TestObject(
         val assetName: String,

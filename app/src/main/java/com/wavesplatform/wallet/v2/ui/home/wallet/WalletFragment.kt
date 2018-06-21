@@ -8,6 +8,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
@@ -66,7 +68,7 @@ class WalletFragment : BaseFragment(), WalletView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_sorting -> {
-                toast(item.title)
+                launchActivity<AssetsSortingActivity> {  }
             }
             R.id.action_your_address -> {
                 toast(item.title)
