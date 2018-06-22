@@ -25,6 +25,7 @@ open class AssetBalance(
         @SerializedName("quantity") var quantity: Long? = 0,
         @SerializedName("issueTransaction") var issueTransaction: IssueTransaction? = IssueTransaction(),
         var isHidden: Boolean = false,
+        var position: Int = -1,
         var configureVisibleState: Boolean = false,
         var isFavorite: Boolean = false
 ) : RealmModel {

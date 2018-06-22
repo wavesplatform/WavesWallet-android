@@ -25,16 +25,16 @@ class NodeDataManager @Inject constructor() : DataManager() {
                 .map({ assets ->
 
                     // merge db data and API data
-//                    executeTransaction {
-//                        assets.balances.forEachIndexed({ index, assetBalance ->
-//                            val dbAsset = queryFirst<AssetBalance>({ equalTo("assetId", assetBalance.assetId) })
-//                            dbAsset.notNull {
-//                                assetBalance.isHidden = it.isHidden
-//                                assetBalance.isFavorite = it.isFavorite
-//                            }
-//                        })
-//                        assets.balances.saveAll()
-//                    }
+                    executeTransaction {
+                        assets.balances.forEachIndexed({ index, assetBalance ->
+                            val dbAsset = queryFirst<AssetBalance>({ equalTo("assetId", assetBalance.assetId) })
+                            dbAsset.notNull {
+                                assetBalance.isHidden = it.isHidden
+                                assetBalance.isFavorite = it.isFavorite
+                            }
+                        })
+                        assets.balances.saveAll()
+                    }
 
                     return@map queryAll<AssetBalance>()
                 }).compose(RxUtil.applyDefaultSchedulers()))
