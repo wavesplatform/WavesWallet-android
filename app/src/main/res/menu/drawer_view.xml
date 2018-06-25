@@ -30,4 +30,14 @@
 
     </group>
 
+    <group android:id="@+id/submenu_3">
+
+        <item
+            android:id="@+id/action_spam_filter"
+            android:title="Spam filter"
+            app:actionLayout="@layout/layout_action_spam_filter"
+            />
+
+    </group>
+
 </menu>

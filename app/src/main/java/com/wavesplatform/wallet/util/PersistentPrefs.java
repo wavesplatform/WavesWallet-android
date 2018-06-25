@@ -31,4 +31,6 @@ interface PersistentPrefs {
     String KEY_RECEIVE_SHORTCUTS_ENABLED = "receive_shortcuts_enabled";
     String KEY_SWIPE_TO_RECEIVE_ENABLED = "swipe_to_receive_enabled";
     String KEY_DONT_ASK_AGAIN_ORDER = "dont_ask_again_order";
+
+    String KEY_ENABLE_SPAM_FILTER = "enable_spam_filter";
 }
