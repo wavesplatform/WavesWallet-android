@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.api;
 
+import com.google.android.gms.common.util.CollectionUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wavesplatform.wallet.crypto.PublicKeyAccount;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -102,18 +104,41 @@ public class NodeManager {
         return own;
     }
 
+    private List<Transaction> filterSpamTransactions(List<Transaction> txs, Set<String> spam) {
+        List<Transaction> filtered = new ArrayList<>();
+        for (Transaction tx : txs) {
+            if (tx instanceof TransferTransaction) {
+                TransferTransaction tt = (TransferTransaction) tx;
+                if (!spam.contains(tt.assetId)) {
+                    filtered.add(tx);
+                }
+            } else {
+                filtered.add(tx);
+            }
+        }
+
+        return filtered;
+    }
+
     public Completable loadBalancesAndTransactions() {
         return Observable.zip(service.wavesBalance(getAddress()),
                 service.assetsBalance(getAddress()),
                 service.transactionList(getAddress(), 50).map(r -> r.get(0)),
                 service.unconfirmedTransactions(),
-                (bal, abs, txs, pending) -> {
+                SpamManager.get().getSpamAssets(),
+                (bal, abs, txs, pending, spam) -> {
                     wavesAsset.balance = bal.balance;
+                    List<AssetBalance> filteredBalances = new ArrayList<AssetBalance>();
+                    for (AssetBalance ab : abs.balances) {
+                        if (!spam.contains(ab.assetId))
+                            filteredBalances.add(ab);
+                    }
+                    abs.balances = filteredBalances;
                     this.assetBalances = abs;
                     Collections.sort(this.assetBalances.balances, (o1, o2) -> o1.assetId.compareTo(o2.assetId));
                     this.assetBalances.balances.add(0, wavesAsset);
                     this.pendingTransactions = filterOwnTransactions(pending);
-                    this.transactions = txs;
+                    this.transactions = filterSpamTransactions(txs, spam);
 
                     updatePendingTxs();
                     updatePendingBalances();
