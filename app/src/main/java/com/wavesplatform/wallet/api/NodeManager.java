@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.api;
 
-import com.google.android.gms.common.util.CollectionUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wavesplatform.wallet.crypto.PublicKeyAccount;
@@ -18,6 +17,7 @@ import com.wavesplatform.wallet.request.IssueTransactionRequest;
 import com.wavesplatform.wallet.request.ReissueTransactionRequest;
 import com.wavesplatform.wallet.request.TransferTransactionRequest;
 import com.wavesplatform.wallet.ui.auth.EnvironmentManager;
+import com.wavesplatform.wallet.util.PrefsUtil;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -36,6 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NodeManager {
     private static NodeManager instance;
     private final NodeApi service;
+    private PrefsUtil prefsUtil;
 
     public static NodeManager get() {
         return instance;
@@ -105,19 +106,22 @@ public class NodeManager {
     }
 
     private List<Transaction> filterSpamTransactions(List<Transaction> txs, Set<String> spam) {
-        List<Transaction> filtered = new ArrayList<>();
-        for (Transaction tx : txs) {
-            if (tx instanceof TransferTransaction) {
-                TransferTransaction tt = (TransferTransaction) tx;
-                if (!spam.contains(tt.assetId)) {
+        if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)){
+            List<Transaction> filtered = new ArrayList<>();
+            for (Transaction tx : txs) {
+                if (tx instanceof TransferTransaction) {
+                    TransferTransaction tt = (TransferTransaction) tx;
+                    if (!spam.contains(tt.assetId)) {
+                        filtered.add(tx);
+                    }
+                } else {
                     filtered.add(tx);
                 }
-            } else {
-                filtered.add(tx);
             }
+            return filtered;
+        }else {
+            return txs;
         }
-
-        return filtered;
     }
 
     public Completable loadBalancesAndTransactions() {
@@ -129,9 +133,13 @@ public class NodeManager {
                 (bal, abs, txs, pending, spam) -> {
                     wavesAsset.balance = bal.balance;
                     List<AssetBalance> filteredBalances = new ArrayList<AssetBalance>();
-                    for (AssetBalance ab : abs.balances) {
-                        if (!spam.contains(ab.assetId))
-                            filteredBalances.add(ab);
+                    if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)){
+                        for (AssetBalance ab : abs.balances) {
+                            if (!spam.contains(ab.assetId))
+                                filteredBalances.add(ab);
+                        }
+                    }else {
+                        filteredBalances = abs.balances;
                     }
                     abs.balances = filteredBalances;
                     this.assetBalances = abs;
@@ -240,5 +248,9 @@ public class NodeManager {
 
     public long getWavesBalance() {
         return getAssetBalance(null).balance;
+    }
+
+    public void setPrefsUtil(PrefsUtil prefsUtil) {
+        this.prefsUtil = prefsUtil;
     }
 }

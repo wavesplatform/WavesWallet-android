@@ -132,6 +132,9 @@
 
     <string name="enter_double_encryption_pw">Please enter double encryption password</string>
 
+
+    <string name="spam_filter_enable">Switch off spam filtering</string>
+    <string name="spam_filter_disable">Switch on spam filtering</string>
     <string name="support">Support</string>
     <string name="rate_us">Rate us</string>
     <string name="licenses">Licenses</string>
