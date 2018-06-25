@@ -107,12 +107,7 @@ public class NodeManager {
     private List<Transaction> filterSpamTransactions(List<Transaction> txs, Set<String> spam) {
         List<Transaction> filtered = new ArrayList<>();
         for (Transaction tx : txs) {
-            if (tx instanceof TransferTransaction) {
-                TransferTransaction tt = (TransferTransaction) tx;
-                if (!spam.contains(tt.assetId)) {
-                    filtered.add(tx);
-                }
-            } else {
+            if (!spam.contains(tx.getAssetId())) {
                 filtered.add(tx);
             }
         }
@@ -123,7 +118,7 @@ public class NodeManager {
     public Completable loadBalancesAndTransactions() {
         return Observable.zip(service.wavesBalance(getAddress()),
                 service.assetsBalance(getAddress()),
-                service.transactionList(getAddress(), 50).map(r -> r.get(0)),
+                service.transactionList(getAddress(), 100).map(r -> r.get(0)),
                 service.unconfirmedTransactions(),
                 SpamManager.get().getSpamAssets(),
                 (bal, abs, txs, pending, spam) -> {

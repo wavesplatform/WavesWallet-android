@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.ui.receive.ReceiveViewModel;
 import com.wavesplatform.wallet.ui.send.SendViewModel;
 import com.wavesplatform.wallet.ui.transactions.ExchangeTransactionDetailViewModel;
 import com.wavesplatform.wallet.ui.transactions.IssueDetailViewModel;
+import com.wavesplatform.wallet.ui.transactions.MassTransferDetailViewModel;
 import com.wavesplatform.wallet.ui.transactions.ReissueDetailViewModel;
 import com.wavesplatform.wallet.ui.transactions.TransactionDetailViewModel;
 import com.wavesplatform.wallet.ui.transactions.UnknownDetailViewModel;
@@ -63,6 +64,8 @@ public interface DataManagerComponent {
     void inject(ReceiveViewModel receiveViewModel);
 
     void inject(TransactionDetailViewModel transactionDetailViewModel);
+
+    void inject(MassTransferDetailViewModel massTransferDetailViewModel);
 
     void inject(FingerprintDialogViewModel fingerprintDialogViewModel);
 

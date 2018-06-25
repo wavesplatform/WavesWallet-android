@@ -468,6 +468,7 @@
     <string name="exchange_detail_tilte">Exchange</string>
     <string name="transaction_detail_title">Transfer Transaction</string>
     <string name="payment_detail_title">Transfer Transaction</string>
+    <string name="mass_transfer_detail_title">Mass Transfer Transaction</string>
     <string name="issue_detail_title">Issue Transaction</string>
     <string name="reissue_detail_title">Reissue Transaction</string>
     <string name="reissue_button">Reissue</string>

@@ -153,4 +153,9 @@ public class ExchangeTransaction extends Transaction {
     public boolean isOwn() {
         return ArrayUtils.isEquals(NodeManager.get().getAddress(), sender);
     }
+
+    @Override
+    public String getAssetId() {
+        return getMyOrder().assetPair.amountAsset;
+    }
 }
