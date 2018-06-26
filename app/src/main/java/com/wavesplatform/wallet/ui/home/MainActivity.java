@@ -177,13 +177,11 @@ public class MainActivity extends BaseAuthActivity implements TransactionsFragme
         // Configure spam filter
         MenuItem spamFilterItem = binding.nvView.getMenu().findItem(R.id.action_spam_filter);
 
-        boolean spamFilterValue = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true);
-        configureSpamFilterItemTitle(spamFilterValue);
+        boolean spamFilterValue = prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false);
         ((SwitchCompat) spamFilterItem.getActionView()).setChecked(spamFilterValue);
 
         ((SwitchCompat) spamFilterItem.getActionView()).setOnCheckedChangeListener((buttonView, isChecked) -> {
-            prefsUtil.setValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, isChecked);
-            configureSpamFilterItemTitle(isChecked);
+            prefsUtil.setValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, isChecked);
         });
 
 
@@ -196,15 +194,6 @@ public class MainActivity extends BaseAuthActivity implements TransactionsFragme
 
         View addressRow = header.findViewById(R.id.address_row);
         addressRow.setOnClickListener(v -> copyToClipboard(NodeManager.get().getAddress()));
-    }
-
-    private void configureSpamFilterItemTitle(Boolean isChecked){
-        MenuItem spamFilterItem = binding.nvView.getMenu().findItem(R.id.action_spam_filter);
-        if (isChecked){
-            spamFilterItem.setTitle(R.string.spam_filter_enable);
-        }else {
-            spamFilterItem.setTitle(R.string.spam_filter_disable);
-        }
     }
 
     private void requestPinDialog() {

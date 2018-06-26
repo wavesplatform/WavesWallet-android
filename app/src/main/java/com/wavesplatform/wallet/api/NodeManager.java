@@ -106,15 +106,16 @@ public class NodeManager {
     }
 
     private List<Transaction> filterSpamTransactions(List<Transaction> txs, Set<String> spam) {
-        if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)){List<Transaction> filtered = new ArrayList<>();
-        for (Transaction tx : txs) {
-            if (!spam.contains(tx.getAssetId())) {
-                filtered.add(tx);
+        if (!prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+            List<Transaction> filtered = new ArrayList<>();
+            for (Transaction tx : txs) {
+                if (!spam.contains(tx.getAssetId())) {
+                    filtered.add(tx);
+                }
             }
-        }
-return filtered;
-        }else {
-        return txs;
+            return filtered;
+        } else {
+            return txs;
         }
     }
 
@@ -127,7 +128,7 @@ return filtered;
                 (bal, abs, txs, pending, spam) -> {
                     wavesAsset.balance = bal.balance;
                     List<AssetBalance> filteredBalances = new ArrayList<AssetBalance>();
-                    if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)){
+                    if (!prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)){
                         for (AssetBalance ab : abs.balances) {
                             if (!spam.contains(ab.assetId))
                                 filteredBalances.add(ab);

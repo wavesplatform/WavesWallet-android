@@ -34,7 +34,7 @@
 
         <item
             android:id="@+id/action_spam_filter"
-            android:title="Spam filter"
+            android:title="@string/spam_filter_enable"
             app:actionLayout="@layout/layout_action_spam_filter"
             />
 
