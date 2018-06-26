@@ -40,4 +40,9 @@ public class ReissueTransaction extends Transaction {
     public int getDirection() {
         return RECEIVED;
     }
+
+    @Override
+    public String getAssetId() {
+        return assetId;
+    }
 }

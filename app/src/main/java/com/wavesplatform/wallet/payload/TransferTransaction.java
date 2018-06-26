@@ -50,4 +50,9 @@ public class TransferTransaction extends Transaction {
         return ArrayUtils.isEquals(NodeManager.get().getAddress(), sender)
                 || ArrayUtils.isEquals(NodeManager.get().getAddress(), recipient);
     }
+
+    @Override
+    public String getAssetId() {
+        return assetId;
+    }
 }

@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.request.IssueTransactionRequest;
 import com.wavesplatform.wallet.request.ReissueTransactionRequest;
 import com.wavesplatform.wallet.request.TransferTransactionRequest;
 import com.wavesplatform.wallet.ui.auth.EnvironmentManager;
+import com.wavesplatform.wallet.util.PrefsUtil;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -34,6 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NodeManager {
     private static NodeManager instance;
     private final NodeApi service;
+    private PrefsUtil prefsUtil;
 
     public static NodeManager get() {
         return instance;
@@ -102,18 +105,43 @@ public class NodeManager {
         return own;
     }
 
+    private List<Transaction> filterSpamTransactions(List<Transaction> txs, Set<String> spam) {
+        if (!prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+            List<Transaction> filtered = new ArrayList<>();
+            for (Transaction tx : txs) {
+                if (!spam.contains(tx.getAssetId())) {
+                    filtered.add(tx);
+                }
+            }
+            return filtered;
+        } else {
+            return txs;
+        }
+    }
+
     public Completable loadBalancesAndTransactions() {
         return Observable.zip(service.wavesBalance(getAddress()),
                 service.assetsBalance(getAddress()),
-                service.transactionList(getAddress(), 50).map(r -> r.get(0)),
+                service.transactionList(getAddress(), 100).map(r -> r.get(0)),
                 service.unconfirmedTransactions(),
-                (bal, abs, txs, pending) -> {
+                SpamManager.get().getSpamAssets(),
+                (bal, abs, txs, pending, spam) -> {
                     wavesAsset.balance = bal.balance;
+                    List<AssetBalance> filteredBalances = new ArrayList<AssetBalance>();
+                    if (!prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)){
+                        for (AssetBalance ab : abs.balances) {
+                            if (!spam.contains(ab.assetId))
+                                filteredBalances.add(ab);
+                        }
+                    }else {
+                        filteredBalances = abs.balances;
+                    }
+                    abs.balances = filteredBalances;
                     this.assetBalances = abs;
                     Collections.sort(this.assetBalances.balances, (o1, o2) -> o1.assetId.compareTo(o2.assetId));
                     this.assetBalances.balances.add(0, wavesAsset);
                     this.pendingTransactions = filterOwnTransactions(pending);
-                    this.transactions = txs;
+                    this.transactions = filterSpamTransactions(txs, spam);
 
                     updatePendingTxs();
                     updatePendingBalances();
@@ -215,5 +243,9 @@ public class NodeManager {
 
     public long getWavesBalance() {
         return getAssetBalance(null).balance;
+    }
+
+    public void setPrefsUtil(PrefsUtil prefsUtil) {
+        this.prefsUtil = prefsUtil;
     }
 }

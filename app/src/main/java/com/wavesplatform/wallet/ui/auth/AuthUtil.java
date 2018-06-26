@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.api.datafeed.DataFeedManager;
 import com.wavesplatform.wallet.api.mather.MatherManager;
 import com.wavesplatform.wallet.db.DBHelper;
 import com.wavesplatform.wallet.ui.home.MainActivity;
+import com.wavesplatform.wallet.util.PrefsUtil;
 
 import io.realm.RealmConfiguration;
 
@@ -16,6 +17,8 @@ public class AuthUtil {
         if (NodeManager.createInstance(publicKey) != null) {
             DataFeedManager.createInstance();
             MatherManager.createInstance(publicKey);
+
+            NodeManager.get().setPrefsUtil(new PrefsUtil(parent));
 
             RealmConfiguration config = new RealmConfiguration.Builder()
                     .name(String.format("%s.realm", publicKey))

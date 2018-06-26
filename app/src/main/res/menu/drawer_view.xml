@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:id="@+id/submenu_1">
 
@@ -26,6 +27,16 @@
             android:id="@+id/nav_logout"
             android:icon="@drawable/icon_logout"
             android:title="@string/logout" />
+
+    </group>
+
+    <group android:id="@+id/submenu_3">
+
+        <item
+            android:id="@+id/action_spam_filter"
+            android:title="@string/spam_filter_enable"
+            app:actionLayout="@layout/layout_action_spam_filter"
+            />
 
     </group>
 
