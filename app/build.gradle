@@ -140,7 +140,7 @@ kapt {
 
 
 ext {
-    supportVersion = '27.1.1'
+    supportVersion = '27.1.0'
     googleServicesVersion = '12.0.1'
     rxJavaVersion = '2.1.12'
     rxAndroidVersion = '2.0.2'

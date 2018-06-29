@@ -12,6 +12,8 @@ import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItemAdapter
 import kotlinx.android.synthetic.main.fragment_history_date.*
 import java.util.*
 import javax.inject.Inject
+import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
+
 
 class HistoryDateItemFragment : BaseFragment(), HistoryDateItemView {
 
@@ -51,6 +53,26 @@ class HistoryDateItemFragment : BaseFragment(), HistoryDateItemView {
         recycle_history.isNestedScrollingEnabled = false
 
         presenter.loadBundle(arguments)
+
+        adapter?.setOnItemChildClickListener({ adapter, view, position ->
+            val historyItem = adapter.getItem(position) as HistoryItem
+            if (!historyItem.isHeader) {
+                val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
+                bottomSheetFragment.selectedItem = historyItem.t
+                bottomSheetFragment.historyType = arguments?.getString("type")
+                val data = adapter?.data as ArrayList<HistoryItem>
+                bottomSheetFragment.allItems = data.filter { !it.isHeader }.map { it.t }
+
+//                TODO lifehack)
+                var sectionSize = 0
+                for (i in 0..position) {
+                    if (data[i].isHeader) sectionSize++
+                }
+
+                bottomSheetFragment.selectedItemPosition = position - sectionSize
+                bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
+            }
+        })
     }
 
     override fun showData(data: ArrayList<HistoryItem>, type: String) {
