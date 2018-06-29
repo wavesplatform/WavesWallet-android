@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.data.model.remote.response
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import io.realm.RealmModel
+import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import org.apache.commons.lang3.ArrayUtils
@@ -27,7 +28,9 @@ open class AssetBalance(
         var isHidden: Boolean = false,
         var position: Int = -1,
         var configureVisibleState: Boolean = false,
-        var isFavorite: Boolean = false
+        var isFavorite: Boolean = false,
+        @Ignore
+        var isChecked: Boolean = false
 ) : RealmModel {
     fun getDecimals(): Int? {
         return if (issueTransaction != null) issueTransaction?.decimals else 8

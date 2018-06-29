@@ -796,6 +796,13 @@
 
     <!-- History Sorting -->
     <string name="history_sorting_toolbar_title">Sorting</string>
+    <string name="history_sorting_week">Week</string>
+    <string name="history_sorting_month">Month</string>
+    <string name="history_sorting_half_year">Half-year</string>
+    <string name="history_sorting_period">Period</string>
+    <string name="history_sorting_display_spam">Display spam transactions</string>
+    <string name="history_sorting_close">Close</string>
+    <string name="history_sorting_filter">Filter</string>
 
     <!-- DEX -->
     <string name="dex_toolbar_title">DEX</string>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <FrameLayout
+        android:id="@+id/container_asset_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
+
+        <com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
+            android:id="@+id/image_asset_icon"
+            android:layout_width="@dimen/asset_icon_size"
+            android:layout_height="@dimen/asset_icon_size"
+            android:layout_centerVertical="true"
+            android:src="@drawable/asset_gray_icon" />
+
+        <FrameLayout
+            android:id="@+id/container_checked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="@dimen/asset_icon_size"
+                android:layout_height="@dimen/asset_icon_size"
+                android:background="@color/white_60" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_on" />
+
+        </FrameLayout>
+    </FrameLayout>
+
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_down_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/container_asset_icon"
+        app:srcCompat="@drawable/ic_circle_down_arrow" />
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_asset_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/container_asset_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/disabled500"
+        tools:text="Waves" />
+</RelativeLayout>

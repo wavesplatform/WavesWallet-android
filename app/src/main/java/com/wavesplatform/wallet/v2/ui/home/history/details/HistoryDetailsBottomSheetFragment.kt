@@ -33,9 +33,7 @@ class HistoryDetailsBottomSheetFragment : BottomSheetDialogFragment() {
 
         this.inflater = inflater
 
-        rooView = inflater.inflate(R.layout.fragment_bottom_sheet_dialog, container, false)
-
-        rooView?.findViewById<CustomScroollView>(R.id.test_test)?.view = rooView
+        rooView = inflater.inflate(R.layout.history_details_bottom_sheet_dialog, container, false)
 
         setupHistoryViewPager(rooView!!)
 

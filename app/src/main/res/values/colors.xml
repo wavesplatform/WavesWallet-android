@@ -22,6 +22,7 @@
 
     <color name="white">#FFffff</color>
     <color name="white_50">#80ffffff</color>
+    <color name="white_60">#a0ffffff</color>
 
     <color name="black">#000000</color>
     <color name="backup_card_blue">#07537d</color>
@@ -154,5 +155,6 @@
     <color name="y">#26c1c9</color>
     <color name="z">#72d28b</color>
     <color name="persist">#96bca0</color>
+    <color name="overlayDark">#33001a39</color>
 
 </resources>
