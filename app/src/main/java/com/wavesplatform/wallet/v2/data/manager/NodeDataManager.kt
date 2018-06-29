@@ -37,7 +37,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
                     }
 
                     return@map queryAll<AssetBalance>()
-                }).compose(RxUtil.applyDefaultSchedulers()))
+                }).compose(RxUtil.applyObservableDefaultSchedulers()))
 
     }
 

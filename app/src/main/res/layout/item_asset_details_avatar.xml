@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
+        android:id="@+id/image_welcome_photo"
+        android:layout_width="@dimen/asset_icon_size"
+        android:layout_height="@dimen/asset_icon_size"
+        android:layout_centerVertical="true"
+        android:src="@drawable/asset_gray_icon"
+        app:text_number="1" />
+
+</FrameLayout>

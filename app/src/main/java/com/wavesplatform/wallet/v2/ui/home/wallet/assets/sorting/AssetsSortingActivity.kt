@@ -1,36 +1,28 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
-import kotlinx.android.synthetic.main.activity_assets_sorting.*
-import javax.inject.Inject
-import android.support.v7.widget.helper.ItemTouchHelper
-import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
-import android.support.v7.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
-import com.google.common.base.Predicates.equalTo
-import com.vicpin.krealmextensions.query
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.wallet.R.id.view_divider
-import com.wavesplatform.wallet.R.id.view_drag_bg
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
-import jp.wasabeef.recyclerview.animators.FadeInAnimator
-import jp.wasabeef.recyclerview.animators.LandingAnimator
+import kotlinx.android.synthetic.main.activity_assets_sorting.*
 import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.*
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
+import pyxis.uzuki.live.richutilskt.utils.runAsync
+import javax.inject.Inject
 
 
 class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
@@ -63,12 +55,6 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         recycle_assets.adapter = adapter
         recycle_assets.isNestedScrollingEnabled = false
         recycle_assets.itemAnimator = FadeInWithoutDelayAnimator()
-
-
-        // load assets from DB
-        adapter.setNewData(presenter.getAssets())
-        adapterFavorites.setNewData(presenter.getFavoriteAssets())
-        checkIfNeedToShowLine()
 
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             when (view.id) {
@@ -147,6 +133,25 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 view_drag_bg.gone()
             }
         })
+
+
+        // load assets from DB
+        runAsync({
+            presenter.loadAssets()
+        })
+    }
+
+    override fun showFavoriteAssets(favorites: List<AssetBalance>) {
+        adapterFavorites.setNewData(favorites)
+    }
+
+    override fun showNotFavoriteAssets(notFavorites: List<AssetBalance>) {
+        adapter.setNewData(notFavorites)
+    }
+
+    override fun checkIfNeedToShowLine() {
+        if (adapter.data.isEmpty() or adapterFavorites.data.isEmpty()) view_divider.gone()
+        else view_divider.visiable()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -170,10 +175,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         return super.onCreateOptionsMenu(menu)
     }
 
-    fun checkIfNeedToShowLine() {
-        if (adapter.data.isEmpty() or adapterFavorites.data.isEmpty()) view_divider.gone()
-        else view_divider.visiable()
-
-    }
-
+//    override fun onBackPressed() {
+//        finish()
+//    }
 }

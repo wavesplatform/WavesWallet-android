@@ -20,7 +20,7 @@ class HistoryItemAdapter @Inject constructor() : BaseSectionQuickAdapter<History
     }
 
     override fun convert(helper: BaseViewHolder?, item: HistoryItem?) {
-        helper?.addOnClickListener(R.id.car_item)
+        helper?.addOnClickListener(R.id.card_transaction)
 
         when (dataType) {
             all -> {

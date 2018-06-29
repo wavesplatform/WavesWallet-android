@@ -1,0 +1,67 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:fontFamily="@font/roboto"
+        app:titleTextAppearance="@style/Toolbar.Title">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="160dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:overScrollMode="never"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_view" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_favorite"
+            android:layout_gravity="end|top"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_toolbar_favorite_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/text_asset_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        tools:text="Waves" />
+
+    <TextView
+        android:id="@+id/text_asset_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_asset_name"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/disabled500"
+        android:textSize="12sp"
+        tools:text="Waves Token" />
+
+    <com.wavesplatform.wallet.v2.ui.custom.SwipeDisableViewPager
+        android:id="@+id/view_pager_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/text_asset_description"
+        android:layout_marginTop="8dp"
+        android:overScrollMode="never" />
+
+</RelativeLayout>

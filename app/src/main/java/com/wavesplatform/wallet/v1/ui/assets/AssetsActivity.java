@@ -132,7 +132,7 @@ public class AssetsActivity extends BaseAuthActivity {
 
             binding.accountsList.setAdapter(accountsAdapter);
         } else {
-            // Notify adapter of items changes
+            // Notify adapterAvatar of items changes
             accountsAdapter.notifyDataSetChanged();
         }
     }

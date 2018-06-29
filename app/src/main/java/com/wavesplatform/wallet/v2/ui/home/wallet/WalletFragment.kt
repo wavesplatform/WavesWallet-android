@@ -68,7 +68,7 @@ class WalletFragment : BaseFragment(), WalletView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_sorting -> {
-                launchActivity<AssetsSortingActivity> {  }
+                launchActivity<AssetsSortingActivity>()
             }
             R.id.action_your_address -> {
                 toast(item.title)

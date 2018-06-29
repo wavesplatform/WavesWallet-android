@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.data.helpers
 import android.app.Activity
 import com.wavesplatform.wallet.v1.db.DBHelper
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
+import io.realm.Realm
 import io.realm.RealmConfiguration
 import javax.inject.Inject
 
@@ -19,6 +20,8 @@ class AuthHelper @Inject constructor(private val publicKeyAccountHelper: PublicK
                     .build()
 
             DBHelper.getInstance().setRealmConfig(config)
+            Realm.getDefaultInstance().isAutoRefresh = false
+            Realm.getInstance(config).isAutoRefresh = false
 
 
             // TODO: uncomment

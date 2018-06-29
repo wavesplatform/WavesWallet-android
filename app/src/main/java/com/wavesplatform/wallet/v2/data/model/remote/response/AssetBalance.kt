@@ -1,13 +1,14 @@
 package com.wavesplatform.wallet.v2.data.model.remote.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import io.realm.RealmModel
 import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
-import org.apache.commons.lang3.ArrayUtils
-import java.util.ArrayList
+import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 
 data class AssetBalances(
@@ -15,6 +16,7 @@ data class AssetBalances(
         @SerializedName("balances") var balances: List<AssetBalance> = ArrayList()
 )
 
+@Parcelize
 @RealmClass
 open class AssetBalance(
         @PrimaryKey
@@ -28,10 +30,11 @@ open class AssetBalance(
         var isHidden: Boolean = false,
         var position: Int = -1,
         var configureVisibleState: Boolean = false,
-        var isFavorite: Boolean = false,
         @Ignore
-        var isChecked: Boolean = false
-) : RealmModel {
+        var isChecked: Boolean = false,
+        var isFlatMoney: Boolean = false,
+        var isFavorite: Boolean = false
+) : RealmModel, Parcelable {
     fun getDecimals(): Int? {
         return if (issueTransaction != null) issueTransaction?.decimals else 8
     }
@@ -41,7 +44,7 @@ open class AssetBalance(
     }
 
     fun isAssetId(assetId: String): Boolean {
-        return assetId == assetId
+        return assetId == this.assetId
     }
 
     fun getName(): String? {
@@ -53,10 +56,11 @@ open class AssetBalance(
     }
 
     fun isWaves(): Boolean {
-        return assetId == null
+        return assetId.isNullOrEmpty()
     }
 }
 
+@Parcelize
 @RealmClass
 open class IssueTransaction(
         @SerializedName("type") var type: Int? = 0,
@@ -75,4 +79,4 @@ open class IssueTransaction(
         @SerializedName("decimals") var decimals: Int? = 0,
         @SerializedName("description") var description: String? = "",
         @SerializedName("script") var script: String? = ""
-) : RealmModel
+) : RealmModel, Parcelable
