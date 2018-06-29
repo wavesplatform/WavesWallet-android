@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_history_type"
+        android:layout_width="@dimen/asset_icon_size"
+        android:layout_height="@dimen/asset_icon_size"
+        android:layout_gravity="center_horizontal"
+        app:srcCompat="@drawable/ic_startlease" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_leasing_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="1.99800118"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_leasing_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="4dp"
+            android:background="@drawable/asset_price_border"
+            android:padding="4dp"
+            android:text="WAVES"
+            android:textColor="@color/info500"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_leasing_value_in_dollar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:text="≈ 00 000.00 US Dollar"
+        android:textColor="@color/disabled500"
+        android:textSize="12sp" />
+</LinearLayout>

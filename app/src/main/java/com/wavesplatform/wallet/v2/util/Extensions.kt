@@ -9,8 +9,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.icu.lang.UProperty.INT_START
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
@@ -18,11 +20,15 @@ import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.text.Html
+import android.text.Spannable
+import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.style.StyleSpan
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -278,3 +284,9 @@ fun View.setMargins(
     layoutParams = lp
 }
 
+fun TextView.makeTextHalfBold() {
+    val text = this.text.toString()
+    val str = SpannableStringBuilder(text)
+    str.setSpan(StyleSpan (Typeface.BOLD), 0, text.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    this.text = str
+}

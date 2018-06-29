@@ -107,11 +107,13 @@
     <color name="success100">#A4EC9B</color>
     <color name="success300">#4ECE3D</color>
     <color name="success400">#4AAD02</color>
+    <color name="success400_01">#194aad02</color>
     <color name="success500">#39A12C</color>
     <color name="successLime">#81C926</color>
     <color name="warning50">#FFF5DF</color>
     <color name="warning100">#FFEBC0</color>
     <color name="warning400">#F8B700</color>
+    <color name="warning400_01">#19f8b700</color>
     <color name="warning600">#F89300</color>
     <color name="error100">#FFE4E4</color>
     <color name="error200">#F4B1A5</color>

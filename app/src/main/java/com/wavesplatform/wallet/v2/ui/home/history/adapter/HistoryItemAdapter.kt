@@ -1,12 +1,14 @@
 package com.wavesplatform.wallet.v2.ui.home.history.adapter
 
 import android.widget.ImageView
+import android.widget.TextView
 import com.chad.library.adapter.base.BaseSectionQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment.Companion.all
 import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment.Companion.received
 import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment.Companion.send
+import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import javax.inject.Inject
 
 class HistoryItemAdapter @Inject constructor() : BaseSectionQuickAdapter<HistoryItem, BaseViewHolder>(R.layout.wallet_leasing_item, R.layout.asset_header, null) {
@@ -18,17 +20,23 @@ class HistoryItemAdapter @Inject constructor() : BaseSectionQuickAdapter<History
     }
 
     override fun convert(helper: BaseViewHolder?, item: HistoryItem?) {
-        when(dataType){
-            all->{
+        helper?.addOnClickListener(R.id.car_item)
+
+        when (dataType) {
+            all -> {
                 helper?.getView<ImageView>(R.id.image_startlease)?.setImageResource(R.drawable.ic_startlease)
             }
-            send->{
+            send -> {
                 helper?.getView<ImageView>(R.id.image_startlease)?.setImageResource(R.drawable.ic_send)
             }
-            received->{
+            received -> {
                 helper?.getView<ImageView>(R.id.image_startlease)?.setImageResource(R.drawable.ic_receive)
             }
         }
+
+        val textLeasingValue = helper?.getView<TextView>(R.id.text_leasing_value)
+        textLeasingValue?.text = "${item?.t?.assetValue}"
+        textLeasingValue?.makeTextHalfBold()
     }
 
     fun setType(type: String) {

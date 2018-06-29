@@ -774,6 +774,26 @@
     <string name="history_sent">Sent</string>
     <string name="history_received">Received</string>
 
+    <!--History Details-->
+    <string name="history_details_received_from">Received from</string>
+    <string name="history_details_free">Free</string>
+    <string name="history_details_confirmations">Confirmations</string>
+    <string name="history_details_block">Block</string>
+    <string name="history_details_timestamp">Timestamp</string>
+    <string name="history_details_copy_tx_id">Copy TX ID</string>
+    <string name="history_details_copy_all_data">Copy all data</string>
+    <string name="history_details_completed">COMPLETED</string>
+    <string name="history_details_active_now">ACTIVE NOW</string>
+    <string name="history_details_unconfirmed">UNCONFIRMED</string>
+    <string name="history_details_sent_to">Sent to</string>
+    <string name="history_details_send_again">Send again</string>
+    <string name="history_details_cancel_leasing">Cancel leasing</string>
+    <string name="history_details_leasing_to">Leasing to</string>
+    <string name="history_details_btc_price">BTC Price</string>
+    <string name="history_details_id">ID</string>
+    <string name="history_details_recipient">Recipient</string>
+    <string name="history_details_show_all">Show all (%1$s)</string>
+
     <!-- History Sorting -->
     <string name="history_sorting_toolbar_title">Sorting</string>
 
