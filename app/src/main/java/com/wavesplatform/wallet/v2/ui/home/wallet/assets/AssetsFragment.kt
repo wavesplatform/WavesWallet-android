@@ -5,16 +5,17 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.id.*
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import pers.victor.ext.visiableIf
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
@@ -71,6 +72,29 @@ class AssetsFragment : BaseFragment(), AssetsView {
         recycle_spam_assets.layoutManager = LinearLayoutManager(baseActivity)
         recycle_spam_assets.adapter = spamAssetsAdapter
         recycle_spam_assets.isNestedScrollingEnabled = false
+
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            val item = adapter.getItem(position) as AssetBalance
+            launchActivity<AssetDetailsActivity> {
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position)
+            }
+        }
+
+        adapterHiddenAssets.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            val item = adapter.getItem(position) as AssetBalance
+            launchActivity<AssetDetailsActivity> {
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position + this@AssetsFragment.adapter.data.size)
+            }
+        }
+
+        spamAssetsAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            val item = adapter.getItem(position) as AssetBalance
+            launchActivity<AssetDetailsActivity> {
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
+            }
+        }
 
         text_hidden_assets.click {
             if (expandable_layout_hidden.isExpanded) {

@@ -7,6 +7,7 @@ import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -38,8 +39,11 @@ abstract class FragmentModule {
     @ContributesAndroidInjector
     internal abstract fun leasingFragment(): LeasingFragment
 
-
     @PerFragment
     @ContributesAndroidInjector
     internal abstract fun historyDateItemFragment(): HistoryDateItemFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun assetDetailsContentFragment(): AssetDetailsContentFragment
 }

@@ -11,10 +11,10 @@ class AssetsPresenter @Inject constructor() :BasePresenter<AssetsView>(){
 
     fun loadAssetsBalance() {
         addSubscription(nodeDataManager.loadAssetsBalance()
-                .compose(RxUtil.applyDefaultSchedulers())
+                .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     val hiddenList = it.filter({ it.isHidden })
-                    val sortedToFirstFavoriteList = it.sortedByDescending({ it.isFavorite })
+                    val sortedToFirstFavoriteList = it.filter({ !it.isHidden }).sortedByDescending({ it.isFavorite })
 
                     viewState.afterSuccessLoadAssets(sortedToFirstFavoriteList)
                     viewState.afterSuccessLoadHiddenAssets(hiddenList)

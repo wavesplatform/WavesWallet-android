@@ -654,6 +654,7 @@
     <string name="action_close">Close</string>
     <string name="msg_in_development">Sorry, this feature will be available in the near future</string>
     <string name="persist">&amp;</string>
+    <string name="copied">Copied to clipboard</string>
 
     <!-- Language-->
     <string name="choose_language_russia">Русский</string>
@@ -796,6 +797,28 @@
 
     <!-- Markets -->
     <string name="dex_market_toolbar_title">Markets</string>
+
+    <!-- Asset Details -->
+    <string name="asset_details_favorite_action">Mark as favorite</string>
+    <string name="asset_details_waves_token">Waves token</string>
+    <string name="asset_details_cryptocurrency">Cryptocurrency</string>
+    <string name="asset_details_flat_money">Fiat Money</string>
+    <string name="asset_details_available_balance">Available balance</string>
+    <string name="asset_details_total">Total</string>
+    <string name="asset_details_send">Send</string>
+    <string name="asset_details_receive">Receive</string>
+    <string name="asset_details_coming_soon">Coming soon</string>
+    <string name="asset_details_last_transactions">Last transactions</string>
+    <string name="asset_details_view_history">View history</string>
+    <string name="asset_details_asset_info">Asset Info</string>
+    <string name="asset_details_name">Name</string>
+    <string name="asset_details_issuer">Issuer</string>
+    <string name="asset_details_id">ID</string>
+    <string name="asset_details_type">Type</string>
+    <string name="asset_details_not_reissuable">Not reissuable</string>
+    <string name="asset_details_reissuable">Reissuable</string>
+    <string name="asset_details_issue_date">Issue date</string>
+    <string name="asset_details_description">Description</string>
 
 
 </resources>
