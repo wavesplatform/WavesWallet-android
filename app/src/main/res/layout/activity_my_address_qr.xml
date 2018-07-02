@@ -1,0 +1,151 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basic50"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:fontFamily="@font/roboto"
+        app:titleTextAppearance="@style/Toolbar.Title" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_rect_address"
+            android:paddingBottom="10dp"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:paddingTop="10dp"
+            android:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW"
+            android:textColor="@color/disabled900"
+            android:textSize="14sp" />
+
+
+        <LinearLayout
+            android:id="@+id/linear_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_address"
+            android:layout_marginTop="18dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/frame_copy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_copy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@drawable/ic_copy_18_submit_400"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/my_address_qr_copy"
+                    android:textColor="@color/submit400" />
+
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:id="@+id/frame_share"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@drawable/ic_share_18_submit_400"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/my_address_qr_share"
+                    android:textColor="@color/submit400" />
+
+            </FrameLayout>
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_view_qr_code"
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="@dimen/_200sdp"
+            android:layout_below="@+id/linear_buttons"
+            android:scaleType="fitXY"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_view_qr_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image_view_qr_code"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dp"
+            android:text="Your QR Code"
+            android:textColor="@color/disabled500"
+            android:textSize="12sp" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_view_qr_code"
+            android:layout_marginTop="24dp"
+            app:srcCompat="@drawable/ic_warning_18_disabled_500" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_warning_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_view_qr_code"
+            android:layout_toRightOf="@+id/image_warning"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="14dp"
+            app:fontFamily="@font/roboto_bold"
+            android:text="@string/my_address_qr_send_only_waves_and_waves_tokens_to_this_address"
+            android:textColor="@color/disabled500"
+            android:textSize="12sp" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_warning_title"
+            android:layout_toRightOf="@+id/image_warning"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="14dp"
+            android:text="@string/my_address_qr_sending_any_other_digital_asset_to_this_address_will_result_in_the_permanent_loss_of_your_funds"
+            android:textColor="@color/disabled500"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -871,5 +871,11 @@
     <string name="asset_details_issue_date">Issue date</string>
     <string name="asset_details_description">Description</string>
 
+    <!-- My Address QR -->
+    <string name="my_address_qr_toolbar_title">Your address</string>
+    <string name="my_address_qr_copy">Copy</string>
+    <string name="my_address_qr_share">Share</string>
+    <string name="my_address_qr_send_only_waves_and_waves_tokens_to_this_address">Send only WAVES and Waves tokens to this address</string>
+    <string name="my_address_qr_sending_any_other_digital_asset_to_this_address_will_result_in_the_permanent_loss_of_your_funds">Sending any other digital asset to this address will result in the permanent loss of your funds</string>
 
 </resources>
