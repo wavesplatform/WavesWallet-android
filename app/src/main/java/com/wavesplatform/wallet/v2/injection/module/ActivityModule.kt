@@ -5,6 +5,7 @@ import com.wavesplatform.wallet.v2.ui.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.ProfileAddressesActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.create.CreateAliasActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPharseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.ui.language.change.ChangeLanguageActivity
@@ -76,4 +77,9 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun createAliasActivity(): CreateAliasActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun backupPharseActivity(): BackupPharseActivity
+
 }

@@ -431,6 +431,13 @@
     <string name="new_alias_create">Create</string>
     <string name="new_alias_symbol_name">Symbolic name to your address</string>
 
+    <!-- BACKUP PHARSE-->
+    <string name="backup_pharse">Backup pharse</string>
+    <string name="backup_wrriten_down">I\'ve written it down</string>
+    <string name="backup_hint">Since only you control your money, you’ll need to save your backup phrase in case this app is deleted or go back</string>
+    <string name="backup_hint_2">Please carefully write down these 15 words or copy them</string>
+    <string name="backup_hint_3">You will confirm this phrase on the next screen</string>
+
     <string name="request_camera_permission">Camera access is required.</string>
     <string name="request_location_permission">Location access is required.</string>
     <string name="request_write_storage_permission">Write external storage is required.</string>

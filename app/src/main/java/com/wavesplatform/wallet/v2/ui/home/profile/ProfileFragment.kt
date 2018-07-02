@@ -9,6 +9,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.ProfileAddressesActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPharseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
@@ -40,6 +41,9 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         card_addresses_and_keys.click {
             launchActivity<ProfileAddressesActivity> {  }
+        }
+        card_backup_phrase.click {
+            launchActivity<BackupPharseActivity> {  }
         }
     }
 
