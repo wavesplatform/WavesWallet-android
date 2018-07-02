@@ -7,6 +7,7 @@ import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -71,7 +72,7 @@ class WalletFragment : BaseFragment(), WalletView {
                 launchActivity<AssetsSortingActivity>()
             }
             R.id.action_your_address -> {
-                toast(item.title)
+                launchActivity<MyAddressQRActivity>()
             }
         }
 
