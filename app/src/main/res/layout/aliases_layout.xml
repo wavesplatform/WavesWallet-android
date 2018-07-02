@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.AppCompatTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/text_aliases_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/aliases_shape"
+    android:drawablePadding="14dp"
+    android:drawableRight="@drawable/ic_copy_black"
+    android:gravity="center"
+    android:padding="14dp"
+    android:text="makstorch"
+    android:textColor="@color/disabled900" />

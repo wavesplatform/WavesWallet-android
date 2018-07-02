@@ -12,6 +12,10 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActiv
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
+import com.wavesplatform.wallet.v2.ui.home.profile.addresses.ProfileAddressesActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
+import kotlinx.android.synthetic.main.fragment_profile.*
+import pers.victor.ext.click
 import pers.victor.ext.toast
 import javax.inject.Inject
 
@@ -39,6 +43,10 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         card_address_book.click {
             launchActivity<AddressBookActivity> {  }
+        }
+
+        card_addresses_and_keys.click {
+            launchActivity<ProfileAddressesActivity> {  }
         }
     }
 
