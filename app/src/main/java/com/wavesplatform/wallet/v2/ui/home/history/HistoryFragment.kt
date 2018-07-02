@@ -6,9 +6,15 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.id.*
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryFragmentPageAdapter
+import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
+import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.home.history.filter.HistoryFilterBottomSheetFragment
 import kotlinx.android.synthetic.main.fragment_history.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
@@ -65,7 +71,8 @@ class HistoryFragment : BaseFragment(), HistoryView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
             R.id.action_sorting -> {
-                toast(item.title)
+                val historyFilter = HistoryFilterBottomSheetFragment()
+                historyFilter.show(fragmentManager, historyFilter.tag)
             }
         }
 

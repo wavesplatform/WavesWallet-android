@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import io.realm.RealmModel
+import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
@@ -29,6 +30,8 @@ open class AssetBalance(
         var isHidden: Boolean = false,
         var position: Int = -1,
         var configureVisibleState: Boolean = false,
+        @Ignore
+        var isChecked: Boolean = false,
         var isFlatMoney: Boolean = false,
         var isFavorite: Boolean = false
 ) : RealmModel, Parcelable {

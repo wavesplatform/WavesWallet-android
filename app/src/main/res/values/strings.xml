@@ -402,6 +402,26 @@
     <string name="settings_field_cant_be_empty">Field can\'t be empty.</string>
     <string name="settings_error_updating">Error updating settings, please try again</string>
 
+    <!-- PROFILE -->
+    <string name="profile_general_setting">General settings</string>
+    <string name="profile_general_addresses_and_keys">Addresses and keys</string>
+    <string name="profile_general_addresses_book">Address book</string>
+    <string name="profile_general_language">Language</string>
+    <string name="profile_general_security">Security</string>
+    <string name="profile_general_change_password">Change password</string>
+    <string name="profile_general_change_passcode">Change passcode</string>
+    <string name="profile_general_metwork">Network</string>
+    <string name="profile_general_other">Other</string>
+    <string name="profile_general_rate_app">Rate app</string>
+    <string name="profile_general_feedback">Feedback</string>
+    <string name="profile_general_support_wavesplatform">Support Wavesplatform</string>
+    <string name="profile_general_current_height">Current height</string>
+    <string name="profile_general_current_version">Version</string>
+    <string name="profile_general_delete_account">Delete account from device</string>
+    <string name="profile_general_fingerprint">Fingerprint</string>
+    <string name="profile_general_backup_phrase">Backup phrase</string>
+    <string name="profile_general_push_notifications">Push Notifications</string>
+
     <string name="request_camera_permission">Camera access is required.</string>
     <string name="request_location_permission">Location access is required.</string>
     <string name="request_write_storage_permission">Write external storage is required.</string>
@@ -797,6 +817,13 @@
 
     <!-- History Sorting -->
     <string name="history_sorting_toolbar_title">Sorting</string>
+    <string name="history_sorting_week">Week</string>
+    <string name="history_sorting_month">Month</string>
+    <string name="history_sorting_half_year">Half-year</string>
+    <string name="history_sorting_period">Period</string>
+    <string name="history_sorting_display_spam">Display spam transactions</string>
+    <string name="history_sorting_close">Close</string>
+    <string name="history_sorting_filter">Filter</string>
 
     <!-- DEX -->
     <string name="dex_toolbar_title">DEX</string>
