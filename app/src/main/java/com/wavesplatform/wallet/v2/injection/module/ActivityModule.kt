@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.injection.module
 
 import com.wavesplatform.wallet.v2.injection.scope.PerActivity
 import com.wavesplatform.wallet.v2.ui.address.MyAddressQRActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
@@ -66,4 +67,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun myAddressQRActivity(): MyAddressQRActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun addressBookActivity(): AddressBookActivity
 }

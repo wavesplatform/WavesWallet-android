@@ -214,9 +214,14 @@
             android:name=".v2.ui.home.wallet.assets.details.AssetDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity android:name=".v2.ui.address.MyAddressQRActivity"
+        <activity
+            android:name=".v2.ui.address.MyAddressQRActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity android:name="com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
     </application>
 
 </manifest>
