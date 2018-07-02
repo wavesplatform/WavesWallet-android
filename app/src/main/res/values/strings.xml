@@ -426,6 +426,11 @@
     <string name="profile_general_aliases">Aliases %1$s</string>
     <string name="profile_general_create_alias">Create new alias</string>
 
+    <!-- NEW ALIAS -->
+    <string name="new_alias">New alias</string>
+    <string name="new_alias_create">Create</string>
+    <string name="new_alias_symbol_name">Symbolic name to your address</string>
+
     <string name="request_camera_permission">Camera access is required.</string>
     <string name="request_location_permission">Location access is required.</string>
     <string name="request_write_storage_permission">Write external storage is required.</string>

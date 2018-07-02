@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:fontFamily="@font/roboto"
+        app:titleTextAppearance="@style/Toolbar.Title" />
+
+    <View
+        android:id="@+id/view_drag_bg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/shape_rect_outline_checked"
+        android:visibility="gone" />
+
+    <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
+        android:id="@+id/til_new_alias_symbol"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textColorHint="@color/basic500"
+        app:errorEnabled="true"
+        app:hintTextAppearance="@style/TextLabel">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_new_alias_symbol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/accent50"
+            android:hint="@string/new_alias_symbol_name"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:paddingBottom="20dp"
+            android:singleLine="true"
+            android:textColorHint="@color/basic500" />
+    </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_create_alias"
+        style="@style/WavesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="24dp"
+        android:enabled="false"
+        android:text="@string/new_alias_create" />
+</RelativeLayout>

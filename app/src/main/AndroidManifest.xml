@@ -175,6 +175,10 @@
         <activity
             android:name=".v2.ui.home.profile.addresses.ProfileAddressesActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"/>
+        <activity
+            android:name=".v2.ui.home.profile.addresses.create.CreateAliasActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar">
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->

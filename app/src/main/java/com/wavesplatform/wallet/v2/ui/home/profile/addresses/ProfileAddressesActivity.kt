@@ -9,7 +9,10 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.adapter.AliasesAdapter
+import com.wavesplatform.wallet.v2.ui.home.profile.addresses.create.CreateAliasActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
+import pers.victor.ext.click
 import java.util.*
 import javax.inject.Inject
 
@@ -31,6 +34,10 @@ class ProfileAddressesActivity : BaseActivity(), ProfileAddressesView {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.profile_general_addresses_and_keys), R.drawable.ic_toolbar_back_black)
 
         setupRecycle()
+
+        button_create_alias.click {
+            launchActivity<CreateAliasActivity> {  }
+        }
     }
 
     private fun setupRecycle() {
