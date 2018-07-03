@@ -7,7 +7,7 @@ import javax.inject.Inject
 @InjectViewState
 class AddressBookPresenter @Inject constructor() : BasePresenter<AddressBookView>() {
     fun getAddresses(){
-        var list = listOf<AddressTestObject>(AddressTestObject("MkSuckMydickmMak1593x1GrfYmFdsf83skS11", "Ed"),
+        var list = arrayListOf<AddressTestObject>(AddressTestObject("MkSuckMydickmMak1593x1GrfYmFdsf83skS11", "Ed"),
                 AddressTestObject("MkSuckMydickmMak1593x1GrfYmFdsf83skS11", "Droid"),
                 AddressTestObject("MkSuckMydickmMak1593x1GrfYmFdsf83skS11", "Expert"),
                 AddressTestObject("MkSuckMydickmMak1593x1GrfYmFdsf83skS11", "Fuaaaarrkkkk"))

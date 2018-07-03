@@ -1,0 +1,106 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:fontFamily="@font/roboto"
+        app:titleTextAppearance="@style/Toolbar.Title" />
+
+    <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
+        android:id="@+id/til_address"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        app:hintTextAppearance="@style/TextLabel"
+        android:textColorHint="@color/basic500"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:errorEnabled="true">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_address"
+            android:layout_width="match_parent"
+            android:textIsSelectable="false"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:drawableRight="@drawable/ic_deladdress_24_error_400"
+            android:hint="@string/edit_address_address"
+            android:imeOptions="actionNext"
+            android:textColorHint="@color/basic500"
+            android:backgroundTint="@color/accent50"
+            android:inputType="text"
+            android:paddingBottom="20dp"
+            android:singleLine="true" />
+    </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
+
+    <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
+        android:layout_below="@+id/til_address"
+        android:id="@+id/til_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:hintTextAppearance="@style/TextLabel"
+        android:textColorHint="@color/basic500"
+        app:errorEnabled="true">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/edit_address_name"
+            android:textColorHint="@color/basic500"
+            android:backgroundTint="@color/accent50"
+            android:inputType="text"
+            android:paddingBottom="20dp"
+            android:singleLine="true" />
+    </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_save"
+        android:layout_above="@+id/button_delete"
+        style="@style/WavesButton"
+        android:layout_width="match_parent"
+        android:enabled="false"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/edit_address_btn_txt" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_delete"
+        android:fontFamily="@font/roboto_bold"
+        app:fontFamily="@font/roboto_bold"
+        android:textSize="12sp"
+        android:padding="17dp"
+        android:clickable="true"
+        android:textColor="@color/error500"
+        android:background="@android:color/transparent"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:stateListAnimator="@null"
+        android:textAllCaps="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/edit_address_delete_txt" />
+
+
+
+</RelativeLayout>

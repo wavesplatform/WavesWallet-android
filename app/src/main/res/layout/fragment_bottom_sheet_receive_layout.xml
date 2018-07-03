@@ -30,7 +30,7 @@
             android:textColor="@color/disabled900" />
 
         <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/image_add_address_submit_300"
+            android:id="@+id/image_add_address_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/text_received_from"

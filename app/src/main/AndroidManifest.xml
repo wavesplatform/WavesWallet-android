@@ -171,15 +171,16 @@
         <activity
             android:name=".v2.ui.welcome.WelcomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"/>
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
             android:name=".v2.ui.home.profile.addresses.ProfileAddressesActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"/>
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
             android:name=".v2.ui.home.profile.addresses.create.CreateAliasActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar">
+
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
 
@@ -225,10 +226,21 @@
             android:name=".v2.ui.address.MyAddressQRActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity android:name="com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity"
+        <activity
+            android:name=".v2.ui.home.profile.address_book.AddressBookActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".v2.ui.home.profile.address_book.add.AddAddressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name="com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="stateHidden"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
+            />
     </application>
 
 </manifest>

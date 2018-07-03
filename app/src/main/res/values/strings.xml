@@ -884,9 +884,24 @@
     <string name="my_address_qr_sending_any_other_digital_asset_to_this_address_will_result_in_the_permanent_loss_of_your_funds">Sending any other digital asset to this address will result in the permanent loss of your funds</string>
 
 
-    <!-- My Address QR -->
+    <!-- Address Book  -->
     <string name="address_book_toolbar_title">Address book</string>
     <string name="address_book_empty_state">Nothing Here…\nYour can create new address</string>
     <string name="address_book_search">Search</string>
     <string name="address_book_add">Add</string>
+
+
+    <!-- Add Address -->
+    <string name="add_address_toolbar_title">Add</string>
+    <string name="add_address_address">Address</string>
+    <string name="add_address_name">Name</string>
+    <string name="add_address_btn_txt">Save</string>
+
+
+    <!-- Edit Address -->
+    <string name="edit_address_toolbar_title">Edit</string>
+    <string name="edit_address_address">Address</string>
+    <string name="edit_address_name">Name</string>
+    <string name="edit_address_btn_txt">Save</string>
+    <string name="edit_address_delete_txt">Delete address</string>
 </resources>

@@ -19,6 +19,11 @@ object Constants {
     val ACC_TWITTER = "wavesplatform"
     val ACC_TELEGRAM = "wavesnews"
 
+    // Custom Result code
+    val RESULT_CANCELED = 404
+    val RESULT_OK = 200
+    val RESULT_OK_NO_RESULT = 204
+
     var alphabetColor = hashMapOf<String, Int>(
             Pair("a", R.color.a),
             Pair("b", R.color.b),
