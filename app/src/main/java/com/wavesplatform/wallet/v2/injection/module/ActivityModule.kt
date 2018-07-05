@@ -10,7 +10,8 @@ import com.wavesplatform.wallet.v2.ui.home.profile.addresses.ProfileAddressesAct
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
-import com.wavesplatform.wallet.v2.ui.language.change.ChangeLanguageActivity
+import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
+import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeWelcomeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.new_account.backup_info.BackupInfoActivity
@@ -46,7 +47,7 @@ abstract class ActivityModule {
 
     @PerActivity
     @ContributesAndroidInjector
-    internal abstract fun changeLanguageActivity(): ChangeLanguageActivity
+    internal abstract fun changeWelcomeLanguageActivity(): ChangeWelcomeLanguageActivity
 
     @PerActivity
     @ContributesAndroidInjector
@@ -91,4 +92,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun editAddressActivity(): EditAddressActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun changeLanguageActivity(): ChangeLanguageActivity
 }

@@ -907,4 +907,7 @@
     <string name="edit_address_delete_alert_description">Are you sure you want to delete address form address book?</string>
     <string name="edit_address_delete_alert_cancel">CANCEL</string>
     <string name="edit_address_delete_alert_delete">DELETE</string>
+
+    <!--Profile language-->
+    <string name="profile_language_toolbar_title">Launguage</string>
 </resources>

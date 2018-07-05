@@ -7,12 +7,11 @@ import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.util.launchActivity
-import kotlinx.android.synthetic.main.fragment_profile.*
-import pers.victor.ext.click
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.ProfileAddressesActivity
+import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
@@ -48,6 +47,20 @@ class ProfileFragment : BaseFragment(), ProfileView {
         card_addresses_and_keys.click {
             launchActivity<ProfileAddressesActivity> {  }
         }
+
+        card_language.click {
+            launchActivity<ChangeLanguageActivity> {  }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setCurrentLangFlag()
+    }
+
+    private fun setCurrentLangFlag() {
+        val languageItemByCode = Language.getLanguageItemByCode(presenter.preferenceHelper.getLanguage())
+        image_language_flag.setImageResource(languageItemByCode.language.image)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

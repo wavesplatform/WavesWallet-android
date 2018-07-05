@@ -92,7 +92,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     public override fun onResume() {
         super.onResume()
-        ActivityRecreationHelper.onResume(this)
+//        ActivityRecreationHelper.onResume(this)
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ errorEvent -> mErrorManager.showError(this, errorEvent.retrofitException, errorEvent.retrySubject) },
@@ -100,7 +100,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     override fun onDestroy() {
-        ActivityRecreationHelper.onDestroy(this);
+//        ActivityRecreationHelper.onDestroy(this);
         eventSubscriptions.clear()
         super.onDestroy()
     }

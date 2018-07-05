@@ -16,7 +16,8 @@ import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.ui.language.change.ChangeLanguageActivity
+import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
+import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeWelcomeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notAvailable
@@ -161,7 +162,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_change_language -> {
-                launchActivity<ChangeLanguageActivity>()
+                launchActivity<ChangeWelcomeLanguageActivity>()
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 return true
             }
