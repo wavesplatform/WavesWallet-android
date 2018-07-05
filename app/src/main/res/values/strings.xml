@@ -881,8 +881,7 @@
     <string name="my_address_qr_copy">Copy</string>
     <string name="my_address_qr_share">Share</string>
     <string name="my_address_qr_send_only_waves_and_waves_tokens_to_this_address">Send only WAVES and Waves tokens to this address</string>
-    <string name="my_address_qr_sending_any_other_digital_asset_to_this_address_will_result_in_the_permanent_loss_of_your_funds">Sending any other digital asset to this address will result in the permanent loss of your funds</string>
-
+    <string name="my_address_qr_sending_any_other_digital_asset_to_this_address_will_result_in_the_permanent_loss_of_your_funds">Sending any other digital asset to this address will result in the permanent loss of your funds</string>rt
 
     <!-- Address Book  -->
     <string name="address_book_toolbar_title">Address book</string>
@@ -904,4 +903,8 @@
     <string name="edit_address_name">Name</string>
     <string name="edit_address_btn_txt">Save</string>
     <string name="edit_address_delete_txt">Delete address</string>
+    <string name="edit_address_delete_alert_title">Delete address</string>
+    <string name="edit_address_delete_alert_description">Are you sure you want to delete address form address book?</string>
+    <string name="edit_address_delete_alert_cancel">CANCEL</string>
+    <string name="edit_address_delete_alert_delete">DELETE</string>
 </resources>
