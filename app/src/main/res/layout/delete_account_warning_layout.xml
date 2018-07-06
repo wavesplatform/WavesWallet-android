@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="8dp"
+    android:orientation="horizontal"
+    android:background="@color/error100"
+    android:paddingBottom="8dp"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_info"
+        app:srcCompat="@drawable/ic_info_18_error_500"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/error500"
+        android:text="@string/profile_general_delete_account_dialog_warning"
+        />
+
+</LinearLayout>

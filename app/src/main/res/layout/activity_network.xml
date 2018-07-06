@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/accent50"
             android:drawablePadding="8dp"
-            android:hint="Node address"
+            android:hint="@string/network_node_address"
             android:text="https://nodes.wavesplatform.com"
             android:imeOptions="actionNext"
             android:inputType="text"
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/accent50"
-            android:hint="Matcher address"
+            android:hint="@string/network_matcher_address"
             android:text="https://matcher.wavesplatform.com/matcher"
             android:inputType="text"
             android:paddingBottom="20dp"
@@ -85,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/accent50"
-            android:hint="Spam filter"
+            android:hint="@string/network_spam_filter"
             android:text="https://github.com/wavesplatform/SpamLi…"
             android:inputType="text"
             android:paddingBottom="20dp"
@@ -107,7 +107,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="@color/basic500"
-        android:text="Switch off spam filtering"
+        android:text="@string/network_switch_off_spam_filtering"
         />
 
         <android.support.v7.widget.SwitchCompat
@@ -130,7 +130,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:enabled="false"
-        android:text="@string/edit_address_btn_txt" />
+        android:text="@string/network_save" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/button_set_default"
@@ -145,7 +145,7 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:padding="17dp"
         android:stateListAnimator="@null"
-        android:text="Set default"
+        android:text="@string/network_set_default"
         android:textAllCaps="false"
         android:textColor="@color/submit400"
         android:textSize="12sp" />

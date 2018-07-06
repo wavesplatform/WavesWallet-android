@@ -1,12 +1,16 @@
 package com.wavesplatform.wallet.v2.ui.home.profile
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.support.v4.content.res.ResourcesCompat
+import android.support.v7.app.AlertDialog
+import android.view.*
+import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -63,6 +67,26 @@ class ProfileFragment : BaseFragment(), ProfileView {
         card_network.click {
             launchActivity<NetworkActivity> {  }
         }
+        button_delete_account.click {
+            val alertDialog = AlertDialog.Builder(baseActivity).create()
+            alertDialog.setTitle(getString(R.string.profile_general_delete_account_dialog_title))
+            alertDialog.setMessage(getString(R.string.profile_general_delete_account_dialog_description))
+//            alertDialog.setView(getWarningView())
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.profile_general_delete_account_dialog_delete),
+                    DialogInterface.OnClickListener { dialog, which ->
+                        dialog.dismiss()
+                        toast("Deleted")
+                    })
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel),
+                    DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+            alertDialog.show()
+            val titleTextView =  alertDialog?.findViewById<TextView>(R.id.alertTitle);
+            titleTextView?.typeface = ResourcesCompat.getFont(baseActivity, R.font.roboto_bold)
+        }
+    }
+
+    private fun getWarningView(): View? {
+        return LayoutInflater.from(baseActivity).inflate(R.layout.delete_account_warning_layout, null)
     }
 
     override fun onResume() {
