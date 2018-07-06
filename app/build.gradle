@@ -86,6 +86,10 @@ android {
             // much faster builds
             minSdkVersion 21
         }
+        staging {
+            applicationIdSuffix ".staging"
+            minSdkVersion 21
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

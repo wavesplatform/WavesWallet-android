@@ -902,6 +902,11 @@
     <string name="profile_general_fingerprint">Fingerprint</string>
     <string name="profile_general_backup_phrase">Backup phrase</string>
     <string name="profile_general_push_notifications">Push Notifications</string>
+    <string name="profile_general_delete_account_dialog_title">Delete account</string>
+    <string name="profile_general_delete_account_dialog_description">Deleting an account will lead to its irretrievable loss!</string>
+    <string name="profile_general_delete_account_dialog_delete">DELETE</string>
+    <string name="profile_general_delete_account_dialog_cancel">CANCEL</string>
+    <string name="profile_general_delete_account_dialog_warning">You did not save your SEED</string>
 
     <!-- NEW ALIAS -->
     <string name="new_alias">New alias</string>
@@ -942,8 +947,13 @@
     <string name="change_password_confirm_password">Confirm password</string>
     <string name="change_password_confirm">Confirm</string>
 
-
     <!--Network-->
     <string name="network_toolbar_title">Network</string>
+    <string name="network_node_address">Node address</string>
+    <string name="network_matcher_address">Matcher address</string>
+    <string name="network_spam_filter">Spam filter</string>
+    <string name="network_switch_off_spam_filtering">Switch off spam filtering</string>
+    <string name="network_set_default">Set default</string>
+    <string name="network_save">Save</string>
 
 </resources>
