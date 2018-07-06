@@ -17,23 +17,9 @@ class ConfirmBackupPhrasePresenter @Inject constructor() : BasePresenter<Confirm
 
         originPhraseString = originPhrase.toString().replace("[", "").replace("]", "").replace(",", "")
 
-        var listRandomPhrase = arrayListOf<String>()
-        var randomNumbers = HashMap<Int, Int>()
+        val randomList = originPhraseList
+        randomList.shuffle()
 
-        for (i in 0 until originPhrase.size) {
-            getRandomPhrasePosition(randomNumbers, listRandomPhrase)
-        }
-
-        viewState.showRandomPhraseList(listRandomPhrase)
-    }
-
-    fun getRandomPhrasePosition(randomNumbers: HashMap<Int, Int>, listRandomPhrase: ArrayList<String>) {
-        val randomPosition = Random().nextInt(originPhraseList.size)
-        if (randomNumbers.contains(randomPosition)) {
-            getRandomPhrasePosition(randomNumbers, listRandomPhrase)
-        } else {
-            randomNumbers[randomPosition] = randomPosition
-            listRandomPhrase.add(originPhraseList[randomPosition])
-        }
+        viewState.showRandomPhraseList(randomList)
     }
 }
