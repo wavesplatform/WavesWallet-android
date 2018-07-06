@@ -12,6 +12,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.HistoryTransactionPagerAdapter
+import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_asset_details_content.*
 import pers.victor.ext.click
@@ -58,11 +59,11 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         historyAdapter.notifyDataSetChanged()
 
         image_copy_issuer.click {
-            copyToClipboard(it, text_view_id_value.text)
+            text_view_issuer_value.copyToClipboard(it)
         }
 
         image_copy_id.click {
-            copyToClipboard(it, text_view_id_value.text)
+            text_view_id_value.copyToClipboard(it)
         }
 
         presenter.assetBalance = arguments?.getParcelable<AssetBalance>(BUNDLE_ASSET)
@@ -77,15 +78,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         text_reusable_value.text = if (assetBalance?.reissuable!!) getString(R.string.asset_details_reissuable) else getString(R.string.asset_details_not_reissuable)
         text_issue_date_value.text = formatter.format(Date(assetBalance.issueTransaction?.timestamp!!))
         text_description.text = assetBalance.issueTransaction?.description
-    }
-
-    private fun copyToClipboard(imageView: AppCompatImageView, text: CharSequence) {
-        clipboardManager.primaryClip = ClipData.newPlainText(getString(R.string.app_name), text)
-        activity.notNull { imageView.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_check_18_success_400)) }
-        toast(getString(R.string.copied))
-        runDelayed(2000, {
-            activity.notNull { imageView.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_copy_18_black)) }
-        })
     }
 
 }

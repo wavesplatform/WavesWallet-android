@@ -4,9 +4,11 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.app.Activity
+import android.content.ClipData
 import android.content.ClipData.newIntent
 import android.content.Context
 import android.content.Intent
+import android.databinding.adapters.ImageViewBindingAdapter.setImageDrawable
 import android.graphics.Bitmap
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -19,6 +21,7 @@ import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.AppCompatImageView
 import android.text.Html
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -38,7 +41,10 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.wavesplatform.wallet.R
+import pers.victor.ext.clipboardManager
 import pers.victor.ext.dp2px
+import pers.victor.ext.toast
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
 import java.text.SimpleDateFormat
@@ -66,6 +72,19 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
         // Update the SystemUiVisibility dependening on whether we want a Light or Dark theme.
         this.window.decorView.systemUiVisibility = if (pIsDark) lFlags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv() else lFlags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
+}
+
+fun TextView.copyToClipboard(imageView: AppCompatImageView? = null) {
+    clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), this.text.toString())
+    toast(this.context.getString(R.string.copied))
+
+    imageView.notNull { image ->
+        image.setImageDrawable(ContextCompat.getDrawable(this.context, R.drawable.ic_check_18_success_400))
+        runDelayed(1500, {
+            this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_copy_18_black)) }
+        })
+    }
+
 }
 
 fun <T : Any> T?.notNull(f: (it: T) -> Unit) {

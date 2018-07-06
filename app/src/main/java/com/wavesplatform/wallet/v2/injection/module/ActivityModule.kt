@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingAc
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeWelcomeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.new_account.backup_info.BackupInfoActivity
 import com.wavesplatform.wallet.v2.ui.new_account.secret_phrase.SecretPhraseActivity
@@ -107,4 +108,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun changePasswordActivity(): ChangePasswordActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun networkActivity(): NetworkActivity
 }

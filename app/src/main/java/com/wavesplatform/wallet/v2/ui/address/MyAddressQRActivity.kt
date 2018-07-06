@@ -23,6 +23,7 @@ import android.graphics.Bitmap
 import android.widget.ImageView
 import com.wavesplatform.wallet.v1.ui.zxing.Contents
 import com.wavesplatform.wallet.v1.ui.zxing.encode.QRCodeEncoder
+import com.wavesplatform.wallet.v2.util.copyToClipboard
 import pers.victor.ext.dp2px
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 
@@ -49,7 +50,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
         }
 
         frame_copy.click {
-            copyToClipboard(text_address.text)
+            text_address.copyToClipboard()
         }
 
         presenter.generateQRCode(text_address.text.toString(), dp2px(240))
@@ -57,11 +58,6 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
 
     override fun showQRCode(qrCode: Bitmap?) {
         image_view_qr_code.setImageBitmap(qrCode)
-    }
-
-    private fun copyToClipboard(text: CharSequence) {
-        clipboardManager.primaryClip = ClipData.newPlainText(getString(R.string.app_name), text)
-        toast(getString(R.string.copied))
     }
 
     private fun shareAddress() {

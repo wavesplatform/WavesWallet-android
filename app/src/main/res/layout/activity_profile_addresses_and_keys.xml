@@ -36,7 +36,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="14dp"
                 android:background="@drawable/shape_rect_bordered_accent50"
                 android:paddingBottom="10dp"
                 android:paddingLeft="14dp"
@@ -112,12 +112,12 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="16dp"
-                        android:layout_toLeftOf="@+id/image_copy_1"
+                        android:layout_toLeftOf="@+id/image_address_copy"
                         android:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW"
                         android:textColor="@color/disabled900" />
 
                     <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/image_copy_1"
+                        android:id="@+id/image_address_copy"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_alignParentRight="true"
@@ -163,12 +163,12 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="16dp"
-                        android:layout_toLeftOf="@+id/image_copy_2"
+                        android:layout_toLeftOf="@+id/image_public_key_copy"
                         android:text="4T25bAunzydwvzkJcQ9f378UzGRqyUcDXLS4xgam7JQQ"
                         android:textColor="@color/disabled900" />
 
                     <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/image_copy_2"
+                        android:id="@+id/image_public_key_copy"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_alignParentRight="true"

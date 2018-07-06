@@ -232,9 +232,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity"
+            android:name=".v2.ui.home.profile.change_password.ChangePasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity android:name="com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
     </application>
 
 </manifest>

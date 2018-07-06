@@ -14,6 +14,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysAct
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPharseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
@@ -58,6 +59,9 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
         card_change_password.click {
             launchActivity<ChangePasswordActivity> {  }
+        }
+        card_network.click {
+            launchActivity<NetworkActivity> {  }
         }
     }
 

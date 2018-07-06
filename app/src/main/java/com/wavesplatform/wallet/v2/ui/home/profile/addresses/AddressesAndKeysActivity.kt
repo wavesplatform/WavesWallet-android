@@ -13,6 +13,7 @@ import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomS
 import com.wavesplatform.wallet.v2.ui.home.profile.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.adapter.AliasesAdapter
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.create.CreateAliasActivity
+import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
 import pers.victor.ext.click
@@ -36,23 +37,19 @@ class AddressesAndKeysActivity : BaseActivity(), ProfileAddressesView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        setupRecycle()
 
         relative_alias.click {
             val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
-    }
 
-    private fun setupRecycle() {
-//        recycle_aliases.adapter = adapter
-//        recycle_aliases.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-
-        val list = arrayListOf<AliasModel>()
-
-        for (i in 0..10) {
-            list.add(AliasModel(Random().nextDouble().toString()))
+        image_address_copy.click{
+            text_address.copyToClipboard(it)
         }
-        adapter.setNewData(list)
+
+        image_public_key_copy.click {
+            text_public_key.copyToClipboard(it)
+        }
     }
+
 }
