@@ -6,7 +6,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActiv
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.addresses.ProfileAddressesActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPharseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
@@ -80,7 +80,7 @@ abstract class ActivityModule {
 
     @PerActivity
     @ContributesAndroidInjector
-    internal abstract fun profileAddressesActivity(): ProfileAddressesActivity
+    internal abstract fun profileAddressesActivity(): AddressesAndKeysActivity
 
     @PerActivity
     @ContributesAndroidInjector

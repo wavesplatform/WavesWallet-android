@@ -21,12 +21,13 @@
         android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="35dp">
+        android:paddingTop="30dp">
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/backup_hint"
+            android:textSize="12sp"
             android:textColor="@color/basic500" />
 
         <com.google.android.flexbox.FlexboxLayout
@@ -50,6 +51,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
+                android:textSize="12sp"
+                android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/image_copy"
                 android:text="@string/backup_hint_2"
                 android:textColor="@color/basic500" />
@@ -71,6 +74,7 @@
         android:layout_above="@+id/button_written_down"
         android:layout_centerHorizontal="true"
         android:layout_marginRight="16dp"
+        android:textSize="12sp"
         android:text="@string/backup_hint_3"
         android:textColor="@color/basic500" />
 

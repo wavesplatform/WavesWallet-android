@@ -26,7 +26,7 @@ class BackupPharseActivity : BaseActivity(), BackupPharseView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.backup_pharse), R.drawable.ic_toolbar_back_black)
 
-        val dummyTexts = arrayListOf<String>("nigga", "wanna", "go", "hack", "any", "wack", "host", "idot", "utmost")
+        val dummyTexts = arrayListOf<String>("nigga", "wanna", "go", "hack", "any", "wack", "host", "idot", "utmost", "any", "that’ll", "wack", "but")
 
         for (text in dummyTexts) {
             val textView = buildLabel(text)

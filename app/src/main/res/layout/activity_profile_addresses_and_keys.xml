@@ -14,16 +14,6 @@
         android:fontFamily="@font/roboto"
         app:titleTextAppearance="@style/Toolbar.Title" />
 
-    <View
-        android:id="@+id/view_drag_bg"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/shape_rect_outline_checked"
-        android:visibility="gone" />
-
-
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,11 +28,66 @@
             android:descendantFocusability="blocksDescendants"
             android:orientation="vertical">
 
-            <View
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/circle_shape_basic200" />
+
+            <RelativeLayout
+                android:id="@+id/relative_alias"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape_rect_bordered_accent50"
+                android:paddingBottom="10dp"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:paddingTop="10dp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_startlease"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_t_alias_48" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@+id/image_startlease"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_leasing_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Started Leasing"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/roboto_bold" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/text_leasing_status"
+                        android:layout_marginTop="4dp"
+                        android:text="You do not have"
+                        android:textColor="@color/disabled500"
+                        android:textSize="12sp" />
+
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        app:srcCompat="@drawable/icon_info_basic_300" />
+                </RelativeLayout>
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,28 +103,41 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp">
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_marginRight="16dp"
-                        android:layout_marginTop="6dp"
                         android:layout_toLeftOf="@+id/image_copy_1"
                         android:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW"
                         android:textColor="@color/disabled900" />
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/image_copy_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
                         app:srcCompat="@drawable/ic_copy_black" />
                 </RelativeLayout>
             </LinearLayout>
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/view_line_2"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/dotted_line"
+                android:layerType="software" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,35 +153,49 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="6dp">
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_public_key"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_marginRight="16dp"
-                        android:layout_marginTop="6dp"
                         android:layout_toLeftOf="@+id/image_copy_2"
                         android:text="4T25bAunzydwvzkJcQ9f378UzGRqyUcDXLS4xgam7JQQ"
                         android:textColor="@color/disabled900" />
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/image_copy_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
                         app:srcCompat="@drawable/ic_copy_black" />
                 </RelativeLayout>
             </LinearLayout>
 
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/view_line_3"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/dotted_line"
+                android:layerType="software" />
+
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/profile_general_public_key"
+                android:text="@string/profile_general_private_key"
                 android:textColor="@color/disabled500" />
 
             <Button
@@ -132,56 +204,12 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/btn_gray_selector"
+                android:background="@drawable/shape_rect_outline_basic_50"
                 android:stateListAnimator="@null"
                 android:text="@string/profile_general_show"
                 android:textAllCaps="false"
                 android:textColor="@color/basic500" />
 
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="24dp"
-                android:background="@color/accent50" />
-
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/profile_general_aliases"
-                android:textColor="@color/disabled500" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_aliases"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
-
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/button_create_alias"
-                style="@style/WavesButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="24dp"
-                android:text="@string/profile_general_create_alias" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="24dp"
-                android:layout_marginTop="16dp"
-                android:text="Transaction Fee 0.001 Waves"
-                android:textColor="@color/basic500"
-                android:textSize="12sp" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

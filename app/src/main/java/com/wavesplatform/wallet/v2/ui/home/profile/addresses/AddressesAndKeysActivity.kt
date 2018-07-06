@@ -8,6 +8,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
+import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.home.profile.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.adapter.AliasesAdapter
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -16,7 +19,7 @@ import pers.victor.ext.click
 import java.util.*
 import javax.inject.Inject
 
-class ProfileAddressesActivity : BaseActivity(), ProfileAddressesView {
+class AddressesAndKeysActivity : BaseActivity(), ProfileAddressesView {
 
     @Inject
     @InjectPresenter
@@ -35,14 +38,15 @@ class ProfileAddressesActivity : BaseActivity(), ProfileAddressesView {
 
         setupRecycle()
 
-        button_create_alias.click {
-            launchActivity<CreateAliasActivity> {  }
+        relative_alias.click {
+            val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
+            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
     }
 
     private fun setupRecycle() {
-        recycle_aliases.adapter = adapter
-        recycle_aliases.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+//        recycle_aliases.adapter = adapter
+//        recycle_aliases.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
         val list = arrayListOf<AliasModel>()
 
