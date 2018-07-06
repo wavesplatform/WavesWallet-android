@@ -14,7 +14,11 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.language.LanguageAdapter
 import com.wavesplatform.wallet.v2.ui.language.LanguagePresenter
 import com.wavesplatform.wallet.v2.ui.language.LanguageView
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_change_language.*
+import pers.victor.ext.click
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
@@ -49,6 +53,14 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
 
             if (presenter.currentLanguagePosition == position) return@OnItemClickListener
 
+            val languageItemByCode = Language.getLanguageItemByCode(preferencesHelper.getLanguage())
+            val positionCurrent = adapter.data.indexOf(languageItemByCode)
+            if (position == positionCurrent){
+                button_save.gone()
+            }else{
+                button_save.visiable()
+            }
+
             if (presenter.currentLanguagePosition == -1) {
                 // check new item
                 presenter.currentLanguagePosition = position
@@ -65,8 +77,16 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
                 item.checked = true
                 adapter.setData(position, item)
             }
-            presenter.saveLanguage(item.language.code)
-            LocaleChanger.setLocale(Locale(getString(item.language.code).toLowerCase()))
+
+        }
+
+        button_save.click {
+            val item = adapter.getItem(presenter.currentLanguagePosition)
+            item.notNull {
+                presenter.saveLanguage(it.language.code)
+                LocaleChanger.setLocale(Locale(getString(it.language.code).toLowerCase()))
+            }
+            onBackPressed()
         }
     }
 

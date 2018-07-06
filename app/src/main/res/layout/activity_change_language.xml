@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -21,8 +21,24 @@
         android:id="@+id/recycle_language"
         android:layout_marginTop="8dp"
         android:overScrollMode="never"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_above="@+id/button_continue"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
 
-</LinearLayout>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_save"
+        style="@style/WavesButton"
+        android:text="Save"
+        android:visibility="gone"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+
+</RelativeLayout>
