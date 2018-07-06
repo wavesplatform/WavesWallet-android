@@ -1,0 +1,98 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:fontFamily="@font/roboto"
+        app:titleTextAppearance="@style/Toolbar.Title" />
+
+    <FrameLayout
+        android:id="@+id/frame_phrase_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/basic50"
+        android:foreground="@drawable/shape_rect_outline_gray"
+        android:minHeight="70dp">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/flow_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:alignContent="center"
+            app:alignItems="center"
+            app:dividerDrawable="@drawable/divider"
+            app:flexWrap="wrap"
+            app:justifyContent="center"
+            app:showDivider="beginning|middle|end" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/text_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/frame_phrase_form"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/_70sdp"
+        android:lineSpacingExtra="2sp"
+        android:text="@string/confirm_backup_error"
+        android:textColor="@color/error500"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:lineSpacingExtra="2sp"
+            android:text="@string/confirm_backup_info"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/flow_random_phrase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:minHeight="62dp"
+            app:alignContent="center"
+            app:alignItems="center"
+            app:dividerDrawable="@drawable/divider"
+            app:flexWrap="wrap"
+            app:justifyContent="center"
+            app:showDivider="beginning|middle|end" />
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_confirm"
+        style="@style/WavesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/confirm_backup_confirm"
+        android:visibility="gone" />
+</RelativeLayout>

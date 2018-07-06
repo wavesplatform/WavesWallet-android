@@ -9,7 +9,8 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressAc
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.create.CreateAliasActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPharseActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
@@ -90,7 +91,7 @@ abstract class ActivityModule {
 
     @PerActivity
     @ContributesAndroidInjector
-    internal abstract fun backupPharseActivity(): BackupPharseActivity
+    internal abstract fun backupPharseActivity(): BackupPhraseActivity
 
 
     @PerActivity
@@ -112,4 +113,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun networkActivity(): NetworkActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun confirmBackupPharseActivity(): ConfirmBackupPhraseActivity
 }

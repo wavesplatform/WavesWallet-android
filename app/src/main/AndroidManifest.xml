@@ -29,9 +29,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.Splash">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+            <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -181,7 +181,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.home.profile.backup.BackupPharseActivity"
+            android:name=".v2.ui.home.profile.backup.BackupPhraseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
+        <activity
+            android:name=".v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
@@ -235,9 +239,10 @@
             android:name=".v2.ui.home.profile.change_password.ChangePasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity android:name="com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity"
+        <activity
+            android:name="com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
     </application>
 
 </manifest>

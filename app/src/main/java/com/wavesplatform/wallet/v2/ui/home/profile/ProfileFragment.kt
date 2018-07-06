@@ -12,7 +12,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPharseActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -51,7 +51,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
             launchActivity<AddressesAndKeysActivity> {  }
         }
         card_backup_phrase.click {
-            launchActivity<BackupPharseActivity> {  }
+            launchActivity<BackupPhraseActivity> {  }
         }
 
         card_language.click {

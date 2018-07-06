@@ -915,6 +915,12 @@
     <string name="backup_hint_2">Please carefully write down these 15 words or copy them</string>
     <string name="backup_hint_3">You will confirm this phrase on the next screen</string>
 
+    <!-- CONFIRM BACKUP-->
+    <string name="confirm_backup">Confirm backup</string>
+    <string name="confirm_backup_info">Please, tap each word in the correct order</string>
+    <string name="confirm_backup_error">Wrong order, try again</string>
+    <string name="confirm_backup_confirm">Confirm</string>
+
     <!--Addresses and keys-->
     <string name="addresses_and_keys_toolbar_title">Addresses, keys</string>
     <string name="addresses_and_keys_started_leasing">Started Leasing</string>
