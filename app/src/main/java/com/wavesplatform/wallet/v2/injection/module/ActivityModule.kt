@@ -2,13 +2,17 @@ package com.wavesplatform.wallet.v2.injection.module
 
 import com.wavesplatform.wallet.v2.injection.scope.PerActivity
 import com.wavesplatform.wallet.v2.ui.address.MyAddressQRActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.ProfileAddressesActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPharseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
-import com.wavesplatform.wallet.v2.ui.language.change.ChangeLanguageActivity
+import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
+import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeWelcomeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.new_account.backup_info.BackupInfoActivity
@@ -44,7 +48,7 @@ abstract class ActivityModule {
 
     @PerActivity
     @ContributesAndroidInjector
-    internal abstract fun changeLanguageActivity(): ChangeLanguageActivity
+    internal abstract fun changeWelcomeLanguageActivity(): ChangeWelcomeLanguageActivity
 
     @PerActivity
     @ContributesAndroidInjector
@@ -72,6 +76,10 @@ abstract class ActivityModule {
 
     @PerActivity
     @ContributesAndroidInjector
+    internal abstract fun addressBookActivity(): AddressBookActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
     internal abstract fun profileAddressesActivity(): ProfileAddressesActivity
 
     @PerActivity
@@ -82,4 +90,16 @@ abstract class ActivityModule {
     @ContributesAndroidInjector
     internal abstract fun backupPharseActivity(): BackupPharseActivity
 
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun addAddressActivity(): AddAddressActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun editAddressActivity(): EditAddressActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun changeLanguageActivity(): ChangeLanguageActivity
 }

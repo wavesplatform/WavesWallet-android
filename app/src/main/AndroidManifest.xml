@@ -171,11 +171,11 @@
         <activity
             android:name=".v2.ui.welcome.WelcomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"/>
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
             android:name=".v2.ui.home.profile.addresses.ProfileAddressesActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"/>
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
             android:name=".v2.ui.home.profile.addresses.create.CreateAliasActivity"
             android:screenOrientation="portrait"
@@ -184,6 +184,7 @@
             android:name=".v2.ui.home.profile.backup.BackupPharseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar">
+
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
 
@@ -202,7 +203,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".v2.ui.language.change.ChangeLanguageActivity"
+            android:name=".v2.ui.language.change_welcome.ChangeWelcomeLanguageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
@@ -225,9 +226,29 @@
             android:name=".v2.ui.home.wallet.assets.details.AssetDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity android:name=".v2.ui.address.MyAddressQRActivity"
+        <activity
+            android:name=".v2.ui.address.MyAddressQRActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
+            android:name=".v2.ui.home.profile.address_book.AddressBookActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".v2.ui.home.profile.address_book.add.AddAddressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name="com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+            android:windowSoftInputMode="stateHidden"
+            />
+        <activity android:name="com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+            />
     </application>
 
 </manifest>

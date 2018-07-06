@@ -3,6 +3,8 @@ package com.wavesplatform.wallet.v2.ui.home.history.details
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.view.ViewPager
+import android.support.v7.widget.AppCompatImageView
+import android.support.v7.widget.AppCompatTextView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.home.history.TestObject
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -71,6 +77,16 @@ class HistoryDetailsBottomSheetFragment : BottomSheetDialogFragment() {
             HistoryTypeEnum.RECEIVE, HistoryTypeEnum.CLOSELEASE, HistoryTypeEnum.INCOMINGLEASE, HistoryTypeEnum.MASSRECEIVED -> {
                 val receiveView = inflater?.inflate(R.layout.fragment_bottom_sheet_receive_layout, historyContainer, false)
                 val receivedFrom = receiveView?.findViewById<TextView>(R.id.text_received_from)
+                val imageAddAddressSubmit = receiveView?.findViewById<AppCompatImageView>(R.id.image_add_address_submit)
+                val textReceivedFrom = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from)
+
+                imageAddAddressSubmit?.click {
+                    launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS){
+                        putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_EDITABLE)
+                        putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressTestObject(textReceivedFrom?.text.toString(), ""))
+                    }
+                }
+
 
                 historyContainer?.addView(receiveView)
                 historyContainer?.addView(baseInfoLayout)
