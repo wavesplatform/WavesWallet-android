@@ -13,6 +13,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActiv
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPharseActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
@@ -54,6 +55,9 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         card_language.click {
             launchActivity<ChangeLanguageActivity> {  }
+        }
+        card_change_password.click {
+            launchActivity<ChangePasswordActivity> {  }
         }
     }
 

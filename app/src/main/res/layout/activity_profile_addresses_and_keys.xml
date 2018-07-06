@@ -63,7 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Started Leasing"
+                        android:text="@string/addresses_and_keys_started_leasing"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:fontFamily="@font/roboto_bold" />
@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/text_leasing_status"
                         android:layout_marginTop="4dp"
-                        android:text="You do not have"
+                        android:text="@string/addresses_and_keys_you_do_not_have"
                         android:textColor="@color/disabled500"
                         android:textSize="12sp" />
 
@@ -98,7 +98,7 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/your_address_toolbar_title"
+                    android:text="@string/addresses_and_keys_your_address"
                     android:textColor="@color/disabled500" />
 
                 <RelativeLayout
@@ -148,7 +148,7 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/profile_general_public_key"
+                    android:text="@string/addresses_and_keys_public_key"
                     android:textColor="@color/disabled500" />
 
                 <RelativeLayout
@@ -195,7 +195,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/profile_general_private_key"
+                android:text="@string/addresses_and_keys_private_key"
                 android:textColor="@color/disabled500" />
 
             <Button
@@ -206,7 +206,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/shape_rect_outline_basic_50"
                 android:stateListAnimator="@null"
-                android:text="@string/profile_general_show"
+                android:text="@string/addresses_and_keys_show"
                 android:textAllCaps="false"
                 android:textColor="@color/basic500" />
 

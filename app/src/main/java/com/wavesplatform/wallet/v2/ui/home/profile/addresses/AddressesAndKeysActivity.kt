@@ -34,7 +34,7 @@ class AddressesAndKeysActivity : BaseActivity(), ProfileAddressesView {
     override fun configLayoutRes(): Int = R.layout.activity_profile_addresses_and_keys
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.profile_general_addresses_and_keys), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         setupRecycle()
 

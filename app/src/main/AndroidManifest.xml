@@ -179,11 +179,11 @@
         <activity
             android:name=".v2.ui.home.profile.addresses.create.CreateAliasActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.home.profile.backup.BackupPharseActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.language.change_welcome.ChangeWelcomeLanguageActivity"
             android:screenOrientation="portrait"
@@ -222,15 +222,19 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name="com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity"
+        <activity
+            android:name=".v2.ui.home.profile.address_book.edit.EditAddressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="stateHidden"
-            />
-        <activity android:name="com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".v2.ui.language.change_welcome.ChangeLanguageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
+            android:name="com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
     </application>
 
 </manifest>

@@ -402,42 +402,6 @@
     <string name="settings_field_cant_be_empty">Field can\'t be empty.</string>
     <string name="settings_error_updating">Error updating settings, please try again</string>
 
-    <!-- PROFILE -->
-    <string name="profile_general_setting">General settings</string>
-    <string name="profile_general_addresses_and_keys">Addresses and keys</string>
-    <string name="profile_general_addresses_book">Address book</string>
-    <string name="profile_general_language">Language</string>
-    <string name="profile_general_security">Security</string>
-    <string name="profile_general_change_password">Change password</string>
-    <string name="profile_general_change_passcode">Change passcode</string>
-    <string name="profile_general_metwork">Network</string>
-    <string name="profile_general_other">Other</string>
-    <string name="profile_general_rate_app">Rate app</string>
-    <string name="profile_general_feedback">Feedback</string>
-    <string name="profile_general_support_wavesplatform">Support Wavesplatform</string>
-    <string name="profile_general_current_height">Current height</string>
-    <string name="profile_general_current_version">Version</string>
-    <string name="profile_general_delete_account">Delete account from device</string>
-    <string name="profile_general_fingerprint">Fingerprint</string>
-    <string name="profile_general_backup_phrase">Backup phrase</string>
-    <string name="profile_general_push_notifications">Push Notifications</string>
-    <string name="profile_general_public_key">Public key</string>
-    <string name="profile_general_private_key">Private key</string>
-    <string name="profile_general_show">Show</string>
-    <string name="profile_general_aliases">Aliases %1$s</string>
-    <string name="profile_general_create_alias">Create new alias</string>
-
-    <!-- NEW ALIAS -->
-    <string name="new_alias">New alias</string>
-    <string name="new_alias_create">Create</string>
-    <string name="new_alias_symbol_name">Symbolic name to your address</string>
-
-    <!-- BACKUP PHARSE-->
-    <string name="backup_pharse">Backup pharse</string>
-    <string name="backup_wrriten_down">I\'ve written it down</string>
-    <string name="backup_hint">Since only you control your money, you’ll need to save your backup phrase in case this app is deleted or go back</string>
-    <string name="backup_hint_2">Please carefully write down these 15 words or copy them</string>
-    <string name="backup_hint_3">You will confirm this phrase on the next screen</string>
 
     <string name="request_camera_permission">Camera access is required.</string>
     <string name="request_location_permission">Location access is required.</string>
@@ -918,4 +882,58 @@
 
     <!--Profile language-->
     <string name="profile_language_toolbar_title">Launguage</string>
+
+    <!-- PROFILE -->
+    <string name="profile_general_setting">General settings</string>
+    <string name="profile_general_addresses_and_keys">Addresses and keys</string>
+    <string name="profile_general_addresses_book">Address book</string>
+    <string name="profile_general_language">Language</string>
+    <string name="profile_general_security">Security</string>
+    <string name="profile_general_change_password">Change password</string>
+    <string name="profile_general_change_passcode">Change passcode</string>
+    <string name="profile_general_metwork">Network</string>
+    <string name="profile_general_other">Other</string>
+    <string name="profile_general_rate_app">Rate app</string>
+    <string name="profile_general_feedback">Feedback</string>
+    <string name="profile_general_support_wavesplatform">Support Wavesplatform</string>
+    <string name="profile_general_current_height">Current height</string>
+    <string name="profile_general_current_version">Version</string>
+    <string name="profile_general_delete_account">Delete account from device</string>
+    <string name="profile_general_fingerprint">Fingerprint</string>
+    <string name="profile_general_backup_phrase">Backup phrase</string>
+    <string name="profile_general_push_notifications">Push Notifications</string>
+
+    <!-- NEW ALIAS -->
+    <string name="new_alias">New alias</string>
+    <string name="new_alias_create">Create</string>
+    <string name="new_alias_symbol_name">Symbolic name to your address</string>
+
+    <!-- BACKUP PHARSE-->
+    <string name="backup_pharse">Backup pharse</string>
+    <string name="backup_wrriten_down">I\'ve written it down</string>
+    <string name="backup_hint">Since only you control your money, you’ll need to save your backup phrase in case this app is deleted or go back</string>
+    <string name="backup_hint_2">Please carefully write down these 15 words or copy them</string>
+    <string name="backup_hint_3">You will confirm this phrase on the next screen</string>
+
+    <!--Addresses and keys-->
+    <string name="addresses_and_keys_toolbar_title">Addresses and keys</string>
+    <string name="addresses_and_keys_started_leasing">Started Leasing</string>
+    <string name="addresses_and_keys_you_do_not_have">You do not have</string>
+    <string name="addresses_and_keys_your_address">Your address</string>
+    <string name="addresses_and_keys_public_key">Public key</string>
+    <string name="addresses_and_keys_private_key">Private key</string>
+    <string name="addresses_and_keys_show">Show</string>
+    <string name="addresses_and_keys_dialog_create_alias">Create new alias</string>
+    <string name="addresses_and_keys_dialog_you_dont_have">You do not have Aliases</string>
+    <string name="addresses_and_keys_dialog_description_1">An Alias is a nickname for your address. You can use an Alias instead of an address to make transactions.</string>
+    <string name="addresses_and_keys_dialog_description_2">Your Alias must be between 4 and 30 characters long, and must contain only lowercase Latin letters, digits and symbols (@, -, _ etc)</string>
+    <string name="addresses_and_keys_dialog_fee">Transaction Fee 0.001 Waves</string>
+
+    <!--Change password-->
+    <string name="change_password_toolbar_title">Change password</string>
+    <string name="change_password_old_password">Old password</string>
+    <string name="change_password_new_password">New password</string>
+    <string name="change_password_confirm_password">Confirm password</string>
+    <string name="change_password_confirm">Confirm</string>
+
 </resources>
