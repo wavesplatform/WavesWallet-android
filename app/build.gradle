@@ -295,7 +295,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.android:flexbox:1.0.0'
-
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
 }
 
 buildscript {
