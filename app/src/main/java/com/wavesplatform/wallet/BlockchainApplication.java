@@ -34,6 +34,7 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
+import io.github.kbiakov.codeview.classifier.CodeProcessor;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -75,6 +76,7 @@ public class BlockchainApplication extends DaggerApplication {
         LocaleChanger.initialize(getApplicationContext(), SUPPORTED_LOCALES);
         // Init objects first
         Injector.getInstance().init(this);
+        CodeProcessor.init(this);
         // Inject into Application
 //        Injector.getInstance().getAppComponent().inject(this);
 

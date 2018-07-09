@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.TestObject
@@ -54,7 +55,7 @@ class HistoryDateItemFragment : BaseFragment(), HistoryDateItemView {
 
         presenter.loadBundle(arguments)
 
-        adapter?.setOnItemChildClickListener({ adapter, view, position ->
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val historyItem = adapter.getItem(position) as HistoryItem
             if (!historyItem.isHeader) {
                 val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
@@ -72,7 +73,7 @@ class HistoryDateItemFragment : BaseFragment(), HistoryDateItemView {
                 bottomSheetFragment.selectedItemPosition = position - sectionSize
                 bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
             }
-        })
+        }
     }
 
     override fun showData(data: ArrayList<HistoryItem>, type: String) {

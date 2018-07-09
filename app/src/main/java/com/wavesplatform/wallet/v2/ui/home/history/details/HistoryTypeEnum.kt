@@ -13,5 +13,6 @@ enum class HistoryTypeEnum {
     TOKENBURN,
     ALIAS,
     MASSRECEIVED,
-    MASSTRANSFER
+    MASSTRANSFER,
+    DATA
 }
