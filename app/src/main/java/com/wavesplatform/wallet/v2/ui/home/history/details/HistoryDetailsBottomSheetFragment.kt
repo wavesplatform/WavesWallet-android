@@ -16,12 +16,18 @@ import com.wavesplatform.wallet.v2.ui.home.history.TestObject
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
+import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
+import io.github.kbiakov.codeview.CodeView
+import kotlinx.android.synthetic.main.fragment_asset_details_content.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import java.util.*
 import kotlin.collections.ArrayList
+import io.github.kbiakov.codeview.highlight.ColorTheme
+import io.github.kbiakov.codeview.highlight.ColorThemeData
+import io.github.kbiakov.codeview.highlight.SyntaxColors
 
 
 class HistoryDetailsBottomSheetFragment : BottomSheetDialogFragment() {
@@ -100,6 +106,35 @@ class HistoryDetailsBottomSheetFragment : BottomSheetDialogFragment() {
                 historyContainer?.addView(sendView)
                 historyContainer?.addView(baseInfoLayout)
                 historyContainer?.addView(resendBtn)
+            }
+            HistoryTypeEnum.DATA -> {
+                val dataView = inflater?.inflate(R.layout.fragment_bottom_sheet_data_layout, historyContainer, false)
+                val codeView = dataView?.findViewById<CodeView>(R.id.code_view)
+                val imageCopyData = dataView?.findViewById<AppCompatImageView>(R.id.image_copy_data)
+
+                imageCopyData?.click {
+//                    codeView.copyToClipboard(it)
+                }
+
+                val myTheme = ColorTheme.SOLARIZED_LIGHT.theme()
+                        .withBgContent(R.color.basic50)
+                        .withNoteColor(R.color.basic50)
+
+                codeView?.getOptions()?.withTheme(myTheme)
+                codeView?.setCode("{\n" +
+                        "\t\"key\" : \"test long\",\n" +
+                        "\t\"type\" : \"integer\",\n" +
+                        "\t\"value\" : 1001\n" +
+                        "}, {\n" +
+                        "\t\"key\" : \"test true\",\n" +
+                        "\t\"type\" : \"boolean\",\n" +
+                        "\t\"value\" : true\n" +
+                        "}, {\n" +
+                        "\t\"key\" : \"test false\",\n" +
+                        "\t\"type\" : \"boolean\",\"value\" : true\n" +
+                        "}");
+                historyContainer?.addView(dataView)
+                historyContainer?.addView(baseInfoLayout)
             }
             HistoryTypeEnum.STARTLEASE -> {
                 val startLeaseView = inflater?.inflate(R.layout.fragment_bottom_sheet_start_lease_layout, historyContainer, false)
@@ -219,7 +254,8 @@ class HistoryDetailsBottomSheetFragment : BottomSheetDialogFragment() {
 
         checkStepIconState()
 
-        setupView(enumList[Random().nextInt(enumList.size)])
+        setupView(HistoryTypeEnum.DATA)
+//        setupView(enumList[Random().nextInt(enumList.size)])
     }
 
     private fun checkStepIconState() {

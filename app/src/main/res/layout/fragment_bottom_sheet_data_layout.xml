@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_data_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data"
+            android:textColor="@color/basic500" />
+
+        <io.github.kbiakov.codeview.CodeView
+            android:id="@+id/code_view"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/shape_rect_outline_basic_50"
+            android:layout_below="@+id/text_data_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_copy_data"
+            android:layout_marginTop="38dp"
+            android:layout_marginEnd="12dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            app:srcCompat="@drawable/ic_copy_18_black"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/code_view"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:textSize="14sp"
+            android:textColor="@color/submit400"
+            android:text="Show all data"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>
