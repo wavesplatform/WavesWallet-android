@@ -6,6 +6,7 @@
 
     <uses-sdk tools:overrideLibrary="com.mtramin.rxfingerprint" />
 
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -34,12 +35,12 @@
             <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+            <action android:name="android.intent.action.VIEW" />
 
-                <data android:scheme="waves" />
+            <data android:scheme="waves" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
         <activity
@@ -183,7 +184,7 @@
         <activity
             android:name=".v2.ui.home.profile.backup.BackupPhraseActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity"
             android:screenOrientation="portrait"
@@ -240,9 +241,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity"
+            android:name=".v2.ui.home.profile.network.NetworkActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
+            android:name=".v2.ui.passcode.create.CreatePasscodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
     </application>
 
 </manifest>

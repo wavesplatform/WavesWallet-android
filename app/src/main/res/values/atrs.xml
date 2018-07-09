@@ -38,4 +38,7 @@
         <attr name="image_tint" format="reference|color" />
         <attr name="background_tint" format="reference|color" />
     </declare-styleable>
+    <declare-styleable name="PassCodeEntryKeypad">
+        <attr name="is_fingerprint_available" format="boolean" />
+    </declare-styleable>
 </resources>

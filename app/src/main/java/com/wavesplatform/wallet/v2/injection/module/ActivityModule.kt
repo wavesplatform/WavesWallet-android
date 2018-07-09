@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.new_account.backup_info.BackupInfoActivity
 import com.wavesplatform.wallet.v2.ui.new_account.secret_phrase.SecretPhraseActivity
+import com.wavesplatform.wallet.v2.ui.passcode.create.CreatePasscodeActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
@@ -117,4 +118,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun confirmBackupPharseActivity(): ConfirmBackupPhraseActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun createPasscodeActivity(): CreatePasscodeActivity
 }

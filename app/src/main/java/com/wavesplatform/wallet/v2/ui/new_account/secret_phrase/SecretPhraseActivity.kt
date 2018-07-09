@@ -8,6 +8,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.new_account.backup_info.BackupInfoActivity
+import com.wavesplatform.wallet.v2.ui.passcode.create.CreatePasscodeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notAvailable
 import kotlinx.android.synthetic.main.activity_secret_phrase.*
@@ -37,7 +38,7 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
         }
 
         text_do_it_later.click {
-            notAvailable()
+            launchActivity<CreatePasscodeActivity> {  }
         }
     }
 
@@ -45,7 +46,7 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_close -> {
-                notAvailable()
+                launchActivity<CreatePasscodeActivity> {  }
             }
         }
         return super.onOptionsItemSelected(item)

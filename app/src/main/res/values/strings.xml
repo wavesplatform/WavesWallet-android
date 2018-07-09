@@ -957,4 +957,8 @@
     <string name="network_set_default">Set default</string>
     <string name="network_save">Save</string>
 
+    <!--Create passcode-->
+    <string name="create_passcode_create_title">Create a passcode</string>
+    <string name="create_passcode_verify_title">Verify your passcode</string>
+
 </resources>

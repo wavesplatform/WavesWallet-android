@@ -11,6 +11,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
+import com.wavesplatform.wallet.v2.ui.passcode.create.CreatePasscodeActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.activity_confirm_backup_pharse.*
 import kotlinx.android.synthetic.main.spinner_item.view.*
@@ -65,6 +67,9 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
 
                 if (phraseText.trim() == presenter.originPhraseString) {
                     button_confirm.visiable()
+                    button_confirm.click {
+                        launchActivity<CreatePasscodeActivity> {  }
+                    }
                 } else {
                     text_error.visiable()
                     frame_phrase_form.foreground = findDrawable(R.drawable.shape_rect_outline_red)
