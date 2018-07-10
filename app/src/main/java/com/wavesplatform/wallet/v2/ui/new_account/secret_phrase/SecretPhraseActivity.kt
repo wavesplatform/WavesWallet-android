@@ -37,7 +37,7 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
             launchActivity<BackupInfoActivity> {  }
         }
 
-        text_do_it_later.click {
+        button_do_it_later.click {
             launchActivity<CreatePasscodeActivity> {  }
         }
     }

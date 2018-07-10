@@ -6,5 +6,5 @@
         android:width="2dp"
         android:dashWidth="4dp"
         android:dashGap="4dp"
-        android:color="#1f5af6"/>
+        android:color="@color/submit400"/>
 </shape>

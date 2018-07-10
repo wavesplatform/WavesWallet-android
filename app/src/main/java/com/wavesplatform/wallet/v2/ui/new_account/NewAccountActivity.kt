@@ -29,6 +29,7 @@ import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.children
 import pers.victor.ext.click
 import pers.victor.ext.getBitmap
+import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.util.*
 import javax.inject.Inject
 
@@ -49,7 +50,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         isFieldsValid()
 
         button_create_account.click {
-            launchActivity<SecretPhraseActivity> {  }
+            launchActivity<SecretPhraseActivity> { }
         }
 
 
@@ -126,6 +127,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                 it.setBackgroundResource(R.drawable.shape_outline_checked)
                 avatarIsSelected(it.getBitmap())
             }
+
 
             // draw unique identicon avatar with random background color and make image with circle crop effect
             val rnd = Random()

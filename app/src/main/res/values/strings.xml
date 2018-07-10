@@ -958,10 +958,11 @@
     <!--Create passcode-->
     <string name="create_passcode_create_title">Create a passcode</string>
     <string name="create_passcode_verify_title">Verify your passcode</string>
+
+    <!--Use fingerprint-->
     <string name="use_fingerprint_submit_txt">Use fingerprint</string>
     <string name="use_fingerprint_not_now">Not now</string>
     <string name="use_fingerprint_subtitle">Use your fingerprint for faster, easier access to your account</string>
     <string name="use_fingerprint_title">Use fingerprint to sign in?</string>
 
-    <!--Use fingerprint-->
 </resources>

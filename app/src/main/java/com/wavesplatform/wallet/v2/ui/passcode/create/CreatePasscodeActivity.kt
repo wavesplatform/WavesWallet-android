@@ -11,6 +11,8 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
+import com.wavesplatform.wallet.v2.ui.fingerprint.UseFingerprintActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_create_passcode.*
 import pyxis.uzuki.live.richutilskt.utils.toast
 
@@ -40,7 +42,7 @@ class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
                     moveToVerifyStep()
                 }else if (presenter.step == CreatePassCodeStep.VERIFY){
                     if (presenter.passCode == passCode){
-                        toast("sucess")
+                        launchActivity<UseFingerprintActivity> {  }
                     }else{
                         pass_keypad.passCodesNotMatches()
                     }

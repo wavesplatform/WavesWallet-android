@@ -5,23 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:fitsSystemWindows="true"
-        app:titleTextAppearance="@style/Toolbar.Title"
-        app:titleTextColor="@color/white" />
+
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_backup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar_view"
+        android:padding="16dp"
+        android:background="@drawable/shape_oval_dotted_basic300"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="90dp"
-        android:src="@drawable/ic_userimg_backupmoney_80_submit_400" />
+        android:layout_marginTop="152dp"
+        android:src="@drawable/ic_fingerprint_48_submit_300" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text_title"
@@ -32,7 +26,7 @@
         android:layout_marginTop="24dp"
         app:fontFamily="@font/roboto_medium"
         android:gravity="center_horizontal"
-        android:text="@string/secret_phrase_no_backup_no_money"
+        android:text="@string/use_fingerprint_title"
         android:textColor="@color/black"
         android:textSize="20sp" />
 
@@ -45,15 +39,15 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="@string/secret_phrase_you_must_save_the_secret_phrase_it_is_crucial_for_accessing_your_account"
+        android:text="@string/use_fingerprint_subtitle"
         android:textColor="@color/disabled500" />
 
     <android.support.v7.widget.AppCompatButton
-        android:id="@+id/button_confirm"
+        android:id="@+id/button_use_fingerprint"
         style="@style/WavesButton"
         android:layout_gravity="bottom"
         android:layout_above="@+id/button_do_it_later"
-        android:text="@string/secret_phrase_back_up_now"
+        android:text="@string/use_fingerprint_submit_txt"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_width="match_parent"
@@ -63,8 +57,8 @@
         android:id="@+id/button_do_it_later"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="24dp"
-        android:layout_marginTop="24dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="24dp"
         android:textColor="@color/submit400"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -75,7 +69,9 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:padding="8dp"
         android:layout_height="wrap_content"
-        android:text="@string/secret_phrase_do_it_later"/>
+        android:text="@string/use_fingerprint_not_now"/>
+
+
 
 
 </RelativeLayout>

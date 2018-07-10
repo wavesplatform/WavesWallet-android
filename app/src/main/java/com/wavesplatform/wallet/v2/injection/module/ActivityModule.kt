@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.injection.module
 
 import com.wavesplatform.wallet.v2.injection.scope.PerActivity
 import com.wavesplatform.wallet.v2.ui.address.MyAddressQRActivity
+import com.wavesplatform.wallet.v2.ui.fingerprint.UseFingerprintActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -122,4 +123,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun createPasscodeActivity(): CreatePasscodeActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun useFingerprintActivity(): UseFingerprintActivity
 }
