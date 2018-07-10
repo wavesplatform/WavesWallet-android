@@ -809,10 +809,6 @@
     <!-- DEX -->
     <string name="dex_toolbar_title">DEX</string>
 
-    <!-- Profile -->
-    <string name="profile_toolbar_title">Profile</string>
-    <string name="profile_toolbar_logout">Logout</string>
-
     <!-- Your Address -->
     <string name="your_address_toolbar_title">Your address</string>
 
@@ -885,6 +881,7 @@
     <string name="profile_language_toolbar_title">Launguage</string>
 
     <!-- PROFILE -->
+    <string name="profile_toolbar_title">Profile</string>
     <string name="profile_general_setting">General settings</string>
     <string name="profile_general_addresses_and_keys">Addresses, keys</string>
     <string name="profile_general_addresses_book">Address book</string>
@@ -904,6 +901,7 @@
     <string name="profile_general_backup_phrase">Backup phrase</string>
     <string name="profile_general_push_notifications">Push Notifications</string>
     <string name="profile_general_delete_account_dialog_title">Delete account</string>
+    <string name="profile_general_logout">Logout of account</string>
     <string name="profile_general_delete_account_dialog_description">Deleting an account will lead to its irretrievable loss!</string>
     <string name="profile_general_delete_account_dialog_delete">DELETE</string>
     <string name="profile_general_delete_account_dialog_cancel">CANCEL</string>
@@ -960,5 +958,10 @@
     <!--Create passcode-->
     <string name="create_passcode_create_title">Create a passcode</string>
     <string name="create_passcode_verify_title">Verify your passcode</string>
+    <string name="use_fingerprint_submit_txt">Use fingerprint</string>
+    <string name="use_fingerprint_not_now">Not now</string>
+    <string name="use_fingerprint_subtitle">Use your fingerprint for faster, easier access to your account</string>
+    <string name="use_fingerprint_title">Use fingerprint to sign in?</string>
 
+    <!--Use fingerprint-->
 </resources>

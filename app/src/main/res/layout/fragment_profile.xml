@@ -504,7 +504,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/_30sdp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="@dimen/_50sdp"
@@ -516,5 +515,35 @@
             android:text="@string/profile_general_delete_account"
             android:textAllCaps="false"
             android:textColor="@color/white" />
+
+        <FrameLayout
+            android:id="@+id/button_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:drawablePadding="16dp"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="@string/profile_general_delete_account"
+            android:textAllCaps="false"
+            android:textColor="@color/white">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:drawableLeft="@drawable/ic_topbar_logout"
+                android:layout_width="wrap_content"
+                android:text="@string/profile_general_logout"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:drawablePadding="14dp"
+                android:layout_height="wrap_content" />
+
+        </FrameLayout>
     </LinearLayout>
 </ScrollView>

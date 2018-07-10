@@ -4,6 +4,7 @@
     <item
         android:id="@+id/action_logout"
         auto:showAsAction="always"
-        android:title="@string/profile_toolbar_logout" />
+        android:icon="@drawable/ic_topbar_logout"
+        android:title="@string/profile_general_logout" />
 
 </menu>
