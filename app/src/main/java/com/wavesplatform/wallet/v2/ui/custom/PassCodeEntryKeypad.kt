@@ -10,7 +10,6 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.color.v
 import kotlinx.android.synthetic.main.pass_code_entry_keyboard_layout.view.*
 import pers.victor.ext.vibrator
 import pers.victor.ext.visiableIf
