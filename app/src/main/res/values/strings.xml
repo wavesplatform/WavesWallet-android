@@ -955,6 +955,19 @@
     <string name="network_set_default">Set default</string>
     <string name="network_save">Save</string>
 
+    <!--Choose account-->
+    <string name="choose_account">Choose account</string>
+    <string name="choose_account_empty_state">Nothing Here…\nYou do not have saved accounts</string>
+    <string name="choose_account_delete_title">Delete account?</string>
+    <string name="choose_account_delete_msg">Are you sure you want to delete this account?</string>
+    <string name="choose_account_cancel">CANCEL</string>
+    <string name="choose_account_yes">YES</string>
+
+    <!--Edit account name-->
+    <string name="edit_account_name">Edit name</string>
+    <string name="edit_account_new_name">New account name</string>
+    <string name="edit_account_new_name_validation_required_error">Name is required</string>
+    <string name="edit_account_save">Save</string>
     <!--Create passcode-->
     <string name="create_passcode_create_title">Create a passcode</string>
     <string name="create_passcode_verify_title">Verify your passcode</string>

@@ -1,0 +1,119 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/img_brand"
+    android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="false">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:fontFamily="@font/roboto"
+        app:titleTextAppearance="@style/Toolbar.Title"
+        app:titleTextColor="@color/white" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="0dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_asset"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    app:srcCompat="@drawable/asset_gray_icon" />
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/image_asset"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Alex Jeff" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_name"
+                    android:layout_marginTop="2dp"
+                    android:layout_toRightOf="@+id/image_asset"
+                    android:singleLine="true"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp"
+                    tools:text="MkSuckMydickmMasdasdasdak1593x1GrfYmFdsf83skS11" />
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/view_line_3"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/dotted_line"
+                android:layerType="software" />
+
+            <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
+                android:id="@+id/til_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/til_new_name"
+                android:layout_marginBottom="@dimen/_35sdp"
+                android:textColorHint="@color/basic500"
+                app:errorEnabled="true"
+                app:hintTextAppearance="@style/TextLabel">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/edit_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/accent50"
+                    android:hint="@string/edit_account_new_name"
+                    android:inputType="text"
+                    android:paddingBottom="20dp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/basic500" />
+            </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_save"
+        style="@style/WavesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:enabled="false"
+        android:text="@string/edit_account_save" />
+</RelativeLayout>
