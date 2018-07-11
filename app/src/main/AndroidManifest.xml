@@ -251,10 +251,11 @@
         <activity
             android:name=".v2.ui.passcode.enter.EnterPasscodeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
-        <activity android:name=".v2.ui.fingerprint.UseFingerprintActivity"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
+            android:name=".v2.ui.fingerprint.UseFingerprintActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name="com.wavesplatform.wallet.v2.ui.new_account.choose_account.edit.EditAccountNameActivity"
             android:screenOrientation="portrait"
@@ -262,6 +263,17 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.wavesplatform.wallet.v2.ui.new_account.choose_account.ChooseAccountActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+
+        <activity
+            android:name=".v2.ui.home.wallet.leasing.start.StartLeasingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
     </application>

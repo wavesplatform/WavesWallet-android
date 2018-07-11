@@ -10,6 +10,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.adapter.AdapterActiveLeasing
+import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_leasing.*
 import pers.victor.ext.click
 import java.util.*
@@ -40,6 +42,10 @@ class LeasingFragment : BaseFragment(), LeasingView {
     override fun configLayoutRes(): Int = R.layout.fragment_leasing
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+
+        button_continue.click {
+            launchActivity<StartLeasingActivity> {  }
+        }
 
         container_quick_note.click {
             if (expandable_layout_hidden.isExpanded) {
