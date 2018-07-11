@@ -27,6 +27,9 @@ import android.graphics.Typeface
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.widget.TextView
+import com.mindorks.editdrawabletext.DrawablePosition
+import com.mindorks.editdrawabletext.onDrawableClickListener
+import pyxis.uzuki.live.richutilskt.utils.toast
 
 
 class EditAddressActivity : BaseActivity(), EditAddressView {
@@ -46,22 +49,20 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
 
         presenter.address = intent.getParcelableExtra<AddressTestObject>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
 
-        edit_address.setOnTouchListener(View.OnTouchListener { v, event ->
-            val DRAWABLE_RIGHT = 2
 
-            if (edit_address.compoundDrawables[DRAWABLE_RIGHT] != null) {
-                if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= edit_address.right - edit_address.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
-                        edit_address.setText("")
-
-                        return@OnTouchListener true
+        edit_address.setDrawableClickListener(object : onDrawableClickListener {
+            override fun onClick(target: DrawablePosition) {
+                when (target) {
+                    DrawablePosition.RIGHT -> {
+                        if (edit_address.tag == R.drawable.ic_deladdress_24_error_400){
+                            edit_address.setText("")
+                        }else if(edit_address.tag == R.drawable.ic_qrcode_24_basic_500){
+                            toast("Open scan QR code")
+                        }
                     }
                 }
             }
-
-            false
         })
-
 
         edit_address.addTextChangedListener {
             on({ s, start, before, count ->
@@ -69,8 +70,10 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
                 isFieldsValid()
                 if (presenter.addressFieldValid) {
                     edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_deladdress_24_error_400, 0)
+                    edit_address.tag = R.drawable.ic_deladdress_24_error_400
                 } else {
                     edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_qrcode_24_basic_500, 0)
+                    edit_address.tag = R.drawable.ic_qrcode_24_basic_500
                 }
             })
         }
@@ -82,6 +85,9 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         }
 
         fillFields()
+
+        if (edit_address.text.isEmpty()) edit_address.tag = R.drawable.ic_qrcode_24_basic_500
+        else edit_address.tag = R.drawable.ic_deladdress_24_error_400
 
         button_save.click {
             val newIntent = Intent()

@@ -29,7 +29,7 @@
         android:layout_marginEnd="16dp"
         app:errorEnabled="true">
 
-        <android.support.v7.widget.AppCompatEditText
+        <com.mindorks.editdrawabletext.EditDrawableText
             android:id="@+id/edit_address"
             android:layout_width="match_parent"
             android:textIsSelectable="false"

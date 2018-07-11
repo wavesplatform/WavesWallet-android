@@ -13,6 +13,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
 
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.mindorks.editdrawabletext.DrawablePosition
+import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -39,30 +41,35 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.add_address_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        edit_address.setOnTouchListener(View.OnTouchListener { v, event ->
-            val DRAWABLE_RIGHT = 2
+        // TODO: set Text before if need
 
-            if (edit_address.compoundDrawables[DRAWABLE_RIGHT] != null) {
-                if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= edit_address.right - edit_address.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
-                        toast("Open scan QR code")
+        if (edit_address.text.isEmpty()) edit_address.tag = R.drawable.ic_qrcode_24_basic_500
+        else edit_address.tag = R.drawable.ic_deladdress_24_error_400
 
-                        return@OnTouchListener true
+        edit_address.setDrawableClickListener(object : onDrawableClickListener {
+            override fun onClick(target: DrawablePosition) {
+                when (target) {
+                    DrawablePosition.RIGHT -> {
+                        if (edit_address.tag == R.drawable.ic_deladdress_24_error_400) {
+                            edit_address.setText("")
+                        } else if (edit_address.tag == R.drawable.ic_qrcode_24_basic_500) {
+                            toast("Open scan QR code")
+                        }
                     }
                 }
             }
-
-            false
         })
 
         edit_address.addTextChangedListener {
             on({ s, start, before, count ->
                 presenter.addressFieldValid = edit_address.text.isNotEmpty()
                 isFieldsValid()
-                if (presenter.addressFieldValid){
+                if (presenter.addressFieldValid) {
                     edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_deladdress_24_error_400, 0)
-                }else{
+                    edit_address.tag = R.drawable.ic_deladdress_24_error_400
+                } else {
                     edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_qrcode_24_basic_500, 0)
+                    edit_address.tag = R.drawable.ic_qrcode_24_basic_500
                 }
             })
         }
@@ -75,7 +82,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
 
         button_save.click {
             val intent = Intent()
-            intent. putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressTestObject(edit_address.text.toString(), edit_name.text.toString()))
+            intent.putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressTestObject(edit_address.text.toString(), edit_name.text.toString()))
             setResult(Constants.RESULT_OK, intent)
             finish()
         }
@@ -85,7 +92,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
 
     private fun configureWithType() {
         val type = intent.getIntExtra(AddressBookActivity.BUNDLE_TYPE, -1)
-        if (type == AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE){
+        if (type == AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE) {
             edit_address.setBackgroundColor(Color.TRANSPARENT)
             edit_address.isFocusable = false
             edit_address.isClickable = false
