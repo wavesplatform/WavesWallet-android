@@ -10,7 +10,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
 
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator

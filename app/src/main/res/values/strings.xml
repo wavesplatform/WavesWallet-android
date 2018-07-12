@@ -994,4 +994,26 @@
     <string name="enter_passcode_forgot_passcode">Forgot passcode?</string>
     <string name="enter_passcode_use_account_password">Use account password</string>
 
+    <!--Start leasing-->
+    <string name="start_leasing_toolbar">Start leasing</string>
+    <string name="start_leasing_balance">Balance</string>
+    <string name="start_leasing_generator">Generator</string>
+    <string name="start_leasing_note_address">Node address...</string>
+    <string name="start_leasing_choose_from_address">Choose from Address book</string>
+    <string name="start_leasing_amount">Amount</string>
+    <string name="start_leasing_use_total_balance">Use total balance</string>
+    <string name="start_leasing_0_100">0.100</string>
+    <string name="start_leasing_0_100000">0.00100000</string>
+    <string name="start_leasing_0_500000">0.00500000</string>
+
+    <!--Confirmation leasing-->
+    <string name="confirm_leasing">Confirmation</string>
+    <string name="confirm_node_address">Node address</string>
+    <string name="confirm_free">Fee</string>
+    <string name="confirm_confirm">Confirm</string>
+
+    <!--Confirm leasing success-->
+    <string name="confirm_leasing_success">Your transaction is on way!</string>
+    <string name="confirm_leasing_okay">Okay</string>
+    <string name="confirm_leasing_result_value">You have leased %1$s WAVES</string>
 </resources>

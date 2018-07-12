@@ -1,0 +1,350 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basic50"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:fontFamily="@font/roboto"
+        app:titleTextAppearance="@style/Toolbar.Title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_continue"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_marginTop="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/start_leasing_balance"
+                android:textColor="@color/basic500"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/basic50_rounded_border"
+                android:padding="14dp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_asset_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/logo_waves_48" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_asset_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_toRightOf="@+id/image_asset_icon"
+                    android:text="Waves"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_asset_is_favourite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/text_asset_name"
+                    app:srcCompat="@drawable/ic_favorite_mini" />
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_asset_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="00000000.00000000"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="24dp"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/start_leasing_generator"
+                android:textColor="@color/basic500"
+                android:textSize="12sp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/edit_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/container_qr_code"
+                        android:background="@color/white"
+                        android:drawablePadding="8dp"
+                        android:hint="@string/start_leasing_note_address"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:padding="14dp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/accent100" />
+
+                    <RelativeLayout
+                        android:id="@+id/container_qr_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="24dp"
+                            android:layout_centerVertical="true"
+                            android:background="@color/accent100" />
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/image_view_qr_code"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:padding="14dp"
+                            app:srcCompat="@drawable/ic_qrcode_24_basic_500" />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_choose_from_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/basic100_rounded"
+                    android:lineSpacingExtra="4sp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/start_leasing_choose_from_address"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_person"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/basic100_rounded"
+                    android:lineSpacingExtra="4sp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="8dp"
+                    android:text="Mike Node"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="24dp"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/start_leasing_amount"
+                android:textColor="@color/basic500"
+                android:textSize="12sp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edit_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/text_amount_asset_name"
+                        android:background="@color/white"
+                        android:hint="0"
+                        android:inputType="numberDecimal"
+                        android:padding="14dp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/accent100" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_amount_asset_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="24dp"
+                        android:lineSpacingExtra="4sp"
+                        android:text="Waves"
+                        android:textColor="@color/basic500"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="8dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_use_total_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:background="@drawable/basic100_rounded"
+                        android:lineSpacingExtra="4sp"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/start_leasing_use_total_balance"
+                        android:textColor="@color/basic500"
+                        android:textSize="12sp" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_leasing_0_100"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@drawable/basic100_rounded"
+                        android:lineSpacingExtra="4sp"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/start_leasing_0_100"
+                        android:textColor="@color/basic500"
+                        android:textSize="12sp" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_leasing_0_100000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@drawable/basic100_rounded"
+                        android:lineSpacingExtra="4sp"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/start_leasing_0_100000"
+                        android:textColor="@color/basic500"
+                        android:textSize="12sp" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_leasing_0_500000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@drawable/basic100_rounded"
+                        android:lineSpacingExtra="4sp"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/start_leasing_0_500000"
+                        android:textColor="@color/basic500"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+    </ScrollView>
+
+
+    <Button
+        android:id="@+id/button_continue"
+        style="@style/WavesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/text_free_transaction"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        android:text="@string/wallet_leasing_start_lease"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_free_transaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="14dp"
+        android:text="Transaction Fee 0.001 WAVES"
+        android:textColor="@color/disabled500"
+        android:textSize="12sp" />
+</RelativeLayout>

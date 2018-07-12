@@ -272,6 +272,17 @@
             android:name="com.wavesplatform.wallet.v2.ui.passcode.enter.use_account_password.UseAccountPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+
+        <activity
+            android:name=".v2.ui.home.wallet.leasing.start.StartLeasingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
     </application>
 
 </manifest>
