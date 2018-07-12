@@ -1,0 +1,111 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingTop="24dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fingerprint_dialog_title"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                app:fontFamily="@font/roboto_medium" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fingerprint_dialog_description"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_fingerprint_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/ic_fingerprint_sensor_48_submit_300" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_fingerprint_state"
+                    android:layout_width="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="14dp"
+                    android:text="@string/fingerprint_dialog_hint"
+                    android:textColor="@color/disabled500" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:layout_marginEnd="8dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:text="@string/fingerprint_dialog_cancel"
+                android:textAllCaps="true"
+                android:textColor="@color/submit300"
+                app:fontFamily="@font/roboto_medium" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_enter_passcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:text="@string/fingerprint_dialog_enter_passcode"
+                android:textAllCaps="true"
+                android:textColor="@color/submit300"
+                app:fontFamily="@font/roboto_medium" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</FrameLayout>

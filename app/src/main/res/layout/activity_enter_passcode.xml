@@ -39,7 +39,6 @@
 
     <com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
         android:id="@+id/pass_keypad"
-        app:is_fingerprint_available="true"
         android:layout_marginBottom="24dp"
         android:layout_centerVertical="true"
         android:layout_below="@+id/pdl_dots"

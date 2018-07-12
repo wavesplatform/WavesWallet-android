@@ -979,6 +979,16 @@
     <string name="use_fingerprint_subtitle">Use your fingerprint for faster, easier access to your account</string>
     <string name="use_fingerprint_title">Use fingerprint to sign in?</string>
 
+    <!--Fingerprint dialog-->
+    <string name="fingerprint_dialog_title">Sign in</string>
+    <string name="fingerprint_dialog_description">Confirm fingerprint to continue</string>
+    <string name="fingerprint_dialog_hint">Touch sensor</string>
+    <string name="fingerprint_dialog_not_recognized">Not recognized</string>
+    <string name="fingerprint_dialog_recognized">Fingerprint recognized</string>
+    <string name="fingerprint_dialog_too_many_attempts">Too many attempts.\nTry again later.</string>
+    <string name="fingerprint_dialog_cancel">CANCEL</string>
+    <string name="fingerprint_dialog_enter_passcode">ENTER PASSCODE</string>
+
     <!--Enter passcode-->
     <string name="enter_passcode_title">Enter Passcode</string>
     <string name="enter_passcode_forgot_passcode">Forgot passcode?</string>

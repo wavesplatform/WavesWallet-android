@@ -52,7 +52,6 @@
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:layout_marginLeft="16dp"
-            android:clickable="true"
             android:elevation="0dp"
             android:foreground="?attr/selectableItemBackground"
             app:cardBackgroundColor="@color/white"

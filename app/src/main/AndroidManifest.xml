@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="com.fingerprints.service.ACCESS_FINGERPRINT_MANAGER" />
+    <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
 
     <application
         android:name=".BlockchainApplication"
@@ -250,20 +252,26 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.passcode.enter.EnterPasscodeActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
-        <activity android:name=".v2.ui.fingerprint.UseFingerprintActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.new_account.choose_account.edit.EditAccountNameActivity"
+            android:name=".v2.ui.fingerprint.UseFingerprintActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
+            android:name=".v2.ui.choose_account.edit.EditAccountNameActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.new_account.choose_account.ChooseAccountActivity"
+            android:name=".v2.ui.choose_account.ChooseAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+        <activity
+            android:name="com.wavesplatform.wallet.v2.ui.passcode.enter.use_account_password.UseAccountPasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.new_account.choose_account
+package com.wavesplatform.wallet.v2.ui.choose_account
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter

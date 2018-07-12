@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.new_account.choose_account
+package com.wavesplatform.wallet.v2.ui.choose_account
 
 import android.content.DialogInterface
 import android.content.Intent
@@ -16,7 +16,8 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity.Companion.REQUEST_EDIT_ADDRESS
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
-import com.wavesplatform.wallet.v2.ui.new_account.choose_account.edit.EditAccountNameActivity
+import com.wavesplatform.wallet.v2.ui.choose_account.edit.EditAccountNameActivity
+import com.wavesplatform.wallet.v2.ui.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activit_choose_account.*
@@ -54,7 +55,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         presenter.getAddresses()
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-
+            launchActivity<EnterPasscodeActivity> {  }
         }
 
         adapter.chooseAccountOnClickListener = this

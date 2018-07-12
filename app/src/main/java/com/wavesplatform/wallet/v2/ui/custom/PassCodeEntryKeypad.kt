@@ -116,6 +116,11 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         listener?.onFingerprintClicked()
     }
 
+    fun isFingerprintAvailable(enable : Boolean){
+        isFingerprintAvailable = enable
+        button_fingerprint.visiableIf { isFingerprintAvailable }
+    }
+
     override fun onClick(v: View) {
         when (v.id) {
             R.id.button0, R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9 -> padClicked(v)

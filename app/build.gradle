@@ -207,7 +207,7 @@ dependencies {
 
     implementation 'com.github.rubensousa:bottomsheetbuilder:1.6.1'
     implementation 'com.github.MindorksOpenSource:EditDrawableText:1.1.0'
-
+    implementation 'com.wei.android.lib:fingerprintidentify:1.2.1'
 
     implementation 'com.github.vihtarb:tooltip:0.1.9'
     implementation 'com.madgag.spongycastle:core:1.52.0.0'
