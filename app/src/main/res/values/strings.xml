@@ -1029,4 +1029,11 @@
     <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code. Scan the code with your camera.</string>
     <string name="import_account_scan_pairing_code">Scan pairing code</string>
     <string name="import_account_enter_seed_manually">Enter seed manually</string>
+
+
+    <!--Qr scanner-->
+    <string name="qr_scanner_toolbar_title">Scan pairing code</string>
+    <string name="qr_scanner_cancel">Cancel</string>
+    <string name="qr_scanner_flash_on">Flash on</string>
+    <string name="qr_scanner_flash_off">Flash off</string>
 </resources>

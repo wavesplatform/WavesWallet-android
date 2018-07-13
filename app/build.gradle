@@ -222,6 +222,7 @@ dependencies {
 
     implementation 'ren.yale.android:retrofitcachelibrx2:1.0.7'
     implementation 'com.github.franmontiel:LocaleChanger:0.9.2'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 //
     implementation 'org.fingerlinks.mobile.android:Navigator:0.1.5'
 

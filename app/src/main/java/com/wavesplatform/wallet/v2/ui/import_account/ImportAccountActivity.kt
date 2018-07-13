@@ -16,7 +16,13 @@ import com.wavesplatform.wallet.v2.util.makeLinks
 import kotlinx.android.synthetic.main.activity_import_account.*
 import javax.inject.Inject
 import android.text.TextPaint
+import android.util.Log
+import com.google.zxing.integration.android.IntentIntegrator
+import com.wavesplatform.wallet.v2.ui.qr_scanner.CustomScannerActivity
 import pers.victor.ext.click
+import com.google.zxing.integration.android.IntentResult
+
+
 
 
 class ImportAccountActivity : BaseActivity(), ImportAccountView {
@@ -27,6 +33,10 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
 
     @ProvidePresenter
     fun providePresenter(): ImportAccountPresenter = presenter
+
+    companion object {
+        var REQUEST_SCAN_QR_CODE = 55
+    }
 
     override fun configLayoutRes() = R.layout.activity_import_account
 
@@ -54,7 +64,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
         text_first_title.makeLinks(arrayOf(getString(R.string.import_account_login_at_site_key)), arrayOf(siteClick))
 
         button_scan.click {
-
+            IntentIntegrator(this).setRequestCode(REQUEST_SCAN_QR_CODE).setOrientationLocked(true).setCaptureActivity(CustomScannerActivity::class.java).initiateScan();
         }
 
         button_enter_manually.click {
@@ -76,5 +86,28 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
     fun openUrlWithIntent(url: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browserIntent)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        if (requestCode != REQUEST_SCAN_QR_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data)
+            return
+        }
+        when (requestCode) {
+            REQUEST_SCAN_QR_CODE -> {
+                val result = IntentIntegrator.parseActivityResult(resultCode, data)
+
+                if (result.contents == null) {
+                    Log.d("MainActivity", "Cancelled scan")
+                    Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+                } else {
+                    Log.d("MainActivity", "Scanned")
+                    Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+
     }
 }
