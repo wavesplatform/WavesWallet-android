@@ -36,6 +36,7 @@ import com.wavesplatform.wallet.v2.ui.receive.ReceiveActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
+import com.wavesplatform.wallet.v2.ui.your_assets.YourAssetsActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -178,6 +179,10 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun protectAccountActivity(): ProtectAccountActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun yourAssetsActivity(): YourAssetsActivity
 
     @PerActivity
     @ContributesAndroidInjector

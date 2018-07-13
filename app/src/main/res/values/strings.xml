@@ -1051,6 +1051,9 @@
     <string name="quick_action_exchange">Exchange</string>
     <string name="quick_action_coming_soon">Coming soon</string>
 
+    <!--Your assets-->
+    <string name="your_assets_toolbar_title">Your assets</string>
+
 
     <!--Receive-->
     <string name="receive_toolbar">Receive</string>

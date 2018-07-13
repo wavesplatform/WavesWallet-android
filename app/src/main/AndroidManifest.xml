@@ -33,9 +33,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.Splash">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -253,6 +253,7 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.passcode.enter.EnterPasscodeActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
@@ -294,14 +295,19 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.import_account.protect_account.ProtectAccountActivity"
+            android:name=".v2.ui.import_account.protect_account.ProtectAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
+            android:name=".v2.ui.your_assets.YourAssetsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".v2.ui.receive.ReceiveActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"/>
     </application>
 
 </manifest>

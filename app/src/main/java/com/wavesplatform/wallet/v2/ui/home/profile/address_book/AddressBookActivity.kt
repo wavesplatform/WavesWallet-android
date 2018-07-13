@@ -21,13 +21,18 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View.OnTouchListener
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.mindorks.editdrawabletext.DrawablePosition
+import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.gone
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import pyxis.uzuki.live.richutilskt.utils.toast
 import java.util.concurrent.TimeUnit
 
 
@@ -61,31 +66,33 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
 
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.address_book_toolbar_title), R.drawable.ic_toolbar_back_black)
 
+        eventSubscriptions.add(RxTextView.textChanges(edit_search)
+                .skipInitialValue()
+                .map({
+                    if (it.isNotEmpty()) {
+                        edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, R.drawable.ic_clear_24_basic_500, 0)
+                    } else {
+                        edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, 0, 0)
+                    }
+                    return@map it.toString()
+                })
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    adapter.filter(it)
+                }))
 
-        edit_search.addTextChangedListener {
-            on { s, start, before, count ->
-                if (edit_search.text.isNotEmpty()) {
-                    edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, R.drawable.ic_clear_24_basic_500, 0)
-                } else {
-                    edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, 0, 0)
-                }
-            }
-        }
 
-        edit_search.setOnTouchListener(OnTouchListener { v, event ->
-            val DRAWABLE_RIGHT = 2
 
-            if (edit_search.compoundDrawables[DRAWABLE_RIGHT] != null) {
-                if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= edit_search.right - edit_search.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
+        edit_search.setDrawableClickListener(object : onDrawableClickListener {
+            override fun onClick(target: DrawablePosition) {
+                when (target) {
+                    DrawablePosition.RIGHT -> {
                         edit_search.text = null
-
-                        return@OnTouchListener true
                     }
                 }
             }
-
-            false
         })
 
         recycle_addresses.layoutManager = LinearLayoutManager(this)
