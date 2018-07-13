@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.new_account.choose_account.edit
+package com.wavesplatform.wallet.v2.ui.choose_account.edit
 
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 

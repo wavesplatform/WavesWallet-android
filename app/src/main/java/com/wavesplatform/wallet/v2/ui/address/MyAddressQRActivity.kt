@@ -53,7 +53,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
             text_address.copyToClipboard()
         }
 
-        presenter.generateQRCode(text_address.text.toString(), dp2px(240))
+        presenter.generateQRCode(text_address.text.toString(), resources.getDimension(R.dimen._200sdp).toInt())
     }
 
     override fun showQRCode(qrCode: Bitmap?) {

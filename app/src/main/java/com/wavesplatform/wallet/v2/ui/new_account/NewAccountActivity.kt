@@ -39,6 +39,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     @Inject
     @InjectPresenter
     lateinit var presenter: NewAccountPresenter
+    lateinit var validator: Validator
 
     @ProvidePresenter
     fun providePresenter(): NewAccountPresenter = presenter
@@ -48,23 +49,23 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.new_account_toolbar_title), R.drawable.ic_toolbar_back_black)
         isFieldsValid()
+        validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         button_create_account.click {
             launchActivity<SecretPhraseActivity> { }
         }
 
 
-        var nameValidation = Validation(til_account_name)
+        val nameValidation = Validation(til_account_name)
                 .and(NotEmptyRule(R.string.new_account_account_name_validation_required_error))
                 .and(MaxRule(20, R.string.new_account_account_name_validation_length_error))
 
-        var passwordValidation = Validation(til_create_password)
+        val passwordValidation = Validation(til_create_password)
                 .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
 
         edit_account_name.addTextChangedListener {
             on({ s, start, before, count ->
-                Validator.with(applicationContext)
-                        .setMode(Mode.CONTINUOUS)
+                validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
                                 presenter.accountNameFieldValid = true
@@ -80,8 +81,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         }
         edit_create_password.addTextChangedListener {
             on({ s, start, before, count ->
-                Validator.with(applicationContext)
-                        .setMode(Mode.CONTINUOUS)
+                validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
                                 presenter.createPasswrodFieldValid = true
@@ -93,6 +93,22 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                                 isFieldsValid()
                             }
                         }, passwordValidation)
+                if (edit_confirm_password.text.isNotEmpty()){
+                    val confirmPasswordValidation = Validation(til_confirm_password)
+                            .and(EqualRule(edit_create_password.text.toString(), R.string.new_account_confirm_password_validation_match_error))
+                    validator
+                            .validate(object : Validator.OnValidateListener {
+                                override fun onValidateSuccess(values: List<String>) {
+                                    presenter.confirmPasswordFieldValid = true
+                                    isFieldsValid()
+                                }
+
+                                override fun onValidateFailed() {
+                                    presenter.confirmPasswordFieldValid = false
+                                    isFieldsValid()
+                                }
+                            }, confirmPasswordValidation)
+                }
             })
         }
 
@@ -100,8 +116,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
             on({ s, start, before, count ->
                 var confirmPasswordValidation = Validation(til_confirm_password)
                         .and(EqualRule(edit_create_password.text.toString(), R.string.new_account_confirm_password_validation_match_error))
-                Validator.with(applicationContext)
-                        .setMode(Mode.CONTINUOUS)
+                validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
                                 presenter.confirmPasswordFieldValid = true

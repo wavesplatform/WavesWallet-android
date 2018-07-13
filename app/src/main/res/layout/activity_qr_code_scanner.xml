@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/zxing_barcode_scanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:zxing_scanner_layout="@layout/custom_barcode_scanner"/>
+
+    <android.support.v7.widget.Toolbar
+        android:fitsSystemWindows="true"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/qr_scanner_toolbar_title"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_flash"
+            android:layout_width="wrap_content"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_height="wrap_content"
+            android:tag="@string/qr_scanner_flash_off"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            app:srcCompat="@drawable/ic_topbar_flash_on" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <View
+        android:layout_centerInParent="true"
+        android:layout_width="252.5dp"
+        android:background="@drawable/shape_rect_outline_white"
+        android:layout_height="252.5dp"/>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="17dp"
+        android:stateListAnimator="@null"
+        android:text="@string/qr_scanner_cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+
+</RelativeLayout>

@@ -32,8 +32,6 @@
         android:layout_toEndOf="@+id/image_flag"
         tools:text="MkSuckMydickmMak1593x1GrfYmFdsf83skS11" />
 
-
-
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_edit"
         android:layout_width="wrap_content"
@@ -43,5 +41,17 @@
         android:background="@null"
         android:layout_centerVertical="true"
         app:srcCompat="@drawable/ic_edit_address_submit_300"/>
+
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/checkbox_choose"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:clickable="false"
+        android:background="@null"
+        android:layout_centerVertical="true"
+        android:button="@drawable/selector_checkbox" />
 
 </RelativeLayout>

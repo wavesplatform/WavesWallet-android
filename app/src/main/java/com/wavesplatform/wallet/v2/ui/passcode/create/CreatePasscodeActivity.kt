@@ -12,7 +12,9 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.fingerprint.UseFingerprintActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import kotlinx.android.synthetic.main.activity_create_passcode.*
 import pyxis.uzuki.live.richutilskt.utils.toast
 
@@ -22,6 +24,7 @@ class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
     @Inject
     @InjectPresenter
     lateinit var presenter: CreatePasscodePresenter
+    lateinit var fingerprintIdentify: FingerprintIdentify
 
     @ProvidePresenter
     fun providePresenter(): CreatePasscodePresenter = presenter
@@ -34,6 +37,8 @@ class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
 
         presenter.step = CreatePassCodeStep.CREATE
 
+        fingerprintIdentify = FingerprintIdentify(this)
+
         pass_keypad.attachDots(pdl_dots)
         pass_keypad.setPadClickedListener(object : PassCodeEntryKeypad.OnPinEntryPadClickedListener{
             override fun onPassCodeEntered(passCode: String) {
@@ -42,7 +47,11 @@ class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
                     moveToVerifyStep()
                 }else if (presenter.step == CreatePassCodeStep.VERIFY){
                     if (presenter.passCode == passCode){
-                        launchActivity<UseFingerprintActivity> {  }
+                        if (fingerprintIdentify.isFingerprintEnable){
+                            launchActivity<UseFingerprintActivity> {  }
+                        }else{
+                            launchActivity<MainActivity>(clear = true) {  }
+                        }
                     }else{
                         pass_keypad.passCodesNotMatches()
                     }

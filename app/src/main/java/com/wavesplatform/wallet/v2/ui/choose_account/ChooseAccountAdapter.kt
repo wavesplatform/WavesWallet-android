@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.new_account.choose_account
+package com.wavesplatform.wallet.v2.ui.choose_account
 
 import android.widget.ImageView
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -20,21 +20,17 @@ class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressTestO
                 .setText(R.id.text_name, item.name)
 
         val swipeLayout = helper.getView<SwipeLayout>(R.id.swipe_layout)
-        swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown)
+        swipeLayout.showMode = SwipeLayout.ShowMode.LayDown
 
         helper.getView<ImageView>(R.id.image_edit_address).click {
             swipeLayout.close(true)
 
-            chooseAccountOnClickListener.notNull {
-                it.onEditClicked(data.indexOf(item))
-            }
+            chooseAccountOnClickListener?.onEditClicked(data.indexOf(item))
         }
         helper.getView<ImageView>(R.id.image_delete_address).click {
             swipeLayout.close(true)
 
-            chooseAccountOnClickListener.notNull {
-                it.onDeleteClicked()
-            }
+            chooseAccountOnClickListener?.onDeleteClicked()
         }
     }
 

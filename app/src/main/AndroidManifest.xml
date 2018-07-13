@@ -13,10 +13,13 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="com.fingerprints.service.ACCESS_FINGERPRINT_MANAGER" />
+    <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
 
     <application
         android:name=".BlockchainApplication"
         android:allowBackup="false"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -257,25 +260,43 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.new_account.choose_account.edit.EditAccountNameActivity"
+            android:name=".v2.ui.choose_account.edit.EditAccountNameActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.wavesplatform.wallet.v2.ui.new_account.choose_account.ChooseAccountActivity"
+            android:name=".v2.ui.choose_account.ChooseAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-
+        <activity
+            android:name=".v2.ui.passcode.enter.use_account_password.UseAccountPasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.home.wallet.leasing.start.StartLeasingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="adjustNothing" />
-
         <activity
             android:name=".v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+        <activity
+            android:name=".v2.ui.import_account.ImportAccountActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
+            android:name=".v2.ui.qr_scanner.QrCodeScannerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+        <activity
+            android:name=".v2.ui.import_account.enter_seed.EnterSeedManuallyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
+            android:name="com.wavesplatform.wallet.v2.ui.import_account.protect_account.ProtectAccountActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
 
         <activity
             android:name=".v2.ui.receive.ReceiveActivity"

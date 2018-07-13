@@ -127,10 +127,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorEnabled="true"
-            android:layout_marginTop="-12dp"
+            android:layout_marginTop="6dp"
             android:textColorHint="@color/basic500"
             app:hintTextAppearance="@style/TextLabel"
-            app:passwordToggleDrawable="@drawable/ic_eyeopen_24"
+            app:passwordToggleDrawable="@drawable/show_password_selector"
             app:passwordToggleEnabled="true">
 
             <android.support.v7.widget.AppCompatEditText
@@ -151,10 +151,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorEnabled="true"
-            android:layout_marginTop="-12dp"
+            android:layout_marginTop="6dp"
             android:textColorHint="@color/basic500"
             app:hintTextAppearance="@style/TextLabel"
-            app:passwordToggleDrawable="@drawable/ic_eyeopen_24"
+            app:passwordToggleDrawable="@drawable/show_password_selector"
             app:passwordToggleEnabled="true">
 
             <android.support.v7.widget.AppCompatEditText

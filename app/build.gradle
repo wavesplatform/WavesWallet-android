@@ -207,7 +207,7 @@ dependencies {
 
     implementation 'com.github.rubensousa:bottomsheetbuilder:1.6.1'
     implementation 'com.github.MindorksOpenSource:EditDrawableText:1.1.0'
-
+    implementation 'com.wei.android.lib:fingerprintidentify:1.2.1'
 
     implementation 'com.github.vihtarb:tooltip:0.1.9'
     implementation 'com.madgag.spongycastle:core:1.52.0.0'
@@ -222,6 +222,7 @@ dependencies {
 
     implementation 'ren.yale.android:retrofitcachelibrx2:1.0.7'
     implementation 'com.github.franmontiel:LocaleChanger:0.9.2'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 //
     implementation 'org.fingerlinks.mobile.android:Navigator:0.1.5'
 

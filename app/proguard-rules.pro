@@ -164,3 +164,9 @@
 -keepclassmembers class com.wavesplatform.wallet.v1.data.services.** {*;}
 -keep class com.wavesplatform.wallet.v1.data.access.** {*;}
 -keepclassmembers class com.wavesplatform.wallet.v1.data.access.** {*;}
+
+# MeiZuFingerprint
+-keep class com.fingerprints.service.** { *; }
+
+# SmsungFingerprint
+-keep class com.samsung.android.sdk.** { *; }
