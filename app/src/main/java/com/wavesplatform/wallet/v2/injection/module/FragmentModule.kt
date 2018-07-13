@@ -9,7 +9,10 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
+import com.wavesplatform.wallet.v2.ui.receive.bank.BankFragment
+import com.wavesplatform.wallet.v2.ui.receive.card.CardFragment
 import com.wavesplatform.wallet.v2.ui.receive.cryptocurrency.СryptocurrencyFragment
+import com.wavesplatform.wallet.v2.ui.receive.invoice.InvoiceFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -51,4 +54,16 @@ abstract class FragmentModule {
     @PerFragment
     @ContributesAndroidInjector
     internal abstract fun cryptocurrencyFragment(): СryptocurrencyFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun invoiceFragment(): InvoiceFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun cardFragment(): CardFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun bankFragment(): BankFragment
 }

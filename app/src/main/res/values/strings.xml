@@ -1065,4 +1065,20 @@
     <string name="receive_will_send">If you will send less than 0.001 BTC, you will lose that money.</string>
     <string name="receive_will_send_only_btc">Send only BTC to this deposit address</string>
     <string name="receive_will_send_other_currency">Sending any other currency to this address may result in the loss of your deposit.</string>
+    <string name="receive_amount">Amount</string>
+    <string name="receive_payment_method">Payment method</string>
+    <string name="receive_minimum_30">The minimum is 30 USD, the maximum is 200 USD</string>
+    <string name="receive_makink_payment">For making a payment from your card you will be redirected to the merchant\'s website</string>
+    <string name="receive_not_verified">Your account is not verified</string>
+    <string name="receive_step_1">Step 1</string>
+    <string name="receive_step_1_msg">In order to deposit Euro directly from your bank account through SEPA transfer you must get verified by our partner \nIDNow.eu</string>
+    <string name="receive_step_1_msg_link">IDNow.eu</string>
+    <string name="receive_step_url_link">"https://www.idnow.eu/"</string>
+    <string name="receive_step_2">Step 2</string>
+    <string name="receive_step_2_msg">After you go through the verification you will receive an email with further instructions</string>
+    <string name="receive_dont_accept_international">We don\'t accept international wire transfers from US Citizens or from USA Banks</string>
+    <string name="receive_list_of_countries">List of eligible countries and IDs</string>
+    <string name="receive_get_verified">Get verified</string>
+    <string name="receive_contact_msg">In case of problems with verification or payment processing, please contact the Coinomat support team — support@coinomat.com</string>
+    <string name="receive_contact_msg_key">support@coinomat.com</string>
 </resources>

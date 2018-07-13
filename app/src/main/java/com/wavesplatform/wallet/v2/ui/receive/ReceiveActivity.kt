@@ -7,11 +7,7 @@ import android.view.View
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_receive.*
-import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
-import pers.victor.ext.click
 import pers.victor.ext.dp2px
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
 
 class ReceiveActivity : BaseActivity(), ReceiveView {
 
