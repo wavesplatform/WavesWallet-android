@@ -27,6 +27,7 @@ import com.wavesplatform.wallet.v2.ui.passcode.create.CreatePasscodeActivity
 import com.wavesplatform.wallet.v2.ui.new_account.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.new_account.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.passcode.enter.EnterPasscodeActivity
+import com.wavesplatform.wallet.v2.ui.receive.ReceiveActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
@@ -152,4 +153,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun confirmationLeasingActivity(): ConfirmationLeasingActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun receiveActivity(): ReceiveActivity
 }

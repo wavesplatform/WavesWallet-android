@@ -276,6 +276,11 @@
             android:name=".v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+
+        <activity
+            android:name=".v2.ui.receive.ReceiveActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
     </application>
 
 </manifest>

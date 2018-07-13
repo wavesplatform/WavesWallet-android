@@ -1006,4 +1006,18 @@
     <string name="confirm_leasing_success">Your transaction is on way!</string>
     <string name="confirm_leasing_okay">Okay</string>
     <string name="confirm_leasing_result_value">You have leased %1$s WAVES</string>
+
+    <!--Receive-->
+    <string name="receive_toolbar">Receive</string>
+    <string name="receive_cryptocurrency">Сryptocurrency</string>
+    <string name="receive_invoice">Invoice</string>
+    <string name="receive_card">Card</string>
+    <string name="receive_bank">Bank</string>
+    <string name="receive_asset">Asset</string>
+    <string name="receive_sellect_asset">Select your asset or from the list</string>
+    <string name="receive_continue">Continue</string>
+    <string name="receive_minimum_amount">The minimum amount of deposit is 0.001 BTC</string>
+    <string name="receive_will_send">If you will send less than 0.001 BTC, you will lose that money.</string>
+    <string name="receive_will_send_only_btc">Send only BTC to this deposit address</string>
+    <string name="receive_will_send_other_currency">Sending any other currency to this address may result in the loss of your deposit.</string>
 </resources>
