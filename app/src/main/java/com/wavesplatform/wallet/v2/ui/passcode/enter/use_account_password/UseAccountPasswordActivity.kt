@@ -26,6 +26,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
     @Inject
     @InjectPresenter
     lateinit var presenter: UseAccountPasswordPresenter
+    lateinit var validator: Validator
 
     @ProvidePresenter
     fun providePresenter(): UseAccountPasswordPresenter = presenter
@@ -36,14 +37,14 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, icon = R.drawable.ic_toolbar_back_black)
 
+        validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         var accountPasswordValidation = Validation(til_account_password)
                 .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
 
         edit_account_password.addTextChangedListener {
             on({ s, start, before, count ->
-                Validator.with(applicationContext)
-                        .setMode(Mode.CONTINUOUS)
+                validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
                                 button_sign_in.isEnabled = true
@@ -57,7 +58,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         }
 
         button_sign_in.click {
-            launchActivity<MainActivity> {  }
+            launchActivity<MainActivity>(clear = true) {  }
         }
     }
 

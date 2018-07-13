@@ -51,7 +51,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint
         pass_keypad.setPadClickedListener(
                 object : PassCodeEntryKeypad.OnPinEntryPadClickedListener {
                     override fun onPassCodeEntered(passCode: String) {
-                        launchActivity<MainActivity> { }
+                        launchActivity<MainActivity>(clear = true) { }
                     }
 
                     override fun onFingerprintClicked() {
@@ -69,7 +69,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint
         mFingerprintDialog.onSuccessRecognizedFingerprint()
         runDelayed(1500, {
             mFingerprintDialog.dismiss()
-            launchActivity<MainActivity> { }
+            launchActivity<MainActivity>(clear = true) { }
         })
     }
 

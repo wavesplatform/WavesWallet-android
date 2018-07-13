@@ -31,11 +31,11 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         button_use_fingerprint.click{
-            launchActivity<MainActivity> {  }
+            launchActivity<MainActivity>(clear = true) {  }
         }
 
         button_do_it_later.click{
-            launchActivity<MainActivity> {  }
+            launchActivity<MainActivity>(clear = true) {  }
         }
     }
 

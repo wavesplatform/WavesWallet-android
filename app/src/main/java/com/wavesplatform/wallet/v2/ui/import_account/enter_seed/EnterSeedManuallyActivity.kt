@@ -10,13 +10,15 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
 
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.import_account.protect_account.ProtectAccountActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
-import io.github.anderscheow.validator.rules.common.MinRule
 import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.activity_enter_seed_manually.*
 import pers.victor.ext.addTextChangedListener
+import pers.victor.ext.click
 
 
 class EnterSeedManuallyActivity : BaseActivity(), EnterSeedManuallyView {
@@ -24,6 +26,7 @@ class EnterSeedManuallyActivity : BaseActivity(), EnterSeedManuallyView {
     @Inject
     @InjectPresenter
     lateinit var presenter: EnterSeedManuallyPresenter
+    lateinit var validator: Validator
 
     @ProvidePresenter
     fun providePresenter(): EnterSeedManuallyPresenter = presenter
@@ -34,14 +37,13 @@ class EnterSeedManuallyActivity : BaseActivity(), EnterSeedManuallyView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, title = getString(R.string.enter_seed_manually_toolbar_title), icon = R.drawable.ic_toolbar_back_black)
 
-
+        validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
         val seedValidation = Validation(til_seed)
                 .and(NotEmptyRule(" "))
 
         edit_seed.addTextChangedListener {
             on({ s, start, before, count ->
-                Validator.with(applicationContext)
-                        .setMode(Mode.CONTINUOUS)
+                validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
                                 button_continue.isEnabled = true
@@ -52,6 +54,12 @@ class EnterSeedManuallyActivity : BaseActivity(), EnterSeedManuallyView {
                             }
                         }, seedValidation)
             })
+        }
+
+        button_continue.click {
+            launchActivity<ProtectAccountActivity> {
+                putExtra(ProtectAccountActivity.BUNDLE_ACCOUNT_ADDRESS, "MkSuckMydickmMak1593x1GrfYmFdsf83skS11")
+            }
         }
 
     }

@@ -19,6 +19,7 @@ import android.text.TextPaint
 import android.util.Log
 import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.v2.ui.import_account.enter_seed.EnterSeedManuallyActivity
+import com.wavesplatform.wallet.v2.ui.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import pers.victor.ext.click
@@ -103,6 +104,11 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
                 } else {
                     Log.d("MainActivity", "Scanned")
                     Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
+
+                    // TODO: Change to real scanned address
+                    launchActivity<ProtectAccountActivity> {
+                        putExtra(ProtectAccountActivity.BUNDLE_ACCOUNT_ADDRESS, "MkSuckMydickmMak1593x1GrfYmFdsf83skS11")
+                    }
                 }
             }
         }

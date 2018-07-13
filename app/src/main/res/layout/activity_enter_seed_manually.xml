@@ -33,6 +33,7 @@
             android:id="@+id/edit_seed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="5"
             android:backgroundTint="@color/accent50"
             android:hint="@string/enter_seed_manually_hint"
             android:imeOptions="actionDone"
@@ -63,8 +64,6 @@
             android:layout_height="8dp"
             android:layout_marginStart="14dp"
             android:layout_gravity="center_vertical"
-            android:layout_below="@+id/til_seed"
-            android:layout_toEndOf="@+id/image_asset"
             android:background="@drawable/skeleton_text_basic_100" />
 
     </LinearLayout>
@@ -74,6 +73,7 @@
         android:id="@+id/button_continue"
         style="@style/WavesButton"
         android:layout_width="match_parent"
+        android:enabled="false"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="24dp"

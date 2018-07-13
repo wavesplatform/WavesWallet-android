@@ -28,6 +28,7 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
     @Inject
     @InjectPresenter
     lateinit var presenter: EditAccountNamePresenter
+    lateinit var validator: Validator
 
     @ProvidePresenter
     fun providePresenter(): EditAccountNamePresenter = presenter
@@ -39,6 +40,7 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
             onBackPressed()
 
         }, true, getString(R.string.edit_account_name), R.drawable.ic_toolbar_back_white)
+        validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         presenter.account = intent.getParcelableExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
 
@@ -64,8 +66,7 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
 
         edit_name.addTextChangedListener {
             on({ s, start, before, count ->
-                Validator.with(applicationContext)
-                        .setMode(Mode.CONTINUOUS)
+                validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
                                 presenter.accountNameFieldValid = true

@@ -24,6 +24,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
     @Inject
     @InjectPresenter
     lateinit var presenter: ChangePasswordPresenter
+    lateinit var validator: Validator
 
     @ProvidePresenter
     fun providePresenter(): ChangePasswordPresenter = presenter
@@ -34,18 +35,18 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.change_password_toolbar_title), R.drawable.ic_toolbar_back_black)
 
+        validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
-        var oldPasswordValidation = Validation(til_old_password)
+        val oldPasswordValidation = Validation(til_old_password)
                 .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
 
 
-        var newPasswordValidation = Validation(til_new_password)
+        val newPasswordValidation = Validation(til_new_password)
                 .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
 
         edit_old_password.addTextChangedListener {
             on({ s, start, before, count ->
-                Validator.with(applicationContext)
-                        .setMode(Mode.CONTINUOUS)
+                validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
                                 presenter.oldPasswordFieldValid = true
@@ -61,8 +62,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         }
         edit_new_password.addTextChangedListener {
             on({ s, start, before, count ->
-                Validator.with(applicationContext)
-                        .setMode(Mode.CONTINUOUS)
+                validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
                                 presenter.newPasswordFieldValid = true
@@ -81,8 +81,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
             on({ s, start, before, count ->
                 var confirmPasswordValidation = Validation(til_confirm_password)
                         .and(EqualRule(edit_new_password.text.toString(), R.string.new_account_confirm_password_validation_match_error))
-                Validator.with(applicationContext)
-                        .setMode(Mode.CONTINUOUS)
+                validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
                                 presenter.confirmPasswordFieldValid = true
