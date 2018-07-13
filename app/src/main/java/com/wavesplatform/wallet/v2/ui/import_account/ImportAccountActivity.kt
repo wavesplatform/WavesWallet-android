@@ -88,7 +88,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
         startActivity(browserIntent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode != REQUEST_SCAN_QR_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
             // This is important, otherwise the result will not be passed to the fragment
             super.onActivityResult(requestCode, resultCode, data)
@@ -100,11 +100,9 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
 
                 if (result.contents == null) {
                     Log.d("MainActivity", "Cancelled scan")
-                    Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
                 } else {
                     Log.d("MainActivity", "Scanned")
                     Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
-
                     // TODO: Change to real scanned address
                     launchActivity<ProtectAccountActivity> {
                         putExtra(ProtectAccountActivity.BUNDLE_ACCOUNT_ADDRESS, "MkSuckMydickmMak1593x1GrfYmFdsf83skS11")
@@ -112,7 +110,6 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
                 }
             }
         }
-
-
     }
+
 }

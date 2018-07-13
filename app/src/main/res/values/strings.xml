@@ -1043,4 +1043,12 @@
     <string name="enter_seed_manually_seed_validation_required_error">Seed is required</string>
     <string name="enter_seed_manually_continue">Continue</string>
     <string name="enter_seed_manually_hint">Your seed is the 15 words you saved when creating your account</string>
+
+
+    <!--Quick action dialog-->
+    <string name="quick_action_send">Send</string>
+    <string name="quick_action_receive">Receive</string>
+    <string name="quick_action_exchange">Exchange</string>
+    <string name="quick_action_coming_soon">Coming soon</string>
+
 </resources>

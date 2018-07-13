@@ -94,10 +94,12 @@ class QrCodeScannerActivity : BaseActivity(), QrCodeScannerView,
 
     override fun onTorchOn() {
         image_flash.tag = getString(R.string.qr_scanner_flash_on)
+        image_flash.setImageResource(R.drawable.ic_topbar_flash_off)
     }
 
     override fun onTorchOff() {
         image_flash.tag = getString(R.string.qr_scanner_flash_off)
+        image_flash.setImageResource(R.drawable.ic_topbar_flash_on)
     }
 
 }

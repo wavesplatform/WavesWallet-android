@@ -14,6 +14,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
+import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.activity_main_v2.*
@@ -62,7 +63,13 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
-
+        when (tab?.position) {
+        // Quick action
+            2 -> {
+                val quickActionDialog = QuickActionBottomSheetFragment()
+                quickActionDialog.show(supportFragmentManager, quickActionDialog::class.java.simpleName)
+            }
+        }
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -70,7 +77,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
-//        toolbar_general.setMargins(0, 0, 0, 0)
         when (tab?.position) {
 //            Wallet screen
             0 -> {
@@ -81,6 +87,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             1 -> {
                 openFragment(R.id.frame_fragment_container, DexFragment.newInstance())
                 toolbar_general.title = getString(R.string.dex_toolbar_title)
+            }
+        // Quick action
+            2 -> {
+                val quickActionDialog = QuickActionBottomSheetFragment()
+                quickActionDialog.show(supportFragmentManager, quickActionDialog::class.java.simpleName)
             }
 //            History screen
             3 -> {

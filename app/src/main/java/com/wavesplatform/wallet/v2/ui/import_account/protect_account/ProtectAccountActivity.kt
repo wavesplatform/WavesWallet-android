@@ -38,7 +38,7 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.enter_seed_manually_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, icon = R.drawable.ic_toolbar_back_black)
 
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
