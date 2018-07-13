@@ -22,6 +22,7 @@ import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
+import com.wavesplatform.wallet.v2.ui.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.new_account.backup_info.BackupInfoActivity
 import com.wavesplatform.wallet.v2.ui.new_account.secret_phrase.SecretPhraseActivity
@@ -157,4 +158,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun confirmationLeasingActivity(): ConfirmationLeasingActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun importAccountActivity(): ImportAccountActivity
 }

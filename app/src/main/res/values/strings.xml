@@ -1016,4 +1016,17 @@
     <string name="confirm_leasing_success">Your transaction is on way!</string>
     <string name="confirm_leasing_okay">Okay</string>
     <string name="confirm_leasing_result_value">You have leased %1$s WAVES</string>
+
+    <!--Use account password-->
+    <string name="use_account_password_account_password">Account password</string>
+    <string name="use_account_password_sign_in">Sign in</string>
+
+    <!--Import account-->
+    <string name="import_account_toolbar_title">Import account</string>
+    <string name="import_account_login_at_site">Log in to your Beta Client via your PC or Mac at https://beta.wavesplatform.com</string>
+    <string name="import_account_login_at_site_key">https://beta.wavesplatform.com</string>
+    <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Settings > Security > Pairing code]]></string>
+    <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code. Scan the code with your camera.</string>
+    <string name="import_account_scan_pairing_code">Scan pairing code</string>
+    <string name="import_account_enter_seed_manually">Enter seed manually</string>
 </resources>

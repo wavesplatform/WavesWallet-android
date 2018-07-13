@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeWelcomeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.new_account.NewAccountActivity
@@ -109,7 +110,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         }
 
         relative_import_acc.click {
-            notAvailable()
+            launchActivity<ImportAccountActivity> {  }
 
         }
     }
