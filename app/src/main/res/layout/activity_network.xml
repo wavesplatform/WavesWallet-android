@@ -50,7 +50,7 @@
         android:layout_below="@+id/til_node_address"
         android:layout_marginEnd="14dp"
         android:layout_marginStart="14dp"
-        android:layout_marginTop="-32dp"
+        android:layout_marginTop="6dp"
         android:textColorHint="@color/basic500"
         app:errorEnabled="true"
         app:hintTextAppearance="@style/TextLabel">
@@ -70,7 +70,7 @@
 
     <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
         android:id="@+id/til_spam_filter"
-        android:layout_marginTop="-32dp"
+        android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/til_matcher_address"
@@ -96,7 +96,7 @@
     <RelativeLayout
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="-32dp"
+        android:layout_marginTop="6dp"
         android:layout_below="@+id/til_spam_filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

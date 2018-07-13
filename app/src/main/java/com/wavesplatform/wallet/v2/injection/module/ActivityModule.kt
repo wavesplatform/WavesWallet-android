@@ -4,6 +4,7 @@ import com.wavesplatform.wallet.v2.injection.scope.PerActivity
 import com.wavesplatform.wallet.v2.ui.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.choose_account.edit.EditAccountNameActivity
+import com.wavesplatform.wallet.v2.ui.import_account.enter_seed.EnterSeedManuallyActivity
 import com.wavesplatform.wallet.v2.ui.fingerprint.UseFingerprintActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -29,7 +30,7 @@ import com.wavesplatform.wallet.v2.ui.new_account.secret_phrase.SecretPhraseActi
 import com.wavesplatform.wallet.v2.ui.passcode.create.CreatePasscodeActivity
 import com.wavesplatform.wallet.v2.ui.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.passcode.enter.use_account_password.UseAccountPasswordActivity
-import com.wavesplatform.wallet.v2.ui.qr_scanner.CustomScannerActivity
+import com.wavesplatform.wallet.v2.ui.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
@@ -166,5 +167,9 @@ abstract class ActivityModule {
 
     @PerActivity
     @ContributesAndroidInjector
-    internal abstract fun customScannerActivity(): CustomScannerActivity
+    internal abstract fun qrCodeScannerActivity(): QrCodeScannerActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun enterSeedManuallyActivity(): EnterSeedManuallyActivity
 }

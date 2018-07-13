@@ -9,6 +9,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.wavesplatform.wallet.R
 import pers.victor.ext.dp2px
+import pers.victor.ext.gone
 import pers.victor.ext.sp2px
 
 
@@ -28,6 +29,9 @@ class TopRightErrorTextInputLayout(context: Context, attrs: AttributeSet) : Text
             topRightAlignedErrorText.post({
                 topRightAlignedErrorText.translationY = -this.height + topRightAlignedErrorText.height.toFloat() - pers.victor.ext.dp2px(3)
             })
+            if (childCount == 3) {
+                getChildAt(1).gone()
+            }
         })
     }
 

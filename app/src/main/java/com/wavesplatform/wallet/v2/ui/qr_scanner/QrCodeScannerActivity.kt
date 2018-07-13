@@ -10,24 +10,24 @@ import com.journeyapps.barcodescanner.CaptureManager
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import kotlinx.android.synthetic.main.activity_custom_scanner.*
+import kotlinx.android.synthetic.main.activity_qr_code_scanner.*
 import pers.victor.ext.click
 import javax.inject.Inject
 
 
-class CustomScannerActivity : BaseActivity(), CustomScannerView,
+class QrCodeScannerActivity : BaseActivity(), QrCodeScannerView,
         DecoratedBarcodeView.TorchListener {
 
 
     private lateinit var capture: CaptureManager
     @Inject
     @InjectPresenter
-    lateinit var presenter: CustomScannerPresenter
+    lateinit var presenter: QrCodeScannerPresenter
 
     @ProvidePresenter
-    fun providePresenter(): CustomScannerPresenter = presenter
+    fun providePresenter(): QrCodeScannerPresenter = presenter
 
-    override fun configLayoutRes() = R.layout.activity_custom_scanner
+    override fun configLayoutRes() = R.layout.activity_qr_code_scanner
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {

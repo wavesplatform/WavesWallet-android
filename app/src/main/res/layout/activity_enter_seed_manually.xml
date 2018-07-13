@@ -1,0 +1,84 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:fontFamily="@font/roboto"
+        app:titleTextAppearance="@style/Toolbar.Title" />
+
+
+    <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
+        android:id="@+id/til_seed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:textColorHint="@color/basic500"
+        app:errorEnabled="true"
+        app:hintTextAppearance="@style/TextLabel"
+        app:passwordToggleDrawable="@drawable/ic_eyeopen_24"
+        app:passwordToggleEnabled="true">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_seed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/accent50"
+            android:hint="@string/enter_seed_manually_hint"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine"
+            android:paddingBottom="20dp"
+            android:textColorHint="@color/basic500" />
+    </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/til_seed"
+        android:layout_marginEnd="18dp"
+        android:layout_marginTop="-8dp"
+        android:layout_marginStart="18dp"
+        android:orientation="horizontal">
+
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_asset"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center_horizontal"
+            app:srcCompat="@drawable/asset_gray_icon" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginStart="14dp"
+            android:layout_gravity="center_vertical"
+            android:layout_below="@+id/til_seed"
+            android:layout_toEndOf="@+id/image_asset"
+            android:background="@drawable/skeleton_text_basic_100" />
+
+    </LinearLayout>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_continue"
+        style="@style/WavesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/enter_seed_manually_continue" />
+
+</RelativeLayout>

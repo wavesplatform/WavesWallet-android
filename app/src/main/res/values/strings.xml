@@ -1036,4 +1036,11 @@
     <string name="qr_scanner_cancel">Cancel</string>
     <string name="qr_scanner_flash_on">Flash on</string>
     <string name="qr_scanner_flash_off">Flash off</string>
+
+
+    <!--Enter seed manually-->
+    <string name="enter_seed_manually_toolbar_title">Welcome Back</string>
+    <string name="enter_seed_manually_seed_validation_required_error">Seed is required</string>
+    <string name="enter_seed_manually_continue">Continue</string>
+    <string name="enter_seed_manually_hint">Your seed is the 15 words you saved when creating your account</string>
 </resources>

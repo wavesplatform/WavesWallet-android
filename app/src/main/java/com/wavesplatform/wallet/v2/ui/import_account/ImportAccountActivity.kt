@@ -18,11 +18,10 @@ import javax.inject.Inject
 import android.text.TextPaint
 import android.util.Log
 import com.google.zxing.integration.android.IntentIntegrator
-import com.wavesplatform.wallet.v2.ui.qr_scanner.CustomScannerActivity
+import com.wavesplatform.wallet.v2.ui.import_account.enter_seed.EnterSeedManuallyActivity
+import com.wavesplatform.wallet.v2.ui.qr_scanner.QrCodeScannerActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import pers.victor.ext.click
-import com.google.zxing.integration.android.IntentResult
-
-
 
 
 class ImportAccountActivity : BaseActivity(), ImportAccountView {
@@ -64,11 +63,11 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
         text_first_title.makeLinks(arrayOf(getString(R.string.import_account_login_at_site_key)), arrayOf(siteClick))
 
         button_scan.click {
-            IntentIntegrator(this).setRequestCode(REQUEST_SCAN_QR_CODE).setOrientationLocked(true).setCaptureActivity(CustomScannerActivity::class.java).initiateScan();
+            IntentIntegrator(this).setRequestCode(REQUEST_SCAN_QR_CODE).setOrientationLocked(true).setCaptureActivity(QrCodeScannerActivity::class.java).initiateScan();
         }
 
         button_enter_manually.click {
-
+            launchActivity<EnterSeedManuallyActivity> {  }
         }
     }
 
