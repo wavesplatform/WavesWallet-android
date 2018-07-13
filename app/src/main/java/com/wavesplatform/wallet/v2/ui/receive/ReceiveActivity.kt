@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_receive.*
 import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
 import pers.victor.ext.click
+import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 
@@ -32,6 +33,12 @@ class ReceiveActivity : BaseActivity(), ReceiveView {
         stl_receive.getTitleView(1).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_r_inwaves_14_basic_500, 0, 0, 0)
         stl_receive.getTitleView(2).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_r_card_14_basic_500, 0, 0, 0)
         stl_receive.getTitleView(3).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_r_bank_14_basic_500, 0, 0, 0)
+
+        stl_receive.getTitleView(0).compoundDrawablePadding = dp2px(8);
+        stl_receive.getTitleView(1).compoundDrawablePadding = dp2px(8);
+        stl_receive.getTitleView(2).compoundDrawablePadding = dp2px(8);
+        stl_receive.getTitleView(3).compoundDrawablePadding = dp2px(8);
+
 
         viewpager_receive.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
