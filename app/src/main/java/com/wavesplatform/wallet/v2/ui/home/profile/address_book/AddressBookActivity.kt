@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_address_book.*
 import pers.victor.ext.addTextChangedListener
 import javax.inject.Inject
 import android.support.constraint.solver.widgets.WidgetContainer.getBounds
+import android.support.v7.widget.AppCompatCheckBox
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -26,6 +27,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddress
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import pers.victor.ext.gone
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.concurrent.TimeUnit
 
 
@@ -46,6 +48,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         var SCREEN_TYPE_EDITABLE = 999
         var REQUEST_ADD_ADDRESS = 101
         var REQUEST_EDIT_ADDRESS = 102
+        var BUNDLE_SCREEN_TYPE = "screen_type"
         var BUNDLE_ADDRESS_ITEM = "item"
         var BUNDLE_POSITION = "position"
         var BUNDLE_TYPE = "type"
@@ -87,16 +90,34 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
 
         recycle_addresses.layoutManager = LinearLayoutManager(this)
         recycle_addresses.adapter = adapter
+        adapter.screenType = intent.getIntExtra(BUNDLE_SCREEN_TYPE, AddressBookScreenType.EDIT.type)
         adapter.bindToRecyclerView(recycle_addresses)
 
         presenter.getAddresses()
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as AddressTestObject
-            launchActivity<EditAddressActivity>(REQUEST_EDIT_ADDRESS) {
-                putExtra(BUNDLE_ADDRESS_ITEM, item)
-                putExtra(BUNDLE_POSITION, position)
-                putExtra(BUNDLE_TYPE, SCREEN_TYPE_EDITABLE)
+            if (this.adapter.screenType == AddressBookScreenType.EDIT.type) {
+                launchActivity<EditAddressActivity>(REQUEST_EDIT_ADDRESS) {
+                    putExtra(BUNDLE_ADDRESS_ITEM, item)
+                    putExtra(BUNDLE_POSITION, position)
+                    putExtra(BUNDLE_TYPE, SCREEN_TYPE_EDITABLE)
+                }
+            } else if (this.adapter.screenType == AddressBookScreenType.CHOOSE.type) {
+                val viewItem = recycle_addresses.layoutManager.findViewByPosition(position)
+                val checkBox = viewItem.findViewById<AppCompatCheckBox>(R.id.checkbox_choose)
+                checkBox.isChecked = true
+
+                // disable click for next items, which user click before activity will finish
+                adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position -> }
+
+                // finish activity with result and timeout
+                runDelayed(500, {
+                    setResult(Activity.RESULT_OK, Intent().apply {
+                        putExtra(BUNDLE_ADDRESS_ITEM, item)
+                    })
+                    finish()
+                })
             }
         }
     }
@@ -143,7 +164,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_add_address -> {
-                launchActivity<AddAddressActivity>(REQUEST_ADD_ADDRESS){
+                launchActivity<AddAddressActivity>(REQUEST_ADD_ADDRESS) {
                     putExtra(BUNDLE_TYPE, SCREEN_TYPE_EDITABLE)
                 }
                 return true
@@ -164,6 +185,11 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         adapter.allData = ArrayList(list)
         adapter.setNewData(list)
         adapter.setEmptyView(R.layout.address_book_empty_state)
+    }
+
+    enum class AddressBookScreenType(var type: Int) {
+        EDIT(0),
+        CHOOSE(1)
     }
 
 }
