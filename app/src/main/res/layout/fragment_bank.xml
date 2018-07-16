@@ -7,142 +7,238 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/footer"
+        android:overScrollMode="never"
         android:paddingTop="20dp">
 
-        <LinearLayout
-            android:id="@+id/container_not_verified"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_rect_outline_basic_50"
-                android:drawableLeft="@drawable/ic_verification_28_error_500"
-                android:drawablePadding="8dp"
-                android:padding="14dp"
-                android:text="@string/receive_not_verified"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/receive_step_1"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:fontFamily="@font/roboto_bold" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_step_2_msg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="@string/receive_step_1_msg"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:text="@string/receive_step_2"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:fontFamily="@font/roboto_bold" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="@string/receive_step_2_msg"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/dotted_line"
-                android:layerType="software" />
+            android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/container_not_verified"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingBottom="24dp"
+                android:paddingRight="16dp"
+                android:visibility="visible">
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_rect_outline_basic_50"
+                    android:drawableLeft="@drawable/ic_verification_28_error_500"
+                    android:drawablePadding="8dp"
+                    android:padding="14dp"
+                    android:text="@string/receive_not_verified"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/receive_step_1"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/roboto_bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_step_2_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/receive_step_1_msg"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/receive_step_2"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/roboto_bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/receive_step_2_msg"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    app:srcCompat="@drawable/ic_info_18_warning_600" />
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/dotted_line"
+                    android:layerType="software" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="14dp"
-                    android:orientation="vertical">
+                    android:layout_marginTop="24dp"
+                    android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/receive_dont_accept_international"
-                        android:textColor="@color/black"
-                        android:textSize="12sp" />
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        app:srcCompat="@drawable/ic_info_18_warning_600" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_list_of_countries"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/receive_list_of_countries"
-                        android:textColor="@color/submit400"
-                        android:textSize="12sp" />
+                        android:layout_marginLeft="14dp"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/receive_dont_accept_international"
+                            android:textColor="@color/black"
+                            android:textSize="12sp" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_list_of_countries"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/receive_list_of_countries"
+                            android:textColor="@color/submit400"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
+
+                <Button
+                    android:id="@+id/button_get_verified"
+                    style="@style/WavesButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginTop="55dp"
+                    android:clickable="true"
+                    android:text="@string/receive_get_verified"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-
-            <Button
-                android:id="@+id/button_get_verified"
-                style="@style/WavesButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="55dp"
-                android:clickable="true"
-                android:text="@string/receive_get_verified"
-                android:textStyle="bold" />
-
             <LinearLayout
+                android:id="@+id/container_verified"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:layout_marginTop="24dp"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/icon_info_basic_300" />
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:visibility="gone">
 
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_contact_msg"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="14dp"
-                    android:text="@string/receive_contact_msg"
-                    android:textColor="@color/basic500"
-                    android:textSize="12sp" />
+                    android:background="@drawable/shape_rect_outline_basic_50"
+                    android:drawableLeft="@drawable/ic_verification_28_success_400"
+                    android:drawablePadding="8dp"
+                    android:padding="14dp"
+                    android:text="@string/receive_verified"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        app:srcCompat="@drawable/ic_info_18_warning_600" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:text="@string/receive_use_same_waves_address"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        app:srcCompat="@drawable/ic_warning_18_black" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:text="@string/about_fill_payment_details"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            app:fontFamily="@font/roboto_medium" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/about_fill_payment_info"
+                            android:textColor="@color/black"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
-        </LinearLayout>
+        </FrameLayout>
 
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/icon_info_basic_300" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_contact_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="14dp"
+            android:text="@string/receive_contact_msg"
+            android:textColor="@color/basic500"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+
 </RelativeLayout>

@@ -1084,4 +1084,13 @@
     <string name="receive_get_verified">Get verified</string>
     <string name="receive_contact_msg">In case of problems with verification or payment processing, please contact the Coinomat support team — support@coinomat.com</string>
     <string name="receive_contact_msg_key">support@coinomat.com</string>
+    <string name="receive_verified">Your account is verified</string>
+    <string name="receive_use_same_waves_address">You must use the same Waves address that you used to make KYC&amp;ALM request. If you make a mistake or put a different Waves address we can’t credit your account.</string>
+
+    <!--About redirection-->
+    <string name="about_redirection_title">You were redirected to the «IDNow» \nfor verification</string>
+    <string name="about_redirection_message">After you go through the verification you will receive an email with further instructions</string>
+    <string name="about_redirection_okay">Okay</string>
+    <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
+    <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>.\nIf you don’t we can’t credit your account.]]></string>
 </resources>

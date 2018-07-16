@@ -11,10 +11,15 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants.RESULT_OK
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.receive.about_redirection.AboutRedirectionActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeLinks
 import kotlinx.android.synthetic.main.fragment_bank.*
 import pers.victor.ext.click
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class BankFragment : BaseFragment(), BankView {
@@ -29,6 +34,7 @@ class BankFragment : BaseFragment(), BankView {
 
     companion object {
 
+        var REQUEST_OPEN_REDIRECTION_SCREEN = 1000
         /**
          * @return BankFragment instance
          * */
@@ -92,7 +98,15 @@ class BankFragment : BaseFragment(), BankView {
         text_contact_msg.makeLinks(arrayOf(getString(R.string.receive_contact_msg_key)), arrayOf(contactMsgClick))
 
         button_get_verified.click {
+            launchActivity<AboutRedirectionActivity>(REQUEST_OPEN_REDIRECTION_SCREEN) { }
+        }
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_OPEN_REDIRECTION_SCREEN && resultCode == RESULT_OK){
+            container_not_verified.gone()
+            container_verified.visiable()
         }
     }
 }
