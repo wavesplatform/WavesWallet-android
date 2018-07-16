@@ -108,8 +108,18 @@
                             android:textColor="@color/black"
                             android:textSize="16sp" />
 
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/image_is_favourite"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="6dp"
+                            android:layout_toRightOf="@+id/text_asset_name"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/ic_favorite_mini" />
 
                         <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_asset_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"

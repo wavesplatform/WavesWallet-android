@@ -63,6 +63,7 @@ class BankFragment : BaseFragment(), BankView {
         }
 
         text_step_2_msg.makeLinks(arrayOf(getString(R.string.receive_step_1_msg_link)), arrayOf(siteClick))
+        text_step_2_msg.makeLinks(arrayOf(getString(R.string.receive_step_1_msg_link)), arrayOf(siteClick))
 
         val listOfCountriesClick = object : ClickableSpan() {
             override fun onClick(p0: View?) {
@@ -96,6 +97,7 @@ class BankFragment : BaseFragment(), BankView {
         }
 
         text_contact_msg.makeLinks(arrayOf(getString(R.string.receive_contact_msg_key)), arrayOf(contactMsgClick))
+        text_contact_msg_2.makeLinks(arrayOf(getString(R.string.receive_contact_msg_key)), arrayOf(contactMsgClick))
 
         button_get_verified.click {
             launchActivity<AboutRedirectionActivity>(REQUEST_OPEN_REDIRECTION_SCREEN) { }
