@@ -54,6 +54,7 @@ class СryptocurrencyFragment : BaseFragment(), СryptocurrencyView {
         if (requestCode == REQUEST_SELECT_ASSET && resultCode == Activity.RESULT_OK) {
             val assetBalance = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
 
+            image_asset_icon.isOval = true
             image_asset_icon.setAsset(assetBalance)
             text_asset_name.text = assetBalance?.getName()
             text_asset_value.text = assetBalance?.getDisplayBalance()
