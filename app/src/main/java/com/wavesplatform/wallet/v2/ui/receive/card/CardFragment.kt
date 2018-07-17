@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.receive.cryptocurrency
+package com.wavesplatform.wallet.v2.ui.receive.card
 
 import android.app.Activity
 import android.content.Intent
@@ -10,33 +10,30 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
+import kotlinx.android.synthetic.main.fragment_card.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import pers.victor.ext.visiableIf
 import javax.inject.Inject
 
-class СryptocurrencyFragment : BaseFragment(), СryptocurrencyView {
-
+class CardFragment :BaseFragment(),CardView{
     @Inject
     @InjectPresenter
-    lateinit var presenter: СryptocurrencyPresenter
+    lateinit var presenter: CardPresenter
 
     @ProvidePresenter
-    fun providePresenter(): СryptocurrencyPresenter = presenter
+    fun providePresenter(): CardPresenter = presenter
 
-    override fun configLayoutRes(): Int = R.layout.fragment_cryptocurrency
+    override fun configLayoutRes(): Int = R.layout.fragment_card
 
     companion object {
-
-        var REQUEST_SELECT_ASSET = 10001
-
+        var REQUEST_SELECT_ASSET = 10003
         /**
-         * @return СryptocurrencyFragment instance
+         * @return CardFragment instance
          * */
-        fun newInstance(): СryptocurrencyFragment {
-            return СryptocurrencyFragment()
+        fun newInstance(): CardFragment {
+            return CardFragment()
         }
     }
 
@@ -66,10 +63,7 @@ class СryptocurrencyFragment : BaseFragment(), СryptocurrencyView {
             edit_asset.gone()
             container_asset.visiable()
             container_info.visiable()
-
             button_continue.isEnabled = true
         }
     }
-
-
 }

@@ -27,8 +27,8 @@ class QuickActionBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         rootView.relative_send.click {
-            launchActivity<SendActivity> {  }
             dismiss()
+            launchActivity<SendActivity> {  }
         }
         rootView.relative_receive.click {
             launchActivity<ReceiveActivity> {  }

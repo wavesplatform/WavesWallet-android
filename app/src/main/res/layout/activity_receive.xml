@@ -29,7 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="2dp"
             android:paddingLeft="16dp"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
@@ -46,7 +45,6 @@
             android:id="@+id/viewpager_receive"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="3dp"
             android:overScrollMode="never"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 

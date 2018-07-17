@@ -118,7 +118,6 @@
                             android:visibility="gone"
                             app:srcCompat="@drawable/ic_favorite_mini" />
 
-
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/text_asset_value"
                             android:layout_width="wrap_content"
@@ -143,103 +142,138 @@
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
-        <LinearLayout
-            android:id="@+id/container_info"
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="24dp"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/receive_amount"
+            android:textColor="@color/basic500"
+            android:textSize="12sp" />
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="true"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="2dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:layout_height="wrap_content">
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    app:srcCompat="@drawable/ic_info_18_warning_600" />
-
-                <LinearLayout
+                <EditText
+                    android:id="@+id/edit_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="14dp"
-                    android:orientation="vertical">
+                    android:layout_toLeftOf="@+id/text_amount_in_dollar"
+                    android:background="@color/white"
+                    android:hint="0"
+                    android:inputType="numberDecimal"
+                    android:padding="14dp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/accent100" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:lineSpacingExtra="4sp"
-                        android:text="@string/receive_minimum_amount"
-                        android:textColor="@color/black"
-                        android:textSize="12sp"
-                        app:fontFamily="@font/roboto_bold" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_amount_in_dollar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="24dp"
+                    android:lineSpacingExtra="4sp"
+                    android:text="≈ 0 US Dollar"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:lineSpacingExtra="4sp"
-                        android:text="@string/receive_will_send"
-                        android:textColor="@color/black"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-            </LinearLayout>
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    app:srcCompat="@drawable/ic_warning_18_disabled_500" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_use_total_balance"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="14dp"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="16dp"
+                    android:background="@drawable/basic100_rounded"
+                    android:lineSpacingExtra="4sp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/start_leasing_use_total_balance"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:lineSpacingExtra="4sp"
-                        android:text="@string/receive_will_send_only_btc"
-                        android:textColor="@color/disabled500"
-                        android:textSize="12sp"
-                        app:fontFamily="@font/roboto_bold" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_leasing_0_100"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/basic100_rounded"
+                    android:lineSpacingExtra="4sp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/start_leasing_0_100"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:lineSpacingExtra="4sp"
-                        android:text="@string/receive_will_send_other_currency"
-                        android:textColor="@color/disabled500"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_leasing_0_100000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/basic100_rounded"
+                    android:lineSpacingExtra="4sp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/start_leasing_0_100000"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_leasing_0_500000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/basic100_rounded"
+                    android:lineSpacingExtra="4sp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/start_leasing_0_500000"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
 
             </LinearLayout>
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/view_line_3"
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="14dp"
-                android:background="@drawable/dotted_line"
-                android:layerType="software" />
-        </LinearLayout>
+        </HorizontalScrollView>
 
     </LinearLayout>
 

@@ -301,17 +301,24 @@
         <activity
             android:name=".v2.ui.send.SendActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".v2.ui.receive.about_redirection.AboutRedirectionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+
         <activity
             android:name=".v2.ui.your_assets.YourAssetsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="stateHidden" />
+
         <activity
             android:name=".v2.ui.receive.ReceiveActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"/>
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
     </application>
 
 </manifest>

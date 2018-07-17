@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.receive.cryptocurrency
+package com.wavesplatform.wallet.v2.ui.receive.invoice
 
 import android.app.Activity
 import android.content.Intent
@@ -8,39 +8,48 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.receive.cryptocurrency.СryptocurrencyFragment.Companion.REQUEST_SELECT_ASSET
 import com.wavesplatform.wallet.v2.ui.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
-import pers.victor.ext.visiableIf
+import kotlinx.android.synthetic.main.fragment_invoice.*
+import pers.victor.ext.*
 import javax.inject.Inject
 
-class СryptocurrencyFragment : BaseFragment(), СryptocurrencyView {
-
+class InvoiceFragment : BaseFragment(), InvoiceView {
     @Inject
     @InjectPresenter
-    lateinit var presenter: СryptocurrencyPresenter
+    lateinit var presenter: InvoicePresenter
 
     @ProvidePresenter
-    fun providePresenter(): СryptocurrencyPresenter = presenter
+    fun providePresenter(): InvoicePresenter = presenter
 
-    override fun configLayoutRes(): Int = R.layout.fragment_cryptocurrency
+    override fun configLayoutRes(): Int = R.layout.fragment_invoice
 
     companion object {
-
         var REQUEST_SELECT_ASSET = 10001
-
         /**
-         * @return СryptocurrencyFragment instance
+         * @return InvoiceFragment instance
          * */
-        fun newInstance(): СryptocurrencyFragment {
-            return СryptocurrencyFragment()
+        fun newInstance(): InvoiceFragment {
+            return InvoiceFragment()
         }
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+
+        text_use_total_balance.click {
+            toast("Total balance")
+        }
+        text_leasing_0_100.click {
+            edit_amount.setText("0.100")
+        }
+        text_leasing_0_100000.click {
+            edit_amount.setText("0.00100000")
+        }
+        text_leasing_0_500000.click {
+            edit_amount.setText("0.00500000")
+        }
+
         edit_asset.click {
             launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
         }
@@ -65,11 +74,8 @@ class СryptocurrencyFragment : BaseFragment(), СryptocurrencyView {
 
             edit_asset.gone()
             container_asset.visiable()
-            container_info.visiable()
 
             button_continue.isEnabled = true
         }
     }
-
-
 }
