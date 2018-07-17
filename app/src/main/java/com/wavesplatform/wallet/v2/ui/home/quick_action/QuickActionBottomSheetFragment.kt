@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.ui.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.ui.receive.ReceiveActivity
+import com.wavesplatform.wallet.v2.ui.send.SendActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.quick_action_bottom_sheet_dialog_layout.view.*
 import pers.victor.ext.click
@@ -26,6 +27,7 @@ class QuickActionBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         rootView.relative_send.click {
+            launchActivity<SendActivity> {  }
             dismiss()
         }
         rootView.relative_receive.click {

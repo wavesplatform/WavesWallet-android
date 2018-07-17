@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.v2.ui.import_account.protect_account.ProtectAcco
 import com.wavesplatform.wallet.v2.ui.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import pers.victor.ext.click
+import pers.victor.ext.findColor
 
 
 class ImportAccountActivity : BaseActivity(), ImportAccountView {
@@ -57,7 +58,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
 
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds.color = ContextCompat.getColor(this@ImportAccountActivity, R.color.black)
+                ds.color = findColor(R.color.black)
             }
         }
 
@@ -68,7 +69,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
         }
 
         button_enter_manually.click {
-            launchActivity<EnterSeedManuallyActivity> {  }
+            launchActivity<EnterSeedManuallyActivity> { }
         }
     }
 
@@ -89,11 +90,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode != REQUEST_SCAN_QR_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data)
-            return
-        }
+        super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_SCAN_QR_CODE -> {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)

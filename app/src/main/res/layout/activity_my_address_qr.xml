@@ -95,7 +95,7 @@
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/image_view_qr_code"
+            android:id="@+id/image_view_recipient_action"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_200sdp"
             android:layout_below="@+id/linear_buttons"
@@ -107,7 +107,7 @@
             android:id="@+id/text_view_qr_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/image_view_qr_code"
+            android:layout_below="@+id/image_view_recipient_action"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="14dp"
             android:text="Your QR Code"
