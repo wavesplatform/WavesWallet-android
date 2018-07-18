@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.wavesplatform.wallet"
-    android:installLocation="auto">
+    android:installLocation="auto" >
 
     <uses-sdk tools:overrideLibrary="com.mtramin.rxfingerprint" />
 
@@ -24,14 +24,14 @@
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme"
-        tools:replace="allowBackup">
+        tools:replace="allowBackup" >
         <activity
             android:name=".v2.ui.splash.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.Splash">
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.Splash" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,7 +50,7 @@
             android:name=".v1.ui.home.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.MainActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize" >
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -63,7 +63,7 @@
             android:name=".v2.ui.home.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.MainActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize" >
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -298,20 +298,26 @@
             android:name=".v2.ui.import_account.protect_account.ProtectAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-
+        <activity
+            android:name=".v2.ui.home.quick_action.send.SendActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".v2.ui.receive.about_redirection.AboutRedirectionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-
         <activity
             android:name=".v2.ui.your_assets.YourAssetsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".v2.ui.receive.ReceiveActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+
+        <activity android:name=".v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
 

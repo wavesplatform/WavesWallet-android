@@ -1054,7 +1054,6 @@
     <!--Your assets-->
     <string name="your_assets_toolbar_title">Your assets</string>
 
-
     <!--Receive-->
     <string name="receive_toolbar">Receive</string>
     <string name="receive_cryptocurrency">Сryptocurrency</string>
@@ -1087,6 +1086,27 @@
     <string name="receive_verified">Your account is verified</string>
     <string name="receive_use_same_waves_address">You must use the same Waves address that you used to make KYC&amp;ALM request. If you make a mistake or put a different Waves address we can’t credit your account.</string>
 
+    <!--Send-->
+    <string name="send_toolbar_title">Send</string>
+    <string name="send_asset">Asset</string>
+    <string name="send_select_your_asset">Select your asset</string>
+    <string name="send_recipient">Recipient</string>
+    <string name="send_recipient_the_address_is_not_valid">The address is not valid</string>
+    <string name="send_recipient_address_hint">Recipient address…</string>
+    <string name="send_gateway_info_gateway_fee_is_0_001_btc">Gateway fee is 0.001 BTC</string>
+    <string name="send_gateway_info_we_detected_bitcoin_address_and_will_send_your_money_through_coinomat_gateway_to_that_address_minimum_amount_is_0_001_btc_maximum_amount_is_20_btc">We detected Bitcoin address and will send your money through Coinomat gateway to that address. Minimum amount is 0.001 BTC, maximum amount is 20 BTC.</string>
+    <string name="send_gateway_info_do_not_withdraw_bitcoin_to_an_ico_we_will_not_credit_your_account_with_tokens_from_that_sale">Do not withdraw Bitcoin to an ICO. We will not credit your account with tokens from that sale.</string>
+    <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">If you have been verified and have deposited US dollars, you can withdraw these dollars back to your bank account. Otherwise, get verified by our partner IDNow.eu</string>
+    <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Fees are 1% from the amount transferred.</string>
+    <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">The minimum amount is 500 US Dollar. If you have any questions, please just send an email to support@coinomat.com</string>
+    <string name="send_amount_error_insufficient_funds">Insufficient funds</string>
+    <string name="send_amount">Amount</string>
+    <string name="send_choose_from_address_book">Choose from Address book</string>
+    <string name="send_use_total_balance">Use total balance</string>
+    <string name="send_errpr_you_don_t_have_enough_funds_to_pay_the_required_fees">You don\'t have enough funds to pay the required fees.</string>
+    <string name="send_continue">Continue</string>
+    <string name="send_transaction_fee_0_001_waves">Transaction Fee 0.001 WAVES</string>
+
     <!--About redirection-->
     <string name="about_redirection_title">You were redirected to the «IDNow» \nfor verification</string>
     <string name="about_redirection_message">After you go through the verification you will receive an email with further instructions</string>
@@ -1094,5 +1114,19 @@
     <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
     <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>.\nIf you don’t we can’t credit your account.]]></string>
 
-    <!---->
+
+    <string name="send_confirmation_toolbar_title">Confirmation</string>
+    <string name="send_confirmation_sent_to">Sent to</string>
+    <string name="send_confirmation_fee">Fee</string>
+    <string name="send_confirmation_description">Description</string>
+    <string name="send_confirmation_the_description_is_too_long">The description is too long</string>
+    <string name="send_confirmation_write_an_optional_message">Write an optional message</string>
+    <string name="send_confirmation_confirm">Confirm</string>
+    <string name="send_progress_sending">Sending…</string>
+    <string name="send_success_do_you_want_to_save_this_address">Do you want to save this address?</string>
+    <string name="send_success_your_transaction_is_on_the_way">Your transaction is on the way!</string>
+    <string name="send_success_you_have_sent_sum">You have sent 0.00138696 WAVES</string>
+    <string name="send_success_okay">Okay</string>
+
+
 </resources>

@@ -1,31 +1,18 @@
 package com.wavesplatform.wallet.v2.ui.address
 
-import android.content.ClipData
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.AppCompatImageView
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_my_address_qr.*
 import pers.victor.ext.click
-import pers.victor.ext.clipboardManager
-import pers.victor.ext.toast
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
-import com.google.zxing.BarcodeFormat
 import android.graphics.Bitmap
-import android.widget.ImageView
-import com.wavesplatform.wallet.v1.ui.zxing.Contents
-import com.wavesplatform.wallet.v1.ui.zxing.encode.QRCodeEncoder
 import com.wavesplatform.wallet.v2.util.copyToClipboard
-import pers.victor.ext.dp2px
-import pyxis.uzuki.live.richutilskt.utils.runAsync
 
 
 class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
@@ -57,7 +44,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
     }
 
     override fun showQRCode(qrCode: Bitmap?) {
-        image_view_qr_code.setImageBitmap(qrCode)
+        image_view_recipient_action.setImageBitmap(qrCode)
     }
 
     private fun shareAddress() {

@@ -361,6 +361,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@+id/image_copy_issuer"
+                    android:layout_marginEnd="8dp"
                     android:text="3PC4roN512iugc6xGVTTM2XkoWKEdSiiscd"
                     android:textColor="@color/disabled900"
                     android:textSize="14sp" />
@@ -396,6 +397,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@+id/image_copy_id"
+                    android:layout_marginEnd="8dp"
                     android:text="3PC4roN512iugc6xGVTTM2XkoWKEdSiiscd"
                     android:textColor="@color/disabled900"
                     android:textSize="14sp" />

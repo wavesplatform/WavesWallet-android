@@ -9,7 +9,7 @@ class AlphaScalePageTransformer(var minScale: Float = 0.32f, var minAlpha: Float
     var decimal = -1f
 
     override fun transformPage(view: View, position: Float) {
-        if (decimal == -1f) decimal = position - position.toInt()
+        if (decimal == -1f && position != 0f) decimal = position - position.toInt()
 
         val scaleFactor = Math.max(minScale, 1 - Math.abs(position - (1 + decimal)))
         val alphaFactor = Math.max(minAlpha, 1 - Math.abs(position - (1 + decimal)))
