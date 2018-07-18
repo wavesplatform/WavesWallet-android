@@ -21,10 +21,11 @@
         android:id="@+id/card_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="-2dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="28dp"
-        android:layout_marginBottom="-2dp"
+        android:visibility="visible"
         app:cardCornerRadius="2dp"
         app:cardElevation="3dp">
 
@@ -45,12 +46,12 @@
 
             <LinearLayout
                 android:id="@+id/linear_sum"
-                android:layout_marginTop="14dp"
+                android:layout_width="wrap_content"
 
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/image_send"
                 android:layout_centerHorizontal="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatTextView
@@ -227,5 +228,179 @@
 
     </android.support.v7.widget.CardView>
 
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/relative_success"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="24dp">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_success"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="4dp"
+            android:visibility="visible"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="0dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="44dp"
+                    app:srcCompat="@drawable/ic_userimg_done_80_success_400" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/send_success_your_transaction_is_on_the_way"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/roboto_medium" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_leasing_result_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/send_success_you_have_sent_sum"
+                    android:textColor="@color/disabled500"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/button_okay"
+                    style="@style/WavesButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="44dp"
+                    android:clickable="true"
+                    android:text="@string/send_success_okay"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_below="@+id/card_success"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="24dp"
+            android:visibility="visible"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="0dp">
+            
+            <RelativeLayout
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_do_you_want"
+                    android:textColor="@color/disabled900"
+                    android:textSize="16sp"
+                    android:layout_toStartOf="@+id/image_add_address"
+                    android:layout_width="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/send_success_do_you_want_to_save_this_address"
+                    />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_marginTop="2dp"
+                    android:layout_below="@+id/text_do_you_want"
+                    android:textColor="@color/basic700"
+                    android:layout_toStartOf="@+id/image_add_address"
+                    android:layout_width="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:layout_height="wrap_content"
+                    android:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"
+                    />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:srcCompat="@drawable/ic_add_address_submit_300"
+                    android:id="@+id/image_add_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.CardView
+        android:visibility="gone"
+        android:id="@+id/card_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="24dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="0dp">
+
+        <RelativeLayout
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_centerHorizontal="true"
+                android:padding="28dp"
+                android:layout_marginTop="20dp"
+                app:srcCompat="@drawable/ic_loader_24_submit_400"
+                android:id="@+id/image_loader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:textSize="16sp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="24dp"
+                android:textColor="@color/basic500"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/send_progress_sending"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@+id/image_loader"
+                />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

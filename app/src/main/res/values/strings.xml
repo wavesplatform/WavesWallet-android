@@ -1122,6 +1122,11 @@
     <string name="send_confirmation_the_description_is_too_long">The description is too long</string>
     <string name="send_confirmation_write_an_optional_message">Write an optional message</string>
     <string name="send_confirmation_confirm">Confirm</string>
+    <string name="send_progress_sending">Sending…</string>
+    <string name="send_success_do_you_want_to_save_this_address">Do you want to save this address?</string>
+    <string name="send_success_your_transaction_is_on_the_way">Your transaction is on the way!</string>
+    <string name="send_success_you_have_sent_sum">You have sent 0.00138696 WAVES</string>
+    <string name="send_success_okay">Okay</string>
 
 
 </resources>
