@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.send
+package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
 import android.app.Activity
 import android.content.Intent
@@ -14,6 +14,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.qr_scanner.QrCodeScannerActivity
@@ -79,6 +80,9 @@ class SendActivity : BaseActivity(), SendView {
             }
         }
 
+        button_continue.click {
+            launchActivity<SendConfirmationActivity> {  }
+        }
 
 
     }

@@ -21,6 +21,7 @@ import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActi
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeWelcomeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.import_account.ImportAccountActivity
@@ -33,7 +34,7 @@ import com.wavesplatform.wallet.v2.ui.passcode.enter.use_account_password.UseAcc
 import com.wavesplatform.wallet.v2.ui.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.receive.ReceiveActivity
-import com.wavesplatform.wallet.v2.ui.send.SendActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.ui.receive.about_redirection.AboutRedirectionActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
@@ -197,4 +198,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun sendActivity(): SendActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun sendConfirmationActivity(): SendConfirmationActivity
 }

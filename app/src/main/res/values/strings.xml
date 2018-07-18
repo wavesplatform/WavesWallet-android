@@ -1115,4 +1115,13 @@
     <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>.\nIf you don’t we can’t credit your account.]]></string>
 
 
+    <string name="send_confirmation_toolbar_title">Confirmation</string>
+    <string name="send_confirmation_sent_to">Sent to</string>
+    <string name="send_confirmation_fee">Fee</string>
+    <string name="send_confirmation_description">Description</string>
+    <string name="send_confirmation_the_description_is_too_long">The description is too long</string>
+    <string name="send_confirmation_write_an_optional_message">Write an optional message</string>
+    <string name="send_confirmation_confirm">Confirm</string>
+
+
 </resources>
