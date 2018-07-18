@@ -21,6 +21,7 @@ android {
     defaultConfig {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 27
+        minSdkVersion 21
         versionCode 335
         versionName "1.1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -77,18 +78,16 @@ android {
 
     productFlavors {
         prod {
-            // For release and testing on <API21 devices
-            minSdkVersion 21
             signingConfig signingConfigs.config
+            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher"]
         }
         dev {
-            // For everyday work, setting minSdkVersion to 21 bypasses MultiDex, resulting in
-            // much faster builds
-            minSdkVersion 21
+            applicationIdSuffix ".dev"
+            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev"]
         }
-        staging {
-            applicationIdSuffix ".staging"
-            minSdkVersion 21
+        devTest {
+            applicationIdSuffix ".test"
+            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test"]
         }
     }
     compileOptions {
