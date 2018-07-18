@@ -1128,5 +1128,11 @@
     <string name="send_success_you_have_sent_sum">You have sent 0.00138696 WAVES</string>
     <string name="send_success_okay">Okay</string>
 
-
+    <!--Receive address view-->
+    <string name="receive_address_view_toolbar">Your Bitcoin address</string>
+    <string name="receive_address_generate">Generate…</string>
+    <string name="receive_address_your_qr_code">Your QR Code</string>
+    <string name="receive_address_share">Share</string>
+    <string name="receive_address_copy">Copy</string>
+    <string name="receive_address_close">Close</string>
 </resources>
