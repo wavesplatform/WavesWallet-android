@@ -1093,4 +1093,6 @@
     <string name="about_redirection_okay">Okay</string>
     <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
     <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>.\nIf you don’t we can’t credit your account.]]></string>
+
+    <!---->
 </resources>

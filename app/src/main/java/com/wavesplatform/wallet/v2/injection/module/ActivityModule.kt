@@ -34,6 +34,7 @@ import com.wavesplatform.wallet.v2.ui.import_account.protect_account.ProtectAcco
 import com.wavesplatform.wallet.v2.ui.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.receive.ReceiveActivity
 import com.wavesplatform.wallet.v2.ui.receive.about_redirection.AboutRedirectionActivity
+import com.wavesplatform.wallet.v2.ui.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
@@ -192,4 +193,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun aboutRedirectionActivity(): AboutRedirectionActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun receiveLoadingActivity(): ReceiveAddressViewActivity
 }
