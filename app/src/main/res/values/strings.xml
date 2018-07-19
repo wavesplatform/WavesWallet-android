@@ -1135,4 +1135,6 @@
     <string name="receive_address_share">Share</string>
     <string name="receive_address_copy">Copy</string>
     <string name="receive_address_close">Close</string>
+    <string name="receive_address_link_to_invoice">Link to an Invoice</string>
+    <string name="receive_address_waves_address">Your Waves address</string>
 </resources>
