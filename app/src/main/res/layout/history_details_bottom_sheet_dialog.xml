@@ -1,52 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/test_test"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:fillViewport="true">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager_history_item"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp" />
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/image_icon_go_to_preview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:padding="16dp"
-            app:srcCompat="@drawable/ic_arrowleft_basic_200" />
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/image_icon_go_to_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:padding="16dp"
-            app:srcCompat="@drawable/ic_arrowright_basic_200" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/accent50" />
-
-    <com.wavesplatform.wallet.v2.ui.home.history.details.CustomScroollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/test_test"
-        android:fillViewport="true">
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager_history_item"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_150sdp" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_icon_go_to_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:padding="16dp"
+                app:srcCompat="@drawable/ic_arrowleft_basic_200" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_icon_go_to_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:padding="16dp"
+                app:srcCompat="@drawable/ic_arrowright_basic_200" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/accent50" />
+
 
         <LinearLayout
             android:id="@+id/main_container"
@@ -54,5 +56,5 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:scrollbarAlwaysDrawVerticalTrack="true" />
-    </com.wavesplatform.wallet.v2.ui.home.history.details.CustomScroollView>
-</LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

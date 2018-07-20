@@ -63,20 +63,20 @@ class HistoryFragment : BaseFragment(), HistoryView {
         stl_history.currentTab = 0
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_history, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
-            R.id.action_sorting -> {
-                val historyFilter = HistoryFilterBottomSheetFragment()
-                historyFilter.show(fragmentManager, historyFilter.tag)
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.menu_history, menu)
+//        super.onCreateOptionsMenu(menu, inflater)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//        when(item?.itemId){
+//            R.id.action_sorting -> {
+//                val historyFilter = HistoryFilterBottomSheetFragment()
+//                historyFilter.show(fragmentManager, historyFilter.tag)
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
+//    }
 
 }

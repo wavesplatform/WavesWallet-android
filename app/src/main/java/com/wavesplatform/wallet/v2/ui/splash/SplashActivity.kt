@@ -32,7 +32,6 @@ class SplashActivity : BaseActivity(), SplashView {
     }
 
     override fun onStartMainActivity(publicKey: String) {
-        authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, publicKey)
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
         if (preferencesHelper.isTutorialPassed()){
             launchActivity<WelcomeActivity>()

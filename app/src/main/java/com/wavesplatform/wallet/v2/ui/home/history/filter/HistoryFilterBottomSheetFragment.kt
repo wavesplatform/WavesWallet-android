@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.history.filter
 
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -12,12 +11,13 @@ import android.widget.CheckBox
 import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.history.filter.adapter.AssetsAdapter
 import com.wavesplatform.wallet.v2.ui.home.history.filter.adapter.TransferAdapter
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 
-class HistoryFilterBottomSheetFragment : BottomSheetDialogFragment() {
+class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
     var rooView: View? = null
     var inflater: LayoutInflater? = null
     var periodListSelected = arrayListOf<String>()

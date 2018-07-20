@@ -32,12 +32,14 @@
                 android:textColor="@color/disabled900" />
         </RelativeLayout>
 
-        <View
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/view_line_2"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/dotted_line" />
+            android:layout_marginBottom="14dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/dotted_line"
+            android:layerType="software" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -89,12 +91,14 @@
             </LinearLayout>
         </LinearLayout>
 
-        <View
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/view_line_3"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/dotted_line" />
+            android:layout_marginBottom="14dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/dotted_line"
+            android:layerType="software" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -125,6 +129,7 @@
                 android:background="@drawable/success400_01_shape"
                 android:paddingBottom="4dp"
                 android:paddingLeft="6dp"
+                android:textSize="12sp"
                 android:paddingRight="6dp"
                 android:paddingTop="4dp"
                 android:text="@string/history_details_completed"

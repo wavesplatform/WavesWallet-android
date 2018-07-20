@@ -1,20 +1,19 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action
 
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.receive.ReceiveActivity
+import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
+import com.wavesplatform.wallet.v2.ui.receive.ReceiveActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.quick_action_bottom_sheet_dialog_layout.view.*
 import pers.victor.ext.click
 
 
-class QuickActionBottomSheetFragment : BottomSheetDialogFragment() {
-
+class QuickActionBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

@@ -656,7 +656,8 @@
     <string name="common_action_close">Close</string>
     <string name="common_msg_in_development">Sorry, this feature will be available in the near future</string>
     <string name="common_persist">&amp;</string>
-    <string name="common_copied">Copied to clipboard</string>
+    <string name="common_copied_to_clipboard">Copied to clipboard</string>
+    <string name="common_copied">Copied!</string>
 
     <!-- Language-->
     <string name="choose_language_russia">Русский</string>

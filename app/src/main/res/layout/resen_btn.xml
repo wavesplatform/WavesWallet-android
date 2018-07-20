@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <FrameLayout
+        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -16,10 +17,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:drawableLeft="@drawable/ic_resend"
+            android:drawableLeft="@drawable/ic_t_resend_28"
             android:drawablePadding="16dp"
             android:gravity="center"
-            android:padding="16dp"
+            android:paddingTop="11dp"
+            android:paddingBottom="11dp"
             android:text="@string/history_details_send_again"
             android:textColor="@color/white" />
     </FrameLayout>

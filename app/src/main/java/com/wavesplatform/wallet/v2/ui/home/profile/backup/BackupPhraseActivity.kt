@@ -52,7 +52,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
         }
         image_copy.click {
             clipboardManager.primaryClip = ClipData.newPlainText(getString(R.string.app_name), phraseList.toString().replace("[", "").replace("]", "").replace(",", ""))
-            toast(getString(R.string.common_copied))
+            toast(getString(R.string.common_copied_to_clipboard))
         }
     }
 

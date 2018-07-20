@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:background="@drawable/shape_rect_outline_checked"
+        android:background="@drawable/shape_rect_outline_basic300"
         android:paddingBottom="10dp"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"

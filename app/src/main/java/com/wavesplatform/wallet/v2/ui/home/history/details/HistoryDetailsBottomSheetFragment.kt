@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.history.details
 
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
@@ -12,25 +11,24 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.history.TestObject
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import io.github.kbiakov.codeview.CodeView
-import kotlinx.android.synthetic.main.fragment_asset_details_content.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
+import io.github.kbiakov.codeview.highlight.ColorTheme
+import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
+import pers.victor.ext.*
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.*
 import kotlin.collections.ArrayList
-import io.github.kbiakov.codeview.highlight.ColorTheme
-import io.github.kbiakov.codeview.highlight.ColorThemeData
-import io.github.kbiakov.codeview.highlight.SyntaxColors
 
 
-class HistoryDetailsBottomSheetFragment : BottomSheetDialogFragment() {
+class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
     var selectedItemPosition: Int = 0
     var selectedItem: TestObject? = null
@@ -63,6 +61,19 @@ class HistoryDetailsBottomSheetFragment : BottomSheetDialogFragment() {
         return rooView
     }
 
+    private fun copyToClipboard(view: TextView, text: Int) {
+        view.text = getString(R.string.common_copied)
+        view.setTextColor(findColor(R.color.success400))
+        view.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_18_success_400, 0, 0, 0);
+        runDelayed(1500, {
+            this.context.notNull {
+                view.text = getString(text)
+                view.setTextColor(findColor(R.color.black))
+                view.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_copy_18_black, 0, 0, 0);
+            }
+        })
+    }
+
     private fun setupView(type: HistoryTypeEnum) {
         val historyContainer = rooView?.findViewById<LinearLayout>(R.id.main_container)
         val bottomBtns = inflater?.inflate(R.layout.fragment_history_bottom_sheet_bottom_btns, historyContainer, false)
@@ -75,7 +86,16 @@ class HistoryDetailsBottomSheetFragment : BottomSheetDialogFragment() {
         val timeStamp = baseInfoLayout?.findViewById<TextView>(R.id.text_timestamp)
         val status = baseInfoLayout?.findViewById<TextView>(R.id.text_status)
 
-        /** **/
+
+        /** Add click to copy buttons **/
+        bottomBtns?.container_copy_tx_id?.click {
+            copyToClipboard(bottomBtns.text_copy_tx_id, R.string.history_details_copy_tx_id)
+        }
+        bottomBtns?.container_copy_all_data?.click {
+            copyToClipboard(bottomBtns.text_copy_all_data, R.string.history_details_copy_all_data)
+        }
+
+
 
         historyContainer?.removeAllViews()
 
@@ -87,7 +107,7 @@ class HistoryDetailsBottomSheetFragment : BottomSheetDialogFragment() {
                 val textReceivedFrom = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from)
 
                 imageAddAddressSubmit?.click {
-                    launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS){
+                    launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                         putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_EDITABLE)
                         putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressTestObject(textReceivedFrom?.text.toString(), ""))
                     }
@@ -112,16 +132,12 @@ class HistoryDetailsBottomSheetFragment : BottomSheetDialogFragment() {
                 val codeView = dataView?.findViewById<CodeView>(R.id.code_view)
                 val imageCopyData = dataView?.findViewById<AppCompatImageView>(R.id.image_copy_data)
 
-                imageCopyData?.click {
-//                    codeView.copyToClipboard(it)
-                }
-
                 val myTheme = ColorTheme.SOLARIZED_LIGHT.theme()
                         .withBgContent(R.color.basic50)
                         .withNoteColor(R.color.basic50)
 
                 codeView?.getOptions()?.withTheme(myTheme)
-                codeView?.setCode("{\n" +
+                val code = "{\n" +
                         "\t\"key\" : \"test long\",\n" +
                         "\t\"type\" : \"integer\",\n" +
                         "\t\"value\" : 1001\n" +
@@ -131,8 +147,14 @@ class HistoryDetailsBottomSheetFragment : BottomSheetDialogFragment() {
                         "\t\"value\" : true\n" +
                         "}, {\n" +
                         "\t\"key\" : \"test false\",\n" +
-                        "\t\"type\" : \"boolean\",\"value\" : true\n" +
-                        "}");
+                        "\t\"type\" : \"boolean\",\n" +
+                        "\"value\" : true\n" +
+                        "}"
+                codeView?.setCode(code);
+
+                imageCopyData?.click {
+                    it.copyToClipboard(code)
+                }
                 historyContainer?.addView(dataView)
                 historyContainer?.addView(baseInfoLayout)
             }

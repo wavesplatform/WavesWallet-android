@@ -27,10 +27,11 @@
             android:padding="16dp">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_copy_tx_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/ic_copy_black"
+                android:drawableStart="@drawable/ic_copy_18_black"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/history_details_copy_tx_id"
@@ -47,10 +48,11 @@
             android:padding="16dp">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_copy_all_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/ic_copy_black"
+                android:drawableStart="@drawable/ic_copy_18_black"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/history_details_copy_all_data"
