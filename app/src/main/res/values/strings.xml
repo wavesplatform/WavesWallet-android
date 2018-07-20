@@ -1114,7 +1114,7 @@
     <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
     <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>.\nIf you don’t we can’t credit your account.]]></string>
 
-
+    <!--Send Confirmation-->
     <string name="send_confirmation_toolbar_title">Confirmation</string>
     <string name="send_confirmation_sent_to">Sent to</string>
     <string name="send_confirmation_fee">Fee</string>
@@ -1122,11 +1122,16 @@
     <string name="send_confirmation_the_description_is_too_long">The description is too long</string>
     <string name="send_confirmation_write_an_optional_message">Write an optional message</string>
     <string name="send_confirmation_confirm">Confirm</string>
+
+    <!--Send Progress-->
     <string name="send_progress_sending">Sending…</string>
+
+    <!--Send Success-->
     <string name="send_success_do_you_want_to_save_this_address">Do you want to save this address?</string>
     <string name="send_success_your_transaction_is_on_the_way">Your transaction is on the way!</string>
     <string name="send_success_you_have_sent_sum">You have sent 0.00138696 WAVES</string>
     <string name="send_success_okay">Okay</string>
+    <string name="wallet_assets_my_asset">/ My Asset</string>
 
 
 </resources>
