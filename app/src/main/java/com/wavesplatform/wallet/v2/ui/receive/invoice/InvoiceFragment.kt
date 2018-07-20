@@ -8,6 +8,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.receive.cryptocurrency.СryptocurrencyFragment.Companion.REQUEST_SELECT_ASSET
 import com.wavesplatform.wallet.v2.ui.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -27,6 +28,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
 
     companion object {
         var REQUEST_SELECT_ASSET = 10001
+        var INVOICE_SCREEN = "invoice"
         /**
          * @return InvoiceFragment instance
          * */
@@ -56,12 +58,19 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         container_asset.click {
             launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
         }
+        button_continue.click {
+            launchActivity<ReceiveAddressViewActivity> {
+                putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
+                putExtra(INVOICE_SCREEN, true)
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SELECT_ASSET && resultCode == Activity.RESULT_OK) {
             val assetBalance = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
+            presenter.assetBalance = assetBalance
 
             image_asset_icon.isOval = true
             image_asset_icon.setAsset(assetBalance)

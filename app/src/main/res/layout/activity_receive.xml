@@ -31,6 +31,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="2dp"
             android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
             tl:tl_bar_stroke_width="0dp"
             tl:tl_indicator_anim_enable="true"

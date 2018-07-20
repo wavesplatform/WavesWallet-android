@@ -8,6 +8,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
@@ -47,12 +48,18 @@ class СryptocurrencyFragment : BaseFragment(), СryptocurrencyView {
         container_asset.click {
             launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
         }
+        button_continue.click {
+            launchActivity<ReceiveAddressViewActivity> {
+                putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SELECT_ASSET && resultCode == Activity.RESULT_OK) {
             val assetBalance = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
+            presenter.assetBalance = assetBalance
 
             image_asset_icon.isOval = true
             image_asset_icon.setAsset(assetBalance)

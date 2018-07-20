@@ -153,7 +153,7 @@
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
             android:exported="false"
-            android:grantUriPermissions="true" >
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
@@ -315,10 +315,16 @@
         <activity
             android:name=".v2.ui.receive.ReceiveActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+
         <activity android:name=".v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
+
+        <activity
+            android:name=".v2.ui.receive.address_view.ReceiveAddressViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"/>
     </application>
 
 </manifest>
