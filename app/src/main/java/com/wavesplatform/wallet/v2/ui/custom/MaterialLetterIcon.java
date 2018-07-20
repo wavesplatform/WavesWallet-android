@@ -95,7 +95,7 @@ public class MaterialLetterIcon extends RoundedImageViewWithBorder {
 
         Integer letter = Constants.INSTANCE.getAlphabetColor().get(text.trim().substring(0, 1).toLowerCase());
         if (letter == null){
-            mText = getContext().getString(R.string.persist);
+            mText = getContext().getString(R.string.common_persist);
         }
     }
 

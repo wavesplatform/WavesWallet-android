@@ -53,7 +53,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
      * Setup bottom navigation with custom tabs
      * **/
     private fun setupBottomNavigation() {
-        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_wallet)).setTag(TAG_NOT_CENTRAL_TAB))
+        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_wallet_default)).setTag(TAG_NOT_CENTRAL_TAB))
         tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_dex)).setTag(TAG_NOT_CENTRAL_TAB))
         tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCenterTabLayout(R.drawable.ic_tabbar_waves)).setTag(TAG_CENTRAL_TAB))
         tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_history)).setTag(TAG_NOT_CENTRAL_TAB))

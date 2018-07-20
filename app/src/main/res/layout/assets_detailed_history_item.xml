@@ -74,7 +74,10 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="4dp"
                         android:background="@drawable/asset_price_border"
-                        android:padding="4dp"
+                        android:paddingEnd="4dp"
+                        android:paddingStart="4dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
                         android:text="WAVES"
                         android:textColor="@color/info500"
                         android:textSize="12sp" />

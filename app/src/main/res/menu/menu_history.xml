@@ -2,8 +2,8 @@
     xmlns:auto="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_sorting"
-        android:icon="@drawable/ic_toolbar_sort"
+        android:icon="@drawable/ic_toolbar_filter"
         auto:showAsAction="always"
-        android:title="@string/history_sorting_toolbar_title" />
+        android:title="@string/common_action_filter" />
 
 </menu>

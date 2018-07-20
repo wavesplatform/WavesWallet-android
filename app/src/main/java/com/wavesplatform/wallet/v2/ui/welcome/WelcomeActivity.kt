@@ -55,6 +55,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view)
+        changeDrawerMenuIcon(R.drawable.ic_toolbar_menu_white)
 
         button_create_account.click {
             white_block.visiable()

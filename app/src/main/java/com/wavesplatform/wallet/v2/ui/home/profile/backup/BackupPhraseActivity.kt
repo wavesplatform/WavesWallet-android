@@ -8,7 +8,6 @@ import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.id.*
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -17,7 +16,6 @@ import pers.victor.ext.click
 import pers.victor.ext.clipboardManager
 import pers.victor.ext.dp2px
 import pers.victor.ext.toast
-import java.lang.StringBuilder
 import javax.inject.Inject
 
 
@@ -54,7 +52,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
         }
         image_copy.click {
             clipboardManager.primaryClip = ClipData.newPlainText(getString(R.string.app_name), phraseList.toString().replace("[", "").replace("]", "").replace(",", ""))
-            toast(getString(R.string.copied))
+            toast(getString(R.string.common_copied))
         }
     }
 

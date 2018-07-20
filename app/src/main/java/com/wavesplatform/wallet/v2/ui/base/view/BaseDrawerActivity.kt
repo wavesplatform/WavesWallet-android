@@ -30,6 +30,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
     protected lateinit var slidingRootNav: SlidingRootNav
     private var changeStatusBarColor = true
     private var view: View? = null
+    private var drawerIcon = R.drawable.ic_toolbar_menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +66,8 @@ abstract class BaseDrawerActivity : BaseActivity() {
                 .withSavedState(savedInstanceState)
                 .withMenuLayout(R.layout.menu_left_drawer)
                 .inject()
+
+        toolbar.setNavigationIcon(drawerIcon)
 
         createCloseView()
         slidingRootNav.layout.linear_drawer.scaleX = 1.5f
@@ -191,5 +194,9 @@ abstract class BaseDrawerActivity : BaseActivity() {
 
     fun needChangeStatusBarColorOnMenuOpen(change: Boolean){
         changeStatusBarColor = change
+    }
+
+    fun changeDrawerMenuIcon(icon: Int){
+        drawerIcon = icon
     }
 }

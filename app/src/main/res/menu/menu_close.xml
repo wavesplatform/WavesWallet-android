@@ -5,5 +5,5 @@
         android:id="@+id/action_close"
         auto:showAsAction="always"
         android:icon="@drawable/ic_toolbar_close"
-        android:title="@string/action_close" />
+        android:title="@string/common_action_close" />
 </menu>
