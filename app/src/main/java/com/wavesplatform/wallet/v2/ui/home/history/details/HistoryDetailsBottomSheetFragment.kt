@@ -21,6 +21,8 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import io.github.kbiakov.codeview.CodeView
 import io.github.kbiakov.codeview.highlight.ColorTheme
+import io.github.kbiakov.codeview.highlight.ColorThemeData
+import io.github.kbiakov.codeview.highlight.SyntaxColors
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
@@ -132,11 +134,10 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 val codeView = dataView?.findViewById<CodeView>(R.id.code_view)
                 val imageCopyData = dataView?.findViewById<AppCompatImageView>(R.id.image_copy_data)
 
-                val myTheme = ColorTheme.SOLARIZED_LIGHT.theme()
-                        .withBgContent(R.color.basic50)
-                        .withNoteColor(R.color.basic50)
+                val customTheme = ColorThemeData(SyntaxColors(android.R.color.transparent, R.color.submit300, android.R.color.transparent, android.R.color.transparent, R.color.basic700,
+                        android.R.color.transparent, R.color.basic700, android.R.color.transparent, android.R.color.transparent, android.R.color.transparent, android.R.color.transparent),
+                        R.color.basic50, android.R.color.transparent, android.R.color.transparent, R.color.basic50)
 
-                codeView?.getOptions()?.withTheme(myTheme)
                 val code = "{\n" +
                         "\t\"key\" : \"test long\",\n" +
                         "\t\"type\" : \"integer\",\n" +
@@ -151,7 +152,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                         "\"value\" : true\n" +
                         "}"
                 codeView?.setCode(code);
-
+                codeView?.getOptions()?.withTheme(customTheme)
                 imageCopyData?.click {
                     it.copyToClipboard(code)
                 }
