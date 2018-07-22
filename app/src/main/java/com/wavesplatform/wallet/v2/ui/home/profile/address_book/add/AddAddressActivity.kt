@@ -1,29 +1,23 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.address_book.add
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
-import javax.inject.Inject
-
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
 import kotlinx.android.synthetic.main.activity_add_address.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
-import pyxis.uzuki.live.richutilskt.utils.put
 import pyxis.uzuki.live.richutilskt.utils.toast
+import javax.inject.Inject
 
 
 class AddAddressActivity : BaseActivity(), AddAddressView {

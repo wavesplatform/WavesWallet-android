@@ -1,17 +1,12 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
 import com.arellomobile.mvp.InjectViewState
-import com.google.common.base.Predicates.equalTo
-import com.vicpin.krealmextensions.query
 import com.vicpin.krealmextensions.queryAsSingle
-import com.vicpin.krealmextensions.queryAsync
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @InjectViewState

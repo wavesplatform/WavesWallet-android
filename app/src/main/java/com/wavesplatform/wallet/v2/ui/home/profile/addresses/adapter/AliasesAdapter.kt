@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses.adapter
 
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder

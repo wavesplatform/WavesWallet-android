@@ -8,12 +8,12 @@ import android.view.View
 import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity
-import com.wavesplatform.wallet.v2.ui.import_account.ImportAccountActivity
-import com.wavesplatform.wallet.v2.ui.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_start_leasing.*
 import pers.victor.ext.click

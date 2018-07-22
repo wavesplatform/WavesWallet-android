@@ -7,21 +7,20 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.local.Language
+import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.language.LanguageAdapter
 import com.wavesplatform.wallet.v2.ui.language.LanguagePresenter
 import com.wavesplatform.wallet.v2.ui.language.LanguageView
-import com.wavesplatform.wallet.v2.util.launchActivity
-import pers.victor.ext.dp2px
-import javax.inject.Inject
-import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_choose_language.*
 import pers.victor.ext.click
+import pers.victor.ext.dp2px
 import pers.victor.ext.visiable
 import java.util.*
+import javax.inject.Inject
 
 
 class ChooseLanguageActivity : BaseActivity(), LanguageView {

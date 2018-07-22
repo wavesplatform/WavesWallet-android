@@ -7,13 +7,12 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.home.history.TestObject
 import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItemAdapter
+import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import kotlinx.android.synthetic.main.fragment_history_date.*
 import java.util.*
 import javax.inject.Inject
-import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 
 
 class HistoryDateItemFragment : BaseFragment(), HistoryDateItemView {

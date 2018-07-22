@@ -2,15 +2,12 @@ package com.wavesplatform.wallet.v2.ui.home.profile.network
 
 import android.os.Bundle
 import android.view.View
-import javax.inject.Inject
-
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_network.*
+import javax.inject.Inject
 
 
 class NetworkActivity : BaseActivity(), NetworkView {

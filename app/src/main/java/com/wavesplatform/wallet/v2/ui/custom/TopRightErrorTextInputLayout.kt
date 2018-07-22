@@ -10,7 +10,6 @@ import android.widget.TextView
 import com.wavesplatform.wallet.R
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
-import pers.victor.ext.sp2px
 
 
 class TopRightErrorTextInputLayout(context: Context, attrs: AttributeSet) : TextInputLayout(context, attrs) {

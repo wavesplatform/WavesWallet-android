@@ -1,9 +1,8 @@
 package com.wavesplatform.wallet.v2.data.local
 
 import android.content.Context
-import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
-
 import com.pddstudio.preferences.encrypted.EncryptedPreferences
+import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import javax.inject.Inject
 
 class PreferencesHelper @Inject constructor(@ApplicationContext context: Context) {

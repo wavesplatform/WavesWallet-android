@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.data.model.local
 
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
-import com.google.gson.annotations.SerializedName
 
 
 /**

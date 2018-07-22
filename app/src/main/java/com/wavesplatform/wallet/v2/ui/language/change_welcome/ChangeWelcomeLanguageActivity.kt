@@ -2,29 +2,27 @@ package com.wavesplatform.wallet.v2.ui.language.change_welcome
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.TypedValue
 import android.view.View
-import javax.inject.Inject
-
 import com.arellomobile.mvp.presenter.InjectPresenter
-import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.Language
+import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
+import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.language.LanguageAdapter
 import com.wavesplatform.wallet.v2.ui.language.LanguagePresenter
 import com.wavesplatform.wallet.v2.ui.language.LanguageView
+import com.wavesplatform.wallet.v2.util.notNull
+import kotlinx.android.synthetic.main.activity_change_welcome_language.*
+import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.screenHeight
 import pers.victor.ext.visiable
-import android.util.TypedValue
-import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
-import com.wavesplatform.wallet.v2.util.notNull
-import pers.victor.ext.click
-import com.franmontiel.localechanger.LocaleChanger
-import kotlinx.android.synthetic.main.activity_change_welcome_language.*
 import java.util.*
+import javax.inject.Inject
 
 
 class ChangeWelcomeLanguageActivity : BaseActivity(), LanguageView {

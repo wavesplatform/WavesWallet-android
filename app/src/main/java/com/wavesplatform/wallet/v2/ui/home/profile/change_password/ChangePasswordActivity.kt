@@ -2,14 +2,10 @@ package com.wavesplatform.wallet.v2.ui.home.profile.change_password
 
 import android.os.Bundle
 import android.view.View
-import javax.inject.Inject
-
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -17,6 +13,7 @@ import io.github.anderscheow.validator.rules.common.EqualRule
 import io.github.anderscheow.validator.rules.common.MinRule
 import kotlinx.android.synthetic.main.activity_change_password.*
 import pers.victor.ext.addTextChangedListener
+import javax.inject.Inject
 
 
 class ChangePasswordActivity : BaseActivity(), ChangePasswordView {

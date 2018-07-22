@@ -11,18 +11,21 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
-import com.wavesplatform.wallet.v2.ui.import_account.ImportAccountActivity
-import com.wavesplatform.wallet.v2.ui.qr_scanner.QrCodeScannerActivity
-import com.wavesplatform.wallet.v2.ui.your_assets.YourAssetsActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_send.*
-import pers.victor.ext.*
+import pers.victor.ext.addTextChangedListener
+import pers.victor.ext.click
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import javax.inject.Inject
 
 

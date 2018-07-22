@@ -14,7 +14,6 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
 import com.wavesplatform.wallet.v2.ui.welcome.AlphaScalePageTransformer
 import kotlinx.android.synthetic.main.activity_asset_details.*
 import pers.victor.ext.click

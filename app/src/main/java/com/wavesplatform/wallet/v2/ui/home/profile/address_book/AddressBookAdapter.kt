@@ -3,10 +3,6 @@ package com.wavesplatform.wallet.v2.ui.home.profile.address_book
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity.Companion.BUNDLE_TYPE
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity.Companion.REQUEST_EDIT_ADDRESS
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity.Companion.SCREEN_TYPE_EDITABLE
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import kotlinx.android.synthetic.main.address_book_item.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.visiable

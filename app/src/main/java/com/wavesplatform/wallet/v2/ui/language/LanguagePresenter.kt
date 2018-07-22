@@ -4,7 +4,6 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.notNull
 import javax.inject.Inject
 
 @InjectViewState

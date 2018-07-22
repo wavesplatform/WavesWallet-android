@@ -9,13 +9,12 @@ import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
-import com.wavesplatform.wallet.v2.ui.passcode.create.CreatePasscodeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.activity_confirm_backup_pharse.*
-import kotlinx.android.synthetic.main.spinner_item.view.*
 import pers.victor.ext.*
 import java.lang.StringBuilder
 import javax.inject.Inject

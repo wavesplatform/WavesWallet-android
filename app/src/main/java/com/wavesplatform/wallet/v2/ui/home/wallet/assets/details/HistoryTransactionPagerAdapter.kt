@@ -2,16 +2,13 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
 import android.content.Context
 import android.support.v4.view.PagerAdapter
-import android.support.v7.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
-import kotlinx.android.synthetic.main.item_asset_details_avatar.view.*
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 
 class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var mContext: Context) : PagerAdapter() {

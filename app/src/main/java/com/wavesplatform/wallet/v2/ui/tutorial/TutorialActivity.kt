@@ -1,11 +1,11 @@
 package com.wavesplatform.wallet.v2.ui.tutorial
 
-import android.animation.*
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.os.Bundle
 import android.support.v7.widget.AppCompatButton
-import android.view.View
-import android.widget.Button
-import android.widget.RelativeLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R

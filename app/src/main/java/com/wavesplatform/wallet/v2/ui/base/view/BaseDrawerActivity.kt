@@ -4,16 +4,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.startActivity
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants

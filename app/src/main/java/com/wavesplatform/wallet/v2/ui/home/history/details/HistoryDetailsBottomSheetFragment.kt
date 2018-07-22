@@ -20,11 +20,13 @@ import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import io.github.kbiakov.codeview.CodeView
-import io.github.kbiakov.codeview.highlight.ColorTheme
 import io.github.kbiakov.codeview.highlight.ColorThemeData
 import io.github.kbiakov.codeview.highlight.SyntaxColors
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
-import pers.victor.ext.*
+import pers.victor.ext.click
+import pers.victor.ext.findColor
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.*
 import kotlin.collections.ArrayList

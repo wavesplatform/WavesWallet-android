@@ -5,9 +5,7 @@ import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.HttpException
@@ -19,9 +17,6 @@ import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
-import io.reactivex.subjects.PublishSubject
-
-
 
 
 class RxErrorHandlingCallAdapterFactory(private val mErrorManager: ErrorManager) : CallAdapter.Factory() {

@@ -1,10 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
 
-import android.content.ClipData
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.AppCompatImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -13,13 +10,9 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.HistoryTransactionPagerAdapter
 import com.wavesplatform.wallet.v2.util.copyToClipboard
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_asset_details_content.*
 import pers.victor.ext.click
-import pers.victor.ext.clipboardManager
 import pers.victor.ext.dp2px
-import pers.victor.ext.toast
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject

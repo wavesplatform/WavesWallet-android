@@ -197,15 +197,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
-            android:name=".v2.ui.new_account.NewAccountActivity"
+            android:name=".v2.ui.auth.new_account.NewAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.new_account.secret_phrase.SecretPhraseActivity"
+            android:name=".v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.new_account.backup_info.BackupInfoActivity"
+            android:name=".v2.ui.auth.new_account.backup_info.BackupInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
@@ -217,7 +217,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.address.MyAddressQRActivity"
+            android:name="com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
@@ -248,29 +248,29 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.passcode.create.CreatePasscodeActivity"
+            android:name=".v2.ui.auth.passcode.create.CreatePasscodeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.passcode.enter.EnterPasscodeActivity"
+            android:name=".v2.ui.auth.passcode.enter.EnterPasscodeActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.fingerprint.UseFingerprintActivity"
+            android:name="com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.choose_account.edit.EditAccountNameActivity"
+            android:name=".v2.ui.auth.choose_account.edit.EditAccountNameActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".v2.ui.choose_account.ChooseAccountActivity"
+            android:name=".v2.ui.auth.choose_account.ChooseAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
-            android:name=".v2.ui.passcode.enter.use_account_password.UseAccountPasswordActivity"
+            android:name=".v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
@@ -283,19 +283,19 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
-            android:name=".v2.ui.import_account.ImportAccountActivity"
+            android:name=".v2.ui.auth.import_account.ImportAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.qr_scanner.QrCodeScannerActivity"
+            android:name="com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
-            android:name=".v2.ui.import_account.enter_seed.EnterSeedManuallyActivity"
+            android:name=".v2.ui.auth.import_account.enter_seed.EnterSeedManuallyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.import_account.protect_account.ProtectAccountActivity"
+            android:name=".v2.ui.auth.import_account.protect_account.ProtectAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
@@ -304,16 +304,16 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".v2.ui.receive.about_redirection.AboutRedirectionActivity"
+            android:name=".v2.ui.home.quick_action.receive.about_redirection.AboutRedirectionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
-            android:name=".v2.ui.your_assets.YourAssetsActivity"
+            android:name="com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".v2.ui.receive.ReceiveActivity"
+            android:name=".v2.ui.home.quick_action.receive.ReceiveActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
 
@@ -322,7 +322,7 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
 
         <activity
-            android:name=".v2.ui.receive.address_view.ReceiveAddressViewActivity"
+            android:name=".v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"/>
     </application>

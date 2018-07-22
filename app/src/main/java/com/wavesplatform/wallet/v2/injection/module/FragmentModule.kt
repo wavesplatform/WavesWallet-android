@@ -5,14 +5,14 @@ import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
+import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.bank.BankFragment
+import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card.CardFragment
+import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency.СryptocurrencyFragment
+import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
-import com.wavesplatform.wallet.v2.ui.receive.bank.BankFragment
-import com.wavesplatform.wallet.v2.ui.receive.card.CardFragment
-import com.wavesplatform.wallet.v2.ui.receive.cryptocurrency.СryptocurrencyFragment
-import com.wavesplatform.wallet.v2.ui.receive.invoice.InvoiceFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

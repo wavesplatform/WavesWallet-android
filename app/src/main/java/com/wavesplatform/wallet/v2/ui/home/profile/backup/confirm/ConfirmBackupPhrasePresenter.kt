@@ -2,9 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @InjectViewState
 class ConfirmBackupPhrasePresenter @Inject constructor() : BasePresenter<ConfirmBackupPhraseView>() {

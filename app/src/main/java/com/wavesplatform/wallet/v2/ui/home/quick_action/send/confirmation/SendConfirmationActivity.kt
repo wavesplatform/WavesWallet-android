@@ -3,20 +3,17 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
-import javax.inject.Inject
-
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_send_confirmation.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.invisiable
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import javax.inject.Inject
 
 
 class SendConfirmationActivity : BaseActivity(), SendConfirmationView {

@@ -1,35 +1,29 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit
 
+
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.MotionEvent
+import android.support.v4.content.res.ResourcesCompat
+import android.support.v7.app.AlertDialog
 import android.view.View
-import javax.inject.Inject
-
+import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-
-import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.mindorks.editdrawabletext.DrawablePosition
+import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity.Companion.BUNDLE_POSITION
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
 import kotlinx.android.synthetic.main.activity_edit_address.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
-import android.content.DialogInterface
-import android.content.DialogInterface.BUTTON_NEUTRAL
-import android.graphics.Typeface
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v7.app.AlertDialog
-import android.widget.TextView
-import com.mindorks.editdrawabletext.DrawablePosition
-import com.mindorks.editdrawabletext.onDrawableClickListener
 import pyxis.uzuki.live.richutilskt.utils.toast
+import javax.inject.Inject
 
 
 class EditAddressActivity : BaseActivity(), EditAddressView {

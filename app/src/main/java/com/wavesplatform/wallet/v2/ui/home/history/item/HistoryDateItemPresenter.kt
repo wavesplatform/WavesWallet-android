@@ -5,9 +5,6 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.history.TestObject
 import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
-import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment.Companion.all
-import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment.Companion.received
-import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment.Companion.send
 import java.util.*
 import javax.inject.Inject
 

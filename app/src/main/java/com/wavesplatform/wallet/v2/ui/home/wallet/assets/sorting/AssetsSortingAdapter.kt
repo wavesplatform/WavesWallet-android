@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
 import com.chad.library.adapter.base.BaseItemDraggableAdapter
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save

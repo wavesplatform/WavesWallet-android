@@ -1,13 +1,9 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
-import android.os.Bundle
 import com.arellomobile.mvp.InjectViewState
-import com.vicpin.krealmextensions.queryAllAsFlowable
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.ui.home.history.TestObject
-import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
 import com.wavesplatform.wallet.v2.util.RxUtil
 import java.util.*
 import javax.inject.Inject

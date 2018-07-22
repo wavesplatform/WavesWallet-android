@@ -1,14 +1,10 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
-import android.support.v4.content.ContextCompat
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.crypto.PublicKeyAccount
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.wallet_asset_item.view.*
 import javax.inject.Inject
 
