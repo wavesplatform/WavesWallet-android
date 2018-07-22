@@ -930,7 +930,7 @@
 
     <!--Addresses and keys-->
     <string name="addresses_and_keys_toolbar_title">Addresses, keys</string>
-    <string name="addresses_and_keys_started_leasing">Started Leasing</string>
+    <string name="addresses_and_keys_aliases">Aliases</string>
     <string name="addresses_and_keys_you_do_not_have">You do not have</string>
     <string name="addresses_and_keys_your_address">Your address</string>
     <string name="addresses_and_keys_public_key">Public key</string>

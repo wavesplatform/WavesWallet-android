@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@color/basic50"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -12,6 +13,7 @@
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="14dp"
             android:layout_marginLeft="16dp"
             android:text="@string/profile_general_setting"
@@ -440,14 +442,16 @@
             </FrameLayout>
         </android.support.v7.widget.CardView>
 
-        <View
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/view_line_3"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:layout_marginBottom="24dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="24dp"
-            android:background="@drawable/dotted_line" />
+            android:background="@drawable/dotted_line"
+            android:layerType="software" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -506,7 +510,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="@dimen/_50sdp"
+            android:layout_marginTop="44dp"
             android:background="@drawable/btn_cancel_leasing_selector"
             android:drawablePadding="16dp"
             android:gravity="center"

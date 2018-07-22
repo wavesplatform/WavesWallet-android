@@ -50,12 +50,13 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
         textView.text = text
         textView.setTextColor(Color.WHITE)
         textView.setBackgroundResource(R.drawable.blue_shape)
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-        textView.setPadding(dp2px(16f), dp2px(8f), dp2px(16f), dp2px(8f))
+        textView.setMargins(dp2px(4), dp2px(7), dp2px(4), dp2px(7))
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+        textView.setPadding(dp2px(14f), dp2px(8f), dp2px(14f), dp2px(8f))
         textView.setOnClickListener({
             flow_random_phrase.getChildAt(position).gone()
-
             flow_confirm.addView(buildConfirmLabel(text, position))
+            checkCountToChangeTextVisibility()
 
             if (flow_confirm.childCount == presenter.originPhraseList.size) {
                 val phraseText = StringBuilder()
@@ -82,12 +83,13 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
         val cardView = CardView(this)
         val textView = TextView(this)
         textView.text = text
-        textView.setMargins(dp2px(10), dp2px(10), dp2px(10), dp2px(10))
-        textView.setTextColor(Color.BLUE)
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-        textView.setPadding(dp2px(16f), dp2px(8f), dp2px(16f), dp2px(8f))
+        textView.setMargins(dp2px(4), dp2px(7), dp2px(4), dp2px(7))
+        textView.setTextColor(findColor(R.color.black))
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+        textView.setPadding(dp2px(14f), dp2px(8f), dp2px(14f), dp2px(8f))
         textView.setOnClickListener({
             flow_confirm.removeView(cardView)
+            checkCountToChangeTextVisibility()
             flow_random_phrase.getChildAt(randomPosition).visiable()
 
             button_confirm.gone()
@@ -102,5 +104,13 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
         cardView.setCardBackgroundColor(Color.WHITE)
         cardView.addView(textView)
         return cardView
+    }
+
+    private fun checkCountToChangeTextVisibility() {
+        if (flow_confirm.childCount == 0) {
+            text_please_tap.visiable()
+        } else {
+            text_please_tap.gone()
+        }
     }
 }

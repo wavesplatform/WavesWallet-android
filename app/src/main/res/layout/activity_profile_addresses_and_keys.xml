@@ -37,6 +37,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="14dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
                 android:background="@drawable/shape_rect_bordered_accent50"
                 android:paddingBottom="10dp"
                 android:paddingLeft="14dp"
@@ -63,7 +65,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="@string/addresses_and_keys_started_leasing"
+                        android:text="@string/addresses_and_keys_aliases"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         app:fontFamily="@font/roboto_bold" />
@@ -199,6 +201,7 @@
                 android:textColor="@color/disabled500" />
 
             <Button
+                android:id="@+id/button_show"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"

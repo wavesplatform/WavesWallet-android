@@ -31,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:padding="7dp"
             app:alignContent="center"
             app:alignItems="center"
             app:dividerDrawable="@drawable/divider"
@@ -61,10 +62,10 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/text_please_tap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:lineSpacingExtra="2sp"
             android:text="@string/confirm_backup_info"
             android:textColor="@color/black"
             android:textSize="12sp" />

@@ -10,12 +10,10 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity
+import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_backup_pharse.*
-import pers.victor.ext.click
-import pers.victor.ext.clipboardManager
-import pers.victor.ext.dp2px
-import pers.victor.ext.toast
+import pers.victor.ext.*
 import javax.inject.Inject
 
 
@@ -50,17 +48,18 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
                 putExtra(PHRASE_LIST, phraseList)
             }
         }
+
         image_copy.click {
-            clipboardManager.primaryClip = ClipData.newPlainText(getString(R.string.app_name), phraseList.toString().replace("[", "").replace("]", "").replace(",", ""))
-            toast(getString(R.string.common_copied_to_clipboard))
+            image_copy.copyToClipboard(phraseList.toString().replace("[", "").replace("]", "").replace(",", ""))
         }
     }
 
     private fun buildLabel(text: String): TextView {
         val textView = TextView(this)
         textView.text = text
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-        textView.setPadding(dp2px(16f), dp2px(8f), dp2px(16f), dp2px(8f))
+        textView.setTextColor(findColor(R.color.black))
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+        textView.setPadding(dp2px(7f), dp2px(7f), dp2px(7f), dp2px(7f))
 
         return textView
     }

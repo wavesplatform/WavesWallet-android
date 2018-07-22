@@ -4,6 +4,8 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -33,9 +35,9 @@
         android:textSize="16sp"
         android:id="@+id/edit_search"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="14dp"
         android:drawableStart="@drawable/ic_search_24_basic_500"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

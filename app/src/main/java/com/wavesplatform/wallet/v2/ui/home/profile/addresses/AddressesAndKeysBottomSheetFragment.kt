@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.home.profile
+package com.wavesplatform.wallet.v2.ui.home.profile.addresses
 
 import android.os.Bundle
 import android.view.LayoutInflater
