@@ -6,5 +6,11 @@ import javax.inject.Inject
 
 @InjectViewState
 class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
+    var checkedAboutFundsOnDevice = false
+    var checkedAboutBackup = false
+    var checkedAboutTerms = false
 
+    fun isAllCheckedToStart(): Boolean {
+        return checkedAboutBackup && checkedAboutFundsOnDevice && checkedAboutTerms
+    }
 }

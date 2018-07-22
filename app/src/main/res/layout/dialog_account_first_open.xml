@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:srcCompat="@drawable/ic_userimg_done_80_success_400" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:text="@string/dialog_account_first_open_title"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:fontFamily="@font/roboto_medium" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/dialog_account_first_open_subtitle"
+        android:textColor="@color/disabled500"
+        android:textSize="12sp" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/view_dashed"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="24dp"
+        android:layerType="software"
+        app:srcCompat="@drawable/bg_dashed" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkbox_funds_on_device"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:button="@drawable/selector_rounded_checkbox" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="14dp"
+            android:text="@string/dialog_account_first_open_about_fund_on_device"
+            android:textColor="@color/black"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkbox_backup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:button="@drawable/selector_rounded_checkbox" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="14dp"
+            android:text="@string/dialog_account_first_open_about_backup"
+            android:textColor="@color/black"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkbox_terms_of_use"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:button="@drawable/selector_rounded_checkbox" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_about_terms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="14dp"
+            android:text="@string/dialog_account_first_open_about_terms"
+            android:textColor="@color/black"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_confirm"
+        style="@style/WavesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:enabled="false"
+        android:text="@string/dialog_account_first_open_confirm_and_begin" />
+
+
+</LinearLayout>

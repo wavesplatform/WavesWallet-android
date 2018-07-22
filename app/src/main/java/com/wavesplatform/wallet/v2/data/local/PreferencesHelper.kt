@@ -21,6 +21,7 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         val PREF_FILE_NAME = "android_waves_pref_file"
         val KEY_TUTORIAL = "keyTutorial"
         val KEY_LANGUAGE = "keyLanguage"
+        val KEY_ACCOUNT_FIRST_OPEN = "key_account_first_open"
         val KEY_DEFAULT_ASSETS = "key_default_assets"
     }
 
@@ -46,6 +47,14 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
 
     fun setDefaultAssetsAlreadyExist(value: Boolean) {
         mPref.edit().putBoolean(KEY_DEFAULT_ASSETS, value).apply()
+    }
+
+    fun isAccountFirstOpen(): Boolean {
+        return mPref.getBoolean(KEY_ACCOUNT_FIRST_OPEN, false)
+    }
+
+    fun setAccountFirstOpen(value: Boolean) {
+        mPref.edit().putBoolean(KEY_ACCOUNT_FIRST_OPEN, value).apply()
     }
 
 }

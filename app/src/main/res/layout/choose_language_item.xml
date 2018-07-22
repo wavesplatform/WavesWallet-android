@@ -38,6 +38,6 @@
         android:clickable="false"
         android:background="@null"
         android:layout_centerVertical="true"
-        android:button="@drawable/selector_checkbox" />
+        android:button="@drawable/selector_circle_checkbox" />
 
 </RelativeLayout>

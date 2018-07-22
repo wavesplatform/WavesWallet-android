@@ -110,7 +110,6 @@ abstract class BaseDrawerActivity : BaseActivity() {
     fun openPdfUrlWithIntent(url: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browserIntent)
-
     }
 
     fun openUrlWithIntent(url: String) {

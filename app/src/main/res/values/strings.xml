@@ -1144,4 +1144,14 @@
     <string name="receive_address_close">Close</string>
     <string name="receive_address_link_to_invoice">Link to an Invoice</string>
     <string name="receive_address_waves_address">Your Waves address</string>
+
+    <!--Account first open alert-->
+    <string name="dialog_account_first_open_title">Done! Let’s review.</string>
+    <string name="dialog_account_first_open_subtitle">Waves is different — it cannot be held safely by a bank or web service</string>
+    <string name="dialog_account_first_open_about_fund_on_device">I understand that my funds are held securely on this device, not by a company</string>
+    <string name="dialog_account_first_open_about_backup">I understand that if this app is moved to another device or deleted, my Waves can only be recovered with the backup phrase</string>
+    <string name="dialog_account_first_open_about_terms">I have read, understood, and agree to the\nTerms of Use</string>
+    <string name="dialog_account_first_open_about_terms_key">Terms of Use</string>
+    <string name="dialog_account_first_open_confirm_and_begin">Confirm and Begin</string>
+
 </resources>

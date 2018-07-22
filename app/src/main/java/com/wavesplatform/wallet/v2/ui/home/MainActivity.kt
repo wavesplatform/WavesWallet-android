@@ -1,21 +1,34 @@
 package com.wavesplatform.wallet.v2.ui.home
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
+import android.text.TextPaint
+import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
+import com.wavesplatform.wallet.v2.util.makeLinks
 import kotlinx.android.synthetic.main.activity_main_v2.*
+import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
+import kotlinx.android.synthetic.main.fragment_bank.*
+import pers.victor.ext.click
+import pers.victor.ext.findColor
 import javax.inject.Inject
 
 
@@ -28,6 +41,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     @Inject
     @InjectPresenter
     lateinit var presenter: MainPresenter
+    var accountFirstOpenDialog: AlertDialog? = null
 
 
     @ProvidePresenter
@@ -36,12 +50,63 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_general)
         needChangeStatusBarColorOnMenuOpen(false)
-//        presenter.loadBalancesAndTransactions()
+
+        showFirstOpenAlert(preferencesHelper.isAccountFirstOpen())
 
         setupBottomNavigation()
 
 //        select the first tab
         onTabSelected(tab_navigation.getTabAt(0))
+    }
+
+    private fun showFirstOpenAlert(firstOpen: Boolean) {
+        if (!firstOpen) {
+            val alertDialogBuilder = AlertDialog.Builder(this)
+            accountFirstOpenDialog = alertDialogBuilder
+                    .setCancelable(false)
+                    .setView(getFirstOpenAlertView())
+                    .create()
+
+            accountFirstOpenDialog?.show()
+        }
+    }
+
+    private fun getFirstOpenAlertView(): View? {
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_account_first_open, null)
+
+        view.checkbox_terms_of_use.setOnCheckedChangeListener { buttonView, isChecked ->
+            presenter.checkedAboutTerms = isChecked
+            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
+        }
+        view.checkbox_backup.setOnCheckedChangeListener { buttonView, isChecked ->
+            presenter.checkedAboutBackup = isChecked
+            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
+        }
+        view.checkbox_funds_on_device.setOnCheckedChangeListener { buttonView, isChecked ->
+            presenter.checkedAboutFundsOnDevice = isChecked
+            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
+        }
+
+        val siteClick = object : ClickableSpan() {
+            override fun onClick(p0: View?) {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_TERMS))
+                startActivity(browserIntent)
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.color = findColor(R.color.black)
+            }
+        }
+
+        view.text_about_terms.makeLinks(arrayOf(getString(R.string.dialog_account_first_open_about_terms_key)), arrayOf(siteClick))
+
+        view.button_confirm.click {
+            preferencesHelper.setAccountFirstOpen(true)
+            accountFirstOpenDialog?.cancel()
+        }
+
+        return view
     }
 
     override fun configLayoutRes() = R.layout.activity_main_v2
