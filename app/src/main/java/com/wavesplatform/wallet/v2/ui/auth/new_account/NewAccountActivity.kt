@@ -2,10 +2,10 @@ package com.wavesplatform.wallet.v2.ui.auth.new_account
 
 import android.app.Activity
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
 import android.view.View
+import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
@@ -13,7 +13,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.launchActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -27,11 +26,17 @@ import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.children
 import pers.victor.ext.click
 import pers.victor.ext.getBitmap
-import java.util.*
 import javax.inject.Inject
 
 
 class NewAccountActivity : BaseActivity(), NewAccountView {
+    override fun afterSuccessGenerateAvatar(bitmap: Bitmap, imageView: AppCompatImageView) {
+        Glide.with(applicationContext)
+                .load(bitmap)
+                .apply(RequestOptions()
+                        .circleCrop())
+                .into(imageView)
+    }
 
     @Inject
     @InjectPresenter
@@ -90,7 +95,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                                 isFieldsValid()
                             }
                         }, passwordValidation)
-                if (edit_confirm_password.text.isNotEmpty()){
+                if (edit_confirm_password.text.isNotEmpty()) {
                     val confirmPasswordValidation = Validation(til_confirm_password)
                             .and(EqualRule(edit_create_password.text.toString(), R.string.new_account_confirm_password_validation_match_error))
                     validator
@@ -140,19 +145,10 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                 avatarIsSelected(it.getBitmap())
             }
 
-
-            // draw unique identicon avatar with random background color and make image with circle crop effect
-            val rnd = Random()
-            val color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
-            Glide.with(applicationContext)
-                    .load(Identicon.create((1..999).shuffled().last().toString(),
-                            Identicon.Options.Builder()
-                                    .setBlankColor(color)
-                                    .create()))
-                    .apply(RequestOptions()
-                            .circleCrop())
-                    .into(it as AppCompatImageView)
         })
+
+        // draw unique identicon avatar with random background color and make image with circle crop effect
+        presenter.generateAvatars(linear_images.children as List<AppCompatImageView>)
     }
 
     fun isFieldsValid() {

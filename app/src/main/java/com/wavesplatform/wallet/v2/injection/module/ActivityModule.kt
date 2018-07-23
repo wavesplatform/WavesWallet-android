@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
@@ -207,4 +208,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun receiveLoadingActivity(): ReceiveAddressViewActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun activeMarketsSortingActivity(): ActiveMarketsSortingActivity
 }

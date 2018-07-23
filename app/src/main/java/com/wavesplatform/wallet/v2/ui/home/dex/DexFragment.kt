@@ -9,7 +9,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
+import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_dex_new.*
 import pers.victor.ext.gone
 import pers.victor.ext.toast
@@ -61,7 +63,7 @@ class DexFragment :BaseFragment(),DexView{
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
             R.id.action_sorting -> {
-                toast(item.title)
+                launchActivity<ActiveMarketsSortingActivity> {  }
             }
             R.id.action_add_market -> {
                 toast(item.title)

@@ -21,6 +21,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_welcome.*
 import pers.victor.ext.*
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.*
 import javax.inject.Inject
 import kotlin.concurrent.fixedRateTimer
@@ -49,7 +50,14 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view)
-        changeDrawerMenuIcon(R.drawable.ic_toolbar_menu_white)
+        changeDrawerMenuIcon(findDrawable(R.drawable.ic_toolbar_menu_white))
+//        val icon = findDrawable(R.drawable.avd_anim)
+//        icon.notNull {
+//            changeDrawerMenuIcon(it)
+//            if (it is Animatable) {
+//                (it as Animatable).start()
+//            }
+//        }
 
         button_create_account.click {
             white_block.visiable()
@@ -64,6 +72,9 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
                             overridePendingTransition(0,0)
                         }
                         .start()
+//                runDelayed(380,{
+//
+//                })
             })
         }
 

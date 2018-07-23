@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -25,7 +26,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
     protected lateinit var slidingRootNav: SlidingRootNav
     private var changeStatusBarColor = true
     private var view: View? = null
-    private var drawerIcon = R.drawable.ic_toolbar_menu
+    private var drawerIcon = findDrawable(R.drawable.ic_toolbar_menu)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +63,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
                 .withMenuLayout(R.layout.menu_left_drawer)
                 .inject()
 
-        toolbar.setNavigationIcon(drawerIcon)
+        toolbar.navigationIcon = drawerIcon
 
         createCloseView()
         slidingRootNav.layout.linear_drawer.scaleX = 1.5f
@@ -190,7 +191,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
         changeStatusBarColor = change
     }
 
-    fun changeDrawerMenuIcon(icon: Int){
+    fun changeDrawerMenuIcon(icon: Drawable?){
         drawerIcon = icon
     }
 }
