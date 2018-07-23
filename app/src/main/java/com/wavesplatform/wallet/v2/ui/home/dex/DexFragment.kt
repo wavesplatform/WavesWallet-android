@@ -9,12 +9,14 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.home.dex.adapter.DexAdapter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
 import kotlinx.android.synthetic.main.fragment_dex_new.*
+import pers.victor.ext.gone
 import pers.victor.ext.toast
+import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class DexFragment :BaseFragment(),DexView{
 
@@ -27,6 +29,7 @@ class DexFragment :BaseFragment(),DexView{
 
     @Inject
     lateinit var adapter: DexAdapter
+    var menu: Menu? = null
 
     override fun configLayoutRes(): Int = R.layout.fragment_dex_new
 
@@ -46,18 +49,12 @@ class DexFragment :BaseFragment(),DexView{
         recycle_dex.adapter = adapter
         recycle_dex.isNestedScrollingEnabled = false
 
-        adapter.setNewData(arrayListOf(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble())))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_dex, menu)
+        this.menu = menu
+        presenter.loadActiveMarkets()
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -72,5 +69,21 @@ class DexFragment :BaseFragment(),DexView{
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun afterSuccessLoadMarkets(list: ArrayList<TestObject>) {
+        if (list.isEmpty()){
+            linear_content.gone()
+            linear_empty.visiable()
+            menu?.findItem(R.id.action_sorting)?.isVisible = false
+        }else{
+            linear_empty.gone()
+            linear_content.visiable()
+            menu?.findItem(R.id.action_sorting)?.isVisible = true
+            adapter.setNewData(list)
+        }
+    }
+
+    override fun afterFailedLoadMarkets() {
     }
 }

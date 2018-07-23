@@ -811,6 +811,9 @@
 
     <!-- DEX -->
     <string name="dex_toolbar_title">DEX</string>
+    <string name="dex_empty_title">Decentralised Exchange</string>
+    <string name="dex_empty_subtitle">Trade quickly and securely. You retain complete control over your funds when trading them on our decentralised exchange.</string>
+    <string name="dex_empty_button_text">Add Markets</string>
 
     <!-- Your Address -->
     <string name="your_address_toolbar_title">Your address</string>
@@ -1153,5 +1156,6 @@
     <string name="dialog_account_first_open_about_terms">I have read, understood, and agree to the\nTerms of Use</string>
     <string name="dialog_account_first_open_about_terms_key">Terms of Use</string>
     <string name="dialog_account_first_open_confirm_and_begin">Confirm and Begin</string>
+
 
 </resources>

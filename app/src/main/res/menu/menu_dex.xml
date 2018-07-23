@@ -4,6 +4,7 @@
         android:id="@+id/action_sorting"
         android:icon="@drawable/ic_toolbar_sort"
         auto:showAsAction="always"
+        android:visible="false"
         android:title="@string/dex_sorting_toolbar_title" />
 
     <item

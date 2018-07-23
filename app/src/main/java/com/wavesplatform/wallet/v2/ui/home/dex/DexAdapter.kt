@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.home.dex.adapter
+package com.wavesplatform.wallet.v2.ui.home.dex
 
 import android.support.v4.content.ContextCompat
 import com.chad.library.adapter.base.BaseQuickAdapter
