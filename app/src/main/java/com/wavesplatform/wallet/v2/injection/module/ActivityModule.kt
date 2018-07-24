@@ -41,6 +41,7 @@ import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeWelcomeLangu
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import dagger.Module
@@ -217,4 +218,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun dexMarketsActivity(): DexMarketsActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun tradeActivity(): TradeActivity
 }

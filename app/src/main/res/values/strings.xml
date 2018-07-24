@@ -654,6 +654,7 @@
     <!-- Common -->
     <string name="common_action_filter">Filter</string>
     <string name="common_action_close">Close</string>
+    <string name="common_action_information">Information</string>
     <string name="common_msg_in_development">Sorry, this feature will be available in the near future</string>
     <string name="common_persist">&amp;</string>
     <string name="common_copied_to_clipboard">Copied to clipboard</string>
@@ -1165,5 +1166,11 @@
     <string name="dex_markets_info_dialog_popular">Popular</string>
     <string name="dex_markets_info_dialog_amount_asset">Amount Asset — %s</string>
     <string name="dex_markets_info_dialog_price_asset">Price Asset — %s</string>
+
+    <!--Dex Trade-->
+    <string name="dex_trade_tab_orderbook">Orderbook</string>
+    <string name="dex_trade_tab_chart">Chart</string>
+    <string name="dex_trade_tab_last_trades">Last Trades</string>
+    <string name="dex_trade_tab_my_orders">My Orders</string>
 
 </resources>

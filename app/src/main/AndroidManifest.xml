@@ -328,10 +328,13 @@
             android:name=".v2.ui.home.dex.sorting.ActiveMarketsSortingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity android:name="com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity"
+        <activity
+            android:name=".v2.ui.home.dex.markets.DexMarketsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity android:name="com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"/>
     </application>
 
 </manifest>

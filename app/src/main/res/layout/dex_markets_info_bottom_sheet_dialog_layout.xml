@@ -55,12 +55,14 @@
         android:layout_height="wrap_content" />
 
     <RelativeLayout
-        android:layout_marginTop="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.AppCompatTextView
-            android:layout_marginStart="16dp"
             android:id="@+id/text_amount_asset_value"
             android:textColor="@color/disabled900"
             android:textSize="14sp"
@@ -74,7 +76,6 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginEnd="16dp"
             app:srcCompat="@drawable/ic_copy_18_submit_400" />
 
     </RelativeLayout>
@@ -82,7 +83,7 @@
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="6dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/dotted_line"
@@ -100,13 +101,15 @@
         android:layout_height="wrap_content" />
 
     <RelativeLayout
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:layout_marginBottom="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.AppCompatTextView
-            android:layout_marginStart="16dp"
             android:textColor="@color/disabled900"
             android:textSize="14sp"
             android:id="@+id/text_price_asset_value"
@@ -120,7 +123,6 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginEnd="16dp"
             app:srcCompat="@drawable/ic_copy_18_submit_400" />
 
     </RelativeLayout>

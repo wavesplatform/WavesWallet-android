@@ -7,17 +7,17 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.remote.response.Market
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_dex_new.*
 import pers.victor.ext.gone
-import pers.victor.ext.toast
 import pers.victor.ext.visiable
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -52,6 +52,11 @@ class DexFragment :BaseFragment(),DexView{
         recycle_dex.adapter = adapter
         recycle_dex.isNestedScrollingEnabled = false
 
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            launchActivity<TradeActivity> {
+                putExtra(TradeActivity.BUNDLE_MARKET, this@DexFragment.adapter.getItem(position))
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -74,7 +79,7 @@ class DexFragment :BaseFragment(),DexView{
         return super.onOptionsItemSelected(item)
     }
 
-    override fun afterSuccessLoadMarkets(list: ArrayList<TestObject>) {
+    override fun afterSuccessLoadMarkets(list: ArrayList<Market>) {
         if (list.isEmpty()){
             linear_content.gone()
             linear_empty.visiable()

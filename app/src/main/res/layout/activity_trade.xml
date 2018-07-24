@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/img_brand">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:fontFamily="@font/roboto"
+        app:titleTextAppearance="@style/Toolbar.Title"
+        app:titleTextColor="@color/white" />
+
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/stl_trade"
+        tl_indicator_gravity="BOTTOM"
+        tl_indicator_style="NORMAL"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_gravity="center_horizontal"
+        tl:tl_bar_stroke_width="0dp"
+        tl:tl_indicator_width="12dp"
+        tl:tl_indicator_corner_radius="2dp"
+        tl:tl_indicator_anim_enable="true"
+        tl:tl_textsize="14sp"
+        tl:tl_indicator_color="@color/white"
+        tl:tl_tab_space_equal="true"
+        tl:tl_textSelectColor="@color/white"
+        tl:tl_textUnselectColor="@color/submit200" />
+
+
+    <android.support.v4.view.ViewPager
+        android:layout_below="@+id/stl_trade"
+        android:id="@+id/viewpager_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="3dp"
+        android:overScrollMode="never" />
+
+
+</RelativeLayout>

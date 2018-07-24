@@ -12,7 +12,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="2dp"
-        android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/asset_item_radius"
