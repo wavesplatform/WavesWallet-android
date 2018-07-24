@@ -1160,8 +1160,10 @@
     <!--Dex Markets-->
     <string name="dex_markets_list_toolbar_title">Markets</string>
     <string name="dex_markets_list_search">Search</string>
-    <string name="dex_markets_list_popular">Popular</string>
-    <string name="dex_markets_list_amount_asset">Amount Asset — %s</string>
-    <string name="dex_markets_list_price_asset">Price Asset — %s</string>
+
+    <!--Dex Markets Info Dialog-->
+    <string name="dex_markets_info_dialog_popular">Popular</string>
+    <string name="dex_markets_info_dialog_amount_asset">Amount Asset — %s</string>
+    <string name="dex_markets_info_dialog_price_asset">Price Asset — %s</string>
 
 </resources>

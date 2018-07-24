@@ -16,6 +16,7 @@ import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.Market
+import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dex_markets.*
 import pers.victor.ext.gone
@@ -85,8 +86,20 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
 
         presenter.getMarkets()
 
+        adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+            val item = this.adapter.getItem(position) as Market
+
+            when(view.id){
+                R.id.image_info -> {
+                    val infoDialog = DexMarketInformationBottomSheetFragment()
+                    infoDialog.withMarketInformation(item)
+                    infoDialog.show(supportFragmentManager, infoDialog::class.java.simpleName)
+                }
+            }
+        }
+
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as Market
+            val item = this.adapter.getItem(position) as Market
 
             item.checked = !item.checked
             this.adapter.setData(position, item)

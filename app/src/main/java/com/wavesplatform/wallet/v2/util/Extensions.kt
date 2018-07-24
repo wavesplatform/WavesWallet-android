@@ -80,26 +80,26 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
     }
 }
 
-fun TextView.copyToClipboard(imageView: AppCompatImageView? = null) {
+fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: Int = R.drawable.ic_copy_18_black) {
     clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), this.text.toString())
     toast(this.context.getString(R.string.common_copied_to_clipboard))
 
     imageView.notNull { image ->
         image.setImageDrawable(ContextCompat.getDrawable(this.context, R.drawable.ic_check_18_success_400))
         runDelayed(1500, {
-            this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_copy_18_black)) }
+            this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, copyIcon)) }
         })
     }
 }
 
-fun ImageView.copyToClipboard(text: String) {
+fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_18_black) {
     clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), text)
     toast(this.context.getString(R.string.common_copied_to_clipboard))
 
     this.notNull { image ->
         image.setImageDrawable(ContextCompat.getDrawable(this.context, R.drawable.ic_check_18_success_400))
         runDelayed(1500, {
-            this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_copy_18_black)) }
+            this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, copyIcon)) }
         })
     }
 

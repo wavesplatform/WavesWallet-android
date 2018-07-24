@@ -50,7 +50,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
         }
 
         image_copy.click {
-            image_copy.copyToClipboard(phraseList.toString().replace("[", "").replace("]", "").replace(",", ""))
+            image_copy.copyToClipboard(phraseList.toString().replace("[", "").replace("]", "").replace(",", ""), R.drawable.ic_copy_18_submit_400)
         }
     }
 
