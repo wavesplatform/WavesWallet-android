@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingBottom="12dp"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="12dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_info"
+        android:layout_width="wrap_content"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/ic_information_22_multy"
+        android:layout_height="wrap_content" />
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_toEndOf="@+id/image_info"
+        android:layout_marginStart="8dp"
+        android:id="@+id/text_name"
+        android:layout_width="wrap_content"
+        android:textSize="12sp"
+        app:fontFamily="@font/roboto_bold"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:layout_height="wrap_content"
+        android:text="NAME1 / NAME2" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_full_name"
+        android:layout_width="wrap_content"
+        android:textSize="12sp"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/basic500"
+        android:layout_below="@+id/text_name"
+        android:textAllCaps="true"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@+id/image_info"
+        tools:text="FULLNAME1 / FULLNAME2" />
+
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/checkbox_choose"
+        android:layout_width="wrap_content"
+        android:visibility="visible"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:clickable="false"
+        android:background="@null"
+        android:layout_centerVertical="true"
+        android:button="@drawable/selector_circle_checkbox" />
+
+</RelativeLayout>

@@ -9,6 +9,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -66,7 +67,7 @@ class DexFragment :BaseFragment(),DexView{
                 launchActivity<ActiveMarketsSortingActivity> {  }
             }
             R.id.action_add_market -> {
-                toast(item.title)
+                launchActivity<DexMarketsActivity> {  }
             }
         }
 

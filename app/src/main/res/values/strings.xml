@@ -1157,5 +1157,11 @@
     <string name="dialog_account_first_open_about_terms_key">Terms of Use</string>
     <string name="dialog_account_first_open_confirm_and_begin">Confirm and Begin</string>
 
+    <!--Dex Markets-->
+    <string name="dex_markets_list_toolbar_title">Markets</string>
+    <string name="dex_markets_list_search">Search</string>
+    <string name="dex_markets_list_popular">Popular</string>
+    <string name="dex_markets_list_amount_asset">Amount Asset — %s</string>
+    <string name="dex_markets_list_price_asset">Price Asset — %s</string>
 
 </resources>

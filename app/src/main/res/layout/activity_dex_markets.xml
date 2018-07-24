@@ -21,7 +21,7 @@
         app:titleTextAppearance="@style/Toolbar.Title" />
 
     <com.mindorks.editdrawabletext.EditDrawableText
-        android:hint="@string/address_book_search"
+        android:hint="@string/dex_markets_list_search"
         android:textColorHint="@color/basic500"
         android:layout_below="@+id/toolbar_view"
         android:drawablePadding="8dp"
@@ -43,10 +43,10 @@
 
     <android.support.v7.widget.RecyclerView
         android:layout_below="@+id/edit_search"
-        android:id="@+id/recycle_addresses"
-        android:fitsSystemWindows="true"
+        android:id="@+id/recycle_markets"
         android:clipToPadding="false"
         android:paddingTop="18dp"
+        android:fitsSystemWindows="true"
         android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
