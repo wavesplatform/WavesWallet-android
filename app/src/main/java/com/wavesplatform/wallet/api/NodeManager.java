@@ -23,6 +23,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -52,6 +53,7 @@ public class NodeManager {
     }
 
     public AssetBalances assetBalances = new AssetBalances();
+    public AssetBalances deletedAssetBalances = new AssetBalances();
     public List<Transaction> transactions = new ArrayList<>();
     public List<Transaction> pendingTransactions = new ArrayList<>();
     public List<AssetBalance> pendingAssets = new ArrayList<>();
@@ -147,7 +149,32 @@ public class NodeManager {
                     updatePendingBalances();
 
                     return Pair.of(abs, txs);
-                }).ignoreElements();
+                }).ignoreElements().andThen(loadMissingAssets());
+    }
+
+    private Completable loadMissingAssets() {
+        Set<String> allAssets = this.assetBalances.getAllAssets();
+        Set<String> missingAssets = new HashSet<>();
+        for (Transaction tx : this.transactions) {
+            if (!allAssets.contains(tx.getAssetId())) {
+                missingAssets.add(tx.getAssetId());
+            }
+        }
+
+        for (Transaction tx : this.pendingTransactions) {
+            if (!allAssets.contains(tx.getAssetId())) {
+                missingAssets.add(tx.getAssetId());
+            }
+        }
+
+        return Observable.fromIterable(missingAssets)
+                .flatMap(service::getTransactionsInfo)
+                .toList().doOnSuccess(tis -> {
+                    this.deletedAssetBalances = new AssetBalances();
+                    for (TransactionsInfo ti : tis) {
+                        this.deletedAssetBalances.balances.add(AssetBalance.fromTransactionInfo(ti));
+                    }
+                }).toCompletable();
     }
 
     private void updatePendingTxs() {
@@ -184,7 +211,8 @@ public class NodeManager {
     }
 
     public String getAssetName(String assetId) {
-        return assetBalances.getAssetName(assetId);
+        String existing = assetBalances.getAssetName(assetId);
+        return existing != null ? existing : deletedAssetBalances.getAssetName(assetId);
     }
 
     public String getPublicKeyStr() {
@@ -212,6 +240,9 @@ public class NodeManager {
 
     public AssetBalance getAssetBalance(String assetId) {
         for (AssetBalance ab : assetBalances.balances) {
+            if (ab.isAssetId(assetId)) return ab;
+        }
+        for (AssetBalance ab : deletedAssetBalances.balances) {
             if (ab.isAssetId(assetId)) return ab;
         }
         return wavesAsset;
