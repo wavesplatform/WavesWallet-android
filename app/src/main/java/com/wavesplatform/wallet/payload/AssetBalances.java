@@ -2,8 +2,10 @@ package com.wavesplatform.wallet.payload;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AssetBalances {
     public String address;
@@ -20,5 +22,13 @@ public class AssetBalances {
         }
 
         return assetId2Name.get(assetId);
+    }
+
+    public Set<String> getAllAssets() {
+        Set<String> allAssets = new HashSet<>();
+        for (AssetBalance ab : balances) {
+            allAssets.add(ab.assetId);
+        }
+        return allAssets;
     }
 }

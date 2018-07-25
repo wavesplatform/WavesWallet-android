@@ -24,7 +24,7 @@ import retrofit2.http.GET;
 public class SpamManager {
     interface SpamApi {
 
-        @GET("scam.csv")
+        @GET("Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv")
         Observable<String> getSpamAssets();
     }
 
@@ -49,7 +49,7 @@ public class SpamManager {
     private SpamManager() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();;
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://github-proxy.wvservices.com/wavesplatform/WavesGUI/client-907-fix-portfolio/")
+                .baseUrl("https://github-proxy.wvservices.com/wavesplatform/waves-community/master/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(new RxErrorHandlingCallAdapterFactory())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

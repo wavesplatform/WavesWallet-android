@@ -37,4 +37,16 @@ public class AssetBalance {
     public boolean isWaves() {
         return assetId == null;
     }
+
+    public static AssetBalance fromTransactionInfo(TransactionsInfo ti) {
+        AssetBalance ab = new AssetBalance();
+        ab.assetId = ti.assetId;
+        ab.balance = 0;
+        ab.reissuable = ti.reissuable;
+        ab.quantity = ti.quantity;
+        ab.issueTransaction = new IssueTransaction(3, ti.id, ti.sender, Long.valueOf(ti.timestamp), ti.quantity, ti.fee,
+                ti.name, ti.description, ti.quantity, ti.decimals, ti.reissuable);
+
+        return ab;
+    }
 }
