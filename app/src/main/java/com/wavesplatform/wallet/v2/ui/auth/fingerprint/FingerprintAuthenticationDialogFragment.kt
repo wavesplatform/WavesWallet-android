@@ -1,12 +1,14 @@
 package com.wavesplatform.wallet.v2.ui.auth.fingerprint
 
 
+import android.app.Dialog
 import android.app.DialogFragment
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.AppCompatTextView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +23,11 @@ import pers.victor.ext.click
 class FingerprintAuthenticationDialogFragment : DialogFragment() {
     private var fingerprintState = FingerprintState.DEFAULT
     private var numberOfAttempts = 0
+    private var fingerPrintDialogListener: FingerPrintDialogListener? = null
+
+    init {
+        setFingerPrintDialogListener(object : FingerPrintDialogListener{})
+    }
 
     override fun onStart() {
         super.onStart()
@@ -32,16 +39,12 @@ class FingerprintAuthenticationDialogFragment : DialogFragment() {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fingerprint_dialog, container, false)
         view.text_enter_passcode.click {
-            dismiss()
+            fingerPrintDialogListener?.onPinCodeButtonClicked(this.dialog, it)
         }
         view.text_cancel.click {
-            dismiss()
+            fingerPrintDialogListener?.onCancelButtonClicked(this.dialog, it)
         }
         return view
-    }
-
-    fun onCancelDialogClicked() {
-        dismiss()
     }
 
     fun onSuccessRecognizedFingerprint() {
@@ -88,11 +91,24 @@ class FingerprintAuthenticationDialogFragment : DialogFragment() {
         }
     }
 
+    fun setFingerPrintDialogListener(fingerPrintDialogListener: FingerPrintDialogListener){
+        this.fingerPrintDialogListener = fingerPrintDialogListener
+    }
+
     private enum class FingerprintState {
         LOCKED, NOT_RECOGNIZED, SUCCESS, DEFAULT
     }
 
     companion object {
         val AVAILABLE_TIMES = 5
+    }
+
+    interface FingerPrintDialogListener {
+        fun onPinCodeButtonClicked(dialog: Dialog, button: AppCompatTextView) {
+            dialog.dismiss()
+        }
+        fun onCancelButtonClicked(dialog: Dialog, button: AppCompatTextView) {
+            dialog.dismiss()
+        }
     }
 }

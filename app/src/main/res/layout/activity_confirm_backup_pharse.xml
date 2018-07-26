@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/frame_phrase_form"
         android:layout_centerInParent="true"
-        android:layout_marginTop="@dimen/_70sdp"
+        android:layout_marginTop="90dp"
         android:lineSpacingExtra="2sp"
         android:text="@string/confirm_backup_error"
         android:textColor="@color/error500"
@@ -58,7 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -74,11 +74,11 @@
             android:id="@+id/flow_random_phrase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="10dp"
             android:minHeight="62dp"
             app:alignContent="center"
             app:alignItems="center"
-            app:dividerDrawable="@drawable/divider"
+            app:dividerDrawable="@drawable/divider_with_14_dp_margin"
             app:flexWrap="wrap"
             app:justifyContent="center"
             app:showDivider="beginning|middle|end" />

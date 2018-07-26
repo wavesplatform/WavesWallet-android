@@ -38,6 +38,7 @@
             android:textIsSelectable="false"
             android:layout_height="wrap_content"
             android:drawablePadding="8dp"
+            android:ellipsize="end"
             android:drawableRight="@drawable/ic_deladdress_24_error_400"
             android:hint="@string/edit_address_address"
             android:imeOptions="actionNext"

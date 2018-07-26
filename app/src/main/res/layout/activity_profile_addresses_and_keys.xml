@@ -200,6 +200,36 @@
                 android:text="@string/addresses_and_keys_private_key"
                 android:textColor="@color/disabled500" />
 
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/relative_private_key_block"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_private_key"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:layout_toLeftOf="@+id/image_private_key_copy"
+                    android:text="4T25bAunzydwvzkJcQ9f378UzGRqyUcDXLS4xgam7JQQ_private"
+                    android:textColor="@color/disabled900" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_private_key_copy"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    app:srcCompat="@drawable/ic_copy_black" />
+            </RelativeLayout>
+
             <Button
                 android:id="@+id/button_show"
                 android:layout_width="match_parent"

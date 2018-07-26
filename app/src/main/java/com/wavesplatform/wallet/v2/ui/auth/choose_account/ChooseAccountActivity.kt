@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
@@ -40,6 +41,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     companion object {
         var REQUEST_EDIT_ACCOUNT_NAME = 999
+        var REQUEST_ENTER_PASSCODE = 555
         var BUNDLE_ADDRESS_ITEM = "item"
         var BUNDLE_POSITION = "position"
     }
@@ -54,7 +56,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         presenter.getAddresses()
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            launchActivity<EnterPasscodeActivity> {  }
+            launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE) {  }
         }
 
         adapter.chooseAccountOnClickListener = this
@@ -101,6 +103,9 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                         adapter.setData(position!!, it)
                     }
                 }
+            }
+            REQUEST_ENTER_PASSCODE -> {
+                launchActivity<MainActivity>(clear = true){ }
             }
         }
     }

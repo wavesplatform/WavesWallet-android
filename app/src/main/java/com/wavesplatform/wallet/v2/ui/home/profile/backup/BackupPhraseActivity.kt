@@ -35,8 +35,8 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.backup_pharse), R.drawable.ic_toolbar_back_black)
 
-        val phraseList = arrayListOf<String>("mad", "more", "curious", "blister", "badlands", "jump", "honorary", "calling ", "hopeless",
-                "hatch", "duplicate", "dismemberment", " harsh", "hitchhiker", "extortion")
+        val phraseList = arrayListOf<String>("utmost", "get", "igot", "nigga", "host", "wanna", "stacks", "attack ", "close",
+                "too", "get", "wack", "that’ll", "but", "any", "tothe")
 
         for (text in phraseList) {
             val textView = buildLabel(text)

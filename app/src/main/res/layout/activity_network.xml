@@ -42,6 +42,7 @@
             android:imeOptions="actionNext"
             android:inputType="text"
             android:paddingBottom="20dp"
+            android:ellipsize="end"
             android:singleLine="true"
             android:textColorHint="@color/basic500"
             android:textIsSelectable="false" />
@@ -66,6 +67,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/accent50"
             android:hint="@string/network_matcher_address"
+            android:ellipsize="end"
             android:text="https://matcher.wavesplatform.com/matcher"
             android:inputType="text"
             android:paddingBottom="20dp"
@@ -91,8 +93,10 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/accent50"
             android:hint="@string/network_spam_filter"
-            android:text="https://github.com/wavesplatform/SpamLi…"
+            android:text="https://github.com/wavesplatform/SpamListBlablablabla"
             android:inputType="text"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:paddingBottom="20dp"
             android:singleLine="true"
             android:textColorHint="@color/basic500" />
