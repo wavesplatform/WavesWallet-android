@@ -1173,4 +1173,10 @@
     <string name="dex_trade_tab_last_trades">Last Trades</string>
     <string name="dex_trade_tab_my_orders">My Orders</string>
 
+    <!--My orders-->
+    <string name="my_orders_time">Time</string>
+    <string name="my_orders_status">Status</string>
+    <string name="my_orders_price">Price</string>
+    <string name="my_orders_amount">Amount</string>
+
 </resources>

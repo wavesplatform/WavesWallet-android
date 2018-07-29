@@ -13,6 +13,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.TradeMyOrdersFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -66,4 +67,8 @@ abstract class FragmentModule {
     @PerFragment
     @ContributesAndroidInjector
     internal abstract fun bankFragment(): BankFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun tradeMyOrdersFragment(): TradeMyOrdersFragment
 }

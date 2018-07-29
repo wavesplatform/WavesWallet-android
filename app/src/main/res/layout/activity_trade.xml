@@ -41,7 +41,6 @@
         android:id="@+id/viewpager_history"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="3dp"
         android:overScrollMode="never" />
 
 
