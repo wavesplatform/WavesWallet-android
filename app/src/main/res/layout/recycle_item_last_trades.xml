@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:id="@+id/linear_fields_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="14dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="14dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_time_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="00:00:00"
+            android:textColor="@color/black"
+            android:textSize="11sp" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_price_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="00000.00000000"
+            android:textColor="@color/submit400"
+            android:textSize="11sp" />
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_amount_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="00000.00000000"
+            android:textColor="@color/black"
+            android:textSize="11sp" />
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_sum_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="00000.00000000"
+            android:textColor="@color/black"
+            android:textSize="11sp" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

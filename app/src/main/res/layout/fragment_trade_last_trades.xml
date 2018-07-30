@@ -1,0 +1,195 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="-2dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="3dp">
+
+        <RelativeLayout
+            android:id="@+id/relative_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/linear_fields_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/basic50"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:paddingTop="10dp">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:layout_marginStart="18dp"
+                    android:text="@string/last_trades_time"
+                    android:textColor="@color/basic500"
+                    android:textSize="11sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@string/last_trades_price"
+                    android:textColor="@color/basic500"
+                    android:textSize="11sp" />
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@string/last_trades_amount"
+                    android:textColor="@color/basic500"
+                    android:textSize="11sp" />
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@string/last_trades_sum"
+                    android:textColor="@color/basic500"
+                    android:textSize="11sp" />
+
+
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/view_top_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/linear_fields_name"
+                android:background="@color/accent50" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycle_last_trades"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/button_confirm"
+                android:background="@color/white"
+                android:layout_alignBottom="@+id/view_divider"
+                android:layout_below="@+id/view_top_divider"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingBottom="8dp" />
+
+            <View
+                android:id="@+id/view_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_above="@+id/linear_buttons"
+                android:layout_marginBottom="8dp"
+                android:background="@color/accent50" />
+
+            <LinearLayout
+                android:id="@+id/linear_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/linear_buy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_waves_primary_button"
+                    android:clickable="true"
+                    android:orientation="vertical"
+                    android:padding="6dp">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
+                        android:text="@string/dex_trade_buy"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_buy_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:text="0.00075077"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:fontFamily="@font/roboto_medium" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_sell"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_error_400"
+                    android:clickable="true"
+                    android:orientation="vertical"
+                    android:padding="6dp">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
+                        android:text="@string/dex_trade_sell"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_sell_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:text="0.00075056"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:fontFamily="@font/roboto_medium" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</RelativeLayout>

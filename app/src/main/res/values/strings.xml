@@ -1172,11 +1172,19 @@
     <string name="dex_trade_tab_chart">Chart</string>
     <string name="dex_trade_tab_last_trades">Last Trades</string>
     <string name="dex_trade_tab_my_orders">My Orders</string>
+    <string name="dex_trade_buy">BUY</string>
+    <string name="dex_trade_sell">SELL</string>
 
     <!--My orders-->
     <string name="my_orders_time">Time</string>
     <string name="my_orders_status">Status</string>
     <string name="my_orders_price">Price</string>
     <string name="my_orders_amount">Amount</string>
+
+    <!--Last trades-->
+    <string name="last_trades_time">Time</string>
+    <string name="last_trades_price">Price</string>
+    <string name="last_trades_amount">Amount</string>
+    <string name="last_trades_sum">Sum</string>
 
 </resources>

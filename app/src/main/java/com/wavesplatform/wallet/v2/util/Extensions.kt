@@ -54,6 +54,9 @@ fun Context.notAvailable() {
     toast(getString(R.string.common_msg_in_development))
 }
 
+fun ClosedRange<Int>.random() =
+        Random().nextInt((endInclusive + 1) - start) +  start
+
 fun TextView.makeLinks( links: Array<String>, clickableSpans: Array<ClickableSpan>) {
     val spannableString = SpannableString(this.text)
 
