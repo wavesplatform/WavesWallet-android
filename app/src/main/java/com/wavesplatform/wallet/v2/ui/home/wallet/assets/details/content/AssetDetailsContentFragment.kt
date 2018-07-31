@@ -9,7 +9,9 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.HistoryTransactionPagerAdapter
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
 import com.wavesplatform.wallet.v2.util.copyToClipboard
+import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_asset_details_content.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
@@ -62,6 +64,10 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         presenter.assetBalance = arguments?.getParcelable<AssetBalance>(BUNDLE_ASSET)
 
         fillInformation(presenter.assetBalance)
+
+        card_burn.click {
+            launchActivity<TokenBurnActivity> {  }
+        }
     }
 
     private fun fillInformation(assetBalance: AssetBalance?) {

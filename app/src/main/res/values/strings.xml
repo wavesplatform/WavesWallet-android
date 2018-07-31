@@ -850,6 +850,7 @@
     <string name="asset_details_reissuable">Reissuable</string>
     <string name="asset_details_issue_date">Issue date</string>
     <string name="asset_details_description">Description</string>
+    <string name="asset_details_token_burn">Token Burn</string>
 
     <!-- My Address QR -->
     <string name="my_address_qr_toolbar_title">Your address</string>
@@ -1186,5 +1187,20 @@
     <string name="last_trades_price">Price</string>
     <string name="last_trades_amount">Amount</string>
     <string name="last_trades_sum">Sum</string>
+
+    <!--Token burn-->
+    <string name="token_burn_toolbar_title">Token Burn</string>
+
+    <!--Token burn confirmation-->
+    <string name="token_burn_confirmation_toolbar_title">Confirmation</string>
+    <string name="token_burn_confirmation_id">ID</string>
+    <string name="token_burn_confirmationt_description">The Official Token of The Dating Decision Robot. www.choosee.site Choosee uses big data and artificial intelligence to facilitate dating. Making humans human again.</string>
+    <string name="token_burn_confirmation_type">Type</string>
+    <string name="token_burn_confirmation_fee">Fee</string>
+    <string name="token_burn_confirmation_burn">Burn</string>
+    <string name="token_burn_confirmation_your_transaction_is_on_the_way">Your transaction is on the way</string>
+    <string name="token_burn_confirmation_you_have_burned">You have burned Sviblovo</string>
+    <string name="token_burn_confirmation_okay">Okay</string>
+    <string name="token_burn_confirmation_burning">Burning…</string>
 
 </resources>

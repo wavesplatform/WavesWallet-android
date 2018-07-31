@@ -19,7 +19,6 @@ class TradeMyOrdersAdapter @Inject constructor() : BaseSectionQuickAdapter<MyOrd
 
     override fun convert(helper: BaseViewHolder?, item: MyOrderItem?) {
         helper?.addOnClickListener(R.id.image_delete)
-
         if ((0..1).random() == 0) {
             helper?.setTextColor(R.id.text_status_value, findColor(R.color.error400))
         }else{
