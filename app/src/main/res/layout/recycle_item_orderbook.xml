@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/linear_fields_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+
+        <RelativeLayout
+            android:id="@+id/frame_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/view_bg"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:background="@color/error100"
+                android:paddingBottom="14dp"
+                android:paddingTop="14dp"
+                android:textSize="11sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_amount_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:paddingStart="8dp"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="14dp"
+                android:paddingTop="14dp"
+                android:text="798.19986671"
+                android:textColor="@color/black"
+                android:textSize="11sp" />
+
+
+        </RelativeLayout>
+
+
+        <FrameLayout
+            android:id="@+id/frame_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="14dp"
+            android:paddingTop="14dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_price_value"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="0.00061269"
+                android:textColor="@color/error400"
+                android:textSize="11sp" />
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/frame_sum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingEnd="16dp"
+            android:paddingBottom="14dp"
+            android:paddingTop="14dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_sum_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="00000.00000000"
+                android:textColor="@color/black"
+                android:textSize="11sp" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

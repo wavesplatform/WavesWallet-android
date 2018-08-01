@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#f9fafc"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/accent50" />
+
+    <LinearLayout
+        android:id="@+id/linear_fields_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <RelativeLayout
+            android:id="@+id/frame_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@+id/image_graph"
+                android:text="@string/orderbook_last_price"
+                android:textColor="@color/basic500"
+                android:textSize="11sp" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_graph"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                app:srcCompat="@drawable/ic_chartarrow_22_success_400" />
+
+
+        </RelativeLayout>
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_price_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="0.00061269"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:fontFamily="@font/roboto_bold" />
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_sum_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:text="SPREAD 0.17%"
+            android:textColor="@color/basic500"
+            android:textSize="11sp" />
+
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/accent50" />
+
+</LinearLayout>

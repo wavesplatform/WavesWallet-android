@@ -1203,4 +1203,10 @@
     <string name="token_burn_confirmation_okay">Okay</string>
     <string name="token_burn_confirmation_burning">Burning…</string>
 
+    <!--Orderbook-->
+    <string name="orderbook_last_price">LAST PRICE</string>
+    <string name="orderbook_amount_title">Amount WAVES</string>
+    <string name="orderbook_price_title">Price BTC</string>
+    <string name="orderbook_sum_title">Sum BTC</string>
+
 </resources>
