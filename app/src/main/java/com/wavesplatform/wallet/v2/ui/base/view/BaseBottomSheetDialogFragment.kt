@@ -7,9 +7,13 @@ import android.support.annotation.Nullable
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
-import android.view.View
 import android.widget.FrameLayout
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.util.getToolBarHeight
+import com.wavesplatform.wallet.v2.util.notNull
+import pers.victor.ext.getStatusBarHeight
+import pers.victor.ext.screenHeight
+import pers.victor.ext.setHeight
 
 open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
@@ -21,8 +25,16 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
         dialog.setOnShowListener { dialog ->
             val d = dialog as BottomSheetDialog
 
-            val bottomSheet = d.findViewById<View>(android.support.design.R.id.design_bottom_sheet) as FrameLayout?
-            BottomSheetBehavior.from(bottomSheet!!).state = BottomSheetBehavior.STATE_EXPANDED
+            val bottomSheet = d.findViewById<FrameLayout>(android.support.design.R.id.design_bottom_sheet)
+            bottomSheet.notNull {
+                if (it.height > screenHeight - getStatusBarHeight() - it.context.getToolBarHeight()){
+                    it.setHeight(screenHeight - getStatusBarHeight() - it.context.getToolBarHeight())
+                }
+                var bottomSheetBehavior = BottomSheetBehavior.from(it)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior.peekHeight = it.height
+
+            }
         }
 
         // Do something with your dialog like setContentView() or whatever

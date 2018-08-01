@@ -23,13 +23,15 @@ import io.github.kbiakov.codeview.CodeView
 import io.github.kbiakov.codeview.highlight.ColorThemeData
 import io.github.kbiakov.codeview.highlight.SyntaxColors
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
-import pers.victor.ext.click
-import pers.victor.ext.findColor
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
+import kotlinx.android.synthetic.main.history_details_bottom_sheet_dialog.view.*
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.*
 import kotlin.collections.ArrayList
+import android.support.design.widget.BottomSheetBehavior
+import android.support.v4.widget.NestedScrollView
+import android.widget.FrameLayout
+import pers.victor.ext.*
+import android.util.TypedValue
 
 
 class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {

@@ -7,6 +7,7 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -54,10 +55,18 @@ fun Context.notAvailable() {
     toast(getString(R.string.common_msg_in_development))
 }
 
-fun ClosedRange<Int>.random() =
-        Random().nextInt((endInclusive + 1) - start) +  start
+fun Context.getToolBarHeight(): Int {
+    val styledAttributes = getTheme().obtainStyledAttributes(
+            intArrayOf(android.R.attr.actionBarSize))
+    val mActionBarSize = styledAttributes.getDimension(0, 0f).toInt()
+    styledAttributes.recycle()
+    return mActionBarSize
+}
 
-fun TextView.makeLinks( links: Array<String>, clickableSpans: Array<ClickableSpan>) {
+fun ClosedRange<Int>.random() =
+        Random().nextInt((endInclusive + 1) - start) + start
+
+fun TextView.makeLinks(links: Array<String>, clickableSpans: Array<ClickableSpan>) {
     val spannableString = SpannableString(this.text)
 
     for (i in links.indices) {
@@ -327,6 +336,6 @@ fun View.setMargins(
 fun TextView.makeTextHalfBold() {
     val text = this.text.toString()
     val str = SpannableStringBuilder(text)
-    str.setSpan(StyleSpan (Typeface.BOLD), 0, text.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     this.text = str
 }
