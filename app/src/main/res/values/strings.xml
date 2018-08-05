@@ -1241,4 +1241,14 @@
 
     <!--Sell-->
     <string name="sell_btn_txt">Sell WAVES</string>
+
+    <!--Buy and Sell Success-->
+    <string name="buy_and_sell_success_the_order_is_created">The order is created</string>
+    <string name="buy_and_sell_success_time">Time</string>
+    <string name="buy_and_sell_success_status">Status</string>
+    <string name="buy_and_sell_success_opened">Opened</string>
+    <string name="buy_and_sell_success_price">Price</string>
+    <string name="buy_and_sell_success_amount">Amount</string>
+    <string name="buy_and_sell_success_okay">Okay</string>
+
 </resources>

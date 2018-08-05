@@ -42,6 +42,7 @@ import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSucessActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
@@ -232,4 +233,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun tokenBurnConfirmationActivity(): TokenBurnConfirmationActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun tradeBuyAndSendSucessActivity(): TradeBuyAndSendSucessActivity
 }

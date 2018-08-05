@@ -13,6 +13,8 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment;
 
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSucessActivity
+import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_trade_sell.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
@@ -64,6 +66,12 @@ class TradeSellFragment : BaseFragment(), TradeSellView {
             buttonPositive?.isClickable = false
             buttonNegative?.typeface = ResourcesCompat.getFont(baseActivity, R.font.roboto_medium)
             titleTextView?.typeface = ResourcesCompat.getFont(baseActivity, R.font.roboto_medium)
+        }
+
+        button_sell.click {
+            launchActivity<TradeBuyAndSendSucessActivity> {
+                putExtra(TradeBuyAndSendSucessActivity.BUNDLE_OPERATION_TYPE, TradeBuyAndSendSucessActivity.SELL_TYPE)
+            }
         }
     }
 
