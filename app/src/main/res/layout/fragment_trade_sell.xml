@@ -425,6 +425,7 @@
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/button_buy"
             style="@style/WavesButton"
+            android:background="@drawable/selector_btn_red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -432,7 +433,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="54dp"
             android:enabled="false"
-            android:text="@string/buy_btn_txt" />
+            android:text="@string/sell_btn_txt" />
 
     </LinearLayout>
 

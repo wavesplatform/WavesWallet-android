@@ -1,31 +1,34 @@
-package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.buy
+package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.sell
 
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.widget.Button
 import android.widget.TextView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import kotlinx.android.synthetic.main.fragment_trade_buy.*
-import pers.victor.ext.click
-import pers.victor.ext.findColor
 import javax.inject.Inject
 
+import com.arellomobile.mvp.presenter.InjectPresenter
 
-class TradeBuyFragment : BaseFragment(), TradeBuyView {
+import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment;
+
+import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.wavesplatform.wallet.R
+import kotlinx.android.synthetic.main.fragment_trade_sell.*
+import pers.victor.ext.click
+import pers.victor.ext.findColor
+
+
+class TradeSellFragment : BaseFragment(), TradeSellView {
 
     @Inject
     @InjectPresenter
-    lateinit var presenter: TradeBuyPresenter
+    lateinit var presenter: TradeSellPresenter
     var buttonPositive: Button? = null
 
     @ProvidePresenter
-    fun providePresenter(): TradeBuyPresenter = presenter
+    fun providePresenter(): TradeSellPresenter = presenter
 
-    override fun configLayoutRes() = R.layout.fragment_trade_buy
+    override fun configLayoutRes() = R.layout.fragment_trade_sell
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
