@@ -11,7 +11,9 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.OrderbookItem
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.BuyAndSellBottomSheetFragment
 import kotlinx.android.synthetic.main.fragment_trade_orderbook.*
+import pers.victor.ext.click
 import java.util.ArrayList
 
 
@@ -34,6 +36,16 @@ class TradeOrderbookFragment : BaseFragment(), TradeOrderbookView {
         recycle_orderbook.layoutManager = LinearLayoutManager(baseActivity)
         recycle_orderbook.adapter = adapter
         recycle_orderbook.isNestedScrollingEnabled = false
+
+        linear_buy.click {
+            val dialog = BuyAndSellBottomSheetFragment()
+            dialog.show(fragmentManager, dialog::class.java.simpleName)
+        }
+
+        linear_sell.click {
+            val dialog = BuyAndSellBottomSheetFragment()
+            dialog.show(fragmentManager, dialog::class.java.simpleName)
+        }
 
         presenter.loadOrderbook()
     }

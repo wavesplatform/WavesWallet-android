@@ -19,8 +19,8 @@ import io.github.kbiakov.codeview.html
 import kotlinx.android.synthetic.main.fragment_trade_last_trades.*
 import android.text.Spannable
 import android.text.SpannableStringBuilder
-
-
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.BuyAndSellBottomSheetFragment
+import pers.victor.ext.click
 
 
 class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
@@ -43,6 +43,16 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
         recycle_last_trades.layoutManager = LinearLayoutManager(baseActivity)
         recycle_last_trades.adapter = adapter
         recycle_last_trades.isNestedScrollingEnabled = false
+
+        linear_buy.click {
+            val dialog = BuyAndSellBottomSheetFragment()
+            dialog.show(fragmentManager, dialog::class.java.simpleName)
+        }
+
+        linear_sell.click {
+            val dialog = BuyAndSellBottomSheetFragment()
+            dialog.show(fragmentManager, dialog::class.java.simpleName)
+        }
 
         presenter.loadLastTrades()
     }

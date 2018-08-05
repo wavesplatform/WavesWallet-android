@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:elevation="0dp">
+
+        <com.flyco.tablayout.SlidingTabLayout
+            android:id="@+id/stl_buy_sell"
+            tl_indicator_gravity="BOTTOM"
+            tl_indicator_style="NORMAL"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_gravity="center_horizontal"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
+            tl:tl_bar_stroke_width="0dp"
+            tl:tl_indicator_anim_enable="true"
+            tl:tl_indicator_color="@color/submit400"
+            tl:tl_indicator_corner_radius="2dp"
+            tl:tl_indicator_width="12dp"
+            tl:tl_tab_space_equal="true"
+            tl:tl_textSelectColor="@color/black"
+            tl:tl_textUnselectColor="@color/basic500"
+            tl:tl_textsize="14sp" />
+
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <com.wavesplatform.wallet.v2.ui.custom.SwipeDisableViewPager
+        android:id="@+id/viewpager_buy_sell"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/stl_buy_sell"
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+</android.support.design.widget.CoordinatorLayout>

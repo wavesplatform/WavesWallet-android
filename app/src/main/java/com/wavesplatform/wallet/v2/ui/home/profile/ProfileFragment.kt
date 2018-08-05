@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.view.*
+import android.widget.Button
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -19,7 +20,9 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
+import org.spongycastle.crypto.tls.ContentType.alert
 import pers.victor.ext.click
+import pers.victor.ext.findColor
 import pers.victor.ext.toast
 import javax.inject.Inject
 
@@ -79,7 +82,11 @@ class ProfileFragment : BaseFragment(), ProfileView {
                     DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
             alertDialog.show()
             val titleTextView =  alertDialog?.findViewById<TextView>(R.id.alertTitle);
-            titleTextView?.typeface = ResourcesCompat.getFont(baseActivity, R.font.roboto_bold)
+            val buttonPositive = alertDialog?.findViewById<Button>(android.R.id.button1)
+            val buttonNegative = alertDialog?.findViewById<Button>(android.R.id.button2)
+            buttonPositive?.typeface = ResourcesCompat.getFont(baseActivity, R.font.roboto_medium)
+            buttonNegative?.typeface = ResourcesCompat.getFont(baseActivity, R.font.roboto_medium)
+            titleTextView?.typeface = ResourcesCompat.getFont(baseActivity, R.font.roboto_medium)
         }
     }
 

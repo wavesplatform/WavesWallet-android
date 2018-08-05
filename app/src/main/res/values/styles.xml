@@ -40,7 +40,14 @@
         <item name="actionMenuTextColor">@color/white</item>
         <item name="android:fontFamily">@font/roboto</item>
         <item name="fontFamily">@font/roboto</item>
+
         <!--<item name="actionMenuTextAppearance">@style/MyMenuTextAppearance</item>-->
+    </style>
+
+    <style name="SubmitEditText">
+        <item name="colorControlNormal">@color/accent50</item>
+        <item name="colorControlActivated">@color/submit400</item>
+        <item name="colorControlHighlight">@color/submit400</item>
     </style>
 
     <style name="TextLabel" parent="TextAppearance.AppCompat">

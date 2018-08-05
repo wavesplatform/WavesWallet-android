@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.injection.module
 
 import com.wavesplatform.wallet.v2.injection.scope.PerFragment
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.buy.TradeBuyFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades.TradeLastTradesFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
@@ -77,8 +78,12 @@ abstract class FragmentModule {
     @PerFragment
     @ContributesAndroidInjector
     internal abstract fun tradeLastTradesFragment(): TradeLastTradesFragment
-    
+
     @PerFragment
     @ContributesAndroidInjector
     internal abstract fun tradeOrderbookFragment(): TradeOrderbookFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun tradeBuyFragment(): TradeBuyFragment
 }

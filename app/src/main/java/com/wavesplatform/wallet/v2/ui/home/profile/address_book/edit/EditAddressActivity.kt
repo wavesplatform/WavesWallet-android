@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -107,7 +108,11 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
                     DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
             alertDialog.show()
             val titleTextView =  alertDialog?.findViewById<TextView>(R.id.alertTitle);
-            titleTextView?.typeface = ResourcesCompat.getFont(this, R.font.roboto_bold)
+            val buttonPositive = alertDialog?.findViewById<Button>(android.R.id.button1)
+            val buttonNegative = alertDialog?.findViewById<Button>(android.R.id.button2)
+            buttonPositive?.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
+            buttonNegative?.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
+            titleTextView?.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
         }
 
         configureWithType()
