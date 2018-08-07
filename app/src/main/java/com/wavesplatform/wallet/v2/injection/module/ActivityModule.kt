@@ -15,7 +15,10 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActivity
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSucessActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
@@ -33,18 +36,14 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendCo
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
-import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeWelcomeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
-import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
-import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
-import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSucessActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import dagger.Module
@@ -72,10 +71,6 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun welcomeActivity(): WelcomeActivity
-
-    @PerActivity
-    @ContributesAndroidInjector
-    internal abstract fun changeWelcomeLanguageActivity(): ChangeWelcomeLanguageActivity
 
     @PerActivity
     @ContributesAndroidInjector

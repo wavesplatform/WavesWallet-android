@@ -16,12 +16,11 @@ import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
-import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeWelcomeLanguageActivity
+import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_welcome.*
 import pers.victor.ext.*
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.*
 import javax.inject.Inject
 import kotlin.concurrent.fixedRateTimer
@@ -171,8 +170,10 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_change_language -> {
-                launchActivity<ChangeWelcomeLanguageActivity>()
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                val dialog = ChangeLanguageBottomSheetFragment()
+                dialog.show(supportFragmentManager, dialog::class.java.simpleName)
+//                launchActivity<ChangeWelcomeLanguageActivity>()
+//                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 return true
             }
         }
