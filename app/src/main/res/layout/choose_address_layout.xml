@@ -5,44 +5,48 @@
     android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:layout_marginRight="16dp"
     app:drag_edge="right">
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="150dp"
-        android:layout_height="65dp"
-        android:layout_gravity="right"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/overlay_dark_shape">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginBottom="6dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/image_edit_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:paddingBottom="20dp"
+                android:paddingEnd="24dp"
+                android:paddingStart="24dp"
+                android:paddingTop="20dp"
                 app:srcCompat="@drawable/ic_edit_address_submit_300" />
-        </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/image_delete_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:paddingBottom="20dp"
+                android:paddingEnd="24dp"
+                android:paddingStart="24dp"
+                android:paddingTop="20dp"
                 app:srcCompat="@drawable/ic_deladdress_24_error_400" />
-        </FrameLayout>
-    </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -50,12 +54,15 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_marginLeft="16dp"
-            android:elevation="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
             android:foreground="?attr/selectableItemBackground"
             app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="2dp">
+            app:cardCornerRadius="2dp"
+            app:cardElevation="2dp">
 
 
             <RelativeLayout
@@ -68,7 +75,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"
                     app:srcCompat="@drawable/asset_gray_icon" />
 
 
@@ -76,7 +83,7 @@
                     android:id="@+id/text_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/image_asset"
+                    android:layout_toEndOf="@+id/image_asset"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     tools:text="Alex Jeff" />
@@ -87,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/text_name"
                     android:layout_marginTop="2dp"
-                    android:layout_toRightOf="@+id/image_asset"
+                    android:layout_toEndOf="@+id/image_asset"
                     android:singleLine="true"
                     android:textColor="@color/basic500"
                     android:textSize="12sp"

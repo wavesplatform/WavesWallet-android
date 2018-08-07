@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/img_brand">
+    android:background="@color/basic50">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"
@@ -11,7 +11,7 @@
         android:layout_marginEnd="8dp"
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
-        app:titleTextColor="@color/white"
+        app:titleTextColor="@color/black"
         android:fontFamily="@font/roboto"
         app:titleTextAppearance="@style/Toolbar.Title" />
 

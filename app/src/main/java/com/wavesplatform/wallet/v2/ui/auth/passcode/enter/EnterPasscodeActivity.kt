@@ -76,6 +76,11 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint
         })
     }
 
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_CANCELED)
+        finish()
+    }
+
     override fun onFailed(isDeviceLocked: Boolean) {
         if (isDeviceLocked) mFingerprintDialog.onFingerprintLocked()
     }

@@ -26,7 +26,6 @@ import javax.inject.Inject
 
 class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOnClickListener {
 
-
     @Inject
     @InjectPresenter
     lateinit var presenter: ChooseAccountPresenter
@@ -47,17 +46,13 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.choose_account), R.drawable.ic_toolbar_back_white)
+        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.choose_account), R.drawable.ic_toolbar_back_black)
 
         recycle_addresses.layoutManager = LinearLayoutManager(this)
         recycle_addresses.adapter = adapter
         adapter.bindToRecyclerView(recycle_addresses)
 
         presenter.getAddresses()
-
-        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE) {  }
-        }
 
         adapter.chooseAccountOnClickListener = this
     }
@@ -66,6 +61,10 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         adapter.setNewData(list)
 
         adapter.setEmptyView(R.layout.choose_account_empty_state)
+    }
+
+    override fun onItemClicked(item: AddressTestObject) {
+        launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE) { }
     }
 
     override fun onEditClicked(position: Int) {
@@ -105,7 +104,9 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                 }
             }
             REQUEST_ENTER_PASSCODE -> {
-                launchActivity<MainActivity>(clear = true){ }
+                if (resultCode == Constants.RESULT_OK) {
+                    launchActivity<MainActivity>(clear = true) { }
+                }
             }
         }
     }
