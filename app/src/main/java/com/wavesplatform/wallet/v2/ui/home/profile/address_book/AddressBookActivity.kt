@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.AppCompatCheckBox
 import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,6 +24,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_address_book.*
+import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.gone
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.concurrent.TimeUnit
@@ -184,7 +186,13 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         }
         adapter.allData = ArrayList(list)
         adapter.setNewData(list)
-        adapter.setEmptyView(R.layout.address_book_empty_state)
+        adapter.emptyView = getEmptyView()
+    }
+
+    private fun getEmptyView(): View {
+        val view = LayoutInflater.from(this).inflate(R.layout.address_book_empty_state, null)
+        view.text_empty.text = getString(R.string.address_book_empty_state)
+        return view
     }
 
     enum class AddressBookScreenType(var type: Int) {

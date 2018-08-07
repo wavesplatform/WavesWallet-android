@@ -13,6 +13,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.home.history.TestObject
 import kotlinx.android.synthetic.main.fragment_trade_last_trades.*
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
+import kotlinx.android.synthetic.main.layout_empty_data.*
 import pers.victor.ext.click
 
 
@@ -33,6 +34,8 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        text_empty.text = getString(R.string.last_trades_empty)
+
         recycle_last_trades.layoutManager = LinearLayoutManager(baseActivity)
         recycle_last_trades.adapter = adapter
         recycle_last_trades.isNestedScrollingEnabled = false

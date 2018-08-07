@@ -779,6 +779,7 @@
     <string name="history_all">All</string>
     <string name="history_sent">Sent</string>
     <string name="history_received">Received</string>
+    <string name="history_empty">Nothing Here…\nYou do not have any transactions</string>
 
     <!--History Details-->
     <string name="history_details_received_from">Received from</string>
@@ -1181,12 +1182,14 @@
     <string name="my_orders_status">Status</string>
     <string name="my_orders_price">Price</string>
     <string name="my_orders_amount">Amount</string>
+    <string name="my_orders_empty">Nothing Here…\nYou do not have any orders</string>
 
     <!--Last trades-->
     <string name="last_trades_time">Time</string>
     <string name="last_trades_price">Price</string>
     <string name="last_trades_amount">Amount</string>
     <string name="last_trades_sum">Sum</string>
+    <string name="last_trades_empty">Nothing Here…\nThe trading history is empty</string>
 
     <!--Token burn-->
     <string name="token_burn_toolbar_title">Token Burn</string>
@@ -1204,10 +1207,15 @@
     <string name="token_burn_confirmation_burning">Burning…</string>
 
     <!--Orderbook-->
+    <string name="chart_empty">No chart data available</string>
+
+
+    <!--Orderbook-->
     <string name="orderbook_last_price">LAST PRICE</string>
     <string name="orderbook_amount_title">Amount WAVES</string>
     <string name="orderbook_price_title">Price BTC</string>
     <string name="orderbook_sum_title">Sum BTC</string>
+    <string name="orderbook_empty">Nothing Here…\nThe order book is empty</string>
 
     <!--Buy And Sell Dialog-->
     <string name="buy_and_sell_dialog_buy_tab">Buy</string>

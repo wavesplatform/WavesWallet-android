@@ -14,6 +14,7 @@ import com.wavesplatform.wallet.v1.ui.dex.details.my_orders.MyOrdersAdapter
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderItem
 import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItemAdapter
 import kotlinx.android.synthetic.main.fragment_trade_my_orders.*
+import kotlinx.android.synthetic.main.layout_empty_data.*
 
 
 class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
@@ -34,6 +35,8 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        text_empty.text = getString(R.string.my_orders_empty)
+
         recycle_my_orders.layoutManager = LinearLayoutManager(baseActivity)
         recycle_my_orders.adapter = adapter
         recycle_my_orders.isNestedScrollingEnabled = false

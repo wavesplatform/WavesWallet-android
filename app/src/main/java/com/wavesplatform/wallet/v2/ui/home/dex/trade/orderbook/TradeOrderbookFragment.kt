@@ -13,6 +13,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.OrderbookItem
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import kotlinx.android.synthetic.main.fragment_trade_orderbook.*
+import kotlinx.android.synthetic.main.layout_empty_data.*
 import pers.victor.ext.click
 import java.util.ArrayList
 
@@ -33,6 +34,8 @@ class TradeOrderbookFragment : BaseFragment(), TradeOrderbookView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        text_empty.text = getString(R.string.orderbook_empty)
+
         recycle_orderbook.layoutManager = LinearLayoutManager(baseActivity)
         recycle_orderbook.adapter = adapter
         recycle_orderbook.isNestedScrollingEnabled = false

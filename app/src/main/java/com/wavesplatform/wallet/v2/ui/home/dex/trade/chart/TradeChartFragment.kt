@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import kotlinx.android.synthetic.main.activity_trade.*
 import kotlinx.android.synthetic.main.fragment_trade_chart.*
+import kotlinx.android.synthetic.main.layout_empty_data.*
 import javax.inject.Inject
 
 
@@ -40,6 +41,8 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        text_empty.text = getString(R.string.chart_empty)
+
         setUpChart()
     }
 

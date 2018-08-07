@@ -6,6 +6,7 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthenticationDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -52,7 +53,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint
         pass_keypad.setPadClickedListener(
                 object : PassCodeEntryKeypad.OnPinEntryPadClickedListener {
                     override fun onPassCodeEntered(passCode: String) {
-                        setResult(Activity.RESULT_OK)
+                        setResult(Constants.RESULT_OK)
                         finish()
                     }
 
@@ -71,13 +72,13 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint
         mFingerprintDialog.onSuccessRecognizedFingerprint()
         runDelayed(1500, {
             mFingerprintDialog.dismiss()
-            setResult(Activity.RESULT_OK)
+            setResult(Constants.RESULT_OK)
             finish()
         })
     }
 
     override fun onBackPressed() {
-        setResult(Activity.RESULT_CANCELED)
+        setResult(Constants.RESULT_CANCELED)
         finish()
     }
 
