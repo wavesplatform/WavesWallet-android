@@ -1,12 +1,15 @@
 package com.wavesplatform.wallet.v2.ui.splash
 
 import android.content.Intent
+import android.os.Looper
+import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 @InjectViewState
@@ -22,8 +25,10 @@ class SplashPresenter @Inject constructor(val keyAccountHelper: PublicKeyAccount
 
     fun resolveNextAction() {
         if (!preferenceHelper.isDefaultAssetsAlreadyExist()){
-            Constants.defaultAssets.saveAll()
-            preferenceHelper.setDefaultAssetsAlreadyExist(true)
+            runAsync {
+                Constants.defaultAssets.saveAll()
+                preferenceHelper.setDefaultAssetsAlreadyExist(true)
+            }
         }
 
         val loggedInGuid = prefsUtil.getGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, "")

@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
+import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 class AssetsSortingAdapter @Inject constructor(var publicKeyAccountHelper: PublicKeyAccountHelper) : BaseItemDraggableAdapter<AssetBalance, BaseViewHolder>(R.layout.wallet_asset_sorting_item, null) {
@@ -20,9 +21,11 @@ class AssetsSortingAdapter @Inject constructor(var publicKeyAccountHelper: Publi
                 .setChecked(R.id.switch_visible, !item.isHidden)
                 .setOnCheckedChangeListener(R.id.switch_visible, { buttonView, isChecked ->
                     item.isHidden = !isChecked
-                    val assetBalance = queryFirst<AssetBalance>({ equalTo("assetId", item.assetId) })
-                    assetBalance?.isHidden = !isChecked
-                    assetBalance?.save()
+                    runAsync {
+                        val assetBalance = queryFirst<AssetBalance>({ equalTo("assetId", item.assetId) })
+                        assetBalance?.isHidden = !isChecked
+                        assetBalance?.save()
+                    }
                 })
                 .setGone(R.id.switch_visible, item.configureVisibleState)
                 .setGone(R.id.image_drag, !item.configureVisibleState)

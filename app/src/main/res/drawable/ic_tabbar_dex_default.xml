@@ -4,13 +4,18 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
   <path
+      android:pathData="M0,0h24v24H0z"
+      android:fillColor="#D8D8D8"
+      android:fillAlpha="0"
+      android:fillType="evenOdd"/>
+  <path
       android:pathData="M0.905,8.007h4.43c0.5,0 0.905,0.404 0.905,0.903v8.83c0,0.498 -0.405,0.902 -0.905,0.902L0.905,18.642A0.904,0.904 0,0 1,0 17.74L0,8.91c0,-0.498 0.405,-0.902 0.905,-0.902zM9.674,5.357h4.43c0.5,0 0.905,0.405 0.905,0.904v6.22c0,0.5 -0.405,0.904 -0.904,0.904L9.674,13.385a0.904,0.904 0,0 1,-0.905 -0.903L8.769,6.26c0,-0.5 0.406,-0.903 0.905,-0.903zM18.924,5.357h3.47c0.765,0 1.384,0.62 1.384,1.385v8.75c0,0.764 -0.62,1.384 -1.384,1.384h-3.47c-0.766,0 -1.386,-0.62 -1.386,-1.384v-8.75c0,-0.764 0.62,-1.384 1.385,-1.384z"
-      android:fillColor="@color/home_tab_inactive"
+      android:fillColor="#CED0DA"
       android:fillType="nonZero"/>
   <path
       android:pathData="M2.677,2.288a0.442,0.442 0,0 1,0.886 0v19.424a0.442,0.442 0,0 1,-0.886 0L2.677,2.288zM11.447,2.288a0.442,0.442 0,0 1,0.885 0v13.284a0.442,0.442 0,0 1,-0.886 0L11.446,2.288zM20.215,2.288a0.442,0.442 0,0 1,0.887 0v19.424a0.442,0.442 0,0 1,-0.887 0L20.215,2.288z"
       android:strokeWidth=".6"
-      android:fillColor="@color/home_tab_inactive"
-      android:strokeColor="@color/home_tab_inactive"
+      android:fillColor="#CED0DA"
+      android:strokeColor="#CED0DA"
       android:fillType="evenOdd"/>
 </vector>

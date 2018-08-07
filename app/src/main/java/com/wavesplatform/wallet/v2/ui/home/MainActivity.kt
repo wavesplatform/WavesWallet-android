@@ -116,10 +116,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
      * **/
     private fun setupBottomNavigation() {
         tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_wallet_default)).setTag(TAG_NOT_CENTRAL_TAB))
-        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_dex)).setTag(TAG_NOT_CENTRAL_TAB))
-        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCenterTabLayout(R.drawable.ic_tabbar_waves)).setTag(TAG_CENTRAL_TAB))
-        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_history)).setTag(TAG_NOT_CENTRAL_TAB))
-        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_profile)).setTag(TAG_NOT_CENTRAL_TAB))
+        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_dex_default)).setTag(TAG_NOT_CENTRAL_TAB))
+        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCenterTabLayout(R.drawable.ic_tabbar_waves_default)).setTag(TAG_CENTRAL_TAB))
+        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_history_default)).setTag(TAG_NOT_CENTRAL_TAB))
+        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_profile_default)).setTag(TAG_NOT_CENTRAL_TAB))
 
         tab_navigation.addOnTabSelectedListener(this)
     }
@@ -150,7 +150,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 openFragment(R.id.frame_fragment_container, DexFragment.newInstance())
                 toolbar_general.title = getString(R.string.dex_toolbar_title)
             }
-        // Quick action
+//            Quick action
             2 -> {
                 val quickActionDialog = QuickActionBottomSheetFragment()
                 quickActionDialog.show(supportFragmentManager, quickActionDialog::class.java.simpleName)
@@ -162,7 +162,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             }
 //            Profile screen
             4 -> {
-//                toolbar_general.setMargins(0, 0, dp2px(8), 0)
                 openFragment(R.id.frame_fragment_container, ProfileFragment.newInstance())
                 toolbar_general.title = getString(R.string.profile_toolbar_title)
             }

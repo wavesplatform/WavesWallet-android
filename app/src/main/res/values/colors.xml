@@ -125,7 +125,7 @@
     <color name="mixOcean">#26C1C9</color>
     <color name="mixUnicorn">#AB7DF6</color>
 
-    <color name="home_tab_inactive">#D3D3D3</color>
+    <color name="home_tab_inactive">#CED0DA</color>
     <color name="home_tab_active">#000000</color>
 
     <color name="qr_scanner_mask">#99001a39</color>
