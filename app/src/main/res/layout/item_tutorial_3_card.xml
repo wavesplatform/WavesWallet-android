@@ -1,92 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardElevation="2dp"
-    app:cardUseCompatPadding="true"
-    card_view:cardBackgroundColor="@android:color/white"
-    card_view:cardCornerRadius="2dp">
+    android:id="@+id/scroll_root"
+    android:fillViewport="true"
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
-
+        android:layout_height="wrap_content"
+        android:padding="24dp">
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_title"
-            android:text="@string/tutorial_card_2_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            app:fontFamily="@font/roboto_bold"
             android:lineSpacingExtra="10sp"
+            android:text="@string/tutorial_card_2_title"
             android:textColor="@color/disabled500"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            app:fontFamily="@font/roboto_bold" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/view_dashed"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/text_title"
             android:layout_marginTop="14dp"
             android:layerType="software"
-            android:layout_width="match_parent"
-            android:layout_below="@+id/text_title"
-            android:layout_height="2dp"
-            android:src="@drawable/bg_dashed"/>
+            android:src="@drawable/bg_dashed" />
 
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="wrap_content"
             android:id="@+id/image_anonim"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_dashed"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="24dp"
             app:srcCompat="@drawable/ic_anonim" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:layout_below="@+id/image_anonim"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="14dp"
-            app:fontFamily="@font/roboto"
             android:id="@+id/text_anonim_description"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black"
+            android:layout_below="@+id/image_anonim"
+            android:layout_marginTop="14dp"
             android:lineSpacingExtra="4sp"
             android:text="@string/card_tutorial_3_description_anonim"
-            />
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:fontFamily="@font/roboto" />
 
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="wrap_content"
             android:id="@+id/image_passbrowser"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_anonim_description"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="24dp"
             app:srcCompat="@drawable/ic_passbrowser" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:layout_below="@+id/image_passbrowser"
+            android:id="@+id/title_passbrowser"
             android:layout_width="wrap_content"
-            android:layout_marginTop="14dp"
-            app:fontFamily="@font/roboto"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black"
+            android:layout_below="@+id/image_passbrowser"
+            android:layout_marginTop="14dp"
             android:lineSpacingExtra="4sp"
             android:text="@string/card_tutorial_3_description_passbrowser"
-            />
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:fontFamily="@font/roboto" />
 
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button_continue"
-            style="@style/WavesButton"
-            android:layout_width="match_parent"
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_backup"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:clickable="false"
-            android:text="@string/card_tutorial_next" />
+            android:layout_below="@+id/title_passbrowser"
+            android:layout_marginTop="24dp"
+            app:srcCompat="@drawable/ic_backup" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_backup_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image_backup"
+            android:layout_marginTop="14dp"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/card_tutorial_4_description_backuo"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:fontFamily="@font/roboto" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_shredder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_backup_description"
+            android:layout_marginTop="24dp"
+            app:srcCompat="@drawable/ic_shredder" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image_shredder"
+            android:layout_marginTop="14dp"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/card_tutorial_4_description_shredder"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:fontFamily="@font/roboto" />
 
 
     </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+</ScrollView>

@@ -1,24 +1,16 @@
 package com.wavesplatform.wallet.v2.ui.tutorial
 
-import android.animation.Animator
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
 import android.os.Bundle
-import android.support.v7.widget.AppCompatButton
+import android.support.v4.view.ViewPager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
-import com.wavesplatform.wallet.v2.util.getViewScaleAnimator
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.yuyakaido.android.cardstackview.CardStackView
-import com.yuyakaido.android.cardstackview.SwipeDirection
 import kotlinx.android.synthetic.main.activity_tutorial.*
-import kotlinx.android.synthetic.main.item_tutorial_1_card.view.*
-import pers.victor.ext.dp2px
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import pers.victor.ext.click
+import pers.victor.ext.findColor
 import javax.inject.Inject
 
 
@@ -36,83 +28,50 @@ class TutorialActivity : BaseActivity(), TutorialView {
     override fun configLayoutRes() = R.layout.activity_tutorial
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        adapter.addAll(arrayListOf(1, 2, 3, 4, 5, 6, 7))
-        card_stack_tutorial.setAdapter(adapter)
-        card_stack_tutorial.setCardEventListener(object : CardStackView.CardEventListener {
-            override fun onCardDragging(percentX: Float, percentY: Float) {
-            }
-
-            override fun onCardSwiped(direction: SwipeDirection?) {
-                if (adapter.count == card_stack_tutorial.topIndex) {
-                    preferencesHelper.setTutorialPassed(true)
-                    launchActivity<WelcomeActivity>(withoutAnimation = true)
+        adapter.items = arrayListOf(1, 2, 3, 4, 5)
+        adapter.listener = object : TutorialAdapter.EndOfScrollListener {
+            override fun onEndOfScroll(position: Int) {
+                if (position == view_pager.currentItem) {
+                    text_next.setTextColor(findColor(R.color.black))
+                    text_next.isClickable = true
                 }
             }
 
-            override fun onCardReversed() {
-            }
-
-            override fun onCardMovedToOrigin() {
-            }
-
-            override fun onCardClicked(index: Int) {
-            }
-
-        })
-
-        white_block.post({
-            card_stack_tutorial.topView.post({
-                val animator = getViewScaleAnimator(card_stack_tutorial.topView, white_block, dp2px(10))
-                animator.addListener(object : Animator.AnimatorListener {
-                    override fun onAnimationRepeat(p0: Animator?) {
-                    }
-
-                    override fun onAnimationEnd(p0: Animator?) {
-                        white_block.animate().alpha(0f).setDuration(350).start()
-                        card_stack_tutorial.topView.button_continue.isClickable = true
-                    }
-
-                    override fun onAnimationCancel(p0: Animator?) {
-                    }
-
-                    override fun onAnimationStart(p0: Animator?) {
-                    }
-
-                })
-                animator.duration = 400
-                animator.start()
-            })
-        })
-
-        adapter.listener = object : TutorialAdapter.OnNextButtonClicked {
-            override fun onButtonClicked(button: AppCompatButton) {
-                // fix library bug with fast swipe
-                button.isClickable = false
-                swipeLeft()
+            override fun onNotEndOfScroll(position: Int) {
+                if (position == view_pager.currentItem) {
+                    text_next.setTextColor(findColor(R.color.accent100))
+                    text_next.isClickable = false
+                }
             }
         }
-    }
 
-    private fun swipeLeft() {
-        val target = card_stack_tutorial.topView
+        text_next.click {
+            view_pager.currentItem = view_pager.currentItem + 1
+        }
 
-        val rotation = ObjectAnimator.ofPropertyValuesHolder(
-                target, PropertyValuesHolder.ofFloat("rotation", -10f))
-        val translateX = ObjectAnimator.ofPropertyValuesHolder(
-                target, PropertyValuesHolder.ofFloat("translationX", 0f, -2000f))
-        val translateY = ObjectAnimator.ofPropertyValuesHolder(
-                target, PropertyValuesHolder.ofFloat("translationY", 0f, 100f))
-        rotation.duration = 500
-        translateX.duration = 500
-        translateY.duration = 500
-        val cardAnimationSet = AnimatorSet()
-        cardAnimationSet.playTogether(rotation, translateX, translateY)
+        view_pager.adapter = adapter
+        view_pager.offscreenPageLimit = 5
+        view_pager_indicator.setupWithViewPager(view_pager)
+        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+            }
 
-        card_stack_tutorial.swipe(SwipeDirection.Left, cardAnimationSet)
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
 
-        // fix library bug with fast swipe
-        runDelayed(600, {
-            card_stack_tutorial.topView.button_continue.isClickable = true
+            override fun onPageSelected(position: Int) {
+                if (view_pager.currentItem == adapter.items.size - 1) {
+                    text_next.text = getString(R.string.card_tutorial_understand)
+                    text_next.click {
+                        launchActivity<WelcomeActivity>()
+                    }
+                } else {
+                    text_next.text = getString(R.string.card_tutorial_next)
+                    text_next.click {
+                        view_pager.currentItem = view_pager.currentItem + 1
+                    }
+                }
+            }
         })
     }
 

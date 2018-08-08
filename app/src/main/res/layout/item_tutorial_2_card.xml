@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:cardElevation="2dp"
-    app:cardUseCompatPadding="true"
-    card_view:cardBackgroundColor="@android:color/white"
-    card_view:cardCornerRadius="2dp">
+    android:fillViewport="true">
 
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="24dp">
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/card_1_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            app:fontFamily="@font/roboto_bold"
             android:lineSpacingExtra="10sp"
             android:text="@string/tutorial_card_2_title"
             android:textColor="@color/black"
-            android:textSize="34sp" />
+            android:textSize="34sp"
+            app:fontFamily="@font/roboto_bold" />
 
 
         <android.support.v7.widget.AppCompatTextView
@@ -31,12 +29,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/card_1_title"
-            app:fontFamily="@font/roboto"
             android:layout_marginTop="24dp"
             android:lineSpacingExtra="4sp"
             android:text="@string/tutorial_card_2_description"
             android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            app:fontFamily="@font/roboto" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,16 +69,6 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button_continue"
-            style="@style/WavesButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:layout_alignParentBottom="true"
-            android:text="@string/card_tutorial_next" />
-
 
     </RelativeLayout>
-
-</android.support.v7.widget.CardView>
+</ScrollView>
