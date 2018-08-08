@@ -46,6 +46,7 @@ import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
+import com.wavesplatform.wallet.v2.ui.whats_new.WhatsNewActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -232,4 +233,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun tradeBuyAndSendSucessActivity(): TradeBuyAndSendSucessActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun whatsNewActivity(): WhatsNewActivity
 }

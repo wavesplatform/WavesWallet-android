@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:padding="24dp">
+    
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_new_icon"
+        android:layout_width="match_parent"
+        android:layout_height="326dp" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_new_title"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/image_new_icon"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Some Good Title"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:fontFamily="@font/roboto_medium" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_new_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_new_title"
+        android:layout_marginTop="8dp"
+        android:text="Become part of a fast-growing area of the crypto world. You are the only person who can access your crypto assets."
+        android:textColor="@color/basic500"
+        android:textSize="14sp" />
+
+
+</RelativeLayout>

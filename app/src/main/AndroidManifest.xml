@@ -32,13 +32,11 @@
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
-
-
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -65,13 +63,7 @@
             android:name=".v2.ui.home.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.MainActivity"
-            android:windowSoftInputMode="adjustResize">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".v1.ui.dex.markets.add.AddMarketActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
@@ -341,10 +333,14 @@
             android:name=".v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-        <activity android:name="com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSucessActivity"
+        <activity
+            android:name=".v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSucessActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
-            />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+        <activity android:name=".v2.ui.whats_new.WhatsNewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"/>
+
     </application>
 
 </manifest>

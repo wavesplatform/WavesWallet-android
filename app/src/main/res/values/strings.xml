@@ -1260,4 +1260,7 @@
     <string name="buy_and_sell_success_amount">Amount</string>
     <string name="buy_and_sell_success_okay">Okay</string>
 
+    <!--What's new-->
+    <string name="whats_new_next">Next</string>
+    <string name="whats_new_okay">Okay</string>
 </resources>
