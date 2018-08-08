@@ -27,7 +27,7 @@
         <com.flyco.tablayout.SlidingTabLayout
             android:id="@+id/stl_receive"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="45dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="2dp"
             android:paddingLeft="16dp"
@@ -38,6 +38,9 @@
             tl:tl_indicator_bounce_enable="false"
             tl:tl_indicator_color="@color/submit400"
             tl:tl_indicator_corner_radius="@dimen/tab_corner_radius"
+            tl:tl_tab_padding="16dp"
+            tl:tl_divider_width="10dp"
+            tl:tl_divider_color="@color/basic50"
             tl:tl_indicator_style="BLOCK"
             tl:tl_textSelectColor="@color/white"
             tl:tl_textUnselectColor="@color/basic500" />

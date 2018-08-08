@@ -22,7 +22,7 @@
         tl_indicator_gravity="BOTTOM"
         tl_indicator_style="NORMAL"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_height="45dp"
         android:layout_below="@+id/toolbar_view"
         android:layout_gravity="center_horizontal"
         tl:tl_bar_stroke_width="0dp"
@@ -31,7 +31,9 @@
         tl:tl_indicator_anim_enable="true"
         tl:tl_textsize="14sp"
         tl:tl_indicator_color="@color/white"
-        tl:tl_tab_space_equal="true"
+        tl:tl_tab_padding="24dp"
+        tl:tl_divider_width="10dp"
+        tl:tl_divider_color="@android:color/transparent"
         tl:tl_textSelectColor="@color/white"
         tl:tl_textUnselectColor="@color/submit200" />
 

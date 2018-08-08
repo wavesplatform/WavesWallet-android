@@ -63,7 +63,13 @@
             android:name=".v2.ui.home.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.MainActivity"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
         <activity
             android:name=".v1.ui.dex.markets.add.AddMarketActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
