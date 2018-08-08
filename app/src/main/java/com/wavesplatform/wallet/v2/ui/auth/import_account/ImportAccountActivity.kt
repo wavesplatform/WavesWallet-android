@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.auth.import_account
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -109,4 +110,9 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
         }
     }
 
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_CANCELED)
+        finish()
+        overridePendingTransition(0, android.R.anim.fade_out)
+    }
 }

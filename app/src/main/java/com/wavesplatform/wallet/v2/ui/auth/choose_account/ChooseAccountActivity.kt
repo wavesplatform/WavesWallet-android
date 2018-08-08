@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.auth.choose_account
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -109,5 +110,11 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_CANCELED)
+        finish()
+        overridePendingTransition(0, android.R.anim.fade_out)
     }
 }

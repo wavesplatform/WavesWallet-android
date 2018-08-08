@@ -7,9 +7,12 @@ import android.support.v4.view.ViewPager
 import android.support.v4.view.ViewPager.SCROLL_STATE_IDLE
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.id.white_block
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
@@ -44,12 +47,13 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
     companion object {
         var REQUEST_NEW_ACCOUNT = 55
+        var REQUEST_SIGN_IN = 56
+        var REQUEST_IMPORT_ACC = 57
     }
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view)
-        changeDrawerMenuIcon(findDrawable(R.drawable.ic_toolbar_menu_white))
 //        val icon = findDrawable(R.drawable.avd_anim)
 //        icon.notNull {
 //            changeDrawerMenuIcon(it)
@@ -59,30 +63,42 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 //        }
 
         button_create_account.click {
-            white_block.visiable()
-            white_block.post({
-                white_block.animate()
-                        .scaleX(1.5f)
-                        .scaleY(4.5f)
-                        .setDuration(500)
-                        .setStartDelay(0)
-                        .withEndAction {
-                            launchActivity<NewAccountActivity>(REQUEST_NEW_ACCOUNT)
-                            overridePendingTransition(0,0)
-                        }
-                        .start()
-//                runDelayed(380,{
-//
-//                })
+            animateWhiteBlock(it, {
+                launchActivity<NewAccountActivity>(REQUEST_NEW_ACCOUNT)
+                overridePendingTransition(0, 0)
+            })
+        }
+
+        relative_sign_in.click {
+            animateWhiteBlock(it,{
+                launchActivity<ChooseAccountActivity>(REQUEST_SIGN_IN)
+                overridePendingTransition(0, 0)
+            })
+        }
+
+        relative_import_acc.click {
+            animateWhiteBlock(it,{
+                launchActivity<ImportAccountActivity>(REQUEST_IMPORT_ACC)
+                overridePendingTransition(0, 0)
             })
         }
 
         adapter.items = populateList()
+        view_pager.setPageTransformer(false, object : ViewPager.PageTransformer {
+            override fun transformPage(page: View, position: Float) {
+                val root = page.findViewById<LinearLayout>(R.id.linear_root)
+                if (position <= -1.0F || position >= 1.0F) {
+                    root.alpha = 0.0F;
+                } else if (position == 0.0F) {
+                    root.alpha = 1.0F;
+                } else {
+                    root.alpha = 1.0F - Math.abs(position);
+                }
+            }
+
+        })
         view_pager.adapter = adapter
         view_pager.offscreenPageLimit = 5
-        view_pager.clipToPadding = false
-        view_pager.setPadding(screenWidth / 2 - dp2px(50), 0, screenWidth / 2 - dp2px(50), 0)
-        view_pager.setPageTransformer(false, AlphaScalePageTransformer())
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
                 presenter.state = state
@@ -95,63 +111,71 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
                 presenter.nextItemPosition = position
                 presenter.nextItemPosition++
                 if (presenter.nextItemPosition == 4) presenter.nextItemPosition = 0
-
-                val item = adapter.items[position]
-                text_title.setText(item.title)
-                text_descr.setText(item.description)
             }
         })
 
         fixedRateTimer(initialDelay = 5000, period = 5000, action = {
-            if (presenter.state == SCROLL_STATE_IDLE){
+            if (presenter.state == SCROLL_STATE_IDLE) {
                 runOnUiThread { view_pager.setCurrentItem(presenter.nextItemPosition, true) }
             }
         })
 
         enterAnimation()
+    }
 
-        relative_sign_in.click {
-            launchActivity<ChooseAccountActivity> {  }
-        }
+    private fun animateWhiteBlock(it: View, endAction: () -> Unit) {
+        white_block.setHeight(it.height)
+        white_block.setWidth(it.width)
+        val originalPos = IntArray(2)
+        it.getLocationOnScreen(originalPos)
+        white_block.y = originalPos[1].toFloat()
+        white_block.visiable()
 
-        relative_import_acc.click {
-            launchActivity<ImportAccountActivity> {  }
-
-        }
+        white_block.post({
+            white_block.animate()
+                    .scaleX(2f)
+                    .scaleY(((screenHeight + white_block.y) / white_block.height).toFloat() + 0.5f)
+                    .setDuration(500)
+                    .setStartDelay(0)
+                    .withEndAction {
+                        endAction()
+                    }
+                    .start()
+        })
     }
 
     private fun enterAnimation() {
-        card_view_welcome.animate()
-                .scaleY(1f)
-                .scaleX(1f)
-                .setStartDelay(500)
-                .setDuration(250)
-                .withEndAction {
-                    linear_sign_in.animate()
-                            .alpha(1f)
-                            .setDuration(350)
-                            .withEndAction {
-                                relative_top_block.animate()
-                                        .translationY(0f)
-                                        .alpha(1f)
-                                        .setDuration(500)
-                                        .start()
-                            }
-                            .start()
-                }
-                .start()
+//        card_view_welcome.animate()
+//                .scaleY(1f)
+//                .scaleX(1f)
+//                .setStartDelay(500)
+//                .setDuration(250)
+//                .withEndAction {
+//                    linear_sign_in.animate()
+//                            .alpha(1f)
+//                            .setDuration(350)
+//                            .withEndAction {
+//                                relative_top_block.animate()
+//                                        .translationY(0f)
+//                                        .alpha(1f)
+//                                        .setDuration(500)
+//                                        .start()
+//                            }
+//                            .start()
+//                }
+//                .start()
     }
 
     private fun populateList(): ArrayList<WelcomeItem> {
-        return arrayListOf(WelcomeItem(R.drawable.ic_userimg_blockchain_80_white, R.string.welcome_blockchain_title, R.string.welcome_blockchain_description),
-                WelcomeItem(R.drawable.ic_userimg_wallet_80_white, R.string.welcome_wallet_title, R.string.welcome_wallet_description),
-                WelcomeItem(R.drawable.ic_userimg_dex_80_white, R.string.welcome_dex_title, R.string.welcome_dex_description),
-                WelcomeItem(R.drawable.ic_userimg_token_80_white, R.string.welcome_token_title, R.string.welcome_token_description))
+        return arrayListOf(WelcomeItem(R.drawable.ic_userimg_blockchain_80, R.string.welcome_blockchain_title, R.string.welcome_blockchain_description),
+                WelcomeItem(R.drawable.ic_userimg_wallet_80, R.string.welcome_wallet_title, R.string.welcome_wallet_description),
+                WelcomeItem(R.drawable.ic_userimg_dex_80, R.string.welcome_dex_title, R.string.welcome_dex_description),
+                WelcomeItem(R.drawable.ic_userimg_token_80, R.string.welcome_token_title, R.string.welcome_token_description))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_NEW_ACCOUNT) {
+        if (requestCode == REQUEST_NEW_ACCOUNT || requestCode == REQUEST_IMPORT_ACC || requestCode == REQUEST_SIGN_IN) {
             if (resultCode == Activity.RESULT_CANCELED) {
                 white_block.animate()
                         .scaleX(1f)

@@ -19,6 +19,8 @@ class WelcomeItemsPagerAdapter @Inject constructor(@ApplicationContext var mCont
         val layout = LayoutInflater.from(mContext).inflate(R.layout.item_welcome, collection, false) as ViewGroup
 
         layout.image_welcome_photo.setImageResource(items[position].image)
+        layout.text_title.setText(items[position].title)
+        layout.text_descr.setText(items[position].description)
 
         collection.addView(layout)
         return layout

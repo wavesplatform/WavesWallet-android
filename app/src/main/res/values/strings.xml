@@ -659,6 +659,7 @@
     <string name="common_persist">&amp;</string>
     <string name="common_copied_to_clipboard">Copied to clipboard</string>
     <string name="common_copied">Copied!</string>
+    <string name="common_or">or</string>
 
     <!-- Language-->
     <string name="choose_language_russia">Русский</string>

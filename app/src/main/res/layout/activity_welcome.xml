@@ -1,11 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root"
-    android:clickable="true"
-    android:background="@drawable/img_brand">
+    android:background="@color/basic50"
+    android:clickable="true">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"
@@ -18,194 +18,186 @@
         android:id="@+id/relative_top_block"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:alpha="1"
-        android:alpha="0"
-        tools:translationY="0dp"
-        android:translationY="-100dp"
-        android:layout_below="@+id/toolbar_view">
+        android:layout_below="@+id/toolbar_view"
+        android:layout_marginTop="14dp">
 
 
-        <android.support.v4.view.ViewPager
+        <com.wavesplatform.wallet.v2.ui.custom.WrapContentHeightViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="24dp" />
-
-        <TextView
-            android:id="@+id/text_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/view_pager"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginTop="24dp"
-            app:fontFamily="@font/roboto_bold"
-            android:gravity="center_horizontal"
-            android:lineSpacingExtra="8sp"
-            android:text="Get Started with Blockchain"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/text_descr"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text_title"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginTop="8dp"
-            android:gravity="center_horizontal"
-            android:lineSpacingExtra="4sp"
-            android:text="Become part of a fast-growing area of the crypto world. You are the only person who can access your crypto assets."
-            android:textColor="@color/submit200"
-            android:textSize="14sp"
-            android:textStyle="normal" />
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 
+    <Button
+        android:id="@+id/button_create_account"
+        style="@style/WavesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relative_top_block"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/welcome_create_new_acc" />
+
+    <RelativeLayout
+        android:layout_above="@+id/card_sign_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/view_dashed"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_toStartOf="@+id/text_or"
+            android:layerType="software"
+            android:src="@drawable/bg_dashed" />
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_or"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="@string/common_or"
+            android:textColor="@color/basic500"
+            android:textSize="14sp" />
+
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/view_dashed_1"
+            android:layout_marginEnd="16dp"
+            android:layout_toEndOf="@+id/text_or"
+            android:layout_marginStart="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_centerVertical="true"
+            android:layerType="software"
+            android:src="@drawable/bg_dashed" />
+
+    </RelativeLayout>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/card_view_welcome"
+        android:id="@+id/card_sign_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/card_import_account"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/white"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="2dp">
+
+        <RelativeLayout
+            android:id="@+id/relative_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="14dp"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:paddingTop="14dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_sign_in_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/welcome_create_sign_in_title"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_sign_in_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_sign_in_title"
+                android:text="@string/welcome_create_sign_in_description"
+                android:textColor="@color/basic500"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_arrow_right" />
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_import_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="24dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:scaleX="0.95"
-        android:scaleY="0.6"
-        tools:scaleX="1"
-        tools:scaleY="1"
+        android:layout_marginTop="2dp"
         android:background="@color/white"
         app:cardCornerRadius="2dp"
         app:cardElevation="2dp">
 
-        <LinearLayout
-            android:id="@+id/linear_sign_in"
-            tools:alpha="1"
-            android:alpha="0"
+
+        <RelativeLayout
+            android:id="@+id/relative_import_acc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="vertical">
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="14dp"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:paddingTop="14dp">
 
-            <Button
-                android:id="@+id/button_create_account"
-                style="@style/WavesButton"
-                android:layout_width="match_parent"
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_import_title"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:text="@string/welcome_create_new_acc" />
+                android:text="@string/welcome_create_import_title"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_import_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_import_title"
+                android:text="@string/welcome_create_import_description"
+                android:textColor="@color/basic500"
+                android:textSize="14sp" />
 
             <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/view_dashed"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="24dp"
-                android:layerType="software"
-                android:src="@drawable/bg_dashed" />
-
-            <RelativeLayout
-                android:id="@+id/relative_sign_in"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:paddingBottom="14dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="14dp">
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_arrow_right" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_sign_in_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/welcome_create_sign_in_title"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_sign_in_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_sign_in_title"
-                    android:text="@string/welcome_create_sign_in_description"
-                    android:textColor="@color/basic500"
-                    android:textSize="14sp" />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    app:srcCompat="@drawable/ic_arrow_right" />
-
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#e9e9eb" />
-
-
-            <RelativeLayout
-                android:id="@+id/relative_import_acc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:paddingBottom="14dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="14dp">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_import_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/welcome_create_import_title"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_import_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_import_title"
-                    android:text="@string/welcome_create_import_description"
-                    android:textColor="@color/basic500"
-                    android:textSize="14sp" />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    app:srcCompat="@drawable/ic_arrow_right" />
-
-            </RelativeLayout>
-
-
-        </LinearLayout>
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
     <View
         android:id="@+id/white_block"
-        android:layout_alignEnd="@+id/card_view_welcome"
-        android:layout_alignBottom="@+id/card_view_welcome"
-        android:layout_alignStart="@+id/card_view_welcome"
-        android:layout_alignTop="@+id/card_view_welcome"
-        android:elevation="3dp"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        />
+        android:elevation="3dp"
+        android:visibility="gone" />
 
 
 </RelativeLayout>
