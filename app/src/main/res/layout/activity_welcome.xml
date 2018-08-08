@@ -29,21 +29,36 @@
 
     </RelativeLayout>
 
+
+    <com.github.vivchar.viewpagerindicator.ViewPagerIndicator
+        android:id="@+id/view_pager_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relative_top_block"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="24dp"
+        app:delimiterSize="6dp"
+        app:itemScale="1"
+        app:itemSelectedTint="@color/black"
+        app:itemSize="6dp"
+        app:itemTint="@color/basic200" />
+
     <Button
         android:id="@+id/button_create_account"
         style="@style/WavesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relative_top_block"
+        android:layout_below="@+id/view_pager_indicator"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:text="@string/welcome_create_new_acc" />
 
     <RelativeLayout
-        android:layout_above="@+id/card_sign_in"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/card_sign_in">
 
 
         <android.support.v7.widget.AppCompatImageView
@@ -72,12 +87,12 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/view_dashed_1"
-            android:layout_marginEnd="16dp"
-            android:layout_toEndOf="@+id/text_or"
-            android:layout_marginStart="24dp"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_toEndOf="@+id/text_or"
             android:layerType="software"
             android:src="@drawable/bg_dashed" />
 
@@ -192,9 +207,9 @@
 
     <View
         android:id="@+id/white_block"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:background="@color/white"
         android:elevation="3dp"
         android:visibility="gone" />

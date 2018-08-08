@@ -196,6 +196,7 @@ dependencies {
 
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35'
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
+    implementation 'com.github.vivchar:ViewPagerIndicator:1.1.0'
 
     // OkHttp
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
