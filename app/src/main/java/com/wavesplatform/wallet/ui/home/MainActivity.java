@@ -514,7 +514,11 @@ public class MainActivity extends BaseAuthActivity implements TransactionsFragme
     public void startSendFragment(String uri) {
         int selectedAccountPosition;
         try {
-            selectedAccountPosition = ((TransactionsFragment) getCurrentFragment()).getSelectedAccountPosition();
+            if (getCurrentFragment() instanceof TransactionsFragment) {
+                selectedAccountPosition = ((TransactionsFragment) getCurrentFragment()).getSelectedAccountPosition();
+            } else {
+                selectedAccountPosition = -1;
+            }
         } catch (Exception e) {
             Log.e(TAG, "startSendFragment: ", e);
             selectedAccountPosition = -1;
@@ -527,7 +531,11 @@ public class MainActivity extends BaseAuthActivity implements TransactionsFragme
     public void startReceiveFragment() {
         int selectedAccountPosition;
         try {
-            selectedAccountPosition = ((TransactionsFragment) getCurrentFragment()).getSelectedAccountPosition();
+            if (getCurrentFragment() instanceof TransactionsFragment) {
+                selectedAccountPosition = ((TransactionsFragment) getCurrentFragment()).getSelectedAccountPosition();
+            } else {
+                selectedAccountPosition = -1;
+            }
         } catch (Exception e) {
             Log.e(TAG, "startReceiveFragment: ", e);
             selectedAccountPosition = -1;
@@ -541,7 +549,11 @@ public class MainActivity extends BaseAuthActivity implements TransactionsFragme
     public void startDexFragment() {
         int selectedAccountPosition;
         try {
-            selectedAccountPosition = ((TransactionsFragment) getCurrentFragment()).getSelectedAccountPosition();
+            if (getCurrentFragment() instanceof TransactionsFragment) {
+                selectedAccountPosition = ((TransactionsFragment) getCurrentFragment()).getSelectedAccountPosition();
+            } else {
+                selectedAccountPosition = -1;
+            }
         } catch (Exception e) {
             Log.e(TAG, "startDexFragment: ", e);
             selectedAccountPosition = -1;

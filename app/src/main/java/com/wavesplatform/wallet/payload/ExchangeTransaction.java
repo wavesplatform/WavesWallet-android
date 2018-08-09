@@ -93,10 +93,7 @@ public class ExchangeTransaction extends Transaction {
 
     @Override
     public String getDisplayAmount() {
-        if (getMyOrder().assetPair.priceAsset == null) {
-            return MoneyUtil.getScaledText(amount, getAssetBallance());
-        }
-        return MoneyUtil.getDisplayWaves(amount);
+        return MoneyUtil.getScaledText(amount, getAssetBallance());
     }
 
     public int getPriceDecimals() {
@@ -108,10 +105,7 @@ public class ExchangeTransaction extends Transaction {
 
     @Override
     public int getDecimals() {
-        if (getMyOrder().assetPair.priceAsset == null) {
-            return getAssetBallance().issueTransaction.decimals;
-        }
-        return 8;
+        return getAssetBallance().issueTransaction.decimals;
     }
 
     @Override
