@@ -19,8 +19,8 @@ android {
         applicationId "com.wavesplatform.wallet"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 350
-        versionName "1.1.7"
+        versionCode 355
+        versionName "1.1.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         archivesBaseName = "waves-wallet-$versionName"
