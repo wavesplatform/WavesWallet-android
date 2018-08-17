@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.AppCompatTextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/text_aliases_name"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/aliases_shape"
-    android:drawablePadding="14dp"
-    android:drawableRight="@drawable/ic_copy_black"
-    android:gravity="center"
-    android:padding="14dp"
-    android:text="makstorch"
-    android:textColor="@color/disabled900" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.AppCompatTextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/text_alias_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="makstorch"
+        android:textColor="@color/disabled900" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_copy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:srcCompat="@drawable/ic_copy_18_submit_400" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/view_dashed"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/image_copy"
+        android:layout_marginTop="14dp"
+        android:layerType="software"
+        app:srcCompat="@drawable/bg_dashed" />
+
+</RelativeLayout>
+

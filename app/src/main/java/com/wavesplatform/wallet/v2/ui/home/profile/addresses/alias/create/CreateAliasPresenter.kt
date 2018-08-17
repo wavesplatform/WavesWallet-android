@@ -1,10 +1,10 @@
-package com.wavesplatform.wallet.v2.ui.home.profile.addresses
+package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
-class ProfileAddressesPresenter @Inject constructor() : BasePresenter<ProfileAddressesView>() {
+class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView>(){
 
 }

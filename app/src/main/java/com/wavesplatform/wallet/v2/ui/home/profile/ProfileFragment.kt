@@ -2,11 +2,8 @@ package com.wavesplatform.wallet.v2.ui.home.profile
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.view.*
-import android.widget.Button
-import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -21,9 +18,7 @@ import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActi
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import kotlinx.android.synthetic.main.fragment_profile.*
-import org.spongycastle.crypto.tls.ContentType.alert
 import pers.victor.ext.click
-import pers.victor.ext.findColor
 import pers.victor.ext.toast
 import javax.inject.Inject
 

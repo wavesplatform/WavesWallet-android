@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_my_address_qr.*
@@ -50,6 +51,14 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
         text_address.text = publicKeyAccountHelper.publicKeyAccount?.address
         frame_share.click {
             shareAddress()
+        }
+
+        text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), 3)
+
+        card_aliases.click {
+            val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
+            bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
+            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
 
         frame_copy.click {
