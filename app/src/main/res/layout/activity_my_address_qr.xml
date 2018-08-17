@@ -10,31 +10,47 @@
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
         android:fontFamily="@font/roboto"
-        app:titleTextAppearance="@style/Toolbar.Title" />
+        app:titleTextAppearance="@style/Toolbar.Title">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="6dp"
+            android:adjustViewBounds="true" />
+
+    </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar_view"
-        android:layout_marginEnd="14dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="8dp">
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dp"
+            android:text="@string/your_address_toolbar_title"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:fontFamily="@font/roboto_medium" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_address"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/shape_rect_address"
-            android:paddingBottom="10dp"
-            android:paddingLeft="14dp"
-            android:paddingRight="14dp"
-            android:paddingTop="10dp"
+            android:layout_below="@+id/text_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
             android:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW"
-            android:textColor="@color/disabled900"
+            android:textColor="@color/basic500"
             android:textSize="14sp" />
 
 
@@ -95,13 +111,90 @@
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/view_dashed"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginBottom="24dp"
+            android:layout_below="@+id/linear_buttons"
+            android:layout_marginTop="18dp"
+            android:layerType="software"
+            app:srcCompat="@drawable/bg_dashed" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_aliases"
+            android:layout_width="match_parent"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardElevation="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_below="@+id/view_dashed"
+            android:layout_marginBottom="44dp"
+            android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/relative_alias"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="6dp"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:paddingTop="6dp">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_startlease"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_t_alias_48" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/image_startlease"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_leasing_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/addresses_and_keys_aliases"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/roboto_bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_leasing_status"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/addresses_and_keys_you_do_not_have"
+                    android:textColor="@color/disabled500"
+                    android:textSize="12sp" />
+
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/icon_info_basic_300" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_view_recipient_action"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_200sdp"
-            android:layout_below="@+id/linear_buttons"
-            android:scaleType="fitXY"
+            android:layout_below="@+id/card_aliases"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp" />
+            android:scaleType="fitXY" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_view_qr_code"
@@ -109,42 +202,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/image_view_recipient_action"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="14dp"
-            android:text="Your QR Code"
+            android:text="@string/your_address_your_qr_code"
             android:textColor="@color/disabled500"
             android:textSize="12sp" />
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/image_warning"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text_view_qr_code"
-            android:layout_marginTop="24dp"
-            app:srcCompat="@drawable/ic_warning_18_disabled_500" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/text_warning_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text_view_qr_code"
-            android:layout_toRightOf="@+id/image_warning"
-            android:layout_marginTop="24dp"
-            android:layout_marginStart="14dp"
-            app:fontFamily="@font/roboto_bold"
-            android:text="@string/my_address_qr_send_only_waves_and_waves_tokens_to_this_address"
-            android:textColor="@color/disabled500"
-            android:textSize="12sp" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text_warning_title"
-            android:layout_toRightOf="@+id/image_warning"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="14dp"
-            android:text="@string/my_address_qr_sending_any_other_digital_asset_to_this_address_will_result_in_the_permanent_loss_of_your_funds"
-            android:textColor="@color/disabled500"
-            android:textSize="12sp" />
 
     </RelativeLayout>
 

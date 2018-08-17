@@ -1284,4 +1284,5 @@
     <!--What's new-->
     <string name="whats_new_next">Next</string>
     <string name="whats_new_okay">Okay</string>
+    <string name="your_address_your_qr_code">Your QR Code</string>
 </resources>
