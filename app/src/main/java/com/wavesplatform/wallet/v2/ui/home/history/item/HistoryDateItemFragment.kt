@@ -7,12 +7,11 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
-import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItemAdapter
-import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryItemAdapter
 import kotlinx.android.synthetic.main.fragment_history_date.*
-import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 class HistoryDateItemFragment : BaseFragment(), HistoryDateItemView {
@@ -34,6 +33,9 @@ class HistoryDateItemFragment : BaseFragment(), HistoryDateItemView {
         const val all = "All"
         const val send = "Sent"
         const val received = "Received"
+        const val exchanged = "Exchanged"
+        const val leased = "Leased"
+        const val issued = "Issued"
 
         /**
          * @return HistoryDateItemFragment instance
@@ -52,30 +54,30 @@ class HistoryDateItemFragment : BaseFragment(), HistoryDateItemView {
         recycle_history.adapter = adapter
         recycle_history.isNestedScrollingEnabled = false
 
-        presenter.loadBundle(arguments)
+        presenter.loadBundle(arguments?.getString("type"))
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val historyItem = adapter.getItem(position) as HistoryItem
             if (!historyItem.isHeader) {
-                val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
-                bottomSheetFragment.selectedItem = historyItem.t
-                bottomSheetFragment.historyType = arguments?.getString("type")
-                val data = adapter?.data as ArrayList<HistoryItem>
-                bottomSheetFragment.allItems = data.filter { !it.isHeader }.map { it.t }
-
-//                TODO lifehack)
-                var sectionSize = 0
-                for (i in 0..position) {
-                    if (data[i].isHeader) sectionSize++
-                }
-
-                bottomSheetFragment.selectedItemPosition = position - sectionSize
-                bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
+//                val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
+//                bottomSheetFragment.selectedItem = historyItem.t
+//                bottomSheetFragment.historyType = arguments?.getString("type")
+//                val data = adapter?.data as ArrayList<HistoryItem>
+//                bottomSheetFragment.allItems = data.filter { !it.isHeader }.map { it.t }
+//
+////                TODO lifehack)
+//                var sectionSize = 0
+//                for (i in 0..position) {
+//                    if (data[i].isHeader) sectionSize++
+//                }
+//
+//                bottomSheetFragment.selectedItemPosition = position - sectionSize
+//                bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
             }
         }
     }
 
-    override fun showData(data: ArrayList<HistoryItem>, type: String) {
+    override fun showData(data: ArrayList<HistoryItem>, type: String?) {
         adapter.setType(type)
         adapter.setNewData(data)
     }

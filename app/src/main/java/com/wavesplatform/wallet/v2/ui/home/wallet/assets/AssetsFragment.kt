@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
@@ -7,7 +8,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.id.*
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.service.UpdateHistoryService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -137,10 +140,13 @@ class AssetsFragment : BaseFragment(), AssetsView {
         item.isVisible = true
     }
 
-    override fun afterSuccessLoadAssets(assets: List<AssetBalance>) {
-        runDelayed(1000, {
-            swipe_container.notNull { swipe_container.isRefreshing = false }
-        })
+    override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean) {
+        swipe_container.notNull { swipe_container.isRefreshing = false }
+
+        if (!fromDB) {
+            val intent = Intent(baseActivity, UpdateHistoryService::class.java)
+            baseActivity.startService(intent)
+        }
         adapter.setNewData(assets)
     }
 

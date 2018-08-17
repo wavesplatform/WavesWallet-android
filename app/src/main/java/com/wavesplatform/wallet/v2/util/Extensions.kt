@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
@@ -33,6 +34,10 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
+import pers.victor.ext.activityManager
+import pers.victor.ext.app
 import pers.victor.ext.clipboardManager
 import pers.victor.ext.toast
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
@@ -53,6 +58,30 @@ fun Context.isNetworkConnection(): Boolean {
 
 fun Context.notAvailable() {
     toast(getString(R.string.common_msg_in_development))
+}
+
+fun Transaction.transactionType() : TransactionType{
+    return TransactionType.getTypeById(this.transactionTypeId)
+}
+
+fun TransactionType.icon(): Drawable? {
+    return ContextCompat.getDrawable(app, this.image)
+}
+
+fun TransactionType.title(): String {
+    return app.getString(this.title)
+}
+
+fun Context.isAppOnForeground(): Boolean {
+    val appProcesses: MutableList<ActivityManager.RunningAppProcessInfo>? = activityManager.runningAppProcesses
+            ?: return false
+    val packageName = getPackageName();
+    appProcesses?.forEach {
+        if (it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && it.processName.equals(packageName)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 fun Context.getToolBarHeight(): Int {
@@ -336,6 +365,8 @@ fun View.setMargins(
 fun TextView.makeTextHalfBold() {
     val text = this.text.toString()
     val str = SpannableStringBuilder(text)
-    str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    if (text.indexOf(".") != -1){
+        str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
     this.text = str
 }

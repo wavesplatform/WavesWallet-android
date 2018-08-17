@@ -14,9 +14,11 @@ import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.service.UpdateHistoryService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
@@ -44,12 +46,16 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     var accountFirstOpenDialog: AlertDialog? = null
 
 
+
     @ProvidePresenter
     fun providePresenter(): MainPresenter = presenter
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_general)
         needChangeStatusBarColorOnMenuOpen(false)
+
+        //TODO: clear this
+        authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
 
         showFirstOpenAlert(preferencesHelper.isAccountFirstOpen())
 

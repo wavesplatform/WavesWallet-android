@@ -20,7 +20,6 @@ class AuthHelper @Inject constructor(private val publicKeyAccountHelper: PublicK
                     .build()
 
             DBHelper.getInstance().setRealmConfig(config)
-            Realm.getDefaultInstance().isAutoRefresh = false
             Realm.getInstance(config).isAutoRefresh = false
 
 

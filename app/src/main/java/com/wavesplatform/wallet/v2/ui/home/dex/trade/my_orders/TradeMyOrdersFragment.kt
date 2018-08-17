@@ -10,9 +10,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment;
 
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.dex.details.my_orders.MyOrdersAdapter
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderItem
-import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItemAdapter
 import kotlinx.android.synthetic.main.fragment_trade_my_orders.*
 import kotlinx.android.synthetic.main.layout_empty_data.*
 

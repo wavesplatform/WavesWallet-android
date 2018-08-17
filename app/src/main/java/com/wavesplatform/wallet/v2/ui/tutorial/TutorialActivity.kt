@@ -63,6 +63,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
                 if (view_pager.currentItem == adapter.items.size - 1) {
                     text_next.text = getString(R.string.card_tutorial_understand)
                     text_next.click {
+                        preferencesHelper.setTutorialPassed(true)
                         launchActivity<WelcomeActivity>()
                     }
                 } else {

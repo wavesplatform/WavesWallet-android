@@ -29,11 +29,11 @@ open class AssetBalance(
         @SerializedName("issueTransaction") var issueTransaction: IssueTransaction? = IssueTransaction(),
         var isHidden: Boolean = false,
         var position: Int = -1,
-        var configureVisibleState: Boolean = false,
-        @Ignore
-        var isChecked: Boolean = false,
+        @Ignore var configureVisibleState: Boolean = false,
+        @Ignore var isChecked: Boolean = false,
         var isFlatMoney: Boolean = false,
-        var isFavorite: Boolean = false
+        var isFavorite: Boolean = false,
+        var isGateway: Boolean = false
 ) : RealmModel, Parcelable {
     fun getDecimals(): Int? {
         return if (issueTransaction != null) issueTransaction?.decimals else 8

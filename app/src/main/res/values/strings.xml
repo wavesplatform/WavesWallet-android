@@ -780,7 +780,28 @@
     <string name="history_all">All</string>
     <string name="history_sent">Sent</string>
     <string name="history_received">Received</string>
+    <string name="history_exchanged">Exchanged</string>
+    <string name="history_leased">Leased</string>
+    <string name="history_issued">Issued</string>
     <string name="history_empty">Nothing Here…\nYou do not have any transactions</string>
+
+    <string name="history_type_receive">Received %s</string>
+    <string name="history_type_sent">Sent %s</string>
+    <string name="history_type_started_leasing">Started Leasing</string>
+    <string name="history_type_exchange">%s %s</string>
+    <string name="history_type_canceled_leasing">Canceled Leasing</string>
+    <string name="history_type_token_generation">%s - Token Generation</string>
+    <string name="history_type_token_burn">%s Token Burn</string>
+    <string name="history_type_token_reissue">%s Token Reissue</string>
+    <string name="history_type_self_transfer">Self-transfer %s</string>
+    <string name="history_type_create_alias">Create Alias</string>
+    <string name="history_type_incoming_leasing">Incoming Leasing</string>
+    <string name="history_type_unrecognised">Unrecognised Transaction</string>
+    <string name="history_type_mass_send">Send %s</string>
+    <string name="history_type_mass_receive">Received %s</string>
+    <string name="history_type_spam_receive">Received %s</string>
+    <string name="history_type_mass_spam_receive">Received %s</string>
+    <string name="history_type_data">Data transaction</string>
 
     <!--History Details-->
     <string name="history_details_received_from">Received from</string>

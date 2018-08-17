@@ -1,0 +1,41 @@
+package com.wavesplatform.wallet.v2.data.model.remote.response
+
+import android.support.annotation.DrawableRes
+import android.support.annotation.StringRes
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.local.Language
+import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
+
+enum class TransactionType(var id: Int,
+                           @DrawableRes var image: Int,
+                           @StringRes var title: Int) {
+    RECEIVED_TYPE(Constants.ID_RECEIVED_TYPE, R.drawable.ic_t_receive_48, R.string.history_type_receive),
+    SENT_TYPE(Constants.ID_SENT_TYPE, R.drawable.ic_t_send_48, R.string.history_type_sent),
+    STARTED_LEASING_TYPE(Constants.ID_STARTED_LEASING_TYPE, R.drawable.ic_t_startlease_48, R.string.history_type_started_leasing),
+    SELF_TRANSFER_TYPE(Constants.ID_SELF_TRANSFER_TYPE, R.drawable.ic_t_selftrans_48, R.string.history_type_self_transfer),
+    CANCELED_LEASING_TYPE(Constants.ID_CANCELED_LEASING_TYPE, R.drawable.ic_t_closelease_48, R.string.history_type_canceled_leasing),
+    TOKEN_GENERATION_TYPE(Constants.ID_TOKEN_GENERATION_TYPE, R.drawable.ic_t_tokengen_48, R.string.history_type_token_generation),
+    TOKEN_BURN_TYPE(Constants.ID_TOKEN_BURN_TYPE, R.drawable.ic_t_tokenburn_48, R.string.history_type_token_burn),
+    TOKEN_REISSUE_TYPE(Constants.ID_TOKEN_REISSUE_TYPE, R.drawable.ic_t_tokenreis_48, R.string.history_type_token_reissue),
+    EXCHANGE_TYPE(Constants.ID_EXCHANGE_TYPE, R.drawable.ic_t_exchange_48, R.string.history_type_exchange),
+    CREATE_ALIAS_TYPE(Constants.ID_CREATE_ALIAS_TYPE, R.drawable.ic_t_alias_48, R.string.history_type_create_alias),
+    INCOMING_LEASING_TYPE(Constants.ID_INCOMING_LEASING_TYPE, R.drawable.ic_t_incominglease_48, R.string.history_type_incoming_leasing),
+    UNRECOGNISED_TYPE(Constants.ID_UNRECOGNISED_TYPE, R.drawable.ic_t_undefined_48, R.string.history_type_unrecognised),
+    MASS_SEND_TYPE(Constants.ID_MASS_SEND_TYPE, R.drawable.ic_t_masstransfer_48, R.string.history_type_mass_send),
+    MASS_RECEIVE_TYPE(Constants.ID_MASS_RECEIVE_TYPE, R.drawable.ic_t_massreceived_48, R.string.history_type_mass_receive),
+    SPAM_RECEIVE_TYPE(Constants.ID_SPAM_RECEIVE_TYPE, R.drawable.ic_t_spam_receive_48, R.string.history_type_spam_receive),
+    MASS_SPAM_RECEIVE_TYPE(Constants.ID_MASS_SPAM_RECEIVE_TYPE, R.drawable.ic_t_spam_massreceived_48, R.string.history_type_mass_spam_receive),
+    DATA_TYPE(Constants.ID_DATA_TYPE, R.drawable.ic_t_data_48, R.string.history_type_data);
+
+    companion object {
+        fun getTypeById(id: Int): TransactionType {
+            TransactionType.values().forEach {
+                if (it.id == id) return it
+            }
+            return TransactionType.UNRECOGNISED_TYPE
+        }
+    }
+
+
+}
