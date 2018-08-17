@@ -22,6 +22,8 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObjec
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activit_choose_account.*
+import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import pers.victor.ext.inflate
 import pers.victor.ext.toast
 import javax.inject.Inject
 
@@ -61,7 +63,13 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     override fun afterSuccessGetAddress(list: ArrayList<AddressTestObject>) {
         adapter.setNewData(list)
 
-        adapter.setEmptyView(R.layout.choose_account_empty_state)
+        adapter.emptyView = getEmptyView()
+    }
+
+    private fun getEmptyView(): View {
+        val view = inflate(R.layout.layout_empty_data)
+        view.text_empty.text = getString(R.string.choose_account_empty_state)
+        return view
     }
 
     override fun onItemClicked(item: AddressTestObject) {
