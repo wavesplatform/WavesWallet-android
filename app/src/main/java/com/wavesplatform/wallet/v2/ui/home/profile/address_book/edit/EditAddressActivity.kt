@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity.Companion.BUNDLE_POSITION
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
+import com.wavesplatform.wallet.v2.util.makeStyled
 import kotlinx.android.synthetic.main.activity_edit_address.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
@@ -107,12 +108,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.edit_address_delete_alert_cancel),
                     DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
             alertDialog.show()
-            val titleTextView =  alertDialog?.findViewById<TextView>(R.id.alertTitle);
-            val buttonPositive = alertDialog?.findViewById<Button>(android.R.id.button1)
-            val buttonNegative = alertDialog?.findViewById<Button>(android.R.id.button2)
-            buttonPositive?.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
-            buttonNegative?.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
-            titleTextView?.typeface = ResourcesCompat.getFont(this, R.font.roboto_medium)
+            alertDialog.makeStyled()
         }
 
         configureWithType()

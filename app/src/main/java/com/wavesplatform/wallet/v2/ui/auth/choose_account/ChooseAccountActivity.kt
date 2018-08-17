@@ -8,6 +8,7 @@ import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -20,6 +21,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activit_choose_account.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
@@ -96,8 +98,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.choose_account_cancel),
                 DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
         alertDialog.show()
-        val titleTextView = alertDialog?.findViewById<TextView>(R.id.alertTitle);
-        titleTextView?.typeface = ResourcesCompat.getFont(this, R.font.roboto_bold)
+        alertDialog.makeStyled()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

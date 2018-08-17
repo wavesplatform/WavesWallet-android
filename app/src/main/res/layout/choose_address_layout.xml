@@ -18,19 +18,22 @@
             android:layout_gravity="end"
             android:layout_marginBottom="6dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/image_edit_address"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:paddingBottom="20dp"
-                android:paddingEnd="24dp"
-                android:paddingStart="24dp"
-                android:paddingTop="20dp"
+                android:layout_margin="10dp"
+                android:paddingBottom="10dp"
+                android:paddingEnd="14dp"
+                android:paddingStart="14dp"
+                android:paddingTop="10dp"
                 app:srcCompat="@drawable/ic_edit_address_submit_300" />
 
 
@@ -39,10 +42,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:paddingBottom="20dp"
-                android:paddingEnd="24dp"
-                android:paddingStart="24dp"
-                android:paddingTop="20dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_margin="10dp"
+                android:paddingBottom="10dp"
+                android:paddingEnd="14dp"
+                android:paddingStart="14dp"
+                android:paddingTop="10dp"
                 app:srcCompat="@drawable/ic_deladdress_24_error_400" />
         </LinearLayout>
 

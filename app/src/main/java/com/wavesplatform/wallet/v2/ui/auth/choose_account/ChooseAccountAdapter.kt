@@ -7,6 +7,7 @@ import com.daimajia.swipe.SwipeLayout
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
 import pers.victor.ext.click
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
 class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressTestObject, BaseViewHolder>(R.layout.choose_address_layout, null) {
@@ -20,19 +21,24 @@ class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressTestO
 
         val swipeLayout = helper.getView<SwipeLayout>(R.id.swipe_layout)
         swipeLayout.showMode = SwipeLayout.ShowMode.LayDown
+
         swipeLayout.surfaceView.setOnClickListener({
             chooseAccountOnClickListener?.onItemClicked(item)
         })
 
         helper.getView<ImageView>(R.id.image_edit_address).click {
             swipeLayout.close(true)
+            runDelayed(250, {
 
-            chooseAccountOnClickListener?.onEditClicked(data.indexOf(item))
+                chooseAccountOnClickListener?.onEditClicked(data.indexOf(item))
+            })
         }
         helper.getView<ImageView>(R.id.image_delete_address).click {
             swipeLayout.close(true)
 
-            chooseAccountOnClickListener?.onDeleteClicked()
+            runDelayed(250, {
+                chooseAccountOnClickListener?.onDeleteClicked()
+            })
         }
     }
 

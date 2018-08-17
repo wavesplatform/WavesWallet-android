@@ -16,6 +16,8 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.res.ResourcesCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatImageView
 import android.text.*
 import android.text.method.LinkMovementMethod
@@ -23,6 +25,7 @@ import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -36,6 +39,7 @@ import com.bumptech.glide.request.target.Target
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
+import kotlinx.android.synthetic.main.dialog_security_centre.*
 import pers.victor.ext.activityManager
 import pers.victor.ext.app
 import pers.victor.ext.clipboardManager
@@ -70,6 +74,15 @@ fun TransactionType.icon(): Drawable? {
 
 fun TransactionType.title(): String {
     return app.getString(this.title)
+}
+
+fun AlertDialog.makeStyled() {
+    val titleTextView =  this.findViewById<TextView>(R.id.alertTitle);
+    val buttonPositive = this.findViewById<Button>(android.R.id.button1)
+    val buttonNegative = this.findViewById<Button>(android.R.id.button2)
+    buttonPositive?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+    buttonNegative?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+    titleTextView?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
 }
 
 fun Context.isAppOnForeground(): Boolean {
