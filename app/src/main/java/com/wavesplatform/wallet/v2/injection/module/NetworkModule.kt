@@ -11,7 +11,8 @@ import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
-import com.wavesplatform.wallet.v2.data.remote.AppService
+import com.wavesplatform.wallet.v2.data.remote.ApiService
+import com.wavesplatform.wallet.v2.data.remote.NodeService
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import dagger.Module
 import dagger.Provides
@@ -27,6 +28,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
+import kotlin.jvm.java
 
 @Module
 class NetworkModule {
@@ -71,10 +73,27 @@ class NetworkModule {
 
 
     @Singleton
+    @Named("NodeRetrofit")
     @Provides
-    internal fun provideBaseRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
+    internal fun provideNodeRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl("https://nodes.wavesplatform.com")
+                .baseUrl(BuildConfig.NODE_URL)
+                .client(httpClient)
+                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+        RetrofitCache.getInstance().addRetrofit(retrofit)
+        return retrofit
+    }
+
+
+    @Singleton
+    @Named("ApiRetrofit")
+    @Provides
+    internal fun provideApiRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(BuildConfig.API_URL)
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -86,8 +105,14 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    internal fun provideBaseRestService(retrofit: Retrofit): AppService {
-        return retrofit.create(AppService::class.java)
+    internal fun provideNodeService(@Named("NodeRetrofit") retrofit: Retrofit): NodeService {
+        return retrofit.create(NodeService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    internal fun provideApiService(@Named("ApiRetrofit") retrofit: Retrofit): ApiService {
+        return retrofit.create(ApiService::class.java)
     }
 
     @Named("timeout")

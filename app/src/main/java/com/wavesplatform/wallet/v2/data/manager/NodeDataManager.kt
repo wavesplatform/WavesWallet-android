@@ -1,26 +1,18 @@
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.google.common.base.Predicates.equalTo
 import com.vicpin.krealmextensions.*
-import com.wavesplatform.wallet.R.color.s
 import com.wavesplatform.wallet.v1.payload.TransactionsInfo
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalances
-import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.util.isAppOnForeground
 import com.wavesplatform.wallet.v2.util.notNull
-import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import pers.victor.ext.app
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class NodeDataManager @Inject constructor() : DataManager() {
 
@@ -28,7 +20,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
     var pendingTransactions: List<Transaction> = ArrayList()
 
 //    fun loadAssetsFromDBAndNetwork(): Observable<List<AssetBalance>> {
-//        return Observable.mergeDelayError(queryAllAsFlowable<AssetBalance>().toObservable(), appService.assetsBalance(getAddress())
+//        return Observable.mergeDelayError(queryAllAsFlowable<AssetBalance>().toObservable(), nodeService.assetsBalance(getAddress())
 //                .map({ assets ->
 //
 //                    // merge db data and API data
@@ -44,7 +36,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
 //                    }
 //
 //                    return@map queryAll<AssetBalance>()
-//                }), appService.wavesBalance(getAddress())
+//                }), nodeService.wavesBalance(getAddress())
 //                .map {
 //                    val currentWaves = Constants.defaultAssets[0]
 //                    currentWaves.balance = it.balance
@@ -55,7 +47,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
 //    }
 
     fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
-        return appService.assetsBalance(getAddress())
+        return nodeService.assetsBalance(getAddress())
                 .flatMap({ assets ->
                     return@flatMap loadWavesBalance()
                             .map({
@@ -82,7 +74,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
     }
 
     fun loadWavesBalance(): Observable<AssetBalance> {
-        return appService.wavesBalance(getAddress())
+        return nodeService.wavesBalance(getAddress())
                 .map({
                     val currentWaves = Constants.defaultAssets[0]
                     currentWaves.balance = it.balance
@@ -97,8 +89,8 @@ class NodeDataManager @Inject constructor() : DataManager() {
                 .retry(3)
                 .flatMap({
                     if (app.isAppOnForeground()) {
-                        return@flatMap Observable.zip(appService.transactionList(getAddress(), 100).map({ r -> r.get(0) }),
-                                appService.unconfirmedTransactions(), BiFunction<List<Transaction>, List<Transaction>, Pair<List<Transaction>, List<Transaction>>> { t1, t2 ->
+                        return@flatMap Observable.zip(nodeService.transactionList(getAddress(), 100).map({ r -> r.get(0) }),
+                                nodeService.unconfirmedTransactions(), BiFunction<List<Transaction>, List<Transaction>, Pair<List<Transaction>, List<Transaction>>> { t1, t2 ->
                             return@BiFunction Pair(t1, t2)
                         })
                     } else {
@@ -110,7 +102,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
 
 
     private fun unconfirmedTransactionsWithOwnFilter(): Observable<List<Transaction>> {
-        return appService.unconfirmedTransactions()
+        return nodeService.unconfirmedTransactions()
                 .flatMap {
                     Observable.fromIterable(it)
                             .map {
@@ -123,11 +115,11 @@ class NodeDataManager @Inject constructor() : DataManager() {
     }
 
     fun broadcastIssue(tx: ReissueTransactionRequest): Observable<ReissueTransactionRequest> {
-        return appService.broadcastReissue(tx)
+        return nodeService.broadcastReissue(tx)
     }
 
     fun getTransactionsInfo(asset: String): Observable<TransactionsInfo> {
-        return appService.getTransactionsInfo(asset)
+        return nodeService.getTransactionsInfo(asset)
     }
 
     var wavesAsset: AssetBalance = AssetBalance(

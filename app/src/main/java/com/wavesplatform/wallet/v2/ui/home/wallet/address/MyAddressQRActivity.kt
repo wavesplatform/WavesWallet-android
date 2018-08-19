@@ -10,8 +10,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
+import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
@@ -42,9 +44,6 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
 
     override fun configLayoutRes() = R.layout.activity_my_address_qr
 
-    @Inject
-    lateinit var publicKeyAccountHelper: PublicKeyAccountHelper
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, icon = R.drawable.ic_toolbar_back_black)
 
@@ -53,7 +52,9 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
             shareAddress()
         }
 
-        text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), 3)
+        queryAllAsync<Alias>({
+            text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), it.size)
+        })
 
         card_aliases.click {
             val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()

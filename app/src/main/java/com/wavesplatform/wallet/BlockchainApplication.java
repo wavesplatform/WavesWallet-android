@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
 import com.franmontiel.localechanger.LocaleChanger;
+import com.github.moduth.blockcanary.BlockCanary;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.vicpin.krealmextensions.RealmConfigStore;
 import com.wavesplatform.wallet.v1.data.access.AccessState;
@@ -22,9 +23,14 @@ import com.wavesplatform.wallet.v1.util.ApplicationLifeCycle;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 import com.wavesplatform.wallet.v1.util.annotations.Thunk;
 import com.wavesplatform.wallet.v1.util.exceptions.LoggingExceptionHandler;
+import com.wavesplatform.wallet.v2.data.model.remote.response.Alias;
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetPair;
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction;
+import com.wavesplatform.wallet.v2.data.model.remote.response.Lease;
+import com.wavesplatform.wallet.v2.data.model.remote.response.Order;
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction;
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
 
 import java.util.Arrays;
@@ -47,6 +53,7 @@ public class BlockchainApplication extends DaggerApplication {
     static final String TAG = BlockchainApplication.class.getSimpleName();
     private static final String RX_ERROR_TAG = "RxJava Error";
     @Inject PrefsUtil mPrefsUtil;
+    private static Context sContext;
 
 
     @Override
@@ -61,7 +68,7 @@ public class BlockchainApplication extends DaggerApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        sContext = this;
         List<Locale> SUPPORTED_LOCALES =
                 Arrays.asList(
                         new Locale(getString(R.string.choose_language_russia_code).toLowerCase()),
@@ -74,6 +81,7 @@ public class BlockchainApplication extends DaggerApplication {
                         new Locale(getString(R.string.choose_language_nederlands_code).toLowerCase())
                 );
 
+        BlockCanary.install(this, new AppBlockCanaryContext()).start();
         LocaleChanger.initialize(getApplicationContext(), SUPPORTED_LOCALES);
         // Init objects first
         Injector.getInstance().init(this);
@@ -93,6 +101,11 @@ public class BlockchainApplication extends DaggerApplication {
         RealmConfigStore.Companion.init(AssetBalance.class, config);
         RealmConfigStore.Companion.init(IssueTransaction.class, config);
         RealmConfigStore.Companion.init(Transaction.class, config);
+        RealmConfigStore.Companion.init(Transfer.class, config);
+        RealmConfigStore.Companion.init(AssetPair.class, config);
+        RealmConfigStore.Companion.init(Order.class, config);
+        RealmConfigStore.Companion.init(Lease.class, config);
+        RealmConfigStore.Companion.init(Alias.class, config);
         DBHelper.getInstance().setRealmConfig(config);
 
         RxJavaPlugins.setErrorHandler(throwable -> Log.e(RX_ERROR_TAG, throwable.getMessage(), throwable));
@@ -133,6 +146,10 @@ public class BlockchainApplication extends DaggerApplication {
                 AccessState.getInstance().removeWavesWallet();
             }
         });
+    }
+
+    public static Context getAppContext() {
+        return sContext;
     }
 
     @Override

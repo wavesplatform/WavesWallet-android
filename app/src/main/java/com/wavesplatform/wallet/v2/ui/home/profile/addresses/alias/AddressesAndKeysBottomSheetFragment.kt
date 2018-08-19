@@ -3,11 +3,15 @@ package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.method.Touch.onTouchEvent
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -42,6 +46,8 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
                               savedInstanceState: Bundle?): View? {
         var rootView = View(this.context)
 
+
+
         when (type) {
             TYPE_EMPTY -> {
                 rootView = inflater.inflate(R.layout.bottom_sheet_dialog_aliases_empty_layout, container, false)
@@ -54,10 +60,12 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 adapter = AliasesAdapter()
                 rootView = inflater.inflate(R.layout.bottom_sheet_dialog_aliases_layout, container, false)
                 rootView.recycle_aliases.layoutManager = LinearLayoutManager(this.context)
-                rootView.recycle_aliases.adapter = adapter
                 rootView.recycle_aliases.isNestedScrollingEnabled = false
+                rootView.recycle_aliases.adapter = adapter
 
-                adapter?.setNewData(getTestData())
+                queryAllAsync<Alias>({
+                    adapter?.setNewData(it)
+                })
 
                 rootView.relative_about_alias.click {
                     if (rootView.expandable_layout_hidden.isExpanded) {
@@ -101,7 +109,7 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
                     toast(getString(R.string.new_alias_success_create))
                 }
                 TYPE_CONTENT -> {
-                    val aliasModel = data?.getParcelableExtra<AliasModel>(CreateAliasActivity.RESULT_ALIAS)
+                    val aliasModel = data?.getParcelableExtra<Alias>(CreateAliasActivity.RESULT_ALIAS)
                     aliasModel.notNull {
                         adapter?.addData(it)
                     }
