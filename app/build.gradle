@@ -82,18 +82,21 @@ android {
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
+            buildConfigField 'String', 'SPAM_URL', '"https://github-proxy.wvservices.com/wavesplatform/waves-community/master/"'
         }
         dev {
             applicationIdSuffix ".dev"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
+            buildConfigField 'String', 'SPAM_URL', '"https://github-proxy.wvservices.com/wavesplatform/waves-community/master/"'
         }
         devTest {
             applicationIdSuffix ".test"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
+            buildConfigField 'String', 'SPAM_URL', '"https://github-proxy.wvservices.com/wavesplatform/waves-community/master/"'
         }
     }
     compileOptions {
@@ -192,6 +195,7 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"

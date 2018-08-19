@@ -89,7 +89,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
                 .retry(3)
                 .flatMap({
                     if (app.isAppOnForeground()) {
-                        return@flatMap Observable.zip(nodeService.transactionList(getAddress(), 100).map({ r -> r.get(0) }),
+                        return@flatMap Observable.zip(nodeService.transactionList(getAddress(), 100).map({ r -> r[0] }),
                                 nodeService.unconfirmedTransactions(), BiFunction<List<Transaction>, List<Transaction>, Pair<List<Transaction>, List<Transaction>>> { t1, t2 ->
                             return@BiFunction Pair(t1, t2)
                         })

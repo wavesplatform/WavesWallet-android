@@ -13,6 +13,7 @@ import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactor
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.remote.ApiService
 import com.wavesplatform.wallet.v2.data.remote.NodeService
+import com.wavesplatform.wallet.v2.data.remote.SpamService
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import dagger.Module
 import dagger.Provides
@@ -24,6 +25,7 @@ import ren.yale.android.retrofitcachelibrx2.intercept.CacheInterceptorOnNet
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -66,6 +68,7 @@ class NetworkModule {
     @Singleton
     internal fun provideGson(): Gson {
         return GsonBuilder()
+                .setLenient()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES) // if filed status_code need as statusCode
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .create()
@@ -79,6 +82,23 @@ class NetworkModule {
         val retrofit = Retrofit.Builder()
                 .baseUrl(BuildConfig.NODE_URL)
                 .client(httpClient)
+                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+        RetrofitCache.getInstance().addRetrofit(retrofit)
+        return retrofit
+    }
+
+
+    @Singleton
+    @Named("SpamRetrofit")
+    @Provides
+    internal fun provideSpamRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(BuildConfig.SPAM_URL)
+                .client(httpClient)
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -113,6 +133,12 @@ class NetworkModule {
     @Provides
     internal fun provideApiService(@Named("ApiRetrofit") retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    internal fun provideSpamService(@Named("SpamRetrofit") retrofit: Retrofit): SpamService {
+        return retrofit.create(SpamService::class.java)
     }
 
     @Named("timeout")

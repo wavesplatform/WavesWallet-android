@@ -29,6 +29,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetPair;
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction;
 import com.wavesplatform.wallet.v2.data.model.remote.response.Lease;
 import com.wavesplatform.wallet.v2.data.model.remote.response.Order;
+import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset;
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction;
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
@@ -106,6 +107,7 @@ public class BlockchainApplication extends DaggerApplication {
         RealmConfigStore.Companion.init(Order.class, config);
         RealmConfigStore.Companion.init(Lease.class, config);
         RealmConfigStore.Companion.init(Alias.class, config);
+        RealmConfigStore.Companion.init(SpamAsset.class, config);
         DBHelper.getInstance().setRealmConfig(config);
 
         RxJavaPlugins.setErrorHandler(throwable -> Log.e(RX_ERROR_TAG, throwable.getMessage(), throwable));
