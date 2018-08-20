@@ -23,12 +23,4 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
                 .subscribe({
                 }))
     }
-
-    fun loadSpamAssets() {
-        addSubscription(spamDataManager.loadSpamAssets()
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({
-                    toast("success")
-                }))
-    }
 }

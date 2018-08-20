@@ -58,7 +58,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
 
         presenter.loadAliases()
-        presenter.loadSpamAssets()
 
         showFirstOpenAlert(preferencesHelper.isAccountFirstOpen())
 

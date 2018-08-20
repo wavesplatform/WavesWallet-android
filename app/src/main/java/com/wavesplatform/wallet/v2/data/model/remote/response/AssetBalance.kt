@@ -33,7 +33,8 @@ open class AssetBalance(
         @Ignore var isChecked: Boolean = false,
         var isFlatMoney: Boolean = false,
         var isFavorite: Boolean = false,
-        var isGateway: Boolean = false
+        var isGateway: Boolean = false,
+        var isSpam: Boolean = false
 ) : RealmModel, Parcelable {
     fun getDecimals(): Int? {
         return if (issueTransaction != null) issueTransaction?.decimals else 8

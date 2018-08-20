@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import pers.victor.ext.app
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -47,30 +48,51 @@ class NodeDataManager @Inject constructor() : DataManager() {
 //    }
 
     fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
-        return nodeService.assetsBalance(getAddress())
-                .flatMap({ assets ->
-                    return@flatMap loadWavesBalance()
-                            .map({
-                                return@map Pair(assets, it)
-                            })
-                })
+        return spamService.spamAssets()
                 .map({
-                    if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
-                        // merge db data and API data
-                        it.first.balances.forEachIndexed({ index, assetBalance ->
-                            val dbAsset = assetsFromDb.firstOrNull({ dbAsset ->
-                                dbAsset.assetId == assetBalance.assetId
-                            })
-                            dbAsset.notNull {
-                                assetBalance.isHidden = it.isHidden
-                                assetBalance.isFavorite = it.isFavorite
-                            }
-                        })
+                    val scanner = Scanner(it)
+                    val spam = arrayListOf<SpamAsset>()
+                    while (scanner.hasNextLine()) {
+                        spam.add(SpamAsset(scanner.nextLine().split(",")[0]))
                     }
-                    it.first.balances.saveAll()
-
-                    return@map queryAll<AssetBalance>()
+                    scanner.close()
+                    spam.saveAll()
+                    return@map spam
                 })
+                .flatMap({ spamAssets ->
+                    return@flatMap nodeService.assetsBalance(getAddress())
+                            .flatMap({ assets ->
+                                return@flatMap loadWavesBalance()
+                                        .map({
+                                            return@map Pair(assets, it)
+                                        })
+                            })
+                            .map({
+                                if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
+                                    // merge db data and API data
+                                    it.first.balances.forEachIndexed({ index, assetBalance ->
+                                        val dbAsset = assetsFromDb.firstOrNull({ dbAsset ->
+                                            dbAsset.assetId == assetBalance.assetId
+                                        })
+                                        dbAsset.notNull {
+                                            assetBalance.isHidden = it.isHidden
+                                            assetBalance.isFavorite = it.isFavorite
+                                            assetBalance.isGateway = it.isGateway
+                                            assetBalance.isSpam = it.isSpam
+                                        }
+                                    })
+                                }
+                                it.first.balances.forEachIndexed { index, assetBalance ->
+                                    assetBalance.isSpam = spamAssets.any({
+                                        it.assetId == assetBalance.assetId
+                                    })
+                                }
+                                it.first.balances.saveAll()
+
+                                return@map queryAll<AssetBalance>()
+                            })
+                })
+
     }
 
     fun loadWavesBalance(): Observable<AssetBalance> {
