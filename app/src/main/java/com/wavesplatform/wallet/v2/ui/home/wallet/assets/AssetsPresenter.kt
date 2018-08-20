@@ -34,7 +34,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     private fun prepareAssetsAndShow(it: List<AssetBalance>, fromDB: Boolean = false) {
         it.notNull {
             val hiddenList = it.filter({ it.isHidden })
-            val sortedToFirstFavoriteList = it.filter({ !it.isHidden }).filter({ !it.isSpam }).sortedByDescending({ it.isGateway })
+            val sortedToFirstFavoriteList = it.filter({ !it.isHidden && !it.isSpam  }).sortedByDescending({ it.isGateway && it.isFavorite})
             val spamList = it.filter({ it.isSpam })
 
             viewState.afterSuccessLoadAssets(sortedToFirstFavoriteList, fromDB)

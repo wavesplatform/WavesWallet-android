@@ -77,7 +77,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
         recycle_spam_assets.isNestedScrollingEnabled = false
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as AssetBalance
+            val item = this.adapter.getItem(position) as AssetBalance
             launchActivity<AssetDetailsActivity> {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position)
@@ -85,7 +85,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         adapterHiddenAssets.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as AssetBalance
+            val item = this.adapterHiddenAssets.getItem(position) as AssetBalance
             launchActivity<AssetDetailsActivity> {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position + this@AssetsFragment.adapter.data.size)
@@ -93,9 +93,10 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         spamAssetsAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as AssetBalance
+            val item = this.spamAssetsAdapter.getItem(position) as AssetBalance
             launchActivity<AssetDetailsActivity> {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position + this@AssetsFragment.adapterHiddenAssets.data.size + this@AssetsFragment.adapter.data.size)
             }
         }
 
