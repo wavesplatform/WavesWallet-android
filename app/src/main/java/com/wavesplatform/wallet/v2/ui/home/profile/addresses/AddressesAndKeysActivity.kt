@@ -7,7 +7,9 @@ import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity.Companion.REQUEST_ENTER_PASSCODE
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthenticationDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
@@ -41,6 +43,20 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFinge
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
+        queryAllAsync<Alias>({ aliases ->
+            text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), aliases.size)
+
+            relative_alias.click {
+                val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
+                if(aliases.isEmpty()){
+                    bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
+                }else{
+                    bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
+                }
+                bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+            }
+        })
+
         mFingerprintIdentify = FingerprintIdentify(this)
         mFingerprintDialog = FingerprintAuthenticationDialogFragment()
         mFingerprintDialog.setFingerPrintDialogListener(object : FingerprintAuthenticationDialogFragment.FingerPrintDialogListener{
@@ -55,12 +71,6 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFinge
                 mFingerprintIdentify.cancelIdentify()
             }
         })
-
-        relative_alias.click {
-            val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
-            bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
-            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
-        }
 
         image_address_copy.click{
             text_address.copyToClipboard(it)

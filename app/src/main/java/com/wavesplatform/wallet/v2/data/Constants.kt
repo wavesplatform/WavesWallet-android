@@ -19,30 +19,33 @@ object Constants {
     val ACC_TWITTER = "wavesplatform"
     val ACC_TELEGRAM = "wavesnews"
 
-    var ID_RECEIVED_TYPE = 0
-    var ID_SENT_TYPE = 1
-    var ID_STARTED_LEASING_TYPE = 2
-    var ID_SELF_TRANSFER_TYPE = 3
-    var ID_CANCELED_LEASING_TYPE = 4
-    var ID_TOKEN_GENERATION_TYPE = 5
-    var ID_TOKEN_BURN_TYPE = 6
-    var ID_TOKEN_REISSUE_TYPE = 7
-    var ID_EXCHANGE_TYPE = 8
-    var ID_CREATE_ALIAS_TYPE = 9
-    var ID_INCOMING_LEASING_TYPE = 10
-    var ID_UNRECOGNISED_TYPE = 11
-    var ID_MASS_SEND_TYPE = 12
-    var ID_MASS_RECEIVE_TYPE = 13
-    var ID_SPAM_RECEIVE_TYPE = 14
-    var ID_MASS_SPAM_RECEIVE_TYPE = 15
-    var ID_DATA_TYPE = 16
+    val WAVES_FEE = 10000
+
+    // Transaction types
+    val ID_RECEIVED_TYPE = 0
+    val ID_SENT_TYPE = 1
+    val ID_STARTED_LEASING_TYPE = 2
+    val ID_SELF_TRANSFER_TYPE = 3
+    val ID_CANCELED_LEASING_TYPE = 4
+    val ID_TOKEN_GENERATION_TYPE = 5
+    val ID_TOKEN_BURN_TYPE = 6
+    val ID_TOKEN_REISSUE_TYPE = 7
+    val ID_EXCHANGE_TYPE = 8
+    val ID_CREATE_ALIAS_TYPE = 9
+    val ID_INCOMING_LEASING_TYPE = 10
+    val ID_UNRECOGNISED_TYPE = 11
+    val ID_MASS_SEND_TYPE = 12
+    val ID_MASS_RECEIVE_TYPE = 13
+    val ID_SPAM_RECEIVE_TYPE = 14
+    val ID_MASS_SPAM_RECEIVE_TYPE = 15
+    val ID_DATA_TYPE = 16
 
     // Custom Result code
     val RESULT_CANCELED = 404
     val RESULT_OK = 200
     val RESULT_OK_NO_RESULT = 204
 
-    var alphabetColor = hashMapOf<String, Int>(
+    val alphabetColor = hashMapOf<String, Int>(
             Pair("a", R.color.a),
             Pair("b", R.color.b),
             Pair("c", R.color.c),
@@ -71,7 +74,7 @@ object Constants {
             Pair("z", R.color.z),
             Pair("persist", R.color.persist))
 
-    var defaultAssets = listOf<AssetBalance>(
+    val defaultAssets = listOf<AssetBalance>(
             AssetBalance("", position = 0, quantity = 10000000000000000L, isFavorite = true, issueTransaction = IssueTransaction(name = "WAVES", decimals = 8), isGateway = true),
             AssetBalance("8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", position = 1, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", id = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", name = "BTC", decimals = 8), isGateway = true),
             AssetBalance("474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", position = 2, quantity = 10000000000000000, issueTransaction = IssueTransaction(assetId = "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", id = "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", name = "ETH", decimals = 8), isGateway = true),
@@ -83,7 +86,7 @@ object Constants {
             AssetBalance("B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", position = 8, quantity = 1890000000000000, issueTransaction = IssueTransaction(assetId = "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", id = "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", name = "DASH", decimals = 8), isGateway = true),
             AssetBalance("5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3", position = 9, quantity = 1603984700000000, issueTransaction = IssueTransaction(assetId = "5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3", id = "5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3", name = "XMR", decimals = 8), isGateway = true))
 
-    var defaultAssetsAvatar = hashMapOf<String, Int>(
+    val defaultAssetsAvatar = hashMapOf<String, Int>(
             Pair("", R.drawable.logo_waves_48),
             Pair("8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", R.drawable.logo_bitcoin_48),
             Pair("474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", R.drawable.logo_ethereum_48),

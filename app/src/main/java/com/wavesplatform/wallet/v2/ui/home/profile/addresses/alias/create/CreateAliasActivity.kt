@@ -8,19 +8,17 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookPresenter
-import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AliasModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_create_alias.*
-import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
+import pers.victor.ext.toast
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class CreateAliasActivity : BaseActivity(), CreateAliasView {
-
 
     @Inject
     @InjectPresenter
@@ -41,8 +39,10 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         eventSubscriptions.add(RxTextView.textChanges(edit_new_alias_symbol)
                 .skipInitialValue()
                 .map({
+                    button_create_alias.isEnabled = false
                     return@map it.toString()
                 })
+                .filter({ !it.isEmpty() })
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -52,19 +52,23 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
 
 
         button_create_alias.click {
-            setResult(Constants.RESULT_OK, Intent().apply {
-                putExtra(RESULT_ALIAS, Alias(publicKeyAccountHelper.publicKeyAccount?.address, edit_new_alias_symbol.text.toString()))
-            })
-            finish()
+            presenter.createAlias(edit_new_alias_symbol.text.toString())
         }
     }
 
     override fun aliasIsAvailable() {
-        button_create_alias.isEnabled = true
+        button_create_alias.isEnabled = !edit_new_alias_symbol.text.toString().isEmpty()
     }
 
     override fun aliasIsNotAvailable() {
         button_create_alias.isEnabled = false
+    }
+
+    override fun successCreateAlias(it: AliasRequest) {
+        setResult(Constants.RESULT_OK, Intent().apply {
+            putExtra(RESULT_ALIAS, Alias(publicKeyAccountHelper.publicKeyAccount?.address, it.alias))
+        })
+        finish()
     }
 
 }

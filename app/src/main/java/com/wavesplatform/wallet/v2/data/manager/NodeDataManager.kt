@@ -1,15 +1,22 @@
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.vicpin.krealmextensions.*
+import com.vicpin.krealmextensions.queryAll
+import com.vicpin.krealmextensions.save
+import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v1.payload.TransactionsInfo
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
+import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.util.isAppOnForeground
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import pers.victor.ext.app
+import pers.victor.ext.currentTimeMillis
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -103,7 +110,15 @@ class NodeDataManager @Inject constructor() : DataManager() {
                     currentWaves.save()
                     return@map currentWaves
                 })
+    }
 
+    fun createAlias(createAliasRequest: AliasRequest): Observable<AliasRequest> {
+        createAliasRequest.signature = "" // TODO: Need to sign request
+        createAliasRequest.senderPublicKey = publicKeyAccountHelper.publicKeyAccount?.publicKeyStr
+        createAliasRequest.type = 10
+        createAliasRequest.fee = Constants.WAVES_FEE
+        createAliasRequest.timestamp = currentTimeMillis
+        return nodeService.createAlias(createAliasRequest)
     }
 
     fun loadTransactions(limit: Int): Observable<Pair<List<Transaction>?, List<Transaction>?>> {

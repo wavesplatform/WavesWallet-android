@@ -52,15 +52,19 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
             shareAddress()
         }
 
-        queryAllAsync<Alias>({
-            text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), it.size)
-        })
+        queryAllAsync<Alias>({ aliases ->
+            text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), aliases.size)
 
-        card_aliases.click {
-            val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
-            bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
-            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
-        }
+            card_aliases.click {
+                val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
+                if(aliases.isEmpty()){
+                    bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
+                }else{
+                    bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
+                }
+                bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+            }
+        })
 
         frame_copy.click {
             text_copy.text = getString(R.string.common_copied)

@@ -71,6 +71,7 @@
                         app:fontFamily="@font/roboto_bold" />
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_alias_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/text_leasing_status"
