@@ -764,8 +764,8 @@
 
     <!-- Wallet Leasing -->
     <string name="wallet_leasing_active_now">Active now (%1$s)</string>
-    <string name="wallet_leasing_total_balance">Total balance</string>
-    <string name="wallet_leasing_available">Available</string>
+    <string name="wallet_leasing_available_balance">Available balance</string>
+    <string name="wallet_leasing_total">Total</string>
     <string name="wallet_leasing_leased">Leased</string>
     <string name="wallet_leasing_leased_in">Leased in</string>
     <string name="wallet_leasing_start_lease">Start Lease</string>
