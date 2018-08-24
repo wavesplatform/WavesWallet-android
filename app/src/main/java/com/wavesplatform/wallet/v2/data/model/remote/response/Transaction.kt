@@ -50,7 +50,9 @@ open class Order(
 @RealmClass
 open class AssetPair(
         @SerializedName("amountAsset") var amountAsset: String? = "",
-        @SerializedName("priceAsset") var priceAsset: String? = ""
+        @SerializedName("amountAssetObject") var amountAssetObject: AssetBalance? = AssetBalance(),
+        @SerializedName("priceAsset") var priceAsset: String? = "",
+        @SerializedName("priceAssetObject") var priceAssetObject: AssetBalance? = AssetBalance()
 ) : RealmModel
 
 @RealmClass
@@ -76,10 +78,28 @@ open class Transaction(
         var assetId: String? = "",
         @SerializedName("leaseId")
         var leaseId: String? = "",
+        @SerializedName("alias")
+        var alias: String? = "",
+        @SerializedName("attachment")
+        var attachment: String? = "",
         @SerializedName("lease")
         var lease: Lease? = Lease(),
         @SerializedName("fee")
         var fee: Long = 0,
+        @SerializedName("feeAssetId")
+        var feeAssetId: String? = null,
+        @SerializedName("quantity")
+        var quantity: Long = 0,
+        @SerializedName("price")
+        var price: Long = 0,
+        @SerializedName("height")
+        var height: Long = 0,
+        @SerializedName("reissuable")
+        var reissuable: Boolean = false,
+        @SerializedName("buyMatcherFee")
+        var buyMatcherFee: Long = 0,
+        @SerializedName("sellMatcherFee")
+        var sellMatcherFee: Long = 0,
         @SerializedName("order1")
         var order1: Order? = Order(),
         @SerializedName("order2")
@@ -91,7 +111,6 @@ open class Transaction(
         @SerializedName("isPending")
         var isPending: Boolean = false,
         var transactionTypeId: Int = 0,
-
         var asset: AssetBalance? = AssetBalance()
 ) : RealmModel {
 

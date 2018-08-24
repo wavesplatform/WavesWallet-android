@@ -64,8 +64,15 @@ fun Context.notAvailable() {
     toast(getString(R.string.common_msg_in_development))
 }
 
-fun Transaction.transactionType() : TransactionType{
+fun Transaction.transactionType(): TransactionType {
     return TransactionType.getTypeById(this.transactionTypeId)
+}
+
+fun Long.toKKType(): String {
+    if (this / 1000000000 >= 1) return String.format(app.getString(R.string.common_kkk_quantity), this / 1000000000)
+    if (this / 1000000 >= 1) return String.format(app.getString(R.string.common_kk_quantity), this / 1000000)
+    if (this / 1000 > 0) return String.format(app.getString(R.string.common_k_quantity), this / 1000)
+    return this.toString()
 }
 
 fun TransactionType.icon(): Drawable? {
@@ -77,7 +84,7 @@ fun TransactionType.title(): String {
 }
 
 fun AlertDialog.makeStyled() {
-    val titleTextView =  this.findViewById<TextView>(R.id.alertTitle);
+    val titleTextView = this.findViewById<TextView>(R.id.alertTitle);
     val buttonPositive = this.findViewById<Button>(android.R.id.button1)
     val buttonNegative = this.findViewById<Button>(android.R.id.button2)
     buttonPositive?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
@@ -146,6 +153,12 @@ fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: In
     }
 }
 
+fun String.stripZeros(): String {
+    if (this == "0.0") return this
+    return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
+}
+
+
 fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_18_black) {
     clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), text)
     toast(this.context.getString(R.string.common_copied_to_clipboard))
@@ -157,6 +170,14 @@ fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_1
         })
     }
 
+}
+
+inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
+    var sum = 0L
+    for (element in this) {
+        sum += selector(element)
+    }
+    return sum
 }
 
 fun <T : Any> T?.notNull(f: (it: T) -> Unit) {
@@ -378,8 +399,12 @@ fun View.setMargins(
 fun TextView.makeTextHalfBold() {
     val text = this.text.toString()
     val str = SpannableStringBuilder(text)
-    if (text.indexOf(".") != -1){
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    if (text.indexOf(".") != -1) {
+        str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    } else if(text.indexOf(" ") != -1) {
+        str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    }else{
+        str.setSpan(StyleSpan(Typeface.BOLD), 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
     this.text = str
 }

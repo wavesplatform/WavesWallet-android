@@ -9,24 +9,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingBottom="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_free_hint"
+                android:id="@+id/text_fee_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/history_details_free"
+                android:text="@string/history_details_fee"
                 android:textColor="@color/basic500" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_free"
+                android:id="@+id/text_fee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_free_hint"
+                android:layout_below="@+id/text_fee_hint"
                 android:layout_marginTop="5dp"
                 android:text="0.00000001 NodeTX2"
                 android:textColor="@color/disabled900" />

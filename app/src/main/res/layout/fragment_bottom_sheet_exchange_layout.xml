@@ -9,13 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingTop="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/history_details_btc_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/history_details_leasing_to"
+            android:text="@string/history_details_exchange_price"
             android:textColor="@color/basic500" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -30,11 +32,4 @@
 
     </LinearLayout>
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/dotted_line" />
 </LinearLayout>

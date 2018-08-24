@@ -57,7 +57,7 @@
                     android:orientation="horizontal">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_transaction_amount"
+                        android:id="@+id/text_transaction_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -77,6 +77,7 @@
                         android:paddingStart="4dp"
                         android:paddingTop="2dp"
                         android:paddingBottom="2dp"
+                        android:visibility="gone"
                         android:text="WAVES"
                         android:textColor="@color/info500"
                         android:textSize="12sp" />

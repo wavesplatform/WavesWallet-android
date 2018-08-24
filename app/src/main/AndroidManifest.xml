@@ -27,7 +27,7 @@
         android:theme="@style/AppTheme"
         tools:replace="allowBackup">
         <service
-            android:name=".v2.data.service.UpdateHistoryService"
+            android:name=".v2.data.service.UpdateApiDataService"
             >
         </service>
         <activity

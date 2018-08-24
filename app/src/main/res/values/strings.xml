@@ -660,6 +660,9 @@
     <string name="common_copied_to_clipboard">Copied to clipboard</string>
     <string name="common_copied">Copied!</string>
     <string name="common_or">or</string>
+    <string name="common_k_quantity">%sk</string>
+    <string name="common_kk_quantity">%skk</string>
+    <string name="common_kkk_quantity">%skkk</string>
 
     <!-- Language-->
     <string name="choose_language_russia">Русский</string>
@@ -784,6 +787,7 @@
     <string name="history_leased">Leased</string>
     <string name="history_issued">Issued</string>
     <string name="history_empty">Nothing Here…\nYou do not have any transactions</string>
+    <string name="history_data_type_title">Entry in blockchain</string>
 
     <string name="history_type_receive">Received %s</string>
     <string name="history_type_sent">Sent %s</string>
@@ -805,7 +809,8 @@
 
     <!--History Details-->
     <string name="history_details_received_from">Received from</string>
-    <string name="history_details_free">Free</string>
+    <string name="history_details_leasing_from">From</string>
+    <string name="history_details_fee">Fee</string>
     <string name="history_details_confirmations">Confirmations</string>
     <string name="history_details_block">Block</string>
     <string name="history_details_timestamp">Timestamp</string>
@@ -818,8 +823,10 @@
     <string name="history_details_send_again">Send again</string>
     <string name="history_details_cancel_leasing">Cancel leasing</string>
     <string name="history_details_leasing_to">Leasing to</string>
-    <string name="history_details_btc_price">BTC Price</string>
+    <string name="history_details_exchange_price">%s Price</string>
     <string name="history_details_id">ID</string>
+    <string name="history_details_reissuable">Reissuable</string>
+    <string name="history_details_not_reissuable">Not Reissuable</string>
     <string name="history_details_recipient">Recipient</string>
     <string name="history_details_show_all">Show all (%1$s)</string>
 

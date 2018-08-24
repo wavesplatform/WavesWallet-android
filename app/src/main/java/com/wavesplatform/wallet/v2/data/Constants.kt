@@ -19,7 +19,11 @@ object Constants {
     val ACC_TWITTER = "wavesplatform"
     val ACC_TELEGRAM = "wavesnews"
 
+
     val WAVES_FEE = 10000
+
+    val SELL_ORDER_TYPE = "sell"
+    val BUY_ORDER_TYPE = "buy"
 
     // Transaction types
     val ID_RECEIVED_TYPE = 0

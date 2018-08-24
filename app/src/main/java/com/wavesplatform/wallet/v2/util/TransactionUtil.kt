@@ -11,7 +11,9 @@ import javax.inject.Inject
 
 class TransactionUtil @Inject constructor(var keyAccountHelper: PublicKeyAccountHelper) {
     fun getTransactionType(transaction: Transaction): Int =
-            if ((transaction.type == 4 || transaction.type == 9) && transaction.sender != keyAccountHelper.publicKeyAccount?.address) Constants.ID_RECEIVED_TYPE
+            if (transaction.type == 4 && transaction.sender != keyAccountHelper.publicKeyAccount?.address && transaction.asset?.isSpam == true) Constants.ID_SPAM_RECEIVE_TYPE
+            else if (transaction.type == 11 && transaction.sender != keyAccountHelper.publicKeyAccount?.address && transaction.asset?.isSpam == true) Constants.ID_MASS_SPAM_RECEIVE_TYPE
+            else if ((transaction.type == 4 || transaction.type == 9) && transaction.sender != keyAccountHelper.publicKeyAccount?.address) Constants.ID_RECEIVED_TYPE
             else if (transaction.type == 4 && transaction.sender == transaction.recipient) Constants.ID_SELF_TRANSFER_TYPE
             else if (transaction.type == 4 && transaction.sender == keyAccountHelper.publicKeyAccount?.address) Constants.ID_SENT_TYPE
             else if (transaction.type == 8 && transaction.recipient != keyAccountHelper.publicKeyAccount?.address) Constants.ID_STARTED_LEASING_TYPE
@@ -24,7 +26,5 @@ class TransactionUtil @Inject constructor(var keyAccountHelper: PublicKeyAccount
             else if (transaction.type == 8 && transaction.recipient == keyAccountHelper.publicKeyAccount?.address) Constants.ID_INCOMING_LEASING_TYPE
             else if (transaction.type == 11 && transaction.sender == keyAccountHelper.publicKeyAccount?.address) Constants.ID_MASS_SEND_TYPE
             else if (transaction.type == 11 && transaction.sender != keyAccountHelper.publicKeyAccount?.address) Constants.ID_MASS_RECEIVE_TYPE
-            else if (transaction.type == 4 && transaction.sender != keyAccountHelper.publicKeyAccount?.address) Constants.ID_SPAM_RECEIVE_TYPE
-            else if (transaction.type == 11 && transaction.sender != keyAccountHelper.publicKeyAccount?.address) Constants.ID_MASS_SPAM_RECEIVE_TYPE
             else Constants.ID_UNRECOGNISED_TYPE
 }

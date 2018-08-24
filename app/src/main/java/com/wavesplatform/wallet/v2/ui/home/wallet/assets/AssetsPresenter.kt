@@ -21,6 +21,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                 .observeOn(Schedulers.io())
                 .flatMap({
                     return@flatMap nodeDataManager.loadAssets(it)
+                            .subscribeOn(Schedulers.io())
                 })
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -34,7 +35,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     private fun prepareAssetsAndShow(it: List<AssetBalance>, fromDB: Boolean = false) {
         it.notNull {
             val hiddenList = it.filter({ it.isHidden })
-            val sortedToFirstFavoriteList = it.filter({ !it.isHidden && !it.isSpam  }).sortedByDescending({ it.isGateway && it.isFavorite})
+            val sortedToFirstFavoriteList = it.filter({ !it.isHidden && !it.isSpam  }).sortedByDescending({ it.isGateway }).sortedByDescending({ it.isFavorite})
             val spamList = it.filter({ it.isSpam })
 
             viewState.afterSuccessLoadAssets(sortedToFirstFavoriteList, fromDB)

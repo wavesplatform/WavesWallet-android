@@ -17,7 +17,7 @@ import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.disposables.CompositeDisposable
 
 
-class UpdateHistoryService : Service() {
+class UpdateApiDataService : Service() {
 
     @Inject
     lateinit var nodeDataManager: NodeDataManager
@@ -38,19 +38,32 @@ class UpdateHistoryService : Service() {
                         if (it.isNotEmpty()) {
                             val transaction = queryFirst<Transaction>({ equalTo("id", it[0].id) })
                             if (transaction == null) {
-                                it.forEach {
-                                    if (it.assetId.isNullOrEmpty()) {
-                                        it.asset = Constants.defaultAssets[0]
+                                it.forEach { trans ->
+                                    if (trans.assetId.isNullOrEmpty()) {
+                                        trans.asset = Constants.defaultAssets[0]
                                     } else {
-                                        it.asset = queryFirst<AssetBalance>({ equalTo("assetId", it.assetId) })
+                                        trans.asset = queryFirst<AssetBalance>({ equalTo("assetId", trans.assetId) })
                                     }
-                                    it.transactionTypeId = transactionUtil.getTransactionType(it)
-                                    Log.d("123", "123")
+                                    trans.order1.notNull {
+                                        val amountAsset = queryFirst<AssetBalance>({ equalTo("assetId", it.assetPair?.amountAsset) })
+                                        val priceAsset = queryFirst<AssetBalance>({ equalTo("assetId", it.assetPair?.priceAsset) })
+                                        it.assetPair?.amountAssetObject = amountAsset
+                                        it.assetPair?.priceAssetObject = priceAsset
+                                        trans.order2.notNull {
+                                            it.assetPair?.amountAssetObject = amountAsset
+                                            it.assetPair?.priceAssetObject = priceAsset
+                                        }
+                                    }
+                                    trans.transactionTypeId = transactionUtil.getTransactionType(trans)
                                 }
                                 it.saveAll()
                             }
                         }
                     }
+                }))
+        subscirtions.add(nodeDataManager.currentBlocksHeight()
+                .subscribe({
+
                 }))
         return Service.START_NOT_STICKY
     }

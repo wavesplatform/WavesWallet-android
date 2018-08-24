@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AliasesResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalances
+import com.wavesplatform.wallet.v2.data.model.remote.response.Height
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -44,5 +45,8 @@ interface NodeService {
 
     @GET("transactions/unconfirmed")
     fun unconfirmedTransactions(): Observable<List<Transaction>>
+
+    @GET("blocks/height")
+    fun currentBlocksHeight(): Observable<Height>
 
 }

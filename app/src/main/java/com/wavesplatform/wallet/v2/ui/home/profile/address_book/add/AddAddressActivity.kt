@@ -53,20 +53,6 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
                 }
             }
         })
-
-        edit_address.addTextChangedListener {
-            on({ s, start, before, count ->
-                presenter.addressFieldValid = edit_address.text.isNotEmpty()
-                isFieldsValid()
-                if (presenter.addressFieldValid) {
-                    edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_deladdress_24_error_400, 0)
-                    edit_address.tag = R.drawable.ic_deladdress_24_error_400
-                } else {
-                    edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_qrcode_24_basic_500, 0)
-                    edit_address.tag = R.drawable.ic_qrcode_24_basic_500
-                }
-            })
-        }
         edit_name.addTextChangedListener {
             on({ s, start, before, count ->
                 presenter.nameFieldValid = edit_name.text.isNotEmpty()
@@ -94,7 +80,23 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
             edit_address.isFocusableInTouchMode = false
             edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 
-            edit_name.setText(intent.getParcelableExtra<AddressTestObject>(AddressBookActivity.BUNDLE_ADDRESS_ITEM).address)
+            edit_address.setText(intent.getParcelableExtra<AddressTestObject>(AddressBookActivity.BUNDLE_ADDRESS_ITEM).address)
+            presenter.addressFieldValid = edit_address.text.isNotEmpty()
+        }else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE){
+
+            edit_address.addTextChangedListener {
+                on({ s, start, before, count ->
+                    presenter.addressFieldValid = edit_address.text.isNotEmpty()
+                    isFieldsValid()
+                    if (presenter.addressFieldValid) {
+                        edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_deladdress_24_error_400, 0)
+                        edit_address.tag = R.drawable.ic_deladdress_24_error_400
+                    } else {
+                        edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_qrcode_24_basic_500, 0)
+                        edit_address.tag = R.drawable.ic_qrcode_24_basic_500
+                    }
+                })
+            }
         }
     }
 

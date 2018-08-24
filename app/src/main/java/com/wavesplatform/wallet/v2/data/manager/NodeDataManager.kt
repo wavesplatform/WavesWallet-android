@@ -7,14 +7,12 @@ import com.wavesplatform.wallet.v1.payload.TransactionsInfo
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.util.isAppOnForeground
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.app
 import pers.victor.ext.currentTimeMillis
 import java.util.*
@@ -73,6 +71,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                         .map({
                                             return@map Pair(assets, it)
                                         })
+                                        .subscribeOn(Schedulers.io())
                             })
                             .map({
                                 if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
@@ -84,6 +83,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                         dbAsset.notNull {
                                             assetBalance.isHidden = it.isHidden
                                             assetBalance.isFavorite = it.isFavorite
+                                            assetBalance.isFlatMoney = it.isFlatMoney
                                             assetBalance.isGateway = it.isGateway
                                             assetBalance.isSpam = it.isSpam
                                         }
@@ -98,6 +98,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
 
                                 return@map queryAll<AssetBalance>()
                             })
+                            .subscribeOn(Schedulers.io())
                 })
 
     }
@@ -134,6 +135,18 @@ class NodeDataManager @Inject constructor() : DataManager() {
                         return@flatMap Observable.just(Pair(null, null))
                     }
 
+                })
+    }
+
+    fun currentBlocksHeight(): Observable<Height> {
+        return Observable.interval(0, 60, TimeUnit.SECONDS)
+                .retry(3)
+                .flatMap({
+                    return@flatMap nodeService.currentBlocksHeight()
+                })
+                .map({
+                    preferencesHelper.currentBlocksHeight = it.height
+                    return@map it
                 })
     }
 

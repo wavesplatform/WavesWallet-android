@@ -3,24 +3,23 @@ package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.text.method.Touch.onTouchEvent
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_empty_layout.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_layout.view.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.toast
+import javax.inject.Inject
 
 
 class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
@@ -34,7 +33,7 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
             }
         }
 
-    private var adapter: AliasesAdapter? = null
+    @Inject lateinit var adapter: AliasesAdapter
 
     companion object {
         var TYPE_EMPTY = 1
@@ -42,11 +41,14 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
         var REQUEST_CREATE_ALIAS = 43
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         var rootView = View(this.context)
-
-
 
         when (type) {
             TYPE_EMPTY -> {
@@ -64,7 +66,7 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 rootView.recycle_aliases.adapter = adapter
 
                 queryAllAsync<Alias>({
-                    adapter?.setNewData(it)
+                    adapter.setNewData(it)
                 })
 
                 rootView.relative_about_alias.click {
@@ -92,11 +94,6 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
         return rootView
     }
 
-    private fun getTestData(): MutableList<AliasModel>? {
-        return arrayListOf(AliasModel("Test"), AliasModel("Test"), AliasModel("obama")
-                , AliasModel("obama"))
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CREATE_ALIAS) {
@@ -111,7 +108,7 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 TYPE_CONTENT -> {
                     val aliasModel = data?.getParcelableExtra<Alias>(CreateAliasActivity.RESULT_ALIAS)
                     aliasModel.notNull {
-                        adapter?.addData(it)
+                        adapter.addData(it)
                     }
                 }
             }

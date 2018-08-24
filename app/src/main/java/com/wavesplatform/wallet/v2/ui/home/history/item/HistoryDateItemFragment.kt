@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItemAdapter
+import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import kotlinx.android.synthetic.main.fragment_history_date.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -59,26 +60,24 @@ class HistoryDateItemFragment : BaseFragment(), HistoryDateItemView {
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val historyItem = adapter.getItem(position) as HistoryItem
             if (!historyItem.isHeader) {
-//                val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
-//                bottomSheetFragment.selectedItem = historyItem.t
-//                bottomSheetFragment.historyType = arguments?.getString("type")
-//                val data = adapter?.data as ArrayList<HistoryItem>
-//                bottomSheetFragment.allItems = data.filter { !it.isHeader }.map { it.t }
-//
-////                TODO lifehack)
-//                var sectionSize = 0
-//                for (i in 0..position) {
-//                    if (data[i].isHeader) sectionSize++
-//                }
-//
-//                bottomSheetFragment.selectedItemPosition = position - sectionSize
-//                bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
+                val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
+                bottomSheetFragment.selectedItem = historyItem.t
+                bottomSheetFragment.historyType = arguments?.getString("type")
+                val data = adapter?.data as ArrayList<HistoryItem>
+                bottomSheetFragment.allItems = data.filter { !it.isHeader }.map { it.t }
+
+                var sectionSize = 0
+                for (i in 0..position) {
+                    if (data[i].isHeader) sectionSize++
+                }
+
+                bottomSheetFragment.selectedItemPosition = position - sectionSize
+                bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
             }
         }
     }
 
     override fun showData(data: ArrayList<HistoryItem>, type: String?) {
-        adapter.setType(type)
         adapter.setNewData(data)
     }
 }

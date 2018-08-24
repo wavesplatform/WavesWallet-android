@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.data.local
 
 import android.content.Context
 import com.pddstudio.preferences.encrypted.EncryptedPreferences
+import com.wavesplatform.wallet.v2.data.local.PreferencesHelper.Companion.KEY_TUTORIAL
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import javax.inject.Inject
 
@@ -20,10 +21,16 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     companion object {
         val PREF_FILE_NAME = "android_waves_pref_file"
         val KEY_TUTORIAL = "keyTutorial"
+        val KEY_CURRENT_BLOCKS_HEIGHT = "currentBlocksHeight"
         val KEY_LANGUAGE = "keyLanguage"
         val KEY_ACCOUNT_FIRST_OPEN = "key_account_first_open"
         val KEY_DEFAULT_ASSETS = "key_default_assets"
     }
+
+    var currentBlocksHeight: Int
+        get() = mPref.getInt(KEY_CURRENT_BLOCKS_HEIGHT, 0)
+        set(value) = mPref.edit().putInt(KEY_CURRENT_BLOCKS_HEIGHT, value).apply()
+
 
     fun setTutorialPassed(value: Boolean) {
         mPref.edit().putBoolean(KEY_TUTORIAL, value).apply()
