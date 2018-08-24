@@ -10,24 +10,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.vicpin.krealmextensions.query
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.color.i
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import io.github.kbiakov.codeview.CodeView
 import io.github.kbiakov.codeview.highlight.ColorThemeData
 import io.github.kbiakov.codeview.highlight.SyntaxColors
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
-import java.util.*
 import kotlin.collections.ArrayList
 import pers.victor.ext.*
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
@@ -163,7 +159,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 imageAddressAction?.click {
                     launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                         putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                        putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressTestObject(receivedFromAddress?.text.toString(), ""))
+                        putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(receivedFromAddress?.text.toString(), ""))
                     }
                 }
 
@@ -238,7 +234,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 imageAddressAction?.click {
                     launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                         putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_EDITABLE)
-                        putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressTestObject(textCancelLeasingFromAddress?.text.toString(), ""))
+                        putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textCancelLeasingFromAddress?.text.toString(), ""))
                     }
                 }
 
@@ -386,7 +382,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
             imageAddressAction?.click {
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressTestObject(textViewAddress?.text.toString(), ""))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
                 }
             }
         }
@@ -410,7 +406,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
             imageAddressAction?.click {
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressTestObject(textViewAddress?.text.toString(), ""))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
                 }
             }
         }

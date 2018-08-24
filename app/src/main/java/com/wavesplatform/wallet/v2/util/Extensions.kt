@@ -14,6 +14,9 @@ import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.support.annotation.ColorInt
+import android.support.annotation.ColorRes
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
@@ -40,10 +43,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import kotlinx.android.synthetic.main.dialog_security_centre.*
-import pers.victor.ext.activityManager
-import pers.victor.ext.app
-import pers.victor.ext.clipboardManager
-import pers.victor.ext.toast
+import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
@@ -367,6 +367,13 @@ inline fun <reified T : Any> Context.launchActivity(
     } else {
         startActivity(intent)
     }
+}
+
+fun Snackbar.withColor(@ColorInt colorInt: Int?): Snackbar{
+    colorInt.notNull {
+        this.view.setBackgroundColor(findColor(it))
+    }
+    return this
 }
 
 inline fun <reified T : Any> newIntent(context: Context): Intent = Intent(context, T::class.java)

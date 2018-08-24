@@ -5,11 +5,8 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.mindorks.editdrawabletext.DrawablePosition
@@ -19,7 +16,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity.Companion.BUNDLE_POSITION
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.util.makeStyled
 import kotlinx.android.synthetic.main.activity_edit_address.*
 import pers.victor.ext.addTextChangedListener
@@ -29,6 +26,20 @@ import javax.inject.Inject
 
 
 class EditAddressActivity : BaseActivity(), EditAddressView {
+    override fun successEditAddress(addressBookUser: AddressBookUser?) {
+        val newIntent = Intent()
+        newIntent.putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, addressBookUser)
+        newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(BUNDLE_POSITION, -1))
+        setResult(Constants.RESULT_OK, newIntent)
+        finish()
+    }
+
+    override fun successDeleteAddress() {
+        val newIntent = Intent()
+        newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(BUNDLE_POSITION, -1))
+        setResult(Constants.RESULT_OK_NO_RESULT, newIntent)
+        finish()
+    }
 
     @Inject
     @InjectPresenter
@@ -43,16 +54,16 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.edit_address_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        presenter.address = intent.getParcelableExtra<AddressTestObject>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
+        presenter.addressBookUser = intent.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
 
 
         edit_address.setDrawableClickListener(object : onDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
                     DrawablePosition.RIGHT -> {
-                        if (edit_address.tag == R.drawable.ic_deladdress_24_error_400){
+                        if (edit_address.tag == R.drawable.ic_deladdress_24_error_400) {
                             edit_address.setText("")
-                        }else if(edit_address.tag == R.drawable.ic_qrcode_24_basic_500){
+                        } else if (edit_address.tag == R.drawable.ic_qrcode_24_basic_500) {
                             toast("Open scan QR code")
                         }
                     }
@@ -86,11 +97,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         else edit_address.tag = R.drawable.ic_deladdress_24_error_400
 
         button_save.click {
-            val newIntent = Intent()
-            newIntent.putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressTestObject(edit_address.text.toString(), edit_name.text.toString()))
-            newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(BUNDLE_POSITION, -1))
-            setResult(Constants.RESULT_OK, newIntent)
-            finish()
+            presenter.editAddress(edit_address.text.toString(), edit_name.text.toString())
         }
 
         button_delete.click {
@@ -99,11 +106,8 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
             alertDialog.setMessage(getString(R.string.edit_address_delete_alert_description))
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.edit_address_delete_alert_delete),
                     DialogInterface.OnClickListener { dialog, which ->
+                        presenter.deleteAddress()
                         dialog.dismiss()
-                        val newIntent = Intent()
-                        newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(BUNDLE_POSITION, -1))
-                        setResult(Constants.RESULT_OK_NO_RESULT, newIntent)
-                        finish()
                     })
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.edit_address_delete_alert_cancel),
                     DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
@@ -127,8 +131,8 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
     }
 
     private fun fillFields() {
-        edit_address.setText(presenter.address?.address)
-        edit_name.setText(presenter.address?.name)
+        edit_address.setText(presenter.addressBookUser?.address)
+        edit_name.setText(presenter.addressBookUser?.name)
     }
 
     fun isFieldsValid() {

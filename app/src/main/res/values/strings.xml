@@ -896,6 +896,7 @@
     <string name="address_book_empty_state">Nothing Here…\nYour can create new address</string>
     <string name="address_book_search">Search</string>
     <string name="address_book_add">Add</string>
+    <string name="address_book_success_deleted">Address deleted</string>
 
 
     <!-- Add Address -->

@@ -4,22 +4,18 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
@@ -62,7 +58,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         adapter.chooseAccountOnClickListener = this
     }
 
-    override fun afterSuccessGetAddress(list: ArrayList<AddressTestObject>) {
+    override fun afterSuccessGetAddress(list: ArrayList<AddressBookUser>) {
         adapter.setNewData(list)
 
         adapter.emptyView = getEmptyView()
@@ -74,12 +70,12 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         return view
     }
 
-    override fun onItemClicked(item: AddressTestObject) {
+    override fun onItemClicked(item: AddressBookUser) {
         launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE) { }
     }
 
     override fun onEditClicked(position: Int) {
-        val item = adapter.getItem(position) as AddressTestObject
+        val item = adapter.getItem(position) as AddressBookUser
         launchActivity<EditAccountNameActivity>(REQUEST_EDIT_ACCOUNT_NAME) {
             putExtra(BUNDLE_ADDRESS_ITEM, item)
             putExtra(BUNDLE_POSITION, position)
@@ -106,7 +102,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         when (requestCode) {
             REQUEST_EDIT_ACCOUNT_NAME -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    val item = data?.getParcelableExtra<AddressTestObject>(BUNDLE_ADDRESS_ITEM)
+                    val item = data?.getParcelableExtra<AddressBookUser>(BUNDLE_ADDRESS_ITEM)
                     val position = data?.getIntExtra(BUNDLE_POSITION, 0)
                     item.notNull {
                         adapter.setData(position!!, it)

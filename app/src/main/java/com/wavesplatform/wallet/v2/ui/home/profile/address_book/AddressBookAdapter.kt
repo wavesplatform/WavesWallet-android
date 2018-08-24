@@ -8,12 +8,12 @@ import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-class AddressBookAdapter @Inject constructor() : BaseQuickAdapter<AddressTestObject, BaseViewHolder>(R.layout.address_book_item, null) {
+class AddressBookAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUser, BaseViewHolder>(R.layout.address_book_item, null) {
 
-    var allData: MutableList<AddressTestObject> = arrayListOf()
+    var allData: MutableList<AddressBookUser> = arrayListOf()
     var screenType: Int = AddressBookActivity.AddressBookScreenType.EDIT.type
 
-    override fun convert(helper: BaseViewHolder, item: AddressTestObject) {
+    override fun convert(helper: BaseViewHolder, item: AddressBookUser) {
         helper.setText(R.id.text_address, item.address)
                 .setText(R.id.text_name, item.name)
 
@@ -30,7 +30,7 @@ class AddressBookAdapter @Inject constructor() : BaseQuickAdapter<AddressTestObj
     fun filter(text: String) {
         data.clear()
         if (text.trim().isEmpty()) {
-            setNewData(ArrayList<AddressTestObject>(allData))
+            setNewData(ArrayList<AddressBookUser>(allData))
         } else {
             for (item in allData) {
                 if (item.name.toLowerCase().contains(text.toLowerCase())) {
