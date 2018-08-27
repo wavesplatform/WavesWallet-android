@@ -15,9 +15,6 @@ import javax.inject.Inject
 
 class SplashActivity : BaseActivity(), SplashView {
 
-    @Inject
-    lateinit var authHelper: AuthHelper
-
     override fun onNotLoggedIn() {
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
         if (preferencesHelper.isTutorialPassed()) {

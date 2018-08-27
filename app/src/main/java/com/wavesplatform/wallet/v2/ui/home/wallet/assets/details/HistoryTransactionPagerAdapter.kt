@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
-import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
 import java.util.*
 import javax.inject.Inject
 

@@ -4,10 +4,7 @@ import com.chad.library.adapter.base.BaseSectionQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderItem
-import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryItem
 import com.wavesplatform.wallet.v2.util.random
-import kotlinx.android.synthetic.main.recycle_item_my_orders.view.*
-import pers.victor.ext.click
 import pers.victor.ext.findColor
 import javax.inject.Inject
 

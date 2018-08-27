@@ -87,7 +87,7 @@
 
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="2dp"
                 android:layout_marginBottom="14dp"
                 android:layout_marginTop="14dp"
                 android:background="@drawable/dotted_line"

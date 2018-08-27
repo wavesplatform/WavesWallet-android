@@ -80,14 +80,23 @@ android {
         prod {
             signingConfig signingConfigs.config
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher"]
+            buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
+            buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
+            buildConfigField 'String', 'SPAM_URL', '"https://github-proxy.wvservices.com/wavesplatform/waves-community/master/"'
         }
         dev {
             applicationIdSuffix ".dev"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev"]
+            buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
+            buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
+            buildConfigField 'String', 'SPAM_URL', '"https://github-proxy.wvservices.com/wavesplatform/waves-community/master/"'
         }
         devTest {
             applicationIdSuffix ".test"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test"]
+            buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
+            buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
+            buildConfigField 'String', 'SPAM_URL', '"https://github-proxy.wvservices.com/wavesplatform/waves-community/master/"'
         }
     }
     compileOptions {
@@ -186,6 +195,7 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
@@ -197,6 +207,8 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35'
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
     implementation 'com.github.vivchar:ViewPagerIndicator:1.1.0'
+    debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'
+    releaseImplementation 'com.github.markzhai:blockcanary-no-op:1.5.0'
 
     // OkHttp
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
@@ -264,7 +276,7 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
 
-    implementation "com.github.bumptech.glide:glide:$glideVersion"\
+    implementation "com.github.bumptech.glide:glide:$glideVersion" \
 
     implementation "com.jakewharton.timber:timber:$timberVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"

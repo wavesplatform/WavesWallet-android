@@ -13,10 +13,11 @@ class AssetsAdapter @Inject constructor(var publicKeyAccountHelper: PublicKeyAcc
     override fun convert(helper: BaseViewHolder, item: AssetBalance) {
         helper.setText(R.id.text_asset_name, item.getName())
                 .setText(R.id.text_asset_value, item.getDisplayBalance())
-                .setVisible(R.id.image_favourite, item.isFavorite)
+                .setGone(R.id.image_favourite, item.isFavorite)
                 .setGone(R.id.text_my_asset, item.issueTransaction?.sender == publicKeyAccountHelper.publicKeyAccount?.address)
-//                .setGone(R.id.image_down_arrow, item.isOut)
-//                .setVisible(R.id.text_tag_spam, item.isSpam)
+                .setGone(R.id.image_down_arrow, item.isGateway)
+                .setGone(R.id.text_tag_spam, item.isSpam)
+                .setGone(R.id.text_bitcoin_value, !item.isSpam)
 
         helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)

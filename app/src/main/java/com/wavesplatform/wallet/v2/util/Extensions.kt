@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
@@ -13,8 +14,13 @@ import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.support.annotation.ColorInt
+import android.support.annotation.ColorRes
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.res.ResourcesCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatImageView
 import android.text.*
 import android.text.method.LinkMovementMethod
@@ -22,6 +28,7 @@ import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -33,8 +40,10 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.wavesplatform.wallet.R
-import pers.victor.ext.clipboardManager
-import pers.victor.ext.toast
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
+import kotlinx.android.synthetic.main.dialog_security_centre.*
+import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
@@ -53,6 +62,46 @@ fun Context.isNetworkConnection(): Boolean {
 
 fun Context.notAvailable() {
     toast(getString(R.string.common_msg_in_development))
+}
+
+fun Transaction.transactionType(): TransactionType {
+    return TransactionType.getTypeById(this.transactionTypeId)
+}
+
+fun Long.toKKType(): String {
+    if (this / 1000000000 >= 1) return String.format(app.getString(R.string.common_kkk_quantity), this / 1000000000)
+    if (this / 1000000 >= 1) return String.format(app.getString(R.string.common_kk_quantity), this / 1000000)
+    if (this / 1000 > 0) return String.format(app.getString(R.string.common_k_quantity), this / 1000)
+    return this.toString()
+}
+
+fun TransactionType.icon(): Drawable? {
+    return ContextCompat.getDrawable(app, this.image)
+}
+
+fun TransactionType.title(): String {
+    return app.getString(this.title)
+}
+
+fun AlertDialog.makeStyled() {
+    val titleTextView = this.findViewById<TextView>(R.id.alertTitle);
+    val buttonPositive = this.findViewById<Button>(android.R.id.button1)
+    val buttonNegative = this.findViewById<Button>(android.R.id.button2)
+    buttonPositive?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+    buttonNegative?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+    titleTextView?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+}
+
+fun Context.isAppOnForeground(): Boolean {
+    val appProcesses: MutableList<ActivityManager.RunningAppProcessInfo>? = activityManager.runningAppProcesses
+            ?: return false
+    val packageName = getPackageName();
+    appProcesses?.forEach {
+        if (it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && it.processName.equals(packageName)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 fun Context.getToolBarHeight(): Int {
@@ -104,6 +153,12 @@ fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: In
     }
 }
 
+fun String.stripZeros(): String {
+    if (this == "0.0") return this
+    return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
+}
+
+
 fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_18_black) {
     clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), text)
     toast(this.context.getString(R.string.common_copied_to_clipboard))
@@ -115,6 +170,14 @@ fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_1
         })
     }
 
+}
+
+inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
+    var sum = 0L
+    for (element in this) {
+        sum += selector(element)
+    }
+    return sum
 }
 
 fun <T : Any> T?.notNull(f: (it: T) -> Unit) {
@@ -306,6 +369,13 @@ inline fun <reified T : Any> Context.launchActivity(
     }
 }
 
+fun Snackbar.withColor(@ColorInt colorInt: Int?): Snackbar{
+    colorInt.notNull {
+        this.view.setBackgroundColor(findColor(it))
+    }
+    return this
+}
+
 inline fun <reified T : Any> newIntent(context: Context): Intent = Intent(context, T::class.java)
 
 inline fun <reified T : Any> newClearIntent(context: Context): Intent {
@@ -336,6 +406,12 @@ fun View.setMargins(
 fun TextView.makeTextHalfBold() {
     val text = this.text.toString()
     val str = SpannableStringBuilder(text)
-    str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    if (text.indexOf(".") != -1) {
+        str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    } else if(text.indexOf(" ") != -1) {
+        str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    }else{
+        str.setSpan(StyleSpan(Typeface.BOLD), 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    }
     this.text = str
 }

@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
@@ -8,6 +9,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -16,7 +18,6 @@ import kotlinx.android.synthetic.main.fragment_assets.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
 class AssetsFragment : BaseFragment(), AssetsView {
@@ -74,7 +75,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
         recycle_spam_assets.isNestedScrollingEnabled = false
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as AssetBalance
+            val item = this.adapter.getItem(position) as AssetBalance
             launchActivity<AssetDetailsActivity> {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position)
@@ -82,7 +83,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         adapterHiddenAssets.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as AssetBalance
+            val item = this.adapterHiddenAssets.getItem(position) as AssetBalance
             launchActivity<AssetDetailsActivity> {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position + this@AssetsFragment.adapter.data.size)
@@ -90,9 +91,10 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         spamAssetsAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as AssetBalance
+            val item = this.spamAssetsAdapter.getItem(position) as AssetBalance
             launchActivity<AssetDetailsActivity> {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position + this@AssetsFragment.adapterHiddenAssets.data.size + this@AssetsFragment.adapter.data.size)
             }
         }
 
@@ -137,10 +139,13 @@ class AssetsFragment : BaseFragment(), AssetsView {
         item.isVisible = true
     }
 
-    override fun afterSuccessLoadAssets(assets: List<AssetBalance>) {
-        runDelayed(1000, {
-            swipe_container.notNull { swipe_container.isRefreshing = false }
-        })
+    override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean) {
+        swipe_container.notNull { swipe_container.isRefreshing = false }
+
+        if (!fromDB) {
+            val intent = Intent(baseActivity, UpdateApiDataService::class.java)
+            baseActivity.startService(intent)
+        }
         adapter.setNewData(assets)
     }
 

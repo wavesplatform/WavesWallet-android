@@ -13,9 +13,8 @@ import android.view.View
 import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
@@ -26,7 +25,6 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.util.makeLinks
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
-import kotlinx.android.synthetic.main.fragment_bank.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
 import javax.inject.Inject
@@ -44,12 +42,18 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     var accountFirstOpenDialog: AlertDialog? = null
 
 
+
     @ProvidePresenter
     fun providePresenter(): MainPresenter = presenter
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_general)
         needChangeStatusBarColorOnMenuOpen(false)
+
+        //TODO: clear this
+        authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
+
+        presenter.loadAliases()
 
         showFirstOpenAlert(preferencesHelper.isAccountFirstOpen())
 

@@ -5,11 +5,11 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryFragmentPageAdapter
 import kotlinx.android.synthetic.main.fragment_history.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
+import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 class HistoryFragment : BaseFragment(), HistoryView {
@@ -35,10 +35,16 @@ class HistoryFragment : BaseFragment(), HistoryView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupUI()
+
+        runAsync {
+            presenter.loadTransactions()
+        }
     }
 
     private fun setupUI() {
-        viewpager_history.adapter = HistoryFragmentPageAdapter(childFragmentManager, arrayOf(getString(R.string.history_all), getString(R.string.history_sent),getString(R.string.history_received)))
+        viewpager_history.adapter = HistoryFragmentPageAdapter(childFragmentManager, arrayOf(getString(R.string.history_all),
+                getString(R.string.history_sent), getString(R.string.history_received),getString(R.string.history_exchanged),
+                getString(R.string.history_leased), getString(R.string.history_issued)))
         stl_history.setViewPager(viewpager_history)
         appbar_layout.addOnOffsetChangedListener({ appBarLayout, verticalOffset ->
             val offsetForShowShadow = appbar_layout.totalScrollRange - dp2px(9)

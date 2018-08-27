@@ -15,6 +15,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSucessActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeStyled
 import kotlinx.android.synthetic.main.fragment_trade_sell.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
@@ -57,15 +58,11 @@ class TradeSellFragment : BaseFragment(), TradeSellView {
                     { dialog, which -> dialog.dismiss() })
             val alert = alt_bld.create()
             alert.show()
+            alert.makeStyled()
 
-            val titleTextView = alert?.findViewById<TextView>(R.id.alertTitle)
             buttonPositive = alert?.findViewById<Button>(android.R.id.button1)
-            val buttonNegative = alert?.findViewById<Button>(android.R.id.button2)
-            buttonPositive?.typeface = ResourcesCompat.getFont(baseActivity, R.font.roboto_medium)
             buttonPositive?.setTextColor(findColor(R.color.basic300))
             buttonPositive?.isClickable = false
-            buttonNegative?.typeface = ResourcesCompat.getFont(baseActivity, R.font.roboto_medium)
-            titleTextView?.typeface = ResourcesCompat.getFont(baseActivity, R.font.roboto_medium)
         }
 
         button_sell.click {

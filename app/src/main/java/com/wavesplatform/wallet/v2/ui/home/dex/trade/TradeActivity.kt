@@ -10,10 +10,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.Market
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketInformationBottomSheetFragment
-import com.wavesplatform.wallet.v2.ui.home.history.adapter.HistoryFragmentPageAdapter
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_trade.*
-import pers.victor.ext.dp2px
 import javax.inject.Inject
 
 

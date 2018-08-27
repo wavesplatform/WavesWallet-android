@@ -7,18 +7,16 @@ import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity.Companion.REQUEST_EDIT_ACCOUNT_NAME
+import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity.Companion.REQUEST_ENTER_PASSCODE
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthenticationDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressTestObject
-import com.wavesplatform.wallet.v2.ui.home.profile.addresses.adapter.AliasesAdapter
+import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
@@ -26,28 +24,38 @@ import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
-import pyxis.uzuki.live.richutilskt.utils.toast
 import javax.inject.Inject
 
-class AddressesAndKeysActivity : BaseActivity(), ProfileAddressesView, BaseFingerprint.FingerprintIdentifyListener  {
+class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFingerprint.FingerprintIdentifyListener  {
 
     @Inject
     @InjectPresenter
-    lateinit var presenter: ProfileAddressesPresenter
+    lateinit var andKeysPresenter: AddressesAndKeysPresenter
 
     private lateinit var mFingerprintIdentify: FingerprintIdentify
     private lateinit var mFingerprintDialog: FingerprintAuthenticationDialogFragment
 
     @ProvidePresenter
-    fun providePresenter(): ProfileAddressesPresenter = presenter
-
-    @Inject
-    lateinit var adapter: AliasesAdapter
+    fun providePresenter(): AddressesAndKeysPresenter = andKeysPresenter
 
     override fun configLayoutRes(): Int = R.layout.activity_profile_addresses_and_keys
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
+
+        queryAllAsync<Alias>({ aliases ->
+            text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), aliases.size)
+
+            relative_alias.click {
+                val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
+                if(aliases.isEmpty()){
+                    bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
+                }else{
+                    bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
+                }
+                bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+            }
+        })
 
         mFingerprintIdentify = FingerprintIdentify(this)
         mFingerprintDialog = FingerprintAuthenticationDialogFragment()
@@ -63,11 +71,6 @@ class AddressesAndKeysActivity : BaseActivity(), ProfileAddressesView, BaseFinge
                 mFingerprintIdentify.cancelIdentify()
             }
         })
-
-        relative_alias.click {
-            val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
-            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
-        }
 
         image_address_copy.click{
             text_address.copyToClipboard(it)

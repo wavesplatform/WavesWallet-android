@@ -98,7 +98,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         presenter.getAddresses()
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as AddressTestObject
+            val item = adapter.getItem(position) as AddressBookUser
             if (this.adapter.screenType == AddressBookScreenType.EDIT.type) {
                 launchActivity<EditAddressActivity>(REQUEST_EDIT_ADDRESS) {
                     putExtra(BUNDLE_ADDRESS_ITEM, item)
@@ -129,7 +129,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         when (requestCode) {
             REQUEST_ADD_ADDRESS -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    val item = data?.getParcelableExtra<AddressTestObject>(BUNDLE_ADDRESS_ITEM)
+                    val item = data?.getParcelableExtra<AddressBookUser>(BUNDLE_ADDRESS_ITEM)
                     item.notNull {
                         adapter.addData(it)
                         adapter.allData.add(it)
@@ -139,7 +139,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
             REQUEST_EDIT_ADDRESS -> {
                 if (resultCode == Constants.RESULT_OK) {
                     val position = data?.getIntExtra(BUNDLE_POSITION, -1)
-                    val item = data?.getParcelableExtra<AddressTestObject>(BUNDLE_ADDRESS_ITEM)
+                    val item = data?.getParcelableExtra<AddressBookUser>(BUNDLE_ADDRESS_ITEM)
                     position.notNull { position ->
                         if (position != -1) {
                             item.notNull {
@@ -155,6 +155,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                         if (it != -1) {
                             adapter.remove(it)
                             adapter.allData.removeAt(it)
+                            showSnackbar(R.string.address_book_success_deleted, R.color.success500_0_94)
                         }
                     }
                 }
@@ -180,7 +181,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun afterSuccessGetAddress(list: ArrayList<AddressTestObject>) {
+    override fun afterSuccessGetAddress(list: List<AddressBookUser>) {
         if (list.isEmpty()) {
             edit_search.gone()
         }

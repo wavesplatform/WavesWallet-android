@@ -4,9 +4,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.support.annotation.DrawableRes
-import android.support.annotation.IdRes
-import android.support.annotation.StringRes
+import android.support.annotation.*
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -19,11 +17,14 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
+import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.withColor
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -60,8 +61,12 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     lateinit var nodeDataManager: NodeDataManager
     @Inject
     lateinit var preferencesHelper: PreferencesHelper
-    var progressDialog: ProgressDialog? = null
+    @Inject
+    lateinit var authHelper: AuthHelper
+    @Inject
+    lateinit var publicKeyAccountHelper: PublicKeyAccountHelper
 
+    var progressDialog: ProgressDialog? = null
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return supportFragmentInjector
@@ -151,13 +156,15 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
             finish()
     }
 
-    fun showSnackbar(@StringRes msg: Int) {
+    fun showSnackbar(@StringRes msg: Int, @ColorInt color: Int? = null) {
         Snackbar.make(findViewById(android.R.id.content), getString(msg), Snackbar.LENGTH_LONG)
+                .withColor(color)
                 .show()
     }
 
-    fun showSnackbar(msg: String) {
+    fun showSnackbar(msg: String, @ColorInt color: Int? = null) {
         Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG)
+                .withColor(color)
                 .show()
     }
 

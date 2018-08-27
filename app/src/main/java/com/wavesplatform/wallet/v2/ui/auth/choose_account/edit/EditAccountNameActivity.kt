@@ -35,7 +35,7 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
         setupToolbar(toolbar_view, View.OnClickListener {
             onBackPressed()
 
-        }, true, getString(R.string.edit_account_name), R.drawable.ic_toolbar_back_white)
+        }, true, getString(R.string.edit_account_name), R.drawable.ic_toolbar_back_black)
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         presenter.account = intent.getParcelableExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM)

@@ -21,7 +21,7 @@
         android:orientation="horizontal">
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/text_leasing_value"
+            android:id="@+id/text_amount_or_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -31,7 +31,7 @@
 
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/text_leasing_type"
+            android:id="@+id/text_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -39,6 +39,7 @@
             android:background="@drawable/asset_price_border"
             android:paddingEnd="4dp"
             android:paddingStart="4dp"
+            android:visibility="gone"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:text="WAVES"
@@ -47,9 +48,10 @@
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/text_leasing_value_in_dollar"
+        android:id="@+id/text_amount_value_in_dollar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="visible"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
         android:text="≈ 00 000.00 US Dollar"
