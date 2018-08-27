@@ -4,13 +4,14 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
+import android.text.SpannableStringBuilder
 import android.view.View
-import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.data.auth.WalletManager
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -33,9 +34,12 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     override fun afterSuccessGenerateAvatar(bitmap: Bitmap, imageView: AppCompatImageView) {
         Glide.with(applicationContext)
                 .load(bitmap)
-                .apply(RequestOptions()
-                        .circleCrop())
+                .apply(RequestOptions().circleCrop())
                 .into(imageView)
+
+        val seed = WalletManager.createWalletSeed(this)
+
+        imageView.callOnClick()
     }
 
     @Inject
@@ -49,7 +53,8 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     override fun configLayoutRes() = R.layout.activity_new_account
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.new_account_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
+                getString(R.string.new_account_toolbar_title), R.drawable.ic_toolbar_back_black)
         isFieldsValid()
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
@@ -66,7 +71,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                 .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
 
         edit_account_name.addTextChangedListener {
-            on({ s, start, before, count ->
+            on { s, start, before, count ->
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
@@ -79,25 +84,26 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                                 isFieldsValid()
                             }
                         }, nameValidation)
-            })
+            }
         }
         edit_create_password.addTextChangedListener {
-            on({ s, start, before, count ->
+            on { s, start, before, count ->
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
-                                presenter.createPasswrodFieldValid = true
+                                presenter.createPasswordFieldValid = true
                                 isFieldsValid()
                             }
 
                             override fun onValidateFailed() {
-                                presenter.createPasswrodFieldValid = false
+                                presenter.createPasswordFieldValid = false
                                 isFieldsValid()
                             }
                         }, passwordValidation)
                 if (edit_confirm_password.text.isNotEmpty()) {
                     val confirmPasswordValidation = Validation(til_confirm_password)
-                            .and(EqualRule(edit_create_password.text.toString(), R.string.new_account_confirm_password_validation_match_error))
+                            .and(EqualRule(edit_create_password.text.toString(),
+                                    R.string.new_account_confirm_password_validation_match_error))
                     validator
                             .validate(object : Validator.OnValidateListener {
                                 override fun onValidateSuccess(values: List<String>) {
@@ -111,13 +117,14 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                                 }
                             }, confirmPasswordValidation)
                 }
-            })
+            }
         }
 
         edit_confirm_password.addTextChangedListener {
-            on({ s, start, before, count ->
-                var confirmPasswordValidation = Validation(til_confirm_password)
-                        .and(EqualRule(edit_create_password.text.toString(), R.string.new_account_confirm_password_validation_match_error))
+            on { s, start, before, count ->
+                val confirmPasswordValidation = Validation(til_confirm_password)
+                        .and(EqualRule(edit_create_password.text.toString(),
+                                R.string.new_account_confirm_password_validation_match_error))
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
@@ -130,10 +137,10 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                                 isFieldsValid()
                             }
                         }, confirmPasswordValidation)
-            })
+            }
         }
 
-        linear_images.children.forEach({
+        linear_images.children.forEach {
             it.click {
                 // delete all background of another images
                 linear_images.children.forEach {
@@ -145,10 +152,15 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                 avatarIsSelected(it.getBitmap())
             }
 
-        })
+        }
 
         // draw unique identicon avatar with random background color and make image with circle crop effect
         presenter.generateAvatars(linear_images.children as List<AppCompatImageView>)
+
+        edit_account_name.text = SpannableStringBuilder("ebta")
+        edit_create_password.text = SpannableStringBuilder("12345678")
+        edit_confirm_password.text = SpannableStringBuilder("12345678")
+
     }
 
     fun isFieldsValid() {

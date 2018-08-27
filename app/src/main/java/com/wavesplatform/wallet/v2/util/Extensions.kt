@@ -369,7 +369,7 @@ inline fun <reified T : Any> Context.launchActivity(
     }
 }
 
-fun Snackbar.withColor(@ColorInt colorInt: Int?): Snackbar{
+fun Snackbar.withColor(@ColorInt colorInt: Int?): Snackbar {
     colorInt.notNull {
         this.view.setBackgroundColor(findColor(it))
     }
@@ -408,9 +408,9 @@ fun TextView.makeTextHalfBold() {
     val str = SpannableStringBuilder(text)
     if (text.indexOf(".") != -1) {
         str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    } else if(text.indexOf(" ") != -1) {
+    } else if (text.indexOf(" ") != -1) {
         str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    }else{
+    } else {
         str.setSpan(StyleSpan(Typeface.BOLD), 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
     this.text = str

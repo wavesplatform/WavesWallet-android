@@ -36,19 +36,19 @@ class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
         fingerprintIdentify = FingerprintIdentify(this)
 
         pass_keypad.attachDots(pdl_dots)
-        pass_keypad.setPadClickedListener(object : PassCodeEntryKeypad.OnPinEntryPadClickedListener{
+        pass_keypad.setPadClickedListener(object : PassCodeEntryKeypad.OnPinEntryPadClickedListener {
             override fun onPassCodeEntered(passCode: String) {
-                if (presenter.step == CreatePassCodeStep.CREATE){
+                if (presenter.step == CreatePassCodeStep.CREATE) {
                     presenter.passCode = passCode
                     moveToVerifyStep()
-                }else if (presenter.step == CreatePassCodeStep.VERIFY){
-                    if (presenter.passCode == passCode){
-                        if (fingerprintIdentify.isFingerprintEnable){
-                            launchActivity<UseFingerprintActivity> {  }
-                        }else{
-                            launchActivity<MainActivity>(clear = true) {  }
+                } else if (presenter.step == CreatePassCodeStep.VERIFY) {
+                    if (presenter.passCode == passCode) {
+                        if (fingerprintIdentify.isFingerprintEnable) {
+                            launchActivity<UseFingerprintActivity> { }
+                        } else {
+                            launchActivity<MainActivity>(clear = true) { }
                         }
-                    }else{
+                    } else {
                         pass_keypad.passCodesNotMatches()
                     }
                 }
@@ -76,13 +76,13 @@ class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
         })
     }
 
-    enum class CreatePassCodeStep(step: Int){
+    enum class CreatePassCodeStep(step: Int) {
         CREATE(0),
         VERIFY(1)
     }
 
     override fun onBackPressed() {
-        if (presenter.step == CreatePassCodeStep.VERIFY){
+        if (presenter.step == CreatePassCodeStep.VERIFY) {
             moveToCreateStep()
         }
     }

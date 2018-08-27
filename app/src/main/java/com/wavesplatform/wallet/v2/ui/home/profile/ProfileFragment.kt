@@ -7,6 +7,7 @@ import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -19,6 +20,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
+import pers.victor.ext.finish
 import pers.victor.ext.toast
 import javax.inject.Inject
 
@@ -68,14 +70,14 @@ class ProfileFragment : BaseFragment(), ProfileView {
             val alertDialog = AlertDialog.Builder(baseActivity).create()
             alertDialog.setTitle(getString(R.string.profile_general_delete_account_dialog_title))
             alertDialog.setMessage(getString(R.string.profile_general_delete_account_dialog_description))
-//            alertDialog.setView(getWarningView())
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.profile_general_delete_account_dialog_delete),
-                    DialogInterface.OnClickListener { dialog, which ->
-                        dialog.dismiss()
-                        toast("Deleted")
-                    })
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel),
-                    DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+            alertDialog.setView(getWarningView())
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->
+                dialog.dismiss()
+                toast("Deleted")
+            }
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel)) { dialog, _ ->
+                dialog.dismiss()
+            }
             alertDialog.show()
             alertDialog.makeStyled()
         }

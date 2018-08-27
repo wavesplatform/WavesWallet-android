@@ -8,7 +8,8 @@ import javax.inject.Inject
 @InjectViewState
 class ChooseAccountPresenter @Inject constructor():BasePresenter<ChooseAccountView>(){
     fun getAddresses(){
-        var list = arrayListOf<AddressBookUser>(AddressBookUser("MkSuckMydickmMak1593x1GrfYmFdsf83skS11", "Ed"),
+        val list = arrayListOf(
+                AddressBookUser("MkSuckMydickmMak1593x1GrfYmFdsf83skS11", "Ed"),
                 AddressBookUser("MkSuckMydickmMak1593x1GrfYmFdsf83skS11", "Droid"),
                 AddressBookUser("MkSuckMydickmMak1593x1GrfYmFdsf83skS11", "Expert"),
                 AddressBookUser("MkSuckMydickmMak1593x1GrfYmFdsf83skS11", "Fuaaaarrkkkk"))
