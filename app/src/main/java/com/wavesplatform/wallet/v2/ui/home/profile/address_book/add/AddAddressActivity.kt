@@ -6,17 +6,25 @@ import android.os.Bundle
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.onDrawableClickListener
+import com.vicpin.krealmextensions.queryAsFlowable
+import com.vicpin.krealmextensions.queryFirst
+import com.vicpin.krealmextensions.queryFirstAsync
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.id.button_save
+import com.wavesplatform.wallet.R.id.edit_address
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_add_address.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.toast
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -59,12 +67,24 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
                 }
             }
         })
-        edit_name.addTextChangedListener {
-            on({ s, start, before, count ->
-                presenter.nameFieldValid = edit_name.text.isNotEmpty()
-                isFieldsValid()
-            })
-        }
+
+        eventSubscriptions.add(RxTextView.textChanges(edit_name)
+                .skipInitialValue()
+                .map({
+                    return@map it.toString()
+                })
+                .debounce(350, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .flatMap({
+                    return@flatMap queryAsFlowable<AddressBookUser> { equalTo("name", it) }.toObservable()
+                })
+                .map({
+                    presenter.nameFieldValid = edit_name.text.isNotEmpty() && it.isEmpty()
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ name ->
+                    isFieldsValid()
+                }))
 
         button_save.click {
             presenter.saveAddress(edit_address.text.toString(), edit_name.text.toString())
@@ -85,7 +105,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
 
             edit_address.setText(intent.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM).address)
             presenter.addressFieldValid = edit_address.text.isNotEmpty()
-        }else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE){
+        } else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE) {
 
             edit_address.addTextChangedListener {
                 on({ s, start, before, count ->

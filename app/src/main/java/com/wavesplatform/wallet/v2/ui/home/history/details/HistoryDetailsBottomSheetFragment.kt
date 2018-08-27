@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.history.details
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.AppCompatImageView
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
@@ -29,6 +31,7 @@ import pers.victor.ext.*
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.util.*
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -152,16 +155,9 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 val receivedFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_address)
                 val imageAddressAction = receiveView?.findViewById<AppCompatImageView>(R.id.image_address_action)
 
-                receivedFromAddress?.text = transaction.recipient
+                receivedFromAddress?.text = transaction.sender
 
                 resolveExistOrNoAddress(receivedFromName, receivedFromAddress, imageAddressAction)
-
-                imageAddressAction?.click {
-                    launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
-                        putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                        putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(receivedFromAddress?.text.toString(), ""))
-                    }
-                }
 
                 historyContainer?.addView(receiveView)
                 historyContainer?.addView(commentBlock)
@@ -231,13 +227,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
                 resolveExistOrNoAddress(textCancelLeasingFromName, textCancelLeasingFromAddress, imageAddressAction)
 
-                imageAddressAction?.click {
-                    launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
-                        putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_EDITABLE)
-                        putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textCancelLeasingFromAddress?.text.toString(), ""))
-                    }
-                }
-
                 historyContainer?.addView(receiveView)
                 historyContainer?.addView(commentBlock)
                 historyContainer?.addView(baseInfoLayout)
@@ -248,9 +237,9 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
 
                 textIdValue?.text = transaction.assetId
-                if (transaction.reissuable){
+                if (transaction.reissuable) {
                     textTokenStatus?.text = getString(R.string.history_details_reissuable)
-                }else{
+                } else {
                     textTokenStatus?.text = getString(R.string.history_details_not_reissuable)
                 }
 
@@ -281,7 +270,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                     val imageAddressAction = addressView?.findViewById<AppCompatImageView>(R.id.image_address_action)
                     val viewDivider = addressView?.findViewById<AppCompatImageView>(R.id.view_divider)
 
-                    resolveExistOrNoAddressForMassSend(textSentAddress,  imageAddressAction)
+                    resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
 
                     textSentAddress?.text = transfer.recipient
                     textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset)
@@ -303,7 +292,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
                                 val transfer = transfers[i]
 
-                                resolveExistOrNoAddressForMassSend(textSentAddress,  imageAddressAction)
+                                resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
 
                                 textSentAddress?.text = transfer.recipient
                                 textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset)
@@ -360,7 +349,8 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
     }
 
     private fun resolveExistOrNoAddress(textViewName: TextView?, textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
-        if (true) {
+        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
+        if (addressBookUser == null) {
             //  not exist
             textViewName?.gone()
             textViewAddress?.textSize = 14f
@@ -368,45 +358,49 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
             imageAddressAction?.click {
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
-                    putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_EDITABLE)
+                    putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
                 }
             }
         } else {
             // exist
-
+            textViewName?.text = addressBookUser.name
             textViewName?.visiable()
             textViewAddress?.textSize = 12f
             imageAddressAction?.setImageResource(R.drawable.ic_edit_address_submit_300)
 
 
             imageAddressAction?.click {
-                launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
+                launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), addressBookUser.name))
                 }
             }
         }
     }
 
     private fun resolveExistOrNoAddressForMassSend(textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
-        // TODO: Check address to exist
-        if (true) {
+        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
+        if (addressBookUser == null) {
             //  not exist
             imageAddressAction?.setImageResource(R.drawable.ic_add_address_submit_300)
 
             imageAddressAction?.click {
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
-                    putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_EDITABLE)
+                    putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
                 }
             }
         } else {
             // exist
+            textViewAddress?.text = addressBookUser.name
+
             imageAddressAction?.setImageResource(R.drawable.ic_edit_address_submit_300)
 
             imageAddressAction?.click {
-                launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
+                launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), addressBookUser.name))
                 }
             }
         }
@@ -429,9 +423,10 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
             override fun onPageSelected(position: Int) {
                 val historyItem = historyDetailsAdapter.mData[position]
+                selectedItem = historyItem
+                selectedItemPosition = position
 
                 setupView(historyItem)
-//                setupView(HistoryTypeEnum.MASSTRANSFER)
 
                 checkStepIconState()
             }
@@ -457,6 +452,17 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
         } else {
             rooView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 1.0F
             rooView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 1.0F
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == AddressBookActivity.REQUEST_EDIT_ADDRESS || requestCode == AddressBookActivity.REQUEST_ADD_ADDRESS){
+            if (resultCode == Constants.RESULT_OK){
+                selectedItem?.let {
+                    setupView(it)
+                }
+            }
         }
     }
 }

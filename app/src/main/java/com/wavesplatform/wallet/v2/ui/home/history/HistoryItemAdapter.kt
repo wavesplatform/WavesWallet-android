@@ -12,6 +12,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.recycle_item_history.view.*
+import java.math.BigInteger
 import java.util.*
 import javax.inject.Inject
 
@@ -65,12 +66,13 @@ class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicK
                                 if (item?.t?.order1?.sender != publicKeyAccountHelper.publicKeyAccount?.address) item?.t?.order1
                                 else item?.t?.order2
 
-                        if (myOrder?.orderType == Constants.SELL_ORDER_TYPE){
+
+                        if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
                             view.text_transaction_name.text = "-${MoneyUtil.getScaledText(myOrder.amount, myOrder.assetPair?.amountAssetObject)}"
-                            view.text_transaction_value.text = "+${MoneyUtil.getScaledText(pairOrder?.amount?.times(pairOrder?.price), myOrder.assetPair?.priceAssetObject)}"
-                        }else{
+                            view.text_transaction_value.text = "+${MoneyUtil.getScaledText(pairOrder?.amount?.times(pairOrder?.price)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
+                        } else {
                             view.text_transaction_name.text = "+${MoneyUtil.getScaledText(myOrder?.amount, myOrder?.assetPair?.amountAssetObject)}"
-                            view.text_transaction_value.text = "-${MoneyUtil.getScaledText(pairOrder?.amount?.times(pairOrder?.price), myOrder?.assetPair?.priceAssetObject)}"
+                            view.text_transaction_value.text = "-${MoneyUtil.getScaledText(pairOrder?.amount?.times(pairOrder?.price)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                         }
                     }
                     TransactionType.DATA_TYPE -> {
