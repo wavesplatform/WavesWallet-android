@@ -49,4 +49,7 @@ interface NodeService {
     @GET("blocks/height")
     fun currentBlocksHeight(): Observable<Height>
 
+    @GET("leasing/active/{address}")
+    fun activeLeasing(@Path("address") address: String?): Observable<List<Transaction>>
+
 }
