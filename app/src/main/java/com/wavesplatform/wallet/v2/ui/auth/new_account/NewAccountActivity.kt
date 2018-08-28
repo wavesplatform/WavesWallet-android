@@ -12,7 +12,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WalletManager
+import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.ui.auth.CreateWalletFragment
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
+import com.wavesplatform.wallet.v1.util.AddressUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -24,10 +28,12 @@ import io.github.anderscheow.validator.rules.common.MaxRule
 import io.github.anderscheow.validator.rules.common.MinRule
 import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.activity_new_account.*
+import org.apache.commons.io.Charsets
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.children
 import pers.victor.ext.click
 import pers.victor.ext.getBitmap
+import java.util.*
 import javax.inject.Inject
 
 
@@ -37,6 +43,22 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         const val KEY_INTENT_ACCOUNT = "intent_account"
         const val KEY_INTENT_PASSWORD = "intent_password"
         const val KEY_INTENT_SEED = "intent_seed"
+    }
+
+    override fun afterSuccessGenerateAvatar(seed: String, bitmap: Bitmap, imageView: AppCompatImageView) {
+        Glide.with(applicationContext)
+                .load(bitmap)
+                .apply(RequestOptions().circleCrop())
+                .into(imageView)
+
+        if (linear_images.children.isNotEmpty() && linear_images.children[0] == imageView) {
+            setImageActive(imageView)
+        }
+
+        imageView.click {
+            this.seed = seed
+            setImageActive(it)
+        }
     }
 
     override fun afterSuccessGenerateAvatar(bitmap: Bitmap, imageView: AppCompatImageView) {
@@ -54,6 +76,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     @InjectPresenter
     lateinit var presenter: NewAccountPresenter
     lateinit var validator: Validator
+    private var seed: String? = null
 
     @ProvidePresenter
     fun providePresenter(): NewAccountPresenter = presenter
@@ -152,12 +175,15 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
             }
         }
 
-        linear_images.children.forEach {
+        /*linear_images.children.forEach {
             it.click { setImageActive(it) }
-        }
+        }*/
+
+
 
         // draw unique identicon avatar with random background color and make image with circle crop effect
-        presenter.generateAvatars(linear_images.children as List<AppCompatImageView>)
+        //presenter.generateAvatars(linear_images.children as List<AppCompatImageView>)
+        presenter.generateSeeds(this, linear_images.children as List<AppCompatImageView>)
 
         edit_account_name.text = SpannableStringBuilder("ebta")
         edit_create_password.text = SpannableStringBuilder("12345678")
@@ -190,5 +216,4 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         finish()
         overridePendingTransition(0, android.R.anim.fade_out)
     }
-
 }

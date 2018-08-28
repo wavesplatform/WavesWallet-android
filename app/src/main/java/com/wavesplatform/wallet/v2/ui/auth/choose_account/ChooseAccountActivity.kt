@@ -89,6 +89,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.choose_account_yes),
                 DialogInterface.OnClickListener { dialog, which ->
                     dialog.dismiss()
+
                     toast("Deleted")
                 })
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.choose_account_cancel),

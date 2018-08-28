@@ -17,10 +17,10 @@ class AddressBookAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUse
         helper.setText(R.id.text_address, item.address)
                 .setText(R.id.text_name, item.name)
 
-        if (screenType == AddressBookActivity.AddressBookScreenType.EDIT.type){
+        if (screenType == AddressBookActivity.AddressBookScreenType.EDIT.type) {
             helper.itemView.checkbox_choose.gone()
             helper.itemView.image_edit.visiable()
-        }else if(screenType == AddressBookActivity.AddressBookScreenType.CHOOSE.type){
+        } else if (screenType == AddressBookActivity.AddressBookScreenType.CHOOSE.type) {
             helper.itemView.checkbox_choose.visiable()
             helper.itemView.image_edit.gone()
         }
@@ -40,6 +40,4 @@ class AddressBookAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUse
         }
         notifyDataSetChanged()
     }
-
-
 }

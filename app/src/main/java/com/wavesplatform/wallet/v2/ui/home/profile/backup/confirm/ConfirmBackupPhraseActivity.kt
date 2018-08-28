@@ -38,6 +38,7 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
 
         presenter.getRandomPhrasePositions(originPhrase.toList() as ArrayList<String>)
 
+        // todo remove, for testing
         launchActivity<CreatePasscodeActivity>(options = intent.extras)
     }
 
@@ -57,16 +58,16 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
         textView.setBackgroundResource(R.drawable.blue_shape)
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
         textView.setPadding(dp2px(14f), dp2px(8f), dp2px(14f), dp2px(8f))
-        var clickListener = View.OnClickListener {
+        val clickListener = View.OnClickListener {
             it.isClickable = false
             it.animate()
                     .scaleX(0f)
                     .scaleY(0f)
                     .setDuration(200)
-                    .withEndAction({
+                    .withEndAction {
                         it.invisiable()
                         it.isClickable = true
-                    })
+                    }
                     .start()
             val confirmLabel = buildConfirmLabel(text, position)
             flow_confirm.addView(confirmLabel)
@@ -74,9 +75,7 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
                     .scaleX(1f)
                     .scaleY(1f)
                     .setDuration(200)
-                    .withEndAction({
-
-                    })
+                    .withEndAction { }
                     .start()
             checkCountToChangeTextVisibility()
 
@@ -111,26 +110,22 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
         textView.setTextColor(findColor(R.color.black))
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
         textView.setPadding(dp2px(14f), dp2px(8f), dp2px(14f), dp2px(8f))
-        textView.setOnClickListener({
+        textView.setOnClickListener {
             cardView.animate()
                     .scaleX(0f)
                     .scaleY(0f)
                     .setDuration(200)
-                    .withEndAction({
-                        flow_confirm.removeView(cardView)
-                    })
+                    .withEndAction { flow_confirm.removeView(cardView) }
                     .start()
             checkCountToChangeTextVisibility()
             val frameDotted = flow_random_phrase.getChildAt(randomPosition) as FrameLayout
-            var textView = frameDotted.getChildAt(0)
+            val textView = frameDotted.getChildAt(0)
             textView.visiable()
             textView.animate()
                     .scaleX(1f)
                     .scaleY(1f)
                     .setDuration(200)
-                    .withEndAction({
-
-                    })
+                    .withEndAction { }
                     .start()
 
             button_confirm.gone()
@@ -139,7 +134,7 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
                 text_error.gone()
                 frame_phrase_form.foreground = findDrawable(R.drawable.shape_rect_outline_gray)
             }
-        })
+        }
         cardView.radius = dp2px(2).toFloat()
         cardView.cardElevation = dp2px(2).toFloat()
         cardView.scaleX = 0f
