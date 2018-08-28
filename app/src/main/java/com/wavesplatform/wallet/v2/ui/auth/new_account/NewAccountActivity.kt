@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WalletManager
+import com.wavesplatform.wallet.v1.ui.auth.CreateWalletFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -31,15 +32,22 @@ import javax.inject.Inject
 
 
 class NewAccountActivity : BaseActivity(), NewAccountView {
+
+    companion object {
+        const val KEY_INTENT_ACCOUNT = "intent_account"
+        const val KEY_INTENT_PASSWORD = "intent_password"
+        const val KEY_INTENT_SEED = "intent_seed"
+    }
+
     override fun afterSuccessGenerateAvatar(bitmap: Bitmap, imageView: AppCompatImageView) {
         Glide.with(applicationContext)
                 .load(bitmap)
                 .apply(RequestOptions().circleCrop())
                 .into(imageView)
 
-        val seed = WalletManager.createWalletSeed(this)
-
-        imageView.callOnClick()
+        if (linear_images.children.isNotEmpty() && linear_images.children[0] == imageView) {
+            setImageActive(imageView)
+        }
     }
 
     @Inject
@@ -59,7 +67,11 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         button_create_account.click {
-            launchActivity<SecretPhraseActivity> { }
+            val options = Bundle()
+            options.putString(KEY_INTENT_SEED, WalletManager.createWalletSeed(this))
+            options.putString(KEY_INTENT_ACCOUNT, edit_account_name.text.toString())
+            options.putString(KEY_INTENT_PASSWORD, edit_create_password.text.toString())
+            launchActivity<SecretPhraseActivity>(options = options)
         }
 
 
@@ -141,17 +153,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         }
 
         linear_images.children.forEach {
-            it.click {
-                // delete all background of another images
-                linear_images.children.forEach {
-                    it.background = null
-                }
-
-                // set selected image
-                it.setBackgroundResource(R.drawable.shape_outline_checked)
-                avatarIsSelected(it.getBitmap())
-            }
-
+            it.click { setImageActive(it) }
         }
 
         // draw unique identicon avatar with random background color and make image with circle crop effect
@@ -161,6 +163,17 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         edit_create_password.text = SpannableStringBuilder("12345678")
         edit_confirm_password.text = SpannableStringBuilder("12345678")
 
+    }
+
+    private fun setImageActive(it: View) {
+        // delete all background of another images
+        linear_images.children.forEach {
+            it.background = null
+        }
+
+        // set selected image
+        it.setBackgroundResource(R.drawable.shape_outline_checked)
+        avatarIsSelected(it.getBitmap())
     }
 
     fun isFieldsValid() {

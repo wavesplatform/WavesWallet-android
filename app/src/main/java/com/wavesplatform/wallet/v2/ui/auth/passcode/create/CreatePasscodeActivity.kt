@@ -5,7 +5,9 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -46,6 +48,12 @@ class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
                         if (fingerprintIdentify.isFingerprintEnable) {
                             launchActivity<UseFingerprintActivity> { }
                         } else {
+                            if (intent.extras != null) {
+                                AccessState.getInstance().storeWavesWallet(
+                                        intent.extras!!.getString(NewAccountActivity.KEY_INTENT_SEED),
+                                        intent.extras!!.getString(NewAccountActivity.KEY_INTENT_PASSWORD),
+                                        intent.extras!!.getString(NewAccountActivity.KEY_INTENT_ACCOUNT))
+                            }
                             launchActivity<MainActivity>(clear = true) { }
                         }
                     } else {

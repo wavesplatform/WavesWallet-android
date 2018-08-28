@@ -22,23 +22,22 @@ class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressBookU
         val swipeLayout = helper.getView<SwipeLayout>(R.id.swipe_layout)
         swipeLayout.showMode = SwipeLayout.ShowMode.LayDown
 
-        swipeLayout.surfaceView.setOnClickListener({
+        swipeLayout.surfaceView.setOnClickListener {
             chooseAccountOnClickListener?.onItemClicked(item)
-        })
+        }
 
         helper.getView<ImageView>(R.id.image_edit_address).click {
             swipeLayout.close(true)
-            runDelayed(250, {
-
+            runDelayed(250) {
                 chooseAccountOnClickListener?.onEditClicked(data.indexOf(item))
-            })
+            }
         }
         helper.getView<ImageView>(R.id.image_delete_address).click {
             swipeLayout.close(true)
 
-            runDelayed(250, {
+            runDelayed(250) {
                 chooseAccountOnClickListener?.onDeleteClicked()
-            })
+            }
         }
     }
 

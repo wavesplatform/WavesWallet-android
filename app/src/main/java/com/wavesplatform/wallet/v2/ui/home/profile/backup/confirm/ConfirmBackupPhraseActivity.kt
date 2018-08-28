@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.view.ViewCompat.animate
 import android.support.v7.widget.CardView
 import android.util.TypedValue
 import android.view.View
@@ -11,14 +10,12 @@ import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.string.click
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.activity_confirm_backup_pharse.*
-import kotlinx.android.synthetic.main.activity_confirm_backup_pharse.view.*
 import pers.victor.ext.*
 import java.lang.StringBuilder
 import javax.inject.Inject
@@ -37,9 +34,11 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.confirm_backup), R.drawable.ic_toolbar_back_black)
 
-        val originPhrase = intent?.getSerializableExtra(BackupPhraseActivity.PHRASE_LIST) as ArrayList<String>
+        val originPhrase = intent?.getSerializableExtra(BackupPhraseActivity.PHRASE_LIST) as Array<*>
 
-        presenter.getRandomPhrasePositions(originPhrase)
+        presenter.getRandomPhrasePositions(originPhrase.toList() as ArrayList<String>)
+
+        launchActivity<CreatePasscodeActivity>(options = intent.extras)
     }
 
     override fun showRandomPhraseList(listRandomPhrase: ArrayList<String>) {
@@ -91,7 +90,7 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
                 if (phraseText.trim() == presenter.originPhraseString) {
                     button_confirm.visiable()
                     button_confirm.click {
-                        launchActivity<CreatePasscodeActivity> { }
+                        launchActivity<CreatePasscodeActivity>(options = intent.extras)
                     }
                 } else {
                     text_error.visiable()

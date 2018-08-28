@@ -161,7 +161,7 @@ public class PrefsUtil implements PersistentPrefs {
         if (getGlobalValue(name, "").isEmpty()) {
             return new String[]{};
         } else {
-            return getValue(name, "").split("\\|");
+            return getGlobalValue(name, "").split("\\|");
         }
     }
 

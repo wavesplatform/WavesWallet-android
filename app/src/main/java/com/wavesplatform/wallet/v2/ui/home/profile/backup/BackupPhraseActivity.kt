@@ -8,6 +8,7 @@ import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity
 import com.wavesplatform.wallet.v2.util.copyToClipboard
@@ -35,8 +36,12 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.backup_pharse), R.drawable.ic_toolbar_back_black)
 
-        val phraseList = arrayListOf<String>("utmost", "get", "igot", "nigga", "host", "wanna", "stacks", "attack ", "close",
-                "too", "get", "wack", "that’ll", "but", "any", "tothe")
+        val seed = intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED)
+        val phraseList = if (seed.isNotEmpty()) {
+            seed.split(" ")
+        } else {
+            arrayListOf()
+        }
 
         for (text in phraseList) {
             val textView = buildLabel(text)
@@ -44,8 +49,8 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
         }
 
         button_written_down.click {
-            launchActivity<ConfirmBackupPhraseActivity> {
-                putExtra(PHRASE_LIST, phraseList)
+            launchActivity<ConfirmBackupPhraseActivity>(options = intent.extras) {
+                putExtra(PHRASE_LIST, phraseList.toTypedArray())
             }
         }
 

@@ -32,7 +32,7 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
 
 
         button_confirm.click {
-            launchActivity<BackupInfoActivity> {  }
+            launchActivity<BackupInfoActivity>(options = intent.extras)
         }
 
         button_do_it_later.click {
