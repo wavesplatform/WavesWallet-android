@@ -366,7 +366,7 @@ public class TransactionsFragment extends Fragment implements TransactionsViewMo
 
     @Override
     public void onRefreshBalanceAndTransactions() {
-        // Notify adapter of change, let DiffUtil work out what needs changing
+        // Notify adapterActiveAdapter of change, let DiffUtil work out what needs changing
         List<Transaction> newTransactions = new ArrayList<>();
         ListUtil.addAllIfNotNull(newTransactions, viewModel.getTransactionList());
         transactionAdapter.onTransactionsUpdated(newTransactions);

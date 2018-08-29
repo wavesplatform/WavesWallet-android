@@ -10,18 +10,14 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
-import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.adapter.AdapterActiveLeasing
+import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.history.LeasingHistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_leasing.*
 import pers.victor.ext.click
-import pers.victor.ext.gone
 import pers.victor.ext.goneIf
-import pers.victor.ext.visiable
-import java.util.*
 import javax.inject.Inject
 
 class LeasingFragment : BaseFragment(), LeasingView {
@@ -34,7 +30,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
     fun providePresenter(): LeasingPresenter = presenter
 
     @Inject
-    lateinit var adapter: AdapterActiveLeasing
+    lateinit var adapterActiveAdapter: LeasingActiveAdapter
 
     companion object {
 
@@ -51,6 +47,10 @@ class LeasingFragment : BaseFragment(), LeasingView {
     override fun onViewReady(savedInstanceState: Bundle?) {
 
         presenter.getActiveLeasing()
+
+        card_view_history.click {
+            launchActivity<LeasingHistoryActivity> { }
+        }
 
         button_continue.click {
             launchActivity<StartLeasingActivity> { }
@@ -89,7 +89,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
         }
 
         recycle_active_leasing.layoutManager = LinearLayoutManager(baseActivity)
-        recycle_active_leasing.adapter = adapter
+        recycle_active_leasing.adapter = adapterActiveAdapter
         recycle_active_leasing.isNestedScrollingEnabled = false
     }
 
@@ -110,7 +110,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
 
     override fun showActiveLeasingTransaction(transactions: List<Transaction>) {
         linear_active_leasing.goneIf { transactions.isEmpty() }
-        adapter.setNewData(transactions)
+        adapterActiveAdapter.setNewData(transactions)
         text_active_leasing.text = getString(R.string.wallet_leasing_active_now, transactions.size.toString())
     }
 }

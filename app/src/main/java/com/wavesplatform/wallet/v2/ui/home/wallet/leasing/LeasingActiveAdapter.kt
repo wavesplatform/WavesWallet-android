@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.adapter
+package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -15,7 +15,7 @@ import com.wavesplatform.wallet.v2.util.transactionType
 import kotlinx.android.synthetic.main.recycle_item_history.view.*
 import javax.inject.Inject
 
-class AdapterActiveLeasing @Inject constructor() : BaseQuickAdapter<Transaction, BaseViewHolder>(R.layout.recycle_item_history, null) {
+class LeasingActiveAdapter @Inject constructor() : BaseQuickAdapter<Transaction, BaseViewHolder>(R.layout.recycle_item_history, null) {
 
     override fun convert(helper: BaseViewHolder, item: Transaction) {
         helper.itemView.image_transaction.setImageDrawable(item.transactionType().icon())

@@ -189,13 +189,13 @@ internal interface SpanLookup {
 
     /**
      * @param itemPosition
-     * @return start span for the item at the given adapter position
+     * @return start span for the item at the given adapterActiveAdapter position
      */
     fun getSpanIndex(itemPosition: Int): Int
 
     /**
      * @param itemPosition
-     * @return number of spans the item at the given adapter position occupies
+     * @return number of spans the item at the given adapterActiveAdapter position occupies
      */
     fun getSpanSize(itemPosition: Int): Int
 

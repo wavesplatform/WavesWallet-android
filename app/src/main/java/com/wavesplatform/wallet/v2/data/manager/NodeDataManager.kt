@@ -26,6 +26,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
     lateinit var transactionUtil: TransactionUtil
     var transactions: List<Transaction> = ArrayList()
     var pendingTransactions: List<Transaction> = ArrayList()
+    var currentLoadTransactionLimitPerRequest = 100
 
 //    fun loadAssetsFromDBAndNetwork(): Observable<List<AssetBalance>> {
 //        return Observable.mergeDelayError(queryAllAsFlowable<AssetBalance>().toObservable(), nodeService.assetsBalance(getAddress())
@@ -124,12 +125,12 @@ class NodeDataManager @Inject constructor() : DataManager() {
         return nodeService.createAlias(createAliasRequest)
     }
 
-    fun loadTransactions(limit: Int): Observable<Pair<List<Transaction>?, List<Transaction>?>> {
+    fun loadTransactions(): Observable<Pair<List<Transaction>?, List<Transaction>?>> {
         return Observable.interval(0, 15, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap({
                     if (app.isAppOnForeground()) {
-                        return@flatMap Observable.zip(nodeService.transactionList(getAddress(), 100).map({ r -> r[0] }),
+                        return@flatMap Observable.zip(nodeService.transactionList(getAddress(), currentLoadTransactionLimitPerRequest).map({ r -> r[0] }),
                                 nodeService.unconfirmedTransactions(), BiFunction<List<Transaction>, List<Transaction>, Pair<List<Transaction>, List<Transaction>>> { t1, t2 ->
                             return@BiFunction Pair(t1, t2)
                         })

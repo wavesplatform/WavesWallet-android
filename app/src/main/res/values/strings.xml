@@ -786,6 +786,8 @@
     <string name="history_exchanged">Exchanged</string>
     <string name="history_leased">Leased</string>
     <string name="history_issued">Issued</string>
+    <string name="history_active_now">Active now</string>
+    <string name="history_canceled">Canceled</string>
     <string name="history_empty">Nothing Here…\nYou do not have any transactions</string>
     <string name="history_data_type_title">Entry in blockchain</string>
 
@@ -1299,5 +1301,8 @@
     <!--What's new-->
     <string name="whats_new_next">Next</string>
     <string name="whats_new_okay">Okay</string>
+
+    <!--Leasing history-->
+    <string name="leasing_history_toolbar_title">History</string>
 
 </resources>

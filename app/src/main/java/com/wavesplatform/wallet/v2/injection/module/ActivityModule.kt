@@ -39,6 +39,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingAc
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.history.LeasingHistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
@@ -237,4 +238,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun whatsNewActivity(): WhatsNewActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun leasingHistoryActivity(): LeasingHistoryActivity
 }

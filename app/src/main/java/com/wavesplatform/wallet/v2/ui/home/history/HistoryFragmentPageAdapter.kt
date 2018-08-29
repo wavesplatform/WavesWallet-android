@@ -3,33 +3,33 @@ package com.wavesplatform.wallet.v2.ui.home.history
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment
-import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment.Companion.all
+import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
+import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment.Companion.all
 
 class HistoryFragmentPageAdapter(fm: FragmentManager?, var titles: Array<String>) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         when (position) {
             0 -> {
-                return HistoryDateItemFragment.newInstance(HistoryDateItemFragment.all)
+                return HistoryTabFragment.newInstance(HistoryTabFragment.all)
             }
             1 -> {
-                return HistoryDateItemFragment.newInstance(HistoryDateItemFragment.send)
+                return HistoryTabFragment.newInstance(HistoryTabFragment.send)
             }
             2 -> {
-                return HistoryDateItemFragment.newInstance(HistoryDateItemFragment.received)
+                return HistoryTabFragment.newInstance(HistoryTabFragment.received)
             }
             3 -> {
-                return HistoryDateItemFragment.newInstance(HistoryDateItemFragment.exchanged)
+                return HistoryTabFragment.newInstance(HistoryTabFragment.exchanged)
             }
             4 -> {
-                return HistoryDateItemFragment.newInstance(HistoryDateItemFragment.leased)
+                return HistoryTabFragment.newInstance(HistoryTabFragment.leased)
             }
             5 -> {
-                return HistoryDateItemFragment.newInstance(HistoryDateItemFragment.issued)
+                return HistoryTabFragment.newInstance(HistoryTabFragment.issued)
             }
         }
-        return HistoryDateItemFragment.newInstance(all)
+        return HistoryTabFragment.newInstance(all)
     }
 
     override fun getCount(): Int = titles.size
