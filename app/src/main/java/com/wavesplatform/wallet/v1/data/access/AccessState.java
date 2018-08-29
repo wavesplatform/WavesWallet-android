@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v1.data.access;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.wavesplatform.wallet.v1.crypto.AESUtil;
@@ -181,6 +182,13 @@ public class AccessState {
 
         if (searchWalletGuid.equals(prefs.getGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, ""))) {
             prefs.removeGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID);
+        }
+    }
+
+    public void saveWavesWalletNewName(String address, String name) {
+        if (!TextUtils.isEmpty(address) && !TextUtils.isEmpty(name)) {
+            String searchWalletGuid = findGuidBy(address);
+            prefs.setGlobalValue(searchWalletGuid + PrefsUtil.KEY_WALLET_NAME, name);
         }
     }
 

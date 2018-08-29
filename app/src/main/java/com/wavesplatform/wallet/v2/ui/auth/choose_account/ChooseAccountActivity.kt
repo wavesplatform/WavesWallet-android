@@ -95,6 +95,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
             val item = adapter.getItem(position)
             if (item is AddressBookUser) {
                 AccessState.getInstance().deleteWavesWallet(item.address)
+                adapter.remove(position)
             }
             toast("Deleted")
             adapter.notifyDataSetChanged()
@@ -116,6 +117,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                     val position = data?.getIntExtra(BUNDLE_POSITION, 0)
                     item.notNull {
                         adapter.setData(position!!, it)
+                        AccessState.getInstance().saveWavesWalletNewName(item!!.address, item.name)
                     }
                 }
             }

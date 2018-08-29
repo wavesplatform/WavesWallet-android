@@ -61,7 +61,7 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
                 .and(NotEmptyRule(R.string.edit_account_new_name_validation_required_error))
 
         edit_name.addTextChangedListener {
-            on({ s, start, before, count ->
+            on { s, start, before, count ->
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
@@ -76,7 +76,7 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
                                 button_save.isEnabled = false
                             }
                         }, nameValidation)
-            })
+            }
         }
 
     }
