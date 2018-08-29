@@ -9,6 +9,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity.Companion.REQUEST_ENTER_PASSCODE
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthenticationDialogFragment
@@ -20,6 +21,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
+import kotlinx.android.synthetic.main.spinner_item.view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -43,7 +45,14 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFinge
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        queryAllAsync<Alias>({ aliases ->
+        val user = AccessState.getInstance().currentWavesWallet
+
+        text_address.text = user.address
+        text_public_key.text = AccessState.getInstance().findPublicKeyBy(user.address)
+        text_private_key.text = "Приватный ключ"
+
+
+        queryAllAsync<Alias> { aliases ->
             text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), aliases.size)
 
             relative_alias.click {
@@ -55,7 +64,7 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFinge
                 }
                 bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
             }
-        })
+        }
 
         mFingerprintIdentify = FingerprintIdentify(this)
         mFingerprintDialog = FingerprintAuthenticationDialogFragment()
@@ -98,12 +107,12 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFinge
 
     override fun onSucceed() {
         mFingerprintDialog.onSuccessRecognizedFingerprint()
-        runDelayed(1500, {
+        runDelayed(1500) {
             mFingerprintDialog.dismiss()
             mFingerprintIdentify.cancelIdentify()
             button_show.gone()
             relative_private_key_block.visiable()
-        })
+        }
     }
 
     override fun onFailed(isDeviceLocked: Boolean) {

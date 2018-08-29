@@ -14,6 +14,7 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v1.util.AddressUtil;
 import com.wavesplatform.wallet.v1.util.AppUtil;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser;
 
 import org.apache.commons.io.Charsets;
 import org.spongycastle.util.encoders.Hex;
@@ -76,7 +77,7 @@ public class AccessState {
 
     public void setOnDexScreens(boolean onDexScreens) {
         this.onDexScreens = onDexScreens;
-        if (!onDexScreens){
+        if (!onDexScreens) {
             setTemporary(wavesWallet);
         }
     }
@@ -190,6 +191,36 @@ public class AccessState {
             String searchWalletGuid = findGuidBy(address);
             prefs.setGlobalValue(searchWalletGuid + PrefsUtil.KEY_WALLET_NAME, name);
         }
+    }
+
+    public AddressBookUser getCurrentWavesWallet() {
+        String guid = prefs.getGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, "");
+        if (TextUtils.isEmpty(guid)) {
+            return null;
+        }
+
+        String name = prefs.getGlobalValue(guid + PrefsUtil.KEY_WALLET_NAME, "");
+        String publicKey = prefs.getGlobalValue(guid + PrefsUtil.KEY_PUB_KEY, "");
+
+        if (TextUtils.isEmpty(publicKey) || TextUtils.isEmpty(name)) {
+            return null;
+        }
+
+        return new AddressBookUser(AddressUtil.addressFromPublicKey(publicKey), name);
+    }
+
+    public boolean deleteCurrentWavesWallet() {
+        AddressBookUser currentUser = getCurrentWavesWallet();
+        if (currentUser == null) {
+            return false;
+        } else {
+            deleteWavesWallet(currentUser.getAddress());
+            return true;
+        }
+    }
+
+    public String findPublicKeyBy(String address) {
+        return prefs.getValue(findGuidBy(address), PrefsUtil.KEY_PUB_KEY, "");
     }
 
     @NonNull

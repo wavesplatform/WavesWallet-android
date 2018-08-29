@@ -7,6 +7,7 @@ import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -73,7 +74,9 @@ class ProfileFragment : BaseFragment(), ProfileView {
             alertDialog.setView(getWarningView())
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->
                 dialog.dismiss()
+                AccessState.getInstance().deleteCurrentWavesWallet()
                 toast("Deleted")
+                launchActivity<MainActivity> {  }
             }
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel)) { dialog, _ ->
                 dialog.dismiss()
