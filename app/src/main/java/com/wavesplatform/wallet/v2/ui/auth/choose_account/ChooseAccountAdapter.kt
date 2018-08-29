@@ -42,7 +42,7 @@ class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressBookU
             swipeLayout.close(true)
 
             runDelayed(250) {
-                chooseAccountOnClickListener?.onDeleteClicked()
+                chooseAccountOnClickListener?.onDeleteClicked(data.indexOf(item))
             }
         }
     }

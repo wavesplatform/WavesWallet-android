@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.auth.choose_account
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -10,6 +9,10 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.data.access.AccessState
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
+import com.wavesplatform.wallet.v1.util.AddressUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
@@ -82,18 +85,24 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         }
     }
 
-    override fun onDeleteClicked() {
+    override fun onDeleteClicked(position: Int) {
         val alertDialog = AlertDialog.Builder(this).create()
         alertDialog.setTitle(getString(R.string.choose_account_delete_title))
         alertDialog.setMessage(getString(R.string.choose_account_delete_msg))
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.choose_account_yes),
-                DialogInterface.OnClickListener { dialog, which ->
-                    dialog.dismiss()
-
-                    toast("Deleted")
-                })
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.choose_account_cancel),
-                DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
+                getString(R.string.choose_account_yes)) { dialog, which ->
+            dialog.dismiss()
+            val item = adapter.getItem(position)
+            if (item is AddressBookUser) {
+                AccessState.getInstance().deleteWavesWallet(item.address)
+            }
+            toast("Deleted")
+            adapter.notifyDataSetChanged()
+        }
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
+                getString(R.string.choose_account_cancel)) { dialog, which ->
+            dialog.dismiss()
+        }
         alertDialog.show()
         alertDialog.makeStyled()
     }

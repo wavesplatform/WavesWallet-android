@@ -4,6 +4,6 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 
 interface ChooseAccountOnClickListener {
     fun onEditClicked(position: Int)
-    fun onDeleteClicked()
+    fun onDeleteClicked(position: Int)
     fun onItemClicked(item: AddressBookUser)
 }

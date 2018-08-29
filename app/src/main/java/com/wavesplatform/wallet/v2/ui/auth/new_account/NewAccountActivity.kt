@@ -12,11 +12,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WalletManager
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
-import com.wavesplatform.wallet.v1.ui.auth.CreateWalletFragment
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.AddressUtil
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -28,12 +23,10 @@ import io.github.anderscheow.validator.rules.common.MaxRule
 import io.github.anderscheow.validator.rules.common.MinRule
 import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.activity_new_account.*
-import org.apache.commons.io.Charsets
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.children
 import pers.victor.ext.click
 import pers.victor.ext.getBitmap
-import java.util.*
 import javax.inject.Inject
 
 
@@ -52,24 +45,16 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                 .into(imageView)
 
         if (linear_images.children.isNotEmpty() && linear_images.children[0] == imageView) {
-            setImageActive(imageView)
+            setImageActive(seed, imageView)
         }
 
         imageView.click {
-            this.seed = seed
-            setImageActive(it)
+            setImageActive(seed, it)
         }
     }
 
     override fun afterSuccessGenerateAvatar(bitmap: Bitmap, imageView: AppCompatImageView) {
-        Glide.with(applicationContext)
-                .load(bitmap)
-                .apply(RequestOptions().circleCrop())
-                .into(imageView)
 
-        if (linear_images.children.isNotEmpty() && linear_images.children[0] == imageView) {
-            setImageActive(imageView)
-        }
     }
 
     @Inject
@@ -91,7 +76,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
 
         button_create_account.click {
             val options = Bundle()
-            options.putString(KEY_INTENT_SEED, WalletManager.createWalletSeed(this))
+            options.putString(KEY_INTENT_SEED, seed)
             options.putString(KEY_INTENT_ACCOUNT, edit_account_name.text.toString())
             options.putString(KEY_INTENT_PASSWORD, edit_create_password.text.toString())
             launchActivity<SecretPhraseActivity>(options = options)
@@ -175,11 +160,6 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
             }
         }
 
-        /*linear_images.children.forEach {
-            it.click { setImageActive(it) }
-        }*/
-
-
 
         // draw unique identicon avatar with random background color and make image with circle crop effect
         //presenter.generateAvatars(linear_images.children as List<AppCompatImageView>)
@@ -191,15 +171,17 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
 
     }
 
-    private fun setImageActive(it: View) {
+    private fun setImageActive(seed: String, view: View) {
+        this.seed = seed
+
         // delete all background of another images
         linear_images.children.forEach {
             it.background = null
         }
 
         // set selected image
-        it.setBackgroundResource(R.drawable.shape_outline_checked)
-        avatarIsSelected(it.getBitmap())
+        view.setBackgroundResource(R.drawable.shape_outline_checked)
+        avatarIsSelected(view.getBitmap())
     }
 
     fun isFieldsValid() {

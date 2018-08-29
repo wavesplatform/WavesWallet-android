@@ -9,6 +9,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsFlowable
 import com.wavesplatform.wallet.v1.data.auth.WalletManager
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
+import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
@@ -67,14 +68,13 @@ class NewAccountPresenter @Inject constructor() : BasePresenter<NewAccountView>(
         Observable.fromIterable(children)
                 .map {
                     val seed = WalletManager.createWalletSeed(context)
-                    val publicKey = WavesWallet(seed.toByteArray(Charsets.UTF_8))
-                            .publicKeyStr
+                    val publicKey = WavesWallet(seed.toByteArray(Charsets.UTF_8)).publicKeyStr
                     val rnd = Random()
                     val color = Color.argb(255,
                             rnd.nextInt(256),
                             rnd.nextInt(256),
                             rnd.nextInt(256))
-                    val bitmap = Identicon.create(publicKey,
+                    val bitmap = Identicon.create(AddressUtil.addressFromPublicKey(publicKey),
                             Identicon.Options.Builder()
                                     .setBlankColor(color)
                                     .create())

@@ -13,7 +13,7 @@ import javax.inject.Inject
 @InjectViewState
 class ChooseAccountPresenter @Inject constructor() : BasePresenter<ChooseAccountView>() {
     fun getAddresses() {
-        val list = arrayListOf(AddressBookUser("MkSuckMydickmMak1593x1GrfYmFdsf83skS11", "Test"))
+        val list = arrayListOf<AddressBookUser>()
         val env = EnvironmentManager.get().current().getName()
         val guids = prefsUtil.getGlobalValueList(env + PrefsUtil.LIST_WALLET_GUIDS)
         val wallets = ArrayList<WalletItem>()

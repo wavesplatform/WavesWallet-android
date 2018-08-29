@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v1.data.access;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.wavesplatform.wallet.v1.crypto.AESUtil;
@@ -9,6 +10,7 @@ import com.wavesplatform.wallet.v1.data.rxjava.RxUtil;
 import com.wavesplatform.wallet.v1.data.services.PinStoreService;
 import com.wavesplatform.wallet.v1.db.DBHelper;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
+import com.wavesplatform.wallet.v1.util.AddressUtil;
 import com.wavesplatform.wallet.v1.util.AppUtil;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 
@@ -16,6 +18,8 @@ import org.apache.commons.io.Charsets;
 import org.spongycastle.util.encoders.Hex;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -142,7 +146,8 @@ public class AccessState {
             WavesWallet newWallet = new WavesWallet(seed.getBytes(Charsets.UTF_8));
             String walletGuid = UUID.randomUUID().toString();
             prefs.setGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, walletGuid);
-            prefs.addGlobalListValue(EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS, walletGuid);
+            prefs.addGlobalListValue(EnvironmentManager.get().current().getName()
+                    + PrefsUtil.LIST_WALLET_GUIDS, walletGuid);
             prefs.setValue(PrefsUtil.KEY_PUB_KEY, newWallet.getPublicKeyStr());
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName);
             prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, newWallet.getEncryptedData(password));
@@ -161,6 +166,48 @@ public class AccessState {
             Log.e(getClass().getSimpleName(), "storeWavesWallet: ", e);
             return null;
         }
+    }
+
+    public void deleteWavesWallet(String address) {
+        String searchWalletGuid = findGuidBy(address);
+
+        prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_PUB_KEY);
+        prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_WALLET_NAME);
+        prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_ENCRYPTED_WALLET);
+
+        prefs.setGlobalValue(
+                EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS,
+                createGuidsListWithout(searchWalletGuid));
+
+        if (searchWalletGuid.equals(prefs.getGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, ""))) {
+            prefs.removeGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID);
+        }
+    }
+
+    @NonNull
+    private String[] createGuidsListWithout(String guidToRemove) {
+        String[] guids = prefs.getGlobalValueList(
+                EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS);
+        List<String> resultGuidsList = new ArrayList<>();
+        for (String guid : guids) {
+            if (!guid.equals(guidToRemove)) {
+                resultGuidsList.add(guid);
+            }
+        }
+        return resultGuidsList.toArray(new String[0]);
+    }
+
+    private String findGuidBy(String address) {
+        String[] guids = prefs.getGlobalValueList(
+                EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS);
+        String resultGuid = "";
+        for (String guid : guids) {
+            String publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "");
+            if (AddressUtil.addressFromPublicKey(publicKey).equals(address)) {
+                resultGuid = guid;
+            }
+        }
+        return resultGuid;
     }
 
     private void setTemporary(WavesWallet newWallet) {

@@ -25,6 +25,10 @@ public class PrefsUtil implements PersistentPrefs {
         return getValueInternal(getGuid() + name, value);
     }
 
+    public String getValue(String guid, String name, String value) {
+        return getValueInternal(guid + name, value);
+    }
+
     public String getGlobalValue(String name, String value) {
         return getValueInternal(name, value);
     }
@@ -107,6 +111,10 @@ public class PrefsUtil implements PersistentPrefs {
 
     public void removeValue(String name) {
         removeValueInternal(getGuid() + name);
+    }
+
+    public void removeValue(String guid, String name) {
+        removeValueInternal(guid + name);
     }
 
     public void removeGlobalValue(String name) {
