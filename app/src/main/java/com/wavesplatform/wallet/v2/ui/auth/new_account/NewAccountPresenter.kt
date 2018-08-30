@@ -36,47 +36,14 @@ class NewAccountPresenter @Inject constructor() : BasePresenter<NewAccountView>(
     }
 
     @SuppressLint("CheckResult")
-    fun generateAvatars(children: List<AppCompatImageView>) {
-        Observable.fromIterable(children)
-                .flatMap {
-                    return@flatMap Observable.zip(
-                            Observable.fromCallable {
-                                val rnd = Random()
-                                val color = Color.argb(255,
-                                        rnd.nextInt(256),
-                                        rnd.nextInt(256),
-                                        rnd.nextInt(256))
-                                return@fromCallable Identicon.create((1..999).shuffled().last().toString(),
-                                        Identicon.Options.Builder()
-                                                .setBlankColor(color)
-                                                .create())
-                            },
-                            Observable.just(it),
-                            BiFunction<Bitmap, AppCompatImageView, Pair<Bitmap, AppCompatImageView>> { t1, t2 ->
-                                Pair(t1, t2)
-                            }
-                    )
-                }
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe {
-                    viewState.afterSuccessGenerateAvatar(it.first, it.second)
-                }
-    }
-
-    @SuppressLint("CheckResult")
     fun generateSeeds(context: Context, children: List<AppCompatImageView>) {
         Observable.fromIterable(children)
                 .map {
                     val seed = WalletManager.createWalletSeed(context)
-                    val publicKey = WavesWallet(seed.toByteArray(Charsets.UTF_8)).publicKeyStr
-                    val rnd = Random()
-                    val color = Color.argb(255,
-                            rnd.nextInt(256),
-                            rnd.nextInt(256),
-                            rnd.nextInt(256))
-                    val bitmap = Identicon.create(AddressUtil.addressFromPublicKey(publicKey),
+                    val wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
+                    val bitmap = Identicon.create(wallet.address,
                             Identicon.Options.Builder()
-                                    .setBlankColor(color)
+                                    .setRandomBlankColor()
                                     .create())
                     return@map Triple(seed, bitmap, it)
                 }

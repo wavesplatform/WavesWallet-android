@@ -26,16 +26,10 @@ class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressBookU
         helper.setText(R.id.text_address, item.address)
                 .setText(R.id.text_name, item.name)
 
-        val rnd = Random()
-        val color = Color.argb(255,
-                rnd.nextInt(256),
-                rnd.nextInt(256),
-                rnd.nextInt(256))
-
         Glide.with(helper.itemView.context)
                 .load(Identicon.create(
                         item.address,
-                        Identicon.Options.Builder().setBlankColor(color).create()))
+                        Identicon.Options.Builder().setRandomBlankColor().create()))
                 .apply(RequestOptions().circleCrop())
                 .into(helper.getView(R.id.image_asset))
 

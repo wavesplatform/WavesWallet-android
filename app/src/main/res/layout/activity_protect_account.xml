@@ -29,7 +29,9 @@
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="14dp"
-            app:srcCompat="@drawable/asset_gray_icon" />
+            app:srcCompat="@drawable/asset_gray_icon"
+            android:adjustViewBounds="true"
+            android:background="@drawable/shape_circle_dot_basic100"/>
 
 
         <android.support.v7.widget.AppCompatTextView

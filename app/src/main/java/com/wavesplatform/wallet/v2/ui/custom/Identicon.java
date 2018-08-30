@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.annotation.Nullable;
 
 import java.security.MessageDigest;
+import java.util.Random;
 
 public class Identicon {
 
@@ -169,6 +170,15 @@ public class Identicon {
 
             public Builder setBlankColor(int color) {
                 bColor = color;
+                return this;
+            }
+
+            public Builder setRandomBlankColor() {
+                Random rnd = new Random();
+                bColor = Color.argb(255,
+                        rnd.nextInt(256),
+                        rnd.nextInt(256),
+                        rnd.nextInt(256));
                 return this;
             }
 

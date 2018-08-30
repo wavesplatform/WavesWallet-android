@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.text.TextPaint
+import android.text.TextUtils
 import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.View
@@ -49,11 +50,11 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
         val siteClick = object : ClickableSpan() {
             override fun onClick(p0: View?) {
                 SimpleChromeCustomTabs.getInstance()
-                        .withFallback({
+                        .withFallback {
                             openUrlWithIntent(getString(R.string.import_account_login_at_site_key))
-                        }).withIntentCustomizer({
+                        }.withIntentCustomizer {
                             it.withToolbarColor(ContextCompat.getColor(this@ImportAccountActivity, R.color.submit400))
-                        })
+                        }
                         .navigateTo(Uri.parse(getString(R.string.import_account_login_at_site_key)), this@ImportAccountActivity)
             }
 
@@ -66,7 +67,11 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
         text_first_title.makeLinks(arrayOf(getString(R.string.import_account_login_at_site_key)), arrayOf(siteClick))
 
         button_scan.click {
-            IntentIntegrator(this).setRequestCode(REQUEST_SCAN_QR_CODE).setOrientationLocked(true).setCaptureActivity(QrCodeScannerActivity::class.java).initiateScan();
+            IntentIntegrator(this)
+                    .setRequestCode(REQUEST_SCAN_QR_CODE)
+                    .setOrientationLocked(true)
+                    .setCaptureActivity(QrCodeScannerActivity::class.java)
+                    .initiateScan()
         }
 
         button_enter_manually.click {
@@ -96,14 +101,12 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
             REQUEST_SCAN_QR_CODE -> {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
 
-                if (result.contents == null) {
+                if (TextUtils.isEmpty(result.contents)) {
                     Log.d("MainActivity", "Cancelled scan")
                 } else {
-                    Log.d("MainActivity", "Scanned")
                     Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
-                    // TODO: Change to real scanned address
                     launchActivity<ProtectAccountActivity> {
-                        putExtra(ProtectAccountActivity.BUNDLE_ACCOUNT_ADDRESS, "MkSuckMydickmMak1593x1GrfYmFdsf83skS11")
+                        putExtra(ProtectAccountActivity.BUNDLE_SEED, result.contents.trim())
                     }
                 }
             }
