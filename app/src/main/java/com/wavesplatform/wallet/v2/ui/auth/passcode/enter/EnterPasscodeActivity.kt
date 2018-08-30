@@ -58,6 +58,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint
         }
 
         pass_keypad.isFingerprintAvailable(mFingerprintIdentify.isFingerprintEnable)
+
         pass_keypad.attachDots(pdl_dots)
         pass_keypad.setPadClickedListener(
                 object : PassCodeEntryKeypad.OnPinEntryPadClickedListener {
@@ -84,13 +85,19 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint
 
                     override fun onFingerprintClicked() {
                         if (mFingerprintIdentify.isFingerprintEnable) {
-                            mFingerprintDialog.isCancelable = false;
-                            mFingerprintDialog.show(fragmentManager, "fingerprintDialog");
-
-                            mFingerprintIdentify.startIdentify(MAX_AVAILABLE_TIMES, this@EnterPasscodeActivity);
+                            showFingerPrint()
                         }
                     }
                 })
+
+        if (mFingerprintIdentify.isFingerprintEnable)
+            showFingerPrint()
+    }
+
+    private fun showFingerPrint() {
+        mFingerprintDialog.isCancelable = false;
+        mFingerprintDialog.show(fragmentManager, "fingerprintDialog");
+        mFingerprintIdentify.startIdentify(MAX_AVAILABLE_TIMES, this@EnterPasscodeActivity)
     }
 
     private fun checkPinFails() {

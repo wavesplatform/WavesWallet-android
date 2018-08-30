@@ -23,6 +23,10 @@ import javax.inject.Inject
 
 class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
 
+    companion object {
+        const val KEY_PASS_CODE = "pass_code"
+    }
+
     @Inject
     @InjectPresenter
     lateinit var presenter: CreatePasscodePresenter
@@ -50,7 +54,9 @@ class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
                 } else if (presenter.step == CreatePassCodeStep.VERIFY) {
                     if (presenter.passCode == passCode) {
                         if (fingerprintIdentify.isFingerprintEnable) {
-                            launchActivity<UseFingerprintActivity> { }
+                            launchActivity<UseFingerprintActivity>(intent.extras) {
+                                putExtra(KEY_PASS_CODE, passCode)
+                            }
                         } else {
                             if (intent.extras != null) {
                                 showProgressBar(true)
