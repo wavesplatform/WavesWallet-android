@@ -37,7 +37,6 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
     fun providePresenter(): ProtectAccountPresenter = presenter
 
     companion object {
-        var BUNDLE_ACCOUNT_ADDRESS = "account_address"
         var BUNDLE_SEED = "account_seed"
     }
 
@@ -48,8 +47,6 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, icon = R.drawable.ic_toolbar_back_black)
 
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
-
-        text_account_address.text = intent.getStringExtra(BUNDLE_ACCOUNT_ADDRESS)
 
         isFieldsValid()
 
@@ -143,9 +140,7 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
             }
         }
 
-
         init()
-
     }
 
     fun init() {
