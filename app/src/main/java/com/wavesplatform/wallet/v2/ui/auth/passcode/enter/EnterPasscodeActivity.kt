@@ -1,13 +1,21 @@
 package com.wavesplatform.wallet.v2.ui.auth.passcode.enter
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.data.access.AccessState
+import com.wavesplatform.wallet.v1.data.auth.IncorrectPinException
+import com.wavesplatform.wallet.v1.ui.auth.PinEntryViewModel
+import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthenticationDialogFragment
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
@@ -17,6 +25,7 @@ import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint
 import kotlinx.android.synthetic.main.activity_enter_passcode.*
 import pers.victor.ext.click
+import pyxis.uzuki.live.richutilskt.utils.put
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
@@ -53,8 +62,24 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint
         pass_keypad.setPadClickedListener(
                 object : PassCodeEntryKeypad.OnPinEntryPadClickedListener {
                     override fun onPassCodeEntered(passCode: String) {
-                        setResult(Constants.RESULT_OK)
-                        finish()
+                        showProgressBar(true)
+                        AccessState.getInstance().validatePin(passCode).subscribe({ password ->
+                            AccessState.getInstance().removePinFails()
+                            showProgressBar(false)
+                            val data = Intent()
+                            data.putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
+                            setResult(Constants.RESULT_OK, data)
+                            finish()
+                        }, { err ->
+                            if (err !is IncorrectPinException) {
+                                Log.e(javaClass.simpleName, "Failed to validate pin", err)
+                            } else {
+                                AccessState.getInstance().incrementPinFails()
+                                checkPinFails()
+                            }
+                            showProgressBar(false)
+                            finish()
+                        })
                     }
 
                     override fun onFingerprintClicked() {
@@ -68,13 +93,24 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint
                 })
     }
 
+    private fun checkPinFails() {
+        val fails = AccessState.getInstance().pinFails
+        if (fails >= PinEntryViewModel.MAX_ATTEMPTS) { // todo check const
+            ToastCustom.makeText(this@EnterPasscodeActivity,
+                    getString(R.string.pin_4_strikes),
+                    ToastCustom.LENGTH_SHORT,
+                    ToastCustom.TYPE_ERROR)
+            // todo showRequestPasswordDialog()
+        }
+    }
+
     override fun onSucceed() {
         mFingerprintDialog.onSuccessRecognizedFingerprint()
-        runDelayed(1500, {
+        runDelayed(1500) {
             mFingerprintDialog.dismiss()
             setResult(Constants.RESULT_OK)
             finish()
-        })
+        }
     }
 
     override fun onBackPressed() {

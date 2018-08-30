@@ -10,8 +10,12 @@ import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.data.access.AccessState
+import com.wavesplatform.wallet.v1.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.setMargins
@@ -37,9 +41,6 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
         val originPhrase = intent?.getSerializableExtra(BackupPhraseActivity.PHRASE_LIST) as Array<*>
 
         presenter.getRandomPhrasePositions(originPhrase.toList() as ArrayList<String>)
-
-        // todo remove, for testing
-        launchActivity<CreatePasscodeActivity>(options = intent.extras)
     }
 
     override fun showRandomPhraseList(listRandomPhrase: ArrayList<String>) {
@@ -89,7 +90,14 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
                 if (phraseText.trim() == presenter.originPhraseString) {
                     button_confirm.visiable()
                     button_confirm.click {
-                        launchActivity<CreatePasscodeActivity>(options = intent.extras)
+                        if (intent.hasExtra(ProfileFragment.KEY_INTENT_SET_BACKUP)) {
+                            AccessState.getInstance().setCurrentAccountBackupCompleted()
+                            launchActivity<MainActivity> { }
+                        } else {
+                            launchActivity<CreatePasscodeActivity>(options = intent.extras) {
+                                putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, false)
+                            }
+                        }
                     }
                 } else {
                     text_error.visiable()

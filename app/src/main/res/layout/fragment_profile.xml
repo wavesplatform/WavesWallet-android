@@ -169,6 +169,7 @@
                 android:orientation="horizontal">
 
                 <View
+                    android:id="@+id/skip_backup_indicator"
                     android:layout_width="5dp"
                     android:layout_height="match_parent"
                     android:background="@color/error500" />
@@ -187,6 +188,7 @@
                         android:textSize="16sp" />
 
                     <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/skip_backup_indicator_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"

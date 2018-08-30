@@ -6,6 +6,7 @@ import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.backup_info.BackupInfoActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -36,7 +37,9 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
         }
 
         button_do_it_later.click {
-            launchActivity<CreatePasscodeActivity> {  }
+            launchActivity<CreatePasscodeActivity>(options = intent.extras) {
+                putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, true)
+            }
         }
     }
 

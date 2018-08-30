@@ -74,7 +74,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onItemClicked(item: AddressBookUser) {
-        launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE) { }
+        launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE)
     }
 
     override fun onEditClicked(position: Int) {
@@ -123,7 +123,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
             }
             REQUEST_ENTER_PASSCODE -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    launchActivity<MainActivity>(clear = true) { }
+                    launchActivity<MainActivity>(clear = true)
                 }
             }
         }

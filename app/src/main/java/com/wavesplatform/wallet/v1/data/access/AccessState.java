@@ -143,7 +143,7 @@ public class AccessState {
         });
     }
 
-    public String storeWavesWallet(String seed, String password, String walletName) {
+    public String storeWavesWallet(String seed, String password, String walletName, boolean skipBackup) {
         try {
             WavesWallet newWallet = new WavesWallet(seed.getBytes(Charsets.UTF_8));
             String walletGuid = UUID.randomUUID().toString();
@@ -153,6 +153,10 @@ public class AccessState {
             prefs.setValue(PrefsUtil.KEY_PUB_KEY, newWallet.getPublicKeyStr());
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName);
             prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, newWallet.getEncryptedData(password));
+
+            if (skipBackup) {
+                prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, true);
+            }
 
             setTemporary(newWallet);
 
@@ -191,6 +195,14 @@ public class AccessState {
             String searchWalletGuid = findGuidBy(address);
             prefs.setGlobalValue(searchWalletGuid + PrefsUtil.KEY_WALLET_NAME, name);
         }
+    }
+
+    public String getCurrentWavesWalletEncryptedData() {
+        String guid = prefs.getGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, "");
+        if (TextUtils.isEmpty(guid)) {
+            return "";
+        }
+        return prefs.getGlobalValue(guid + PrefsUtil.KEY_ENCRYPTED_WALLET, "");
     }
 
     public AddressBookUser getCurrentWavesWallet() {
@@ -277,5 +289,26 @@ public class AccessState {
 
     public void removeWavesWallet() {
         wavesWallet = null;
+    }
+
+    public void removePinFails() {
+        prefs.removeValue(PrefsUtil.KEY_PIN_FAILS);
+    }
+
+    public void incrementPinFails() {
+        int fails = prefs.getValue(PrefsUtil.KEY_PIN_FAILS, 0);
+        prefs.setValue(PrefsUtil.KEY_PIN_FAILS, ++fails);
+    }
+
+    public int getPinFails() {
+        return prefs.getValue(PrefsUtil.KEY_PIN_FAILS, 0);
+    }
+
+    public void setCurrentAccountBackupCompleted() {
+        prefs.removeValue(PrefsUtil.KEY_SKIP_BACKUP);
+    }
+
+    public boolean isCurrentAccountBackupSkipped() {
+        return prefs.getValue(PrefsUtil.KEY_SKIP_BACKUP, false);
     }
 }

@@ -1,11 +1,15 @@
 package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
+import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
+import com.wavesplatform.wallet.v1.util.AppUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -49,12 +53,45 @@ class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
                             launchActivity<UseFingerprintActivity> { }
                         } else {
                             if (intent.extras != null) {
-                                AccessState.getInstance().storeWavesWallet(
+                                showProgressBar(true)
+
+                                val skipBackup = intent.extras!!.getBoolean(
+                                        NewAccountActivity.KEY_INTENT_SKIP_BACKUP)
+
+                                val password = intent.extras!!.getString(
+                                        NewAccountActivity.KEY_INTENT_PASSWORD)
+                                val walletGuid = AccessState.getInstance().storeWavesWallet(
                                         intent.extras!!.getString(NewAccountActivity.KEY_INTENT_SEED),
-                                        intent.extras!!.getString(NewAccountActivity.KEY_INTENT_PASSWORD),
-                                        intent.extras!!.getString(NewAccountActivity.KEY_INTENT_ACCOUNT))
+                                        password,
+                                        intent.extras!!.getString(NewAccountActivity.KEY_INTENT_ACCOUNT),
+                                        skipBackup)
+
+                                AccessState.getInstance().createPin(walletGuid, password, passCode)
+                                        .subscribe({
+                                            showProgressBar(false)
+                                            /*mDataListener.dismissProgressDialog()
+                                            mFingerprintHelper.clearEncryptedData(PrefsUtil.KEY_ENCRYPTED_PIN_CODE)
+                                            mFingerprintHelper.setFingerprintUnlockEnabled(false)
+                                            mPrefsUtil.removeValue(PrefsUtil.KEY_PIN_FAILS)
+                                            if (mValidatingPinForResult) {
+                                                mDataListener.finishWithResultOk(mPassword.toString())
+                                            } else {
+                                                mAppUtil.restartAppWithVerifiedPin()
+                                            }*/
+                                            launchActivity<MainActivity>(clear = true) { }
+                                        }, { throwable ->
+                                            /*
+                                            mAppUtil.restartApp()*/
+                                            showProgressBar(false)
+                                            ToastCustom.makeText(this@CreatePasscodeActivity,
+                                                    getString(R.string.create_pin_failed),
+                                                    ToastCustom.LENGTH_SHORT,
+                                                    ToastCustom.TYPE_ERROR)
+                                            AccessState.getInstance().deleteCurrentWavesWallet()
+                                            finish()
+                                            Log.e("CreatePasscodeActivity_TAG", throwable.message)
+                                        })
                             }
-                            launchActivity<MainActivity>(clear = true) { }
                         }
                     } else {
                         pass_keypad.passCodesNotMatches()
@@ -79,9 +116,7 @@ class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
         presenter.step = CreatePassCodeStep.VERIFY
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.setNavigationOnClickListener({
-            moveToCreateStep()
-        })
+        toolbar.setNavigationOnClickListener { moveToCreateStep() }
     }
 
     enum class CreatePassCodeStep(step: Int) {

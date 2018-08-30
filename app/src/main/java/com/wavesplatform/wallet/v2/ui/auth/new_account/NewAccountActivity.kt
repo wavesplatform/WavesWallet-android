@@ -36,6 +36,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         const val KEY_INTENT_ACCOUNT = "intent_account"
         const val KEY_INTENT_PASSWORD = "intent_password"
         const val KEY_INTENT_SEED = "intent_seed"
+        const val KEY_INTENT_SKIP_BACKUP = "intent_skip_backup"
     }
 
     override fun afterSuccessGenerateAvatar(seed: String, bitmap: Bitmap, imageView: AppCompatImageView) {

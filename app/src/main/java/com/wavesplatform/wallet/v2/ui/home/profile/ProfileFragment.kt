@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.profile
 
-import android.content.DialogInterface
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -21,7 +21,6 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
-import pers.victor.ext.finish
 import pers.victor.ext.toast
 import javax.inject.Inject
 
@@ -42,6 +41,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
         fun newInstance(): ProfileFragment {
             return ProfileFragment()
         }
+
+        const val KEY_INTENT_SET_BACKUP = "intent_set_backup"
     }
 
     override fun configLayoutRes(): Int = R.layout.fragment_profile
@@ -55,7 +56,9 @@ class ProfileFragment : BaseFragment(), ProfileView {
             launchActivity<AddressesAndKeysActivity> {  }
         }
         card_backup_phrase.click {
-            launchActivity<BackupPhraseActivity> {  }
+            launchActivity<BackupPhraseActivity> {
+                putExtra(KEY_INTENT_SET_BACKUP, true)
+            }
         }
 
         card_language.click {
@@ -83,6 +86,19 @@ class ProfileFragment : BaseFragment(), ProfileView {
             }
             alertDialog.show()
             alertDialog.makeStyled()
+        }
+
+
+        if (AccessState.getInstance().isCurrentAccountBackupSkipped) {
+            skip_backup_indicator.setBackgroundColor(ContextCompat
+                    .getColor(context!!, R.color.error500))
+            skip_backup_indicator_image.setImageDrawable(ContextCompat
+                    .getDrawable(context!!, R.drawable.ic_info_error_500))
+        } else {
+            skip_backup_indicator.setBackgroundColor(ContextCompat
+                    .getColor(context!!, R.color.success400))
+            skip_backup_indicator_image.setImageDrawable(ContextCompat
+                    .getDrawable(context!!, R.drawable.ic_check_18_success_400))
         }
     }
 
