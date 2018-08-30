@@ -1,7 +1,10 @@
 package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import android.os.Bundle
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
+import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -10,11 +13,15 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItemAdapter
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
-import kotlinx.android.synthetic.main.fragment_history_date.*
+import kotlinx.android.synthetic.main.fragment_history_tab.*
+import kotlinx.android.synthetic.main.view_load_more.view.*
+import pers.victor.ext.dp2px
 import pers.victor.ext.gone
+import pers.victor.ext.inflate
 import pers.victor.ext.visiable
+import pyxis.uzuki.live.richutilskt.utils.runAsync
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 
 class HistoryTabFragment : BaseFragment(), HistoryTabView {
@@ -28,8 +35,10 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
     @Inject
     lateinit var adapter: HistoryItemAdapter
+    lateinit var layoutManager: LinearLayoutManager
 
-    override fun configLayoutRes(): Int = R.layout.fragment_history_date
+
+    override fun configLayoutRes(): Int = R.layout.fragment_history_tab
 
     companion object {
 
@@ -57,11 +66,43 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        recycle_history.layoutManager = LinearLayoutManager(baseActivity)
+        layoutManager = LinearLayoutManager(baseActivity)
+        recycle_history.layoutManager = layoutManager
         recycle_history.adapter = adapter
         recycle_history.isNestedScrollingEnabled = false
 
-        presenter.loadBundle(arguments?.getString("type"))
+        presenter.type = arguments?.getString("type")
+
+        runAsync {
+            presenter.loadTransactions()
+        }
+
+        if (adapter.footerLayout != null) {
+            if (adapter.footerLayout.parent != null) {
+                (adapter.footerLayout.parent as ViewGroup).removeView(adapter.footerLayout)
+            }
+        }
+        adapter.addFooterView(getLoadingView())
+
+        nested_scroll_view.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (v.getChildAt(v.childCount - 1) != null) {
+                if (scrollY >= v.getChildAt(v.childCount - 1).measuredHeight - v.measuredHeight - dp2px(50) && scrollY > oldScrollY) {
+                    if (presenter.needLoadMore) {
+                        if (layoutManager.childCount + layoutManager.findFirstVisibleItemPosition() >= layoutManager.itemCount) {
+                            if (presenter.loadMoreCompleted) {
+                                presenter.loadMoreCompleted = false
+                                adapter.footerLayout.load_more_loading_view.visiable()
+                                runAsync({
+                                    presenter.loadMore(adapter.data.size)
+                                })
+                            }
+                        }
+                    } else {
+                        adapter.loadMoreEnd()
+                    }
+                }
+            }
+        })
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val historyItem = adapter.getItem(position) as HistoryItem
@@ -83,7 +124,23 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         }
     }
 
+    private fun getLoadingView(): View? {
+        return inflate(R.layout.view_load_more, null, false)
+    }
+
+    override fun goneLoadMoreView() {
+        adapter.footerLayout.load_more_loading_view.gone()
+    }
+
     override fun showData(data: ArrayList<HistoryItem>, type: String?) {
-        adapter.setNewData(data)
+        // stop over scroll
+        nested_scroll_view.fling(0)
+
+        runDelayed(350, {
+            adapter.addData(data)
+            adapter.footerLayout.load_more_loading_view.gone()
+            presenter.loadMoreCompleted = true
+        })
+
     }
 }

@@ -663,6 +663,7 @@
     <string name="common_k_quantity">%sk</string>
     <string name="common_kk_quantity">%skk</string>
     <string name="common_kkk_quantity">%skkk</string>
+    <string name="common_load_more_status">Loading…</string>
 
     <!-- Language-->
     <string name="choose_language_russia">Русский</string>
