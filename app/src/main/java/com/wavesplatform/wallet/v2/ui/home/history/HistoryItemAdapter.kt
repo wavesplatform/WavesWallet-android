@@ -3,16 +3,12 @@ package com.wavesplatform.wallet.v2.ui.home.history
 import com.chad.library.adapter.base.BaseSectionQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.color.t
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
-import com.wavesplatform.wallet.v2.data.model.remote.response.Order
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.recycle_item_history.view.*
-import java.math.BigInteger
 import java.util.*
 import javax.inject.Inject
 

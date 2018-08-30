@@ -5,7 +5,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.buy.TradeBuyFr
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades.TradeLastTradesFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
-import com.wavesplatform.wallet.v2.ui.home.history.item.HistoryDateItemFragment
+import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.bank.BankFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card.CardFragment
@@ -53,7 +53,7 @@ abstract class FragmentModule {
 
     @PerFragment
     @ContributesAndroidInjector
-    internal abstract fun historyDateItemFragment(): HistoryDateItemFragment
+    internal abstract fun historyDateItemFragment(): HistoryTabFragment
 
     @PerFragment
     @ContributesAndroidInjector

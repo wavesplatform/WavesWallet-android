@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.isAppOnForeground
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
@@ -21,9 +22,11 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 class NodeDataManager @Inject constructor() : DataManager() {
-
+    @Inject
+    lateinit var transactionUtil: TransactionUtil
     var transactions: List<Transaction> = ArrayList()
     var pendingTransactions: List<Transaction> = ArrayList()
+    var currentLoadTransactionLimitPerRequest = 100
 
 //    fun loadAssetsFromDBAndNetwork(): Observable<List<AssetBalance>> {
 //        return Observable.mergeDelayError(queryAllAsFlowable<AssetBalance>().toObservable(), nodeService.assetsBalance(getAddress())
@@ -122,12 +125,12 @@ class NodeDataManager @Inject constructor() : DataManager() {
         return nodeService.createAlias(createAliasRequest)
     }
 
-    fun loadTransactions(limit: Int): Observable<Pair<List<Transaction>?, List<Transaction>?>> {
+    fun loadTransactions(): Observable<Pair<List<Transaction>?, List<Transaction>?>> {
         return Observable.interval(0, 15, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap({
                     if (app.isAppOnForeground()) {
-                        return@flatMap Observable.zip(nodeService.transactionList(getAddress(), 100).map({ r -> r[0] }),
+                        return@flatMap Observable.zip(nodeService.transactionList(getAddress(), currentLoadTransactionLimitPerRequest).map({ r -> r[0] }),
                                 nodeService.unconfirmedTransactions(), BiFunction<List<Transaction>, List<Transaction>, Pair<List<Transaction>, List<Transaction>>> { t1, t2 ->
                             return@BiFunction Pair(t1, t2)
                         })
@@ -147,6 +150,18 @@ class NodeDataManager @Inject constructor() : DataManager() {
                 .map({
                     preferencesHelper.currentBlocksHeight = it.height
                     return@map it
+                })
+    }
+
+    fun activeLeasing(): Observable<List<Transaction>> {
+        return nodeService.activeLeasing(getAddress())
+                .map({
+                    val activeTransactionList = it.filter {
+                        it.asset = Constants.defaultAssets[0]
+                        it.transactionTypeId = transactionUtil.getTransactionType(it)
+                        it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
+                    }
+                    return@map activeTransactionList
                 })
     }
 

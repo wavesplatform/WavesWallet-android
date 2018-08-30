@@ -186,7 +186,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 val textLeasingToAddress = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_leasing_to_address)
                 val imageAddressAction = startLeaseView?.findViewById<AppCompatImageView>(R.id.image_address_action)
 
-                textLeasingToAddress?.text = transaction.lease?.recipient
+                textLeasingToAddress?.text = transaction.recipient
 
                 resolveExistOrNoAddress(textLeasingToName, textLeasingToAddress, imageAddressAction)
 

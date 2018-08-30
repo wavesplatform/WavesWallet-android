@@ -1,97 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="2dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/asset_item_radius"
+    app:cardElevation="2dp">
 
-    <android.support.v7.widget.CardView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="2dp"
-        android:foreground="?attr/selectableItemBackground"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="@dimen/asset_item_radius"
-        app:cardElevation="2dp">
+        android:paddingBottom="10dp"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:paddingTop="10dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_transaction"
+            android:layout_width="@dimen/asset_icon_size"
+            android:layout_height="@dimen/asset_icon_size"
+            android:layout_centerVertical="true"
+            app:srcCompat="@drawable/ic_startlease" />
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_transaction_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="14dp"
-            android:paddingRight="14dp"
-            android:paddingTop="10dp">
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_transaction"
-                android:layout_width="@dimen/asset_icon_size"
-                android:layout_height="@dimen/asset_icon_size"
-                android:layout_centerVertical="true"
-                app:srcCompat="@drawable/ic_startlease" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:layout_toRightOf="@+id/image_transaction"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_transaction_name"
-                    android:layout_width="wrap_content"
-                    android:textSize="12sp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="Started Leasing"
-                    android:textColor="@color/disabled500" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_transaction_name"
-                    android:layout_marginTop="4dp"
-                    android:orientation="horizontal">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_transaction_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="1.99800118"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/image_transaction"
+            android:text="Started Leasing"
+            android:textColor="@color/disabled500"
+            android:textSize="12sp" />
 
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_tag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="4dp"
-                        android:background="@drawable/asset_price_border"
-                        android:paddingEnd="4dp"
-                        android:paddingStart="4dp"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        android:visibility="gone"
-                        android:text="WAVES"
-                        android:textColor="@color/info500"
-                        android:textSize="12sp" />
-                </LinearLayout>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_transaction_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_transaction_name"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_toEndOf="@+id/image_transaction"
+            android:text="1.99800118"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    app:srcCompat="@drawable/icon_info_basic_300" />
-            </RelativeLayout>
-        </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
-</RelativeLayout>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/text_transaction_value"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="4dp"
+            android:layout_toEndOf="@+id/text_transaction_value"
+            android:background="@drawable/asset_price_border"
+            android:paddingBottom="2dp"
+            android:paddingEnd="4dp"
+            android:paddingStart="4dp"
+            android:paddingTop="2dp"
+            android:text="WAVES"
+            android:textColor="@color/info500"
+            android:textSize="12sp"
+            android:visibility="visible" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            app:srcCompat="@drawable/icon_info_basic_300" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

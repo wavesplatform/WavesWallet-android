@@ -60,4 +60,5 @@
         android:visibility="gone"
         android:id="@+id/layout_empty"
         layout="@layout/layout_empty_data"/>
+
 </android.support.design.widget.CoordinatorLayout>

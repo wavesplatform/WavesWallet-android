@@ -35,10 +35,6 @@ class HistoryFragment : BaseFragment(), HistoryView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupUI()
-
-        runAsync {
-            presenter.loadTransactions()
-        }
     }
 
     private fun setupUI() {

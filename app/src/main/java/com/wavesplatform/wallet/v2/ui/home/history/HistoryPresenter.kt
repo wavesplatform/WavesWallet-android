@@ -8,7 +8,4 @@ import javax.inject.Inject
 
 @InjectViewState
 class HistoryPresenter @Inject constructor() : BasePresenter<HistoryView>() {
-    fun loadTransactions() {
-
-    }
 }

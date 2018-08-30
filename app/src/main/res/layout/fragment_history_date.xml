@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:overScrollMode="never">
 
-    <android.support.v4.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_history"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:descendantFocusability="blocksDescendants"
-            android:orientation="vertical">
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="18dp" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_history"
-                android:layout_width="match_parent"
-                android:paddingBottom="18dp"
-                android:clipToPadding="false"
-                android:layout_height="match_parent"
-                android:overScrollMode="never" />
+    </LinearLayout>
 
-        </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
 
-    </android.support.v4.widget.NestedScrollView>
-</FrameLayout>

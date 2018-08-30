@@ -3,18 +3,21 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
-import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.adapter.AdapterActiveLeasing
+import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.history.LeasingHistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeTextHalfBold
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_leasing.*
 import pers.victor.ext.click
-import java.util.*
+import pers.victor.ext.goneIf
 import javax.inject.Inject
 
 class LeasingFragment : BaseFragment(), LeasingView {
@@ -27,7 +30,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
     fun providePresenter(): LeasingPresenter = presenter
 
     @Inject
-    lateinit var adapter: AdapterActiveLeasing
+    lateinit var adapterActiveAdapter: LeasingActiveAdapter
 
     companion object {
 
@@ -43,8 +46,14 @@ class LeasingFragment : BaseFragment(), LeasingView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
 
+        presenter.getActiveLeasing()
+
+        card_view_history.click {
+            launchActivity<LeasingHistoryActivity> { }
+        }
+
         button_continue.click {
-            launchActivity<StartLeasingActivity> {  }
+            launchActivity<StartLeasingActivity> { }
         }
 
         container_quick_note.click {
@@ -80,30 +89,28 @@ class LeasingFragment : BaseFragment(), LeasingView {
         }
 
         recycle_active_leasing.layoutManager = LinearLayoutManager(baseActivity)
-        recycle_active_leasing.adapter = adapter
+        recycle_active_leasing.adapter = adapterActiveAdapter
         recycle_active_leasing.isNestedScrollingEnabled = false
-
-
-        adapter.setNewData(arrayListOf(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()),
-                TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble())))
-
-        text_active_leasing.text = getString(R.string.wallet_leasing_active_now, adapter.data.size.toString())
-
-        view_line_1.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-        view_line_2.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-        view_line_3.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-        view_line_4.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-        view_line_5.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         val item = menu.findItem(R.id.action_sorting)
         item.isVisible = false
+    }
+
+    override fun showBalances(wavesAsset: AssetBalance, leasedValue: Long, availableValue: Long?) {
+        text_available_balance.text = MoneyUtil.getScaledText(availableValue, wavesAsset)
+        text_available_balance.makeTextHalfBold()
+        text_leased.text = MoneyUtil.getScaledText(leasedValue, wavesAsset)
+        text_total.text = wavesAsset.getDisplayBalance()
+        wavesAsset.balance.notNull {
+            progress_of_leasing.progress = ((leasedValue * 100) / it).toInt()
+        }
+    }
+
+    override fun showActiveLeasingTransaction(transactions: List<Transaction>) {
+        linear_active_leasing.goneIf { transactions.isEmpty() }
+        adapterActiveAdapter.setNewData(transactions)
+        text_active_leasing.text = getString(R.string.wallet_leasing_active_now, transactions.size.toString())
     }
 }

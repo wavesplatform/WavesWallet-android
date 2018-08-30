@@ -120,12 +120,6 @@ open class Transaction(
     val decimals: Int
         get() = 8
 
-    val direction: Int
-        get() = if (sender == NodeManager.get().address) {
-            SENT
-        } else {
-            RECEIVED
-        }
 
     val assetName: String
         get() = "WAVES"
@@ -145,10 +139,6 @@ open class Transaction(
         return ArrayUtils.EMPTY_BYTE_ARRAY
     }
 
-    companion object {
-        val RECEIVED = 1
-        val SENT = 2
-    }
 }
 
 @RealmClass

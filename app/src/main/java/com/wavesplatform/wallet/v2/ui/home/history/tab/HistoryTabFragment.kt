@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.home.history.item
+package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -11,18 +11,20 @@ import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItemAdapter
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import kotlinx.android.synthetic.main.fragment_history_date.*
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 
-class HistoryDateItemFragment : BaseFragment(), HistoryDateItemView {
+class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
     @Inject
     @InjectPresenter
-    lateinit var presenter: HistoryDateItemPresenter
+    lateinit var presenter: HistoryTabPresenter
 
     @ProvidePresenter
-    fun providePresenter(): HistoryDateItemPresenter = presenter
+    fun providePresenter(): HistoryTabPresenter = presenter
 
     @Inject
     lateinit var adapter: HistoryItemAdapter
@@ -38,11 +40,15 @@ class HistoryDateItemFragment : BaseFragment(), HistoryDateItemView {
         const val leased = "Leased"
         const val issued = "Issued"
 
+        const val leasing_all = "Leasing All"
+        const val leasing_active_now = "Active now"
+        const val leasing_canceled = "Canceled"
+
         /**
-         * @return HistoryDateItemFragment instance
+         * @return HistoryTabFragment instance
          * */
-        fun newInstance(type: String): HistoryDateItemFragment {
-            val historyDateItemFragment = HistoryDateItemFragment()
+        fun newInstance(type: String): HistoryTabFragment {
+            val historyDateItemFragment = HistoryTabFragment()
             val bundle = Bundle()
             bundle.putString("type", type)
             historyDateItemFragment.arguments = bundle
