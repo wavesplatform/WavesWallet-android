@@ -1,0 +1,111 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/basic50"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="44dp"
+        app:srcCompat="@drawable/ic_userimg_pairing_80" />
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_scan"
+        android:layout_width="match_parent"
+        android:background="@drawable/shape_btn_white_default"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:layout_height="48dp"
+        android:textSize="12sp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/import_account_scan_pairing_code" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="44dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="1."
+            android:textColor="@color/basic500" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_first_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/text_one"
+            android:text="@string/import_account_login_at_site"
+            android:textColor="@color/basic500"
+            android:textSize="14sp" />
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_first_title"
+            android:layout_marginTop="14dp"
+            android:text="2."
+            android:textColor="@color/basic500" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_second_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_first_title"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="14dp"
+            android:layout_toEndOf="@+id/text_two"
+            android:text="@string/import_account_click_show_pairing"
+            android:textColor="@color/basic500" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_second_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_second_title"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_toEndOf="@+id/text_two"
+            android:text="@string/import_account_settings_gt_security_gt_pairing_code"
+            android:textColor="@color/basic500" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_three"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_second_description"
+            android:layout_marginTop="14dp"
+            android:text="3."
+            android:textColor="@color/basic500" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_third_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_second_description"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="14dp"
+            android:layout_toEndOf="@+id/text_three"
+            android:text="@string/import_account_click_show_pairing"
+            android:textColor="@color/basic500" />
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -12,6 +12,7 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -114,7 +115,7 @@ class SendActivity : BaseActivity(), SendView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            ImportAccountActivity.REQUEST_SCAN_QR_CODE -> {
+            ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
 
                 if (result.contents == null) {

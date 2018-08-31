@@ -1,0 +1,93 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/basic50"
+    android:layout_height="match_parent">
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="18dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="2dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp"
+            android:descendantFocusability="beforeDescendants"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:paddingEnd="14dp"
+            android:paddingStart="14dp"
+            android:paddingTop="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/til_seed"
+                android:orientation="horizontal">
+
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_asset"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center_horizontal"
+                    app:srcCompat="@drawable/asset_gray_icon" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="14dp"
+                    android:background="@drawable/skeleton_text_basic_100" />
+
+            </LinearLayout>
+
+
+            <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
+                android:id="@+id/til_seed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="52dp"
+                android:textColorHint="@color/basic500"
+                app:errorEnabled="true"
+                app:hintTextAppearance="@style/TextLabel"
+                app:passwordToggleDrawable="@drawable/show_password_selector"
+                app:passwordToggleEnabled="true">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/edit_seed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/accent50"
+                    android:hint="@string/enter_seed_manually_hint"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine|textLongMessage"
+                    android:maxLines="5"
+                    android:paddingBottom="20dp"
+                    android:textColorHint="@color/basic500" />
+            </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
+
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/button_continue"
+                style="@style/WavesButton"
+                android:layout_width="match_parent"
+                android:layout_marginTop="34dp"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="@string/enter_seed_manually_continue" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
