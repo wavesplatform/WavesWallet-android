@@ -12,6 +12,8 @@ interface PersistentPrefs {
     String KEY_SKIP_BACKUP = "skip_backup";
     String KEY_ENCRYPTED_PASSWORD = "encrypted_password";
     String KEY_PIN_FAILS = "pin_fails";
+    String KEY_USE_FINGERPRINT = "use_fingerprint";
+    String KEY_ENCRYPTED_PIN = "encrypted_pin";
 
     String KEY_AB_NAMES = "address_book_names";
     String KEY_AB_ADDRESSES = "address_book_addresses";

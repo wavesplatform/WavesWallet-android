@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.*
+import android.widget.CompoundButton
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -86,6 +87,11 @@ class ProfileFragment : BaseFragment(), ProfileView {
             }
             alertDialog.show()
             alertDialog.makeStyled()
+        }
+
+        fingerprint_switch.isChecked = AccessState.getInstance().isUseFingerPrint
+        fingerprint_switch.setOnCheckedChangeListener { _, isChecked->
+            AccessState.getInstance().isUseFingerPrint = isChecked
         }
 
 

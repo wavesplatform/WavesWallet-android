@@ -299,6 +299,7 @@
                     android:textSize="16sp" />
 
                 <Switch
+                    android:id="@+id/fingerprint_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right" />

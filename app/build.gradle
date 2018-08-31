@@ -311,6 +311,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.android:flexbox:1.0.0'
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+
+    // fingerprint decryption
+    implementation 'com.mtramin:rxfingerprint:2.2.1'
 }
 
 buildscript {

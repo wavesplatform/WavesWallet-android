@@ -67,7 +67,8 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFinge
         }
 
         mFingerprintIdentify = FingerprintIdentify(this)
-        mFingerprintDialog = FingerprintAuthenticationDialogFragment()
+        val mFingerprintDialog = FingerprintAuthenticationDialogFragment
+                .newInstance(FingerprintAuthenticationDialogFragment.DECRYPT)
         mFingerprintDialog.setFingerPrintDialogListener(object : FingerprintAuthenticationDialogFragment.FingerPrintDialogListener{
             override fun onPinCodeButtonClicked(dialog: Dialog, button: AppCompatTextView) {
                 super.onPinCodeButtonClicked(dialog, button)

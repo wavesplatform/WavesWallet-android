@@ -311,4 +311,20 @@ public class AccessState {
     public boolean isCurrentAccountBackupSkipped() {
         return prefs.getValue(PrefsUtil.KEY_SKIP_BACKUP, false);
     }
+
+    public void setUseFingerPrint(boolean use) {
+        prefs.setValue(PrefsUtil.KEY_USE_FINGERPRINT, use);
+    }
+
+    public boolean isUseFingerPrint() {
+        return prefs.getValue(PrefsUtil.KEY_USE_FINGERPRINT, false);
+    }
+
+    public void setEcryptedPin(String data) {
+        prefs.setValue(PrefsUtil.KEY_ENCRYPTED_PIN, data);
+    }
+
+    public String getEcryptedPin() {
+        return prefs.getValue(PrefsUtil.KEY_ENCRYPTED_PIN, "");
+    }
 }

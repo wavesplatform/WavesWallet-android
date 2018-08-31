@@ -166,7 +166,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         //presenter.generateAvatars(linear_images.children as List<AppCompatImageView>)
         presenter.generateSeeds(this, linear_images.children as List<AppCompatImageView>)
 
-        edit_account_name.text = SpannableStringBuilder("ebta")
+        edit_account_name.text = SpannableStringBuilder("eshkere")
         edit_create_password.text = SpannableStringBuilder("12345678")
         edit_confirm_password.text = SpannableStringBuilder("12345678")
 

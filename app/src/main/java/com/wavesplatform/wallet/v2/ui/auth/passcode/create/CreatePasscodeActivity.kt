@@ -5,9 +5,11 @@ import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.mtramin.rxfingerprint.RxFingerprint
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
+import com.wavesplatform.wallet.v1.ui.fingerprint.FingerprintHelper
 import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
@@ -21,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_create_passcode.*
 import javax.inject.Inject
 
 
-class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
+open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
 
     companion object {
         const val KEY_PASS_CODE = "pass_code"
@@ -53,29 +55,41 @@ class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
                     moveToVerifyStep()
                 } else if (presenter.step == CreatePassCodeStep.VERIFY) {
                     if (presenter.passCode == passCode) {
-                        if (fingerprintIdentify.isFingerprintEnable) {
-                            launchActivity<UseFingerprintActivity>(intent.extras) {
-                                putExtra(KEY_PASS_CODE, passCode)
-                            }
-                        } else {
-                            if (intent.extras != null) {
-                                showProgressBar(true)
+                        trySaveAccount(passCode)
+                    } else {
+                        pass_keypad.passCodesNotMatches()
+                    }
+                }
+            }
+        })
+    }
 
-                                val skipBackup = intent.extras!!.getBoolean(
-                                        NewAccountActivity.KEY_INTENT_SKIP_BACKUP)
+    fun trySaveAccount(passCode: String) {
+        if (intent.extras == null) {
+            ToastCustom.makeText(this@CreatePasscodeActivity,
+                    getString(R.string.create_pin_failed),
+                    ToastCustom.LENGTH_SHORT,
+                    ToastCustom.TYPE_ERROR)
+            return
+        }
 
-                                val password = intent.extras!!.getString(
-                                        NewAccountActivity.KEY_INTENT_PASSWORD)
-                                val walletGuid = AccessState.getInstance().storeWavesWallet(
-                                        intent.extras!!.getString(NewAccountActivity.KEY_INTENT_SEED),
-                                        password,
-                                        intent.extras!!.getString(NewAccountActivity.KEY_INTENT_ACCOUNT),
-                                        skipBackup)
+        showProgressBar(true)
 
-                                AccessState.getInstance().createPin(walletGuid, password, passCode)
-                                        .subscribe({
-                                            showProgressBar(false)
-                                            /*mDataListener.dismissProgressDialog()
+        val skipBackup = intent.extras!!.getBoolean(
+                NewAccountActivity.KEY_INTENT_SKIP_BACKUP)
+
+        val password = intent.extras!!.getString(
+                NewAccountActivity.KEY_INTENT_PASSWORD)
+        val walletGuid = AccessState.getInstance().storeWavesWallet(
+                intent.extras!!.getString(NewAccountActivity.KEY_INTENT_SEED),
+                password,
+                intent.extras!!.getString(NewAccountActivity.KEY_INTENT_ACCOUNT),
+                skipBackup)
+
+        AccessState.getInstance().createPin(walletGuid, password, passCode)
+                .subscribe( {
+                    showProgressBar(false)
+                    /*mDataListener.dismissProgressDialog()
                                             mFingerprintHelper.clearEncryptedData(PrefsUtil.KEY_ENCRYPTED_PIN_CODE)
                                             mFingerprintHelper.setFingerprintUnlockEnabled(false)
                                             mPrefsUtil.removeValue(PrefsUtil.KEY_PIN_FAILS)
@@ -84,27 +98,25 @@ class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
                                             } else {
                                                 mAppUtil.restartAppWithVerifiedPin()
                                             }*/
-                                            launchActivity<MainActivity>(clear = true) { }
-                                        }, { throwable ->
-                                            /*
-                                            mAppUtil.restartApp()*/
-                                            showProgressBar(false)
-                                            ToastCustom.makeText(this@CreatePasscodeActivity,
-                                                    getString(R.string.create_pin_failed),
-                                                    ToastCustom.LENGTH_SHORT,
-                                                    ToastCustom.TYPE_ERROR)
-                                            AccessState.getInstance().deleteCurrentWavesWallet()
-                                            finish()
-                                            Log.e("CreatePasscodeActivity_TAG", throwable.message)
-                                        })
-                            }
+
+                    if (RxFingerprint.isAvailable(this)) {
+                        launchActivity<UseFingerprintActivity>(intent.extras) {
+                            putExtra(KEY_PASS_CODE, passCode)
                         }
                     } else {
-                        pass_keypad.passCodesNotMatches()
+                        launchActivity<MainActivity>(clear = true) { }
                     }
-                }
-            }
-        })
+                }, { throwable ->
+                    // AppUtil.restartApp()
+                    showProgressBar(false)
+                    ToastCustom.makeText(this@CreatePasscodeActivity,
+                            getString(R.string.create_pin_failed),
+                            ToastCustom.LENGTH_SHORT,
+                            ToastCustom.TYPE_ERROR)
+                    AccessState.getInstance().deleteCurrentWavesWallet()
+                    finish()
+                    Log.e("CreatePasscodeActivity_TAG", throwable.message)
+                })
     }
 
     private fun moveToCreateStep() {
