@@ -41,12 +41,15 @@ public class AESUtil {
 
     // AES 256 PBKDF2 CBC iso10126 decryption
     // 16 byte IV must be prepended to ciphertext - Compatible with crypto-js
-    public static String decrypt(String ciphertext, String password, int iterations) throws UnsupportedEncodingException, InvalidCipherTextException, DecryptionException {
+    public static String decrypt(String ciphertext, String password, int iterations)
+            throws UnsupportedEncodingException, InvalidCipherTextException, DecryptionException {
 
         return decryptWithSetMode(ciphertext, password, iterations, MODE_CBC, new ISO10126d2Padding());
     }
 
-    public static String decryptWithSetMode(String ciphertext, String password, int iterations, int mode, BlockCipherPadding padding) throws InvalidCipherTextException, UnsupportedEncodingException, DecryptionException {
+    public static String decryptWithSetMode(String ciphertext, String password, int iterations,
+                                            int mode, BlockCipherPadding padding)
+            throws InvalidCipherTextException, UnsupportedEncodingException, DecryptionException {
 
         byte[] cipherdata = Base64.decodeBase64(ciphertext.getBytes());
 
@@ -55,7 +58,8 @@ public class AESUtil {
         byte[] input = copyOfRange(cipherdata, AESBlockSize * 4, cipherdata.length);
 
         PBEParametersGenerator generator = new PKCS5S2ParametersGenerator();
-        generator.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(password.toCharArray()), iv, iterations);
+        generator.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(
+                password.toCharArray()), iv, iterations);
         KeyParameter keyParam = (KeyParameter) generator.generateDerivedParameters(256);
 
         CipherParameters params = new ParametersWithIV(keyParam, iv);
@@ -103,7 +107,8 @@ public class AESUtil {
         return encryptWithSetMode(cleartext, password, iterations, MODE_CBC, new ISO10126d2Padding());
     }
 
-    public static String encryptWithSetMode(String cleartext, String password, int iterations, int mode, BlockCipherPadding padding) throws Exception {
+    private static String encryptWithSetMode(String cleartext, String password, int iterations,
+                                             int mode, BlockCipherPadding padding) throws Exception {
 
         if (password == null) {
             throw  new Exception("Password null");
@@ -117,7 +122,8 @@ public class AESUtil {
         byte[] clearbytes = cleartext.getBytes("UTF-8");
 
         PBEParametersGenerator generator = new PKCS5S2ParametersGenerator();
-        generator.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(password.toString().toCharArray()), iv, iterations);
+        generator.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(
+                password.toCharArray()), iv, iterations);
         KeyParameter keyParam = (KeyParameter) generator.generateDerivedParameters(256);
 
         CipherParameters params = new ParametersWithIV(keyParam, iv);
@@ -190,9 +196,9 @@ public class AESUtil {
      * @param key AES key (256 bit Buffer)
      * @param data e.g. "{'aaa':'bbb'}"
      * @return
-     * @throws InvalidCipherTextException
+     * @throws UnsupportedEncodingException
      */
-    public static byte[] encryptWithKey(byte[] key, String data) throws InvalidCipherTextException, UnsupportedEncodingException {
+    public static byte[] encryptWithKey(byte[] key, String data) throws UnsupportedEncodingException {
 
         byte[] iv = getSalt();
         byte[] dataBytes = data.getBytes("utf-8");
@@ -225,7 +231,8 @@ public class AESUtil {
      * @throws InvalidCipherTextException
      * @throws UnsupportedEncodingException
      */
-    public static String decryptWithKey(byte[] key, String ciphertext) throws InvalidCipherTextException, UnsupportedEncodingException {
+    public static String decryptWithKey(byte[] key, String ciphertext)
+            throws InvalidCipherTextException, UnsupportedEncodingException {
 
         byte[] dataBytesB64 = Base64.decodeBase64(ciphertext.getBytes("utf-8"));
 
@@ -258,7 +265,8 @@ public class AESUtil {
         byte[] salt = new String("salt").getBytes("utf-8");
 
         PBEParametersGenerator generator = new PKCS5S2ParametersGenerator();
-        generator.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(string.toString().toCharArray()), salt, iterations);
+        generator.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(
+                string.toCharArray()), salt, iterations);
         KeyParameter keyParam = (KeyParameter) generator.generateDerivedParameters(KEY_BIT_LEN);
 
         return  keyParam.getKey();
