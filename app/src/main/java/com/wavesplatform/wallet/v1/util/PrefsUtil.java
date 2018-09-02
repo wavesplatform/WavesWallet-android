@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext;
@@ -12,7 +13,37 @@ import org.apache.commons.lang3.*;
 
 import javax.inject.Inject;
 
-public class PrefsUtil implements PersistentPrefs {
+public class PrefsUtil {
+
+    public static final String GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment";
+    public static final String GLOBAL_LOGGED_IN_GUID = "global_logged_in_wallet_guid";
+    public static final String GLOBAL_SCHEME_URL = "scheme_url";
+    public static final String LIST_WALLET_GUIDS = "list_wallet_guid";
+
+    public static final String KEY_WALLET_NAME = "wallet_name";
+    public static final String KEY_PUB_KEY = "wallet_public_key";
+    public static final String KEY_ENCRYPTED_WALLET = "encrypted_wallet";
+    public static final String KEY_SKIP_BACKUP = "skip_backup";
+    public static final String KEY_ENCRYPTED_PASSWORD = "encrypted_password";
+    public static final String KEY_PIN_FAILS = "pin_fails";
+    public static final String KEY_USE_FINGERPRINT = "use_fingerprint";
+    public static final String KEY_ENCRYPTED_PIN = "encrypted_pin";
+
+    public static final String KEY_AB_NAMES = "address_book_names";
+    public static final String KEY_AB_ADDRESSES = "address_book_addresses";
+
+    public static final String KEY_DISABLE_ROOT_WARNING = "disable_root_warning";
+    public static final String KEY_BACKUP_DATE_KEY = "backup_date_key";
+    public static final String KEY_LAST_BACKUP_PROMPT = "last_backup_prompt";
+    public static final String KEY_SECURITY_BACKUP_NEVER = "security_backup_never";
+    public static final String KEY_ENCRYPTED_PIN_CODE = "encrypted_pin_code";
+
+    public static final String KEY_FINGERPRINT_ENABLED = "fingerprint_enabled";
+    public static final String KEY_SHARED_KEY = "sharedKey";
+    public static final String KEY_NEWLY_CREATED_WALLET = "newly_created_wallet";
+    public static final String LOGGED_OUT = "logged_out";
+    public static final String KEY_RECEIVE_SHORTCUTS_ENABLED = "receive_shortcuts_enabled";
+    public static final String KEY_DONT_ASK_AGAIN_ORDER = "dont_ask_again_order";
 
     private SharedPreferences preferenceManager;
 
@@ -34,7 +65,7 @@ public class PrefsUtil implements PersistentPrefs {
     }
 
     private String getValueInternal(String name, String value) {
-        return preferenceManager.getString(name, (value == null || value.isEmpty()) ? "" : value);
+        return preferenceManager.getString(name, TextUtils.isEmpty(value) ? "" : value);
     }
 
     public void setGlobalValue(String name, String value) {

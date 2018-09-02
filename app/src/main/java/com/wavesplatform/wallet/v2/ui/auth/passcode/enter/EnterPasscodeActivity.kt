@@ -2,40 +2,36 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.enter
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
+import android.support.v7.widget.AppCompatEditText
+import android.text.InputType
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.mtramin.rxfingerprint.EncryptionMethod
 import com.mtramin.rxfingerprint.RxFingerprint
-import com.mtramin.rxfingerprint.data.FingerprintResult
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.IncorrectPinException
-import com.wavesplatform.wallet.v1.ui.auth.PinEntryViewModel
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
+import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthenticationDialogFragment
+import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
-import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
-import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint
 import kotlinx.android.synthetic.main.activity_enter_passcode.*
 import pers.victor.ext.click
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
 
-class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint.FingerprintIdentifyListener {
+class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
     @Inject
     @InjectPresenter
     lateinit var presenter: EnterPasscodePresenter
-    private lateinit var mFingerprintDialog: FingerprintAuthenticationDialogFragment
+    private lateinit var fingerprintDialog: FingerprintAuthDialogFragment
 
     @ProvidePresenter
     fun providePresenter(): EnterPasscodePresenter = presenter
@@ -74,17 +70,15 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint
                     }
                 })
 
-        mFingerprintDialog = FingerprintAuthenticationDialogFragment
-                .newInstance(FingerprintAuthenticationDialogFragment.DECRYPT)
-        mFingerprintDialog.setFingerPrintDialogListener(object : FingerprintAuthenticationDialogFragment.FingerPrintDialogListener {
-            override fun onSuccessRecognizedFingerprint(decrypted: String) {
-                super.onSuccessRecognizedFingerprint(decrypted)
-                validate(decrypted)
-            }
-        })
-
         if (RxFingerprint.isAvailable(this)
                 && AccessState.getInstance().isUseFingerPrint) {
+            fingerprintDialog = FingerprintAuthDialogFragment.newInstance()
+            fingerprintDialog.setFingerPrintDialogListener(
+                    object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
+                        override fun onSuccessRecognizedFingerprint(decrypted: String) {
+                            validate(decrypted)
+                        }
+                    })
             showFingerPrint()
         }
     }
@@ -111,27 +105,18 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint
     }
 
     private fun showFingerPrint() {
-        mFingerprintDialog.isCancelable = false;
-        mFingerprintDialog.show(fragmentManager, "fingerprintDialog")
+        fingerprintDialog.isCancelable = false;
+        fingerprintDialog.show(fragmentManager, "fingerprintDialog")
     }
 
     private fun checkPinFails() {
         val fails = AccessState.getInstance().pinFails
-        if (fails >= PinEntryViewModel.MAX_ATTEMPTS) { // todo check const
+        if (fails >= MAX_AVAILABLE_TIMES) {
             ToastCustom.makeText(this@EnterPasscodeActivity,
                     getString(R.string.pin_4_strikes),
                     ToastCustom.LENGTH_SHORT,
                     ToastCustom.TYPE_ERROR)
-            // todo showRequestPasswordDialog()
-        }
-    }
-
-    override fun onSucceed() {
-        mFingerprintDialog.onSuccessRecognizedFingerprint()
-        runDelayed(1500) {
-            mFingerprintDialog.dismiss()
-            setResult(Constants.RESULT_OK)
-            finish()
+            showRequestPasswordDialog()
         }
     }
 
@@ -140,15 +125,29 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView, BaseFingerprint
         finish()
     }
 
-    override fun onFailed(isDeviceLocked: Boolean) {
-        if (isDeviceLocked) mFingerprintDialog.onFingerprintLocked()
-    }
+    private fun showRequestPasswordDialog() {
+        val password = AppCompatEditText(this)
+        password.inputType = InputType.TYPE_CLASS_TEXT or
+                InputType.TYPE_TEXT_VARIATION_PASSWORD or
+                InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+        password.hint = getString(R.string.password_entry)
 
-    override fun onNotMatch(availableTimes: Int) {
-        mFingerprintDialog.onFingerprintDoNotMatchTryAgain()
-    }
+        AlertDialog.Builder(this, R.style.AlertDialogStyle)
+                .setTitle(R.string.app_name)
+                .setMessage(getString(R.string.pin_4_strikes))
+                .setView(ViewUtils.getAlertDialogEditTextLayout(this, password))
+                .setCancelable(false)
+                .setNegativeButton(android.R.string.cancel) { _, _ ->
+                    // todo viewModel.getAppUtil().restartApp()
+                }
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    val passCode = password.text.toString()
+                    if (passCode.isNotEmpty()) {
+                        validate(passCode)
+                    } else {
+                        password.error = getString(R.string.invalid_password_too_short)
+                    }
 
-    override fun onStartFailedByDeviceLocked() {
-        mFingerprintDialog.onFingerprintLocked()
+                }.show()
     }
 }

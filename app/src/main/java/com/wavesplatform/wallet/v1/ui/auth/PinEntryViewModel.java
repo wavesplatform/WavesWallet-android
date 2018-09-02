@@ -41,7 +41,7 @@ public class PinEntryViewModel extends BaseViewModel {
     public static final String KEY_INTENT_CREATE_NEW_PIN = "intent_create_new_pin";
 
     private static final int PIN_LENGTH = 4;
-    public static final int MAX_ATTEMPTS = 4;
+    private static final int MAX_ATTEMPTS = 4;
 
     private DataListener mDataListener;
     @Inject protected AppUtil mAppUtil;

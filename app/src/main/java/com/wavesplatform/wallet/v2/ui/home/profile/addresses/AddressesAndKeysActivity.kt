@@ -12,7 +12,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity.Companion.REQUEST_ENTER_PASSCODE
-import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthenticationDialogFragment
+import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
@@ -21,21 +21,17 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
-import kotlinx.android.synthetic.main.spinner_item.view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
-class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFingerprint.FingerprintIdentifyListener  {
+class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView  {
 
     @Inject
     @InjectPresenter
     lateinit var andKeysPresenter: AddressesAndKeysPresenter
-
-    private lateinit var mFingerprintIdentify: FingerprintIdentify
-    private lateinit var mFingerprintDialog: FingerprintAuthenticationDialogFragment
 
     @ProvidePresenter
     fun providePresenter(): AddressesAndKeysPresenter = andKeysPresenter
@@ -66,22 +62,6 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFinge
             }
         }
 
-        mFingerprintIdentify = FingerprintIdentify(this)
-        val mFingerprintDialog = FingerprintAuthenticationDialogFragment
-                .newInstance(FingerprintAuthenticationDialogFragment.DECRYPT)
-        mFingerprintDialog.setFingerPrintDialogListener(object : FingerprintAuthenticationDialogFragment.FingerPrintDialogListener{
-            override fun onPinCodeButtonClicked(dialog: Dialog, button: AppCompatTextView) {
-                super.onPinCodeButtonClicked(dialog, button)
-                mFingerprintIdentify.cancelIdentify()
-                launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE) {  }
-            }
-
-            override fun onCancelButtonClicked(dialog: Dialog, button: AppCompatTextView) {
-                super.onCancelButtonClicked(dialog, button)
-                mFingerprintIdentify.cancelIdentify()
-            }
-        })
-
         image_address_copy.click{
             text_address.copyToClipboard(it)
         }
@@ -95,47 +75,8 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFinge
         }
 
         button_show.click {
-            if (mFingerprintIdentify.isFingerprintEnable){
-                mFingerprintDialog.isCancelable = false;
-                mFingerprintDialog.show(fragmentManager, "fingerprintDialog");
-
-                mFingerprintIdentify.startIdentify(EnterPasscodeActivity.MAX_AVAILABLE_TIMES, this@AddressesAndKeysActivity);
-            }else{
-                launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE) {  }
-            }
+            launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE) {  }
         }
-    }
-
-    override fun onSucceed() {
-        mFingerprintDialog.onSuccessRecognizedFingerprint()
-        runDelayed(1500) {
-            mFingerprintDialog.dismiss()
-            mFingerprintIdentify.cancelIdentify()
-            button_show.gone()
-            relative_private_key_block.visiable()
-        }
-    }
-
-    override fun onFailed(isDeviceLocked: Boolean) {
-        if (isDeviceLocked) mFingerprintDialog.onFingerprintLocked()
-    }
-
-    override fun onNotMatch(availableTimes: Int) {
-        mFingerprintDialog.onFingerprintDoNotMatchTryAgain()
-    }
-
-    override fun onStartFailedByDeviceLocked() {
-        mFingerprintDialog.onFingerprintLocked();
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mFingerprintIdentify.cancelIdentify()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mFingerprintIdentify.cancelIdentify()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

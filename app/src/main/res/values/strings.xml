@@ -532,6 +532,8 @@
     <string name="fingerprint_fatal_error_register_description">There have been too many failed attempts in the last 30 minutes. Please attempt setup again later.</string>
     <string name="fingerprint_fatal_error_authenticate_description">There have been too many failed attempts. Please log in using your PIN instead.</string>
     <string name="fingerprint_fatal_error_brief">Unexpected error</string>
+    <string name="fingerprint_fatal_error_key_invalidate">The keys you wanted to use are invalidated because secure lock screen has turned off or changed the fingerprints stored on the device. You have to re-encrypt the data to access it</string>
+
 
     <!-- LAUNCHER SHORTCUTS -->
     <string name="shortcut_receive_copy_short">Copy Address</string>

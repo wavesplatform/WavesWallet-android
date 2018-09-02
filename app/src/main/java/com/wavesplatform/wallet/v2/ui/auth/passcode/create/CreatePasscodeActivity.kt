@@ -89,16 +89,6 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
         AccessState.getInstance().createPin(walletGuid, password, passCode)
                 .subscribe( {
                     showProgressBar(false)
-                    /*mDataListener.dismissProgressDialog()
-                                            mFingerprintHelper.clearEncryptedData(PrefsUtil.KEY_ENCRYPTED_PIN_CODE)
-                                            mFingerprintHelper.setFingerprintUnlockEnabled(false)
-                                            mPrefsUtil.removeValue(PrefsUtil.KEY_PIN_FAILS)
-                                            if (mValidatingPinForResult) {
-                                                mDataListener.finishWithResultOk(mPassword.toString())
-                                            } else {
-                                                mAppUtil.restartAppWithVerifiedPin()
-                                            }*/
-
                     if (RxFingerprint.isAvailable(this)) {
                         launchActivity<UseFingerprintActivity>(intent.extras) {
                             putExtra(KEY_PASS_CODE, passCode)

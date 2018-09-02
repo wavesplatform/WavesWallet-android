@@ -320,11 +320,11 @@ public class AccessState {
         return prefs.getValue(PrefsUtil.KEY_USE_FINGERPRINT, false);
     }
 
-    public void setEcryptedPin(String data) {
-        prefs.setValue(PrefsUtil.KEY_ENCRYPTED_PIN, data);
+    public void setEncryptedPin(String data) {
+        prefs.setGlobalValue(PrefsUtil.KEY_ENCRYPTED_PIN, data);
     }
 
-    public String getEcryptedPin() {
-        return prefs.getValue(PrefsUtil.KEY_ENCRYPTED_PIN, "");
+    public String getEncryptedPin() {
+        return prefs.getGlobalValue(PrefsUtil.KEY_ENCRYPTED_PIN, "");
     }
 }
