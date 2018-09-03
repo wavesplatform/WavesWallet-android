@@ -26,4 +26,8 @@ public class PrivateKeyAccount {
     public String getPublicKeyStr() {
         return Base58.encode(getPublicKey());
     }
+
+    public String getPrivateKeyStr() {
+        return Base58.encode(getPrivateKey());
+    }
 }

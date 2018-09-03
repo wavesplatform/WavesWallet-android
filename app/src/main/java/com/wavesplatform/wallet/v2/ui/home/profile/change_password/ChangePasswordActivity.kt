@@ -30,7 +30,8 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.change_password_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
+                getString(R.string.change_password_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
@@ -42,7 +43,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                 .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
 
         edit_old_password.addTextChangedListener {
-            on({ s, start, before, count ->
+            on { s, start, before, count ->
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
@@ -55,10 +56,10 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                                 isFieldsValid()
                             }
                         }, oldPasswordValidation)
-            })
+            }
         }
         edit_new_password.addTextChangedListener {
-            on({ s, start, before, count ->
+            on { s, start, before, count ->
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
@@ -71,13 +72,14 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                                 isFieldsValid()
                             }
                         }, newPasswordValidation)
-            })
+            }
         }
 
         edit_confirm_password.addTextChangedListener {
-            on({ s, start, before, count ->
-                var confirmPasswordValidation = Validation(til_confirm_password)
-                        .and(EqualRule(edit_new_password.text.toString(), R.string.new_account_confirm_password_validation_match_error))
+            on { s, start, before, count ->
+                val confirmPasswordValidation = Validation(til_confirm_password)
+                        .and(EqualRule(edit_new_password.text.toString(),
+                                R.string.new_account_confirm_password_validation_match_error))
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
@@ -90,7 +92,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                                 isFieldsValid()
                             }
                         }, confirmPasswordValidation)
-            })
+            }
         }
 
     }

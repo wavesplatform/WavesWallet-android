@@ -57,6 +57,4 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
         menuInflater.inflate(R.menu.menu_close, menu)
         return super.onCreateOptionsMenu(menu)
     }
-
-
 }

@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.auth.passcode.enter
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -21,6 +22,7 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
+import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_enter_passcode.*
 import pers.victor.ext.click
@@ -138,7 +140,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
                 .setView(ViewUtils.getAlertDialogEditTextLayout(this, password))
                 .setCancelable(false)
                 .setNegativeButton(android.R.string.cancel) { _, _ ->
-                    // todo viewModel.getAppUtil().restartApp()
+                    restartApp(this)
                 }
                 .setPositiveButton(android.R.string.ok) { _, _ ->
                     val passCode = password.text.toString()
@@ -149,5 +151,11 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
                     }
 
                 }.show()
+    }
+
+    fun restartApp(context: Context) {
+        val intent = Intent(context, SplashActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
     }
 }

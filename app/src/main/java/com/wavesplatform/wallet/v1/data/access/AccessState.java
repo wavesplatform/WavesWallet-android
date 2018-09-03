@@ -84,7 +84,7 @@ public class AccessState {
 
     public Observable<String> validatePin(String pin) {
         return createValidateObservable(pin).flatMap(pwd ->
-                createPin(prefs.getGuid(), new String(pwd), pin).andThen(Observable.just(pwd))
+                createPin(prefs.getGuid(), pwd, pin).andThen(Observable.just(pwd))
         ).compose(RxUtil.applySchedulersToObservable());
     }
 
@@ -141,6 +141,10 @@ public class AccessState {
                 }
             }
         });
+    }
+
+    public void storePassword(String guid, String password) {
+        //prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, newWallet.getEncryptedData(password));
     }
 
     public String storeWavesWallet(String seed, String password, String walletName, boolean skipBackup) {
@@ -205,8 +209,12 @@ public class AccessState {
         return prefs.getGlobalValue(guid + PrefsUtil.KEY_ENCRYPTED_WALLET, "");
     }
 
+    public String getCurrentGuid() {
+        return prefs.getGuid();
+    }
+
     public AddressBookUser getCurrentWavesWallet() {
-        String guid = prefs.getGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, "");
+        String guid = getCurrentGuid();
         if (TextUtils.isEmpty(guid)) {
             return null;
         }

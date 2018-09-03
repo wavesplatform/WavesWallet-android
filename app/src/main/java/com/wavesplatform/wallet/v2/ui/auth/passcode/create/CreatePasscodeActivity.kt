@@ -9,9 +9,6 @@ import com.mtramin.rxfingerprint.RxFingerprint
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
-import com.wavesplatform.wallet.v1.ui.fingerprint.FingerprintHelper
-import com.wavesplatform.wallet.v1.util.AppUtil
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -27,6 +24,7 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
 
     companion object {
         const val KEY_PASS_CODE = "pass_code"
+        const val KEY_CHANGE_PASS_CODE = "change_pass_code"
     }
 
     @Inject
@@ -75,16 +73,21 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
 
         showProgressBar(true)
 
-        val skipBackup = intent.extras!!.getBoolean(
-                NewAccountActivity.KEY_INTENT_SKIP_BACKUP)
-
+        val walletGuid: String
         val password = intent.extras!!.getString(
                 NewAccountActivity.KEY_INTENT_PASSWORD)
-        val walletGuid = AccessState.getInstance().storeWavesWallet(
-                intent.extras!!.getString(NewAccountActivity.KEY_INTENT_SEED),
-                password,
-                intent.extras!!.getString(NewAccountActivity.KEY_INTENT_ACCOUNT),
-                skipBackup)
+        if (intent.hasExtra(CreatePasscodeActivity.KEY_CHANGE_PASS_CODE)) {
+            walletGuid = AccessState.getInstance().currentGuid
+            //AccessState.getInstance().storePassword(walletGuid, password)
+        } else {
+            val skipBackup = intent.extras!!.getBoolean(
+                    NewAccountActivity.KEY_INTENT_SKIP_BACKUP)
+            walletGuid = AccessState.getInstance().storeWavesWallet(
+                    intent.extras!!.getString(NewAccountActivity.KEY_INTENT_SEED),
+                    password,
+                    intent.extras!!.getString(NewAccountActivity.KEY_INTENT_ACCOUNT),
+                    skipBackup)
+        }
 
         AccessState.getInstance().createPin(walletGuid, password, passCode)
                 .subscribe( {
@@ -94,7 +97,7 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
                             putExtra(KEY_PASS_CODE, passCode)
                         }
                     } else {
-                        launchActivity<MainActivity>(clear = true) { }
+                        launchActivity<MainActivity>(clear = true)
                     }
                 }, { throwable ->
                     // AppUtil.restartApp()

@@ -1,30 +1,27 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
+import com.wavesplatform.wallet.v1.data.auth.WavesWallet
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity.Companion.REQUEST_ENTER_PASSCODE
-import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
-import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
 class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView  {
@@ -45,7 +42,6 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView  {
 
         text_address.text = user.address
         text_public_key.text = AccessState.getInstance().findPublicKeyBy(user.address)
-        text_private_key.text = "Приватный ключ"
 
 
         queryAllAsync<Alias> { aliases ->
@@ -83,8 +79,14 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView  {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_ENTER_PASSCODE -> {
-                button_show.gone()
-                relative_private_key_block.visiable()
+                if (resultCode == Constants.RESULT_OK) {
+                    button_show.gone()
+                    val password = data!!.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
+                    val wallet = WavesWallet(
+                            AccessState.getInstance().currentWavesWalletEncryptedData, password)
+                    text_private_key.text = (wallet.privateKeyStr)
+                    relative_private_key_block.visiable()
+                }
             }
         }
     }

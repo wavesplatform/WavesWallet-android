@@ -1,18 +1,27 @@
 package com.wavesplatform.wallet.v2.ui.home.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.*
-import android.widget.CompoundButton
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.mtramin.rxfingerprint.RxFingerprint
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
+import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.Language
+import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
@@ -20,6 +29,9 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
+import com.wavesplatform.wallet.v2.util.notNull
+import kotlinx.android.synthetic.main.activity_new_account.*
+import kotlinx.android.synthetic.main.activity_protect_account.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import pers.victor.ext.toast
@@ -68,6 +80,11 @@ class ProfileFragment : BaseFragment(), ProfileView {
         card_change_password.click {
             launchActivity<ChangePasswordActivity> {  }
         }
+
+        card_change_passcode.click {
+            launchActivity<EnterPasscodeActivity>(requestCode = ChooseAccountActivity.REQUEST_ENTER_PASSCODE)
+        }
+
         card_network.click {
             launchActivity<NetworkActivity> {  }
         }
@@ -89,9 +106,13 @@ class ProfileFragment : BaseFragment(), ProfileView {
             alertDialog.makeStyled()
         }
 
-        fingerprint_switch.isChecked = AccessState.getInstance().isUseFingerPrint
-        fingerprint_switch.setOnCheckedChangeListener { _, isChecked->
-            AccessState.getInstance().isUseFingerPrint = isChecked
+        if (RxFingerprint.isAvailable(context!!)) {
+            fingerprint_switch.isChecked = AccessState.getInstance().isUseFingerPrint
+            fingerprint_switch.setOnCheckedChangeListener { _, isChecked->
+                AccessState.getInstance().isUseFingerPrint = isChecked
+            }
+        } else {
+            card_fingerprint.visibility = View.GONE
         }
 
 
@@ -135,5 +156,31 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            ChooseAccountActivity.REQUEST_ENTER_PASSCODE -> {
+                if (resultCode == Constants.RESULT_OK) {
+
+                    val password = data!!.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
+                    val wallet = WavesWallet(
+                            AccessState.getInstance().currentWavesWalletEncryptedData, password)
+
+                    val options = Bundle()
+                    options.putString(NewAccountActivity.KEY_INTENT_SEED, wallet.seedStr)
+                    options.putString(NewAccountActivity.KEY_INTENT_ACCOUNT,
+                            AccessState.getInstance().currentWavesWallet.name)
+                    options.putString(NewAccountActivity.KEY_INTENT_PASSWORD, password)
+                    options.putBoolean(NewAccountActivity.KEY_INTENT_SKIP_BACKUP,
+                            AccessState.getInstance().isCurrentAccountBackupSkipped)
+
+                    launchActivity<CreatePasscodeActivity>(clear = true, options = options) {
+                        putExtra(CreatePasscodeActivity.KEY_CHANGE_PASS_CODE, true)
+                    }
+                }
+            }
+        }
     }
 }
