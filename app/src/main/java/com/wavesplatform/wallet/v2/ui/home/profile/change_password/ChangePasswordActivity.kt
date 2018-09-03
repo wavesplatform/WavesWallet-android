@@ -1,10 +1,14 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.change_password
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.string.password
+import com.wavesplatform.wallet.v1.data.access.AccessState
+import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -13,6 +17,8 @@ import io.github.anderscheow.validator.rules.common.EqualRule
 import io.github.anderscheow.validator.rules.common.MinRule
 import kotlinx.android.synthetic.main.activity_change_password.*
 import pers.victor.ext.addTextChangedListener
+import pers.victor.ext.click
+import pers.victor.ext.toast
 import javax.inject.Inject
 
 
@@ -92,6 +98,24 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                                 isFieldsValid()
                             }
                         }, confirmPasswordValidation)
+            }
+        }
+
+        button_confirm.click {
+            val guid = AccessState.getInstance().currentGuid
+            try {
+                val oldWallet = WavesWallet(
+                        AccessState.getInstance().currentWavesWalletEncryptedData,
+                        edit_old_password.text.toString()
+                )
+                val newWallet = WavesWallet(oldWallet.seed)
+                AccessState.getInstance().storePassword(
+                        guid, newWallet.publicKeyStr,
+                        newWallet.getEncryptedData(edit_confirm_password.text.toString()))
+                toast(getString(R.string.change_password_success))
+                finish()
+            } catch (e: Exception) {
+                toast(getString(R.string.change_password_error))
             }
         }
 

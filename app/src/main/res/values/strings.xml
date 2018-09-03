@@ -996,6 +996,8 @@
     <string name="change_password_new_password">New password</string>
     <string name="change_password_confirm_password">Confirm password</string>
     <string name="change_password_confirm">Confirm</string>
+    <string name="change_password_success">Change password successful</string>
+    <string name="change_password_error">Change password failed. Check old password</string>
 
     <!--Network-->
     <string name="network_toolbar_title">Network</string>

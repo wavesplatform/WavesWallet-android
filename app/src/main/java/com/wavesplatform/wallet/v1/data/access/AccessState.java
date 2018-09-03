@@ -143,8 +143,10 @@ public class AccessState {
         });
     }
 
-    public void storePassword(String guid, String password) {
-        //prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, newWallet.getEncryptedData(password));
+    public void storePassword(String guid, String publicKeyStr, String encryptedPassword) {
+        prefs.setGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, guid);
+        prefs.setValue(PrefsUtil.KEY_PUB_KEY, publicKeyStr);
+        prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, encryptedPassword);
     }
 
     public String storeWavesWallet(String seed, String password, String walletName, boolean skipBackup) {
@@ -192,6 +194,10 @@ public class AccessState {
         if (searchWalletGuid.equals(prefs.getGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, ""))) {
             prefs.removeGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID);
         }
+    }
+
+    public WavesWallet getWavesWallet() {
+        return wavesWallet;
     }
 
     public void saveWavesWalletNewName(String address, String name) {
