@@ -169,20 +169,13 @@ class ProfileFragment : BaseFragment(), ProfileView {
             REQUEST_ENTER_PASSCODE_FOR_CHANGE -> {
                 if (resultCode == Constants.RESULT_OK) {
 
-                    val password = data!!.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
-                    val wallet = WavesWallet(
-                            AccessState.getInstance().currentWavesWalletEncryptedData, password)
+                    val passCode = data!!.extras.getString(EnterPasscodeActivity.KEY_PASS_CODE)
+                    val password = data.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
 
-                    val options = Bundle()
-                    options.putString(NewAccountActivity.KEY_INTENT_SEED, wallet.seedStr)
-                    options.putString(NewAccountActivity.KEY_INTENT_ACCOUNT,
-                            AccessState.getInstance().currentWavesWallet.name)
-                    options.putString(NewAccountActivity.KEY_INTENT_PASSWORD, password)
-                    options.putBoolean(NewAccountActivity.KEY_INTENT_SKIP_BACKUP,
-                            AccessState.getInstance().isCurrentAccountBackupSkipped)
-
-                    launchActivity<CreatePasscodeActivity>(clear = true, options = options) {
+                    launchActivity<CreatePasscodeActivity>(clear = true) {
                         putExtra(CreatePasscodeActivity.KEY_CHANGE_PASS_CODE, true)
+                        putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
+                        putExtra(EnterPasscodeActivity.KEY_PASS_CODE, passCode)
                     }
                 }
             }

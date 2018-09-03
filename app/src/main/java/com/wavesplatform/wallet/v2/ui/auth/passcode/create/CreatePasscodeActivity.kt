@@ -30,7 +30,6 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
     @Inject
     @InjectPresenter
     lateinit var presenter: CreatePasscodePresenter
-    lateinit var fingerprintIdentify: FingerprintIdentify
 
     @ProvidePresenter
     fun providePresenter(): CreatePasscodePresenter = presenter
@@ -42,8 +41,6 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, false, icon = R.drawable.ic_toolbar_back_black)
 
         presenter.step = CreatePassCodeStep.CREATE
-
-        fingerprintIdentify = FingerprintIdentify(this)
 
         pass_keypad.attachDots(pdl_dots)
         pass_keypad.setPadClickedListener(object : PassCodeEntryKeypad.OnPinEntryPadClickedListener {
@@ -76,13 +73,12 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
         val walletGuid: String
         val password = intent.extras!!.getString(
                 NewAccountActivity.KEY_INTENT_PASSWORD)
-        if (intent.hasExtra(CreatePasscodeActivity.KEY_CHANGE_PASS_CODE)) {
-            walletGuid = AccessState.getInstance().currentGuid
-            //AccessState.getInstance().storePassword(walletGuid, password)
+        walletGuid = if (intent.hasExtra(CreatePasscodeActivity.KEY_CHANGE_PASS_CODE)) {
+            AccessState.getInstance().currentGuid
         } else {
             val skipBackup = intent.extras!!.getBoolean(
                     NewAccountActivity.KEY_INTENT_SKIP_BACKUP)
-            walletGuid = AccessState.getInstance().storeWavesWallet(
+            AccessState.getInstance().storeWavesWallet(
                     intent.extras!!.getString(NewAccountActivity.KEY_INTENT_SEED),
                     password,
                     intent.extras!!.getString(NewAccountActivity.KEY_INTENT_ACCOUNT),
