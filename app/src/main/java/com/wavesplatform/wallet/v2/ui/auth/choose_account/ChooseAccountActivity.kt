@@ -10,9 +10,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.AddressUtil
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
@@ -44,7 +41,6 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     companion object {
         var REQUEST_EDIT_ACCOUNT_NAME = 999
-        var REQUEST_ENTER_PASSCODE = 555
         var BUNDLE_ADDRESS_ITEM = "item"
         var BUNDLE_POSITION = "position"
     }
@@ -74,7 +70,12 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onItemClicked(item: AddressBookUser) {
-        launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE)
+        val guid = AccessState.getInstance().findGuidBy(item.address)
+        launchActivity<EnterPasscodeActivity>(requestCode = EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE) {
+            if (AccessState.getInstance().isGuidUseFingerPrint(guid)) {
+                putExtra(EnterPasscodeActivity.KEY_SHOW_FINGERPRINT, true)
+            }
+        }
     }
 
     override fun onEditClicked(position: Int) {
@@ -121,7 +122,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                     }
                 }
             }
-            REQUEST_ENTER_PASSCODE -> {
+            EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
                     launchActivity<MainActivity>(clear = true)
                 }

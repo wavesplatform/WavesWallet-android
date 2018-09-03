@@ -34,9 +34,7 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         button_use_fingerprint.click { _ ->
-            AccessState.getInstance().isUseFingerPrint = true
             val passCode = intent.extras.getString(CreatePasscodeActivity.KEY_PASS_CODE)
-
             val mFingerprintDialog = FingerprintAuthDialogFragment.newInstance(passCode)
 
             mFingerprintDialog.isCancelable = false
@@ -44,12 +42,14 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
             mFingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint() {
+                            AccessState.getInstance().isUseFingerPrint = true
                             launchActivity<MainActivity>(clear = true) { }
                         }
                     })
         }
 
         button_do_it_later.click {
+            AccessState.getInstance().isUseFingerPrint = false
             launchActivity<MainActivity>(clear = true) { }
         }
     }

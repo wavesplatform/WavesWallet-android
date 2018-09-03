@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatEditText
 import android.text.InputType
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -43,7 +44,9 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
 
     companion object {
         const val MAX_AVAILABLE_TIMES = 5
-        const val KEY_PIN_CODE = "pin_code"
+        const val KEY_PASS_CODE = "pass_code"
+        const val KEY_SHOW_FINGERPRINT = "show_fingerprint"
+        const val REQUEST_ENTER_PASS_CODE = 555
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -54,9 +57,13 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
             launchActivity<UseAccountPasswordActivity> {  }
         }
 
-        pass_keypad.isFingerprintAvailable(
-                RxFingerprint.isAvailable(this)
-                        && AccessState.getInstance().isUseFingerPrint)
+        val isShowFingerprint = intent.hasExtra(KEY_SHOW_FINGERPRINT)
+        val isLoggedIn = !TextUtils.isEmpty(AccessState.getInstance().currentGuid)
+        val useFingerprint = (RxFingerprint.isAvailable(this)
+                && ((isLoggedIn && AccessState.getInstance().isUseFingerPrint)
+                || isShowFingerprint))
+
+        pass_keypad.isFingerprintAvailable(useFingerprint)
 
         pass_keypad.attachDots(pdl_dots)
         pass_keypad.setPadClickedListener(
@@ -72,8 +79,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
                     }
                 })
 
-        if (RxFingerprint.isAvailable(this)
-                && AccessState.getInstance().isUseFingerPrint) {
+        if (useFingerprint) {
             fingerprintDialog = FingerprintAuthDialogFragment.newInstance()
             fingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
@@ -92,6 +98,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
             showProgressBar(false)
             val data = Intent()
             data.putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
+            data.putExtra(KEY_PASS_CODE, passCode)
             setResult(Constants.RESULT_OK, data)
             finish()
         }, { err ->

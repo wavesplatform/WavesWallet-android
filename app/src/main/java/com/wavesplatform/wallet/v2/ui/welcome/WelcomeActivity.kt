@@ -63,24 +63,24 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 //        }
 
         button_create_account.click {
-            animateWhiteBlock(it, {
+            animateWhiteBlock(it) {
                 launchActivity<NewAccountActivity>(REQUEST_NEW_ACCOUNT)
                 overridePendingTransition(0, 0)
-            })
+            }
         }
 
         relative_sign_in.click {
-            animateWhiteBlock(it,{
+            animateWhiteBlock(it) {
                 launchActivity<ChooseAccountActivity>(REQUEST_SIGN_IN)
                 overridePendingTransition(0, 0)
-            })
+            }
         }
 
         relative_import_acc.click {
-            animateWhiteBlock(it,{
+            animateWhiteBlock(it) {
                 launchActivity<ImportAccountActivity>(REQUEST_IMPORT_ACC)
                 overridePendingTransition(0, 0)
-            })
+            }
         }
 
         adapter.items = populateList()

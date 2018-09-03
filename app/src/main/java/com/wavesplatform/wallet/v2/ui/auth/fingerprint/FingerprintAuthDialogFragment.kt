@@ -120,7 +120,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         fingerprintDisposable = RxFingerprint.encrypt(
                 EncryptionMethod.RSA,
                 activity,
-                EnterPasscodeActivity.KEY_PIN_CODE, passCode)
+                EnterPasscodeActivity.KEY_PASS_CODE, passCode)
                 .subscribe(
                         { encryptionResult ->
                             when (encryptionResult?.result) {
@@ -140,7 +140,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
 
     private fun decrypt() {
         fingerprintDisposable = RxFingerprint.decrypt(EncryptionMethod.RSA, activity,
-                EnterPasscodeActivity.KEY_PIN_CODE, AccessState.getInstance().encryptedPin)
+                EnterPasscodeActivity.KEY_PASS_CODE, AccessState.getInstance().encryptedPin)
                 .subscribe(
                         { result ->
                             when (result?.result) {

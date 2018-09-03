@@ -119,7 +119,11 @@ public class PrefsUtil {
     }
 
     public boolean getValue(String name, boolean value) {
-        return getValueInternal(getGuid() + name, value);
+        return getGuidValue(getGuid(), name, value);
+    }
+
+    public boolean getGuidValue(String guid, String name, boolean value) {
+        return preferenceManager.getBoolean(guid + name, value);
     }
 
     private boolean getValueInternal(String name, boolean value) {

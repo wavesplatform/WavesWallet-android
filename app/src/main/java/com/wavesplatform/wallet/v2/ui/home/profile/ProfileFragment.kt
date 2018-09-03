@@ -14,14 +14,12 @@ import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.Language
-import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
@@ -29,9 +27,6 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.wallet.v2.util.notNull
-import kotlinx.android.synthetic.main.activity_new_account.*
-import kotlinx.android.synthetic.main.activity_protect_account.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import pers.victor.ext.toast
@@ -56,6 +51,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
 
         const val KEY_INTENT_SET_BACKUP = "intent_set_backup"
+        const val REQUEST_ENTER_PASSCODE_FOR_CHANGE = 5551
+        const val REQUEST_ENTER_PASSCODE_FOR_FINGERPRINT = 5552
     }
 
     override fun configLayoutRes(): Int = R.layout.fragment_profile
@@ -82,7 +79,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
 
         card_change_passcode.click {
-            launchActivity<EnterPasscodeActivity>(requestCode = ChooseAccountActivity.REQUEST_ENTER_PASSCODE)
+            launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE_FOR_CHANGE)
         }
 
         card_network.click {
@@ -92,11 +89,14 @@ class ProfileFragment : BaseFragment(), ProfileView {
             val alertDialog = AlertDialog.Builder(baseActivity).create()
             alertDialog.setTitle(getString(R.string.profile_general_delete_account_dialog_title))
             alertDialog.setMessage(getString(R.string.profile_general_delete_account_dialog_description))
-            alertDialog.setView(getWarningView())
+            if (AccessState.getInstance().isCurrentAccountBackupSkipped) {
+                alertDialog.setView(LayoutInflater.from(baseActivity)
+                        .inflate(R.layout.delete_account_warning_layout, null))
+            }
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->
                 dialog.dismiss()
                 AccessState.getInstance().deleteCurrentWavesWallet()
-                toast("Deleted")
+                toast(getString(R.string.profile_general_delete_account_dialog_deleted))
                 launchActivity<MainActivity> {  }
             }
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel)) { dialog, _ ->
@@ -109,7 +109,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
         if (RxFingerprint.isAvailable(context!!)) {
             fingerprint_switch.isChecked = AccessState.getInstance().isUseFingerPrint
             fingerprint_switch.setOnCheckedChangeListener { _, isChecked->
-                AccessState.getInstance().isUseFingerPrint = isChecked
+                launchActivity<EnterPasscodeActivity>(
+                        requestCode = REQUEST_ENTER_PASSCODE_FOR_FINGERPRINT)
             }
         } else {
             card_fingerprint.visibility = View.GONE
@@ -127,10 +128,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
             skip_backup_indicator_image.setImageDrawable(ContextCompat
                     .getDrawable(context!!, R.drawable.ic_check_18_success_400))
         }
-    }
-
-    private fun getWarningView(): View? {
-        return LayoutInflater.from(baseActivity).inflate(R.layout.delete_account_warning_layout, null)
     }
 
     override fun onResume() {
@@ -161,7 +158,15 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            ChooseAccountActivity.REQUEST_ENTER_PASSCODE -> {
+            REQUEST_ENTER_PASSCODE_FOR_FINGERPRINT -> {
+                if (resultCode == Constants.RESULT_OK) {
+                    val passCode = data!!.extras.getString(EnterPasscodeActivity.KEY_PASS_CODE)
+                    launchActivity<UseFingerprintActivity>(clear = true) {
+                        putExtra(CreatePasscodeActivity.KEY_PASS_CODE, passCode)
+                    }
+                }
+            }
+            REQUEST_ENTER_PASSCODE_FOR_CHANGE -> {
                 if (resultCode == Constants.RESULT_OK) {
 
                     val password = data!!.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)

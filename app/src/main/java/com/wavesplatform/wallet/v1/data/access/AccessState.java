@@ -202,7 +202,7 @@ public class AccessState {
     }
 
     public String getCurrentWavesWalletEncryptedData() {
-        String guid = prefs.getGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, "");
+        String guid = getCurrentGuid();
         if (TextUtils.isEmpty(guid)) {
             return "";
         }
@@ -256,7 +256,7 @@ public class AccessState {
         return resultGuidsList.toArray(new String[0]);
     }
 
-    private String findGuidBy(String address) {
+    public String findGuidBy(String address) {
         String[] guids = prefs.getGlobalValueList(
                 EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS);
         String resultGuid = "";
@@ -322,6 +322,10 @@ public class AccessState {
 
     public void setUseFingerPrint(boolean use) {
         prefs.setValue(PrefsUtil.KEY_USE_FINGERPRINT, use);
+    }
+
+    public boolean isGuidUseFingerPrint(String guid) {
+        return prefs.getGuidValue(guid, PrefsUtil.KEY_USE_FINGERPRINT, false);
     }
 
     public boolean isUseFingerPrint() {

@@ -47,9 +47,6 @@ class SplashActivity : BaseActivity(), SplashView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.storeIncomingURI(intent)
-
         presenter.resolveNextAction()
     }
-
-
 }
