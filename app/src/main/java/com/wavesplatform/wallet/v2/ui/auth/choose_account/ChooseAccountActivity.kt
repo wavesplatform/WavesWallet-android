@@ -75,6 +75,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
             if (AccessState.getInstance().isGuidUseFingerPrint(guid)) {
                 putExtra(EnterPasscodeActivity.KEY_SHOW_FINGERPRINT, true)
             }
+            putExtra(EnterPasscodeActivity.KEY_GUID, guid)
         }
     }
 

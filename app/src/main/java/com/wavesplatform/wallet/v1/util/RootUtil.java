@@ -1,22 +1,26 @@
 package com.wavesplatform.wallet.v1.util;
 
+import android.os.Build;
+
+import com.wavesplatform.wallet.BuildConfig;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 
 public class RootUtil {
 
-    public boolean isDeviceRooted() {
-        return buildTags() || checkPaths() || checkSu();
+    public static boolean isDeviceRooted() {
+        return !BuildConfig.DEBUG && (buildTags() || checkPaths() || checkSuperUser() || isEmulator());
+
     }
 
-    private boolean buildTags() {
+    private static boolean buildTags() {
         String buildTags = android.os.Build.TAGS;
         return buildTags != null && buildTags.contains("test-keys");
     }
 
-    private boolean checkPaths() {
-
+    private static boolean checkPaths() {
         String[] paths = {
                 "/data/local/su",
                 "/data/local/xbin/su",
@@ -34,20 +38,15 @@ public class RootUtil {
                 return true;
             }
         }
-
         return false;
     }
 
-    private boolean checkSu() {
-
+    private static boolean checkSuperUser() {
         Process process = null;
         try {
             process = Runtime.getRuntime().exec(new String[]{"/system/xbin/which", "su"});
             BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            if (in.readLine() != null) {
-                return true;
-            }
-            return false;
+            return in.readLine() != null;
         } catch (Throwable t) {
             return false;
         } finally {
@@ -58,4 +57,14 @@ public class RootUtil {
 
     }
 
+    private static boolean isEmulator() {
+        return Build.FINGERPRINT.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("unknown")
+                || Build.MODEL.contains("google_sdk")
+                || Build.MODEL.contains("Emulator")
+                || Build.MODEL.contains("Android SDK built for x86")
+                || Build.MANUFACTURER.contains("Genymotion")
+                || (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
+                || "google_sdk".equals(Build.PRODUCT);
+    }
 }

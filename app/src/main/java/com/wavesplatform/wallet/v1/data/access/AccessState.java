@@ -196,10 +196,6 @@ public class AccessState {
         }
     }
 
-    public WavesWallet getWavesWallet() {
-        return wavesWallet;
-    }
-
     public void saveWavesWalletNewName(String address, String name) {
         if (!TextUtils.isEmpty(address) && !TextUtils.isEmpty(name)) {
             String searchWalletGuid = findGuidBy(address);
@@ -208,11 +204,7 @@ public class AccessState {
     }
 
     public String getCurrentWavesWalletEncryptedData() {
-        String guid = getCurrentGuid();
-        if (TextUtils.isEmpty(guid)) {
-            return "";
-        }
-        return prefs.getGlobalValue(guid + PrefsUtil.KEY_ENCRYPTED_WALLET, "");
+        return getWalletData(getCurrentGuid());
     }
 
     public String getCurrentGuid() {
@@ -243,6 +235,13 @@ public class AccessState {
             deleteWavesWallet(currentUser.getAddress());
             return true;
         }
+    }
+
+    public String getWalletData(String guid) {
+        if (TextUtils.isEmpty(guid)) {
+            return "";
+        }
+        return prefs.getGlobalValue(guid + PrefsUtil.KEY_ENCRYPTED_WALLET, "");
     }
 
     public String findPublicKeyBy(String address) {

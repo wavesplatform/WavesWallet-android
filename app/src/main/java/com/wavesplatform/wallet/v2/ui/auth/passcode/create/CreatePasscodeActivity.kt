@@ -11,6 +11,7 @@ import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -25,6 +26,7 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
     companion object {
         const val KEY_PASS_CODE = "pass_code"
         const val KEY_CHANGE_PASS_CODE = "change_pass_code"
+        const val KEY_RECREATE_PASS_CODE = "recreate_pass_code"
     }
 
     @Inject
@@ -73,16 +75,20 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
         val walletGuid: String
         val password = intent.extras!!.getString(
                 NewAccountActivity.KEY_INTENT_PASSWORD)
-        walletGuid = if (intent.hasExtra(CreatePasscodeActivity.KEY_CHANGE_PASS_CODE)) {
-            AccessState.getInstance().currentGuid
-        } else {
-            val skipBackup = intent.extras!!.getBoolean(
-                    NewAccountActivity.KEY_INTENT_SKIP_BACKUP)
-            AccessState.getInstance().storeWavesWallet(
-                    intent.extras!!.getString(NewAccountActivity.KEY_INTENT_SEED),
-                    password,
-                    intent.extras!!.getString(NewAccountActivity.KEY_INTENT_ACCOUNT),
-                    skipBackup)
+        walletGuid = when {
+            intent.hasExtra(CreatePasscodeActivity.KEY_CHANGE_PASS_CODE) ->
+                AccessState.getInstance().currentGuid
+            intent.hasExtra(CreatePasscodeActivity.KEY_RECREATE_PASS_CODE) ->
+                intent.extras!!.getString(EnterPasscodeActivity.KEY_GUID)
+            else -> {
+                val skipBackup = intent.extras!!.getBoolean(
+                        NewAccountActivity.KEY_INTENT_SKIP_BACKUP)
+                AccessState.getInstance().storeWavesWallet(
+                        intent.extras!!.getString(NewAccountActivity.KEY_INTENT_SEED),
+                        password,
+                        intent.extras!!.getString(NewAccountActivity.KEY_INTENT_ACCOUNT),
+                        skipBackup)
+            }
         }
 
         AccessState.getInstance().createPin(walletGuid, password, passCode)

@@ -66,6 +66,7 @@
     <string name="confirm_pin">Confirm PIN</string>
     <string name="create_pin_failed">PIN creation failed. Please try again.</string>
     <string name="pairing_failed">Pairing failed. Please try again.</string>
+    <string name="enter_passcode_error_wrong_password">Wrong password</string>
 
     <string name="check_connectivity_exit">No connection to the Internet</string>
     <string name="dialog_continue">Continue</string>
@@ -533,7 +534,7 @@
     <string name="fingerprint_fatal_error_authenticate_description">There have been too many failed attempts. Please log in using your PIN instead.</string>
     <string name="fingerprint_fatal_error_brief">Unexpected error</string>
     <string name="fingerprint_fatal_error_key_invalidate">The keys you wanted to use are invalidated because secure lock screen has turned off or changed the fingerprints stored on the device. You have to re-encrypt the data to access it</string>
-
+    <string name="fingerprint_fatal_error_root">Rooted device, Fingerprint auth canceled!</string>
 
     <!-- LAUNCHER SHORTCUTS -->
     <string name="shortcut_receive_copy_short">Copy Address</string>

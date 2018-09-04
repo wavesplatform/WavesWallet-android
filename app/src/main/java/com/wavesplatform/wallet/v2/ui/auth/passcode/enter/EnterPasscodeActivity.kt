@@ -15,11 +15,14 @@ import com.mtramin.rxfingerprint.RxFingerprint
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.IncorrectPinException
+import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
+import com.wavesplatform.wallet.v1.util.RootUtil
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
@@ -27,6 +30,7 @@ import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_enter_passcode.*
 import pers.victor.ext.click
+import pers.victor.ext.toast
 import javax.inject.Inject
 
 
@@ -46,6 +50,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
         const val MAX_AVAILABLE_TIMES = 5
         const val KEY_PASS_CODE = "pass_code"
         const val KEY_SHOW_FINGERPRINT = "show_fingerprint"
+        const val KEY_GUID = "guid"
         const val REQUEST_ENTER_PASS_CODE = 555
     }
 
@@ -59,7 +64,8 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
 
         val isShowFingerprint = intent.hasExtra(KEY_SHOW_FINGERPRINT)
         val isLoggedIn = !TextUtils.isEmpty(AccessState.getInstance().currentGuid)
-        val useFingerprint = (RxFingerprint.isAvailable(this)
+        val useFingerprint = (!RootUtil.isDeviceRooted()
+                && RxFingerprint.isAvailable(this)
                 && ((isLoggedIn && AccessState.getInstance().isUseFingerPrint)
                 || isShowFingerprint))
 
@@ -83,8 +89,8 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
             fingerprintDialog = FingerprintAuthDialogFragment.newInstance()
             fingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
-                        override fun onSuccessRecognizedFingerprint(decrypted: String) {
-                            validate(decrypted)
+                        override fun onSuccessRecognizedFingerprint(passCode: String) {
+                            validate(passCode)
                         }
                     })
             showFingerPrint()
@@ -109,7 +115,6 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
                 checkPinFails()
             }
             showProgressBar(false)
-            finish()
         })
     }
 
@@ -150,13 +155,28 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
                     restartApp(this)
                 }
                 .setPositiveButton(android.R.string.ok) { _, _ ->
-                    val passCode = password.text.toString()
-                    if (passCode.isNotEmpty()) {
-                        validate(passCode)
-                    } else {
+                    val passwordStr = password.text.toString()
+                    if (passwordStr.isEmpty()) {
                         password.error = getString(R.string.invalid_password_too_short)
+                        return@setPositiveButton
                     }
 
+                    if (intent.hasExtra(KEY_GUID)) {
+                        val guid = intent.extras.getString(KEY_GUID)
+                        if (!TextUtils.isEmpty(guid)) {
+                            try {
+                                WavesWallet(AccessState.getInstance().getWalletData(guid), passwordStr)
+                                launchActivity<CreatePasscodeActivity>(clear = true) {
+                                    putExtra(CreatePasscodeActivity.KEY_RECREATE_PASS_CODE, true)
+                                    putExtra(KEY_GUID, guid)
+                                    putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, passwordStr)
+                                }
+                                AccessState.getInstance().removePinFails()
+                            } catch (e: Exception) {
+                                toast(getString(R.string.enter_passcode_error_wrong_password))
+                            }
+                        }
+                    }
                 }.show()
     }
 

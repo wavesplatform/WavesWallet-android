@@ -25,6 +25,7 @@ import com.mtramin.rxfingerprint.RxFingerprint
 import com.mtramin.rxfingerprint.data.FingerprintResult
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
+import com.wavesplatform.wallet.v1.util.RootUtil
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import io.reactivex.disposables.Disposables
 
@@ -92,6 +93,13 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     private fun createDisposable() {
+        if (RootUtil.isDeviceRooted()) {
+            val message = getString(R.string.fingerprint_fatal_error_root)
+            showErrorMessage(message,
+                    "Fingerprint auth Error rooted Device", Throwable(message))
+            return
+        }
+
         when (mode) {
             CRYPT -> authFingerprintDisposable = RxFingerprint.authenticate(activity)
                     .subscribe(
