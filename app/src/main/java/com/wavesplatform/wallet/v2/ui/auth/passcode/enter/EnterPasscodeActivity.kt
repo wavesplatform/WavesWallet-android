@@ -59,7 +59,14 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
                 icon = R.drawable.ic_toolbar_back_black)
 
         text_use_acc_password.click {
-            launchActivity<UseAccountPasswordActivity> {  }
+            val guid = getGuid()
+            if (TextUtils.isEmpty(guid)) {
+                restartApp(this)
+            } else {
+                launchActivity<UseAccountPasswordActivity> {
+                    putExtra(KEY_GUID, guid)
+                }
+            }
         }
 
         val isShowFingerprint = intent.hasExtra(KEY_SHOW_FINGERPRINT)
@@ -94,6 +101,16 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
                         }
                     })
             showFingerPrint()
+        }
+    }
+
+    private fun getGuid(): String? {
+        return if (intent.hasExtra(KEY_GUID)) {
+            intent.extras.getString(KEY_GUID)
+        } else if (!TextUtils.isEmpty(AccessState.getInstance().currentGuid)) {
+            AccessState.getInstance().currentGuid
+        } else {
+            ""
         }
     }
 
@@ -158,26 +175,33 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
                     val passwordStr = password.text.toString()
                     if (passwordStr.isEmpty()) {
                         password.error = getString(R.string.invalid_password_too_short)
-                        return@setPositiveButton
-                    }
-
-                    if (intent.hasExtra(KEY_GUID)) {
-                        val guid = intent.extras.getString(KEY_GUID)
-                        if (!TextUtils.isEmpty(guid)) {
-                            try {
-                                WavesWallet(AccessState.getInstance().getWalletData(guid), passwordStr)
-                                launchActivity<CreatePasscodeActivity>(clear = true) {
-                                    putExtra(CreatePasscodeActivity.KEY_RECREATE_PASS_CODE, true)
-                                    putExtra(KEY_GUID, guid)
-                                    putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, passwordStr)
-                                }
-                                AccessState.getInstance().removePinFails()
-                            } catch (e: Exception) {
-                                toast(getString(R.string.enter_passcode_error_wrong_password))
-                            }
-                        }
+                    } else {
+                        tryLaunchRecreatePassCode(passwordStr)
                     }
                 }.show()
+    }
+
+    private fun tryLaunchRecreatePassCode(passwordStr: String) {
+        val guid = getGuid()
+
+        if (TextUtils.isEmpty(guid)) {
+            restartApp(this)
+        } else {
+            if (!TextUtils.isEmpty(guid)) {
+                try {
+                    WavesWallet(AccessState.getInstance()
+                            .getWalletData(guid), passwordStr)
+                    launchActivity<CreatePasscodeActivity>(clear = true) {
+                        putExtra(CreatePasscodeActivity.KEY_RECREATE_PASS_CODE, true)
+                        putExtra(KEY_GUID, guid)
+                        putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, passwordStr)
+                    }
+                    AccessState.getInstance().removePinFails()
+                } catch (e: Exception) {
+                    toast(getString(R.string.enter_passcode_error_wrong_password))
+                }
+            }
+        }
     }
 
     fun restartApp(context: Context) {

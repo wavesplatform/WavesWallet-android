@@ -244,6 +244,21 @@ public class AccessState {
         return prefs.getGlobalValue(guid + PrefsUtil.KEY_ENCRYPTED_WALLET, "");
     }
 
+    public String getWalletName(String guid) {
+        if (TextUtils.isEmpty(guid)) {
+            return "";
+        }
+        return prefs.getGlobalValue(guid + PrefsUtil.KEY_WALLET_NAME, "");
+    }
+
+    public String getWalletAddress(String guid) {
+        if (TextUtils.isEmpty(guid)) {
+            return "";
+        }
+        String publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "");
+        return AddressUtil.addressFromPublicKey(publicKey);
+    }
+
     public String findPublicKeyBy(String address) {
         return prefs.getValue(findGuidBy(address), PrefsUtil.KEY_PUB_KEY, "");
     }
