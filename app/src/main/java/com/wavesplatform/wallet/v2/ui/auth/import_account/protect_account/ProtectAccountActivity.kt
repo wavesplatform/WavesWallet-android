@@ -55,7 +55,7 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
                 val seed = intent.extras.getString(BUNDLE_SEED)
                 val options = Bundle()
                 options.putString(NewAccountActivity.KEY_INTENT_SEED, seed)
-                options.putString(NewAccountActivity.KEY_INTENT_ACCOUNT,
+                options.putString(NewAccountActivity.KEY_INTENT_ACCOUNT_NAME,
                         edit_account_name.text.toString())
                 options.putString(NewAccountActivity.KEY_INTENT_PASSWORD,
                         edit_confirm_password.text.toString())

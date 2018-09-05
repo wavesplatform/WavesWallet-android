@@ -192,7 +192,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
                     WavesWallet(AccessState.getInstance()
                             .getWalletData(guid), passwordStr)
                     launchActivity<CreatePasscodeActivity>(clear = true) {
-                        putExtra(CreatePasscodeActivity.KEY_RECREATE_PASS_CODE, true)
+                        putExtra(CreatePasscodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE, true)
                         putExtra(KEY_GUID, guid)
                         putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, passwordStr)
                     }

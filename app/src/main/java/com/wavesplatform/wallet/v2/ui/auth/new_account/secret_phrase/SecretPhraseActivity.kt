@@ -27,13 +27,13 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
 
     override fun configLayoutRes() = R.layout.activity_secret_phrase
 
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view)
 
-
         button_confirm.click {
-            launchActivity<BackupInfoActivity>(options = intent.extras)
+            launchActivity<BackupInfoActivity>(options = intent.extras) {
+                putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, false)
+            }
         }
 
         button_do_it_later.click {
@@ -43,11 +43,12 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
         }
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_close -> {
-                launchActivity<CreatePasscodeActivity> {  }
+                launchActivity<CreatePasscodeActivity>(options = intent.extras) {
+                    putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, true)
+                }
             }
         }
         return super.onOptionsItemSelected(item)

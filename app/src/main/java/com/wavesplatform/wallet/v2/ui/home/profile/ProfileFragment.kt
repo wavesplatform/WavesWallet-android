@@ -161,7 +161,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 if (resultCode == Constants.RESULT_OK) {
                     val passCode = data!!.extras.getString(EnterPasscodeActivity.KEY_PASS_CODE)
                     launchActivity<UseFingerprintActivity>(clear = true) {
-                        putExtra(CreatePasscodeActivity.KEY_PASS_CODE, passCode)
+                        putExtra(CreatePasscodeActivity.KEY_INTENT_PASS_CODE, passCode)
                     }
                 }
             }
@@ -172,7 +172,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                     val password = data.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
 
                     launchActivity<CreatePasscodeActivity>(clear = true) {
-                        putExtra(CreatePasscodeActivity.KEY_CHANGE_PASS_CODE, true)
+                        putExtra(CreatePasscodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE, true)
                         putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
                         putExtra(EnterPasscodeActivity.KEY_PASS_CODE, passCode)
                     }

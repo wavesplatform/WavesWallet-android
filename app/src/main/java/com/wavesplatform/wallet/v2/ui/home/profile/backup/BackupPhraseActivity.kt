@@ -32,17 +32,13 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
     @ProvidePresenter
     fun providePresenter(): BackupPhrasePresenter = presenter
 
-    companion object {
-        const val PHRASE_LIST = "phrase_list"
-    }
-
     override fun configLayoutRes(): Int = R.layout.activity_backup_pharse
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
                 getString(R.string.backup_pharse), R.drawable.ic_toolbar_back_black)
 
-        if (intent.hasExtra(NewAccountActivity.KEY_INTENT_SEED)) {
+        if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
             setSeed(intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED))
         } else {
             launchActivity<EnterPasscodeActivity>(
@@ -64,7 +60,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
 
         button_written_down.click {
             launchActivity<ConfirmBackupPhraseActivity>(options = intent.extras) {
-                putExtra(PHRASE_LIST, phraseList.toTypedArray())
+                putExtra(KEY_INTENT_SEED_AS_ARRAY, phraseList.toTypedArray())
                 if (intent.hasExtra(ProfileFragment.KEY_INTENT_SET_BACKUP)) {
                     putExtra(ProfileFragment.KEY_INTENT_SET_BACKUP, true)
                 }
@@ -85,7 +81,6 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
         textView.setTextColor(findColor(R.color.black))
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
         textView.setPadding(dp2px(7f), dp2px(7f), dp2px(7f), dp2px(7f))
-
         return textView
     }
 
@@ -101,5 +96,9 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
                 }
             }
         }
+    }
+
+    companion object {
+        const val KEY_INTENT_SEED_AS_ARRAY = "intent_seed_as_array"
     }
 }

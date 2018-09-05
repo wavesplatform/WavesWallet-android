@@ -29,5 +29,4 @@ class BackupInfoActivity : BaseActivity(), BackupInfoView {
             launchActivity<BackupPhraseActivity>(options = intent.extras)
         }
     }
-
 }

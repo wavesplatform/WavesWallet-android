@@ -15,7 +15,6 @@ import com.wavesplatform.wallet.v1.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.setMargins
@@ -36,11 +35,11 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
     override fun configLayoutRes(): Int = R.layout.activity_confirm_backup_pharse
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.confirm_backup), R.drawable.ic_toolbar_back_black)
-
-        val originPhrase = intent?.getSerializableExtra(BackupPhraseActivity.PHRASE_LIST) as Array<*>
-
-        presenter.getRandomPhrasePositions(originPhrase.toList() as ArrayList<String>)
+        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
+                getString(R.string.confirm_backup), R.drawable.ic_toolbar_back_black)
+        val seedArray = intent?.getSerializableExtra(
+                BackupPhraseActivity.KEY_INTENT_SEED_AS_ARRAY) as Array<*>
+        presenter.getRandomPhrasePositions(seedArray.toList() as ArrayList<String>)
     }
 
     override fun showRandomPhraseList(listRandomPhrase: ArrayList<String>) {
@@ -90,13 +89,11 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
                 if (phraseText.trim() == presenter.originPhraseString) {
                     button_confirm.visiable()
                     button_confirm.click {
-                        if (intent.hasExtra(ProfileFragment.KEY_INTENT_SET_BACKUP)) {
+                        if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
+                            launchActivity<CreatePasscodeActivity>(options = intent.extras, clear = true)
+                        } else {
                             AccessState.getInstance().setCurrentAccountBackupCompleted()
                             launchActivity<MainActivity> { }
-                        } else {
-                            launchActivity<CreatePasscodeActivity>(options = intent.extras) {
-                                putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, false)
-                            }
                         }
                     }
                 } else {

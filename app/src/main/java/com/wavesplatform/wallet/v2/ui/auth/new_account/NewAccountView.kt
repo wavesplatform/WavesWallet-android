@@ -6,7 +6,5 @@ import android.widget.ImageView
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface NewAccountView : BaseMvpView {
-    fun afterSuccessGenerateAvatar(bitmap: Bitmap, imageView: AppCompatImageView)
     fun afterSuccessGenerateAvatar(seed: String, bitmap: Bitmap, imageView: AppCompatImageView)
-
 }

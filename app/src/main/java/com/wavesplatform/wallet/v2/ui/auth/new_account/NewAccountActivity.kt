@@ -11,7 +11,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.auth.WalletManager
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -26,37 +25,10 @@ import kotlinx.android.synthetic.main.activity_new_account.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.children
 import pers.victor.ext.click
-import pers.victor.ext.getBitmap
 import javax.inject.Inject
 
 
 class NewAccountActivity : BaseActivity(), NewAccountView {
-
-    companion object {
-        const val KEY_INTENT_ACCOUNT = "intent_account"
-        const val KEY_INTENT_PASSWORD = "intent_password"
-        const val KEY_INTENT_SEED = "intent_seed"
-        const val KEY_INTENT_SKIP_BACKUP = "intent_skip_backup"
-    }
-
-    override fun afterSuccessGenerateAvatar(seed: String, bitmap: Bitmap, imageView: AppCompatImageView) {
-        Glide.with(applicationContext)
-                .load(bitmap)
-                .apply(RequestOptions().circleCrop())
-                .into(imageView)
-
-        if (linear_images.children.isNotEmpty() && linear_images.children[0] == imageView) {
-            setImageActive(seed, imageView)
-        }
-
-        imageView.click {
-            setImageActive(seed, it)
-        }
-    }
-
-    override fun afterSuccessGenerateAvatar(bitmap: Bitmap, imageView: AppCompatImageView) {
-
-    }
 
     @Inject
     @InjectPresenter
@@ -76,13 +48,8 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         button_create_account.click {
-            val options = Bundle()
-            options.putString(KEY_INTENT_SEED, seed)
-            options.putString(KEY_INTENT_ACCOUNT, edit_account_name.text.toString())
-            options.putString(KEY_INTENT_PASSWORD, edit_create_password.text.toString())
-            launchActivity<SecretPhraseActivity>(options = options)
+            launchActivity<SecretPhraseActivity>(options = createDataBundle())
         }
-
 
         val nameValidation = Validation(til_account_name)
                 .and(NotEmptyRule(R.string.new_account_account_name_validation_required_error))
@@ -93,50 +60,47 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
 
         edit_account_name.addTextChangedListener {
             on { s, start, before, count ->
-                validator
-                        .validate(object : Validator.OnValidateListener {
-                            override fun onValidateSuccess(values: List<String>) {
-                                presenter.accountNameFieldValid = true
-                                isFieldsValid()
-                            }
+                validator.validate(object : Validator.OnValidateListener {
+                    override fun onValidateSuccess(values: List<String>) {
+                        presenter.accountNameFieldValid = true
+                        isFieldsValid()
+                    }
 
-                            override fun onValidateFailed() {
-                                presenter.accountNameFieldValid = false
-                                isFieldsValid()
-                            }
-                        }, nameValidation)
+                    override fun onValidateFailed() {
+                        presenter.accountNameFieldValid = false
+                        isFieldsValid()
+                    }
+                }, nameValidation)
             }
         }
         edit_create_password.addTextChangedListener {
             on { s, start, before, count ->
-                validator
-                        .validate(object : Validator.OnValidateListener {
-                            override fun onValidateSuccess(values: List<String>) {
-                                presenter.createPasswordFieldValid = true
-                                isFieldsValid()
-                            }
+                validator.validate(object : Validator.OnValidateListener {
+                    override fun onValidateSuccess(values: List<String>) {
+                        presenter.createPasswordFieldValid = true
+                        isFieldsValid()
+                    }
 
-                            override fun onValidateFailed() {
-                                presenter.createPasswordFieldValid = false
-                                isFieldsValid()
-                            }
-                        }, passwordValidation)
+                    override fun onValidateFailed() {
+                        presenter.createPasswordFieldValid = false
+                        isFieldsValid()
+                    }
+                }, passwordValidation)
                 if (edit_confirm_password.text.isNotEmpty()) {
                     val confirmPasswordValidation = Validation(til_confirm_password)
                             .and(EqualRule(edit_create_password.text.toString(),
                                     R.string.new_account_confirm_password_validation_match_error))
-                    validator
-                            .validate(object : Validator.OnValidateListener {
-                                override fun onValidateSuccess(values: List<String>) {
-                                    presenter.confirmPasswordFieldValid = true
-                                    isFieldsValid()
-                                }
+                    validator.validate(object : Validator.OnValidateListener {
+                        override fun onValidateSuccess(values: List<String>) {
+                            presenter.confirmPasswordFieldValid = true
+                            isFieldsValid()
+                        }
 
-                                override fun onValidateFailed() {
-                                    presenter.confirmPasswordFieldValid = false
-                                    isFieldsValid()
-                                }
-                            }, confirmPasswordValidation)
+                        override fun onValidateFailed() {
+                            presenter.confirmPasswordFieldValid = false
+                            isFieldsValid()
+                        }
+                    }, confirmPasswordValidation)
                 }
             }
         }
@@ -161,42 +125,63 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
             }
         }
 
-
-        // draw unique identicon avatar with random background color and make image with circle crop effect
-        //presenter.generateAvatars(linear_images.children as List<AppCompatImageView>)
         presenter.generateSeeds(this, linear_images.children as List<AppCompatImageView>)
 
+        // todo remove
         edit_account_name.text = SpannableStringBuilder("eshkere")
         edit_create_password.text = SpannableStringBuilder("12345678")
         edit_confirm_password.text = SpannableStringBuilder("12345678")
+    }
 
+    private fun createDataBundle(): Bundle {
+        val options = Bundle()
+        options.putBoolean(KEY_INTENT_PROCESS_ACCOUNT_CREATION, true)
+        options.putString(KEY_INTENT_SEED, seed)
+        options.putString(KEY_INTENT_ACCOUNT_NAME, edit_account_name.text.toString())
+        options.putString(KEY_INTENT_PASSWORD, edit_create_password.text.toString())
+        return options
+    }
+
+    override fun afterSuccessGenerateAvatar(seed: String, bitmap: Bitmap, imageView: AppCompatImageView) {
+        Glide.with(applicationContext)
+                .load(bitmap)
+                .apply(RequestOptions().circleCrop())
+                .into(imageView)
+
+        if (linear_images.children.isNotEmpty() && linear_images.children[0] == imageView) {
+            setImageActive(seed, imageView)
+        }
+
+        imageView.click {
+            setImageActive(seed, it)
+        }
     }
 
     private fun setImageActive(seed: String, view: View) {
         this.seed = seed
 
-        // delete all background of another images
-        linear_images.children.forEach {
-            it.background = null
-        }
+        linear_images.children.forEach { it.background = null }
 
-        // set selected image
         view.setBackgroundResource(R.drawable.shape_outline_checked)
-        avatarIsSelected(view.getBitmap())
-    }
-
-    fun isFieldsValid() {
-        button_create_account.isEnabled = presenter.isAllFieldsValid()
-    }
-
-    private fun avatarIsSelected(bitmap: Bitmap) {
         presenter.avatarValid = true
         isFieldsValid()
+    }
+
+    private fun isFieldsValid() {
+        button_create_account.isEnabled = presenter.isAllFieldsValid()
     }
 
     override fun onBackPressed() {
         setResult(Activity.RESULT_CANCELED)
         finish()
         overridePendingTransition(0, android.R.anim.fade_out)
+    }
+
+    companion object {
+        const val KEY_INTENT_PROCESS_ACCOUNT_CREATION = "intent_process_account_creation"
+        const val KEY_INTENT_ACCOUNT_NAME = "intent_account_name"
+        const val KEY_INTENT_PASSWORD = "intent_password"
+        const val KEY_INTENT_SEED = "intent_seed"
+        const val KEY_INTENT_SKIP_BACKUP = "intent_skip_backup"
     }
 }

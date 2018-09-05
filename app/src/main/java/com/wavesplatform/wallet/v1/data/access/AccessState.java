@@ -336,7 +336,7 @@ public class AccessState {
     }
 
     public void setCurrentAccountBackupCompleted() {
-        prefs.removeValue(PrefsUtil.KEY_SKIP_BACKUP);
+        prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, true);
     }
 
     public boolean isCurrentAccountBackupSkipped() {

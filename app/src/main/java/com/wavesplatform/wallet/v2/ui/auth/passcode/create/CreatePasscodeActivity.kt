@@ -1,17 +1,13 @@
 package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
-import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -22,12 +18,6 @@ import javax.inject.Inject
 
 open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
 
-    companion object {
-        const val KEY_PASS_CODE = "pass_code"
-        const val KEY_CHANGE_PASS_CODE = "change_pass_code"
-        const val KEY_RECREATE_PASS_CODE = "recreate_pass_code"
-    }
-
     @Inject
     @InjectPresenter
     lateinit var presenter: CreatePasscodePresenter
@@ -37,9 +27,9 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
 
     override fun configLayoutRes() = R.layout.activity_create_passcode
 
-
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, false, icon = R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, false,
+                icon = R.drawable.ic_toolbar_back_black)
 
         presenter.step = CreatePassCodeStep.CREATE
 
@@ -51,7 +41,7 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
                     moveToVerifyStep()
                 } else if (presenter.step == CreatePassCodeStep.VERIFY) {
                     if (presenter.passCode == passCode) {
-                        trySaveAccount(passCode)
+                        saveAccount(passCode)
                     } else {
                         pass_keypad.passCodesNotMatches()
                     }
@@ -60,57 +50,37 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
         })
     }
 
-    fun trySaveAccount(passCode: String) {
+    private fun saveAccount(passCode: String) {
         if (intent.extras == null) {
             ToastCustom.makeText(this@CreatePasscodeActivity,
                     getString(R.string.create_pin_failed),
                     ToastCustom.LENGTH_SHORT,
                     ToastCustom.TYPE_ERROR)
+            finish()
             return
         }
-
         showProgressBar(true)
+        presenter.saveAccount(passCode, intent.extras)
+    }
 
-        val walletGuid: String
-        val password = intent.extras!!.getString(
-                NewAccountActivity.KEY_INTENT_PASSWORD)
-        walletGuid = when {
-            intent.hasExtra(CreatePasscodeActivity.KEY_CHANGE_PASS_CODE) ->
-                AccessState.getInstance().currentGuid
-            intent.hasExtra(CreatePasscodeActivity.KEY_RECREATE_PASS_CODE) ->
-                intent.extras!!.getString(EnterPasscodeActivity.KEY_GUID)
-            else -> {
-                val skipBackup = intent.extras!!.getBoolean(
-                        NewAccountActivity.KEY_INTENT_SKIP_BACKUP)
-                AccessState.getInstance().storeWavesWallet(
-                        intent.extras!!.getString(NewAccountActivity.KEY_INTENT_SEED),
-                        password,
-                        intent.extras!!.getString(NewAccountActivity.KEY_INTENT_ACCOUNT),
-                        skipBackup)
+    override fun onSuccessCreatePassCodeFailed(passCode: String) {
+        showProgressBar(false)
+        if (FingerprintAuthDialogFragment.isAvailable(this)) {
+            launchActivity<UseFingerprintActivity>(intent.extras) {
+                putExtra(CreatePasscodeActivity.KEY_INTENT_PASS_CODE, passCode)
             }
+        } else {
+            launchActivity<MainActivity>(clear = true)
         }
+    }
 
-        AccessState.getInstance().createPin(walletGuid, password, passCode)
-                .subscribe( {
-                    showProgressBar(false)
-                    if (FingerprintAuthDialogFragment.isAvailable(this)) {
-                        launchActivity<UseFingerprintActivity>(intent.extras) {
-                            putExtra(KEY_PASS_CODE, passCode)
-                        }
-                    } else {
-                        launchActivity<MainActivity>(clear = true)
-                    }
-                }, { throwable ->
-                    // AppUtil.restartApp()
-                    showProgressBar(false)
-                    ToastCustom.makeText(this@CreatePasscodeActivity,
-                            getString(R.string.create_pin_failed),
-                            ToastCustom.LENGTH_SHORT,
-                            ToastCustom.TYPE_ERROR)
-                    AccessState.getInstance().deleteCurrentWavesWallet()
-                    finish()
-                    Log.e("CreatePasscodeActivity_TAG", throwable.message)
-                })
+    override fun onFailCreatePassCode() {
+        showProgressBar(false)
+        ToastCustom.makeText(this@CreatePasscodeActivity,
+                getString(R.string.create_pin_failed),
+                ToastCustom.LENGTH_SHORT,
+                ToastCustom.TYPE_ERROR)
+        launchActivity<MainActivity>(clear = true)
     }
 
     private fun moveToCreateStep() {
@@ -131,14 +101,23 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
         toolbar.setNavigationOnClickListener { moveToCreateStep() }
     }
 
-    enum class CreatePassCodeStep(step: Int) {
-        CREATE(0),
-        VERIFY(1)
-    }
 
     override fun onBackPressed() {
         if (presenter.step == CreatePassCodeStep.VERIFY) {
             moveToCreateStep()
+        } else {
+            super.onBackPressed()
         }
+    }
+
+    enum class CreatePassCodeStep {
+        CREATE,
+        VERIFY
+    }
+
+    companion object {
+        const val KEY_INTENT_PASS_CODE = "intent_pass_code"
+        const val KEY_INTENT_PROCESS_CHANGE_PASS_CODE = "intent_process_change_pass_code"
+        const val KEY_INTENT_PROCESS_RECREATE_PASS_CODE = "intent_process_recreate_pass_code"
     }
 }
