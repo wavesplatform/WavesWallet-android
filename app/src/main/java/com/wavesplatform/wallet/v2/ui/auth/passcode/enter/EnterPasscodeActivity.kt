@@ -104,7 +104,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
 
     fun validate(passCode: String) {
         showProgressBar(true)
-        presenter.validate(getGuid(), passCode)
+        presenter.validate(this, getGuid(), passCode)
     }
 
     override fun onSuccessValidatePassCode(password: String, passCode: String) {
@@ -117,7 +117,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
         finish()
     }
 
-    override fun onFailValidatePassCode(overMaxWrongPassCode: Boolean) {
+    override fun onFailValidatePassCode(overMaxWrongPassCode: Boolean, message: String?) {
         showProgressBar(false)
         if (overMaxWrongPassCode) {
             ToastCustom.makeText(this@EnterPasscodeActivity,
@@ -125,7 +125,13 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
                     ToastCustom.LENGTH_SHORT,
                     ToastCustom.TYPE_ERROR)
             showRequestPasswordDialog()
+        } else {
+            ToastCustom.makeText(this@EnterPasscodeActivity,
+                    getString(R.string.unexpected_error) + " ($message)",
+                    ToastCustom.LENGTH_SHORT,
+                    ToastCustom.TYPE_ERROR)
         }
+        finish()
     }
 
     private fun showFingerPrint() {

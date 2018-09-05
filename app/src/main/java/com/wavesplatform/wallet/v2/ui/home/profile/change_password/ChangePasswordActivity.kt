@@ -124,5 +124,4 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
     fun isFieldsValid() {
         button_confirm.isEnabled = presenter.isAllFieldsValid()
     }
-
 }

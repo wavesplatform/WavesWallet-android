@@ -60,7 +60,7 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
             return
         }
         showProgressBar(true)
-        presenter.saveAccount(passCode, intent.extras)
+        presenter.saveAccount(this, passCode, intent.extras)
     }
 
     override fun onSuccessCreatePassCodeFailed(passCode: String) {

@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.data.manager
 
+import android.content.Context
 import android.util.Log
 import com.wavesplatform.wallet.v1.crypto.AESUtil
 import com.wavesplatform.wallet.v1.data.access.AccessState
@@ -12,20 +13,12 @@ import io.reactivex.Observable
 import io.reactivex.exceptions.Exceptions
 import org.spongycastle.util.encoders.Hex
 import java.security.SecureRandom
-import javax.inject.Inject
 
-open class AccessManager @Inject constructor() {
+class AccessManager(context: Context) {
 
-    @Inject
-    lateinit var prefs: PrefsUtil
-    @Inject
-    lateinit var appUtil: AppUtil
+    private var prefs: PrefsUtil = PrefsUtil(context)
+    private var appUtil: AppUtil = AppUtil(context)
     private val pinStore = PinStoreService()
-
-    private object Holder {
-        val INSTANCE = AccessManager()
-    }
-
 
     fun validatePassCodeObservable(guid: String, passCode: String): Observable<String> {
         return createValidateObservable(guid, passCode)
@@ -87,11 +80,6 @@ open class AccessManager @Inject constructor() {
         val bytes = ByteArray(16)
         val random = SecureRandom()
         random.nextBytes(bytes)
-        val value = String(Hex.encode(bytes), charset("UTF-8"))
-        return value
-    }
-
-    companion object {
-        val instance: AccessManager by lazy { Holder.INSTANCE }
+        return String(Hex.encode(bytes), charset("UTF-8"))
     }
 }

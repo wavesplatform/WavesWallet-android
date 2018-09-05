@@ -1,9 +1,12 @@
 package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v1.data.access.AccessState
+import com.wavesplatform.wallet.v1.util.AppUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.AccessManager
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
@@ -16,7 +19,7 @@ class CreatePasscodePresenter @Inject constructor() : BasePresenter<CreatePassco
     var passCode: String = ""
     lateinit var step: CreatePasscodeActivity.CreatePassCodeStep
 
-    fun saveAccount(passCode: String, extras: Bundle) {
+    fun saveAccount(context: Context, passCode: String, extras: Bundle) {
 
         val password = extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
         val guid = when {
@@ -31,11 +34,11 @@ class CreatePasscodePresenter @Inject constructor() : BasePresenter<CreatePassco
                 AccessState.getInstance().storeWavesWallet(seed, password, accountName, skipBackup)
             }
         }
-        createPassCode(guid, password, passCode)
+        createPassCode(context, guid, password, passCode)
     }
 
-    private fun createPassCode(guid: String, password: String, passCode: String) {
-        AccessManager.instance.createPassCodeObservable(guid, password, passCode)
+    private fun createPassCode(context: Context, guid: String, password: String, passCode: String) {
+        AccessManager(context).createPassCodeObservable(guid, password, passCode)
                 .subscribe({
                     viewState.onSuccessCreatePassCodeFailed(passCode)
                 }, { throwable ->
