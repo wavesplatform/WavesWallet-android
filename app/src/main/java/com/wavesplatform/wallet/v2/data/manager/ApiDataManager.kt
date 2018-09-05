@@ -9,17 +9,16 @@ class ApiDataManager @Inject constructor() : DataManager() {
 
     fun loadAliases(): Observable<List<Alias>> {
         return apiService.aliases(getAddress())
-                .map({
-                    val aliases = it.data.mapTo(ArrayList(), {
+                .map {
+                    val aliases = it.data.mapTo(ArrayList()) {
                         it.alias
-                    })
+                    }
                     aliases.saveAll()
                     return@map aliases
-                })
+                }
     }
 
     fun loadAlias(alias: String): Observable<Any> {
         return apiService.alias(alias)
     }
-
 }

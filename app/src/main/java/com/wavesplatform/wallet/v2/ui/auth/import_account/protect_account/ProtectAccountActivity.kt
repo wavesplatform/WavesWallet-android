@@ -33,12 +33,10 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
     @InjectPresenter
     lateinit var presenter: ProtectAccountPresenter
     lateinit var validator: Validator
+    private lateinit var seed: String
+
     @ProvidePresenter
     fun providePresenter(): ProtectAccountPresenter = presenter
-
-    companion object {
-        var BUNDLE_SEED = "account_seed"
-    }
 
     override fun configLayoutRes() = R.layout.activity_protect_account
 
@@ -51,15 +49,8 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
         isFieldsValid()
 
         button_create_account.click {
-            if (intent.hasExtra(BUNDLE_SEED)) {
-                val seed = intent.extras.getString(BUNDLE_SEED)
-                val options = Bundle()
-                options.putString(NewAccountActivity.KEY_INTENT_SEED, seed)
-                options.putString(NewAccountActivity.KEY_INTENT_ACCOUNT_NAME,
-                        edit_account_name.text.toString())
-                options.putString(NewAccountActivity.KEY_INTENT_PASSWORD,
-                        edit_confirm_password.text.toString())
-                launchActivity<CreatePasscodeActivity>(options = options)
+            if (intent.hasExtra(NewAccountActivity.KEY_INTENT_SEED)) {
+                launchActivity<CreatePasscodeActivity>(options = createDataBundle())
             }
         }
 
@@ -100,7 +91,7 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
                                 isFieldsValid()
                             }
                         }, passwordValidation)
-                if (edit_confirm_password.text.isNotEmpty()){
+                if (edit_confirm_password.text.isNotEmpty()) {
                     val confirmPasswordValidation = Validation(til_confirm_password)
                             .and(EqualRule(edit_create_password.text.toString(),
                                     R.string.new_account_confirm_password_validation_match_error))
@@ -140,24 +131,34 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
             }
         }
 
-        init()
+        if (intent.hasExtra(NewAccountActivity.KEY_INTENT_SEED)) {
+            seed = intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED)
+            setAccountData()
+        }
     }
 
-    fun init() {
-        if (intent.hasExtra(BUNDLE_SEED)) {
-            val seed = intent.extras.getString(BUNDLE_SEED)
-            val wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
-            val bitmap = Identicon.create(wallet.address,
-                    Identicon.Options.Builder()
-                            .setRandomBlankColor()
-                            .create())
+    private fun createDataBundle(): Bundle {
+        val options = Bundle()
+        options.putString(NewAccountActivity.KEY_INTENT_SEED, seed)
+        options.putString(NewAccountActivity.KEY_INTENT_ACCOUNT_NAME,
+                edit_account_name.text.toString())
+        options.putString(NewAccountActivity.KEY_INTENT_PASSWORD,
+                edit_confirm_password.text.toString())
+        return options
+    }
 
-            Glide.with(applicationContext)
-                    .load(bitmap)
-                    .apply(RequestOptions().circleCrop())
-                    .into(image_account_icon)
-            text_account_address.text = wallet.address
-        }
+    private fun setAccountData() {
+        val wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
+        val bitmap = Identicon.create(wallet.address,
+                Identicon.Options.Builder()
+                        .setRandomBlankColor()
+                        .create())
+
+        Glide.with(applicationContext)
+                .load(bitmap)
+                .apply(RequestOptions().circleCrop())
+                .into(image_account_icon)
+        text_account_address.text = wallet.address
     }
 
 

@@ -5,9 +5,8 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.access.AccessState
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import io.github.anderscheow.validator.Validation
@@ -15,7 +14,6 @@ import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
 import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.activity_enter_seed_manually.*
-import org.apache.commons.io.Charsets
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import javax.inject.Inject
@@ -58,9 +56,8 @@ class EnterSeedManuallyActivity : BaseActivity(), EnterSeedManuallyView {
 
         button_continue.click {
             launchActivity<ProtectAccountActivity> {
-                putExtra(ProtectAccountActivity.BUNDLE_SEED, edit_seed.text.toString().trim())
+                putExtra(NewAccountActivity.KEY_INTENT_SEED, edit_seed.text.toString().trim())
             }
         }
     }
-
 }

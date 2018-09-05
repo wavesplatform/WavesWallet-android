@@ -18,6 +18,7 @@ import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.import_account.enter_seed.EnterSeedManuallyActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -106,7 +107,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
                 } else {
                     Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
                     launchActivity<ProtectAccountActivity> {
-                        putExtra(ProtectAccountActivity.BUNDLE_SEED, result.contents.trim())
+                        putExtra(NewAccountActivity.KEY_INTENT_SEED, result.contents.trim())
                     }
                 }
             }

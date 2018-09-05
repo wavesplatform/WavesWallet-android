@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -44,21 +45,10 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
                 icon = R.drawable.ic_toolbar_back_black)
-        if (intent.hasExtra(EnterPasscodeActivity.KEY_GUID)) {
-            guid = intent.extras.getString(EnterPasscodeActivity.KEY_GUID)
+        if (intent.hasExtra(EnterPasscodeActivity.KEY_INTENT_GUID)) {
+            guid = intent.extras.getString(EnterPasscodeActivity.KEY_INTENT_GUID)
             if (!TextUtils.isEmpty(guid)) {
-                account_name.text = AccessState.getInstance().getWalletName(guid)
-                val address = AccessState.getInstance().getWalletAddress(guid)
-                account_address.text = address
-                val bitmap = Identicon.create(address,
-                        Identicon.Options.Builder()
-                                .setRandomBlankColor()
-                                .create())
-
-                Glide.with(applicationContext)
-                        .load(bitmap)
-                        .apply(RequestOptions().circleCrop())
-                        .into(image_asset)
+                setAccountData(guid!!)
             }
         }
 
@@ -85,18 +75,36 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         button_sign_in.click {
             if (!TextUtils.isEmpty(guid)) {
                 try {
-                    val passwordStr = edit_account_password.text.toString()
-                    WavesWallet(AccessState.getInstance().getWalletData(guid), passwordStr)
-                    launchActivity<CreatePasscodeActivity>(clear = true) {
-                        putExtra(CreatePasscodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE, true)
-                        putExtra(EnterPasscodeActivity.KEY_GUID, guid)
-                        putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, passwordStr)
-                    }
+                    WavesWallet(AccessState.getInstance().getWalletData(guid),
+                            edit_account_password.text.toString())
+                    launchActivity<CreatePasscodeActivity>(clear = true, options = createDataBundle())
                     AccessState.getInstance().removePinFails()
                 } catch (e: Exception) {
                     toast(getString(R.string.enter_passcode_error_wrong_password))
                 }
             }
         }
+    }
+
+    private fun createDataBundle(): Bundle {
+        val options = Bundle()
+        options.putBoolean(CreatePasscodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE, true)
+        options.putString(EnterPasscodeActivity.KEY_INTENT_GUID, guid)
+        options.putString(NewAccountActivity.KEY_INTENT_PASSWORD, edit_account_password.text.toString())
+        return options
+    }
+
+    private fun setAccountData(guid: String) {
+        account_name.text = AccessState.getInstance().getWalletName(guid)
+        val address = AccessState.getInstance().getWalletAddress(guid)
+        account_address.text = address
+        val bitmap = Identicon.create(address,
+                Identicon.Options.Builder()
+                        .setRandomBlankColor()
+                        .create())
+        Glide.with(applicationContext)
+                .load(bitmap)
+                .apply(RequestOptions().circleCrop())
+                .into(image_asset)
     }
 }

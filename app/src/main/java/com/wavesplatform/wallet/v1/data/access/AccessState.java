@@ -1,7 +1,5 @@
 package com.wavesplatform.wallet.v1.data.access;
 
-import android.content.Context;
-import android.hardware.fingerprint.FingerprintManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -48,7 +46,7 @@ public class AccessState {
     private WavesWallet wavesWallet;
     private boolean onDexScreens = false;
 
-    public void initAccessState(Context context, PrefsUtil prefs, PinStoreService pinStore, AppUtil appUtil) {
+    public void initAccessState(PrefsUtil prefs, PinStoreService pinStore, AppUtil appUtil) {
         this.prefs = prefs;
         this.pinStore = pinStore;
         this.appUtil = appUtil;
@@ -60,10 +58,6 @@ public class AccessState {
         return instance;
     }
 
-    public Completable createPin(String walletGuid, String password, String passedPin) {
-        return createPinObservable(walletGuid, password, passedPin)
-                .compose(RxUtil.applySchedulersToCompletable());
-    }
 
     public boolean restoreWavesWallet(String guid, String password) {
         String encryptedWallet = prefs.getValue(guid, PrefsUtil.KEY_ENCRYPTED_WALLET, "");
@@ -83,10 +77,17 @@ public class AccessState {
         }
     }
 
-    public Observable<String> validatePin(String guid, String pin) {
-        return createValidateObservable(guid, pin).flatMap(pwd ->
-                createPin(guid, pwd, pin).andThen(Observable.just(pwd))
-        ).compose(RxUtil.applySchedulersToObservable());
+    public Observable<String> validatePin(String guid, String passedPin) {
+        return createValidateObservable(guid, passedPin)
+                .flatMap(password ->
+                        createPin(guid, password, passedPin)
+                                .andThen(Observable.just(password)))
+                .compose(RxUtil.applySchedulersToObservable());
+    }
+
+    public Completable createPin(String guid, String password, String passedPin) {
+        return createPinObservable(guid, password, passedPin)
+                .compose(RxUtil.applySchedulersToCompletable());
     }
 
     private Observable<String> createValidateObservable(String guid, String passedPin) {

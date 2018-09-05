@@ -39,14 +39,9 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     override fun configLayoutRes(): Int = R.layout.activit_choose_account
 
-    companion object {
-        var REQUEST_EDIT_ACCOUNT_NAME = 999
-        var BUNDLE_ADDRESS_ITEM = "item"
-        var BUNDLE_POSITION = "position"
-    }
-
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.choose_account), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
+                getString(R.string.choose_account), R.drawable.ic_toolbar_back_black)
 
         recycle_addresses.layoutManager = LinearLayoutManager(this)
         recycle_addresses.adapter = adapter
@@ -73,9 +68,9 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         val guid = AccessState.getInstance().findGuidBy(item.address)
         launchActivity<EnterPasscodeActivity>(requestCode = EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE) {
             if (AccessState.getInstance().isGuidUseFingerPrint(guid)) {
-                putExtra(EnterPasscodeActivity.KEY_SHOW_FINGERPRINT, true)
+                putExtra(EnterPasscodeActivity.KEY_INTENT_SHOW_FINGERPRINT, true)
             }
-            putExtra(EnterPasscodeActivity.KEY_GUID, guid)
+            putExtra(EnterPasscodeActivity.KEY_INTENT_GUID, guid)
         }
     }
 
@@ -99,7 +94,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                 AccessState.getInstance().deleteWavesWallet(item.address)
                 adapter.remove(position)
             }
-            toast("Deleted")
+            toast(getString(R.string.choose_account_deleted))
             adapter.notifyDataSetChanged()
         }
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
@@ -135,5 +130,11 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         setResult(Activity.RESULT_CANCELED)
         finish()
         overridePendingTransition(0, android.R.anim.fade_out)
+    }
+
+    companion object {
+        var REQUEST_EDIT_ACCOUNT_NAME = 999
+        var BUNDLE_ADDRESS_ITEM = "item"
+        var BUNDLE_POSITION = "position"
     }
 }

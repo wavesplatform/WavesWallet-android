@@ -116,7 +116,7 @@ public class BlockchainApplication extends DaggerApplication {
 
         AppUtil appUtil = new AppUtil(this);
 
-        AccessState.getInstance().initAccessState(this,
+        AccessState.getInstance().initAccessState(
                 new PrefsUtil(this),
                 new PinStoreService(),
                 appUtil);

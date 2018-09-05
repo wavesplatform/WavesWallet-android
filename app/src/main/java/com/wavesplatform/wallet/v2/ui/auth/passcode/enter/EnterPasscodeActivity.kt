@@ -7,13 +7,11 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatEditText
 import android.text.InputType
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
-import com.wavesplatform.wallet.v1.data.auth.IncorrectPinException
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v1.util.RootUtil
@@ -33,7 +31,7 @@ import pers.victor.ext.toast
 import javax.inject.Inject
 
 
-class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
+class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
     @Inject
     @InjectPresenter
     lateinit var presenter: EnterPasscodePresenter
@@ -43,15 +41,6 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
     fun providePresenter(): EnterPasscodePresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_enter_passcode
-
-
-    companion object {
-        const val MAX_AVAILABLE_TIMES = 5
-        const val KEY_PASS_CODE = "pass_code"
-        const val KEY_SHOW_FINGERPRINT = "show_fingerprint"
-        const val KEY_GUID = "guid"
-        const val REQUEST_ENTER_PASS_CODE = 555
-    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
@@ -63,12 +52,12 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
                 restartApp(this)
             } else {
                 launchActivity<UseAccountPasswordActivity> {
-                    putExtra(KEY_GUID, guid)
+                    putExtra(KEY_INTENT_GUID, guid)
                 }
             }
         }
 
-        val isShowFingerprint = intent.hasExtra(KEY_SHOW_FINGERPRINT)
+        val isShowFingerprint = intent.hasExtra(KEY_INTENT_SHOW_FINGERPRINT)
         val isLoggedIn = !TextUtils.isEmpty(AccessState.getInstance().currentGuid)
         val useFingerprint = (!RootUtil.isDeviceRooted()
                 && FingerprintAuthDialogFragment.isAvailable(this)
@@ -103,9 +92,9 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
         }
     }
 
-    private fun getGuid(): String? {
-        return if (intent.hasExtra(KEY_GUID)) {
-            intent.extras.getString(KEY_GUID)
+    private fun getGuid(): String {
+        return if (intent.hasExtra(KEY_INTENT_GUID)) {
+            intent.extras.getString(KEY_INTENT_GUID, "")
         } else if (!TextUtils.isEmpty(AccessState.getInstance().currentGuid)) {
             AccessState.getInstance().currentGuid
         } else {
@@ -115,40 +104,33 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
 
     fun validate(passCode: String) {
         showProgressBar(true)
-        val guid = getGuid()
-        AccessState.getInstance().validatePin(guid, passCode).subscribe({ password ->
-            AccessState.getInstance().removePinFails()
-            showProgressBar(false)
-            val data = Intent()
-            data.putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
-            data.putExtra(KEY_PASS_CODE, passCode)
-            setResult(Constants.RESULT_OK, data)
-            finish()
-        }, { err ->
-            if (err !is IncorrectPinException) {
-                Log.e(javaClass.simpleName, "Failed to validate pin", err)
-            } else {
-                AccessState.getInstance().incrementPinFails()
-                checkPinFails()
-            }
-            showProgressBar(false)
-        })
+        presenter.validate(getGuid(), passCode)
     }
 
-    private fun showFingerPrint() {
-        fingerprintDialog.isCancelable = false;
-        fingerprintDialog.show(fragmentManager, "fingerprintDialog")
+    override fun onSuccessValidatePassCode(password: String, passCode: String) {
+        AccessState.getInstance().removePinFails()
+        showProgressBar(false)
+        val data = Intent()
+        data.putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
+        data.putExtra(KEY_INTENT_PASS_CODE, passCode)
+        setResult(Constants.RESULT_OK, data)
+        finish()
     }
 
-    private fun checkPinFails() {
-        val fails = AccessState.getInstance().pinFails
-        if (fails >= MAX_AVAILABLE_TIMES) {
+    override fun onFailValidatePassCode(overMaxWrongPassCode: Boolean) {
+        showProgressBar(false)
+        if (overMaxWrongPassCode) {
             ToastCustom.makeText(this@EnterPasscodeActivity,
                     getString(R.string.pin_4_strikes),
                     ToastCustom.LENGTH_SHORT,
                     ToastCustom.TYPE_ERROR)
             showRequestPasswordDialog()
         }
+    }
+
+    private fun showFingerPrint() {
+        fingerprintDialog.isCancelable = false;
+        fingerprintDialog.show(fragmentManager, "fingerprintDialog")
     }
 
     override fun onBackPressed() {
@@ -193,7 +175,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
                             .getWalletData(guid), passwordStr)
                     launchActivity<CreatePasscodeActivity>(clear = true) {
                         putExtra(CreatePasscodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE, true)
-                        putExtra(KEY_GUID, guid)
+                        putExtra(KEY_INTENT_GUID, guid)
                         putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, passwordStr)
                     }
                     AccessState.getInstance().removePinFails()
@@ -208,5 +190,12 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
         val intent = Intent(context, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
+    }
+
+    companion object {
+        const val KEY_INTENT_PASS_CODE = "intent_pass_code"
+        const val KEY_INTENT_SHOW_FINGERPRINT = "intent_show_fingerprint"
+        const val KEY_INTENT_GUID = "intent_guid"
+        const val REQUEST_ENTER_PASS_CODE = 555
     }
 }
