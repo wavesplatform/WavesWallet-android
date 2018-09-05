@@ -46,15 +46,12 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         recycle_addresses.layoutManager = LinearLayoutManager(this)
         recycle_addresses.adapter = adapter
         adapter.bindToRecyclerView(recycle_addresses)
-
         presenter.getAddresses()
-
         adapter.chooseAccountOnClickListener = this
     }
 
     override fun afterSuccessGetAddress(list: ArrayList<AddressBookUser>) {
         adapter.setNewData(list)
-
         adapter.emptyView = getEmptyView()
     }
 
@@ -66,19 +63,21 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     override fun onItemClicked(item: AddressBookUser) {
         val guid = AccessState.getInstance().findGuidBy(item.address)
-        launchActivity<EnterPasscodeActivity>(requestCode = EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE) {
+        launchActivity<EnterPasscodeActivity>(
+                requestCode = EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE) {
+            putExtra(KEY_INTENT_PROCESS_AUTH, true)
+            putExtra(EnterPasscodeActivity.KEY_INTENT_GUID, guid)
             if (AccessState.getInstance().isGuidUseFingerPrint(guid)) {
                 putExtra(EnterPasscodeActivity.KEY_INTENT_SHOW_FINGERPRINT, true)
             }
-            putExtra(EnterPasscodeActivity.KEY_INTENT_GUID, guid)
         }
     }
 
     override fun onEditClicked(position: Int) {
         val item = adapter.getItem(position) as AddressBookUser
         launchActivity<EditAccountNameActivity>(REQUEST_EDIT_ACCOUNT_NAME) {
-            putExtra(BUNDLE_ADDRESS_ITEM, item)
-            putExtra(BUNDLE_POSITION, position)
+            putExtra(KEY_INTENT_ITEM_ADDRESS, item)
+            putExtra(KEY_INTENT_ITEM_POSITION, position)
         }
     }
 
@@ -110,8 +109,8 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         when (requestCode) {
             REQUEST_EDIT_ACCOUNT_NAME -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    val item = data?.getParcelableExtra<AddressBookUser>(BUNDLE_ADDRESS_ITEM)
-                    val position = data?.getIntExtra(BUNDLE_POSITION, 0)
+                    val item = data?.getParcelableExtra<AddressBookUser>(KEY_INTENT_ITEM_ADDRESS)
+                    val position = data?.getIntExtra(KEY_INTENT_ITEM_POSITION, 0)
                     item.notNull {
                         adapter.setData(position!!, it)
                         AccessState.getInstance().saveWavesWalletNewName(item!!.address, item.name)
@@ -133,8 +132,9 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     companion object {
-        var REQUEST_EDIT_ACCOUNT_NAME = 999
-        var BUNDLE_ADDRESS_ITEM = "item"
-        var BUNDLE_POSITION = "position"
+        const val KEY_INTENT_PROCESS_AUTH = "intent_process_auth"
+        const val REQUEST_EDIT_ACCOUNT_NAME = 999
+        const val KEY_INTENT_ITEM_ADDRESS = "intent_item_address"
+        const val KEY_INTENT_ITEM_POSITION = "intent_item_position"
     }
 }

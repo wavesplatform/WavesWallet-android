@@ -112,8 +112,10 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
         showProgressBar(false)
         val data = Intent()
         data.putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
+        data.putExtra(KEY_INTENT_GUID, getGuid())
         data.putExtra(KEY_INTENT_PASS_CODE, passCode)
         setResult(Constants.RESULT_OK, data)
+        AccessState.getInstance().setCurrentAccount(getGuid())
         finish()
     }
 
@@ -130,8 +132,8 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
                     getString(R.string.unexpected_error) + " ($message)",
                     ToastCustom.LENGTH_SHORT,
                     ToastCustom.TYPE_ERROR)
+            finish()
         }
-        finish()
     }
 
     private fun showFingerPrint() {
@@ -187,6 +189,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
                     AccessState.getInstance().removePinFails()
                 } catch (e: Exception) {
                     toast(getString(R.string.enter_passcode_error_wrong_password))
+                    finish()
                 }
             }
         }

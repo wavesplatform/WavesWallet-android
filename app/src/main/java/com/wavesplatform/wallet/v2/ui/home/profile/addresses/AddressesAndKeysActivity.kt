@@ -23,7 +23,7 @@ import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView  {
+class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
 
     @Inject
     @InjectPresenter
@@ -48,16 +48,16 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView  {
 
             relative_alias.click {
                 val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
-                if(aliases.isEmpty()){
+                if (aliases.isEmpty()) {
                     bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
-                }else{
+                } else {
                     bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
                 }
                 bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
             }
         }
 
-        image_address_copy.click{
+        image_address_copy.click {
             text_address.copyToClipboard(it)
         }
 
@@ -71,7 +71,7 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView  {
 
         button_show.click {
             launchActivity<EnterPasscodeActivity>(
-                    requestCode = EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE) {  }
+                    requestCode = EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE) { }
         }
     }
 

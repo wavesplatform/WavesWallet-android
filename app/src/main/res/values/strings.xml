@@ -948,8 +948,8 @@
     <string name="profile_general_delete_account_dialog_title">Delete account</string>
     <string name="profile_general_logout">Logout of account</string>
     <string name="profile_general_delete_account_dialog_description">Deleting an account will lead to its irretrievable loss!</string>
-    <string name="profile_general_delete_account_dialog_delete">DELETE</string>
-    <string name="profile_general_delete_account_dialog_cancel">CANCEL</string>
+    <string name="profile_general_delete_account_dialog_delete">Delete</string>
+    <string name="profile_general_delete_account_dialog_cancel">Cancel</string>
     <string name="profile_general_delete_account_dialog_warning">You did not save your SEED</string>
     <string name="profile_general_delete_account_dialog_deleted">Deleted</string>
 

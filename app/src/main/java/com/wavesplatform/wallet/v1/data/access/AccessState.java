@@ -153,13 +153,17 @@ public class AccessState {
         prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, encryptedPassword);
     }
 
+    public void setCurrentAccount(String guid) {
+        prefs.setValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, guid);
+    }
+
     public String storeWavesWallet(String seed, String password, String walletName, boolean skipBackup) {
         try {
             WavesWallet newWallet = new WavesWallet(seed.getBytes(Charsets.UTF_8));
-            String walletGuid = UUID.randomUUID().toString();
-            prefs.setGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, walletGuid);
+            String guid = UUID.randomUUID().toString();
+            prefs.setGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, guid);
             prefs.addGlobalListValue(EnvironmentManager.get().current().getName()
-                    + PrefsUtil.LIST_WALLET_GUIDS, walletGuid);
+                    + PrefsUtil.LIST_WALLET_GUIDS, guid);
             prefs.setValue(PrefsUtil.KEY_PUB_KEY, newWallet.getPublicKeyStr());
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName);
             prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, newWallet.getEncryptedData(password));
@@ -177,7 +181,7 @@ public class AccessState {
                     .build();
             DBHelper.getInstance().setRealmConfig(config);
 
-            return walletGuid;
+            return guid;
         } catch (Exception e) {
             Log.e(getClass().getSimpleName(), "storeWavesWallet: ", e);
             return null;
@@ -341,7 +345,7 @@ public class AccessState {
     }
 
     public boolean isCurrentAccountBackupSkipped() {
-        return prefs.getValue(PrefsUtil.KEY_SKIP_BACKUP, false);
+        return prefs.getValue(PrefsUtil.KEY_SKIP_BACKUP, true);
     }
 
     public void setUseFingerPrint(boolean use) {

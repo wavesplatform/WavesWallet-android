@@ -9,7 +9,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
-import com.wavesplatform.wallet.v1.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
@@ -24,6 +23,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
+import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -40,49 +40,32 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @ProvidePresenter
     fun providePresenter(): ProfilePresenter = presenter
 
-    companion object {
-
-        /**
-         * @return ProfileFragment instance
-         * */
-        fun newInstance(): ProfileFragment {
-            return ProfileFragment()
-        }
-
-        const val KEY_INTENT_SET_BACKUP = "intent_set_backup"
-        const val REQUEST_ENTER_PASSCODE_FOR_CHANGE = 5551
-        const val REQUEST_ENTER_PASSCODE_FOR_FINGERPRINT = 5552
-    }
-
     override fun configLayoutRes(): Int = R.layout.fragment_profile
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         card_address_book.click {
-            launchActivity<AddressBookActivity> {  }
+            launchActivity<AddressBookActivity> { }
         }
-
         card_addresses_and_keys.click {
-            launchActivity<AddressesAndKeysActivity> {  }
+            launchActivity<AddressesAndKeysActivity> { }
         }
         card_backup_phrase.click {
             launchActivity<BackupPhraseActivity> {
                 putExtra(KEY_INTENT_SET_BACKUP, true)
             }
         }
-
         card_language.click {
-            launchActivity<ChangeLanguageActivity> {  }
+            launchActivity<ChangeLanguageActivity> { }
         }
         card_change_password.click {
-            launchActivity<ChangePasswordActivity> {  }
+            launchActivity<ChangePasswordActivity> { }
         }
-
         card_change_passcode.click {
-            launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE_FOR_CHANGE)
+            launchActivity<EnterPasscodeActivity>(
+                    requestCode = REQUEST_ENTER_PASS_CODE_FOR_CHANGE)
         }
-
         card_network.click {
-            launchActivity<NetworkActivity> {  }
+            launchActivity<NetworkActivity> { }
         }
         button_delete_account.click {
             val alertDialog = AlertDialog.Builder(baseActivity).create()
@@ -92,11 +75,14 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 alertDialog.setView(LayoutInflater.from(baseActivity)
                         .inflate(R.layout.delete_account_warning_layout, null))
             }
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->
-                dialog.dismiss()
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
+                    getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->
                 AccessState.getInstance().deleteCurrentWavesWallet()
-                toast(getString(R.string.profile_general_delete_account_dialog_deleted))
-                launchActivity<MainActivity> {  }
+                dialog.dismiss()
+                val intent = Intent(context, WelcomeActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        or Intent.FLAG_ACTIVITY_NEW_TASK)
+                context?.startActivity(intent)
             }
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel)) { dialog, _ ->
                 dialog.dismiss()
@@ -107,9 +93,9 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         if (FingerprintAuthDialogFragment.isAvailable(context!!)) {
             fingerprint_switch.isChecked = AccessState.getInstance().isUseFingerPrint
-            fingerprint_switch.setOnCheckedChangeListener { _, isChecked->
+            fingerprint_switch.setOnCheckedChangeListener { _, isChecked ->
                 launchActivity<EnterPasscodeActivity>(
-                        requestCode = REQUEST_ENTER_PASSCODE_FOR_FINGERPRINT)
+                        requestCode = REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT)
             }
         } else {
             card_fingerprint.visibility = View.GONE
@@ -145,32 +131,28 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+        when (item?.itemId) {
             R.id.action_logout -> {
                 toast(item.title)
             }
         }
-
         return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_ENTER_PASSCODE_FOR_FINGERPRINT -> {
-                if (resultCode == Constants.RESULT_OK) {
+        if (resultCode == Constants.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT -> {
                     val passCode = data!!.extras.getString(EnterPasscodeActivity.KEY_INTENT_PASS_CODE)
                     launchActivity<UseFingerprintActivity>(clear = true) {
                         putExtra(CreatePasscodeActivity.KEY_INTENT_PASS_CODE, passCode)
                     }
                 }
-            }
-            REQUEST_ENTER_PASSCODE_FOR_CHANGE -> {
-                if (resultCode == Constants.RESULT_OK) {
 
+                REQUEST_ENTER_PASS_CODE_FOR_CHANGE -> {
                     val passCode = data!!.extras.getString(EnterPasscodeActivity.KEY_INTENT_PASS_CODE)
                     val password = data.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
-
                     launchActivity<CreatePasscodeActivity>(clear = true) {
                         putExtra(CreatePasscodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE, true)
                         putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
@@ -179,5 +161,19 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 }
             }
         }
+    }
+
+    companion object {
+
+        /**
+         * @return ProfileFragment instance
+         * */
+        fun newInstance(): ProfileFragment {
+            return ProfileFragment()
+        }
+
+        const val KEY_INTENT_SET_BACKUP = "intent_set_backup"
+        const val REQUEST_ENTER_PASS_CODE_FOR_CHANGE = 5551
+        const val REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT = 5552
     }
 }

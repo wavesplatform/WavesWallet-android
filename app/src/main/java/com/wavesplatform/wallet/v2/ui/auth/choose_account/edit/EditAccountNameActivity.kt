@@ -7,7 +7,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity.Companion.BUNDLE_POSITION
+import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity.Companion.KEY_INTENT_ITEM_POSITION
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import io.github.anderscheow.validator.Validation
@@ -51,7 +51,7 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
 
                 val newIntent = Intent()
                 newIntent.putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, presenter.account)
-                newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(BUNDLE_POSITION, -1))
+                newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(KEY_INTENT_ITEM_POSITION, -1))
                 setResult(Constants.RESULT_OK, newIntent)
                 finish()
             }

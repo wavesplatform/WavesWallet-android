@@ -42,7 +42,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
             setSeed(intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED))
         } else {
             launchActivity<EnterPasscodeActivity>(
-                    requestCode = EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE) {  }
+                    requestCode = EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE)
         }
     }
 
