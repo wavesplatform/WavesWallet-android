@@ -76,6 +76,10 @@ public class PrefsUtil {
         setValueInternal(getGuid() + name, value);
     }
 
+    public void setValue(String guid, String name, String value) {
+        setValueInternal(guid + name, value);
+    }
+
     private void setValueInternal(String name, String value) {
         Editor editor = preferenceManager.edit();
         editor.putString(name, (value == null || value.isEmpty()) ? "" : value);

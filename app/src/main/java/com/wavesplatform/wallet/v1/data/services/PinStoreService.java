@@ -63,7 +63,6 @@ public class PinStoreService {
                     }
                 }
             }) ;
-        });//.compose(RxUtil.applySchedulersToObservable());
+        });
     }
-
 }

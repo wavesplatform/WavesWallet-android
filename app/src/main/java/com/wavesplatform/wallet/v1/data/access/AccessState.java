@@ -64,8 +64,8 @@ public class AccessState {
                 .compose(RxUtil.applySchedulersToCompletable());
     }
 
-    public boolean restoreWavesWallet(String password) {
-        String encryptedWallet = prefs.getValue(PrefsUtil.KEY_ENCRYPTED_WALLET, "");
+    public boolean restoreWavesWallet(String guid, String password) {
+        String encryptedWallet = prefs.getValue(guid, PrefsUtil.KEY_ENCRYPTED_WALLET, "");
 
         try {
             setTemporary(new WavesWallet(encryptedWallet, password));
@@ -82,23 +82,25 @@ public class AccessState {
         }
     }
 
-    public Observable<String> validatePin(String pin) {
-        return createValidateObservable(pin).flatMap(pwd ->
-                createPin(prefs.getGuid(), pwd, pin).andThen(Observable.just(pwd))
+    public Observable<String> validatePin(String guid, String pin) {
+        return createValidateObservable(guid, pin).flatMap(pwd ->
+                createPin(guid, pwd, pin).andThen(Observable.just(pwd))
         ).compose(RxUtil.applySchedulersToObservable());
     }
 
-    private Observable<String> createValidateObservable(String passedPin) {
+    private Observable<String> createValidateObservable(String guid, String passedPin) {
         int fails = prefs.getValue(PrefsUtil.KEY_PIN_FAILS, 0);
 
-        return pinStore.readPassword(fails, prefs.getGuid(), passedPin)
+        return pinStore.readPassword(fails, guid, passedPin)
                 .map(value -> {
                     try {
-                        String encryptedPassword = prefs.getValue(PrefsUtil.KEY_ENCRYPTED_PASSWORD, "");
-                        String password = AESUtil.decrypt(encryptedPassword,
+                        String encryptedPassword = prefs
+                                .getValue(guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, "");
+                        String password = AESUtil.decrypt(
+                                encryptedPassword,
                                 value,
                                 AESUtil.PIN_PBKDF2_ITERATIONS);
-                        if (!restoreWavesWallet(password)) {
+                        if (!restoreWavesWallet(guid, password)) {
                             throw new RuntimeException("Failed password");
                         }
                         return password;
@@ -108,7 +110,7 @@ public class AccessState {
                 });
     }
 
-    private Completable createPinObservable(String walletGuid, String password, String passedPin) {
+    private Completable createPinObservable(String guid, String password, String passedPin) {
         if (passedPin == null || passedPin.equals("0000") || passedPin.length() != 4) {
             return Completable.error(new RuntimeException("Prohibited pin"));
         }
@@ -122,10 +124,10 @@ public class AccessState {
                 random.nextBytes(bytes);
                 String value = new String(Hex.encode(bytes), "UTF-8");
 
-                pinStore.savePasswordByKey(walletGuid, value, passedPin).subscribe(res -> {
+                pinStore.savePasswordByKey(guid, value, passedPin).subscribe(res -> {
                     String encryptedPassword = AESUtil.encrypt(
                             password.toString(), value, AESUtil.PIN_PBKDF2_ITERATIONS);
-                    prefs.setValue(PrefsUtil.KEY_ENCRYPTED_PASSWORD, encryptedPassword);
+                    prefs.setValue(guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, encryptedPassword);
                     if (!subscriber.isDisposed()) {
                         subscriber.onComplete();
                     }

@@ -116,7 +116,8 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
 
     fun validate(passCode: String) {
         showProgressBar(true)
-        AccessState.getInstance().validatePin(passCode).subscribe({ password ->
+        val guid = getGuid()
+        AccessState.getInstance().validatePin(guid, passCode).subscribe({ password ->
             AccessState.getInstance().removePinFails()
             showProgressBar(false)
             val data = Intent()
