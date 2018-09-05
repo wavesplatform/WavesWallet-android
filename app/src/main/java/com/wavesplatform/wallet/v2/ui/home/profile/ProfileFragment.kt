@@ -7,13 +7,12 @@ import android.support.v7.app.AlertDialog
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.mtramin.rxfingerprint.RxFingerprint
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.Language
+import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
@@ -106,7 +105,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
             alertDialog.makeStyled()
         }
 
-        if (RxFingerprint.isAvailable(context!!)) {
+        if (FingerprintAuthDialogFragment.isAvailable(context!!)) {
             fingerprint_switch.isChecked = AccessState.getInstance().isUseFingerPrint
             fingerprint_switch.setOnCheckedChangeListener { _, isChecked->
                 launchActivity<EnterPasscodeActivity>(

@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.mtramin.rxfingerprint.RxFingerprint
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.IncorrectPinException
@@ -72,7 +71,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView{
         val isShowFingerprint = intent.hasExtra(KEY_SHOW_FINGERPRINT)
         val isLoggedIn = !TextUtils.isEmpty(AccessState.getInstance().currentGuid)
         val useFingerprint = (!RootUtil.isDeviceRooted()
-                && RxFingerprint.isAvailable(this)
+                && FingerprintAuthDialogFragment.isAvailable(this)
                 && ((isLoggedIn && AccessState.getInstance().isUseFingerPrint)
                 || isShowFingerprint))
 

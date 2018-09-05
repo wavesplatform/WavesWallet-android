@@ -5,10 +5,10 @@ import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.mtramin.rxfingerprint.RxFingerprint
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
+import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
@@ -16,7 +16,6 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import kotlinx.android.synthetic.main.activity_create_passcode.*
 import javax.inject.Inject
 
@@ -94,7 +93,7 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
         AccessState.getInstance().createPin(walletGuid, password, passCode)
                 .subscribe( {
                     showProgressBar(false)
-                    if (RxFingerprint.isAvailable(this)) {
+                    if (FingerprintAuthDialogFragment.isAvailable(this)) {
                         launchActivity<UseFingerprintActivity>(intent.extras) {
                             putExtra(KEY_PASS_CODE, passCode)
                         }

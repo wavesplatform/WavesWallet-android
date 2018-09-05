@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v1.data.access;
 
 import android.content.Context;
+import android.hardware.fingerprint.FingerprintManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
