@@ -77,7 +77,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
                     WavesWallet(AccessState.getInstance().getWalletData(guid),
                             edit_account_password.text.toString())
                     launchActivity<CreatePassCodeActivity>(options = createDataBundle())
-                    AccessState.getInstance().removePinFails()
+                    AccessState.getInstance().resetPassCodeInputFails()
                 } catch (e: Exception) {
                     toast(getString(R.string.enter_passcode_error_wrong_password))
                 }

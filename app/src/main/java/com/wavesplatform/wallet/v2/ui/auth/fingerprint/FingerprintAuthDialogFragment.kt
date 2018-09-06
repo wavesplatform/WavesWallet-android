@@ -109,7 +109,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                                 FingerprintResult.FAILED -> onFingerprintDoNotMatchTryAgain()
                                 FingerprintResult.HELP -> showHelpMessage(encryptionResult.message)
                                 FingerprintResult.AUTHENTICATED -> {
-                                    AccessState.getInstance().encryptedPin =
+                                    AccessState.getInstance().encryptedPassCode =
                                             encryptionResult.encrypted
                                     onSuccessRecognizedFingerprint()
                                     fingerPrintDialogListener?.onSuccessRecognizedFingerprint()
@@ -122,7 +122,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
 
     private fun decrypt() {
         fingerprintDisposable = RxFingerprint.decrypt(EncryptionMethod.RSA, activity,
-                EnterPassCodeActivity.KEY_INTENT_PASS_CODE, AccessState.getInstance().encryptedPin)
+                EnterPassCodeActivity.KEY_INTENT_PASS_CODE, AccessState.getInstance().encryptedPassCode)
                 .subscribe(
                         { result ->
                             when (result?.result) {

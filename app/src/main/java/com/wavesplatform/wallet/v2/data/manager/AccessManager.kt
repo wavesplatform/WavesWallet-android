@@ -1,28 +1,30 @@
 package com.wavesplatform.wallet.v2.data.manager
 
 import android.content.Context
+import android.preference.PreferenceManager
 import android.util.Log
 import com.wavesplatform.wallet.v1.crypto.AESUtil
 import com.wavesplatform.wallet.v1.data.access.AccessState
+import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v1.data.services.PinStoreService
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.exceptions.Exceptions
+import org.apache.commons.io.Charsets
 import org.spongycastle.util.encoders.Hex
 import java.security.SecureRandom
+import java.util.*
 
-class AccessManager(context: Context) {
+class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) {
 
-    private var prefs: PrefsUtil = PrefsUtil(context)
-    private var appUtil: AppUtil = AppUtil(context)
     private val pinStore = PinStoreService()
 
     fun validatePassCodeObservable(guid: String, passCode: String): Observable<String> {
-        val fails = AccessState.getInstance().pinFails
-        return readPassCodeObservable(guid, passCode, fails)
+        return readPassCodeObservable(guid, passCode, AccessState.getInstance().passCodeInputFails)
                 .flatMap { password ->
                     writePassCodeObservable(guid, password, passCode)
                             .andThen(Observable.just<String>(password))
@@ -81,5 +83,25 @@ class AccessManager(context: Context) {
         val random = SecureRandom()
         random.nextBytes(bytes)
         return String(Hex.encode(bytes), charset("UTF-8"))
+    }
+
+    fun storeWavesWallet(seed: String, password: String, walletName: String, skipBackup: Boolean): String {
+        try {
+            val wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
+            val guid = UUID.randomUUID().toString()
+            prefs.setGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, guid)
+            prefs.addGlobalListValue(EnvironmentManager.get().current().getName()
+                    + PrefsUtil.LIST_WALLET_GUIDS, guid)
+            prefs.setValue(PrefsUtil.KEY_PUB_KEY, wallet.publicKeyStr)
+            prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
+            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet.getEncryptedData(password))
+            if (skipBackup) {
+                prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, true)
+            }
+            return guid
+        } catch (e: Exception) {
+            Log.e(javaClass.simpleName, "storeWavesWallet: ", e)
+            return ""
+        }
     }
 }

@@ -37,7 +37,7 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        val user = AccessState.getInstance().currentWavesWallet
+        val user = AccessState.getInstance().createAddressBookCurrentAccount()
         text_address.text = user.address
         text_public_key.text = AccessState.getInstance().findPublicKeyBy(user.address)
 

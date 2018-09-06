@@ -104,11 +104,11 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
 
     fun validate(passCode: String) {
         showProgressBar(true)
-        presenter.validate(this, getGuid(), passCode)
+        presenter.validate(getGuid(), passCode)
     }
 
     override fun onSuccessValidatePassCode(password: String, passCode: String) {
-        AccessState.getInstance().removePinFails()
+        AccessState.getInstance().resetPassCodeInputFails()
         showProgressBar(false)
         val data = Intent()
         data.putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
@@ -189,7 +189,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                         putExtra(KEY_INTENT_GUID, guid)
                         putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
                     }
-                    AccessState.getInstance().removePinFails()
+                    AccessState.getInstance().resetPassCodeInputFails()
                 } catch (e: Exception) {
                     toast(getString(R.string.enter_passcode_error_wrong_password))
                     finish()
