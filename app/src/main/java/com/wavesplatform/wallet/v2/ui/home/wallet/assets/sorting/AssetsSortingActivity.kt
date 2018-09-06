@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -15,6 +16,7 @@ import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
@@ -40,6 +42,10 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
     @Inject
     lateinit var adapterFavorites: AssetsFavoriteSortingAdapter
 
+    companion object {
+        var RESULT_NEED_UPDATE = "need_update"
+    }
+
     override fun configLayoutRes() = R.layout.activity_assets_sorting
 
 
@@ -59,19 +65,23 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             when (view.id) {
                 R.id.image_favorite -> {
+                    presenter.needToUpdate = true
+
                     // manage UI
                     val item = this.adapter.getItem(position) as AssetBalance
 
                     item.isFavorite = true
                     item.isHidden = false
+
+                    // add to favorite list
                     this.adapterFavorites.addData(item)
-                    this.adapter.remove(position)
+
+                    // remove from current list
+                    this.adapter.data.removeAt(position)
+                    this.adapter.notifyItemRemoved(position)
 
                     // Save to DB
-                    val assetBalance = queryFirst<AssetBalance>({ equalTo("assetId", item.assetId) })
-                    assetBalance?.isFavorite = true
-                    assetBalance?.isHidden = false
-                    assetBalance?.save()
+                    item.save()
 
                     checkIfNeedToShowLine()
                 }
@@ -81,22 +91,35 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         adapterFavorites.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             when (view.id) {
                 R.id.image_favorite -> {
+                    presenter.needToUpdate = true
+
                     // manage UI
 
                     val item = this.adapterFavorites.getItem(position) as AssetBalance
                     if (!item.assetId.isNullOrEmpty()) {
-                        item?.isFavorite = false
+                        item.isFavorite = false
+
+                        // add to not favorite list
                         this.adapter.addData(0, item)
-                        this.adapterFavorites.remove(position)
+
+                        // remove from favorite list
+                        this.adapterFavorites.data.removeAt(position)
+                        this.adapterFavorites.notifyItemRemoved(position)
 
                         // Save to DB
-                        val assetBalance = queryFirst<AssetBalance>({ equalTo("assetId", item.assetId) })
-                        assetBalance?.isFavorite = false
-                        assetBalance?.save()
+                        item.save()
 
                         checkIfNeedToShowLine()
                     }
                 }
+            }
+        }
+
+        adapter.onHiddenChangeListener = object : AssetsSortingAdapter.OnHiddenChangeListener {
+            override fun onHiddenStateChanged(item: AssetBalance, checked: Boolean) {
+                presenter.needToUpdate = true
+                item.isHidden = !checked
+                item.save()
             }
         }
 
@@ -123,6 +146,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             }
 
             override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int, target: RecyclerView.ViewHolder, to: Int) {
+                presenter.needToUpdate = true
                 val originalPos = IntArray(2)
                 target.itemView.card_asset.getLocationOnScreen(originalPos)
                 view_drag_bg.y = originalPos[1].toFloat()
@@ -175,7 +199,13 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         return super.onCreateOptionsMenu(menu)
     }
 
-//    override fun onBackPressed() {
-//        finish()
-//    }
+    override fun onBackPressed() {
+        presenter.saveSortedPositions(adapter.data)
+
+        setResult(Constants.RESULT_OK, Intent().apply {
+            putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
+        })
+        finish()
+    }
+
 }

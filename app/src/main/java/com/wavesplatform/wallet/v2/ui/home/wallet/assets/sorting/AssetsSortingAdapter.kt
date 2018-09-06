@@ -12,6 +12,7 @@ import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 class AssetsSortingAdapter @Inject constructor(var publicKeyAccountHelper: PublicKeyAccountHelper) : BaseItemDraggableAdapter<AssetBalance, BaseViewHolder>(R.layout.wallet_asset_sorting_item, null) {
+    var onHiddenChangeListener: OnHiddenChangeListener? = null
 
     override fun convert(helper: BaseViewHolder, item: AssetBalance) {
         helper.setText(R.id.text_asset_name, item.getName())
@@ -20,17 +21,16 @@ class AssetsSortingAdapter @Inject constructor(var publicKeyAccountHelper: Publi
                 .setOnCheckedChangeListener(R.id.switch_visible, null) // fix bug with incorrect call listener
                 .setChecked(R.id.switch_visible, !item.isHidden)
                 .setOnCheckedChangeListener(R.id.switch_visible, { buttonView, isChecked ->
-                    item.isHidden = !isChecked
-                    runAsync {
-                        val assetBalance = queryFirst<AssetBalance>({ equalTo("assetId", item.assetId) })
-                        assetBalance?.isHidden = !isChecked
-                        assetBalance?.save()
-                    }
+                    onHiddenChangeListener?.onHiddenStateChanged(item, isChecked)
                 })
                 .setGone(R.id.switch_visible, item.configureVisibleState)
                 .setGone(R.id.image_drag, !item.configureVisibleState)
 
         helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)
+    }
+
+    interface OnHiddenChangeListener {
+        fun onHiddenStateChanged(item: AssetBalance, checked: Boolean)
     }
 }
