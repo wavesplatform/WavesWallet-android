@@ -102,7 +102,8 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         fingerprintDisposable = RxFingerprint.encrypt(
                 EncryptionMethod.RSA,
                 activity,
-                EnterPassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
+                guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE,
+                passCode)
                 .subscribe(
                         { encryptionResult ->
                             when (encryptionResult?.result) {
@@ -123,8 +124,8 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     private fun decrypt() {
         val guid = arguments.getString(KEY_INTENT_GUID, "")
         fingerprintDisposable = RxFingerprint.decrypt(EncryptionMethod.RSA, activity,
-                EnterPassCodeActivity.KEY_INTENT_PASS_CODE, BlockchainApplication.getAccessManager()
-                .getEncryptedPassCode(guid))
+                guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE,
+                BlockchainApplication.getAccessManager().getEncryptedPassCode(guid))
                 .subscribe(
                         { result ->
                             when (result?.result) {
