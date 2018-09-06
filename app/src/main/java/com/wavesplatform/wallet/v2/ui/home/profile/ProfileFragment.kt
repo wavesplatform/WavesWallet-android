@@ -14,7 +14,7 @@ import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysActivity
@@ -59,7 +59,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
             launchActivity<ChangePasswordActivity> { }
         }
         card_change_passcode.click {
-            launchActivity<EnterPasscodeActivity>(
+            launchActivity<EnterPassCodeActivity>(
                     requestCode = REQUEST_ENTER_PASS_CODE_FOR_CHANGE)
         }
         card_network.click {
@@ -94,7 +94,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         if (FingerprintAuthDialogFragment.isAvailable(context!!)) {
             fingerprint_switch.isChecked = AccessState.getInstance().isUseFingerPrint
             fingerprint_switch.setOnCheckedChangeListener { _, isChecked ->
-                launchActivity<EnterPasscodeActivity>(
+                launchActivity<EnterPassCodeActivity>(
                         requestCode = REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT)
             }
         } else {
@@ -159,12 +159,12 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
             REQUEST_ENTER_PASS_CODE_FOR_CHANGE -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    val passCode = data!!.extras.getString(EnterPasscodeActivity.KEY_INTENT_PASS_CODE)
+                    val passCode = data!!.extras.getString(EnterPassCodeActivity.KEY_INTENT_PASS_CODE)
                     val password = data.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
                     launchActivity<CreatePassCodeActivity> {
                         putExtra(CreatePassCodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE, true)
                         putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
-                        putExtra(EnterPasscodeActivity.KEY_INTENT_PASS_CODE, passCode)
+                        putExtra(EnterPassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
                     }
                 }
             }

@@ -12,7 +12,7 @@ import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity
@@ -41,8 +41,8 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
             setSeed(intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED))
         } else {
-            launchActivity<EnterPasscodeActivity>(
-                    requestCode = EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE)
+            launchActivity<EnterPassCodeActivity>(
+                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
         }
     }
 
@@ -87,7 +87,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE -> {
+            EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
                     val password = data!!.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
                     val wallet = WavesWallet(

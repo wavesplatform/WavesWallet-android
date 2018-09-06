@@ -99,7 +99,7 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         })
     }
 
-    fun clearPasscode(){
+    fun clearPassCode(){
         dots?.clearDots()
         passCode = ""
     }

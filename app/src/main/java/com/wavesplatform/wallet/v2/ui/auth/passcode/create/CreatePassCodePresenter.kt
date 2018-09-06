@@ -7,12 +7,12 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v2.data.manager.AccessManager
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
-class CreatePasscodePresenter @Inject constructor() : BasePresenter<CreatePasscodeView>() {
+class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePasscodeView>() {
 
     var passCode: String = ""
     lateinit var step: CreatePassCodeActivity.CreatePassCodeStep
@@ -24,7 +24,7 @@ class CreatePasscodePresenter @Inject constructor() : BasePresenter<CreatePassco
             extras.containsKey(CreatePassCodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE) ->
                 AccessState.getInstance().currentGuid
             extras.containsKey(CreatePassCodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE) ->
-                extras.getString(EnterPasscodeActivity.KEY_INTENT_GUID)
+                extras.getString(EnterPassCodeActivity.KEY_INTENT_GUID)
             else -> {
                 val accountName = extras.getString(NewAccountActivity.KEY_INTENT_ACCOUNT_NAME)
                 val seed = extras.getString(NewAccountActivity.KEY_INTENT_SEED)

@@ -251,7 +251,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.auth.passcode.enter.EnterPasscodeActivity"
+            android:name=".v2.ui.auth.passcode.enter.EnterPassCodeActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />

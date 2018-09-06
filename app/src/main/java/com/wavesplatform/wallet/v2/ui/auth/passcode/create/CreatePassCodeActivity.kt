@@ -24,10 +24,10 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     @Inject
     @InjectPresenter
-    lateinit var presenter: CreatePasscodePresenter
+    lateinit var presenter: CreatePassCodePresenter
 
     @ProvidePresenter
-    fun providePresenter(): CreatePasscodePresenter = presenter
+    fun providePresenter(): CreatePassCodePresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_create_passcode
 
@@ -110,7 +110,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
         } else {
             text_title.setText(R.string.create_passcode_create_new_title)
         }
-        pass_keypad.clearPasscode()
+        pass_keypad.clearPassCode()
         presenter.step = CreatePassCodeStep.CREATE
         supportActionBar?.setHomeButtonEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
@@ -119,7 +119,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     private fun moveToVerifyStep() {
         text_title.setText(R.string.create_passcode_verify_title)
-        pass_keypad.clearPasscode()
+        pass_keypad.clearPassCode()
         presenter.step = CreatePassCodeStep.VERIFY
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

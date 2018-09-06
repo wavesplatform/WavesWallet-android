@@ -12,7 +12,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
@@ -63,12 +63,12 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     override fun onItemClicked(item: AddressBookUser) {
         val guid = AccessState.getInstance().findGuidBy(item.address)
-        launchActivity<EnterPasscodeActivity>(
-                requestCode = EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE) {
+        launchActivity<EnterPassCodeActivity>(
+                requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
             putExtra(KEY_INTENT_PROCESS_AUTH, true)
-            putExtra(EnterPasscodeActivity.KEY_INTENT_GUID, guid)
+            putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
             if (AccessState.getInstance().isGuidUseFingerPrint(guid)) {
-                putExtra(EnterPasscodeActivity.KEY_INTENT_SHOW_FINGERPRINT, true)
+                putExtra(EnterPassCodeActivity.KEY_INTENT_SHOW_FINGERPRINT, true)
             }
         }
     }
@@ -117,7 +117,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                     }
                 }
             }
-            EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE -> {
+            EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
                     launchActivity<MainActivity>(clear = true)
                 }

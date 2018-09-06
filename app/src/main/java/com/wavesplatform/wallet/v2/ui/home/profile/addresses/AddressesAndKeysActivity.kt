@@ -12,7 +12,7 @@ import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
@@ -70,15 +70,15 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
         }
 
         button_show.click {
-            launchActivity<EnterPasscodeActivity>(
-                    requestCode = EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE) { }
+            launchActivity<EnterPassCodeActivity>(
+                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) { }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            EnterPasscodeActivity.REQUEST_ENTER_PASS_CODE -> {
+            EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
                     button_show.gone()
                     val password = data!!.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)

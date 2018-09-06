@@ -27,7 +27,7 @@ import com.mtramin.rxfingerprint.data.FingerprintResult
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v1.util.RootUtil
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import io.reactivex.disposables.Disposables
 
 
@@ -133,7 +133,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         fingerprintDisposable = RxFingerprint.encrypt(
                 EncryptionMethod.RSA,
                 activity,
-                EnterPasscodeActivity.KEY_INTENT_PASS_CODE, passCode)
+                EnterPassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
                 .subscribe(
                         { encryptionResult ->
                             when (encryptionResult?.result) {
@@ -153,7 +153,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
 
     private fun decrypt() {
         fingerprintDisposable = RxFingerprint.decrypt(EncryptionMethod.RSA, activity,
-                EnterPasscodeActivity.KEY_INTENT_PASS_CODE, AccessState.getInstance().encryptedPin)
+                EnterPassCodeActivity.KEY_INTENT_PASS_CODE, AccessState.getInstance().encryptedPin)
                 .subscribe(
                         { result ->
                             when (result?.result) {

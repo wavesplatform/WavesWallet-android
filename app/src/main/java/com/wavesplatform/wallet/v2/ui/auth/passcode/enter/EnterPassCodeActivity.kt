@@ -31,7 +31,7 @@ import pers.victor.ext.toast
 import javax.inject.Inject
 
 
-class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
+class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     @Inject
     @InjectPresenter
     lateinit var presenter: EnterPassCodePresenter
@@ -122,7 +122,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
     override fun onFailValidatePassCode(overMaxWrongPassCode: Boolean, errorMessage: String?) {
         showProgressBar(false)
         if (overMaxWrongPassCode) {
-            ToastCustom.makeText(this@EnterPasscodeActivity,
+            ToastCustom.makeText(this@EnterPassCodeActivity,
                     getString(R.string.pin_4_strikes),
                     ToastCustom.LENGTH_SHORT,
                     ToastCustom.TYPE_ERROR)
@@ -133,14 +133,14 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
             } else {
                 getString(R.string.unexpected_error) + " ($errorMessage)"
             }
-            ToastCustom.makeText(this@EnterPasscodeActivity, message,
+            ToastCustom.makeText(this@EnterPassCodeActivity, message,
                     ToastCustom.LENGTH_SHORT, ToastCustom.TYPE_ERROR)
             finish()
         }
     }
 
     private fun showFingerPrint() {
-        fingerprintDialog.isCancelable = false;
+        fingerprintDialog.isCancelable = false
         fingerprintDialog.show(fragmentManager, "fingerprintDialog")
     }
 

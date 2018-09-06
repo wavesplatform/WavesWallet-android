@@ -12,7 +12,7 @@ import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -44,8 +44,8 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
                 icon = R.drawable.ic_toolbar_back_black)
-        if (intent.hasExtra(EnterPasscodeActivity.KEY_INTENT_GUID)) {
-            guid = intent.extras.getString(EnterPasscodeActivity.KEY_INTENT_GUID)
+        if (intent.hasExtra(EnterPassCodeActivity.KEY_INTENT_GUID)) {
+            guid = intent.extras.getString(EnterPassCodeActivity.KEY_INTENT_GUID)
             if (!TextUtils.isEmpty(guid)) {
                 setAccountData(guid!!)
             }
@@ -88,7 +88,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
     private fun createDataBundle(): Bundle {
         val options = Bundle()
         options.putBoolean(CreatePassCodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE, true)
-        options.putString(EnterPasscodeActivity.KEY_INTENT_GUID, guid)
+        options.putString(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
         options.putString(NewAccountActivity.KEY_INTENT_PASSWORD, edit_account_password.text.toString())
         return options
     }
