@@ -2,23 +2,20 @@ package com.wavesplatform.wallet.v2.ui.auth.import_account.scan
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import javax.inject.Inject
-
+import android.text.TextUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
+import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_scan_seed.*
 import pers.victor.ext.click
 import pers.victor.ext.toast
+import javax.inject.Inject
 
 
 class ScanSeedFragment : BaseFragment(), ScanSeedView {
@@ -40,7 +37,10 @@ class ScanSeedFragment : BaseFragment(), ScanSeedView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         button_scan.click {
-            IntentIntegrator(baseActivity).setRequestCode(REQUEST_SCAN_QR_CODE).setOrientationLocked(true).setCaptureActivity(QrCodeScannerActivity::class.java).initiateScan();
+            IntentIntegrator(baseActivity).setRequestCode(REQUEST_SCAN_QR_CODE)
+                    .setOrientationLocked(true)
+                    .setCaptureActivity(QrCodeScannerActivity::class.java)
+                    .initiateScan()
         }
     }
 
@@ -49,19 +49,13 @@ class ScanSeedFragment : BaseFragment(), ScanSeedView {
         when (requestCode) {
             REQUEST_SCAN_QR_CODE -> {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
-
-                if (result.contents == null) {
-                    Log.d("ScanSeedFragment", "Cancelled scan")
-                } else {
-                    toast("Scanned: " + result.contents)
-                    // TODO: Change to real scanned address
+                if (!TextUtils.isEmpty(result.contents)) {
+                    toast(getString(R.string.scan_qr_scanned_result_is, result.contents))
                     launchActivity<ProtectAccountActivity> {
-                        putExtra(ProtectAccountActivity.BUNDLE_ACCOUNT_ADDRESS, "MkSuckMydickmMak1593x1GrfYmFdsf83skS11")
+                        putExtra(NewAccountActivity.KEY_INTENT_SEED, result.contents.trim())
                     }
                 }
             }
         }
-
     }
-
 }
