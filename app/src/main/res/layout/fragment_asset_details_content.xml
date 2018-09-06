@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/text_asset_description"
-    android:layout_marginTop="24dp"
     android:fillViewport="true"
     android:overScrollMode="never">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
@@ -48,6 +48,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:orientation="horizontal">
 
                         <android.support.v7.widget.AppCompatTextView
@@ -56,7 +57,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="00000000.00000000"
-                            android:textColor="@color/disabled500"
+                            android:textColor="@color/black"
                             android:textSize="16sp" />
 
 
@@ -67,79 +68,136 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="4dp"
                             android:background="@drawable/asset_price_border"
+                            android:paddingBottom="2dp"
                             android:paddingEnd="4dp"
                             android:paddingStart="4dp"
                             android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
                             android:text="$ 00.00"
                             android:textColor="@color/info500"
                             android:textSize="12sp" />
                     </LinearLayout>
 
-
-                    <RelativeLayout
+                    <LinearLayout
+                        android:id="@+id/frame_in_order"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp">
+                        android:layout_marginTop="24dp"
+                        android:orientation="vertical">
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="0.00000000"
-                            android:textColor="@color/disabled500" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/text_in_order"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="0.00000000"
+                                android:textColor="@color/disabled900" />
 
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_gravity="center_vertical"
-                            android:drawablePadding="8dp"
-                            android:gravity="center"
-                            android:text="@string/wallet_leasing_leased"
-                            android:textColor="@color/disabled500" />
-                    </RelativeLayout>
+                            <android.support.v7.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_gravity="center_vertical"
+                                android:drawablePadding="8dp"
+                                android:gravity="center"
+                                android:text="@string/asset_details_in_order"
+                                android:textColor="@color/disabled500" />
+                        </RelativeLayout>
 
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/view_line_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="5dp"
-                        android:layout_marginTop="14dp"
-                        android:background="@drawable/dotted_line"
-                        android:layerType="software" />
+                        <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="14dp"
+                            android:background="@drawable/dotted_line"
+                            android:layerType="software" />
 
-                    <RelativeLayout
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/frame_leased"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="0.00000000"
-                            android:textColor="@color/disabled500" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_gravity="center_vertical"
-                            android:drawablePadding="8dp"
-                            android:gravity="center"
-                            android:text="@string/asset_details_total"
-                            android:textColor="@color/disabled500" />
-                    </RelativeLayout>
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/view_line_3"
-                        android:layout_width="match_parent"
-                        android:layout_height="5dp"
                         android:layout_marginTop="14dp"
-                        android:background="@drawable/dotted_line"
-                        android:layerType="software" />
+                        android:orientation="vertical">
 
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/text_leased"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="0.00000000"
+                                android:textColor="@color/disabled900" />
+
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_gravity="center_vertical"
+                                android:drawablePadding="8dp"
+                                android:gravity="center"
+                                android:text="@string/asset_details_leased"
+                                android:textColor="@color/disabled500" />
+                        </RelativeLayout>
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/view_line_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="14dp"
+                            android:background="@drawable/dotted_line"
+                            android:layerType="software" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/frame_total"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/text_total"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="0.00000000"
+                                android:textColor="@color/disabled900" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_gravity="center_vertical"
+                                android:drawablePadding="8dp"
+                                android:gravity="center"
+                                android:text="@string/asset_details_total"
+                                android:textColor="@color/disabled500" />
+                        </RelativeLayout>
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/view_line_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="14dp"
+                            android:background="@drawable/dotted_line"
+                            android:layerType="software" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -363,8 +421,8 @@
                     android:id="@+id/text_view_issuer_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toStartOf="@+id/image_copy_issuer"
                     android:layout_marginEnd="8dp"
+                    android:layout_toStartOf="@+id/image_copy_issuer"
                     android:text="3PC4roN512iugc6xGVTTM2XkoWKEdSiiscd"
                     android:textColor="@color/disabled900"
                     android:textSize="14sp" />
@@ -373,9 +431,9 @@
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_copy_issuer"
                     android:layout_width="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     app:srcCompat="@drawable/ic_copy_18_black" />
 
             </RelativeLayout>
@@ -399,8 +457,8 @@
                     android:id="@+id/text_view_id_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toStartOf="@+id/image_copy_id"
                     android:layout_marginEnd="8dp"
+                    android:layout_toStartOf="@+id/image_copy_id"
                     android:text="3PC4roN512iugc6xGVTTM2XkoWKEdSiiscd"
                     android:textColor="@color/disabled900"
                     android:textSize="14sp" />
@@ -409,9 +467,9 @@
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_copy_id"
                     android:layout_width="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     app:srcCompat="@drawable/ic_copy_18_black" />
 
             </RelativeLayout>
@@ -496,51 +554,51 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/card_burn"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             android:layout_marginEnd="16dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="2dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardElevation="2dp"
-            android:layout_marginBottom="24dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="2dp">
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
                 android:paddingEnd="14dp"
                 android:paddingStart="14dp"
-                android:paddingBottom="12dp"
-                android:paddingTop="12dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:paddingTop="12dp">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_burn"
-                    app:srcCompat="@drawable/ic_t_tokenburn_24"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_height="wrap_content" />
+                    app:srcCompat="@drawable/ic_t_tokenburn_24" />
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:layout_toEndOf="@+id/image_burn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_toEndOf="@+id/image_burn"
                     android:text="@string/asset_details_token_burn"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    app:fontFamily="@font/roboto_medium"
-                    android:layout_marginStart="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    app:fontFamily="@font/roboto_medium" />
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    app:srcCompat="@drawable/ic_arrowright_basic_200"
                     android:id="@+id/image_arrow"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_arrowright_basic_200" />
 
             </RelativeLayout>
 
