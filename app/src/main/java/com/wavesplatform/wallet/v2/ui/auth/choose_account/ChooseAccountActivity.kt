@@ -8,9 +8,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.manager.AccessManager
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -62,12 +64,12 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onItemClicked(item: AddressBookUser) {
-        val guid = AccessState.getInstance().findGuidBy(item.address)
+        val guid = BlockchainApplication.getAccessManager().findGuidBy(item.address)
         launchActivity<EnterPassCodeActivity>(
                 requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
             putExtra(KEY_INTENT_PROCESS_AUTH, true)
             putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
-            if (AccessState.getInstance().isGuidUseFingerPrint(guid)) {
+            if (BlockchainApplication.getAccessManager().isGuidUseFingerPrint(guid)) {
                 putExtra(EnterPassCodeActivity.KEY_INTENT_SHOW_FINGERPRINT, true)
             }
         }
@@ -90,7 +92,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
             dialog.dismiss()
             val item = adapter.getItem(position)
             if (item is AddressBookUser) {
-                AccessState.getInstance().deleteWavesWallet(item.address)
+                BlockchainApplication.getAccessManager().deleteWavesWallet(item.address)
                 adapter.remove(position)
             }
             toast(getString(R.string.choose_account_deleted))
@@ -113,7 +115,9 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                     val position = data?.getIntExtra(KEY_INTENT_ITEM_POSITION, 0)
                     item.notNull {
                         adapter.setData(position!!, it)
-                        AccessState.getInstance().saveWavesWalletNewName(item!!.address, item.name)
+                        BlockchainApplication
+                                .getAccessManager()
+                                .storeWalletName(item!!.address, item.name)
                     }
                 }
             }

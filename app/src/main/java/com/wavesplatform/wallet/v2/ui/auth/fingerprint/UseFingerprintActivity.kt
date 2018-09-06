@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.auth.fingerprint
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
@@ -35,7 +36,7 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
             fingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint() {
-                            AccessState.getInstance().isUseFingerPrint = true
+                            BlockchainApplication.getAccessManager().setUseFingerPrint(true)
                             launchActivity<MainActivity>(clear = true) { }
                         }
                     })
@@ -47,7 +48,7 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
     }
 
     override fun onBackPressed() {
-        AccessState.getInstance().isUseFingerPrint = false
+        BlockchainApplication.getAccessManager().setUseFingerPrint(false)
         launchActivity<MainActivity>(clear = true)
     }
 }

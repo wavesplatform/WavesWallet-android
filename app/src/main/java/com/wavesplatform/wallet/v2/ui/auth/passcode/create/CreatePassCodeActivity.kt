@@ -6,6 +6,7 @@ import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
@@ -70,13 +71,13 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     override fun onSuccessCreatePassCode(passCode: String) {
         showProgressBar(false)
-        AccessState.getInstance().isUseFingerPrint = false
+        BlockchainApplication.getAccessManager().setUseFingerPrint(false)
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)
                 && FingerprintAuthDialogFragment.isAvailable(this)) {
             launchActivity<UseFingerprintActivity>(intent.extras) {
                 putExtra(CreatePassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
             }
-        } else if (AccessState.getInstance().isUseFingerPrint) {
+        } else if (BlockchainApplication.getAccessManager().isUseFingerPrint()) {
             val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(passCode)
             fingerprintDialog.isCancelable = false
             fingerprintDialog.show(fragmentManager, "fingerprintDialog")

@@ -10,6 +10,7 @@ import android.text.TextUtils
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
@@ -58,10 +59,10 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         }
 
         val isShowFingerprint = intent.hasExtra(KEY_INTENT_SHOW_FINGERPRINT)
-        val isLoggedIn = !TextUtils.isEmpty(AccessState.getInstance().currentGuid)
+        val isLoggedIn = !TextUtils.isEmpty(BlockchainApplication.getAccessManager().getCurrentGuid())
         val useFingerprint = (!RootUtil.isDeviceRooted()
                 && FingerprintAuthDialogFragment.isAvailable(this)
-                && ((isLoggedIn && AccessState.getInstance().isUseFingerPrint)
+                && ((isLoggedIn && BlockchainApplication.getAccessManager().isUseFingerPrint())
                 || isShowFingerprint))
 
         pass_keypad.isFingerprintAvailable(useFingerprint)
@@ -74,7 +75,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                     }
 
                     override fun onFingerprintClicked() {
-                        if (AccessState.getInstance().isUseFingerPrint) {
+                        if (BlockchainApplication.getAccessManager().isUseFingerPrint()) {
                             showFingerPrint()
                         }
                     }
@@ -95,8 +96,8 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     private fun getGuid(): String {
         return if (intent.hasExtra(KEY_INTENT_GUID)) {
             intent.extras.getString(KEY_INTENT_GUID, "")
-        } else if (!TextUtils.isEmpty(AccessState.getInstance().currentGuid)) {
-            AccessState.getInstance().currentGuid
+        } else if (!TextUtils.isEmpty(BlockchainApplication.getAccessManager().getCurrentGuid())) {
+            BlockchainApplication.getAccessManager().getCurrentGuid()
         } else {
             ""
         }
@@ -108,14 +109,14 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     }
 
     override fun onSuccessValidatePassCode(password: String, passCode: String) {
-        AccessState.getInstance().resetPassCodeInputFails()
+        BlockchainApplication.getAccessManager().resetPassCodeInputFails()
         showProgressBar(false)
         val data = Intent()
         data.putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
         data.putExtra(KEY_INTENT_GUID, getGuid())
         data.putExtra(KEY_INTENT_PASS_CODE, passCode)
         setResult(Constants.RESULT_OK, data)
-        AccessState.getInstance().setCurrentAccount(getGuid())
+        BlockchainApplication.getAccessManager().setCurrentAccount(getGuid())
         finish()
     }
 
@@ -182,14 +183,14 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         } else {
             if (!TextUtils.isEmpty(guid)) {
                 try {
-                    WavesWallet(AccessState.getInstance()
+                    WavesWallet(BlockchainApplication.getAccessManager()
                             .getWalletData(guid), password)
                     launchActivity<CreatePassCodeActivity> {
                         putExtra(CreatePassCodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE, true)
                         putExtra(KEY_INTENT_GUID, guid)
                         putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
                     }
-                    AccessState.getInstance().resetPassCodeInputFails()
+                    BlockchainApplication.getAccessManager().resetPassCodeInputFails()
                 } catch (e: Exception) {
                     toast(getString(R.string.enter_passcode_error_wrong_password))
                     finish()

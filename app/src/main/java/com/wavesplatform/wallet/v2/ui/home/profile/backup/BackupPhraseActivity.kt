@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
@@ -90,8 +91,8 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
             EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
                     val password = data!!.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
-                    val wallet = WavesWallet(
-                            AccessState.getInstance().currentWavesWalletEncryptedData, password)
+                    val wallet = WavesWallet(BlockchainApplication.getAccessManager()
+                            .getCurrentWavesWalletEncryptedData(), password)
                     setSeed(wallet.seedStr)
                 }
             }

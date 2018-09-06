@@ -1,12 +1,10 @@
 package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.v1.data.access.AccessState
-import com.wavesplatform.wallet.v2.data.manager.AccessManager
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -23,7 +21,7 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
         val password = extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
         val guid = when {
             extras.containsKey(CreatePassCodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE) ->
-                AccessState.getInstance().currentGuid
+                BlockchainApplication.getAccessManager().getCurrentGuid()
             extras.containsKey(CreatePassCodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE) ->
                 extras.getString(EnterPassCodeActivity.KEY_INTENT_GUID)
             else -> {
@@ -32,7 +30,7 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
                 val skipBackup = extras.getBoolean(NewAccountActivity.KEY_INTENT_SKIP_BACKUP)
                 BlockchainApplication
                         .getAccessManager()
-                        .storeWavesWallet(seed, password, accountName, skipBackup)
+                        .storeWalletData(seed, password, accountName, skipBackup)
             }
         }
         createPassCode(guid, password, passCode)
@@ -46,7 +44,7 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
                     viewState.onSuccessCreatePassCode(passCode)
                 }, { throwable ->
                     Log.e("CreatePassCodeActivity", throwable.message)
-                    AccessState.getInstance().deleteCurrentWavesWallet()
+                    BlockchainApplication.getAccessManager().deleteCurrentWavesWallet()
                     viewState.onFailCreatePassCode()
                 })
     }

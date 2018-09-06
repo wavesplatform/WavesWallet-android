@@ -6,6 +6,7 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.vicpin.krealmextensions.queryAllAsync
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
@@ -37,9 +38,9 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        val user = AccessState.getInstance().createAddressBookCurrentAccount()
-        text_address.text = user.address
-        text_public_key.text = AccessState.getInstance().findPublicKeyBy(user.address)
+        val user = BlockchainApplication.getAccessManager().createAddressBookCurrentAccount()
+        text_address.text = user?.address
+        text_public_key.text = BlockchainApplication.getAccessManager().findPublicKeyBy(user!!.address)
 
         queryAllAsync<Alias> { aliases ->
             val ownAliases = aliases.filter { it.own }
@@ -80,8 +81,8 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
                 if (resultCode == Constants.RESULT_OK) {
                     button_show.gone()
                     val password = data!!.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
-                    val wallet = WavesWallet(
-                            AccessState.getInstance().currentWavesWalletEncryptedData, password)
+                    val wallet = WavesWallet(BlockchainApplication.getAccessManager()
+                            .getCurrentWavesWalletEncryptedData(), password)
                     text_private_key.text = (wallet.privateKeyStr)
                     relative_private_key_block.visiable()
                 }

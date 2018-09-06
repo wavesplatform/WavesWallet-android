@@ -148,7 +148,7 @@ public class DexAccessState {
 
             return walletGuid;
         } catch (Exception e) {
-            Log.e(getClass().getSimpleName(), "storeWavesWallet: ", e);
+            Log.e(getClass().getSimpleName(), "storeWalletData: ", e);
             return null;
         }
     }

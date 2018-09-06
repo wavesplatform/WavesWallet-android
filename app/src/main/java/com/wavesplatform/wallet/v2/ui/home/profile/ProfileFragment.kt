@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v2.data.Constants
@@ -69,13 +70,13 @@ class ProfileFragment : BaseFragment(), ProfileView {
             val alertDialog = AlertDialog.Builder(baseActivity).create()
             alertDialog.setTitle(getString(R.string.profile_general_delete_account_dialog_title))
             alertDialog.setMessage(getString(R.string.profile_general_delete_account_dialog_description))
-            if (AccessState.getInstance().isCurrentAccountBackupSkipped) {
+            if (BlockchainApplication.getAccessManager().isCurrentAccountBackupSkipped()) {
                 alertDialog.setView(LayoutInflater.from(baseActivity)
                         .inflate(R.layout.delete_account_warning_layout, null))
             }
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                     getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->
-                AccessState.getInstance().deleteCurrentWavesWallet()
+                BlockchainApplication.getAccessManager().deleteCurrentWavesWallet()
                 presenter.prefsUtil.logOut()
                 presenter.appUtil.restartApp()
                 dialog.dismiss()
@@ -92,7 +93,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
 
         if (FingerprintAuthDialogFragment.isAvailable(context!!)) {
-            fingerprint_switch.isChecked = AccessState.getInstance().isUseFingerPrint
+            fingerprint_switch.isChecked = BlockchainApplication.getAccessManager().isUseFingerPrint()
             fingerprint_switch.setOnCheckedChangeListener { _, isChecked ->
                 launchActivity<EnterPassCodeActivity>(
                         requestCode = REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT)
@@ -102,7 +103,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
 
 
-        if (AccessState.getInstance().isCurrentAccountBackupSkipped) {
+        if (BlockchainApplication.getAccessManager().isCurrentAccountBackupSkipped()) {
             skip_backup_indicator.setBackgroundColor(ContextCompat
                     .getColor(context!!, R.color.error500))
             skip_backup_indicator_image.setImageDrawable(ContextCompat
@@ -151,10 +152,13 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
             REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    AccessState.getInstance().isUseFingerPrint =
-                            !AccessState.getInstance().isUseFingerPrint
+                    BlockchainApplication.getAccessManager()
+                            .setUseFingerPrint(
+                                    !BlockchainApplication.getAccessManager().isUseFingerPrint())
+
                 }
-                fingerprint_switch.isChecked = AccessState.getInstance().isUseFingerPrint
+                fingerprint_switch.isChecked = BlockchainApplication.getAccessManager()
+                        .isUseFingerPrint()
             }
 
             REQUEST_ENTER_PASS_CODE_FOR_CHANGE -> {

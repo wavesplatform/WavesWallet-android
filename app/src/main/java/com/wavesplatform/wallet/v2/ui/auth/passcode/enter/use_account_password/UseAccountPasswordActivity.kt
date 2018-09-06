@@ -7,6 +7,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
@@ -32,8 +33,8 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
     @Inject
     @InjectPresenter
     lateinit var presenter: UseAccountPasswordPresenter
-    lateinit var validator: Validator
-    private var guid: String? = ""
+    private lateinit var validator: Validator
+    private var guid: String = ""
 
     @ProvidePresenter
     fun providePresenter(): UseAccountPasswordPresenter = presenter
@@ -74,10 +75,10 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         button_sign_in.click {
             if (!TextUtils.isEmpty(guid)) {
                 try {
-                    WavesWallet(AccessState.getInstance().getWalletData(guid),
+                    WavesWallet(BlockchainApplication.getAccessManager().getWalletData(guid),
                             edit_account_password.text.toString())
                     launchActivity<CreatePassCodeActivity>(options = createDataBundle())
-                    AccessState.getInstance().resetPassCodeInputFails()
+                    BlockchainApplication.getAccessManager().resetPassCodeInputFails()
                 } catch (e: Exception) {
                     toast(getString(R.string.enter_passcode_error_wrong_password))
                 }
@@ -94,8 +95,8 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
     }
 
     private fun setAccountData(guid: String) {
-        account_name.text = AccessState.getInstance().getWalletName(guid)
-        val address = AccessState.getInstance().getWalletAddress(guid)
+        account_name.text = BlockchainApplication.getAccessManager().getWalletName(guid)
+        val address = BlockchainApplication.getAccessManager().getWalletAddress(guid)
         account_address.text = address
         val bitmap = Identicon.create(address,
                 Identicon.Options.Builder()

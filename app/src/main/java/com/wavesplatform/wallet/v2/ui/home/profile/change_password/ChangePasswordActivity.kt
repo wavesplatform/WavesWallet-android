@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.R.string.password
 import com.wavesplatform.wallet.v1.data.access.AccessState
@@ -102,14 +103,14 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         }
 
         button_confirm.click {
-            val guid = AccessState.getInstance().currentGuid
+            val guid = BlockchainApplication.getAccessManager().getCurrentGuid()
             try {
                 val oldWallet = WavesWallet(
-                        AccessState.getInstance().currentWavesWalletEncryptedData,
+                        BlockchainApplication.getAccessManager().getCurrentWavesWalletEncryptedData(),
                         edit_old_password.text.toString()
                 )
                 val newWallet = WavesWallet(oldWallet.seed)
-                AccessState.getInstance().storePassword(
+                BlockchainApplication.getAccessManager().storePassword(
                         guid, newWallet.publicKeyStr,
                         newWallet.getEncryptedData(edit_confirm_password.text.toString()))
                 toast(getString(R.string.change_password_success))
