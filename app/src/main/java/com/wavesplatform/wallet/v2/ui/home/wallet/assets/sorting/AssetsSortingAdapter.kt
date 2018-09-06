@@ -24,6 +24,7 @@ class AssetsSortingAdapter @Inject constructor(var publicKeyAccountHelper: Publi
                     onHiddenChangeListener?.onHiddenStateChanged(item, isChecked)
                 })
                 .setGone(R.id.switch_visible, item.configureVisibleState)
+                .setGone(R.id.image_down_arrow, item.isGateway)
                 .setGone(R.id.image_drag, !item.configureVisibleState)
 
         helper.itemView.image_asset_icon.isOval = true
