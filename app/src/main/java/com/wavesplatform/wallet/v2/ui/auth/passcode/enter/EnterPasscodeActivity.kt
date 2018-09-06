@@ -19,7 +19,7 @@ import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
@@ -34,11 +34,11 @@ import javax.inject.Inject
 class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
     @Inject
     @InjectPresenter
-    lateinit var presenter: EnterPasscodePresenter
+    lateinit var presenter: EnterPassCodePresenter
     private lateinit var fingerprintDialog: FingerprintAuthDialogFragment
 
     @ProvidePresenter
-    fun providePresenter(): EnterPasscodePresenter = presenter
+    fun providePresenter(): EnterPassCodePresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_enter_passcode
 
@@ -119,7 +119,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
         finish()
     }
 
-    override fun onFailValidatePassCode(overMaxWrongPassCode: Boolean, message: String?) {
+    override fun onFailValidatePassCode(overMaxWrongPassCode: Boolean, errorMessage: String?) {
         showProgressBar(false)
         if (overMaxWrongPassCode) {
             ToastCustom.makeText(this@EnterPasscodeActivity,
@@ -128,10 +128,13 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
                     ToastCustom.TYPE_ERROR)
             showRequestPasswordDialog()
         } else {
-            ToastCustom.makeText(this@EnterPasscodeActivity,
-                    getString(R.string.unexpected_error) + " ($message)",
-                    ToastCustom.LENGTH_SHORT,
-                    ToastCustom.TYPE_ERROR)
+            val message = if (TextUtils.isEmpty(errorMessage)) {
+                getString(R.string.invalid_pin)
+            } else {
+                getString(R.string.unexpected_error) + " ($errorMessage)"
+            }
+            ToastCustom.makeText(this@EnterPasscodeActivity, message,
+                    ToastCustom.LENGTH_SHORT, ToastCustom.TYPE_ERROR)
             finish()
         }
     }
@@ -171,7 +174,7 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
                 }.show()
     }
 
-    private fun tryLaunchRecreatePassCode(passwordStr: String) {
+    private fun tryLaunchRecreatePassCode(password: String) {
         val guid = getGuid()
 
         if (TextUtils.isEmpty(guid)) {
@@ -180,11 +183,11 @@ class EnterPasscodeActivity : BaseActivity(), EnterPasscodeView {
             if (!TextUtils.isEmpty(guid)) {
                 try {
                     WavesWallet(AccessState.getInstance()
-                            .getWalletData(guid), passwordStr)
-                    launchActivity<CreatePasscodeActivity>(clear = true) {
-                        putExtra(CreatePasscodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE, true)
+                            .getWalletData(guid), password)
+                    launchActivity<CreatePassCodeActivity> {
+                        putExtra(CreatePassCodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE, true)
                         putExtra(KEY_INTENT_GUID, guid)
-                        putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, passwordStr)
+                        putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
                     }
                     AccessState.getInstance().removePinFails()
                 } catch (e: Exception) {

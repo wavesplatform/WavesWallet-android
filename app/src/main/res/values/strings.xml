@@ -70,6 +70,7 @@
 
     <string name="check_connectivity_exit">No connection to the Internet</string>
     <string name="dialog_continue">Continue</string>
+    <string name="dialog_processing">Wait…</string>
 
     <string name="double_encryption_password_error">Double encrypt password error. Please try again.</string>
 
@@ -1026,6 +1027,7 @@
 
     <!--Create passcode-->
     <string name="create_passcode_create_title">Create a passcode</string>
+    <string name="create_passcode_create_new_title">Create a new passcode</string>
     <string name="create_passcode_verify_title">Verify your passcode</string>
 
     <!--Use fingerprint-->

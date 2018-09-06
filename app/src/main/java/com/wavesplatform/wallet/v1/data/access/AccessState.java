@@ -340,8 +340,8 @@ public class AccessState {
         return prefs.getValue(PrefsUtil.KEY_PIN_FAILS, 0);
     }
 
-    public void setCurrentAccountBackupCompleted() {
-        prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, true);
+    public void setCurrentAccountBackupSkipped() {
+        prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, false);
     }
 
     public boolean isCurrentAccountBackupSkipped() {

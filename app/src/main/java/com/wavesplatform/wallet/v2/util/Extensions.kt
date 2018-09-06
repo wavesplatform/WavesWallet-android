@@ -165,9 +165,9 @@ fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_1
 
     this.notNull { image ->
         image.setImageDrawable(ContextCompat.getDrawable(this.context, R.drawable.ic_check_18_success_400))
-        runDelayed(1500, {
+        runDelayed(1500) {
             this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, copyIcon)) }
-        })
+        }
     }
 
 }
@@ -206,7 +206,7 @@ fun String?.getAge(): String {
 
 
 fun ImageView.loadImage(url: String?, centerCrop: Boolean = true) {
-    this.post({
+    this.post {
         val options = RequestOptions()
                 .override(this.width, this.height)
 
@@ -217,7 +217,7 @@ fun ImageView.loadImage(url: String?, centerCrop: Boolean = true) {
                 .load(url)
                 .apply(options)
                 .into(this)
-    })
+    }
 }
 
 fun Context.getViewScaleAnimator(from: View, target: View, additionalPadding: Int = 0): Animator {
@@ -247,7 +247,7 @@ fun Context.getViewScaleAnimator(from: View, target: View, additionalPadding: In
 }
 
 fun ImageView.loadImage(drawableRes: Int?, centerCrop: Boolean = true) {
-    this.post({
+    this.post {
         val options = RequestOptions()
                 .override(this.width, this.height)
 
@@ -258,11 +258,11 @@ fun ImageView.loadImage(drawableRes: Int?, centerCrop: Boolean = true) {
                 .load(drawableRes)
                 .apply(options)
                 .into(this)
-    })
+    }
 }
 
 fun ImageView.loadImage(file: File?, centerCrop: Boolean = true, circleCrop: Boolean = false, deleteImmediately: Boolean = true) {
-    this.post({
+    this.post {
         val options = RequestOptions()
                 .override(this.width, this.height)
 
@@ -285,7 +285,7 @@ fun ImageView.loadImage(file: File?, centerCrop: Boolean = true, circleCrop: Boo
 
                 })
                 .into(this)
-    })
+    }
 }
 
 
@@ -379,7 +379,7 @@ fun Snackbar.withColor(@ColorInt colorInt: Int?): Snackbar {
 inline fun <reified T : Any> newIntent(context: Context): Intent = Intent(context, T::class.java)
 
 inline fun <reified T : Any> newClearIntent(context: Context): Intent {
-    var intent = Intent(context, T::class.java)
+    val intent = Intent(context, T::class.java)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     return intent
 }

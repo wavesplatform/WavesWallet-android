@@ -8,7 +8,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.backup_info.BackupInfoActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_secret_phrase.*
@@ -37,7 +37,7 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
         }
 
         button_do_it_later.click {
-            launchActivity<CreatePasscodeActivity>(options = intent.extras) {
+            launchActivity<CreatePassCodeActivity>(options = intent.extras) {
                 putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, true)
             }
         }
@@ -46,7 +46,7 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_close -> {
-                launchActivity<CreatePasscodeActivity>(options = intent.extras) {
+                launchActivity<CreatePassCodeActivity>(options = intent.extras) {
                     putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, true)
                 }
             }

@@ -1,13 +1,17 @@
 package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 
+import android.app.Dialog
 import android.os.Bundle
+import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -16,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_create_passcode.*
 import javax.inject.Inject
 
 
-open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
+open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     @Inject
     @InjectPresenter
@@ -48,11 +52,12 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
                 }
             }
         })
+        moveToCreateStep()
     }
 
     private fun saveAccount(passCode: String) {
         if (intent.extras == null) {
-            ToastCustom.makeText(this@CreatePasscodeActivity,
+            ToastCustom.makeText(this@CreatePassCodeActivity,
                     getString(R.string.create_pin_failed),
                     ToastCustom.LENGTH_SHORT,
                     ToastCustom.TYPE_ERROR)
@@ -63,20 +68,36 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
         presenter.saveAccount(this, passCode, intent.extras)
     }
 
-    override fun onSuccessCreatePassCodeFailed(passCode: String) {
+    override fun onSuccessCreatePassCode(passCode: String) {
         showProgressBar(false)
-        if (FingerprintAuthDialogFragment.isAvailable(this)) {
+        AccessState.getInstance().isUseFingerPrint = false
+        if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)
+                && FingerprintAuthDialogFragment.isAvailable(this)) {
             launchActivity<UseFingerprintActivity>(intent.extras) {
-                putExtra(CreatePasscodeActivity.KEY_INTENT_PASS_CODE, passCode)
+                putExtra(CreatePassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
             }
+        } else if (AccessState.getInstance().isUseFingerPrint) {
+            val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(passCode)
+            fingerprintDialog.isCancelable = false
+            fingerprintDialog.show(fragmentManager, "fingerprintDialog")
+            fingerprintDialog.setFingerPrintDialogListener(
+                    object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
+                        override fun onSuccessRecognizedFingerprint() {
+                            launchActivity<MainActivity>()
+                        }
+
+                        override fun onCancelButtonClicked(dialog: Dialog, button: AppCompatTextView) {
+                            launchActivity<MainActivity>()
+                        }
+                    })
         } else {
-            launchActivity<MainActivity>(clear = true)
+            launchActivity<MainActivity>()
         }
     }
 
     override fun onFailCreatePassCode() {
         showProgressBar(false)
-        ToastCustom.makeText(this@CreatePasscodeActivity,
+        ToastCustom.makeText(this@CreatePassCodeActivity,
                 getString(R.string.create_pin_failed),
                 ToastCustom.LENGTH_SHORT,
                 ToastCustom.TYPE_ERROR)
@@ -84,7 +105,11 @@ open class CreatePasscodeActivity : BaseActivity(), CreatePasscodeView {
     }
 
     private fun moveToCreateStep() {
-        text_title.setText(R.string.create_passcode_create_title)
+        if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
+            text_title.setText(R.string.create_passcode_create_title)
+        } else {
+            text_title.setText(R.string.create_passcode_create_new_title)
+        }
         pass_keypad.clearPasscode()
         presenter.step = CreatePassCodeStep.CREATE
         supportActionBar?.setHomeButtonEnabled(false)

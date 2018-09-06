@@ -9,7 +9,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -50,7 +50,7 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
 
         button_create_account.click {
             if (intent.hasExtra(NewAccountActivity.KEY_INTENT_SEED)) {
-                launchActivity<CreatePasscodeActivity>(options = createDataBundle())
+                launchActivity<CreatePassCodeActivity>(options = createDataBundle())
             }
         }
 

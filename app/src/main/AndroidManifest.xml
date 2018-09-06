@@ -247,7 +247,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.auth.passcode.create.CreatePasscodeActivity"
+            android:name=".v2.ui.auth.passcode.create.CreatePassCodeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity

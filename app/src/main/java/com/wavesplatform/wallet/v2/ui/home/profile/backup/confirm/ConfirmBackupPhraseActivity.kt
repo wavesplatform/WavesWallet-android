@@ -13,7 +13,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -90,9 +90,9 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
                     button_confirm.visiable()
                     button_confirm.click {
                         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
-                            launchActivity<CreatePasscodeActivity>(options = intent.extras, clear = true)
+                            launchActivity<CreatePassCodeActivity>(options = intent.extras)
                         } else {
-                            AccessState.getInstance().setCurrentAccountBackupCompleted()
+                            AccessState.getInstance().setCurrentAccountBackupSkipped()
                             launchActivity<MainActivity> { }
                         }
                     }

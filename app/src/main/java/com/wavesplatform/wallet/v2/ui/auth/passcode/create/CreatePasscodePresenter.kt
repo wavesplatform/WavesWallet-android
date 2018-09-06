@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v1.data.access.AccessState
-import com.wavesplatform.wallet.v1.util.AppUtil
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.AccessManager
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
@@ -17,15 +15,15 @@ import javax.inject.Inject
 class CreatePasscodePresenter @Inject constructor() : BasePresenter<CreatePasscodeView>() {
 
     var passCode: String = ""
-    lateinit var step: CreatePasscodeActivity.CreatePassCodeStep
+    lateinit var step: CreatePassCodeActivity.CreatePassCodeStep
 
     fun saveAccount(context: Context, passCode: String, extras: Bundle) {
 
         val password = extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
         val guid = when {
-            extras.containsKey(CreatePasscodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE) ->
+            extras.containsKey(CreatePassCodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE) ->
                 AccessState.getInstance().currentGuid
-            extras.containsKey(CreatePasscodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE) ->
+            extras.containsKey(CreatePassCodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE) ->
                 extras.getString(EnterPasscodeActivity.KEY_INTENT_GUID)
             else -> {
                 val accountName = extras.getString(NewAccountActivity.KEY_INTENT_ACCOUNT_NAME)
@@ -40,7 +38,7 @@ class CreatePasscodePresenter @Inject constructor() : BasePresenter<CreatePassco
     private fun createPassCode(context: Context, guid: String, password: String, passCode: String) {
         AccessManager(context).createPassCodeObservable(guid, password, passCode)
                 .subscribe({
-                    viewState.onSuccessCreatePassCodeFailed(passCode)
+                    viewState.onSuccessCreatePassCode(passCode)
                 }, { throwable ->
                     Log.e("CreatePassCodeActivity", throwable.message)
                     AccessState.getInstance().deleteCurrentWavesWallet()

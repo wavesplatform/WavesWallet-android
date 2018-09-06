@@ -5,18 +5,16 @@ import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.IncorrectPinException
-import com.wavesplatform.wallet.v1.util.AppUtil
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.AccessManager
-import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
-class EnterPasscodePresenter @Inject constructor() : BasePresenter<EnterPasscodeView>() {
+class EnterPassCodePresenter @Inject constructor() : BasePresenter<EnterPasscodeView>() {
 
     val passCode: String = ""
-    lateinit var step: CreatePasscodeActivity.CreatePassCodeStep
+    lateinit var step: CreatePassCodeActivity.CreatePassCodeStep
 
     fun validate(context: Context, guid: String, passCode: String) {
         AccessManager(context).validatePassCodeObservable(guid, passCode).subscribe({ password ->

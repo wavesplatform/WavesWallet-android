@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -12,7 +11,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPasscodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
@@ -77,7 +76,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
                 try {
                     WavesWallet(AccessState.getInstance().getWalletData(guid),
                             edit_account_password.text.toString())
-                    launchActivity<CreatePasscodeActivity>(clear = true, options = createDataBundle())
+                    launchActivity<CreatePassCodeActivity>(options = createDataBundle())
                     AccessState.getInstance().removePinFails()
                 } catch (e: Exception) {
                     toast(getString(R.string.enter_passcode_error_wrong_password))
@@ -88,7 +87,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
 
     private fun createDataBundle(): Bundle {
         val options = Bundle()
-        options.putBoolean(CreatePasscodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE, true)
+        options.putBoolean(CreatePassCodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE, true)
         options.putString(EnterPasscodeActivity.KEY_INTENT_GUID, guid)
         options.putString(NewAccountActivity.KEY_INTENT_PASSWORD, edit_account_password.text.toString())
         return options
