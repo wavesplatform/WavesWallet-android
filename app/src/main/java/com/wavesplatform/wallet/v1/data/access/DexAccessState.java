@@ -75,7 +75,7 @@ public class DexAccessState {
     private Observable<String> createValidateObservable(String passedPin) {
         int fails = prefs.getValue(PrefsUtil.KEY_PIN_FAILS, 0);
 
-        return pinStore.readPassword(fails, prefs.getGuid(), passedPin)
+        return pinStore.readPassword(prefs.getGuid(), passedPin, fails)
                 .map(value -> {
                     try {
                         String encryptedPassword = prefs.getValue(PrefsUtil.KEY_ENCRYPTED_PASSWORD, "");
@@ -106,7 +106,7 @@ public class DexAccessState {
                 random.nextBytes(bytes);
                 String value = new String(Hex.encode(bytes), "UTF-8");
 
-                pinStore.savePasswordByKey(walletGuid, value, passedPin).subscribe(res -> {
+                pinStore.writePassword(walletGuid, passedPin, value).subscribe(res -> {
                     String encryptedPassword = AESUtil.encrypt(
                             password.toString(), value, AESUtil.PIN_PBKDF2_ITERATIONS);
                     prefs.setValue(PrefsUtil.KEY_ENCRYPTED_PASSWORD, encryptedPassword);

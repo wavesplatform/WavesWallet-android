@@ -33,37 +33,6 @@ import io.reactivex.disposables.Disposables
 
 class FingerprintAuthDialogFragment : DialogFragment() {
 
-    companion object {
-        const val AVAILABLE_TIMES = 5
-
-        private const val KEY_MODE = "key_mode"
-        private const val KEY_PASS_CODE = "key_pass_code"
-        private const val CRYPT = 0
-        private const val DECRYPT = 1
-
-        fun newInstance(passCode: String): FingerprintAuthDialogFragment {
-            val args = Bundle()
-            args.putInt(KEY_MODE, CRYPT)
-            args.putString(KEY_PASS_CODE, passCode)
-            val fragment = FingerprintAuthDialogFragment()
-            fragment.arguments = args
-            return fragment
-        }
-
-        fun newInstance(): FingerprintAuthDialogFragment {
-            val args = Bundle()
-            args.putInt(KEY_MODE, DECRYPT)
-            val fragment = FingerprintAuthDialogFragment()
-            fragment.arguments = args
-            return fragment
-        }
-
-        fun isAvailable(context: Context): Boolean {
-            return RxFingerprint.isAvailable(context)
-        }
-    }
-
-
     private var fingerprintState = FingerprintState.DEFAULT
     private var numberOfAttempts = 0
     private var fingerPrintDialogListener: FingerPrintDialogListener? = null
@@ -267,6 +236,36 @@ class FingerprintAuthDialogFragment : DialogFragment() {
 
         fun onSuccessRecognizedFingerprint(passCode: String) {
 
+        }
+    }
+
+    companion object {
+        const val AVAILABLE_TIMES = 5
+
+        private const val KEY_MODE = "key_mode"
+        private const val KEY_PASS_CODE = "key_pass_code"
+        private const val CRYPT = 0
+        private const val DECRYPT = 1
+
+        fun newInstance(passCode: String): FingerprintAuthDialogFragment {
+            val args = Bundle()
+            args.putInt(KEY_MODE, CRYPT)
+            args.putString(KEY_PASS_CODE, passCode)
+            val fragment = FingerprintAuthDialogFragment()
+            fragment.arguments = args
+            return fragment
+        }
+
+        fun newInstance(): FingerprintAuthDialogFragment {
+            val args = Bundle()
+            args.putInt(KEY_MODE, DECRYPT)
+            val fragment = FingerprintAuthDialogFragment()
+            fragment.arguments = args
+            return fragment
+        }
+
+        fun isAvailable(context: Context): Boolean {
+            return RxFingerprint.isAvailable(context)
         }
     }
 }

@@ -36,7 +36,7 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
     }
 
     private fun createPassCode(context: Context, guid: String, password: String, passCode: String) {
-        AccessManager(context).createPassCodeObservable(guid, password, passCode)
+        AccessManager(context).writePassCodeObservable(guid, password, passCode)
                 .subscribe({
                     viewState.onSuccessCreatePassCode(passCode)
                 }, { throwable ->

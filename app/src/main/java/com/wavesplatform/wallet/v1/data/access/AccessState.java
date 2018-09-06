@@ -31,6 +31,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.exceptions.Exceptions;
 import io.realm.RealmConfiguration;
 
+@Deprecated
 public class AccessState {
 
     private static final String TAG = AccessState.class.getSimpleName();
@@ -93,7 +94,7 @@ public class AccessState {
     private Observable<String> createValidateObservable(String guid, String passedPin) {
         int fails = prefs.getValue(PrefsUtil.KEY_PIN_FAILS, 0);
 
-        return pinStore.readPassword(fails, guid, passedPin)
+        return pinStore.readPassword(guid, passedPin, fails)
                 .map(value -> {
                     try {
                         String encryptedPassword = prefs
@@ -126,7 +127,7 @@ public class AccessState {
                 random.nextBytes(bytes);
                 String value = new String(Hex.encode(bytes), "UTF-8");
 
-                pinStore.savePasswordByKey(guid, value, passedPin).subscribe(res -> {
+                pinStore.writePassword(guid, passedPin, value).subscribe(res -> {
                     String encryptedPassword = AESUtil.encrypt(
                             password.toString(), value, AESUtil.PIN_PBKDF2_ITERATIONS);
                     prefs.setValue(guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, encryptedPassword);
@@ -147,15 +148,7 @@ public class AccessState {
         });
     }
 
-    public void storePassword(String guid, String publicKeyStr, String encryptedPassword) {
-        prefs.setGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, guid);
-        prefs.setValue(PrefsUtil.KEY_PUB_KEY, publicKeyStr);
-        prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, encryptedPassword);
-    }
 
-    public void setCurrentAccount(String guid) {
-        prefs.setValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, guid);
-    }
 
     public String storeWavesWallet(String seed, String password, String walletName, boolean skipBackup) {
         try {
@@ -245,31 +238,7 @@ public class AccessState {
         }
     }
 
-    public String getWalletData(String guid) {
-        if (TextUtils.isEmpty(guid)) {
-            return "";
-        }
-        return prefs.getGlobalValue(guid + PrefsUtil.KEY_ENCRYPTED_WALLET, "");
-    }
 
-    public String getWalletName(String guid) {
-        if (TextUtils.isEmpty(guid)) {
-            return "";
-        }
-        return prefs.getGlobalValue(guid + PrefsUtil.KEY_WALLET_NAME, "");
-    }
-
-    public String getWalletAddress(String guid) {
-        if (TextUtils.isEmpty(guid)) {
-            return "";
-        }
-        String publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "");
-        return AddressUtil.addressFromPublicKey(publicKey);
-    }
-
-    public String findPublicKeyBy(String address) {
-        return prefs.getValue(findGuidBy(address), PrefsUtil.KEY_PUB_KEY, "");
-    }
 
     @NonNull
     private String[] createGuidsListWithout(String guidToRemove) {
@@ -327,6 +296,48 @@ public class AccessState {
         wavesWallet = null;
     }
 
+
+
+
+
+
+    public String getWalletData(String guid) {
+        if (TextUtils.isEmpty(guid)) {
+            return "";
+        }
+        return prefs.getGlobalValue(guid + PrefsUtil.KEY_ENCRYPTED_WALLET, "");
+    }
+
+    public String getWalletName(String guid) {
+        if (TextUtils.isEmpty(guid)) {
+            return "";
+        }
+        return prefs.getGlobalValue(guid + PrefsUtil.KEY_WALLET_NAME, "");
+    }
+
+    public String getWalletAddress(String guid) {
+        if (TextUtils.isEmpty(guid)) {
+            return "";
+        }
+        String publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "");
+        return AddressUtil.addressFromPublicKey(publicKey);
+    }
+
+    public String findPublicKeyBy(String address) {
+        return prefs.getValue(findGuidBy(address), PrefsUtil.KEY_PUB_KEY, "");
+    }
+
+
+    public void storePassword(String guid, String publicKeyStr, String encryptedPassword) {
+        prefs.setGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, guid);
+        prefs.setValue(PrefsUtil.KEY_PUB_KEY, publicKeyStr);
+        prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, encryptedPassword);
+    }
+
+    public void setCurrentAccount(String guid) {
+        prefs.setValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, guid);
+    }
+
     public void removePinFails() {
         prefs.removeValue(PrefsUtil.KEY_PIN_FAILS);
     }
@@ -361,10 +372,10 @@ public class AccessState {
     }
 
     public void setEncryptedPin(String data) {
-        prefs.setGlobalValue(PrefsUtil.KEY_ENCRYPTED_PIN, data);
+        prefs.setValue(PrefsUtil.KEY_ENCRYPTED_PIN, data);
     }
 
     public String getEncryptedPin() {
-        return prefs.getGlobalValue(PrefsUtil.KEY_ENCRYPTED_PIN, "");
+        return prefs.getValue(PrefsUtil.KEY_ENCRYPTED_PIN, "");
     }
 }

@@ -21,31 +21,31 @@ class AccessManager(context: Context) {
     private val pinStore = PinStoreService()
 
     fun validatePassCodeObservable(guid: String, passCode: String): Observable<String> {
-        return createValidateObservable(guid, passCode)
+        val fails = AccessState.getInstance().pinFails
+        return readPassCodeObservable(guid, passCode, fails)
                 .flatMap { password ->
-                    createPassCodeObservable(guid, password, passCode)
+                    writePassCodeObservable(guid, password, passCode)
                             .andThen(Observable.just<String>(password))
                 }
                 .compose(RxUtil.applySchedulersToObservable<String>())
     }
 
-    private fun createValidateObservable(guid: String, passedPin: String): Observable<String> {
-        val fails = AccessState.getInstance().pinFails
-
-        return pinStore.readPassword(fails, guid, passedPin)
-                .map { value ->
+    private fun readPassCodeObservable(guid: String, passedPin: String, tryCount: Int): Observable<String> {
+        return pinStore.readPassword(guid, passedPin, tryCount)
+                .map { seed ->
                     try {
-                        val encryptedPassword = prefs.getValue(guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, "")
-                        AESUtil
-                                .decrypt(encryptedPassword, value, AESUtil.PIN_PBKDF2_ITERATIONS)
+                        val encryptedPassword = prefs.getValue(
+                                guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, "")
+                        AESUtil.decrypt(
+                                encryptedPassword, seed, AESUtil.PIN_PBKDF2_ITERATIONS)
                     } catch (e: Exception) {
                         throw Exceptions.propagate(Throwable("Decrypt wallet failed"))
                     }
                 }
     }
 
-    fun createPassCodeObservable(guid: String, password: String, passedPassCode: String): Completable {
-        if (passedPassCode == "0000" || passedPassCode.length != 4) {
+    fun writePassCodeObservable(guid: String, password: String, passCode: String): Completable {
+        if (passCode == "0000" || passCode.length != 4) {
             return Completable.error(RuntimeException("Prohibited pin"))
         }
 
@@ -53,11 +53,11 @@ class AccessManager(context: Context) {
 
         return Completable.create { subscriber ->
             try {
-                val randomString = randomString()
-                pinStore.savePasswordByKey(guid, randomString, passedPassCode)
+                val seed = randomString()
+                pinStore.writePassword(guid, passCode, seed)
                         .subscribe({ res ->
-                            val encryptedPassword = AESUtil
-                                    .encrypt(password, randomString, AESUtil.PIN_PBKDF2_ITERATIONS)
+                            val encryptedPassword = AESUtil.encrypt(
+                                    password, seed, AESUtil.PIN_PBKDF2_ITERATIONS)
                             prefs.setValue(guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, encryptedPassword)
                             if (!subscriber.isDisposed) {
                                 subscriber.onComplete()
