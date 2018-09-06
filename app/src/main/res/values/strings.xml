@@ -667,6 +667,7 @@
     <string name="common_k_quantity">%sk</string>
     <string name="common_kk_quantity">%skk</string>
     <string name="common_kkk_quantity">%skkk</string>
+    <string name="common_load_more_status">Loading…</string>
 
     <!-- Language-->
     <string name="choose_language_russia">Русский</string>
@@ -1080,10 +1081,12 @@
 
     <!--Import account-->
     <string name="import_account_toolbar_title">Import account</string>
-    <string name="import_account_login_at_site">Log in to your Beta Client via your PC or Mac at https://beta.wavesplatform.com</string>
-    <string name="import_account_login_at_site_key">https://beta.wavesplatform.com</string>
+    <string name="import_account_tab_scan">Scan</string>
+    <string name="import_account_tab_manually">Manually</string>
+    <string name="import_account_login_at_site">Log in to your Waves Client via web or Mac/PC</string>
     <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Settings > Security > Pairing code]]></string>
-    <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code. Scan the code with your camera.</string>
+    <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
+    <string name="import_account_scan">Scan the code with your camera</string>
     <string name="import_account_scan_pairing_code">Scan pairing code</string>
     <string name="import_account_enter_seed_manually">Enter seed manually</string>
 
@@ -1099,7 +1102,7 @@
     <string name="enter_seed_manually_toolbar_title">Welcome Back</string>
     <string name="enter_seed_manually_seed_validation_required_error">Seed is required</string>
     <string name="enter_seed_manually_continue">Continue</string>
-    <string name="enter_seed_manually_hint">Your seed is the 15 words you saved when creating your account</string>
+    <string name="enter_seed_manually_hint">Your seed is the 15 words you saved\nwhen creating your account</string>
 
 
     <!--Quick action dialog-->

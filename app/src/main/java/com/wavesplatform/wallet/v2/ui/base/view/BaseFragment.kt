@@ -13,12 +13,13 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
 
 abstract class BaseFragment : MvpAppCompatFragment(), BaseView, BaseMvpView, HasSupportFragmentInjector {
 
-    protected lateinit var mContext: Context
+    var eventSubscriptions: CompositeDisposable = CompositeDisposable()
 
     val supportActionBar: ActionBar?
         get() = baseActivity.supportActionBar
@@ -29,7 +30,8 @@ abstract class BaseFragment : MvpAppCompatFragment(), BaseView, BaseMvpView, Has
     val toolbar: Toolbar
         get() = baseActivity.toolbar
 
-    @Inject lateinit var childFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject
+    lateinit var childFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return childFragmentInjector
@@ -49,11 +51,15 @@ abstract class BaseFragment : MvpAppCompatFragment(), BaseView, BaseMvpView, Has
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mContext = activity!!
         onViewReady(savedInstanceState)
     }
 
     protected abstract fun onViewReady(savedInstanceState: Bundle?)
+
+    override fun onDestroyView() {
+        eventSubscriptions.clear()
+        super.onDestroyView()
+    }
 
     fun setTitle(title: Int) {
         baseActivity.title = getString(title)

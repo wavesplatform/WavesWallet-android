@@ -8,20 +8,28 @@ import android.view.ViewGroup
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.history_details_layout.view.*
+import pers.victor.ext.app
 import pers.victor.ext.gone
+import pers.victor.ext.inflate
 import pers.victor.ext.visiable
+import javax.inject.Inject
 
-class HistoryDetailsAdapter(private val mContext: Context, var mData: List<Transaction>, val historyType: String?) : PagerAdapter() {
+class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
 
+    @Inject lateinit var publicKeyAccountHelper: PublicKeyAccountHelper
+
+    var mData: List<Transaction> = arrayListOf()
+    
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
         val transaction = mData[position]
-        val layout = LayoutInflater.from(mContext).inflate(R.layout.history_details_layout, collection, false) as ViewGroup
+        val layout = inflate(R.layout.history_details_layout, collection, false) as ViewGroup
 
-        val showTag = Constants.defaultAssets.any({
+        var showTag = Constants.defaultAssets.any({
             it.assetId == transaction.assetId || transaction.assetId.isNullOrEmpty()
         })
 
@@ -53,24 +61,37 @@ class HistoryDetailsAdapter(private val mContext: Context, var mData: List<Trans
                 layout.text_amount_or_title.text = transaction.alias
             }
             TransactionType.EXCHANGE_TYPE -> {
-//                val myOrder =
-//                        if (transaction.order1?.sender == publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
-//                        else transaction.order2
-//
-//                val pairOrder =
-//                        if (transaction.order1?.sender != publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
-//                        else transaction.order2
-//
-//                if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-//                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(myOrder.amount, myOrder.assetPair?.amountAssetObject)}"
-//                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(pairOrder?.amount?.times(pairOrder?.price), myOrder.assetPair?.priceAssetObject)}"
-//                } else {
-//                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(myOrder?.amount, myOrder?.assetPair?.amountAssetObject)}"
-//                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(pairOrder?.amount?.times(pairOrder?.price), myOrder?.assetPair?.priceAssetObject)}"
-//                }
+                var myOrder =
+                        if (transaction.order1?.sender == publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
+                        else transaction.order2
+
+                var pairOrder =
+                        if (transaction.order1?.sender != publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
+                        else transaction.order2
+
+
+                if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
+                    layout.text_amount_value_in_dollar.text = "-${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.issueTransaction?.name}"
+                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
+                } else {
+                    layout.text_amount_value_in_dollar.text = "+${MoneyUtil.getScaledText(transaction.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.issueTransaction?.name}"
+                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
+                }
+
+                showTag = Constants.defaultAssets.any({
+                    it.assetId == pairOrder?.assetPair?.priceAssetObject?.assetId || pairOrder?.assetPair?.priceAssetObject?.assetId.isNullOrEmpty()
+                })
+
+                if (showTag) {
+                    layout.text_tag.visiable()
+                    layout.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.issueTransaction?.name
+                } else {
+                    layout.text_tag.gone()
+                    layout.text_amount_value_in_dollar.text = "${layout.text_amount_value_in_dollar.text} ${pairOrder?.assetPair?.priceAssetObject?.issueTransaction?.name}"
+                }
             }
             TransactionType.DATA_TYPE -> {
-                layout.text_amount_or_title.text = mContext.getString(R.string.history_data_type_title)
+                layout.text_amount_or_title.text = app.getString(R.string.history_data_type_title)
             }
             TransactionType.CANCELED_LEASING_TYPE -> {
                 transaction.lease?.amount.notNull {
@@ -103,13 +124,21 @@ class HistoryDetailsAdapter(private val mContext: Context, var mData: List<Trans
             }
         }
 
-        if (showTag) {
-            layout.text_tag.visiable()
-            layout.text_tag.text = transaction.asset?.issueTransaction?.name
-        } else {
+        if (transaction.transactionType() != TransactionType.CREATE_ALIAS_TYPE && transaction.transactionType() != TransactionType.DATA_TYPE
+                && transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE && transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE) {
+            if (showTag) {
+                layout.text_tag.visiable()
+                layout.text_tag.text = transaction.asset?.issueTransaction?.name
+            } else {
+                layout.text_tag.gone()
+                layout.text_amount_or_title.text = "${layout.text_amount_or_title.text} ${transaction.asset?.issueTransaction?.name}"
+            }
+        } else if (transaction.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
             layout.text_tag.gone()
+            layout.text_tag_spam.visiable()
             layout.text_amount_or_title.text = "${layout.text_amount_or_title.text} ${transaction.asset?.issueTransaction?.name}"
         }
+
 
         layout.text_amount_or_title.makeTextHalfBold()
 

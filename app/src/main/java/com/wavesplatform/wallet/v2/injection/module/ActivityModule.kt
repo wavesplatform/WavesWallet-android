@@ -5,7 +5,6 @@ import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.import_account.enter_seed.EnterSeedManuallyActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.backup_info.BackupInfoActivity
@@ -178,10 +177,6 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun qrCodeScannerActivity(): QrCodeScannerActivity
-
-    @PerActivity
-    @ContributesAndroidInjector
-    internal abstract fun enterSeedManuallyActivity(): EnterSeedManuallyActivity
 
     @PerActivity
     @ContributesAndroidInjector

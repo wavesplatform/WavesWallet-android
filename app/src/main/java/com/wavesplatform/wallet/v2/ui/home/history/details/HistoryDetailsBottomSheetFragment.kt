@@ -11,12 +11,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.string.asset
+import com.wavesplatform.wallet.R.string.fee
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
@@ -34,10 +40,11 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.util.*
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.history_details_layout.view.*
 import javax.inject.Inject
 
 
-class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
+class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), HistoryDetailsView {
 
     var selectedItemPosition: Int = 0
     var selectedItem: Transaction? = null
@@ -46,6 +53,20 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
     var viewPager: ViewPager? = null
     var rooView: View? = null
     var inflater: LayoutInflater? = null
+
+    @Inject
+    @InjectPresenter
+    lateinit var presenter: HistoryDetailsPresenter
+
+    @Inject
+    lateinit var historyDetailsAdapter: HistoryDetailsAdapter
+    @Inject
+    lateinit var publicKeyAccountHelper: PublicKeyAccountHelper
+
+
+    @ProvidePresenter
+    fun providePresenter(): HistoryDetailsPresenter = presenter
+
 
     @Inject
     lateinit var preferencesHelper: PreferencesHelper
@@ -121,7 +142,11 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
         if (transaction.feeAssetId.isNullOrEmpty()) {
             feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, 8).stripZeros()} ${Constants.defaultAssets[0].issueTransaction?.name}"
         } else {
-            // TODO: Need call details of asset
+            presenter.getAssetDetails(transaction.feeAssetId, { asset ->
+                asset.getDecimals()?.let {
+                    feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, it).stripZeros()} ${asset.issueTransaction?.name}"
+                }
+            })
         }
         confirmation?.text = (preferencesHelper.currentBlocksHeight - transaction.height).toString()
         block?.text = transaction.height.toString()
@@ -170,7 +195,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 val sentAddress = sendView?.findViewById<AppCompatTextView>(R.id.text_sent_address)
                 val imageAddressAction = sendView?.findViewById<AppCompatImageView>(R.id.image_address_action)
 
-                sentAddress?.text = transaction.recipient
+                sentAddress?.text = transaction.recipientAddress
 
                 resolveExistOrNoAddress(sentToName, sentAddress, imageAddressAction)
 
@@ -186,7 +211,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 val textLeasingToAddress = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_leasing_to_address)
                 val imageAddressAction = startLeaseView?.findViewById<AppCompatImageView>(R.id.image_address_action)
 
-                textLeasingToAddress?.text = transaction.recipient
+                textLeasingToAddress?.text = transaction.recipientAddress
 
                 resolveExistOrNoAddress(textLeasingToName, textLeasingToAddress, imageAddressAction)
 
@@ -197,7 +222,24 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
             }
             TransactionType.EXCHANGE_TYPE -> {
                 val exchangeView = inflater?.inflate(R.layout.fragment_bottom_sheet_exchange_layout, historyContainer, false)
-                val btcPrice = exchangeView?.findViewById<TextView>(R.id.text_btc_price)
+                val btcPrice = exchangeView?.findViewById<AppCompatTextView>(R.id.text_btc_price)
+                val priceTitle = exchangeView?.findViewById<AppCompatTextView>(R.id.history_details_btc_price)
+
+                val myOrder =
+                        if (transaction.order1?.sender == publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
+                        else transaction.order2
+
+                val pairOrder =
+                        if (transaction.order1?.sender != publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
+                        else transaction.order2
+
+                if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
+                    priceTitle?.text = String.format(getString(R.string.history_details_exchange_price), myOrder.assetPair?.priceAssetObject?.issueTransaction?.name)
+                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.issueTransaction?.name}"
+                } else {
+                    priceTitle?.text = String.format(getString(R.string.history_details_exchange_price), myOrder?.assetPair?.amountAssetObject?.issueTransaction?.name)
+                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)} ${myOrder?.assetPair?.priceAssetObject?.issueTransaction?.name}"
+                }
 
                 historyContainer?.addView(exchangeView)
                 historyContainer?.addView(commentBlock)
@@ -408,7 +450,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
     private fun setupHistoryViewPager(view: View) {
         viewPager = view.findViewById(R.id.viewpager_history_item)
-        val historyDetailsAdapter = HistoryDetailsAdapter(activity!!, allItems!!, historyType)
+        historyDetailsAdapter.mData = allItems!!
         viewPager?.adapter = historyDetailsAdapter
         viewPager?.currentItem = selectedItemPosition
 
@@ -457,8 +499,8 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AddressBookActivity.REQUEST_EDIT_ADDRESS || requestCode == AddressBookActivity.REQUEST_ADD_ADDRESS){
-            if (resultCode == Constants.RESULT_OK){
+        if (requestCode == AddressBookActivity.REQUEST_EDIT_ADDRESS || requestCode == AddressBookActivity.REQUEST_ADD_ADDRESS) {
+            if (resultCode == Constants.RESULT_OK) {
                 selectedItem?.let {
                     setupView(it)
                 }

@@ -74,6 +74,8 @@ open class Transaction(
         var signature: String = "",
         @SerializedName("recipient")
         var recipient: String = "",
+        @SerializedName("recipientAddress")
+        var recipientAddress: String? = "",
         @SerializedName("assetId")
         var assetId: String? = "",
         @SerializedName("leaseId")

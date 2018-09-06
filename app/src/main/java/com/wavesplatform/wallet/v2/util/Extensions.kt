@@ -404,14 +404,19 @@ fun View.setMargins(
 }
 
 fun TextView.makeTextHalfBold() {
-    val text = this.text.toString()
-    val str = SpannableStringBuilder(text)
-    if (text.indexOf(".") != -1) {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    } else if (text.indexOf(" ") != -1) {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, text.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    val textBefore = this.text.toString().substringBefore(" ")
+    val textAfter = if (text.indexOf(" ") != -1) {
+        this.text.toString().substringAfter(" ")
     } else {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ""
     }
-    this.text = str
+    val str = SpannableStringBuilder(textBefore)
+    if (textBefore.indexOf(".") != -1) {
+        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    } else if (textBefore.indexOf(" ") != -1) {
+        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    } else {
+        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    }
+    this.text = str.append(" $textAfter")
 }

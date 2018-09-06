@@ -4,18 +4,23 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
-import dagger.android.AndroidInjection
-import javax.inject.Inject
-import com.vicpin.krealmextensions.*
-import com.wavesplatform.wallet.R.string.save
+import com.vicpin.krealmextensions.queryFirst
+import com.vicpin.krealmextensions.save
+import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
+import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.Order
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.notNull
+import dagger.android.AndroidInjection
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
+import javax.inject.Inject
 
 
 class UpdateApiDataService : Service() {
@@ -23,12 +28,15 @@ class UpdateApiDataService : Service() {
     @Inject
     lateinit var nodeDataManager: NodeDataManager
     @Inject
+    lateinit var apiDataManager: ApiDataManager
+    @Inject
     lateinit var transactionUtil: TransactionUtil
     var subscriptions: CompositeDisposable = CompositeDisposable()
 
     var currentLimit = 100
     var prevLimit = 100
     var defaultLimit = 100
+    var maxLimit = 10000
 
     override fun onCreate() {
         AndroidInjection.inject(this)
@@ -36,6 +44,10 @@ class UpdateApiDataService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        val transaction = queryFirst<Transaction>()
+        if (transaction == null) {
+            nodeDataManager.currentLoadTransactionLimitPerRequest = maxLimit
+        }
         subscriptions.add(nodeDataManager.loadTransactions()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
@@ -49,14 +61,14 @@ class UpdateApiDataService : Service() {
                             if (lastTransaction == null) {
                                 // all list is new, need load more
 
-                                if (currentLimit > 10000) currentLimit = defaultLimit
+                                if (currentLimit >= maxLimit) currentLimit = 50
 
                                 if (prevLimit == defaultLimit) {
                                     saveToDb(it)
                                 } else {
                                     try {
                                         saveToDb(it.subList(prevLimit - 1, it.size - 1))
-                                    }catch (e: Exception){
+                                    } catch (e: Exception) {
                                         currentLimit = 50
                                     }
                                 }
@@ -92,16 +104,42 @@ class UpdateApiDataService : Service() {
             } else {
                 trans.asset = queryFirst<AssetBalance>({ equalTo("assetId", trans.assetId) })
             }
-//            trans.order1.notNull {
-//                val amountAsset = queryFirst<AssetBalance>({ equalTo("assetId", it.assetPair?.amountAsset) })
-//                val priceAsset = queryFirst<AssetBalance>({ equalTo("assetId", it.assetPair?.priceAsset) })
-//                it.assetPair?.amountAssetObject = amountAsset
-//                it.assetPair?.priceAssetObject = priceAsset
-//                trans.order2.notNull {
-//                    it.assetPair?.amountAssetObject = amountAsset
-//                    it.assetPair?.priceAssetObject = priceAsset
-//                }
-//            }
+
+            if (trans.recipient.contains("alias")) {
+                val aliasName = trans.recipient.substringAfterLast(":")
+                aliasName.notNull {
+                    subscriptions.add(apiDataManager.loadAlias(it)
+                            .compose(RxUtil.applyObservableDefaultSchedulers())
+                            .subscribe({
+                                trans.recipientAddress = it.address
+                            }))
+                }
+            } else {
+                trans.recipientAddress = trans.recipient
+            }
+
+            if (trans.order1 != null) {
+                val amountAsset =
+                        if (trans.order1?.assetPair?.amountAsset.isNullOrEmpty()) {
+                            Constants.defaultAssets[0]
+                        } else {
+                            queryFirst<AssetBalance>({ equalTo("assetId", trans.order1?.assetPair?.amountAsset) })
+                        }
+                val priceAsset =
+                        if (trans.order1?.assetPair?.priceAsset.isNullOrEmpty()) {
+                            Constants.defaultAssets[0]
+                        } else {
+                            queryFirst<AssetBalance>({ equalTo("assetId", trans.order1?.assetPair?.priceAsset) })
+                        }
+
+
+                trans.order1?.assetPair?.amountAssetObject = amountAsset
+                trans.order1?.assetPair?.priceAssetObject = priceAsset
+                trans.order2.notNull {
+                    it.assetPair?.amountAssetObject = amountAsset
+                    it.assetPair?.priceAssetObject = priceAsset
+                }
+            }
             trans.transactionTypeId = transactionUtil.getTransactionType(trans)
         }
         it.saveAll()

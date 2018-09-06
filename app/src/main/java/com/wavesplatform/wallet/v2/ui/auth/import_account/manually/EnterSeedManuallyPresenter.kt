@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.auth.import_account.enter_seed
+package com.wavesplatform.wallet.v2.ui.auth.import_account.manually
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter

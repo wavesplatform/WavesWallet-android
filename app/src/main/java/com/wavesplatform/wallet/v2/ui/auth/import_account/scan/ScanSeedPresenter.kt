@@ -1,11 +1,10 @@
-package com.wavesplatform.wallet.v2.ui.home.wallet
+package com.wavesplatform.wallet.v2.ui.auth.import_account.scan
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
-class WalletPresenter @Inject constructor() :BasePresenter<WalletView>(){
-    var needToShowShadow = false
+class ScanSeedPresenter @Inject constructor() : BasePresenter<ScanSeedView>() {
 
 }

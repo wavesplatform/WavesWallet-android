@@ -38,17 +38,15 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         val user = AccessState.getInstance().currentWavesWallet
-
         text_address.text = user.address
         text_public_key.text = AccessState.getInstance().findPublicKeyBy(user.address)
 
-
         queryAllAsync<Alias> { aliases ->
-            text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), aliases.size)
-
+            val ownAliases = aliases.filter { it.own }
+            text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
             relative_alias.click {
                 val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
-                if (aliases.isEmpty()) {
+                if (ownAliases.isEmpty()) {
                     bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
                 } else {
                     bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
