@@ -26,7 +26,7 @@ import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
-class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFingerprint.FingerprintIdentifyListener  {
+class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFingerprint.FingerprintIdentifyListener {
 
     @Inject
     @InjectPresenter
@@ -44,13 +44,15 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFinge
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         queryAllAsync<Alias>({ aliases ->
-            text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), aliases.size)
+            val ownAliases = aliases.filter { it.own }
+
+            text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
 
             relative_alias.click {
                 val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
-                if(aliases.isEmpty()){
+                if (ownAliases.isEmpty()) {
                     bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
-                }else{
+                } else {
                     bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
                 }
                 bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
@@ -59,11 +61,11 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFinge
 
         mFingerprintIdentify = FingerprintIdentify(this)
         mFingerprintDialog = FingerprintAuthenticationDialogFragment()
-        mFingerprintDialog.setFingerPrintDialogListener(object : FingerprintAuthenticationDialogFragment.FingerPrintDialogListener{
+        mFingerprintDialog.setFingerPrintDialogListener(object : FingerprintAuthenticationDialogFragment.FingerPrintDialogListener {
             override fun onPinCodeButtonClicked(dialog: Dialog, button: AppCompatTextView) {
                 super.onPinCodeButtonClicked(dialog, button)
                 mFingerprintIdentify.cancelIdentify()
-                launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE) {  }
+                launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE) { }
             }
 
             override fun onCancelButtonClicked(dialog: Dialog, button: AppCompatTextView) {
@@ -72,7 +74,7 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFinge
             }
         })
 
-        image_address_copy.click{
+        image_address_copy.click {
             text_address.copyToClipboard(it)
         }
 
@@ -85,13 +87,13 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView, BaseFinge
         }
 
         button_show.click {
-            if (mFingerprintIdentify.isFingerprintEnable){
+            if (mFingerprintIdentify.isFingerprintEnable) {
                 mFingerprintDialog.isCancelable = false;
                 mFingerprintDialog.show(fragmentManager, "fingerprintDialog");
 
                 mFingerprintIdentify.startIdentify(EnterPasscodeActivity.MAX_AVAILABLE_TIMES, this@AddressesAndKeysActivity);
-            }else{
-                launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE) {  }
+            } else {
+                launchActivity<EnterPasscodeActivity>(requestCode = REQUEST_ENTER_PASSCODE) { }
             }
         }
     }

@@ -6,7 +6,6 @@ import javax.inject.Inject
 
 @InjectViewState
 class WalletPresenter @Inject constructor() :BasePresenter<WalletView>(){
-
     var needToShowShadow = false
 
 }

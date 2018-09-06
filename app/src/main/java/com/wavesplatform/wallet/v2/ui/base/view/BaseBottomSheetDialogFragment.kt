@@ -15,10 +15,19 @@ import pers.victor.ext.getStatusBarHeight
 import pers.victor.ext.screenHeight
 import pers.victor.ext.setHeight
 
-open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
+open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpView {
+    override fun showNetworkError() {
+        baseActivity.showNetworkError()
+    }
+
+    override fun showProgressBar(isShowProgress: Boolean) {
+        baseActivity.showProgressBar(isShowProgress)
+    }
 
     var fullScreenHeightEnable = false
     var extraTopMargin = 0
+    val baseActivity: BaseActivity
+        get() = activity as BaseActivity
 
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -30,7 +39,7 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
             val bottomSheet = d.findViewById<FrameLayout>(android.support.design.R.id.design_bottom_sheet)
             bottomSheet.notNull {
-                if ((it.height > screenHeight - getStatusBarHeight() - it.context.getToolBarHeight()) || fullScreenHeightEnable){
+                if ((it.height > screenHeight - getStatusBarHeight() - it.context.getToolBarHeight()) || fullScreenHeightEnable) {
                     it.setHeight(screenHeight - getStatusBarHeight() - it.context.getToolBarHeight() - extraTopMargin)
                 }
                 var bottomSheetBehavior = BottomSheetBehavior.from(it)

@@ -10,10 +10,10 @@ import kotlinx.android.parcel.Parcelize
 
 data class AliasesResponse(
         @SerializedName("__type") var type: String = "list",
-        @SerializedName("data") var data: List<Data> = listOf()
+        @SerializedName("data") var data: List<AliasData> = listOf()
 )
 
-data class Data(
+data class AliasData(
         @SerializedName("__type") var type: String = "alias",
         @SerializedName("data") var alias: Alias = Alias()
 )
@@ -23,5 +23,6 @@ data class Data(
 open class Alias(
         @PrimaryKey
         @SerializedName("alias") var alias: String? = "",
-        @SerializedName("address") var address: String? = ""
+        @SerializedName("address") var address: String? = "",
+        var own: Boolean = false
 ) : RealmModel, Parcelable

@@ -53,11 +53,13 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
         }
 
         queryAllAsync<Alias>({ aliases ->
-            text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), aliases.size)
+            val ownAliases = aliases.filter { it.own }
+
+            text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
 
             card_aliases.click {
                 val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
-                if(aliases.isEmpty()){
+                if(ownAliases.isEmpty()){
                     bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
                 }else{
                     bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT

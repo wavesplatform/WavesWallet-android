@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.history
 
 import com.chad.library.adapter.base.BaseSectionQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.google.common.base.Strings.isNullOrEmpty
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -9,6 +10,8 @@ import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.recycle_item_history.view.*
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
@@ -21,6 +24,11 @@ class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicK
     override fun convert(helper: BaseViewHolder?, item: HistoryItem?) {
         helper?.itemView.notNull { view ->
             view.image_transaction.setImageDrawable(item?.t?.transactionType()?.icon())
+
+            var showTag = Constants.defaultAssets.any({
+                it.assetId == item?.t?.assetId || item?.t?.assetId.isNullOrEmpty()
+            })
+
             item?.t?.transactionType().notNull {
                 try {
                     view.text_transaction_name.text = String.format(it.title(), item?.t?.asset?.issueTransaction?.name)
@@ -64,11 +72,23 @@ class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicK
 
 
                         if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                            view.text_transaction_name.text = "-${MoneyUtil.getScaledText(myOrder.amount, myOrder.assetPair?.amountAssetObject)}"
-                            view.text_transaction_value.text = "+${MoneyUtil.getScaledText(pairOrder?.amount?.times(pairOrder?.price)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
+                            view.text_transaction_name.text = "-${MoneyUtil.getScaledText(item?.t?.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.issueTransaction?.name}"
+                            view.text_transaction_value.text = "+${MoneyUtil.getScaledText(item?.t?.amount?.times(item?.t?.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                         } else {
-                            view.text_transaction_name.text = "+${MoneyUtil.getScaledText(myOrder?.amount, myOrder?.assetPair?.amountAssetObject)}"
-                            view.text_transaction_value.text = "-${MoneyUtil.getScaledText(pairOrder?.amount?.times(pairOrder?.price)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
+                            view.text_transaction_name.text = "+${MoneyUtil.getScaledText(item?.t?.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.issueTransaction?.name}"
+                            view.text_transaction_value.text = "-${MoneyUtil.getScaledText(item?.t?.amount?.times(item?.t?.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
+                        }
+
+                        showTag = Constants.defaultAssets.any({
+                            it.assetId == pairOrder?.assetPair?.priceAssetObject?.assetId || pairOrder?.assetPair?.priceAssetObject?.assetId.isNullOrEmpty()
+                        })
+
+                        if (showTag) {
+                            view.text_tag.visiable()
+                            view.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.issueTransaction?.name
+                        } else {
+                            view.text_tag.gone()
+                            view.text_transaction_value.text = "${view.text_transaction_value.text} ${pairOrder?.assetPair?.priceAssetObject?.issueTransaction?.name}"
                         }
                     }
                     TransactionType.DATA_TYPE -> {
@@ -105,6 +125,23 @@ class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicK
                     }
                 }
             }
+
+            if (item?.t?.transactionType() != TransactionType.CREATE_ALIAS_TYPE && item?.t?.transactionType() != TransactionType.DATA_TYPE
+                    && item?.t?.transactionType() != TransactionType.SPAM_RECEIVE_TYPE && item?.t?.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
+                    && item?.t?.transactionType() != TransactionType.EXCHANGE_TYPE) {
+                if (showTag) {
+                    view.text_tag.visiable()
+                    view.text_tag.text = item?.t?.asset?.issueTransaction?.name
+                } else {
+                    view.text_tag.gone()
+                    view.text_transaction_value.text = "${view.text_transaction_value.text} ${item?.t?.asset?.issueTransaction?.name}"
+                }
+            } else if (item?.t?.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || item?.t?.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
+                view.text_tag.gone()
+                view.text_tag_spam.visiable()
+                view.text_transaction_value.text = "${view.text_transaction_value.text} ${item?.t?.asset?.issueTransaction?.name}"
+            }
+
 
             view.text_transaction_value.makeTextHalfBold()
         }

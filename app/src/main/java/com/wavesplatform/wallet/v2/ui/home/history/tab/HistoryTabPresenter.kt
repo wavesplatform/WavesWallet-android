@@ -85,11 +85,11 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
         addSubscription(singleData
                 .map({
-                    allItemsFromDb = it
+                    allItemsFromDb = it.sortedByDescending({ it.timestamp })
                     if (allItemsFromDb.size > 50) {
-                        return@map sortAndConfigToUi(it.subList(0, PER_PAGE))
+                        return@map sortAndConfigToUi(allItemsFromDb.subList(0, PER_PAGE))
                     } else {
-                        return@map sortAndConfigToUi(it)
+                        return@map sortAndConfigToUi(allItemsFromDb)
                     }
                 })
                 .subscribeOn(Schedulers.computation())
@@ -127,7 +127,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     private fun sortAndConfigToUi(it: List<Transaction>): ArrayList<HistoryItem> {
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale(app.getString(preferenceHelper.getLanguage())))
 
-        val sortedList = it.sortedByDescending({ it.timestamp })
+        val sortedList = it
                 .mapTo(mutableListOf(), {
                     HistoryItem(it)
                 })

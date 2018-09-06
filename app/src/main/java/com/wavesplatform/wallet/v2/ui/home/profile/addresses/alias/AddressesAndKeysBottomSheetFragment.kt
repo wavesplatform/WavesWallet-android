@@ -66,7 +66,9 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 rootView.recycle_aliases.adapter = adapter
 
                 queryAllAsync<Alias>({
-                    adapter.setNewData(it)
+                    val ownAliases = it.filter { it.own }
+
+                    adapter.setNewData(ownAliases)
                 })
 
                 rootView.relative_about_alias.click {
