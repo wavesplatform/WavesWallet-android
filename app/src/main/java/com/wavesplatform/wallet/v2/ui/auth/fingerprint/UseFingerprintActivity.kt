@@ -5,7 +5,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -29,8 +28,9 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         button_use_fingerprint.click { _ ->
             val passCode = intent.extras.getString(CreatePassCodeActivity.KEY_INTENT_PASS_CODE)
+            val guid = intent.extras.getString(CreatePassCodeActivity.KEY_INTENT_GUID)
 
-            val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(passCode)
+            val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
             fingerprintDialog.isCancelable = false
             fingerprintDialog.show(fragmentManager, "fingerprintDialog")
             fingerprintDialog.setFingerPrintDialogListener(

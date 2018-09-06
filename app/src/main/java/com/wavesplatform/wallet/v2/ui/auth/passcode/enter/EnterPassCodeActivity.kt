@@ -82,7 +82,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                 })
 
         if (useFingerprint) {
-            fingerprintDialog = FingerprintAuthDialogFragment.newInstance()
+            fingerprintDialog = FingerprintAuthDialogFragment.newInstance(getGuid())
             fingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint(passCode: String) {

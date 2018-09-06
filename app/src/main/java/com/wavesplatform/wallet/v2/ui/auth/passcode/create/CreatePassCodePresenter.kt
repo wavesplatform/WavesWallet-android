@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.BlockchainApplication
-import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -41,7 +40,7 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
                 .getAccessManager()
                 .writePassCodeObservable(guid, password, passCode)
                 .subscribe({
-                    viewState.onSuccessCreatePassCode(passCode)
+                    viewState.onSuccessCreatePassCode(guid, passCode)
                 }, { throwable ->
                     Log.e("CreatePassCodeActivity", throwable.message)
                     BlockchainApplication.getAccessManager().deleteCurrentWavesWallet()

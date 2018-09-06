@@ -17,19 +17,17 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import com.mtramin.rxfingerprint.EncryptionMethod
-
-import com.wavesplatform.wallet.R
-import kotlinx.android.synthetic.main.fingerprint_dialog.*
-import kotlinx.android.synthetic.main.fingerprint_dialog.view.*
-import pers.victor.ext.click
 import com.mtramin.rxfingerprint.RxFingerprint
 import com.mtramin.rxfingerprint.data.FingerprintResult
 import com.wavesplatform.wallet.BlockchainApplication
-import com.wavesplatform.wallet.v1.data.access.AccessState
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v1.util.RootUtil
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import io.reactivex.disposables.Disposables
+import kotlinx.android.synthetic.main.fingerprint_dialog.*
+import kotlinx.android.synthetic.main.fingerprint_dialog.view.*
+import pers.victor.ext.click
 
 
 class FingerprintAuthDialogFragment : DialogFragment() {
@@ -58,7 +56,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         view.text_cancel.click {
             fingerPrintDialogListener?.onCancelButtonClicked(this.dialog, it)
         }
-        mode = arguments.getInt(KEY_MODE, CRYPT)
+        mode = arguments.getInt(KEY_INTENT_MODE, CRYPT)
         return view
     }
 
@@ -99,7 +97,8 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     private fun crypt() {
-        val passCode = arguments.getString(KEY_PASS_CODE, "")
+        val guid = arguments.getString(KEY_INTENT_GUID, "")
+        val passCode = arguments.getString(KEY_INTENT_PASS_CODE, "")
         fingerprintDisposable = RxFingerprint.encrypt(
                 EncryptionMethod.RSA,
                 activity,
@@ -111,7 +110,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                                 FingerprintResult.HELP -> showHelpMessage(encryptionResult.message)
                                 FingerprintResult.AUTHENTICATED -> {
                                     BlockchainApplication.getAccessManager()
-                                            .setEncryptedPassCode(encryptionResult.encrypted)
+                                            .setEncryptedPassCode(guid, encryptionResult.encrypted)
                                     onSuccessRecognizedFingerprint()
                                     fingerPrintDialogListener?.onSuccessRecognizedFingerprint()
                                     dismiss()
@@ -122,9 +121,10 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     private fun decrypt() {
+        val guid = arguments.getString(KEY_INTENT_GUID, "")
         fingerprintDisposable = RxFingerprint.decrypt(EncryptionMethod.RSA, activity,
                 EnterPassCodeActivity.KEY_INTENT_PASS_CODE, BlockchainApplication.getAccessManager()
-                .getEncryptedPassCode())
+                .getEncryptedPassCode(guid))
                 .subscribe(
                         { result ->
                             when (result?.result) {
@@ -244,23 +244,26 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     companion object {
         const val AVAILABLE_TIMES = 5
 
-        private const val KEY_MODE = "key_mode"
-        private const val KEY_PASS_CODE = "key_pass_code"
+        private const val KEY_INTENT_MODE = "intent_mode"
+        private const val KEY_INTENT_PASS_CODE = "intent_pass_code"
+        private const val KEY_INTENT_GUID = "intent_guid"
         private const val CRYPT = 0
         private const val DECRYPT = 1
 
-        fun newInstance(passCode: String): FingerprintAuthDialogFragment {
+        fun newInstance(guid: String, passCode: String): FingerprintAuthDialogFragment {
             val args = Bundle()
-            args.putInt(KEY_MODE, CRYPT)
-            args.putString(KEY_PASS_CODE, passCode)
+            args.putInt(KEY_INTENT_MODE, CRYPT)
+            args.putString(KEY_INTENT_PASS_CODE, passCode)
+            args.putString(KEY_INTENT_GUID, guid)
             val fragment = FingerprintAuthDialogFragment()
             fragment.arguments = args
             return fragment
         }
 
-        fun newInstance(): FingerprintAuthDialogFragment {
+        fun newInstance(guid: String): FingerprintAuthDialogFragment {
             val args = Bundle()
-            args.putInt(KEY_MODE, DECRYPT)
+            args.putInt(KEY_INTENT_MODE, DECRYPT)
+            args.putString(KEY_INTENT_GUID, guid)
             val fragment = FingerprintAuthDialogFragment()
             fragment.arguments = args
             return fragment

@@ -14,8 +14,7 @@ import javax.inject.Inject
 class ChooseAccountPresenter @Inject constructor() : BasePresenter<ChooseAccountView>() {
     fun getAddresses() {
         val list = arrayListOf<AddressBookUser>()
-        val env = EnvironmentManager.get().current().getName()
-        val guids = prefsUtil.getGlobalValueList(env + PrefsUtil.LIST_WALLET_GUIDS)
+        val guids = prefsUtil.getGlobalValueList(PrefsUtil.LIST_WALLET_GUIDS)
         val wallets = ArrayList<WalletItem>()
         for (i in guids.indices) {
             val pubKey = prefsUtil.getGlobalValue(guids[i] + PrefsUtil.KEY_PUB_KEY, "")

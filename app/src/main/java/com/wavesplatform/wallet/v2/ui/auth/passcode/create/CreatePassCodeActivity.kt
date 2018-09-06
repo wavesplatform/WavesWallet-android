@@ -8,7 +8,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
@@ -69,16 +68,17 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
         presenter.saveAccount(passCode, intent.extras)
     }
 
-    override fun onSuccessCreatePassCode(passCode: String) {
+    override fun onSuccessCreatePassCode(guid: String, passCode: String) {
         showProgressBar(false)
         BlockchainApplication.getAccessManager().setUseFingerPrint(false)
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)
                 && FingerprintAuthDialogFragment.isAvailable(this)) {
             launchActivity<UseFingerprintActivity>(intent.extras) {
+                putExtra(CreatePassCodeActivity.KEY_INTENT_GUID, guid)
                 putExtra(CreatePassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
             }
         } else if (BlockchainApplication.getAccessManager().isUseFingerPrint()) {
-            val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(passCode)
+            val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
             fingerprintDialog.isCancelable = false
             fingerprintDialog.show(fragmentManager, "fingerprintDialog")
             fingerprintDialog.setFingerPrintDialogListener(
@@ -143,6 +143,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     companion object {
         const val KEY_INTENT_PASS_CODE = "intent_pass_code"
+        const val KEY_INTENT_GUID = "intent_guid"
         const val KEY_INTENT_PROCESS_CHANGE_PASS_CODE = "intent_process_change_pass_code"
         const val KEY_INTENT_PROCESS_RECREATE_PASS_CODE = "intent_process_recreate_pass_code"
     }
