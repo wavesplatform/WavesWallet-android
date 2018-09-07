@@ -9,14 +9,6 @@ import java.util.Random;
 
 public class Identicon {
 
-    public static Bitmap createFromObject(Object seed) {
-        return create(Integer.toHexString(seed.hashCode()), Options.DEFAULT);
-    }
-
-    public static Bitmap createFromObject(Object seed, Options options) {
-        return create(Integer.toHexString(seed.hashCode()), options);
-    }
-
     public static Bitmap create(String seed) {
         return create(seed, Options.DEFAULT);
     }

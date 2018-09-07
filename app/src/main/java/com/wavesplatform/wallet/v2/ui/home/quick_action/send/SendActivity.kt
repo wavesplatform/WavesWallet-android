@@ -61,19 +61,19 @@ class SendActivity : BaseActivity(), SendView {
         }
 
         edit_address.addTextChangedListener {
-            on({ s, start, before, count ->
+            on { s, start, before, count ->
                 checkAddressFieldAndSetAction()
-            })
+            }
         }
 
         edit_amount.addTextChangedListener {
-            on({ s, start, before, count ->
+            on { s, start, before, count ->
                 if (edit_amount.text.isNotEmpty()){
                     horizontal_amount_suggestion.gone()
                 }else{
                     horizontal_amount_suggestion.visiable()
                 }
-            })
+            }
         }
 
         image_view_recipient_action.click {
