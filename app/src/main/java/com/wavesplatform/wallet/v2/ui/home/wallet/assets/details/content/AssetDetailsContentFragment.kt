@@ -14,8 +14,7 @@ import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_asset_details_content.*
-import pers.victor.ext.click
-import pers.victor.ext.dp2px
+import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.text.SimpleDateFormat
 import java.util.*
@@ -72,11 +71,32 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     }
 
     override fun showLastTransactions(data: MutableList<HistoryItem>) {
-        historyAdapter.items = data
-        historyAdapter.notifyDataSetChanged()
+        if (data.isNotEmpty()) {
+            // configure clickable card
+            card_transaction.setCardBackgroundColor(findColor(R.color.white))
+            card_transaction.cardElevation = dp2px(2).toFloat()
+            relative_transaction.setBackgroundResource(0)
+            text_view_history.setTextColor(findColor(R.color.black))
+            card_transaction.click {
+                //                launchActivity<> {  }
+            }
+
+            historyAdapter.items = data
+            historyAdapter.notifyDataSetChanged()
+        } else {
+            // configure not clickable card
+            card_transaction.setCardBackgroundColor(findColor(android.R.color.transparent))
+            card_transaction.cardElevation = 0f
+            relative_transaction.setBackgroundResource(R.drawable.shape_rect_outline_basic300_transparent)
+            text_view_history.setTextColor(findColor(R.color.accent100))
+            text_last_transaction_title.text = getString(R.string.asset_details_last_transactions_empty)
+            card_transaction.click {}
+        }
     }
 
     private fun fillInformation(assetBalance: AssetBalance?) {
+        card_burn.visiableIf { assetBalance?.issueTransaction?.sender == baseActivity.publicKeyAccountHelper.publicKeyAccount?.address }
+
         text_view_asset_name_value.text = assetBalance?.getName()
         text_reusable_value.text =
                 if (assetBalance?.reissuable == true) getString(R.string.asset_details_reissuable)

@@ -877,6 +877,7 @@
     <string name="asset_details_receive">Receive</string>
     <string name="asset_details_coming_soon">Coming soon</string>
     <string name="asset_details_last_transactions">Last transactions</string>
+    <string name="asset_details_last_transactions_empty">You do not have any transactions</string>
     <string name="asset_details_view_history">View history</string>
     <string name="asset_details_asset_info">Asset Info</string>
     <string name="asset_details_name">Name</string>

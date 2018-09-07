@@ -4,12 +4,14 @@ import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_history.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 class HistoryFragment : BaseFragment(), HistoryView {
@@ -24,7 +26,7 @@ class HistoryFragment : BaseFragment(), HistoryView {
     override fun configLayoutRes(): Int = R.layout.fragment_history
 
     companion object {
-
+        var BUNDLE_TABS = "tabs"
         /**
          * @return HistoryFragment instance
          * */
@@ -38,9 +40,15 @@ class HistoryFragment : BaseFragment(), HistoryView {
     }
 
     private fun setupUI() {
-        viewpager_history.adapter = HistoryFragmentPageAdapter(childFragmentManager, arrayOf(getString(R.string.history_all),
-                getString(R.string.history_sent), getString(R.string.history_received),getString(R.string.history_exchanged),
-                getString(R.string.history_leased), getString(R.string.history_issued)))
+        val tabs = arguments?.getParcelableArrayList<HistoryTab>(BUNDLE_TABS)
+        val list = tabs?.map {
+            return@map Pair(HistoryTabFragment.newInstance(it.data), it.title)
+        }?.toMutableList()
+
+        list.notNull {
+            viewpager_history.adapter = HistoryFragmentPageAdapter(childFragmentManager, it)
+        }
+
         stl_history.setViewPager(viewpager_history)
         appbar_layout.addOnOffsetChangedListener({ appBarLayout, verticalOffset ->
             val offsetForShowShadow = appbar_layout.totalScrollRange - dp2px(9)

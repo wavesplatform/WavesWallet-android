@@ -301,6 +301,7 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_last_transaction_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -333,6 +334,7 @@
             app:cardElevation="2dp">
 
             <RelativeLayout
+                android:id="@+id/relative_transaction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="14dp"
@@ -341,7 +343,7 @@
                 android:paddingTop="14dp">
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_leasing_status"
+                    android:id="@+id/text_view_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -544,7 +546,7 @@
                 android:id="@+id/text_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="34dp"
                 android:layout_marginTop="6dp"
                 android:text="The Waves Platform is a global public blockchain platform, founded in 2016. Waves Platform’s mission is to reinvent the DNA of entrepreneurship around the world by providing a shared infrastructure, offering easy-to-use, highly functional tools to make blockchain available to every person or organisation that can benefit from it."
                 android:textColor="@color/disabled900"
@@ -556,12 +558,13 @@
             android:id="@+id/card_burn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="34dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
+            android:visibility="gone"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp">
