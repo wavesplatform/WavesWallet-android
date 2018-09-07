@@ -27,6 +27,7 @@ class HistoryFragment : BaseFragment(), HistoryView {
 
     companion object {
         var BUNDLE_TABS = "tabs"
+        var BUNDLE_ASSET = "asset"
         /**
          * @return HistoryFragment instance
          * */
@@ -42,7 +43,7 @@ class HistoryFragment : BaseFragment(), HistoryView {
     private fun setupUI() {
         val tabs = arguments?.getParcelableArrayList<HistoryTab>(BUNDLE_TABS)
         val list = tabs?.map {
-            return@map Pair(HistoryTabFragment.newInstance(it.data), it.title)
+            return@map Pair(HistoryTabFragment.newInstance(it.data, arguments?.getParcelable(BUNDLE_ASSET)), it.title)
         }?.toMutableList()
 
         list.notNull {

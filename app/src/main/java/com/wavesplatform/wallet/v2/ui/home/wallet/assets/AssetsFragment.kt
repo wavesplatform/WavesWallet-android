@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_assets.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
+import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 class AssetsFragment : BaseFragment(), AssetsView {
@@ -51,7 +52,11 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun configLayoutRes(): Int = R.layout.fragment_assets
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.loadAssetsBalance()
+        if (savedInstanceState == null) {
+            runAsync({
+                presenter.loadAssetsBalance()
+            })
+        }
 
         setupUI()
     }

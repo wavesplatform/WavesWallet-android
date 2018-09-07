@@ -20,8 +20,6 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
 
     fun loadLastTransactions() {
         queryAllAsync<Transaction> {
-            it.sortedByDescending({ it.timestamp })
-
             val list = it
                     .sortedByDescending({ it.timestamp })
 //                    .filter { it.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE || it.transactionType() != TransactionType.SPAM_RECEIVE_TYPE }

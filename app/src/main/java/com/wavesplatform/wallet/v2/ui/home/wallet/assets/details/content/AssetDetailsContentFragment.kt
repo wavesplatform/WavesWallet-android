@@ -5,9 +5,13 @@ import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
+import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.HistoryTransactionPagerAdapter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
 import com.wavesplatform.wallet.v2.util.copyToClipboard
@@ -78,7 +82,20 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             relative_transaction.setBackgroundResource(0)
             text_view_history.setTextColor(findColor(R.color.black))
             card_transaction.click {
-                //                launchActivity<> {  }
+                launchActivity<HistoryActivity> {
+                    val bundle = Bundle().apply {
+                        val tabs = arrayListOf(
+                                HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)),
+                                HistoryTab(HistoryTabFragment.send, getString(R.string.history_sent)),
+                                HistoryTab(HistoryTabFragment.received, getString(R.string.history_received)),
+                                HistoryTab(HistoryTabFragment.exchanged, getString(R.string.history_exchanged)),
+                                HistoryTab(HistoryTabFragment.leased, getString(R.string.history_leased)),
+                                HistoryTab(HistoryTabFragment.issued, getString(R.string.history_issued)))
+                        putParcelable(HistoryFragment.BUNDLE_ASSET, presenter.assetBalance)
+                        putParcelableArrayList(HistoryFragment.BUNDLE_TABS, tabs)
+                    }
+                    putExtras(bundle)
+                }
             }
 
             historyAdapter.items = data
