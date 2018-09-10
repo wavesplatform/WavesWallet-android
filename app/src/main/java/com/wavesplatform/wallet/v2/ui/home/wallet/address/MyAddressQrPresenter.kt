@@ -52,8 +52,6 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
     fun generateQRCode(text: String, size: Int) {
         addSubscription(generateQrCodeObservable(text, size)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe {
-                    viewState.showQRCode(it)
-                })
+                .subscribe { viewState.showQRCode(it) })
     }
 }

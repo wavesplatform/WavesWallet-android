@@ -16,6 +16,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
@@ -122,6 +123,15 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         return view
     }
 
+    public fun enableElevation(enable: Boolean) {
+        if (enable) {
+            appbar_layout.elevation = 0F
+        } else {
+            appbar_layout.elevation = ViewUtils.convertDpToPixel(8F, this)
+        }
+    }
+
+
     /**
      * Setup bottom navigation with custom tabs
      * **/
@@ -159,6 +169,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             WALLET_SCREEN -> {
                 openFragment(R.id.frame_fragment_container, fragments[WALLET_SCREEN])
                 toolbar_general.title = getString(R.string.wallet_toolbar_title)
+                toolbar_general.elevation = 0F
             }
             DEX_SCREEN -> {
                 openFragment(R.id.frame_fragment_container, fragments[DEX_SCREEN])

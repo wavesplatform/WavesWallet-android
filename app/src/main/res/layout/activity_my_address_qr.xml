@@ -49,7 +49,7 @@
             android:layout_below="@+id/text_title"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
-            android:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW"
+            tools:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW"
             android:textColor="@color/basic500"
             android:textSize="14sp" />
 
@@ -193,7 +193,7 @@
             android:id="@+id/image_view_recipient_action"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_200sdp"
-            android:layout_below="@+id/card_aliases"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:scaleType="fitXY" />
 

@@ -44,9 +44,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
     companion object {
 
-        /**
-         * @return AssetsFragment instance
-         * */
         fun newInstance(): AssetsFragment {
             return AssetsFragment()
         }

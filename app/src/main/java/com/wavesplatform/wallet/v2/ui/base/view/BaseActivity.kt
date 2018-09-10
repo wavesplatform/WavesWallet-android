@@ -3,16 +3,19 @@ package com.wavesplatform.wallet.v2.ui.base.view
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
 import android.support.annotation.*
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
 import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.R
@@ -86,6 +89,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        setStatusBarColor(R.color.basic50)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(configLayoutRes())
 
@@ -213,6 +217,13 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                     .commit()
         }
     }
+
+    protected fun setStatusBarColor(@ColorRes intColorRes: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.statusBarColor = ContextCompat.getColor(this, intColorRes)
+    }}
 
     protected abstract fun onViewReady(savedInstanceState: Bundle?)
 
