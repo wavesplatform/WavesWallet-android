@@ -9,7 +9,6 @@ import kotlinx.android.synthetic.main.fragment_history.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 class HistoryFragment : BaseFragment(), HistoryView {
@@ -17,20 +16,23 @@ class HistoryFragment : BaseFragment(), HistoryView {
     @Inject
     @InjectPresenter
     lateinit var presenter: HistoryPresenter
+    private lateinit var adapter: HistoryFragmentPageAdapter
 
     @ProvidePresenter
     fun providePresenter(): HistoryPresenter = presenter
 
     override fun configLayoutRes(): Int = R.layout.fragment_history
 
-    companion object {
-
-        /**
-         * @return HistoryFragment instance
-         * */
-        fun newInstance(): HistoryFragment {
-            return HistoryFragment()
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        adapter = HistoryFragmentPageAdapter(
+                childFragmentManager,
+                arrayOf(getString(R.string.history_all),
+                        getString(R.string.history_sent),
+                        getString(R.string.history_received),
+                        getString(R.string.history_exchanged),
+                        getString(R.string.history_leased),
+                        getString(R.string.history_issued)))
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -38,11 +40,9 @@ class HistoryFragment : BaseFragment(), HistoryView {
     }
 
     private fun setupUI() {
-        viewpager_history.adapter = HistoryFragmentPageAdapter(childFragmentManager, arrayOf(getString(R.string.history_all),
-                getString(R.string.history_sent), getString(R.string.history_received),getString(R.string.history_exchanged),
-                getString(R.string.history_leased), getString(R.string.history_issued)))
+        viewpager_history.adapter = adapter
         stl_history.setViewPager(viewpager_history)
-        appbar_layout.addOnOffsetChangedListener({ appBarLayout, verticalOffset ->
+        appbar_layout.addOnOffsetChangedListener { _, verticalOffset ->
             val offsetForShowShadow = appbar_layout.totalScrollRange - dp2px(9)
             if (-verticalOffset > offsetForShowShadow) {
                 viewpager_history.setPagingEnabled(false)
@@ -51,24 +51,14 @@ class HistoryFragment : BaseFragment(), HistoryView {
                 viewpager_history.setPagingEnabled(true)
                 view_shadow.gone()
             }
-        })
-        stl_history.currentTab = 0
+        }
+        stl_history.currentTab = HistoryFragmentPageAdapter.ALL
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.menu_history, menu)
-//        super.onCreateOptionsMenu(menu, inflater)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-//        when(item?.itemId){
-//            R.id.action_sorting -> {
-//                val historyFilter = HistoryFilterBottomSheetFragment()
-//                historyFilter.show(fragmentManager, historyFilter.tag)
-//            }
-//        }
-//
-//        return super.onOptionsItemSelected(item)
-//    }
+    companion object {
 
+        fun newInstance(): HistoryFragment {
+            return HistoryFragment()
+        }
+    }
 }

@@ -37,46 +37,46 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 queryAllAsSingle()
             }
             HistoryTabFragment.exchanged -> {
-                queryAsSingle({ `in`("transactionTypeId", arrayOf(Constants.ID_EXCHANGE_TYPE)) })
+                queryAsSingle { `in`("transactionTypeId", arrayOf(Constants.ID_EXCHANGE_TYPE)) }
             }
             HistoryTabFragment.issued -> {
-                queryAsSingle({
+                queryAsSingle {
                     `in`("transactionTypeId", arrayOf(Constants.ID_TOKEN_REISSUE_TYPE,
                             Constants.ID_TOKEN_BURN_TYPE, Constants.ID_TOKEN_GENERATION_TYPE))
-                })
+                }
             }
             HistoryTabFragment.leased -> {
-                queryAsSingle({
+                queryAsSingle {
                     `in`("transactionTypeId", arrayOf(Constants.ID_INCOMING_LEASING_TYPE,
                             Constants.ID_CANCELED_LEASING_TYPE, Constants.ID_STARTED_LEASING_TYPE))
-                })
+                }
             }
             HistoryTabFragment.send -> {
-                queryAsSingle({
+                queryAsSingle {
                     `in`("transactionTypeId", arrayOf(Constants.ID_SENT_TYPE, Constants.ID_MASS_SEND_TYPE))
-                })
+                }
             }
             HistoryTabFragment.received -> {
-                queryAsSingle({
+                queryAsSingle {
                     `in`("transactionTypeId", arrayOf(Constants.ID_RECEIVED_TYPE, Constants.ID_MASS_RECEIVE_TYPE,
                             Constants.ID_MASS_SPAM_RECEIVE_TYPE, Constants.ID_SPAM_RECEIVE_TYPE))
-                })
+                }
             }
             HistoryTabFragment.leasing_all -> {
-                queryAsSingle({
+                queryAsSingle {
                     `in`("transactionTypeId", arrayOf(Constants.ID_STARTED_LEASING_TYPE,
                             Constants.ID_INCOMING_LEASING_TYPE, Constants.ID_CANCELED_LEASING_TYPE))
-                })
+                }
             }
             HistoryTabFragment.leasing_active_now -> {
-                queryAsSingle({
+                queryAsSingle {
                     `in`("transactionTypeId", arrayOf(Constants.ID_STARTED_LEASING_TYPE))
-                })
+                }
             }
             HistoryTabFragment.leasing_canceled -> {
-                queryAsSingle({
+                queryAsSingle {
                     `in`("transactionTypeId", arrayOf(Constants.ID_CANCELED_LEASING_TYPE))
-                })
+                }
             }
             else -> {
                 queryAllAsSingle()
@@ -84,14 +84,14 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         }
 
         addSubscription(singleData
-                .map({
-                    allItemsFromDb = it.sortedByDescending({ it.timestamp })
+                .map {
+                    allItemsFromDb = it.sortedByDescending { it.timestamp }
                     if (allItemsFromDb.size > 50) {
                         return@map sortAndConfigToUi(allItemsFromDb.subList(0, PER_PAGE))
                     } else {
                         return@map sortAndConfigToUi(allItemsFromDb)
                     }
-                })
+                }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -110,12 +110,16 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
             return
         }
 
-        val toIndex = if (itemsWithoutHeaders + PER_PAGE >= allItemsFromDb.size) allItemsFromDb.size else itemsWithoutHeaders + PER_PAGE
+        val toIndex = if (itemsWithoutHeaders + PER_PAGE >= allItemsFromDb.size) {
+            allItemsFromDb.size
+        } else {
+            itemsWithoutHeaders + PER_PAGE
+        }
 
         addSubscription(Single.just(allItemsFromDb.subList(itemsWithoutHeaders, toIndex))
-                .map({
+                .map {
                     return@map sortAndConfigToUi(it)
-                })
+                }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -128,9 +132,9 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale(app.getString(preferenceHelper.getLanguage())))
 
         val sortedList = it
-                .mapTo(mutableListOf(), {
+                .mapTo(mutableListOf()) {
                     HistoryItem(it)
-                })
+                }
 
         val list = arrayListOf<HistoryItem>()
 

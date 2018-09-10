@@ -40,42 +40,13 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
     override fun configLayoutRes(): Int = R.layout.fragment_history_tab
 
-    companion object {
-
-        const val all = "All"
-        const val send = "Sent"
-        const val received = "Received"
-        const val exchanged = "Exchanged"
-        const val leased = "Leased"
-        const val issued = "Issued"
-
-        const val leasing_all = "Leasing All"
-        const val leasing_active_now = "Active now"
-        const val leasing_canceled = "Canceled"
-
-        /**
-         * @return HistoryTabFragment instance
-         * */
-        fun newInstance(type: String): HistoryTabFragment {
-            val historyDateItemFragment = HistoryTabFragment()
-            val bundle = Bundle()
-            bundle.putString("type", type)
-            historyDateItemFragment.arguments = bundle
-            return historyDateItemFragment
-        }
-    }
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         layoutManager = LinearLayoutManager(baseActivity)
         recycle_history.layoutManager = layoutManager
         recycle_history.adapter = adapter
         recycle_history.isNestedScrollingEnabled = false
 
-        presenter.type = arguments?.getString("type")
-
-        runAsync {
-            presenter.loadTransactions()
-        }
+        presenter.type = arguments?.getString(TYPE)
 
         if (adapter.footerLayout != null) {
             if (adapter.footerLayout.parent != null) {
@@ -92,9 +63,9 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                             if (presenter.loadMoreCompleted) {
                                 presenter.loadMoreCompleted = false
                                 adapter.footerLayout.load_more_loading_view.visiable()
-                                runAsync({
+                                runAsync {
                                     presenter.loadMore(adapter.data.size)
-                                })
+                                }
                             }
                         }
                     } else {
@@ -104,12 +75,17 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
             }
         })
 
+        adapter.footerLayout.load_more_loading_view.visiable()
+        runAsync {
+            presenter.loadTransactions()
+        }
+
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val historyItem = adapter.getItem(position) as HistoryItem
             if (!historyItem.isHeader) {
                 val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
                 bottomSheetFragment.selectedItem = historyItem.t
-                bottomSheetFragment.historyType = arguments?.getString("type")
+                bottomSheetFragment.historyType = arguments?.getString(TYPE)
                 val data = adapter?.data as ArrayList<HistoryItem>
                 bottomSheetFragment.allItems = data.filter { !it.isHeader }.map { it.t }
 
@@ -133,14 +109,46 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     }
 
     override fun showData(data: ArrayList<HistoryItem>, type: String?) {
+        if (data.isEmpty()) {
+            recycle_history.visibility = View.GONE
+            empty_view.visibility = View.VISIBLE
+        }
+        else {
+            recycle_history.visibility = View.VISIBLE
+            empty_view.visibility = View.GONE
+        }
+
         // stop over scroll
         nested_scroll_view.fling(0)
 
-        runDelayed(350, {
+        runDelayed(350) {
             adapter.addData(data)
-            adapter.footerLayout.load_more_loading_view.gone()
+            goneLoadMoreView()
             presenter.loadMoreCompleted = true
-        })
+        }
+    }
 
+    companion object {
+
+        const val all = "All"
+        const val send = "Sent"
+        const val received = "Received"
+        const val exchanged = "Exchanged"
+        const val leased = "Leased"
+        const val issued = "Issued"
+
+        const val leasing_all = "Leasing All"
+        const val leasing_active_now = "Active now"
+        const val leasing_canceled = "Canceled"
+
+        const val TYPE = "type"
+
+        fun newInstance(type: String): HistoryTabFragment {
+            val historyDateItemFragment = HistoryTabFragment()
+            val bundle = Bundle()
+            bundle.putString(TYPE, type)
+            historyDateItemFragment.arguments = bundle
+            return historyDateItemFragment
+        }
     }
 }
