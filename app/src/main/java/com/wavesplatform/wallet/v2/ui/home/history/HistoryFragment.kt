@@ -46,10 +46,8 @@ class HistoryFragment : BaseFragment(), HistoryView {
             val offsetForShowShadow = appbar_layout.totalScrollRange - dp2px(9)
             if (-verticalOffset > offsetForShowShadow) {
                 viewpager_history.setPagingEnabled(false)
-                view_shadow.visiable()
             } else {
                 viewpager_history.setPagingEnabled(true)
-                view_shadow.gone()
             }
         }
         stl_history.currentTab = HistoryFragmentPageAdapter.ALL

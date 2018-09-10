@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -15,8 +17,10 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsAct
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
+import kotlinx.android.synthetic.main.view_load_more.view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
+import pers.victor.ext.inflate
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
@@ -51,9 +55,9 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun configLayoutRes(): Int = R.layout.fragment_assets
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.loadAssetsBalance()
-
         setupUI()
+        adapter.footerLayout.load_more_loading_view.visiable()
+        presenter.loadAssetsBalance()
     }
 
     private fun setupUI() {
@@ -65,6 +69,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
         recycle_assets_not_hidden.layoutManager = LinearLayoutManager(baseActivity)
         recycle_assets_not_hidden.adapter = adapter
         recycle_assets_not_hidden.isNestedScrollingEnabled = false
+        addFooter(adapter)
 
         recycle_assets_hidden.layoutManager = LinearLayoutManager(baseActivity)
         recycle_assets_hidden.adapter = adapterHiddenAssets
@@ -86,7 +91,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
             val item = this.adapterHiddenAssets.getItem(position) as AssetBalance
             launchActivity<AssetDetailsActivity> {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position + this@AssetsFragment.adapter.data.size)
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION,
+                        position + this@AssetsFragment.adapter.data.size)
             }
         }
 
@@ -94,7 +100,9 @@ class AssetsFragment : BaseFragment(), AssetsView {
             val item = this.spamAssetsAdapter.getItem(position) as AssetBalance
             launchActivity<AssetDetailsActivity> {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position + this@AssetsFragment.adapterHiddenAssets.data.size + this@AssetsFragment.adapter.data.size)
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION,
+                        position + this@AssetsFragment.adapterHiddenAssets.data.size
+                                + this@AssetsFragment.adapter.data.size)
             }
         }
 
@@ -130,8 +138,19 @@ class AssetsFragment : BaseFragment(), AssetsView {
             }
         }
 
-        text_hidden_assets.text = getString(R.string.wallet_assets_hidden_category, adapterHiddenAssets.data.size.toString())
-        text_spam_assets.text = getString(R.string.wallet_assets_spam_category, spamAssetsAdapter.data.size.toString())
+        text_hidden_assets.text = getString(R.string.wallet_assets_hidden_category,
+                adapterHiddenAssets.data.size.toString())
+        text_spam_assets.text = getString(R.string.wallet_assets_spam_category,
+                spamAssetsAdapter.data.size.toString())
+    }
+
+    private fun addFooter(adapter: AssetsAdapter) {
+        if (adapter.footerLayout != null) {
+            if (adapter.footerLayout.parent != null) {
+                (adapter.footerLayout.parent as ViewGroup).removeView(adapter.footerLayout)
+            }
+        }
+        adapter.addFooterView(inflate(R.layout.view_load_more, null, false))
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -147,6 +166,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
             baseActivity.startService(intent)
         }
         adapter.setNewData(assets)
+        adapter.footerLayout.load_more_loading_view.gone()
     }
 
     override fun afterSuccessLoadHiddenAssets(assets: List<AssetBalance>) {
@@ -159,7 +179,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         adapterHiddenAssets.setNewData(assets)
-        text_hidden_assets.text = getString(R.string.wallet_assets_hidden_category, assets.size.toString())
+        text_hidden_assets.text = getString(
+                R.string.wallet_assets_hidden_category, assets.size.toString())
     }
 
     override fun afterSuccessLoadSpamAssets(assets: List<AssetBalance>) {
@@ -171,8 +192,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
             relative_spam_block.gone()
         }
         spamAssetsAdapter.setNewData(assets)
-        text_spam_assets.text = getString(R.string.wallet_assets_spam_category, assets.size.toString())
+        text_spam_assets.text = getString(
+                R.string.wallet_assets_spam_category, assets.size.toString())
     }
-
-
 }

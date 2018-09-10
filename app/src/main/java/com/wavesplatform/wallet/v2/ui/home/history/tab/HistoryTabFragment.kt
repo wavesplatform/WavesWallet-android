@@ -76,9 +76,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         })
 
         adapter.footerLayout.load_more_loading_view.visiable()
-        runAsync {
-            presenter.loadTransactions()
-        }
+        presenter.loadTransactions()
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val historyItem = adapter.getItem(position) as HistoryItem

@@ -57,7 +57,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
 
     fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
         return spamService.spamAssets()
-                .map({
+                .map {
                     val scanner = Scanner(it)
                     val spam = arrayListOf<SpamAsset>()
                     while (scanner.hasNextLine()) {
@@ -66,23 +66,21 @@ class NodeDataManager @Inject constructor() : DataManager() {
                     scanner.close()
                     spam.saveAll()
                     return@map spam
-                })
-                .flatMap({ spamAssets ->
+                }
+                .flatMap { spamAssets ->
                     return@flatMap nodeService.assetsBalance(getAddress())
-                            .flatMap({ assets ->
+                            .flatMap { assets ->
                                 return@flatMap loadWavesBalance()
-                                        .map({
-                                            return@map Pair(assets, it)
-                                        })
+                                        .map { return@map Pair(assets, it) }
                                         .subscribeOn(Schedulers.io())
-                            })
-                            .map({
+                            }
+                            .map {
                                 if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
                                     // merge db data and API data
-                                    it.first.balances.forEachIndexed({ index, assetBalance ->
-                                        val dbAsset = assetsFromDb.firstOrNull({ dbAsset ->
+                                    it.first.balances.forEachIndexed { index, assetBalance ->
+                                        val dbAsset = assetsFromDb.firstOrNull { dbAsset ->
                                             dbAsset.assetId == assetBalance.assetId
-                                        })
+                                        }
                                         dbAsset.notNull {
                                             assetBalance.isHidden = it.isHidden
                                             assetBalance.isFavorite = it.isFavorite
@@ -90,19 +88,19 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                             assetBalance.isGateway = it.isGateway
                                             assetBalance.isSpam = it.isSpam
                                         }
-                                    })
+                                    }
                                 }
                                 it.first.balances.forEachIndexed { index, assetBalance ->
-                                    assetBalance.isSpam = spamAssets.any({
+                                    assetBalance.isSpam = spamAssets.any {
                                         it.assetId == assetBalance.assetId
-                                    })
+                                    }
                                 }
                                 it.first.balances.saveAll()
 
                                 return@map queryAll<AssetBalance>()
-                            })
+                            }
                             .subscribeOn(Schedulers.io())
-                })
+                }
 
     }
 

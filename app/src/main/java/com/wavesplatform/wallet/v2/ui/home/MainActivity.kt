@@ -22,6 +22,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.util.makeLinks
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
@@ -38,9 +39,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     private var accountFirstOpenDialog: AlertDialog? = null
     private val fragments = arrayListOf<Fragment>()
 
-
     @ProvidePresenter
     fun providePresenter(): MainPresenter = presenter
+
+    override fun configLayoutRes() = R.layout.activity_main_v2
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_general)
@@ -55,13 +57,13 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
         setupBottomNavigation()
 
-        fragments.add(ProfileFragment.newInstance())
+        fragments.add(WalletFragment.newInstance())
         fragments.add(DexFragment.newInstance())
         fragments.add(QuickActionBottomSheetFragment.newInstance())
         fragments.add(HistoryFragment.newInstance())
         fragments.add(ProfileFragment.newInstance())
 
-        onTabSelected(tab_navigation.getTabAt(PROFILE_SCREEN))
+        onTabSelected(tab_navigation.getTabAt(WALLET_SCREEN))
     }
 
     private fun showFirstOpenAlert(firstOpen: Boolean) {
@@ -119,8 +121,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
         return view
     }
-
-    override fun configLayoutRes() = R.layout.activity_main_v2
 
     /**
      * Setup bottom navigation with custom tabs

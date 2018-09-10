@@ -12,6 +12,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_wallet.*
+import kotlinx.android.synthetic.main.view_load_more.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -23,20 +24,18 @@ class WalletFragment : BaseFragment(), WalletView {
     @Inject
     @InjectPresenter
     lateinit var presenter: WalletPresenter
+    private lateinit var adapter: WalletFragmentPageAdapter
 
     @ProvidePresenter
     fun providePresenter(): WalletPresenter = presenter
 
     override fun configLayoutRes(): Int = R.layout.fragment_wallet
 
-    companion object {
-
-        /**
-         * @return WalletFragment instance
-         * */
-        fun newInstance(): WalletFragment {
-            return WalletFragment()
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        adapter = WalletFragmentPageAdapter(
+                childFragmentManager,
+                arrayOf(getString(R.string.wallet_assets), getString(R.string.wallet_leasing)))
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -44,18 +43,8 @@ class WalletFragment : BaseFragment(), WalletView {
     }
 
     private fun setupUI() {
-        viewpager_wallet.adapter = WalletFragmentPageAdapter(childFragmentManager, arrayOf(getString(R.string.wallet_assets), getString(R.string.wallet_leasing)))
+        viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
-        appbar_layout.addOnOffsetChangedListener({ appBarLayout, verticalOffset ->
-            val offsetForShowShadow = appbar_layout.totalScrollRange - dp2px(9)
-            if (-verticalOffset > offsetForShowShadow) {
-                viewpager_wallet.setPagingEnabled(false)
-                view_shadow.visiable()
-            } else {
-                viewpager_wallet.setPagingEnabled(true)
-                view_shadow.gone()
-            }
-        })
         stl_wallet.currentTab = 0
     }
 
@@ -76,5 +65,12 @@ class WalletFragment : BaseFragment(), WalletView {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+
+        fun newInstance(): WalletFragment {
+            return WalletFragment()
+        }
     }
 }

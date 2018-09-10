@@ -14,7 +14,8 @@ import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
-class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicKeyAccountHelper) : BaseSectionQuickAdapter<HistoryItem, BaseViewHolder>(R.layout.recycle_item_history, R.layout.asset_header, null) {
+class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicKeyAccountHelper) :
+        BaseSectionQuickAdapter<HistoryItem, BaseViewHolder>(R.layout.recycle_item_history, R.layout.asset_header, null) {
 
     override fun convertHead(helper: BaseViewHolder?, item: HistoryItem?) {
         helper?.setText(R.id.text_header_text, item?.header)
