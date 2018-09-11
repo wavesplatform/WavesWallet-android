@@ -4,16 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -39,7 +43,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
     lateinit var spamAssetsAdapter: AssetsAdapter
 
     companion object {
-
+        var REQUEST_SORTING = 111
         /**
          * @return AssetsFragment instance
          * */
@@ -51,6 +55,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun configLayoutRes(): Int = R.layout.fragment_assets
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        swipe_container?.isRefreshing = true
         presenter.loadAssetsBalance()
 
         setupUI()
@@ -139,13 +144,18 @@ class AssetsFragment : BaseFragment(), AssetsView {
         item.isVisible = true
     }
 
-    override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean) {
-        swipe_container.notNull { swipe_container.isRefreshing = false }
-
+    override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean, withApiUpdate: Boolean) {
         if (!fromDB) {
             val intent = Intent(baseActivity, UpdateApiDataService::class.java)
             baseActivity.startService(intent)
         }
+
+        if (!fromDB) {
+            swipe_container?.isRefreshing = false
+        } else if (!withApiUpdate) {
+            swipe_container?.isRefreshing = false
+        }
+
         adapter.setNewData(assets)
     }
 
@@ -174,5 +184,41 @@ class AssetsFragment : BaseFragment(), AssetsView {
         text_spam_assets.text = getString(R.string.wallet_assets_spam_category, assets.size.toString())
     }
 
+    override fun afterFailedLoadAssets() {
+        swipe_container?.isRefreshing = false
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_SORTING -> {
+                if (resultCode == Constants.RESULT_OK) {
+                    val needToUpdate = data?.getBooleanExtra(AssetsSortingActivity.RESULT_NEED_UPDATE, false)
+                    if (needToUpdate == true) {
+                        swipe_container?.isRefreshing = true
+                        presenter.loadAssetsBalance(false)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_assets, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_sorting -> {
+                launchActivity<AssetsSortingActivity>(REQUEST_SORTING)
+            }
+            R.id.action_your_address -> {
+                launchActivity<MyAddressQRActivity>()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
 
 }
