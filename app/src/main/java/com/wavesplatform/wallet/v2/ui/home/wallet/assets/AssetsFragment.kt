@@ -44,7 +44,9 @@ class AssetsFragment : BaseFragment(), AssetsView {
     lateinit var spamAssetsAdapter: AssetsAdapter
 
     companion object {
+        var RESULT_NEED_UPDATE = "need_update"
         var REQUEST_SORTING = 111
+        var REQUEST_ASSET_DETAILS = 112
         /**
          * @return AssetsFragment instance
          * */
@@ -85,7 +87,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position) as AssetBalance
-            launchActivity<AssetDetailsActivity> {
+            launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position)
             }
@@ -93,7 +95,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
         adapterHiddenAssets.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = this.adapterHiddenAssets.getItem(position) as AssetBalance
-            launchActivity<AssetDetailsActivity> {
+            launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position + this@AssetsFragment.adapter.data.size)
             }
@@ -101,7 +103,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
         spamAssetsAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = this.spamAssetsAdapter.getItem(position) as AssetBalance
-            launchActivity<AssetDetailsActivity> {
+            launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position + this@AssetsFragment.adapterHiddenAssets.data.size + this@AssetsFragment.adapter.data.size)
             }
@@ -195,9 +197,9 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            REQUEST_SORTING -> {
+            REQUEST_SORTING, REQUEST_ASSET_DETAILS -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    val needToUpdate = data?.getBooleanExtra(AssetsSortingActivity.RESULT_NEED_UPDATE, false)
+                    val needToUpdate = data?.getBooleanExtra(RESULT_NEED_UPDATE, false)
                     if (needToUpdate == true) {
                         swipe_container?.isRefreshing = true
                         presenter.loadAssetsBalance(false)

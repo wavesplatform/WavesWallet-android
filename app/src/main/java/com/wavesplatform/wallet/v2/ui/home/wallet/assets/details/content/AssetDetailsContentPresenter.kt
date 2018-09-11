@@ -22,7 +22,7 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
         queryAllAsync<Transaction> {
             val list = it
                     .sortedByDescending({ it.timestamp })
-//                    .filter { it.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE || it.transactionType() != TransactionType.SPAM_RECEIVE_TYPE }
+                    .filter { it.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE || it.transactionType() != TransactionType.SPAM_RECEIVE_TYPE }
                     .filter {
                         if (assetBalance?.isWaves() == true) it.assetId.isNullOrEmpty()
                         else it.assetId == assetBalance?.assetId

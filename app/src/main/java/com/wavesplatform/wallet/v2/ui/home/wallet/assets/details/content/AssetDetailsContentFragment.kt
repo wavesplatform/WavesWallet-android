@@ -147,7 +147,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         linear_transfer_buttons.goneIf { assetBalance?.isSpam == true }
 
         // TODO: configure view when will be balance
-        frame_total.goneIf { text_total.text == text_available_balance.text }
+        frame_total.goneIf { text_total.text.toString().trim() == text_available_balance.text.toString().trim() }
         frame_leased.gone()
         frame_in_order.gone()
     }
