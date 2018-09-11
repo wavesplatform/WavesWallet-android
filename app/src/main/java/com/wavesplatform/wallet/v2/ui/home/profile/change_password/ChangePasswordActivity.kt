@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.change_password
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,13 +11,18 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.R.string.password
 import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
+import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
+import com.wavesplatform.wallet.v2.util.launchActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
 import io.github.anderscheow.validator.rules.common.EqualRule
 import io.github.anderscheow.validator.rules.common.MinRule
 import kotlinx.android.synthetic.main.activity_change_password.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import pers.victor.ext.toast
@@ -103,26 +109,55 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         }
 
         button_confirm.click {
-            val guid = BlockchainApplication.getAccessManager().getCurrentGuid()
-            try {
-                val oldWallet = WavesWallet(
-                        BlockchainApplication.getAccessManager().getCurrentWavesWalletEncryptedData(),
-                        edit_old_password.text.toString()
-                )
-                val newWallet = WavesWallet(oldWallet.seed)
-                BlockchainApplication.getAccessManager().storePassword(
-                        guid, newWallet.publicKeyStr,
-                        newWallet.getEncryptedData(edit_confirm_password.text.toString()))
-                toast(getString(R.string.change_password_success))
-                finish()
-            } catch (e: Exception) {
-                toast(getString(R.string.change_password_error))
-            }
+            launchActivity<EnterPassCodeActivity>(
+                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
         }
-
     }
 
     fun isFieldsValid() {
         button_confirm.isEnabled = presenter.isAllFieldsValid()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+
+            EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
+                if (resultCode == Constants.RESULT_OK) {
+                    writePassword(data!!.extras
+                            .getString(EnterPassCodeActivity.KEY_INTENT_PASS_CODE))
+                }
+            }
+        }
+    }
+
+    private fun writePassword(passCode: String) {
+        val guid = BlockchainApplication.getAccessManager().getCurrentGuid()
+        try {
+            val oldWallet = WavesWallet(
+                    BlockchainApplication.getAccessManager()
+                            .getCurrentWavesWalletEncryptedData(),
+                    edit_old_password.text.toString()
+            )
+            val newWallet = WavesWallet(oldWallet.seed)
+            val newPassWord = edit_confirm_password.text.toString()
+
+            BlockchainApplication.getAccessManager().storePassword(
+                    guid, newWallet.publicKeyStr,
+                    newWallet.getEncryptedData(newPassWord))
+
+            BlockchainApplication
+                    .getAccessManager()
+                    .writePassCodeObservable(guid, newPassWord, passCode)
+                    .subscribe({
+                        toast(getString(R.string.change_password_success))
+                        finish()
+                    }, { throwable ->
+                        Log.e("CreatePassCodeActivity", throwable.message)
+                    })
+
+        } catch (e: Exception) {
+            toast(getString(R.string.change_password_error))
+        }
     }
 }
