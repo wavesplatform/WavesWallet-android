@@ -3,6 +3,8 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -11,9 +13,10 @@ import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
@@ -105,9 +108,19 @@ class LeasingFragment : BaseFragment(), LeasingView {
         recycle_active_leasing.isNestedScrollingEnabled = false
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val item = menu.findItem(R.id.action_sorting)
-        item.isVisible = false
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_leasing, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_your_address -> {
+                launchActivity<MyAddressQRActivity>()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun showBalances(wavesAsset: AssetBalance, leasedValue: Long, availableValue: Long?) {
