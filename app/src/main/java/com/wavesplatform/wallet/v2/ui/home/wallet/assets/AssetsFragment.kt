@@ -6,16 +6,20 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
 import kotlinx.android.synthetic.main.view_load_more.view.*
 import pers.victor.ext.*
@@ -40,6 +44,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
     lateinit var spamAssetsAdapter: AssetsAdapter
 
     companion object {
+        const val REQUEST_SORTING = 111
 
         fun newInstance(): AssetsFragment {
             return AssetsFragment()
@@ -49,9 +54,10 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun configLayoutRes(): Int = R.layout.fragment_assets
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupUI()
-        adapter.footerLayout.load_more_loading_view.visiable()
+        swipe_container?.isRefreshing = true
         presenter.loadAssetsBalance()
+
+        setupUI()
     }
 
     private fun setupUI() {
@@ -152,15 +158,20 @@ class AssetsFragment : BaseFragment(), AssetsView {
         item.isVisible = true
     }
 
-    override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean) {
-        adapter.setNewData(assets)
-        adapter.footerLayout.load_more_loading_view.gone()
-
+    override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean, withApiUpdate: Boolean) {
         if (!fromDB) {
             val intent = Intent(baseActivity, UpdateApiDataService::class.java)
             baseActivity.startService(intent)
             swipe_container.notNull { swipe_container.isRefreshing = false }
         }
+
+        if (!fromDB) {
+            swipe_container?.isRefreshing = false
+        } else if (!withApiUpdate) {
+            swipe_container?.isRefreshing = false
+        }
+
+        adapter.setNewData(assets)
     }
 
     override fun afterSuccessLoadHiddenAssets(assets: List<AssetBalance>) {
@@ -190,9 +201,42 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 R.string.wallet_assets_spam_category, assets.size.toString())
     }
 
-    override fun afterErrorLoadAssets(error: Throwable) {
+    override fun afterFailedLoadAssets() {
+        swipe_container?.isRefreshing = false
         toast(getString(R.string.unexpected_error))
-        swipe_container.notNull { swipe_container.isRefreshing = false }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_SORTING -> {
+                if (resultCode == Constants.RESULT_OK) {
+                    val needToUpdate = data?.getBooleanExtra(AssetsSortingActivity.RESULT_NEED_UPDATE, false)
+                    if (needToUpdate == true) {
+                        swipe_container?.isRefreshing = true
+                        presenter.loadAssetsBalance(false)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_assets, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_sorting -> {
+                launchActivity<AssetsSortingActivity>(REQUEST_SORTING)
+            }
+            R.id.action_your_address -> {
+                launchActivity<MyAddressQRActivity>()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
 }

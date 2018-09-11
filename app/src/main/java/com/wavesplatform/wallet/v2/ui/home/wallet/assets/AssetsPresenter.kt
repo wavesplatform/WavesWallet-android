@@ -4,6 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -12,43 +13,43 @@ import javax.inject.Inject
 @InjectViewState
 class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
 
-    fun loadAssetsBalance() {
+    fun loadAssetsBalance(withApiUpdate: Boolean = true) {
         addSubscription(queryAllAsSingle<AssetBalance>().toObservable()
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext {
-                    prepareAssetsAndShow(it, true)
-                }
+                .doOnNext({
+                    prepareAssetsAndShow(it, true, withApiUpdate)
+                })
                 .observeOn(Schedulers.io())
-                .flatMap {
-                    return@flatMap nodeDataManager.loadAssets(it)
-                            .subscribeOn(Schedulers.io())
-                }
+                .flatMap({
+                    if (withApiUpdate) {
+                        return@flatMap nodeDataManager.loadAssets(it)
+                                .subscribeOn(Schedulers.io())
+                    } else {
+                        return@flatMap Observable.just(it)
+                    }
+                })
+                .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    prepareAssetsAndShow(it)
+                    if (withApiUpdate) {
+                        prepareAssetsAndShow(it, false, withApiUpdate)
+                    }
                 }, {
                     it.printStackTrace()
-                    viewState.afterErrorLoadAssets(it)
+                    viewState.afterFailedLoadAssets()
                 }))
     }
 
-    private fun prepareAssetsAndShow(assetList: List<AssetBalance>, fromDB: Boolean = false) {
-        addSubscription(Observable.fromIterable(assetList)
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .map { list ->
-                    val assets = list.filter { !it.isHidden && !it.isSpam  }
-                            .sortedByDescending { it.isGateway }
-                            .sortedByDescending { it.isFavorite}
-                    val hidden = list.filter { it.isHidden && !it.isSpam }
-                    val spam = list.filter { it.isSpam }
-                    return@map Triple(assets, hidden, spam)
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { t ->
-                    viewState.afterSuccessLoadHiddenAssets(t.second)
-                    viewState.afterSuccessLoadSpamAssets(t.third)
-                    viewState.afterSuccessLoadAssets(t.first, fromDB)
-                })
+    private fun prepareAssetsAndShow(it: List<AssetBalance>, fromDB: Boolean, withApiUpdate: Boolean) {
+        it.notNull {
+            val hiddenList = it.filter({ it.isHidden && !it.isSpam }).sortedBy { it.position }
+            val sortedToFirstFavoriteList = it.filter({ !it.isHidden && !it.isSpam }).sortedByDescending({ it.isGateway }).sortedBy { it.position }.sortedByDescending({ it.isFavorite })
+            val spamList = it.filter({ it.isSpam })
+
+            viewState.afterSuccessLoadAssets(sortedToFirstFavoriteList, fromDB, withApiUpdate)
+            viewState.afterSuccessLoadHiddenAssets(hiddenList)
+
+            viewState.afterSuccessLoadSpamAssets(spamList)
+        }
     }
 }

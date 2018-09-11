@@ -7,8 +7,8 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface AssetsView :BaseMvpView{
-    fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean)
+    fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean, withApiUpdate: Boolean)
     fun afterSuccessLoadHiddenAssets(assets: List<AssetBalance>)
     fun afterSuccessLoadSpamAssets(assets: List<AssetBalance>)
-    fun afterErrorLoadAssets(error: Throwable)
+    fun afterFailedLoadAssets()
 }
