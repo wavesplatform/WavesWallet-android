@@ -160,9 +160,13 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     private fun setImageActive(seed: String, view: View) {
         this.seed = seed
 
-        linear_images.children.forEach { it.background = null }
+        linear_images.children.forEach {
+            it.background = null
+            it.alpha = 0.3F
+        }
 
         view.setBackgroundResource(R.drawable.shape_outline_checked)
+        view.alpha = 1F
         presenter.avatarValid = true
         isFieldsValid()
     }
