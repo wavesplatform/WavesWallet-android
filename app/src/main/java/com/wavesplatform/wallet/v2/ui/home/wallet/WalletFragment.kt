@@ -28,6 +28,12 @@ class WalletFragment : BaseFragment(), WalletView {
                 arrayOf(getString(R.string.wallet_assets), getString(R.string.wallet_leasing)))
     }
 
+    companion object {
+        fun newInstance(): WalletFragment {
+            return WalletFragment()
+        }
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupUI()
     }
