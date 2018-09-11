@@ -162,10 +162,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
         if (!fromDB) {
             val intent = Intent(baseActivity, UpdateApiDataService::class.java)
             baseActivity.startService(intent)
-            swipe_container.notNull { swipe_container.isRefreshing = false }
-        }
-
-        if (!fromDB) {
             swipe_container?.isRefreshing = false
         } else if (!withApiUpdate) {
             swipe_container?.isRefreshing = false
