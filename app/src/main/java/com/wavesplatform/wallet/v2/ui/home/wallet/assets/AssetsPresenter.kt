@@ -23,32 +23,32 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     return@flatMap nodeDataManager.loadAssets(it)
                             .subscribeOn(Schedulers.io())
                 }
-                .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     prepareAssetsAndShow(it)
                 }, {
                     it.printStackTrace()
+                    viewState.afterErrorLoadAssets(it)
                 }))
     }
 
     private fun prepareAssetsAndShow(assetList: List<AssetBalance>, fromDB: Boolean = false) {
         addSubscription(Observable.fromIterable(assetList)
                 .toList()
+                .subscribeOn(Schedulers.io())
                 .map { list ->
                     val assets = list.filter { !it.isHidden && !it.isSpam  }
                             .sortedByDescending { it.isGateway }
                             .sortedByDescending { it.isFavorite}
-                    val hidden = list.filter { it.isHidden }
+                    val hidden = list.filter { it.isHidden && !it.isSpam }
                     val spam = list.filter { it.isSpam }
                     return@map Triple(assets, hidden, spam)
                 }
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { t ->
-                    viewState.afterSuccessLoadAssets(t.first, fromDB)
                     viewState.afterSuccessLoadHiddenAssets(t.second)
                     viewState.afterSuccessLoadSpamAssets(t.third)
+                    viewState.afterSuccessLoadAssets(t.first, fromDB)
                 })
     }
 }

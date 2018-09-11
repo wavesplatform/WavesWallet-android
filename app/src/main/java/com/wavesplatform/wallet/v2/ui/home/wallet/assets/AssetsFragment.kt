@@ -18,10 +18,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
 import kotlinx.android.synthetic.main.view_load_more.view.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.inflate
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import javax.inject.Inject
 
 class AssetsFragment : BaseFragment(), AssetsView {
@@ -156,14 +153,14 @@ class AssetsFragment : BaseFragment(), AssetsView {
     }
 
     override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean) {
-        swipe_container.notNull { swipe_container.isRefreshing = false }
+        adapter.setNewData(assets)
+        adapter.footerLayout.load_more_loading_view.gone()
 
         if (!fromDB) {
             val intent = Intent(baseActivity, UpdateApiDataService::class.java)
             baseActivity.startService(intent)
+            swipe_container.notNull { swipe_container.isRefreshing = false }
         }
-        adapter.setNewData(assets)
-        adapter.footerLayout.load_more_loading_view.gone()
     }
 
     override fun afterSuccessLoadHiddenAssets(assets: List<AssetBalance>) {
@@ -192,4 +189,10 @@ class AssetsFragment : BaseFragment(), AssetsView {
         text_spam_assets.text = getString(
                 R.string.wallet_assets_spam_category, assets.size.toString())
     }
+
+    override fun afterErrorLoadAssets(error: Throwable) {
+        toast(getString(R.string.unexpected_error))
+        swipe_container.notNull { swipe_container.isRefreshing = false }
+    }
+
 }

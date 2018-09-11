@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/basic50"
     android:layout_height="match_parent">
 
@@ -479,10 +480,11 @@
                     android:textColor="@color/disabled500" />
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/textView_height"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="985219"
+                    tools:text="985219"
                     android:textColor="@color/disabled900" />
             </LinearLayout>
 
@@ -500,6 +502,7 @@
                     android:textColor="@color/disabled500" />
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/textView_version"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"

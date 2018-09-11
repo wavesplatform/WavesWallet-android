@@ -8,8 +8,10 @@ import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.BlockchainApplication
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -24,6 +26,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import pers.victor.ext.toast
@@ -34,6 +37,10 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @Inject
     @InjectPresenter
     lateinit var presenter: ProfilePresenter
+    @Inject
+    lateinit var nodeDataManager: NodeDataManager
+    var subscriptions: CompositeDisposable = CompositeDisposable()
+
 
     @ProvidePresenter
     fun providePresenter(): ProfilePresenter = presenter
@@ -113,11 +120,20 @@ class ProfileFragment : BaseFragment(), ProfileView {
             skip_backup_indicator_image.setImageDrawable(ContextCompat
                     .getDrawable(context!!, R.drawable.ic_check_18_success_400))
         }
+
+        textView_version.text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        subscriptions.add(nodeDataManager.currentBlocksHeight()
+                .subscribe { textView_height.text = it.height.toString() })
     }
 
     override fun onResume() {
         super.onResume()
         setCurrentLangFlag()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        subscriptions.clear()
     }
 
     private fun setCurrentLangFlag() {
