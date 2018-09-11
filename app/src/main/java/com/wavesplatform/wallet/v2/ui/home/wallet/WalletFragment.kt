@@ -9,6 +9,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_wallet.*
@@ -57,24 +58,5 @@ class WalletFragment : BaseFragment(), WalletView {
             }
         })
         stl_wallet.currentTab = 0
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_wallet, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_sorting -> {
-                launchActivity<AssetsSortingActivity>()
-            }
-            R.id.action_your_address -> {
-                launchActivity<MyAddressQRActivity>()
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 }
