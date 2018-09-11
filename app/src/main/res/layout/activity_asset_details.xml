@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
@@ -16,7 +17,7 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="160dp"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="6dp"
             android:overScrollMode="never"
@@ -26,35 +27,49 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_favorite"
-            android:layout_gravity="end|top"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_marginEnd="16dp"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic_toolbar_favorite_off"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_toolbar_favorite_off" />
 
     </android.support.v7.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/text_asset_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar_view"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        tools:text="Waves" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/text_asset_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_asset_name"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/disabled500"
-        android:textSize="12sp"
-        tools:text="Waves Token" />
+        <TextView
+            android:id="@+id/text_asset_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:text="Waves" />
+
+        <TextView
+            android:id="@+id/text_asset_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/disabled500"
+            android:textSize="12sp"
+            tools:text="Waves Token" />
+
+        <com.wavesplatform.wallet.v2.ui.custom.SpamTag
+            android:id="@+id/spam_tag"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="2dp" />
+
+    </LinearLayout>
 
     <com.wavesplatform.wallet.v2.ui.custom.SwipeDisableViewPager
         android:id="@+id/view_pager_content"
@@ -64,4 +79,4 @@
         android:layout_marginTop="12dp"
         android:overScrollMode="never" />
 
-</RelativeLayout>
+</LinearLayout>

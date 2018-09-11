@@ -29,7 +29,7 @@
             android:layout_below="@+id/text_title"
             android:layout_marginTop="14dp"
             android:layerType="software"
-            android:src="@drawable/bg_dashed" />
+            android:src="@drawable/shape_dashed_line" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_anonim"

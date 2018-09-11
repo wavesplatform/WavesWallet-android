@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
+package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
 import android.content.Context
 import android.support.v4.view.PagerAdapter

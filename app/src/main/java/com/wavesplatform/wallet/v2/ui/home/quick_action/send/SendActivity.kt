@@ -11,7 +11,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -97,7 +96,7 @@ class SendActivity : BaseActivity(), SendView {
             image_view_recipient_action.tag = R.drawable.ic_deladdress_24_error_400
             horizontal_recipient_suggestion.gone()
             presenter.selectedAsset.notNull {
-                if (it.isFlatMoney){
+                if (it.isFiatMoney){
                     relative_gateway_fee.gone()
                     relative_fiat_fee.visiable()
                 }else{

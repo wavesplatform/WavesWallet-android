@@ -37,26 +37,21 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="4dp"
             android:background="@drawable/asset_price_border"
+            android:paddingBottom="2dp"
             android:paddingEnd="4dp"
             android:paddingStart="4dp"
-            android:visibility="gone"
             android:paddingTop="2dp"
-            android:paddingBottom="2dp"
             android:text="WAVES"
             android:textColor="@color/info500"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <com.wavesplatform.wallet.v2.ui.custom.SpamTag
             android:id="@+id/text_tag_spam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="4dp"
-            android:background="@drawable/bg_tag"
-            android:text="@string/wallet_assets_spam_tag"
-            android:textAllCaps="true"
-            android:textColor="@color/basic500"
-            android:textSize="12sp"
             android:visibility="gone" />
     </LinearLayout>
 
@@ -64,10 +59,10 @@
         android:id="@+id/text_amount_value_in_dollar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
         android:text="≈ 00 000.00 US Dollar"
         android:textColor="@color/disabled500"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:visibility="visible" />
 </LinearLayout>

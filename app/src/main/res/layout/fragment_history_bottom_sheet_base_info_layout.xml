@@ -40,7 +40,7 @@
             android:layout_height="5dp"
             android:layout_marginBottom="14dp"
             android:layout_marginTop="14dp"
-            android:background="@drawable/dotted_line"
+            android:background="@drawable/shape_dashed_line"
             android:layerType="software" />
 
         <LinearLayout
@@ -99,7 +99,7 @@
             android:layout_height="5dp"
             android:layout_marginBottom="14dp"
             android:layout_marginTop="14dp"
-            android:background="@drawable/dotted_line"
+            android:background="@drawable/shape_dashed_line"
             android:layerType="software" />
 
         <RelativeLayout

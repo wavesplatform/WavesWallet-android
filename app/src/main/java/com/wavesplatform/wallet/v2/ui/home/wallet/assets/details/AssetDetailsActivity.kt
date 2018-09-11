@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.welcome.AlphaScalePageTransformer
 import kotlinx.android.synthetic.main.activity_asset_details.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
+import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.util.*
@@ -84,15 +85,18 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         val item = adapterAvatar.items[position]
         text_asset_name.text = item.getName()
 
-        val avatar = Constants.defaultAssetsAvatar[item.assetId]
-        if (avatar == null) {
-            text_asset_description.text = ""
-        } else {
-            when {
-                item.isAssetId("") -> text_asset_description.setText(R.string.asset_details_waves_token)
-                item.isFlatMoney -> text_asset_description.setText(R.string.asset_details_flat_money)
-                else -> text_asset_description.setText(R.string.asset_details_cryptocurrency)
+        text_asset_description.visiable()
+        spam_tag.gone()
+
+        when {
+            item.isWaves() -> text_asset_description.setText(R.string.asset_details_waves_token)
+            item.isGateway -> text_asset_description.setText(R.string.asset_details_cryptocurrency)
+            item.isFiatMoney -> text_asset_description.setText(R.string.asset_details_flat_money)
+            item.isSpam -> {
+                text_asset_description.gone()
+                spam_tag.visiable()
             }
+            else -> text_asset_description.text = ""
         }
     }
 
@@ -102,7 +106,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         adapterAvatar.notifyDataSetChanged()
         view_pager.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0), false)
         view_pager.post({
-            if (view_pager.beginFakeDrag()){
+            if (view_pager.beginFakeDrag()) {
                 view_pager.fakeDragBy(0f)
                 view_pager.endFakeDrag()
             }
@@ -134,7 +138,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     fun changeFavorite() {
-        if (!adapterAvatar.items[view_pager.currentItem].isWaves()){
+        if (!adapterAvatar.items[view_pager.currentItem].isWaves()) {
             if (adapterAvatar.items[view_pager.currentItem].isFavorite) {
                 unmarkAsFavorite()
             } else {

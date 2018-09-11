@@ -76,7 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
                     android:layout_marginTop="24dp"
-                    android:background="@drawable/dotted_line"
+                    android:background="@drawable/shape_dashed_line"
                     android:layerType="software" />
 
                 <LinearLayout
