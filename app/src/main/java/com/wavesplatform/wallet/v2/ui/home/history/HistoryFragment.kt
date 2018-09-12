@@ -17,7 +17,6 @@ class HistoryFragment : BaseFragment(), HistoryView {
     @Inject
     @InjectPresenter
     lateinit var presenter: HistoryPresenter
-    private lateinit var adapter: HistoryFragmentPageAdapter
 
     @ProvidePresenter
     fun providePresenter(): HistoryPresenter = presenter
@@ -56,6 +55,6 @@ class HistoryFragment : BaseFragment(), HistoryView {
                 viewpager_history.setPagingEnabled(true)
             }
         }
-        stl_history.currentTab = HistoryFragmentPageAdapter.ALL
+        stl_history.currentTab = 0
     }
 }

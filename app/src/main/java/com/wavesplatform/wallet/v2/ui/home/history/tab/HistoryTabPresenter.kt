@@ -102,7 +102,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                     } else {
                         return@map sortAndConfigToUi(allItemsFromDb)
                     }
-                }
+                })
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
