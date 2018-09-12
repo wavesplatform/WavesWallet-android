@@ -94,6 +94,8 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
                     val wallet = WavesWallet(BlockchainApplication.getAccessManager()
                             .getCurrentWavesWalletEncryptedData(), password)
                     setSeed(wallet.seedStr)
+                } else {
+                    finish()
                 }
             }
         }

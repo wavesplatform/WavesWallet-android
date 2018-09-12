@@ -32,9 +32,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/til_seed"
                 android:orientation="horizontal">
-
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_asset"
@@ -44,11 +42,23 @@
                     app:srcCompat="@drawable/asset_gray_icon" />
 
                 <View
+                    android:id="@+id/skeleton_address_asset"
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="14dp"
-                    android:background="@drawable/skeleton_text_basic_100" />
+                    android:background="@drawable/skeleton_text_basic_100"
+                    android:visibility="gone"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/address_asset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="14dp"
+                    android:textColor="@color/basic500"
+                    android:textSize="14sp"
+                    tools:text="f44735ac21178db09087157f4fa87a10"/>
 
             </LinearLayout>
 
