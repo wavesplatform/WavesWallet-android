@@ -5,16 +5,9 @@ import android.graphics.Color;
 import android.support.annotation.Nullable;
 
 import java.security.MessageDigest;
+import java.util.Random;
 
 public class Identicon {
-
-    public static Bitmap createFromObject(Object seed) {
-        return create(Integer.toHexString(seed.hashCode()), Options.DEFAULT);
-    }
-
-    public static Bitmap createFromObject(Object seed, Options options) {
-        return create(Integer.toHexString(seed.hashCode()), options);
-    }
 
     public static Bitmap create(String seed) {
         return create(seed, Options.DEFAULT);
@@ -169,6 +162,15 @@ public class Identicon {
 
             public Builder setBlankColor(int color) {
                 bColor = color;
+                return this;
+            }
+
+            public Builder setRandomBlankColor() {
+                Random rnd = new Random();
+                bColor = Color.argb(255,
+                        rnd.nextInt(256),
+                        rnd.nextInt(256),
+                        rnd.nextInt(256));
                 return this;
             }
 

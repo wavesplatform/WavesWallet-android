@@ -1,13 +1,11 @@
 package com.wavesplatform.wallet.v1.data.access;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.wavesplatform.wallet.v1.crypto.AESUtil;
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet;
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil;
 import com.wavesplatform.wallet.v1.data.services.PinStoreService;
-import com.wavesplatform.wallet.v1.db.DBHelper;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v1.util.AppUtil;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
@@ -24,12 +22,11 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.exceptions.Exceptions;
-import io.realm.RealmConfiguration;
 
+@Deprecated
 public class AccessState {
 
     private static final String TAG = AccessState.class.getSimpleName();
-
     private static final long CLEAR_TIMEOUT_SECS = 60L;
 
     private PrefsUtil prefs;
@@ -37,29 +34,26 @@ public class AccessState {
     private AppUtil appUtil;
     private static AccessState instance;
     private Disposable disposable;
-
     private WavesWallet wavesWallet;
     private boolean onDexScreens = false;
 
-    public void initAccessState(Context context, PrefsUtil prefs, PinStoreService pinStore, AppUtil appUtil) {
+    @Deprecated
+    public void initAccessState(PrefsUtil prefs, PinStoreService pinStore, AppUtil appUtil) {
         this.prefs = prefs;
         this.pinStore = pinStore;
         this.appUtil = appUtil;
     }
 
+    @Deprecated
     public static AccessState getInstance() {
         if (instance == null)
             instance = new AccessState();
         return instance;
     }
 
-    public Completable createPin(String walletGuid, String password, String passedPin) {
-        return createPinObservable(walletGuid, password, passedPin)
-                .compose(RxUtil.applySchedulersToCompletable());
-    }
-
-    public boolean restoreWavesWallet(String password) {
-        String encryptedWallet = prefs.getValue(PrefsUtil.KEY_ENCRYPTED_WALLET, "");
+    @Deprecated
+    public boolean restoreWavesWallet(String guid, String password) {
+        String encryptedWallet = prefs.getValue(guid, PrefsUtil.KEY_ENCRYPTED_WALLET, "");
 
         try {
             setTemporary(new WavesWallet(encryptedWallet, password));
@@ -69,30 +63,43 @@ public class AccessState {
         }
     }
 
+    @Deprecated
     public void setOnDexScreens(boolean onDexScreens) {
         this.onDexScreens = onDexScreens;
-        if (!onDexScreens){
+        if (!onDexScreens) {
             setTemporary(wavesWallet);
         }
     }
 
-    public Observable<String> validatePin(String pin) {
-        return createValidateObservable(pin).flatMap(pwd ->
-                createPin(prefs.getGuid(), new String(pwd), pin).andThen(Observable.just(pwd))
-        ).compose(RxUtil.applySchedulersToObservable());
+    @Deprecated
+    public Observable<String> validatePin(String guid, String passedPin) {
+        return createValidateObservable(guid, passedPin)
+                .flatMap(password ->
+                        createPin(guid, password, passedPin)
+                                .andThen(Observable.just(password)))
+                .compose(RxUtil.applySchedulersToObservable());
     }
 
-    private Observable<String> createValidateObservable(String passedPin) {
+    @Deprecated
+    public Completable createPin(String guid, String password, String passedPin) {
+        return createPinObservable(guid, password, passedPin)
+                .compose(RxUtil.applySchedulersToCompletable());
+    }
+
+    @Deprecated
+    private Observable<String> createValidateObservable(String guid, String passedPin) {
         int fails = prefs.getValue(PrefsUtil.KEY_PIN_FAILS, 0);
 
-        return pinStore.readPassword(fails, prefs.getGuid(), passedPin)
+        return pinStore.readPassword(guid, passedPin, fails)
                 .map(value -> {
                     try {
-                        String encryptedPassword = prefs.getValue(PrefsUtil.KEY_ENCRYPTED_PASSWORD, "");
-                        String password = AESUtil.decrypt(encryptedPassword,
+                        String encryptedPassword = prefs
+                                .getValue(guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, "");
+                        String password = AESUtil.decrypt(
+                                encryptedPassword,
                                 value,
                                 AESUtil.PIN_PBKDF2_ITERATIONS);
-                        if (!restoreWavesWallet(password)) {
+                        if (!restoreWavesWallet(guid, password)) {
                             throw new RuntimeException("Failed password");
                         }
                         return password;
@@ -102,7 +109,8 @@ public class AccessState {
                 });
     }
 
-    private Completable createPinObservable(String walletGuid, String password, String passedPin) {
+    @Deprecated
+    private Completable createPinObservable(String guid, String password, String passedPin) {
         if (passedPin == null || passedPin.equals("0000") || passedPin.length() != 4) {
             return Completable.error(new RuntimeException("Prohibited pin"));
         }
@@ -116,10 +124,10 @@ public class AccessState {
                 random.nextBytes(bytes);
                 String value = new String(Hex.encode(bytes), "UTF-8");
 
-                pinStore.savePasswordByKey(walletGuid, value, passedPin).subscribe(res -> {
+                pinStore.writePassword(guid, passedPin, value).subscribe(res -> {
                     String encryptedPassword = AESUtil.encrypt(
                             password.toString(), value, AESUtil.PIN_PBKDF2_ITERATIONS);
-                    prefs.setValue(PrefsUtil.KEY_ENCRYPTED_PASSWORD, encryptedPassword);
+                    prefs.setValue(guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, encryptedPassword);
                     if (!subscriber.isDisposed()) {
                         subscriber.onComplete();
                     }
@@ -137,32 +145,7 @@ public class AccessState {
         });
     }
 
-    public String storeWavesWallet(String seed, String password, String walletName) {
-        try {
-            WavesWallet newWallet = new WavesWallet(seed.getBytes(Charsets.UTF_8));
-            String walletGuid = UUID.randomUUID().toString();
-            prefs.setGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, walletGuid);
-            prefs.addGlobalListValue(EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS, walletGuid);
-            prefs.setValue(PrefsUtil.KEY_PUB_KEY, newWallet.getPublicKeyStr());
-            prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName);
-            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, newWallet.getEncryptedData(password));
-
-            setTemporary(newWallet);
-
-
-            RealmConfiguration config = new RealmConfiguration.Builder()
-                    .name(String.format("%s.realm", newWallet.getPublicKeyStr()))
-                    .deleteRealmIfMigrationNeeded()
-                    .build();
-            DBHelper.getInstance().setRealmConfig(config);
-
-            return walletGuid;
-        } catch (Exception e) {
-            Log.e(getClass().getSimpleName(), "storeWavesWallet: ", e);
-            return null;
-        }
-    }
-
+    @Deprecated
     private void setTemporary(WavesWallet newWallet) {
         if (disposable != null) {
             disposable.dispose();
@@ -175,6 +158,7 @@ public class AccessState {
                     .subscribe(res -> removeWavesWallet());
     }
 
+    @Deprecated
     public byte[] getPrivateKey() {
         if (wavesWallet != null) {
             return wavesWallet.getPrivateKey();
@@ -182,6 +166,7 @@ public class AccessState {
         return null;
     }
 
+    @Deprecated
     public String getSeedStr() {
         if (wavesWallet != null) {
             return wavesWallet.getSeedStr();
@@ -189,7 +174,28 @@ public class AccessState {
         return null;
     }
 
+    @Deprecated
     public void removeWavesWallet() {
         wavesWallet = null;
+    }
+
+    @Deprecated
+    public String storeWavesWallet(String seed, String password, String walletName, boolean skipBackup) {
+        try {
+            WavesWallet wallet = new WavesWallet(seed.getBytes(Charsets.UTF_8));
+            String guid = UUID.randomUUID().toString();
+            prefs.setGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, guid);
+            prefs.addGlobalListValue(EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS, guid);
+            prefs.setValue(PrefsUtil.KEY_PUB_KEY, wallet.getPublicKeyStr());
+            prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName);
+            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet.getEncryptedData(password));
+            if (skipBackup) {
+                prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, true);
+            }
+            return guid;
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), "storeWalletData: ", e);
+            return "";
+        }
     }
 }

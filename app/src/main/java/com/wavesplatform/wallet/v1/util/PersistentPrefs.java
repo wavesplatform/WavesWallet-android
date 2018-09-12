@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v1.util;
 
-interface PersistentPrefs {
+public interface PersistentPrefs {
     String GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment";
     String GLOBAL_LOGGED_IN_GUID = "global_logged_in_wallet_guid";
     String GLOBAL_SCHEME_URL = "scheme_url";
@@ -9,8 +9,11 @@ interface PersistentPrefs {
     String KEY_WALLET_NAME = "wallet_name";
     String KEY_PUB_KEY = "wallet_public_key";
     String KEY_ENCRYPTED_WALLET = "encrypted_wallet";
+    String KEY_SKIP_BACKUP = "skip_backup";
     String KEY_ENCRYPTED_PASSWORD = "encrypted_password";
     String KEY_PIN_FAILS = "pin_fails";
+    String KEY_USE_FINGERPRINT = "use_fingerprint";
+    String KEY_ENCRYPTED_PIN = "encrypted_pin";
 
     String KEY_AB_NAMES = "address_book_names";
     String KEY_AB_ADDRESSES = "address_book_addresses";

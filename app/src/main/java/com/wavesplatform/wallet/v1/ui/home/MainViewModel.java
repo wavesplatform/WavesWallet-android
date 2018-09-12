@@ -64,7 +64,7 @@ public class MainViewModel extends BaseViewModel {
     }
 
     private void checkRooted() {
-        if (new RootUtil().isDeviceRooted() &&
+        if (RootUtil.isDeviceRooted() &&
                 !prefs.getValue(PrefsUtil.KEY_DISABLE_ROOT_WARNING, false)) {
             dataListener.onRooted();
             prefs.setValue(PrefsUtil.KEY_DISABLE_ROOT_WARNING, true);

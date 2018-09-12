@@ -184,7 +184,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                 if (progressDialog == null || !progressDialog?.isShowing!!) {
                     progressDialog = ProgressDialog(this)
                     progressDialog?.setCancelable(false)
-//                    progressDialog?.setMessage(getString(R.string.dialog_loading))
+                    progressDialog?.setMessage(getString(R.string.dialog_processing))
                     progressDialog?.show()
                 } else {
                     progressDialog?.show()

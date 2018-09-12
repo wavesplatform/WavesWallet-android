@@ -5,6 +5,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
 import io.github.anderscheow.validator.Validation
@@ -37,7 +38,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                 .and(NotEmptyRule(" "))
 
         edit_seed.addTextChangedListener {
-            on({ s, start, before, count ->
+            on { s, start, before, count ->
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
@@ -48,14 +49,13 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                                 button_continue.isEnabled = false
                             }
                         }, seedValidation)
-            })
+            }
         }
 
         button_continue.click {
             launchActivity<ProtectAccountActivity> {
-                putExtra(ProtectAccountActivity.BUNDLE_ACCOUNT_ADDRESS, "MkSuckMydickmMak1593x1GrfYmFdsf83skS11")
+                putExtra(NewAccountActivity.KEY_INTENT_SEED, edit_seed.text.toString().trim())
             }
         }
     }
-
 }

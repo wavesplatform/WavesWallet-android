@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.view.ViewCompat.animate
 import android.support.v7.widget.CardView
 import android.util.TypedValue
 import android.view.View
@@ -10,15 +9,16 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.string.click
-import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
+import com.wavesplatform.wallet.v1.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.activity_confirm_backup_pharse.*
-import kotlinx.android.synthetic.main.activity_confirm_backup_pharse.view.*
 import pers.victor.ext.*
 import java.lang.StringBuilder
 import javax.inject.Inject
@@ -35,11 +35,11 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
     override fun configLayoutRes(): Int = R.layout.activity_confirm_backup_pharse
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.confirm_backup), R.drawable.ic_toolbar_back_black)
-
-        val originPhrase = intent?.getSerializableExtra(BackupPhraseActivity.PHRASE_LIST) as ArrayList<String>
-
-        presenter.getRandomPhrasePositions(originPhrase)
+        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
+                getString(R.string.confirm_backup), R.drawable.ic_toolbar_back_black)
+        val seedArray = intent?.getSerializableExtra(
+                BackupPhraseActivity.KEY_INTENT_SEED_AS_ARRAY) as Array<*>
+        presenter.getRandomPhrasePositions(seedArray.toList() as ArrayList<String>)
     }
 
     override fun showRandomPhraseList(listRandomPhrase: ArrayList<String>) {
@@ -58,16 +58,16 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
         textView.setBackgroundResource(R.drawable.blue_shape)
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
         textView.setPadding(dp2px(14f), dp2px(8f), dp2px(14f), dp2px(8f))
-        var clickListener = View.OnClickListener {
+        val clickListener = View.OnClickListener {
             it.isClickable = false
             it.animate()
                     .scaleX(0f)
                     .scaleY(0f)
                     .setDuration(200)
-                    .withEndAction({
+                    .withEndAction {
                         it.invisiable()
                         it.isClickable = true
-                    })
+                    }
                     .start()
             val confirmLabel = buildConfirmLabel(text, position)
             flow_confirm.addView(confirmLabel)
@@ -75,9 +75,7 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
                     .scaleX(1f)
                     .scaleY(1f)
                     .setDuration(200)
-                    .withEndAction({
-
-                    })
+                    .withEndAction { }
                     .start()
             checkCountToChangeTextVisibility()
 
@@ -91,7 +89,12 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
                 if (phraseText.trim() == presenter.originPhraseString) {
                     button_confirm.visiable()
                     button_confirm.click {
-                        launchActivity<CreatePasscodeActivity> { }
+                        if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
+                            launchActivity<CreatePassCodeActivity>(options = intent.extras)
+                        } else {
+                            BlockchainApplication.getAccessManager().setCurrentAccountBackupSkipped()
+                            launchActivity<MainActivity> { }
+                        }
                     }
                 } else {
                     text_error.visiable()
@@ -112,26 +115,22 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
         textView.setTextColor(findColor(R.color.black))
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
         textView.setPadding(dp2px(14f), dp2px(8f), dp2px(14f), dp2px(8f))
-        textView.setOnClickListener({
+        textView.setOnClickListener {
             cardView.animate()
                     .scaleX(0f)
                     .scaleY(0f)
                     .setDuration(200)
-                    .withEndAction({
-                        flow_confirm.removeView(cardView)
-                    })
+                    .withEndAction { flow_confirm.removeView(cardView) }
                     .start()
             checkCountToChangeTextVisibility()
             val frameDotted = flow_random_phrase.getChildAt(randomPosition) as FrameLayout
-            var textView = frameDotted.getChildAt(0)
+            val textView = frameDotted.getChildAt(0)
             textView.visiable()
             textView.animate()
                     .scaleX(1f)
                     .scaleY(1f)
                     .setDuration(200)
-                    .withEndAction({
-
-                    })
+                    .withEndAction { }
                     .start()
 
             button_confirm.gone()
@@ -140,7 +139,7 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
                 text_error.gone()
                 frame_phrase_form.foreground = findDrawable(R.drawable.shape_rect_outline_gray)
             }
-        })
+        }
         cardView.radius = dp2px(2).toFloat()
         cardView.cardElevation = dp2px(2).toFloat()
         cardView.scaleX = 0f

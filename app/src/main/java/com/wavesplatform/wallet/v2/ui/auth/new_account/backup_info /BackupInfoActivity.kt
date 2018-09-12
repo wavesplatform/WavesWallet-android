@@ -26,8 +26,7 @@ class BackupInfoActivity : BaseActivity(), BackupInfoView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         button_confirm.click {
-            launchActivity<BackupPhraseActivity> { }
+            launchActivity<BackupPhraseActivity>(options = intent.extras)
         }
     }
-
 }

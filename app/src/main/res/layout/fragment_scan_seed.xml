@@ -52,6 +52,7 @@
             android:layout_toEndOf="@+id/text_one"
             android:text="@string/import_account_login_at_site"
             android:textColor="@color/basic500"
+            android:autoLink="web"
             android:textSize="14sp" />
 
 

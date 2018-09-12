@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.v1.util.ApplicationLifeCycle;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 import com.wavesplatform.wallet.v1.util.annotations.Thunk;
 import com.wavesplatform.wallet.v1.util.exceptions.LoggingExceptionHandler;
+import com.wavesplatform.wallet.v2.data.manager.AccessManager;
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias;
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetPair;
@@ -56,6 +57,7 @@ public class BlockchainApplication extends DaggerApplication {
     private static final String RX_ERROR_TAG = "RxJava Error";
     @Inject PrefsUtil mPrefsUtil;
     private static Context sContext;
+    private static AccessManager accessManager;
 
 
     @Override
@@ -115,8 +117,9 @@ public class BlockchainApplication extends DaggerApplication {
         RxJavaPlugins.setErrorHandler(throwable -> Log.e(RX_ERROR_TAG, throwable.getMessage(), throwable));
 
         AppUtil appUtil = new AppUtil(this);
+        accessManager = new AccessManager(mPrefsUtil, appUtil);
 
-        AccessState.getInstance().initAccessState(this,
+        AccessState.getInstance().initAccessState(
                 new PrefsUtil(this),
                 new PinStoreService(),
                 appUtil);
@@ -154,6 +157,10 @@ public class BlockchainApplication extends DaggerApplication {
 
     public static Context getAppContext() {
         return sContext;
+    }
+
+    public static AccessManager getAccessManager() {
+        return accessManager;
     }
 
     @Override

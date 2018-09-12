@@ -6,8 +6,9 @@ import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.backup_info.BackupInfoActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePasscodeActivity
+import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_secret_phrase.*
@@ -26,25 +27,28 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
 
     override fun configLayoutRes() = R.layout.activity_secret_phrase
 
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view)
 
-
         button_confirm.click {
-            launchActivity<BackupInfoActivity> {  }
+            launchActivity<BackupInfoActivity>(options = intent.extras) {
+                putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, false)
+            }
         }
 
         button_do_it_later.click {
-            launchActivity<CreatePasscodeActivity> {  }
+            launchActivity<CreatePassCodeActivity>(options = intent.extras) {
+                putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, true)
+            }
         }
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_close -> {
-                launchActivity<CreatePasscodeActivity> {  }
+                launchActivity<CreatePassCodeActivity>(options = intent.extras) {
+                    putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, true)
+                }
             }
         }
         return super.onOptionsItemSelected(item)
@@ -54,6 +58,4 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
         menuInflater.inflate(R.menu.menu_close, menu)
         return super.onCreateOptionsMenu(menu)
     }
-
-
 }

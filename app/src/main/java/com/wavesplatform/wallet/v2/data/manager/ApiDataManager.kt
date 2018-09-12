@@ -13,28 +13,28 @@ class ApiDataManager @Inject constructor() : DataManager() {
 
     fun loadAliases(): Observable<List<Alias>> {
         return apiService.aliases(getAddress())
-                .map({
-                    val aliases = it.data.mapTo(ArrayList(), {
+                .map {
+                    val aliases = it.data.mapTo(ArrayList()) {
                         it.alias.own = true
                         return@mapTo it.alias
-                    })
+                    }
                     aliases.saveAll()
                     return@map aliases
-                })
+                }
     }
 
     fun loadAlias(alias: String): Observable<Alias> {
-        val localAlias = queryFirst<Alias>({ equalTo("alias", alias) })
+        val localAlias = queryFirst<Alias> { equalTo("alias", alias) }
 
         if (localAlias != null) {
             return Observable.just(localAlias)
         } else {
             return apiService.alias(alias)
-                    .map({
+                    .map {
                         it.alias.own = false
                         it.alias.save()
                         return@map it.alias
-                    })
+                    }
         }
     }
 
@@ -42,13 +42,13 @@ class ApiDataManager @Inject constructor() : DataManager() {
         val assetBalance = if (assetId.isNullOrEmpty()){
             Constants.defaultAssets[0]
         }else{
-            queryFirst<AssetBalance>({ equalTo("assetId", assetId) })
+            queryFirst<AssetBalance> { equalTo("assetId", assetId) }
         }
 
-        if (assetBalance != null) {
-            return Observable.just(assetBalance)
+        return if (assetBalance != null) {
+            Observable.just(assetBalance)
         } else {
-            return apiService.assetDetails(assetId)
+            apiService.assetDetails(assetId)
         }
     }
 

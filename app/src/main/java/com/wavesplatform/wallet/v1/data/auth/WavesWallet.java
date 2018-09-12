@@ -35,6 +35,10 @@ public class WavesWallet {
         return account.getPrivateKey();
     }
 
+    public String getPrivateKeyStr() {
+        return account.getPrivateKeyStr();
+    }
+
     public String getEncryptedData(String password) throws Exception {
         return AESUtil.encrypt(Base58.encode(seed), password, DEFAULT_PBKDF2_ITERATIONS_V2);
     }

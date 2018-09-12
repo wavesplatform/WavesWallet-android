@@ -17,9 +17,9 @@ class SplashActivity : BaseActivity(), SplashView {
 
     override fun onNotLoggedIn() {
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
-        if (preferencesHelper.isTutorialPassed()){
+        if (preferencesHelper.isTutorialPassed()) {
             launchActivity<WelcomeActivity>()
-        }else{
+        } else {
             launchActivity<ChooseLanguageActivity>()
         }
 //        launchActivity<LandingActivity>(clear = true)
@@ -27,9 +27,9 @@ class SplashActivity : BaseActivity(), SplashView {
 
     override fun onStartMainActivity(publicKey: String) {
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
-        if (preferencesHelper.isTutorialPassed()){
+        if (preferencesHelper.isTutorialPassed()) {
             launchActivity<WelcomeActivity>()
-        }else{
+        } else {
             launchActivity<ChooseLanguageActivity>()
         }
 //        AuthUtil.startMainActivity(this, publicKey)
@@ -46,10 +46,8 @@ class SplashActivity : BaseActivity(), SplashView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        presenter.prefsUtil.logOut()
         presenter.storeIncomingURI(intent)
-
         presenter.resolveNextAction()
     }
-
-
 }

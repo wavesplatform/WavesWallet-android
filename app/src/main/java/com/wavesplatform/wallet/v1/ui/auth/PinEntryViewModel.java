@@ -273,7 +273,7 @@ public class PinEntryViewModel extends BaseViewModel {
     public void validatePassword(String password) {
         mDataListener.showProgressDialog(R.string.validating_password, null);
 
-        if (mAccessState.restoreWavesWallet(password)) {
+        if (mAccessState.restoreWavesWallet("", password)) {
             mPassword = password;
             mCreatingNewPin = true;
             mDataListener.showToast(R.string.pin_4_strikes_password_accepted, ToastCustom.TYPE_OK);
@@ -314,7 +314,7 @@ public class PinEntryViewModel extends BaseViewModel {
     private void validatePin(String pin) {
         mDataListener.showProgressDialog(R.string.validating_pin, null);
 
-        mAccessState.validatePin(pin).subscribe(pwd -> {
+        mAccessState.validatePin("", pin).subscribe(pwd -> {
             mDataListener.dismissProgressDialog();
             mPrefsUtil.removeValue(PrefsUtil.KEY_PIN_FAILS);
             mDataListener.finishWithResultOk(pwd);
@@ -361,7 +361,7 @@ public class PinEntryViewModel extends BaseViewModel {
     private void createWallet() {
         mAppUtil.applyPRNGFixes();
 
-        mWalletGuid = mAccessState.storeWavesWallet(mSeed, mPassword, mEmail);
+        mWalletGuid = mAccessState.storeWavesWallet(mSeed, mPassword, mEmail, false);
         mDataListener.dismissProgressDialog();
 
         if (mWalletGuid == null) {

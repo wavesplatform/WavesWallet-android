@@ -66,9 +66,11 @@
     <string name="confirm_pin">Confirm PIN</string>
     <string name="create_pin_failed">PIN creation failed. Please try again.</string>
     <string name="pairing_failed">Pairing failed. Please try again.</string>
+    <string name="enter_passcode_error_wrong_password">Wrong password</string>
 
     <string name="check_connectivity_exit">No connection to the Internet</string>
     <string name="dialog_continue">Continue</string>
+    <string name="dialog_processing">Wait…</string>
 
     <string name="double_encryption_password_error">Double encrypt password error. Please try again.</string>
 
@@ -532,6 +534,8 @@
     <string name="fingerprint_fatal_error_register_description">There have been too many failed attempts in the last 30 minutes. Please attempt setup again later.</string>
     <string name="fingerprint_fatal_error_authenticate_description">There have been too many failed attempts. Please log in using your PIN instead.</string>
     <string name="fingerprint_fatal_error_brief">Unexpected error</string>
+    <string name="fingerprint_fatal_error_key_invalidate">The keys you wanted to use are invalidated because secure lock screen has turned off or changed the fingerprints stored on the device. You have to re-encrypt the data to access it</string>
+    <string name="fingerprint_fatal_error_root">Rooted device, Fingerprint auth canceled!</string>
 
     <!-- LAUNCHER SHORTCUTS -->
     <string name="shortcut_receive_copy_short">Copy Address</string>
@@ -743,6 +747,7 @@
     <string name="new_account_continue">Continue</string>
     <string name="new_account_avatar_title">Choose your address avatar</string>
     <string name="new_account_avatar_description">This avatar is unique. You cannot change it later.</string>
+    <string name="new_account_exist_error">This account name exist</string>
 
     <!-- Secret Phrase -->
     <string name="secret_phrase_no_backup_no_money">No Backup, No Money</string>
@@ -950,9 +955,10 @@
     <string name="profile_general_delete_account_dialog_title">Delete account</string>
     <string name="profile_general_logout">Logout of account</string>
     <string name="profile_general_delete_account_dialog_description">Deleting an account will lead to its irretrievable loss!</string>
-    <string name="profile_general_delete_account_dialog_delete">DELETE</string>
-    <string name="profile_general_delete_account_dialog_cancel">CANCEL</string>
+    <string name="profile_general_delete_account_dialog_delete">Delete</string>
+    <string name="profile_general_delete_account_dialog_cancel">Cancel</string>
     <string name="profile_general_delete_account_dialog_warning">You did not save your SEED</string>
+    <string name="profile_general_delete_account_dialog_deleted">Deleted</string>
 
     <!-- NEW ALIAS -->
     <string name="new_alias_toolbar_title">New alias</string>
@@ -998,6 +1004,8 @@
     <string name="change_password_new_password">New password</string>
     <string name="change_password_confirm_password">Confirm password</string>
     <string name="change_password_confirm">Confirm</string>
+    <string name="change_password_success">Change password successful</string>
+    <string name="change_password_error">Change password failed. Check old password</string>
 
     <!--Network-->
     <string name="network_toolbar_title">Network</string>
@@ -1013,8 +1021,9 @@
     <string name="choose_account_empty_state">Nothing Here…\nYou do not have saved accounts</string>
     <string name="choose_account_delete_title">Delete account?</string>
     <string name="choose_account_delete_msg">Are you sure you want to delete this account?</string>
-    <string name="choose_account_cancel">CANCEL</string>
-    <string name="choose_account_yes">YES</string>
+    <string name="choose_account_cancel">Cancel</string>
+    <string name="choose_account_yes">Yes</string>
+    <string name="choose_account_deleted">Deleted</string>
 
     <!--Edit account name-->
     <string name="edit_account_name">Edit name</string>
@@ -1024,6 +1033,7 @@
 
     <!--Create passcode-->
     <string name="create_passcode_create_title">Create a passcode</string>
+    <string name="create_passcode_create_new_title">Create a new passcode</string>
     <string name="create_passcode_verify_title">Verify your passcode</string>
 
     <!--Use fingerprint-->
@@ -1051,7 +1061,7 @@
     <string name="start_leasing_toolbar">Start leasing</string>
     <string name="start_leasing_balance">Balance</string>
     <string name="start_leasing_generator">Generator</string>
-    <string name="start_leasing_note_address">Node address...</string>
+    <string name="start_leasing_note_address">Node address…</string>
     <string name="start_leasing_choose_from_address">Choose from Address book</string>
     <string name="start_leasing_amount">Amount</string>
     <string name="start_leasing_use_total_balance">Use total balance</string>
