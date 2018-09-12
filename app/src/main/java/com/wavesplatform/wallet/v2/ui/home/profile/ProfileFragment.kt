@@ -1,9 +1,11 @@
 package com.wavesplatform.wallet.v2.ui.home.profile
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.AppCompatTextView
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -16,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
@@ -91,15 +94,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
             logout()
         }
 
-        if (FingerprintAuthDialogFragment.isAvailable(context!!)) {
-            fingerprint_switch.isChecked = BlockchainApplication.getAccessManager().isUseFingerPrint()
-            fingerprint_switch.setOnCheckedChangeListener { _, isChecked ->
-                launchActivity<EnterPassCodeActivity>(
-                        requestCode = REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT)
-            }
-        } else {
-            card_fingerprint.visibility = View.GONE
-        }
+        initFingerPrintControl()
 
 
         if (BlockchainApplication.getAccessManager().isCurrentAccountBackupSkipped()) {
@@ -112,6 +107,21 @@ class ProfileFragment : BaseFragment(), ProfileView {
                     .getColor(context!!, R.color.success400))
             skip_backup_indicator_image.setImageDrawable(ContextCompat
                     .getDrawable(context!!, R.drawable.ic_check_18_success_400))
+        }
+    }
+
+    private fun initFingerPrintControl() {
+        if (FingerprintAuthDialogFragment.isAvailable(context!!)) {
+            fingerprint_switch.setOnCheckedChangeListener(null)
+            fingerprint_switch.isChecked = BlockchainApplication.getAccessManager().isUseFingerPrint()
+            fingerprint_switch.setOnCheckedChangeListener { _, _ ->
+                launchActivity<EnterPassCodeActivity>(
+                        requestCode = REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT) {
+                    putExtra(EnterPassCodeActivity.KEY_INTENT_PROCESS_SET_FINGERPRINT, true)
+                }
+            }
+        } else {
+            card_fingerprint.visibility = View.GONE
         }
     }
 
@@ -151,13 +161,11 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
             REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    BlockchainApplication.getAccessManager()
-                            .setUseFingerPrint(
-                                    !BlockchainApplication.getAccessManager().isUseFingerPrint())
-
+                    setFingerprint(BlockchainApplication.getAccessManager().getCurrentGuid(),
+                            data!!.extras.getString(EnterPassCodeActivity.KEY_INTENT_PASS_CODE))
+                } else {
+                    initFingerPrintControl()
                 }
-                fingerprint_switch.isChecked = BlockchainApplication.getAccessManager()
-                        .isUseFingerPrint()
             }
 
             REQUEST_ENTER_PASS_CODE_FOR_CHANGE -> {
@@ -171,6 +179,29 @@ class ProfileFragment : BaseFragment(), ProfileView {
                     }
                 }
             }
+        }
+    }
+
+    private fun setFingerprint(guid: String, passCode: String) {
+        if (BlockchainApplication.getAccessManager().isUseFingerPrint()) {
+            BlockchainApplication.getAccessManager().setUseFingerPrint(false)
+        } else {
+            val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
+            fingerprintDialog.isCancelable = false
+            fingerprintDialog.show(activity!!.fragmentManager, "fingerprintDialog")
+            fingerprintDialog.setFingerPrintDialogListener(
+                    object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
+                        override fun onSuccessRecognizedFingerprint() {
+                            BlockchainApplication.getAccessManager().setUseFingerPrint(
+                                    !BlockchainApplication.getAccessManager().isUseFingerPrint())
+                            initFingerPrintControl()
+                        }
+
+                        override fun onCancelButtonClicked(dialog: Dialog, button: AppCompatTextView) {
+                            dialog.dismiss()
+                            initFingerPrintControl()
+                        }
+                    })
         }
     }
 

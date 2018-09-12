@@ -49,13 +49,13 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
     }
 
     fun writePassCodeObservable(guid: String, password: String, passCode: String): Completable {
-        if (passCode == "0000" || passCode.length != 4) {
-            return Completable.error(RuntimeException("Prohibited pin"))
-        }
-
         appUtil.applyPRNGFixes()
 
         return Completable.create { subscriber ->
+            if (passCode.length != 4) {
+                subscriber.onError(RuntimeException("Prohibited pin"))
+            }
+
             try {
                 val seed = randomString()
                 pinStore.writePassword(guid, passCode, seed)
@@ -125,6 +125,20 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
         return resultGuid
     }
 
+    fun isAccountNameExist(checkedName: String): Boolean {
+        if (TextUtils.isEmpty(checkedName)) {
+            return true
+        }
+
+        val guids = prefs.getGlobalValueList(PrefsUtil.LIST_WALLET_GUIDS)
+        for (guid in guids) {
+            if (checkedName == prefs.getValue(guid, PrefsUtil.KEY_WALLET_NAME, "")) {
+                return true
+            }
+        }
+        return false
+    }
+
     fun getCurrentWavesWalletEncryptedData(): String {
         return getWalletData(getCurrentGuid())
     }
@@ -150,11 +164,11 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
 
     fun deleteCurrentWavesWallet(): Boolean {
         val currentUser = createAddressBookCurrentAccount()
-        if (currentUser == null) {
-            return false
+        return if (currentUser == null) {
+            false
         } else {
             deleteWavesWallet(currentUser.address)
-            return true
+            true
         }
     }
 

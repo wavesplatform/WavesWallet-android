@@ -271,7 +271,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         }
 
         fun isAvailable(context: Context): Boolean {
-            return RxFingerprint.isAvailable(context)
+            return !RootUtil.isDeviceRooted() && RxFingerprint.isAvailable(context)
         }
     }
 }

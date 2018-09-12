@@ -12,10 +12,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
-import com.wavesplatform.wallet.v1.util.RootUtil
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
@@ -58,12 +56,15 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
             }
         }
 
+        val isProcessSetFingerprint = intent.hasExtra(KEY_INTENT_PROCESS_SET_FINGERPRINT)
+
+        val isAvailable = FingerprintAuthDialogFragment.isAvailable(this)
         val isShowFingerprint = intent.hasExtra(KEY_INTENT_SHOW_FINGERPRINT)
         val isLoggedIn = !TextUtils.isEmpty(BlockchainApplication.getAccessManager().getCurrentGuid())
-        val useFingerprint = (!RootUtil.isDeviceRooted()
-                && FingerprintAuthDialogFragment.isAvailable(this)
+        val useFingerprint = (isAvailable
                 && ((isLoggedIn && BlockchainApplication.getAccessManager().isUseFingerPrint())
-                || isShowFingerprint))
+                    || isShowFingerprint)
+                && !isProcessSetFingerprint)
 
         pass_keypad.isFingerprintAvailable(useFingerprint)
 
@@ -209,6 +210,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         const val KEY_INTENT_PASS_CODE = "intent_pass_code"
         const val KEY_INTENT_SHOW_FINGERPRINT = "intent_show_fingerprint"
         const val KEY_INTENT_GUID = "intent_guid"
+        const val KEY_INTENT_PROCESS_SET_FINGERPRINT = "intent_process_set_fingerprint"
         const val REQUEST_ENTER_PASS_CODE = 555
     }
 }

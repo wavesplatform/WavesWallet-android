@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -39,8 +40,11 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         val user = BlockchainApplication.getAccessManager().createAddressBookCurrentAccount()
-        text_address.text = user?.address
-        text_public_key.text = BlockchainApplication.getAccessManager().findPublicKeyBy(user!!.address)
+        user.notNull {
+            text_address.text = user!!.address
+            text_public_key.text = BlockchainApplication.getAccessManager()
+                    .findPublicKeyBy(user.address)
+        }
 
         queryAllAsync<Alias> { aliases ->
             val ownAliases = aliases.filter { it.own }
