@@ -202,6 +202,7 @@
         <activity
             android:name=".v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity"
             android:screenOrientation="portrait"
+            android:noHistory="true"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.auth.new_account.backup_info.BackupInfoActivity"
@@ -348,7 +349,7 @@
             android:name=".v2.ui.whats_new.WhatsNewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity android:name="com.wavesplatform.wallet.v2.ui.home.wallet.leasing.history.LeasingHistoryActivity"
+        <activity android:name="com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
     </application>

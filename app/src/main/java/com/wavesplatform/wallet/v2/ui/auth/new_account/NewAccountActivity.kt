@@ -4,12 +4,12 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
-import android.text.SpannableStringBuilder
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_new_account.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.children
 import pers.victor.ext.click
+import pers.victor.ext.toast
 import javax.inject.Inject
 
 
@@ -48,7 +49,12 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         button_create_account.click {
-            launchActivity<SecretPhraseActivity>(options = createDataBundle())
+            if (BlockchainApplication.getAccessManager()
+                            .isAccountNameExist(edit_account_name.text.toString())) {
+                toast(getString(R.string.new_account_exist_error))
+            } else {
+                launchActivity<SecretPhraseActivity>(options = createDataBundle())
+            }
         }
 
         val nameValidation = Validation(til_account_name)
@@ -126,11 +132,6 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         }
 
         presenter.generateSeeds(this, linear_images.children as List<AppCompatImageView>)
-
-        // todo remove
-        edit_account_name.text = SpannableStringBuilder("eshkere")
-        edit_create_password.text = SpannableStringBuilder("12345678")
-        edit_confirm_password.text = SpannableStringBuilder("12345678")
     }
 
     private fun createDataBundle(): Bundle {

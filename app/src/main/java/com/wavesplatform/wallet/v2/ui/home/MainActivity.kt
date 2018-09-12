@@ -18,9 +18,12 @@ import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragmentPageAdapter
+import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
@@ -183,7 +186,22 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 }
             }
             HISTORY_SCREEN -> {
-                openFragment(R.id.frame_fragment_container, fragments[HISTORY_SCREEN])
+                val bundle = Bundle().apply {
+                    val tabs = arrayListOf(
+                            HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)),
+                            HistoryTab(HistoryTabFragment.send, getString(R.string.history_sent)),
+                            HistoryTab(HistoryTabFragment.received, getString(R.string.history_received)),
+                            HistoryTab(HistoryTabFragment.exchanged, getString(R.string.history_exchanged)),
+                            HistoryTab(HistoryTabFragment.leased, getString(R.string.history_leased)),
+                            HistoryTab(HistoryTabFragment.issued, getString(R.string.history_issued)))
+                    putParcelableArrayList(HistoryFragment.BUNDLE_TABS, tabs)
+                }
+
+                val fragment = HistoryFragment.newInstance().apply {
+                    arguments = bundle
+                }
+
+                openFragment(R.id.frame_fragment_container, fragment)
                 toolbar_general.title = getString(R.string.history_toolbar_title)
             }
             PROFILE_SCREEN -> {

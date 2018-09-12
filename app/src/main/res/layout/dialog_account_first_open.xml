@@ -39,7 +39,7 @@
         android:layout_height="2dp"
         android:layout_marginTop="24dp"
         android:layerType="software"
-        app:srcCompat="@drawable/bg_dashed" />
+        app:srcCompat="@drawable/shape_dashed_line" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -73,7 +73,7 @@
             android:layout_marginStart="16dp"
             android:layout_toStartOf="@+id/text_or"
             android:layerType="software"
-            android:src="@drawable/bg_dashed" />
+            android:src="@drawable/shape_dashed_line" />
 
 
         <android.support.v7.widget.AppCompatTextView
@@ -97,7 +97,7 @@
             android:layout_marginStart="24dp"
             android:layout_toEndOf="@+id/text_or"
             android:layerType="software"
-            android:src="@drawable/bg_dashed" />
+            android:src="@drawable/shape_dashed_line" />
 
     </RelativeLayout>
 

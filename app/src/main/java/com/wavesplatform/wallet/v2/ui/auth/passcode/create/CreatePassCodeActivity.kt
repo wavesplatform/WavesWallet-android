@@ -102,7 +102,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                 getString(R.string.create_pin_failed),
                 ToastCustom.LENGTH_SHORT,
                 ToastCustom.TYPE_ERROR)
-        launchActivity<MainActivity>(clear = true)
+        finish()
     }
 
     private fun moveToCreateStep() {

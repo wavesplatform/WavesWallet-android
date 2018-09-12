@@ -9,7 +9,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItemAdapter
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
@@ -40,13 +42,48 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
     override fun configLayoutRes(): Int = R.layout.fragment_history_tab
 
+    companion object {
+
+        const val all = "All"
+        const val send = "Sent"
+        const val received = "Received"
+        const val exchanged = "Exchanged"
+        const val leased = "Leased"
+        const val issued = "Issued"
+
+        const val leasing_all = "Leasing All"
+        const val leasing_active_now = "Active now"
+        const val leasing_canceled = "Canceled"
+
+        const val TYPE = "type"
+
+        /**
+         * @return HistoryTabFragment instance
+         * */
+        fun newInstance(type: String, asset: AssetBalance?): HistoryTabFragment {
+            val historyDateItemFragment = HistoryTabFragment()
+            val bundle = Bundle()
+            bundle.putString(TYPE, type)
+            bundle.putParcelable(HistoryFragment.BUNDLE_ASSET, asset)
+            historyDateItemFragment.arguments = bundle
+            return historyDateItemFragment
+        }
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         layoutManager = LinearLayoutManager(baseActivity)
         recycle_history.layoutManager = layoutManager
         recycle_history.adapter = adapter
         recycle_history.isNestedScrollingEnabled = false
 
-        presenter.type = arguments?.getString(TYPE)
+        presenter.type = arguments?.getString("type")
+        presenter.assetBalance = arguments?.getParcelable<AssetBalance>(HistoryFragment.BUNDLE_ASSET)
+
+        runAsync {
+            if (savedInstanceState == null) {
+                presenter.loadTransactions()
+            }
+        }
 
         if (adapter.footerLayout != null) {
             if (adapter.footerLayout.parent != null) {
@@ -106,16 +143,11 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         adapter.footerLayout.load_more_loading_view.gone()
     }
 
-    override fun showData(data: ArrayList<HistoryItem>, type: String?) {
-        if (data.isEmpty()) {
-            recycle_history.visibility = View.GONE
-            empty_view.visibility = View.VISIBLE
-        }
-        else {
-            recycle_history.visibility = View.VISIBLE
-            empty_view.visibility = View.GONE
-        }
+    override fun afterSuccessLoadTransaction(data: ArrayList<HistoryItem>, type: String?) {
+        adapter.setNewData(data)
+    }
 
+    override fun afterSuccessLoadMoreTransaction(data: ArrayList<HistoryItem>, type: String?) {
         // stop over scroll
         nested_scroll_view.fling(0)
 
@@ -123,30 +155,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
             adapter.addData(data)
             goneLoadMoreView()
             presenter.loadMoreCompleted = true
-        }
-    }
-
-    companion object {
-
-        const val all = "All"
-        const val send = "Sent"
-        const val received = "Received"
-        const val exchanged = "Exchanged"
-        const val leased = "Leased"
-        const val issued = "Issued"
-
-        const val leasing_all = "Leasing All"
-        const val leasing_active_now = "Active now"
-        const val leasing_canceled = "Canceled"
-
-        const val TYPE = "type"
-
-        fun newInstance(type: String): HistoryTabFragment {
-            val historyDateItemFragment = HistoryTabFragment()
-            val bundle = Bundle()
-            bundle.putString(TYPE, type)
-            historyDateItemFragment.arguments = bundle
-            return historyDateItemFragment
         }
     }
 }

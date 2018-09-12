@@ -84,7 +84,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                         dbAsset.notNull {
                                             assetBalance.isHidden = it.isHidden
                                             assetBalance.isFavorite = it.isFavorite
-                                            assetBalance.isFlatMoney = it.isFlatMoney
+                                            assetBalance.isFiatMoney = it.isFiatMoney
                                             assetBalance.isGateway = it.isGateway
                                             assetBalance.isSpam = it.isSpam
                                         }
