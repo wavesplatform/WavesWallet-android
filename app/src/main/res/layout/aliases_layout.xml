@@ -32,7 +32,7 @@
         android:layout_below="@+id/image_copy"
         android:layout_marginTop="14dp"
         android:layerType="software"
-        app:srcCompat="@drawable/bg_dashed" />
+        app:srcCompat="@drawable/shape_dashed_line" />
 
 </RelativeLayout>
 

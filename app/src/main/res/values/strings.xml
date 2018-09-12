@@ -664,6 +664,7 @@
     <string name="common_kk_quantity">%skk</string>
     <string name="common_kkk_quantity">%skkk</string>
     <string name="common_load_more_status">Loading…</string>
+    <string name="common_dash">&#8211;</string>
 
     <!-- Language-->
     <string name="choose_language_russia">Русский</string>
@@ -870,10 +871,13 @@
     <string name="asset_details_flat_money">Fiat Money</string>
     <string name="asset_details_available_balance">Available balance</string>
     <string name="asset_details_total">Total</string>
+    <string name="asset_details_leased">Leased</string>
+    <string name="asset_details_in_order">In order</string>
     <string name="asset_details_send">Send</string>
     <string name="asset_details_receive">Receive</string>
     <string name="asset_details_coming_soon">Coming soon</string>
     <string name="asset_details_last_transactions">Last transactions</string>
+    <string name="asset_details_last_transactions_empty">You do not have any transactions</string>
     <string name="asset_details_view_history">View history</string>
     <string name="asset_details_asset_info">Asset Info</string>
     <string name="asset_details_name">Name</string>

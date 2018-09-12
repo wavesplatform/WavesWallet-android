@@ -31,7 +31,7 @@ open class AssetBalance(
         var position: Int = -1,
         @Ignore var configureVisibleState: Boolean = false,
         @Ignore var isChecked: Boolean = false,
-        var isFlatMoney: Boolean = false,
+        var isFiatMoney: Boolean = false,
         var isFavorite: Boolean = false,
         var isGateway: Boolean = false,
         var isSpam: Boolean = false

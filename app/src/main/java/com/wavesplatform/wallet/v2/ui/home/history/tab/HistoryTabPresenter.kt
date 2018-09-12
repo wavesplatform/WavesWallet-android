@@ -6,9 +6,11 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
+import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -26,6 +28,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     var needLoadMore: Boolean = true
     var loadMoreCompleted = true
     val hashOfTimestamp = hashMapOf<Long, Long>()
+    var assetBalance: AssetBalance? = null
 
     companion object {
         var PER_PAGE = 25
@@ -85,7 +88,18 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
         addSubscription(singleData
                 .map({
+
+                    // all history
                     allItemsFromDb = it.sortedByDescending({ it.timestamp })
+
+                    // history only for detailed asset
+                    assetBalance.notNull {
+                        allItemsFromDb = allItemsFromDb.filter {
+                            if (assetBalance?.isWaves() == true) it.assetId.isNullOrEmpty()
+                            else it.assetId == assetBalance?.assetId
+                        }
+                    }
+
                     if (allItemsFromDb.size > 50) {
                         return@map sortAndConfigToUi(allItemsFromDb.subList(0, PER_PAGE))
                     } else {
@@ -95,7 +109,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    viewState.showData(it, type)
+                    viewState.afterSuccessLoadTransaction(it, type)
                 }, {
 
                 }))
@@ -119,7 +133,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    viewState.showData(it, type)
+                    viewState.afterSuccessLoadMoreTransaction(it, type)
                 }, {}))
     }
 

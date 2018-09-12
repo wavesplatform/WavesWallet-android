@@ -9,13 +9,14 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
+import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.history.LeasingHistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
@@ -54,7 +55,16 @@ class LeasingFragment : BaseFragment(), LeasingView {
         presenter.getActiveLeasing()
 
         card_view_history.click {
-            launchActivity<LeasingHistoryActivity> { }
+            launchActivity<HistoryActivity> {
+                val bundle = Bundle().apply {
+                    val tabs = arrayListOf(
+                            HistoryTab(HistoryTabFragment.leasing_all, getString(R.string.history_all)),
+                            HistoryTab(HistoryTabFragment.leasing_active_now, getString(R.string.history_active_now)),
+                            HistoryTab(HistoryTabFragment.leasing_canceled, getString(R.string.history_canceled)))
+                    putParcelableArrayList(HistoryFragment.BUNDLE_TABS, tabs)
+                }
+                putExtras(bundle)
+            }
         }
 
         button_continue.click {

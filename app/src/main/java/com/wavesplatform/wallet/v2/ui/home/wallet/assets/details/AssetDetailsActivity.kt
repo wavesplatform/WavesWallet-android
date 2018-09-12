@@ -1,10 +1,10 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -14,11 +14,10 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.ui.welcome.AlphaScalePageTransformer
 import kotlinx.android.synthetic.main.activity_asset_details.*
-import pers.victor.ext.click
-import pers.victor.ext.dp2px
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.util.*
 import javax.inject.Inject
@@ -62,7 +61,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
             override fun onPageSelected(position: Int) {
                 configureTitleForAssets(position)
-                showFavorite()
+                showFavorite(view_pager.currentItem)
                 view_pager_content.setCurrentItem(position, true)
             }
         })
@@ -72,6 +71,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         view_pager_content.setPagingEnabled(false)
 
         image_favorite.click {
+            presenter.needToUpdate = true
             changeFavorite()
         }
 
@@ -84,15 +84,18 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         val item = adapterAvatar.items[position]
         text_asset_name.text = item.getName()
 
-        val avatar = Constants.defaultAssetsAvatar[item.assetId]
-        if (avatar == null) {
-            text_asset_description.text = ""
-        } else {
-            when {
-                item.isAssetId("") -> text_asset_description.setText(R.string.asset_details_waves_token)
-                item.isFlatMoney -> text_asset_description.setText(R.string.asset_details_flat_money)
-                else -> text_asset_description.setText(R.string.asset_details_cryptocurrency)
+        text_asset_description.visiable()
+        spam_tag.gone()
+
+        when {
+            item.isWaves() -> text_asset_description.setText(R.string.asset_details_waves_token)
+            item.isGateway -> text_asset_description.setText(R.string.asset_details_cryptocurrency)
+            item.isFiatMoney -> text_asset_description.setText(R.string.asset_details_flat_money)
+            item.isSpam -> {
+                text_asset_description.gone()
+                spam_tag.visiable()
             }
+            else -> text_asset_description.text = ""
         }
     }
 
@@ -102,30 +105,23 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         adapterAvatar.notifyDataSetChanged()
         view_pager.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0), false)
         view_pager.post({
-            if (view_pager.beginFakeDrag()){
+            if (view_pager.beginFakeDrag()) {
                 view_pager.fakeDragBy(0f)
                 view_pager.endFakeDrag()
             }
         })
         configureTitleForAssets(view_pager.currentItem)
-        showFavorite()
+        showFavorite(view_pager.currentItem)
 
         // configure contents pager
         view_pager_content.adapter = AssetDetailsContentPageAdapter(supportFragmentManager, sortedToFirstFavoriteList)
         view_pager_content.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0), false)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_favorite -> {
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+    fun showFavorite(currentItem: Int) {
+        if (adapterAvatar.items[currentItem].isSpam) image_favorite.gone()
+        else image_favorite.visiable()
 
-    fun showFavorite() {
-        image_favorite.visiable()
         if (adapterAvatar.items[view_pager.currentItem].isFavorite) {
             markAsFavorite()
         } else {
@@ -133,8 +129,8 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         }
     }
 
-    fun changeFavorite() {
-        if (!adapterAvatar.items[view_pager.currentItem].isWaves()){
+    private fun changeFavorite() {
+        if (!adapterAvatar.items[view_pager.currentItem].isWaves()) {
             if (adapterAvatar.items[view_pager.currentItem].isFavorite) {
                 unmarkAsFavorite()
             } else {
@@ -161,5 +157,12 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
             assetBalance?.save()
         }
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_on))
+    }
+
+    override fun onBackPressed() {
+        setResult(Constants.RESULT_OK, Intent().apply {
+            putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
+        })
+        finish()
     }
 }

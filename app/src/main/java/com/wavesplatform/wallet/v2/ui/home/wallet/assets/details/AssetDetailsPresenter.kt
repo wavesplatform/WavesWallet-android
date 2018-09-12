@@ -10,6 +10,7 @@ import javax.inject.Inject
 
 @InjectViewState
 class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsView>() {
+    var needToUpdate: Boolean = false
 
     fun loadAssets() {
         addSubscription(queryAllAsSingle<AssetBalance>()

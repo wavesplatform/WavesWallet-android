@@ -116,7 +116,7 @@
                     android:layout_height="2dp"
                     android:layout_marginTop="14dp"
                     android:layerType="software"
-                    android:src="@drawable/dotted_line" />
+                    android:src="@drawable/shape_dashed_line" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -151,7 +151,7 @@
                     android:layout_height="2dp"
                     android:layout_marginTop="14dp"
                     android:layerType="software"
-                    android:src="@drawable/dotted_line" />
+                    android:src="@drawable/shape_dashed_line" />
 
                 <Button
                     android:id="@+id/button_continue"
@@ -310,7 +310,7 @@
                     android:layout_marginBottom="14dp"
                     android:layout_marginTop="14dp"
                     android:layerType="software"
-                    android:src="@drawable/dotted_line" />
+                    android:src="@drawable/shape_dashed_line" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
@@ -330,7 +330,7 @@
                     android:layout_marginBottom="14dp"
                     android:layout_marginTop="14dp"
                     android:layerType="software"
-                    android:src="@drawable/dotted_line" />
+                    android:src="@drawable/shape_dashed_line" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
