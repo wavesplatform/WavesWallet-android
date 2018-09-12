@@ -27,7 +27,8 @@
             android:focusableInTouchMode="true"
             android:paddingEnd="14dp"
             android:paddingStart="14dp"
-            android:paddingTop="24dp">
+            android:paddingTop="24dp"
+            android:animateLayoutChanges="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/accent50"
-                    android:hint="@string/enter_seed_manually_hint"
+                    android:hint="@string/enter_seed_manually_hint_your_seed"
                     android:imeOptions="actionDone"
                     android:inputType="textMultiLine|textLongMessage"
                     android:maxLines="5"

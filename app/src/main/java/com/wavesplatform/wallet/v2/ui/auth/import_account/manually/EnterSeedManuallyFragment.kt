@@ -60,8 +60,8 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                                                     wallet.address,
                                                     Identicon.Options.Builder().setRandomBlankColor().create()))
                                             .apply(RequestOptions().circleCrop())
-                                            .into(image_asset)
-                                    // edit_seed.setHint(R.string.enter_seed_manually_hint_your_seed)
+                                            .into(image_asset!!)
+                                    edit_seed.setHint(R.string.enter_seed_manually_hint_your_seed)
                                     address_asset.text = wallet.address
                                     address_asset.visibility = View.VISIBLE
                                     skeleton_address_asset.visibility = View.GONE
@@ -86,7 +86,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
     }
 
     fun setSkeleton() {
-         edit_seed.setHint(R.string.enter_seed_manually_hint)
+        edit_seed.setHint(R.string.enter_seed_manually_hint)
         skeleton_address_asset.visibility = View.VISIBLE
         address_asset.visibility = View.GONE
         Glide.with(activity)
