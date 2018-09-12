@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import kotlinx.android.synthetic.main.activity_assets_sorting.*
 import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.*
@@ -42,9 +43,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
     @Inject
     lateinit var adapterFavorites: AssetsFavoriteSortingAdapter
 
-    companion object {
-        var RESULT_NEED_UPDATE = "need_update"
-    }
+
 
     override fun configLayoutRes() = R.layout.activity_assets_sorting
 

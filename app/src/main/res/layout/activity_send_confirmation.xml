@@ -100,7 +100,7 @@
                 android:layout_below="@+id/text_sum_in_dollar"
                 android:layout_marginBottom="14dp"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/dotted_line"
+                android:background="@drawable/shape_dashed_line"
                 android:layerType="software" />
 
 
@@ -141,7 +141,7 @@
                 android:layout_below="@+id/text_sent_to_address"
                 android:layout_marginBottom="14dp"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/dotted_line"
+                android:background="@drawable/shape_dashed_line"
                 android:layerType="software" />
 
             <android.support.v7.widget.AppCompatTextView
@@ -171,7 +171,7 @@
                 android:layout_below="@+id/text_fee_value"
                 android:layout_marginBottom="14dp"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/dotted_line"
+                android:background="@drawable/shape_dashed_line"
                 android:layerType="software" />
 
 

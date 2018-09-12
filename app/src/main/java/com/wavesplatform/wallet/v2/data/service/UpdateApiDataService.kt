@@ -8,8 +8,10 @@ import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
+import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Order
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
@@ -31,6 +33,8 @@ class UpdateApiDataService : Service() {
     lateinit var apiDataManager: ApiDataManager
     @Inject
     lateinit var transactionUtil: TransactionUtil
+    @Inject
+    lateinit var publicKeyAccountHelper: PublicKeyAccountHelper
     var subscriptions: CompositeDisposable = CompositeDisposable()
 
     var currentLimit = 100
@@ -107,12 +111,17 @@ class UpdateApiDataService : Service() {
 
             if (trans.recipient.contains("alias")) {
                 val aliasName = trans.recipient.substringAfterLast(":")
-                aliasName.notNull {
-                    subscriptions.add(apiDataManager.loadAlias(it)
-                            .compose(RxUtil.applyObservableDefaultSchedulers())
-                            .subscribe({
-                                trans.recipientAddress = it.address
-                            }))
+                val alias = queryFirst<Alias>({ equalTo("alias", aliasName) })
+                if (alias != null) {
+                    trans.recipientAddress = publicKeyAccountHelper.publicKeyAccount?.address
+                }else{
+                    aliasName.notNull {
+                        subscriptions.add(apiDataManager.loadAlias(it)
+                                .compose(RxUtil.applyObservableDefaultSchedulers())
+                                .subscribe({
+                                    trans.recipientAddress = it.address
+                                }))
+                    }
                 }
             } else {
                 trans.recipientAddress = trans.recipient

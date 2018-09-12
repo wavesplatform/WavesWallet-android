@@ -9,7 +9,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItemAdapter
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
@@ -56,10 +58,11 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         /**
          * @return HistoryTabFragment instance
          * */
-        fun newInstance(type: String): HistoryTabFragment {
+        fun newInstance(type: String, asset: AssetBalance?): HistoryTabFragment {
             val historyDateItemFragment = HistoryTabFragment()
             val bundle = Bundle()
             bundle.putString("type", type)
+            bundle.putParcelable(HistoryFragment.BUNDLE_ASSET, asset)
             historyDateItemFragment.arguments = bundle
             return historyDateItemFragment
         }
@@ -72,9 +75,12 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         recycle_history.isNestedScrollingEnabled = false
 
         presenter.type = arguments?.getString("type")
+        presenter.assetBalance = arguments?.getParcelable<AssetBalance>(HistoryFragment.BUNDLE_ASSET)
 
         runAsync {
-            presenter.loadTransactions()
+            if (savedInstanceState == null) {
+                presenter.loadTransactions()
+            }
         }
 
         if (adapter.footerLayout != null) {
@@ -132,7 +138,11 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         adapter.footerLayout.load_more_loading_view.gone()
     }
 
-    override fun showData(data: ArrayList<HistoryItem>, type: String?) {
+    override fun afterSuccessLoadTransaction(data: ArrayList<HistoryItem>, type: String?) {
+        adapter.setNewData(data)
+    }
+
+    override fun afterSuccessLoadMoreTransaction(data: ArrayList<HistoryItem>, type: String?) {
         // stop over scroll
         nested_scroll_view.fling(0)
 

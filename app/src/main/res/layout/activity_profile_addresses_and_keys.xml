@@ -141,7 +141,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/dotted_line"
+                android:background="@drawable/shape_dashed_line"
                 android:layerType="software" />
 
             <LinearLayout
@@ -192,7 +192,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/dotted_line"
+                android:background="@drawable/shape_dashed_line"
                 android:layerType="software" />
 
             <android.support.v7.widget.AppCompatTextView

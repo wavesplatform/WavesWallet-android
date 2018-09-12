@@ -237,7 +237,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/dotted_line"
+                android:background="@drawable/shape_dashed_line"
                 android:layerType="software" />
         </LinearLayout>
 
