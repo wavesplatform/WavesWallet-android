@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.data.manager
 
+import com.vicpin.krealmextensions.deleteAll
 import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
@@ -64,7 +65,11 @@ class NodeDataManager @Inject constructor() : DataManager() {
                         spam.add(SpamAsset(scanner.nextLine().split(",")[0]))
                     }
                     scanner.close()
+
+                    // clear old spam list and save new
+                    deleteAll<SpamAsset>()
                     spam.saveAll()
+
                     return@map spam
                 })
                 .flatMap({ spamAssets ->

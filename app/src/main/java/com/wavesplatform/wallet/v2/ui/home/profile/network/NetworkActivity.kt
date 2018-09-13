@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_network.*
@@ -23,9 +24,9 @@ class NetworkActivity : BaseActivity(), NetworkView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view,  true, getString(R.string.network_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.network_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-
+        edit_spam_filter.setText(BuildConfig.SPAM_URL)
     }
 
 }
