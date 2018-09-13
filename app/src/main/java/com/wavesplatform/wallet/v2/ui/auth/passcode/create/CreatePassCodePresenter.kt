@@ -20,7 +20,7 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
         val password = extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
         val guid = when {
             extras.containsKey(CreatePassCodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE) ->
-                BlockchainApplication.getAccessManager().getCurrentGuid()
+                BlockchainApplication.getAccessManager().getLoggedInGuid()
             extras.containsKey(CreatePassCodeActivity.KEY_INTENT_PROCESS_RECREATE_PASS_CODE) ->
                 extras.getString(EnterPassCodeActivity.KEY_INTENT_GUID)
             else -> {
@@ -41,6 +41,7 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
                 .writePassCodeObservable(guid, password, passCode)
                 .subscribe({
                     viewState.onSuccessCreatePassCode(guid, passCode)
+
                 }, { throwable ->
                     Log.e("CreatePassCodeActivity", throwable.message)
                     BlockchainApplication.getAccessManager().deleteCurrentWavesWallet()

@@ -20,7 +20,6 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
@@ -166,7 +165,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun logout() {
-        presenter.prefsUtil.logOut()
+        BlockchainApplication.getAccessManager().setCurrentAccount("")
+        activity?.finish()
         presenter.appUtil.restartApp()
         toast(getString(R.string.profile_general_logout))
     }
@@ -177,7 +177,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
             REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    setFingerprint(BlockchainApplication.getAccessManager().getCurrentGuid(),
+                    setFingerprint(BlockchainApplication.getAccessManager().getLoggedInGuid(),
                             data!!.extras.getString(EnterPassCodeActivity.KEY_INTENT_PASS_CODE))
                 } else {
                     initFingerPrintControl()

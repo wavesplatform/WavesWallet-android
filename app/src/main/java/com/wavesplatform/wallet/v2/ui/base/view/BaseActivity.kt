@@ -2,6 +2,8 @@ package com.wavesplatform.wallet.v2.ui.base.view
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +20,7 @@ import android.view.View
 import android.view.WindowManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.franmontiel.localechanger.LocaleChanger
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
@@ -25,6 +28,7 @@ import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.ScreenReceiver
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.withColor
@@ -69,7 +73,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     @Inject
     lateinit var publicKeyAccountHelper: PublicKeyAccountHelper
 
-    var progressDialog: ProgressDialog? = null
+    private var progressDialog: ProgressDialog? = null
+    private var screenReceiver: ScreenReceiver? = null
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return supportFragmentInjector
@@ -96,21 +101,22 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         Timber.tag(javaClass.simpleName)
 
         onViewReady(savedInstanceState)
+        screenReceiver = ScreenReceiver()
     }
 
     public override fun onResume() {
         super.onResume()
-//        ActivityRecreationHelper.onResume(this)
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ errorEvent -> mErrorManager.showError(this, errorEvent.retrofitException, errorEvent.retrySubject) },
                         { t: Throwable? -> t?.printStackTrace() }))
+        registerReceiver(screenReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
     }
 
     override fun onDestroy() {
-//        ActivityRecreationHelper.onDestroy(this);
         eventSubscriptions.clear()
         super.onDestroy()
+        unregisterReceiver(screenReceiver)
     }
 
     public override fun onPause() {
@@ -224,6 +230,10 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.statusBarColor = ContextCompat.getColor(this, intColorRes)
     }}
+
+    protected fun restartApp(context: Context) {
+        BlockchainApplication.getAccessManager().restartApp(context)
+    }
 
     protected abstract fun onViewReady(savedInstanceState: Bundle?)
 

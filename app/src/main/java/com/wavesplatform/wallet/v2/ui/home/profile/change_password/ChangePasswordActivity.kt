@@ -8,13 +8,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.string.password
-import com.wavesplatform.wallet.v1.data.access.AccessState
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -22,7 +19,6 @@ import io.github.anderscheow.validator.constant.Mode
 import io.github.anderscheow.validator.rules.common.EqualRule
 import io.github.anderscheow.validator.rules.common.MinRule
 import kotlinx.android.synthetic.main.activity_change_password.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import pers.victor.ext.toast
@@ -132,7 +128,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
     }
 
     private fun writePassword(passCode: String) {
-        val guid = BlockchainApplication.getAccessManager().getCurrentGuid()
+        val guid = BlockchainApplication.getAccessManager().getLoggedInGuid()
         try {
             val oldWallet = WavesWallet(
                     BlockchainApplication.getAccessManager()

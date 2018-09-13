@@ -1,11 +1,13 @@
 package com.wavesplatform.wallet.v2.ui.splash
 
 import android.os.Bundle
+import android.text.TextUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
@@ -18,11 +20,19 @@ class SplashActivity : BaseActivity(), SplashView {
     override fun onNotLoggedIn() {
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
         if (preferencesHelper.isTutorialPassed()) {
-            launchActivity<WelcomeActivity>()
+
+            if (!TextUtils.isEmpty(BlockchainApplication.getAccessManager().getLastLoggedInGuid())
+                    && TextUtils.isEmpty(BlockchainApplication.getAccessManager().getLoggedInGuid())) {
+                launchActivity<EnterPassCodeActivity>() {
+                    putExtra(EnterPassCodeActivity.KEY_INTENT_PROCESS_LOGIN, true)
+                }
+            } else {
+                launchActivity<WelcomeActivity>()
+            }
+
         } else {
             launchActivity<ChooseLanguageActivity>()
         }
-//        launchActivity<LandingActivity>(clear = true)
     }
 
     override fun onStartMainActivity(publicKey: String) {
@@ -32,7 +42,6 @@ class SplashActivity : BaseActivity(), SplashView {
         } else {
             launchActivity<ChooseLanguageActivity>()
         }
-//        AuthUtil.startMainActivity(this, publicKey)
     }
 
     @Inject
@@ -46,7 +55,6 @@ class SplashActivity : BaseActivity(), SplashView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.prefsUtil.logOut()
         presenter.storeIncomingURI(intent)
         presenter.resolveNextAction()
     }

@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
@@ -15,9 +13,20 @@
         android:fontFamily="@font/roboto"
         app:titleTextAppearance="@style/Toolbar.Title" />
 
+    <ImageView
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_8sdp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_topbar_logout"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
     <TextView
         android:id="@+id/text_title"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_below="@+id/toolbar_view"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
@@ -28,18 +37,32 @@
         android:text="@string/enter_passcode_title"
         />
 
+    <TextView
+        android:id="@+id/text_subtitle"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/text_title"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@color/basic500"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="f44735ac21178db09087157f4fa87a10"
+        />
+
     <com.wavesplatform.wallet.v2.ui.custom.PinDotsLayout
+        android:id="@+id/pdl_dots"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
         android:layout_width="wrap_content"
-        android:id="@+id/pdl_dots"
-        android:layout_below="@+id/text_title"
+        android:layout_below="@+id/text_subtitle"
         android:layout_height="wrap_content"/>
 
     <com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
         android:id="@+id/pass_keypad"
-        android:layout_marginBottom="24dp"
         android:layout_centerVertical="true"
         android:layout_below="@+id/pdl_dots"
         android:layout_width="match_parent"
