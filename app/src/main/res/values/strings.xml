@@ -669,6 +669,8 @@
     <string name="common_kkk_quantity">%skkk</string>
     <string name="common_load_more_status">Loading…</string>
     <string name="common_dash">&#8211;</string>
+    <string name="common_feedback_title">Send feedback</string>
+    <string name="common_market_error">Unable to find market app</string>
 
     <!-- Language-->
     <string name="choose_language_russia">Русский</string>

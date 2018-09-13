@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
 import com.wavesplatform.wallet.v2.util.setSystemBarTheme
 import com.yarolegovich.slidingrootnav.SlidingRootNav
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
@@ -58,7 +59,6 @@ abstract class BaseDrawerActivity : BaseActivity() {
                     }
                 }
                 .withMenuOpened(false)
-//                .withContentClickableWhenMenuOpened(false)
                 .withSavedState(savedInstanceState)
                 .withMenuLayout(R.layout.menu_left_drawer)
                 .inject()
@@ -70,8 +70,8 @@ abstract class BaseDrawerActivity : BaseActivity() {
         slidingRootNav.layout.linear_drawer.scaleY = 1.5f
         slidingRootNav.layout.text_site.paintFlags = slidingRootNav.layout.text_site.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         slidingRootNav.layout.text_site.click { openUrlWithChromeTab(Constants.URL_WAVES_COMMUNITY) }
-        slidingRootNav.layout.text_whitepaper.click { openPdfUrlWithIntent(Constants.URL_WHITEPAPER) }
-        slidingRootNav.layout.text_terms.click { openPdfUrlWithIntent(Constants.URL_TERMS) }
+        slidingRootNav.layout.text_whitepaper.click { openUrlWithIntent(Constants.URL_WHITEPAPER) }
+        slidingRootNav.layout.text_terms.click { openUrlWithIntent(Constants.URL_TERMS) }
         slidingRootNav.layout.image_discord.click { openDiscord(Constants.URL_DISCORD) }
         slidingRootNav.layout.image_facebook.click { openFacebook(Constants.URL_FACEBOOK) }
         slidingRootNav.layout.image_github.click { openUrlWithChromeTab(Constants.URL_GITHUB) }
@@ -94,23 +94,6 @@ abstract class BaseDrawerActivity : BaseActivity() {
         slidingRootNav.layout.findViewById<ViewGroup>(R.id.root).addView(view)
 
         view?.gone()
-    }
-
-
-    fun openUrlWithChromeTab(url: String) {
-        SimpleChromeCustomTabs.getInstance()
-                .withFallback({
-                    openUrlWithIntent(url)
-                }).withIntentCustomizer({
-                    it.withToolbarColor(ContextCompat.getColor(this, R.color.submit400))
-                })
-                .navigateTo(Uri.parse(url), this)
-
-    }
-
-    fun openPdfUrlWithIntent(url: String) {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        startActivity(browserIntent)
     }
 
     fun openUrlWithIntent(url: String) {

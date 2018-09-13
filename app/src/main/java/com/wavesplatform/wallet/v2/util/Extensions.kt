@@ -12,6 +12,7 @@ import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.ColorInt
@@ -20,6 +21,7 @@ import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatImageView
@@ -40,6 +42,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
@@ -64,6 +67,33 @@ fun Context.isNetworkConnection(): Boolean {
 
 fun Context.notAvailable() {
     toast(getString(R.string.common_msg_in_development))
+}
+
+
+fun Activity.openUrlWithChromeTab(url: String) {
+    SimpleChromeCustomTabs.getInstance()
+            .withFallback({
+                openUrlWithIntent(url)
+            }).withIntentCustomizer({
+                it.withToolbarColor(findColor(R.color.submit400))
+            })
+            .navigateTo(Uri.parse(url), this)
+}
+
+fun Fragment.openUrlWithChromeTab(url: String) {
+    SimpleChromeCustomTabs.getInstance()
+            .withFallback({
+                activity?.openUrlWithIntent(url)
+            }).withIntentCustomizer({
+                it.withToolbarColor(findColor(R.color.submit400))
+            })
+            .navigateTo(Uri.parse(url), activity)
+
+}
+
+fun Activity.openUrlWithIntent(url: String) {
+    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    startActivity(browserIntent)
 }
 
 fun Transaction.transactionType(): TransactionType {
