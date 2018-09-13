@@ -37,7 +37,7 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
     override fun configLayoutRes(): Int = R.layout.activity_profile_addresses_and_keys
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         val user = BlockchainApplication.getAccessManager().createAddressBookCurrentAccount()
         user.notNull {
@@ -61,15 +61,15 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
         }
 
         image_address_copy.click {
-            text_address.copyToClipboard(it)
+            it.copyToClipboard(text_address.text.toString())
         }
 
         image_public_key_copy.click {
-            text_public_key.copyToClipboard(it)
+            it.copyToClipboard(text_public_key.text.toString())
         }
 
         image_private_key_copy.click {
-            text_private_key.copyToClipboard(it)
+            it.copyToClipboard(text_private_key.text.toString())
         }
 
         button_show.click {

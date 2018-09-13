@@ -15,7 +15,7 @@ class ConfirmationLeasingActivity : BaseActivity(), ConfirmationLeasingView {
     override fun configLayoutRes(): Int = R.layout.activity_confirm_leasing
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.confirm_leasing), R.drawable.ic_toolbar_back_white)
+        setupToolbar(toolbar_view,true, getString(R.string.confirm_leasing), R.drawable.ic_toolbar_back_white)
 
         button_confirm.click {
             supportActionBar?.setDisplayShowTitleEnabled(false)

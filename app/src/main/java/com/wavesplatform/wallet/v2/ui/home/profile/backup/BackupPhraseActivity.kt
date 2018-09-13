@@ -36,7 +36,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
     override fun configLayoutRes(): Int = R.layout.activity_backup_pharse
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
+        setupToolbar(toolbar_view,  true,
                 getString(R.string.backup_pharse), R.drawable.ic_toolbar_back_black)
 
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {

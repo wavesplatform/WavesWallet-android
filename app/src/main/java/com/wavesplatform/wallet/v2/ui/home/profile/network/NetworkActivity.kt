@@ -23,7 +23,7 @@ class NetworkActivity : BaseActivity(), NetworkView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.network_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view,  true, getString(R.string.network_toolbar_title), R.drawable.ic_toolbar_back_black)
 
 
     }

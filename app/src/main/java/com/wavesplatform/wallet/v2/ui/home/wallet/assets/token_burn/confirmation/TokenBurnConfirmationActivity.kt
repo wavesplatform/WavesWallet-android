@@ -32,7 +32,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.token_burn_confirmation_toolbar_title), R.drawable.ic_toolbar_back_white)
+        setupToolbar(toolbar_view, true, getString(R.string.token_burn_confirmation_toolbar_title), R.drawable.ic_toolbar_back_white)
 
         button_confirm.click {
             toolbar_view.invisiable()

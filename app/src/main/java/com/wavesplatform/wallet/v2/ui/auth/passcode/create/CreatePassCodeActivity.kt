@@ -32,7 +32,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
     override fun configLayoutRes() = R.layout.activity_create_passcode
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, false,
+        setupToolbar(toolbar_view,  false,
                 icon = R.drawable.ic_toolbar_back_black)
 
         presenter.step = CreatePassCodeStep.CREATE

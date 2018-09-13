@@ -29,7 +29,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
     override fun configLayoutRes(): Int = R.layout.activity_start_leasing
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.start_leasing_toolbar), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.start_leasing_toolbar), R.drawable.ic_toolbar_back_black)
 
         text_choose_from_address.click {
             launchActivity<AddressBookActivity>(requestCode = REQUEST_CHOOSE_ADDRESS) {

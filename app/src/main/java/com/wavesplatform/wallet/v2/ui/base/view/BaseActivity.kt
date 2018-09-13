@@ -24,6 +24,7 @@ import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.showSnackbar
 import com.wavesplatform.wallet.v2.util.withColor
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -33,6 +34,7 @@ import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import org.fingerlinks.mobile.android.navigator.Navigator
+import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -82,7 +84,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -115,8 +116,9 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     @JvmOverloads
-    fun setupToolbar(toolbar: Toolbar, onClickListener: View.OnClickListener? = null, homeEnable: Boolean = false,
-                     title: String = "", @DrawableRes icon: Int = R.drawable.ic_arrow_back_white_24dp) {
+    inline fun setupToolbar(toolbar: Toolbar, homeEnable: Boolean = false,
+                            title: String = "", @DrawableRes icon: Int = R.drawable.ic_arrow_back_white_24dp,
+                            crossinline onClickListener: () -> Unit = { onBackPressed() }) {
         this.toolbar = toolbar
         setSupportActionBar(toolbar)
         mActionBar = supportActionBar
@@ -130,7 +132,10 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         if (title.isNotEmpty()) mActionBar?.title = title
         else mActionBar?.title = " "
 
-        onClickListener?.let { toolbar.setNavigationOnClickListener(it) }
+        toolbar.setNavigationOnClickListener({
+            hideKeyboard()
+            onClickListener()
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -154,18 +159,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
             supportFragmentManager.popBackStack()
         else
             finish()
-    }
-
-    fun showSnackbar(@StringRes msg: Int, @ColorInt color: Int? = null) {
-        Snackbar.make(findViewById(android.R.id.content), getString(msg), Snackbar.LENGTH_LONG)
-                .withColor(color)
-                .show()
-    }
-
-    fun showSnackbar(msg: String, @ColorInt color: Int? = null) {
-        Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG)
-                .withColor(color)
-                .show()
     }
 
     override fun showNetworkError() {

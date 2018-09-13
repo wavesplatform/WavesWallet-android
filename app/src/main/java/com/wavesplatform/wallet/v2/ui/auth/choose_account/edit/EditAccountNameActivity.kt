@@ -32,10 +32,7 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
     override fun configLayoutRes(): Int = R.layout.activity_edit_account_name
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener {
-            onBackPressed()
-
-        }, true, getString(R.string.edit_account_name), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view,  true, getString(R.string.edit_account_name), R.drawable.ic_toolbar_back_black)
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         presenter.account = intent.getParcelableExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM)

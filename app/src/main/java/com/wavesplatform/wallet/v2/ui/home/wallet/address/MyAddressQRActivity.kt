@@ -45,7 +45,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
     override fun configLayoutRes() = R.layout.activity_my_address_qr
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, icon = R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view,  true, icon = R.drawable.ic_toolbar_back_black)
 
         text_address.text = publicKeyAccountHelper.publicKeyAccount?.address
         frame_share.click {

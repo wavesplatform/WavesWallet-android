@@ -31,7 +31,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, title = getString(R.string.import_account_toolbar_title), icon = R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, title = getString(R.string.import_account_toolbar_title), icon = R.drawable.ic_toolbar_back_black)
 
         viewpager_import.adapter = ImportAccountFragmentPageAdapter(supportFragmentManager, arrayOf(getString(R.string.import_account_tab_scan),
                 getString(R.string.import_account_tab_manually)))

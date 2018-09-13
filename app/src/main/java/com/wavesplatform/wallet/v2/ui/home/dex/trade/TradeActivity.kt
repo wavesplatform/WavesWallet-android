@@ -32,7 +32,7 @@ class TradeActivity : BaseActivity(), TradeView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
+        setupToolbar(toolbar_view,  true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
 
         viewpageer_trade.adapter = TradeFragmentPageAdapter(supportFragmentManager, arrayOf(getString(R.string.dex_trade_tab_orderbook), getString(R.string.dex_trade_tab_chart),
                 getString(R.string.dex_trade_tab_last_trades), getString(R.string.dex_trade_tab_my_orders)))
