@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity.Companion.KEY_INTENT_ITEM_POSITION
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
+import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -35,11 +38,17 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
         setupToolbar(toolbar_view,  true, getString(R.string.edit_account_name), R.drawable.ic_toolbar_back_black)
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
-        presenter.account = intent.getParcelableExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
-
+        presenter.account = intent.getParcelableExtra(ChooseAccountActivity.KEY_INTENT_ITEM_ADDRESS)
 
         text_name.text = presenter.account?.name
         text_address.text = presenter.account?.address
+
+        Glide.with(this)
+                .load(Identicon.create(
+                        presenter.account?.address,
+                        Identicon.Options.Builder().setRandomBlankColor().create()))
+                .apply(RequestOptions().circleCrop())
+                .into(image_asset)
 
         button_save.click {
 
@@ -47,8 +56,9 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
                 presenter.account?.name = edit_name.text.toString()
 
                 val newIntent = Intent()
-                newIntent.putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, presenter.account)
-                newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(KEY_INTENT_ITEM_POSITION, -1))
+                newIntent.putExtra(ChooseAccountActivity.KEY_INTENT_ITEM_ADDRESS, presenter.account)
+                newIntent.putExtra(ChooseAccountActivity.KEY_INTENT_ITEM_POSITION,
+                        intent.getIntExtra(KEY_INTENT_ITEM_POSITION, -1))
                 setResult(Constants.RESULT_OK, newIntent)
                 finish()
             }

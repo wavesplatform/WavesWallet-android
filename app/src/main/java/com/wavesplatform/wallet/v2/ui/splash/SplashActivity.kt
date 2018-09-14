@@ -1,11 +1,12 @@
 package com.wavesplatform.wallet.v2.ui.splash
 
 import android.os.Bundle
+import android.text.TextUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
@@ -18,11 +19,15 @@ class SplashActivity : BaseActivity(), SplashView {
     override fun onNotLoggedIn() {
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
         if (preferencesHelper.isTutorialPassed()) {
-            launchActivity<WelcomeActivity>()
+            if (!TextUtils.isEmpty(App.getAccessManager().getLastLoggedInGuid())) {
+                launchActivity<com.wavesplatform.wallet.v2.ui.home.MainActivity>(clear = true)
+            } else {
+                launchActivity<WelcomeActivity>()
+            }
+
         } else {
             launchActivity<ChooseLanguageActivity>()
         }
-//        launchActivity<LandingActivity>(clear = true)
     }
 
     override fun onStartMainActivity(publicKey: String) {
@@ -32,7 +37,6 @@ class SplashActivity : BaseActivity(), SplashView {
         } else {
             launchActivity<ChooseLanguageActivity>()
         }
-//        AuthUtil.startMainActivity(this, publicKey)
     }
 
     @Inject
@@ -44,9 +48,10 @@ class SplashActivity : BaseActivity(), SplashView {
 
     override fun configLayoutRes() = R.layout.activity_splash
 
+    override fun askPassCode() = false
+
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.prefsUtil.logOut()
         presenter.storeIncomingURI(intent)
         presenter.resolveNextAction()
     }

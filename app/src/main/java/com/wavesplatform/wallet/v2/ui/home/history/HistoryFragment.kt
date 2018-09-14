@@ -10,8 +10,6 @@ import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_history.*
 import pers.victor.ext.dp2px
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class HistoryFragment : BaseFragment(), HistoryView {
@@ -26,11 +24,9 @@ class HistoryFragment : BaseFragment(), HistoryView {
     override fun configLayoutRes(): Int = R.layout.fragment_history
 
     companion object {
-        var BUNDLE_TABS = "tabs"
-        var BUNDLE_ASSET = "asset"
-        /**
-         * @return HistoryFragment instance
-         * */
+        const val BUNDLE_TABS = "tabs"
+        const val BUNDLE_ASSET = "asset"
+
         fun newInstance(): HistoryFragment {
             return HistoryFragment()
         }
@@ -51,33 +47,14 @@ class HistoryFragment : BaseFragment(), HistoryView {
         }
 
         stl_history.setViewPager(viewpager_history)
-        appbar_layout.addOnOffsetChangedListener({ appBarLayout, verticalOffset ->
+        appbar_layout.addOnOffsetChangedListener { _, verticalOffset ->
             val offsetForShowShadow = appbar_layout.totalScrollRange - dp2px(9)
             if (-verticalOffset > offsetForShowShadow) {
                 viewpager_history.setPagingEnabled(false)
-                view_shadow.visiable()
             } else {
                 viewpager_history.setPagingEnabled(true)
-                view_shadow.gone()
             }
-        })
+        }
         stl_history.currentTab = 0
     }
-
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.menu_history, menu)
-//        super.onCreateOptionsMenu(menu, inflater)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-//        when(item?.itemId){
-//            R.id.action_sorting -> {
-//                val historyFilter = HistoryFilterBottomSheetFragment()
-//                historyFilter.show(fragmentManager, historyFilter.tag)
-//            }
-//        }
-//
-//        return super.onOptionsItemSelected(item)
-//    }
-
 }

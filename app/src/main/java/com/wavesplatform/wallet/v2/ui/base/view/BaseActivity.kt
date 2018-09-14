@@ -3,18 +3,23 @@ package com.wavesplatform.wallet.v2.ui.base.view
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
 import android.support.annotation.*
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
 import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.Toolbar
+import android.text.TextUtils
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.franmontiel.localechanger.LocaleChanger
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
@@ -22,8 +27,10 @@ import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showSnackbar
 import com.wavesplatform.wallet.v2.util.withColor
 import dagger.android.AndroidInjection
@@ -68,7 +75,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     @Inject
     lateinit var publicKeyAccountHelper: PublicKeyAccountHelper
 
-    var progressDialog: ProgressDialog? = null
+    private var progressDialog: ProgressDialog? = null
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return supportFragmentInjector
@@ -87,32 +94,50 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        setStatusBarColor(R.color.basic50)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(configLayoutRes())
-
         Timber.tag(javaClass.simpleName)
-
         onViewReady(savedInstanceState)
     }
 
     public override fun onResume() {
         super.onResume()
-//        ActivityRecreationHelper.onResume(this)
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({ errorEvent -> mErrorManager.showError(this, errorEvent.retrofitException, errorEvent.retrySubject) },
-                        { t: Throwable? -> t?.printStackTrace() }))
-    }
-
-    override fun onDestroy() {
-//        ActivityRecreationHelper.onDestroy(this);
-        eventSubscriptions.clear()
-        super.onDestroy()
+                .subscribe({ errorEvent ->
+                    mErrorManager.showError(this,
+                            errorEvent.retrofitException, errorEvent.retrySubject)
+                }, { t: Throwable? -> t?.printStackTrace() }))
+        App.getAccessManager().addActivity()
+        askPassCodeIfNeed()
     }
 
     public override fun onPause() {
         mCompositeDisposable.clear()
         super.onPause()
+        App.getAccessManager().removeActivity()
+    }
+
+    override fun onDestroy() {
+        eventSubscriptions.clear()
+        super.onDestroy()
+    }
+
+    protected open fun askPassCode() = true
+
+    private fun askPassCodeIfNeed() {
+        val guid = App.getAccessManager().getLastLoggedInGuid()
+
+        val notAuthenticated = App.getAccessManager().getWallet() == null
+        val hasGuidToLogin = !TextUtils.isEmpty(guid)
+
+        if (hasGuidToLogin && notAuthenticated && askPassCode()) {
+            launchActivity<EnterPassCodeActivity>(
+                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
+                putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
+            }
+        }
     }
 
     @JvmOverloads
@@ -139,12 +164,12 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -205,6 +230,18 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                     .replace()
                     .commit()
         }
+    }
+
+    protected fun setStatusBarColor(@ColorRes intColorRes: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.statusBarColor = ContextCompat.getColor(this, intColorRes)
+        }
+    }
+
+    protected fun restartApp() {
+        App.getAccessManager().restartApp(this)
     }
 
     protected abstract fun onViewReady(savedInstanceState: Bundle?)

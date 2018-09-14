@@ -9,6 +9,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -50,11 +51,13 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
-                val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                val seed = result.contents.trim()
-                if (!TextUtils.isEmpty(seed)) {
-                    launchActivity<ProtectAccountActivity> {
-                        putExtra(NewAccountActivity.KEY_INTENT_SEED, seed)
+                if (resultCode == Constants.RESULT_OK) {
+                    val result = IntentIntegrator.parseActivityResult(resultCode, data)
+                    val seed = result.contents
+                    if (!TextUtils.isEmpty(seed)) {
+                        launchActivity<ProtectAccountActivity> {
+                            putExtra(NewAccountActivity.KEY_INTENT_SEED, seed)
+                        }
                     }
                 }
             }

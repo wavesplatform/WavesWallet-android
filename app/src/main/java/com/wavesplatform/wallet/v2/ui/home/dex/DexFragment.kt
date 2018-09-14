@@ -21,7 +21,7 @@ import pers.victor.ext.visiable
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class DexFragment :BaseFragment(),DexView{
+class DexFragment : BaseFragment(), DexView {
 
     @Inject
     @InjectPresenter
@@ -67,12 +67,12 @@ class DexFragment :BaseFragment(),DexView{
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+        when (item?.itemId) {
             R.id.action_sorting -> {
-                launchActivity<ActiveMarketsSortingActivity> {  }
+                launchActivity<ActiveMarketsSortingActivity> { }
             }
             R.id.action_add_market -> {
-                launchActivity<DexMarketsActivity> {  }
+                launchActivity<DexMarketsActivity> { }
             }
         }
 
@@ -80,11 +80,11 @@ class DexFragment :BaseFragment(),DexView{
     }
 
     override fun afterSuccessLoadMarkets(list: ArrayList<Market>) {
-        if (list.isEmpty()){
+        if (list.isEmpty()) {
             linear_content.gone()
             linear_empty.visiable()
             menu?.findItem(R.id.action_sorting)?.isVisible = false
-        }else{
+        } else {
             linear_empty.gone()
             linear_content.visiable()
             menu?.findItem(R.id.action_sorting)?.isVisible = true

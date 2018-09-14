@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.base.view
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar

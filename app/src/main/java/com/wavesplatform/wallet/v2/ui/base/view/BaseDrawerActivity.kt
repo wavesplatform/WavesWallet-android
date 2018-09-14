@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.View
@@ -24,7 +25,7 @@ import pers.victor.ext.*
 
 abstract class BaseDrawerActivity : BaseActivity() {
 
-    protected lateinit var slidingRootNav: SlidingRootNav
+    private lateinit var slidingRootNav: SlidingRootNav
     private var changeStatusBarColor = true
     private var view: View? = null
     private var drawerIcon = findDrawable(R.drawable.ic_toolbar_menu)

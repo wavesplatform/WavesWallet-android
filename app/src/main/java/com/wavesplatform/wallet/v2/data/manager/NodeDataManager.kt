@@ -58,7 +58,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
 
     fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
         return spamService.spamAssets()
-                .map({
+                .map {
                     val scanner = Scanner(it)
                     val spam = arrayListOf<SpamAsset>()
                     while (scanner.hasNextLine()) {
@@ -71,23 +71,21 @@ class NodeDataManager @Inject constructor() : DataManager() {
                     spam.saveAll()
 
                     return@map spam
-                })
-                .flatMap({ spamAssets ->
+                }
+                .flatMap { spamAssets ->
                     return@flatMap nodeService.assetsBalance(getAddress())
-                            .flatMap({ assets ->
+                            .flatMap { assets ->
                                 return@flatMap loadWavesBalance()
-                                        .map({
-                                            return@map Pair(assets, it)
-                                        })
+                                        .map { return@map Pair(assets, it) }
                                         .subscribeOn(Schedulers.io())
-                            })
-                            .map({
+                            }
+                            .map {
                                 if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
                                     // merge db data and API data
-                                    it.first.balances.forEachIndexed({ index, assetBalance ->
-                                        val dbAsset = assetsFromDb.firstOrNull({ dbAsset ->
+                                    it.first.balances.forEachIndexed { index, assetBalance ->
+                                        val dbAsset = assetsFromDb.firstOrNull { dbAsset ->
                                             dbAsset.assetId == assetBalance.assetId
-                                        })
+                                        }
                                         dbAsset.notNull {
                                             assetBalance.isHidden = it.isHidden
                                             assetBalance.isFavorite = it.isFavorite
@@ -95,30 +93,30 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                             assetBalance.isGateway = it.isGateway
                                             assetBalance.isSpam = it.isSpam
                                         }
-                                    })
+                                    }
                                 }
                                 it.first.balances.forEachIndexed { index, assetBalance ->
-                                    assetBalance.isSpam = spamAssets.any({
+                                    assetBalance.isSpam = spamAssets.any {
                                         it.assetId == assetBalance.assetId
-                                    })
+                                    }
                                 }
                                 it.first.balances.saveAll()
 
                                 return@map queryAll<AssetBalance>()
-                            })
+                            }
                             .subscribeOn(Schedulers.io())
-                })
+                }
 
     }
 
     fun loadWavesBalance(): Observable<AssetBalance> {
         return nodeService.wavesBalance(getAddress())
-                .map({
+                .map {
                     val currentWaves = Constants.defaultAssets[0]
                     currentWaves.balance = it.balance
                     currentWaves.save()
                     return@map currentWaves
-                })
+                }
     }
 
     fun createAlias(createAliasRequest: AliasRequest, privateKey: ByteArray, publicKeyStr: String): Observable<Alias> {
@@ -136,9 +134,9 @@ class NodeDataManager @Inject constructor() : DataManager() {
     fun loadTransactions(): Observable<Pair<List<Transaction>?, List<Transaction>?>> {
         return Observable.interval(0, 15, TimeUnit.SECONDS)
                 .retry(3)
-                .flatMap({
+                .flatMap {
                     if (app.isAppOnForeground()) {
-                        return@flatMap Observable.zip(nodeService.transactionList(getAddress(), currentLoadTransactionLimitPerRequest).map({ r -> r[0] }),
+                        return@flatMap Observable.zip(nodeService.transactionList(getAddress(), currentLoadTransactionLimitPerRequest).map { r -> r[0] },
                                 nodeService.unconfirmedTransactions(), BiFunction<List<Transaction>, List<Transaction>, Pair<List<Transaction>, List<Transaction>>> { t1, t2 ->
                             return@BiFunction Pair(t1, t2)
                         })
@@ -146,31 +144,30 @@ class NodeDataManager @Inject constructor() : DataManager() {
                         return@flatMap Observable.just(Pair(null, null))
                     }
 
-                })
+                }
     }
 
     fun currentBlocksHeight(): Observable<Height> {
         return Observable.interval(0, 60, TimeUnit.SECONDS)
                 .retry(3)
-                .flatMap({
+                .flatMap {
                     return@flatMap nodeService.currentBlocksHeight()
-                })
-                .map({
+                }
+                .map {
                     preferencesHelper.currentBlocksHeight = it.height
                     return@map it
-                })
+                }
     }
 
     fun activeLeasing(): Observable<List<Transaction>> {
         return nodeService.activeLeasing(getAddress())
-                .map({
-                    val activeTransactionList = it.filter {
+                .map {
+                    return@map it.filter {
                         it.asset = Constants.defaultAssets[0]
                         it.transactionTypeId = transactionUtil.getTransactionType(it)
                         it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
                     }
-                    return@map activeTransactionList
-                })
+                }
     }
 
 
