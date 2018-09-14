@@ -19,12 +19,12 @@ class LeasingPresenter @Inject constructor() : BasePresenter<LeasingView>() {
                     return@BiFunction Pair(t1, t2)
                 })
                 .compose(RxUtil.applySchedulersToObservable())
-                .subscribe({
+                .subscribe {
                     val leasedSum = it.second.sumByLong { it.amount }
                     viewState.showBalances(it.first,
                             leasedSum, it.first.balance?.minus(leasedSum))
                     viewState.showActiveLeasingTransaction(it.second)
-                }))
+                })
     }
 
 }

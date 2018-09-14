@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.text.TextPaint
@@ -15,6 +16,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
@@ -35,18 +37,16 @@ import javax.inject.Inject
 
 class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedListener {
 
-    //
-    private val TAG_NOT_CENTRAL_TAB = "not_central_tab"
-    private val TAG_CENTRAL_TAB = "central_tab"
-
     @Inject
     @InjectPresenter
     lateinit var presenter: MainPresenter
-    var accountFirstOpenDialog: AlertDialog? = null
-
+    private var accountFirstOpenDialog: AlertDialog? = null
+    private val fragments = arrayListOf<Fragment>()
 
     @ProvidePresenter
     fun providePresenter(): MainPresenter = presenter
+
+    override fun configLayoutRes() = R.layout.activity_main_v2
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_general)
@@ -61,8 +61,13 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
         setupBottomNavigation()
 
-//        select the first tab
-        onTabSelected(tab_navigation.getTabAt(0))
+        fragments.add(WalletFragment.newInstance())
+        fragments.add(DexFragment.newInstance())
+        fragments.add(QuickActionBottomSheetFragment.newInstance())
+        fragments.add(HistoryFragment.newInstance())
+        fragments.add(ProfileFragment.newInstance())
+
+        onTabSelected(tab_navigation.getTabAt(WALLET_SCREEN))
     }
 
     private fun showFirstOpenAlert(firstOpen: Boolean) {
@@ -78,20 +83,24 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     private fun getFirstOpenAlertView(): View? {
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_account_first_open, null)
+        val view = LayoutInflater.from(this)
+                .inflate(R.layout.dialog_account_first_open, null)
 
-        view.checkbox_terms_of_use.setOnCheckedChangeListener { buttonView, isChecked ->
-            presenter.checkedAboutTerms = isChecked
-            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
-        }
-        view.checkbox_backup.setOnCheckedChangeListener { buttonView, isChecked ->
-            presenter.checkedAboutBackup = isChecked
-            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
-        }
-        view.checkbox_funds_on_device.setOnCheckedChangeListener { buttonView, isChecked ->
-            presenter.checkedAboutFundsOnDevice = isChecked
-            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
-        }
+        view.checkbox_terms_of_use
+                .setOnCheckedChangeListener { _, isChecked ->
+                    presenter.checkedAboutTerms = isChecked
+                    view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
+                }
+        view.checkbox_backup
+                .setOnCheckedChangeListener { _, isChecked ->
+                    presenter.checkedAboutBackup = isChecked
+                    view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
+                }
+        view.checkbox_funds_on_device
+                .setOnCheckedChangeListener { _, isChecked ->
+                    presenter.checkedAboutFundsOnDevice = isChecked
+                    view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
+                }
 
         val siteClick = object : ClickableSpan() {
             override fun onClick(p0: View?) {
@@ -105,7 +114,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             }
         }
 
-        view.text_about_terms.makeLinks(arrayOf(getString(R.string.dialog_account_first_open_about_terms_key)), arrayOf(siteClick))
+        view.text_about_terms.makeLinks(
+                arrayOf(getString(R.string.dialog_account_first_open_about_terms_key)),
+                arrayOf(siteClick))
 
         view.button_confirm.click {
             preferencesHelper.setAccountFirstOpen(true)
@@ -115,27 +126,39 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         return view
     }
 
-    override fun configLayoutRes() = R.layout.activity_main_v2
+    public fun enableElevation(enable: Boolean) {
+        if (enable) {
+            appbar_layout.elevation = 0F
+        } else {
+            appbar_layout.elevation = ViewUtils.convertDpToPixel(8F, this)
+        }
+    }
+
 
     /**
      * Setup bottom navigation with custom tabs
      * **/
     private fun setupBottomNavigation() {
-        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_wallet_default)).setTag(TAG_NOT_CENTRAL_TAB))
-        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_dex_default)).setTag(TAG_NOT_CENTRAL_TAB))
-        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCenterTabLayout(R.drawable.ic_tabbar_waves_default)).setTag(TAG_CENTRAL_TAB))
-        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_history_default)).setTag(TAG_NOT_CENTRAL_TAB))
-        tab_navigation.addTab(tab_navigation.newTab().setCustomView(getCustomView(R.drawable.ic_tabbar_profile_default)).setTag(TAG_NOT_CENTRAL_TAB))
+        tab_navigation.addTab(tab_navigation.newTab().setCustomView(
+                getCustomView(R.drawable.ic_tabbar_wallet_default)).setTag(TAG_NOT_CENTRAL_TAB))
+        tab_navigation.addTab(tab_navigation.newTab().setCustomView(
+                getCustomView(R.drawable.ic_tabbar_dex_default)).setTag(TAG_NOT_CENTRAL_TAB))
+        tab_navigation.addTab(tab_navigation.newTab().setCustomView(
+                getCenterTabLayout(R.drawable.ic_tabbar_waves_default)).setTag(TAG_CENTRAL_TAB))
+        tab_navigation.addTab(tab_navigation.newTab().setCustomView(
+                getCustomView(R.drawable.ic_tabbar_history_default)).setTag(TAG_NOT_CENTRAL_TAB))
+        tab_navigation.addTab(tab_navigation.newTab().setCustomView(
+                getCustomView(R.drawable.ic_tabbar_profile_default)).setTag(TAG_NOT_CENTRAL_TAB))
 
         tab_navigation.addOnTabSelectedListener(this)
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
         when (tab?.position) {
-        // Quick action
-            2 -> {
+            QUICK_ACTION_SCREEN -> {
                 val quickActionDialog = QuickActionBottomSheetFragment()
-                quickActionDialog.show(supportFragmentManager, quickActionDialog::class.java.simpleName)
+                quickActionDialog.show(supportFragmentManager,
+                        quickActionDialog::class.java.simpleName)
             }
         }
     }
@@ -146,23 +169,23 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
         when (tab?.position) {
-//            Wallet screen
-            0 -> {
-                openFragment(R.id.frame_fragment_container, WalletFragment.newInstance())
+            WALLET_SCREEN -> {
+                openFragment(R.id.frame_fragment_container, fragments[WALLET_SCREEN])
                 toolbar_general.title = getString(R.string.wallet_toolbar_title)
+                toolbar_general.elevation = 0F
             }
-//            DEX screen
-            1 -> {
-                openFragment(R.id.frame_fragment_container, DexFragment.newInstance())
+            DEX_SCREEN -> {
+                openFragment(R.id.frame_fragment_container, fragments[DEX_SCREEN])
                 toolbar_general.title = getString(R.string.dex_toolbar_title)
             }
-//            Quick action
-            2 -> {
-                val quickActionDialog = QuickActionBottomSheetFragment()
-                quickActionDialog.show(supportFragmentManager, quickActionDialog::class.java.simpleName)
+            QUICK_ACTION_SCREEN -> {
+                val quickActionDialog = fragments[QUICK_ACTION_SCREEN]
+                if (quickActionDialog is QuickActionBottomSheetFragment) {
+                    quickActionDialog.show(supportFragmentManager,
+                            quickActionDialog::class.java.simpleName)
+                }
             }
-//            History screen
-            3 -> {
+            HISTORY_SCREEN -> {
                 val bundle = Bundle().apply {
                     val tabs = arrayListOf(
                             HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)),
@@ -181,15 +204,13 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 openFragment(R.id.frame_fragment_container, fragment)
                 toolbar_general.title = getString(R.string.history_toolbar_title)
             }
-//            Profile screen
-            4 -> {
-                openFragment(R.id.frame_fragment_container, ProfileFragment.newInstance())
+            PROFILE_SCREEN -> {
+                openFragment(R.id.frame_fragment_container, fragments[PROFILE_SCREEN])
                 toolbar_general.title = getString(R.string.profile_toolbar_title)
             }
         }
 
-//        tab?.position = 2 where center tab
-        if (tab?.position != 2) {
+        if (tab?.position != QUICK_ACTION_SCREEN) {
             selectedTabs(tab)
         }
     }
@@ -200,8 +221,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
      * **/
     private fun selectedTabs(selectedTab: TabLayout.Tab?) {
         for (i in 0 until tab_navigation.tabCount) {
-//            if i == 2 need continue iteration because this is central tab
-            if (i == 2) continue
+            if (i == QUICK_ACTION_SCREEN) {
+                continue
+            }
 
             val tab = tab_navigation.getTabAt(i)
             if (tab == selectedTab) {
@@ -215,14 +237,17 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     /**
      * Method that changes the color of the tab icon
      * @param selectedTab -  tab with layout and ImageView with id == R.id.image_tab_icon
-     * @param isSelected - if true -> the color of the icon will be {R.color.home_tab_active} otherwise {R.color.home_tab_inactive}
+     * @param isSelected - if true -> the color of the icon will be {R.color.home_tab_active}
+     * otherwise {R.color.home_tab_inactive}
      * **/
     private fun changeTabIcon(selectedTab: TabLayout.Tab, isSelected: Boolean) {
         val imageTabIcon = selectedTab.customView?.findViewById<ImageView>(R.id.image_tab_icon)
         if (isSelected) {
-            imageTabIcon?.setColorFilter(ContextCompat.getColor(this, R.color.home_tab_active))
+            imageTabIcon?.setColorFilter(ContextCompat
+                    .getColor(this, R.color.home_tab_active))
         } else {
-            imageTabIcon?.setColorFilter(ContextCompat.getColor(this, R.color.home_tab_inactive))
+            imageTabIcon?.setColorFilter(ContextCompat
+                    .getColor(this, R.color.home_tab_inactive))
         }
     }
 
@@ -231,7 +256,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
      * @param tabIcon
      * **/
     private fun getCustomView(tabIcon: Int): View? {
-        val customTab = LayoutInflater.from(this).inflate(R.layout.home_navigation_tab, null)
+        val customTab = LayoutInflater.from(this)
+                .inflate(R.layout.home_navigation_tab, null)
         val imageTabIcon = customTab.findViewById<ImageView>(R.id.image_tab_icon)
 
         imageTabIcon.setImageResource(tabIcon)
@@ -243,10 +269,22 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
      * @param tabIcon
      * **/
     private fun getCenterTabLayout(tabIcon: Int): View? {
-        var customTab = LayoutInflater.from(this).inflate(R.layout.home_navigation_center_tab, null)
+        val customTab = LayoutInflater.from(this)
+                .inflate(R.layout.home_navigation_center_tab, null)
         val imageTabIcon = customTab.findViewById<ImageView>(R.id.image_tab_icon)
 
         imageTabIcon.setImageResource(tabIcon)
         return customTab
+    }
+
+    companion object {
+        private const val WALLET_SCREEN = 0
+        private const val DEX_SCREEN = 1
+        private const val QUICK_ACTION_SCREEN = 2
+        private const val HISTORY_SCREEN = 3
+        private const val PROFILE_SCREEN = 4
+
+        private const val TAG_NOT_CENTRAL_TAB = "not_central_tab"
+        private const val TAG_CENTRAL_TAB = "central_tab"
     }
 }

@@ -19,7 +19,7 @@ import android.widget.Toast
 import com.mtramin.rxfingerprint.EncryptionMethod
 import com.mtramin.rxfingerprint.RxFingerprint
 import com.mtramin.rxfingerprint.data.FingerprintResult
-import com.wavesplatform.wallet.BlockchainApplication
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v1.util.RootUtil
@@ -110,7 +110,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                                 FingerprintResult.FAILED -> onFingerprintDoNotMatchTryAgain()
                                 FingerprintResult.HELP -> showHelpMessage(encryptionResult.message)
                                 FingerprintResult.AUTHENTICATED -> {
-                                    BlockchainApplication.getAccessManager()
+                                    App.getAccessManager()
                                             .setEncryptedPassCode(guid, encryptionResult.encrypted)
                                     onSuccessRecognizedFingerprint()
                                     fingerPrintDialogListener?.onSuccessRecognizedFingerprint()
@@ -125,7 +125,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         val guid = arguments.getString(KEY_INTENT_GUID, "")
         fingerprintDisposable = RxFingerprint.decrypt(EncryptionMethod.RSA, activity,
                 guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE,
-                BlockchainApplication.getAccessManager().getEncryptedPassCode(guid))
+                App.getAccessManager().getEncryptedPassCode(guid))
                 .subscribe(
                         { result ->
                             when (result?.result) {

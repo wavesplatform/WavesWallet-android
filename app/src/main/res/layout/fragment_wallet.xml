@@ -46,12 +46,4 @@
         android:overScrollMode="never"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <View
-        android:id="@+id/view_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@drawable/toolbar_dropshadow"
-        android:visibility="gone"
-        app:layout_anchor="@+id/appbar_layout"
-        app:layout_anchorGravity="bottom" />
 </android.support.design.widget.CoordinatorLayout>

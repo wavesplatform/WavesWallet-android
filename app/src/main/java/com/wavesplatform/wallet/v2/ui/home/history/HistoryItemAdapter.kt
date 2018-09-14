@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.history
 
 import com.chad.library.adapter.base.BaseSectionQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.google.common.base.Strings.isNullOrEmpty
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -15,7 +14,8 @@ import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
-class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicKeyAccountHelper) : BaseSectionQuickAdapter<HistoryItem, BaseViewHolder>(R.layout.recycle_item_history, R.layout.asset_header, null) {
+class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicKeyAccountHelper) :
+        BaseSectionQuickAdapter<HistoryItem, BaseViewHolder>(R.layout.recycle_item_history, R.layout.asset_header, null) {
 
     override fun convertHead(helper: BaseViewHolder?, item: HistoryItem?) {
         helper?.setText(R.id.text_header_text, item?.header)
@@ -25,9 +25,9 @@ class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicK
         helper?.itemView.notNull { view ->
             view.image_transaction.setImageDrawable(item?.t?.transactionType()?.icon())
 
-            var showTag = Constants.defaultAssets.any({
+            var showTag = Constants.defaultAssets.any {
                 it.assetId == item?.t?.assetId || item?.t?.assetId.isNullOrEmpty()
-            })
+            }
 
             item?.t?.transactionType().notNull {
                 try {
@@ -62,11 +62,11 @@ class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicK
                         view.text_transaction_value.text = item?.t?.alias
                     }
                     TransactionType.EXCHANGE_TYPE -> {
-                        var myOrder =
+                        val myOrder =
                                 if (item?.t?.order1?.sender == publicKeyAccountHelper.publicKeyAccount?.address) item?.t?.order1
                                 else item?.t?.order2
 
-                        var pairOrder =
+                        val pairOrder =
                                 if (item?.t?.order1?.sender != publicKeyAccountHelper.publicKeyAccount?.address) item?.t?.order1
                                 else item?.t?.order2
 
@@ -79,9 +79,9 @@ class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicK
                             view.text_transaction_value.text = "-${MoneyUtil.getScaledText(item?.t?.amount?.times(item?.t?.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                         }
 
-                        showTag = Constants.defaultAssets.any({
+                        showTag = Constants.defaultAssets.any {
                             it.assetId == pairOrder?.assetPair?.priceAssetObject?.assetId || pairOrder?.assetPair?.priceAssetObject?.assetId.isNullOrEmpty()
-                        })
+                        }
 
                         if (showTag) {
                             view.text_tag.visiable()
@@ -136,16 +136,13 @@ class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicK
                     view.text_tag.gone()
                     view.text_transaction_value.text = "${view.text_transaction_value.text} ${item?.t?.asset?.issueTransaction?.name}"
                 }
-            } else if (item?.t?.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || item?.t?.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
+            } else if (item.t?.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || item.t?.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
                 view.text_tag.gone()
                 view.text_tag_spam.visiable()
-                view.text_transaction_value.text = "${view.text_transaction_value.text} ${item?.t?.asset?.issueTransaction?.name}"
+                view.text_transaction_value.text = "${view.text_transaction_value.text} ${item.t?.asset?.issueTransaction?.name}"
             }
-
 
             view.text_transaction_value.makeTextHalfBold()
         }
-
     }
-
 }

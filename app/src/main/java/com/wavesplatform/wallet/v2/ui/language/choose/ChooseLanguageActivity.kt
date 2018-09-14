@@ -88,13 +88,13 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
                     .translationY(-(image_logo.y - dp2px(80)))
                     .setDuration(500)
                     .setStartDelay(500)
-                    .withEndAction({
+                    .withEndAction {
                         recycle_language.animate()
                                 .alpha(1f)
                                 .translationY(0f)
                                 .setDuration(500)
                                 .start()
-                    })
+                    }
                     .start()
         }
     }
@@ -105,10 +105,10 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
                     .translationY(dp2px(50).toFloat())
                     .alpha(0f)
                     .setDuration(400)
-                    .withEndAction({
+                    .withEndAction {
                         launchActivity<TutorialActivity>()
                         overridePendingTransition(0, 0)
-                    })
+                    }
                     .start()
         }
     }

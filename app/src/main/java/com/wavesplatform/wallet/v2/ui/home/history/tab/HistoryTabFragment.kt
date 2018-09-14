@@ -55,13 +55,15 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         const val leasing_active_now = "Active now"
         const val leasing_canceled = "Canceled"
 
+        const val TYPE = "type"
+
         /**
          * @return HistoryTabFragment instance
          * */
         fun newInstance(type: String, asset: AssetBalance?): HistoryTabFragment {
             val historyDateItemFragment = HistoryTabFragment()
             val bundle = Bundle()
-            bundle.putString("type", type)
+            bundle.putString(TYPE, type)
             bundle.putParcelable(HistoryFragment.BUNDLE_ASSET, asset)
             historyDateItemFragment.arguments = bundle
             return historyDateItemFragment
@@ -98,9 +100,9 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                             if (presenter.loadMoreCompleted) {
                                 presenter.loadMoreCompleted = false
                                 adapter.footerLayout.load_more_loading_view.visiable()
-                                runAsync({
+                                runAsync {
                                     presenter.loadMore(adapter.data.size)
-                                })
+                                }
                             }
                         }
                     } else {
@@ -110,12 +112,15 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
             }
         })
 
+        adapter.footerLayout.load_more_loading_view.visiable()
+        presenter.loadTransactions()
+
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val historyItem = adapter.getItem(position) as HistoryItem
             if (!historyItem.isHeader) {
                 val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
                 bottomSheetFragment.selectedItem = historyItem.t
-                bottomSheetFragment.historyType = arguments?.getString("type")
+                bottomSheetFragment.historyType = arguments?.getString(TYPE)
                 val data = adapter?.data as ArrayList<HistoryItem>
                 bottomSheetFragment.allItems = data.filter { !it.isHeader }.map { it.t }
 
@@ -146,11 +151,10 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         // stop over scroll
         nested_scroll_view.fling(0)
 
-        runDelayed(350, {
+        runDelayed(350) {
             adapter.addData(data)
-            adapter.footerLayout.load_more_loading_view.gone()
+            goneLoadMoreView()
             presenter.loadMoreCompleted = true
-        })
-
+        }
     }
 }

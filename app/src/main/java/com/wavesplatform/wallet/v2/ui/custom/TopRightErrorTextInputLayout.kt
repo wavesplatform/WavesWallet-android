@@ -24,14 +24,14 @@ class TopRightErrorTextInputLayout(context: Context, attrs: AttributeSet) : Text
         topRightAlignedErrorText.gravity = Gravity.END
         addView(topRightAlignedErrorText)
 
-        this.post({
-            topRightAlignedErrorText.post({
+        this.post {
+            topRightAlignedErrorText.post {
                 topRightAlignedErrorText.translationY = -this.height + topRightAlignedErrorText.height.toFloat() - pers.victor.ext.dp2px(3)
-            })
+            }
             if (childCount == 3) {
                 getChildAt(1).gone()
             }
-        })
+        }
     }
 
     override fun setError(error: CharSequence?) {

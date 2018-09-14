@@ -1,8 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.history.details
 
-import android.content.Context
 import android.support.v4.view.PagerAdapter
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.wallet.R
@@ -29,9 +27,9 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
         val transaction = mData[position]
         val layout = inflate(R.layout.history_details_layout, collection, false) as ViewGroup
 
-        var showTag = Constants.defaultAssets.any({
+        var showTag = Constants.defaultAssets.any {
             it.assetId == transaction.assetId || transaction.assetId.isNullOrEmpty()
-        })
+        }
 
         layout.image_history_type.setImageDrawable(transaction.transactionType().icon())
 

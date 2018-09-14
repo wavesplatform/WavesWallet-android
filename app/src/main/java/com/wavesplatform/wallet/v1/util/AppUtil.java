@@ -8,10 +8,10 @@ import android.hardware.Camera;
 import android.support.v7.app.AlertDialog;
 import android.view.MotionEvent;
 
+import com.wavesplatform.wallet.App;
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.v1.injection.Injector;
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom;
-import com.wavesplatform.wallet.v1.ui.launcher.LauncherActivity;
 
 import java.io.File;
 import java.security.Security;
@@ -35,7 +35,7 @@ public class AppUtil {
     }
 
     public void clearCredentialsAndRestart() {
-        prefs.removeGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID);
+        App.getAccessManager().setLastLoggedInGuid("");
         restartApp();
     }
 

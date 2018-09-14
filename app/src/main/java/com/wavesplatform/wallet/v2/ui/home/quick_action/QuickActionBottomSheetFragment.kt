@@ -36,4 +36,11 @@ class QuickActionBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
         return rootView
     }
+
+    companion object {
+
+        fun newInstance(): QuickActionBottomSheetFragment {
+            return QuickActionBottomSheetFragment()
+        }
+    }
 }

@@ -9,14 +9,16 @@ import android.text.TextUtils;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext;
 
-import org.apache.commons.lang3.*;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.inject.Inject;
 
 public class PrefsUtil {
 
     public static final String GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment";
+    @Deprecated
     public static final String GLOBAL_LOGGED_IN_GUID = "global_logged_in_wallet_guid";
+    public static final String GLOBAL_LAST_LOGGED_IN_GUID = "global_last_logged_in_wallet_guid"; // ex "global_logged_in_wallet_guid"
     public static final String GLOBAL_SCHEME_URL = "scheme_url";
     public static final String LIST_WALLET_GUIDS = "list_wallet_guid";
 
@@ -229,7 +231,7 @@ public class PrefsUtil {
     }
 
     public String getGuid() {
-        return getGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID, "");
+        return getGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, "");
     }
 
     public String getEnvironment() {
