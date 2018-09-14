@@ -47,6 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:rotation="180"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="16dp"
@@ -59,7 +60,6 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:el_duration="500"
-                app:el_expanded="true"
                 app:el_parallax="0.5">
 
                 <android.support.v7.widget.RecyclerView
@@ -96,6 +96,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:rotation="180"
                     android:layout_marginEnd="16dp"
                     app:srcCompat="@drawable/ic_arrowup_basic_300" />
             </RelativeLayout>
@@ -106,7 +107,6 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:el_duration="500"
-                app:el_expanded="true"
                 app:el_parallax="0.5">
 
                 <android.support.v7.widget.RecyclerView
