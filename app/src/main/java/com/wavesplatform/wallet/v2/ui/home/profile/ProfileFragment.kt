@@ -9,7 +9,7 @@ import android.support.v7.widget.AppCompatTextView
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.wallet.BlockchainApplication
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
@@ -78,13 +78,13 @@ class ProfileFragment : BaseFragment(), ProfileView {
             val alertDialog = AlertDialog.Builder(baseActivity).create()
             alertDialog.setTitle(getString(R.string.profile_general_delete_account_dialog_title))
             alertDialog.setMessage(getString(R.string.profile_general_delete_account_dialog_description))
-            if (BlockchainApplication.getAccessManager().isCurrentAccountBackupSkipped()) {
+            if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
                 alertDialog.setView(LayoutInflater.from(baseActivity)
                         .inflate(R.layout.delete_account_warning_layout, null))
             }
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                     getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->
-                BlockchainApplication.getAccessManager().deleteCurrentWavesWallet()
+                App.getAccessManager().deleteCurrentWavesWallet()
                 presenter.prefsUtil.logOut()
                 presenter.appUtil.restartApp()
                 dialog.dismiss()
@@ -103,7 +103,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         initFingerPrintControl()
 
 
-        if (BlockchainApplication.getAccessManager().isCurrentAccountBackupSkipped()) {
+        if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
             skip_backup_indicator.setBackgroundColor(ContextCompat
                     .getColor(context!!, R.color.error500))
             skip_backup_indicator_image.setImageDrawable(ContextCompat
@@ -123,7 +123,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     private fun initFingerPrintControl() {
         if (FingerprintAuthDialogFragment.isAvailable(context!!)) {
             fingerprint_switch.setOnCheckedChangeListener(null)
-            fingerprint_switch.isChecked = BlockchainApplication.getAccessManager().isUseFingerPrint()
+            fingerprint_switch.isChecked = App.getAccessManager().isUseFingerPrint()
             fingerprint_switch.setOnCheckedChangeListener { _, _ ->
                 launchActivity<EnterPassCodeActivity>(
                         requestCode = REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT) {
@@ -165,7 +165,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun logout() {
-        BlockchainApplication.getAccessManager().setCurrentAccount("")
+        App.getAccessManager().setLastLoggedInGuid("")
         activity?.finish()
         presenter.appUtil.restartApp()
         toast(getString(R.string.profile_general_logout))
@@ -177,7 +177,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
             REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    setFingerprint(BlockchainApplication.getAccessManager().getLoggedInGuid(),
+                    setFingerprint(App.getAccessManager().getLoggedInGuid(),
                             data!!.extras.getString(EnterPassCodeActivity.KEY_INTENT_PASS_CODE))
                 } else {
                     initFingerPrintControl()
@@ -190,6 +190,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
                     val password = data.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
                     launchActivity<CreatePassCodeActivity> {
                         putExtra(CreatePassCodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE, true)
+                        putExtra(EnterPassCodeActivity.KEY_INTENT_GUID,
+                                App.getAccessManager().getLoggedInGuid())
                         putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
                         putExtra(EnterPassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
                     }
@@ -199,8 +201,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun setFingerprint(guid: String, passCode: String) {
-        if (BlockchainApplication.getAccessManager().isUseFingerPrint()) {
-            BlockchainApplication.getAccessManager().setUseFingerPrint(false)
+        if (App.getAccessManager().isUseFingerPrint()) {
+            App.getAccessManager().setUseFingerPrint(false)
         } else {
             val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
             fingerprintDialog.isCancelable = false
@@ -208,8 +210,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
             fingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint() {
-                            BlockchainApplication.getAccessManager().setUseFingerPrint(
-                                    !BlockchainApplication.getAccessManager().isUseFingerPrint())
+                            App.getAccessManager().setUseFingerPrint(
+                                    !App.getAccessManager().isUseFingerPrint())
                             initFingerPrintControl()
                         }
 

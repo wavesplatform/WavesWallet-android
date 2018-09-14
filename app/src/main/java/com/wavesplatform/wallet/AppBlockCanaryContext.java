@@ -1,15 +1,11 @@
 package com.wavesplatform.wallet;
 
-import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.github.moduth.blockcanary.BlockCanaryContext;
-import com.github.moduth.blockcanary.internal.BlockInfo;
 
-import java.io.File;
-import java.util.LinkedList;
 import java.util.List;
 
 public class AppBlockCanaryContext extends BlockCanaryContext {
@@ -17,8 +13,8 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
     public String provideQualifier() {
         String qualifier = "";
         try {
-            PackageInfo info = BlockchainApplication.getAppContext().getPackageManager()
-                    .getPackageInfo(BlockchainApplication.getAppContext().getPackageName(), 0);
+            PackageInfo info = App.getAppContext().getPackageManager()
+                    .getPackageInfo(App.getAppContext().getPackageName(), 0);
             qualifier += info.versionCode + "_" + info.versionName + "_YYB";
         } catch (PackageManager.NameNotFoundException e) {
             Log.e("AppBlockCanaryContext", "provideQualifier exception", e);

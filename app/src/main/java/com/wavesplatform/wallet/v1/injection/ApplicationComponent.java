@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v1.injection;
 
-import com.wavesplatform.wallet.BlockchainApplication;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v1.util.AppUtil;
 import com.wavesplatform.wallet.v1.util.RxEventBus;

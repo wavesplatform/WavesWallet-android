@@ -3,7 +3,7 @@ package com.wavesplatform.wallet.v1.data.access;
 import android.content.Context;
 import android.util.Log;
 
-import com.wavesplatform.wallet.BlockchainApplication;
+import com.wavesplatform.wallet.App;
 import com.wavesplatform.wallet.v1.crypto.AESUtil;
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet;
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil;
@@ -69,7 +69,7 @@ public class DexAccessState {
 
     public Observable<String> validatePin(String pin) {
         return createValidateObservable(pin).flatMap(pwd ->
-                createPin(BlockchainApplication.getAccessManager().getLastLoggedInGuid(), pwd, pin)
+                createPin(App.getAccessManager().getLastLoggedInGuid(), pwd, pin)
                         .andThen(Observable.just(pwd))
         ).compose(RxUtil.applySchedulersToObservable());
     }
@@ -77,7 +77,7 @@ public class DexAccessState {
     private Observable<String> createValidateObservable(String passedPin) {
         int fails = prefs.getValue(PrefsUtil.KEY_PIN_FAILS, 0);
 
-        return pinStore.readPassword(BlockchainApplication.getAccessManager()
+        return pinStore.readPassword(App.getAccessManager()
                 .getLastLoggedInGuid(), passedPin, fails)
                 .map(value -> {
                     try {

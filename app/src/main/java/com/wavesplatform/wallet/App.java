@@ -50,10 +50,10 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import pers.victor.ext.Ext;
 
-public class BlockchainApplication extends DaggerApplication {
+public class App extends DaggerApplication {
 
     @Thunk
-    static final String TAG = BlockchainApplication.class.getSimpleName();
+    static final String TAG = App.class.getSimpleName();
     private static final String RX_ERROR_TAG = "RxJava Error";
     @Inject PrefsUtil mPrefsUtil;
     private static Context sContext;

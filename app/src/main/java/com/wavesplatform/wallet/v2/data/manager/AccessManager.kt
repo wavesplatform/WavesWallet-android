@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
-import com.wavesplatform.wallet.BlockchainApplication
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.crypto.AESUtil
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
@@ -22,14 +22,17 @@ import org.spongycastle.util.encoders.Hex
 import java.security.SecureRandom
 import java.util.*
 
+
 class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) {
 
     private val pinStore = PinStoreService()
     private var loggedInGuid: String = ""
+    private var wallet: WavesWallet? = null
+    private var activityCounter = 0
 
     fun validatePassCodeObservable(guid: String, passCode: String): Observable<String> {
         return readPassCodeObservable(
-                guid, passCode, BlockchainApplication.getAccessManager().getPassCodeInputFails())
+                guid, passCode, App.getAccessManager().getPassCodeInputFails())
                 .flatMap { password ->
                     writePassCodeObservable(guid, password, passCode)
                             .andThen(Observable.just<String>(password))
@@ -92,13 +95,13 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
 
     fun storeWalletData(seed: String, password: String, walletName: String, skipBackup: Boolean): String {
         try {
-            val wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
+            wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
             val guid = UUID.randomUUID().toString()
             prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, guid)
             prefs.addGlobalListValue(PrefsUtil.LIST_WALLET_GUIDS, guid)
-            prefs.setValue(PrefsUtil.KEY_PUB_KEY, wallet.publicKeyStr)
+            prefs.setValue(PrefsUtil.KEY_PUB_KEY, wallet!!.publicKeyStr)
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
-            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet.getEncryptedData(password))
+            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet!!.getEncryptedData(password))
             if (skipBackup) {
                 prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, true)
             }
@@ -154,9 +157,22 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
         return prefs.guid
     }
 
-    fun setCurrentAccount(guid: String) {
+    fun setLastLoggedInGuid(guid: String) {
         prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, guid)
         loggedInGuid = guid
+    }
+
+    fun resetWallet() {
+        wallet = null
+    }
+
+    fun setWallet(guid: String, password: String) {
+        wallet = WavesWallet(getWalletData(guid), password)
+        setLastLoggedInGuid(guid)
+    }
+
+    fun getWallet(): WavesWallet? {
+        return wallet
     }
 
     fun createAddressBookCurrentAccount(): AddressBookUser? {
@@ -185,7 +201,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
 
 
     fun deleteWavesWallet(address: String) {
-        val searchWalletGuid = BlockchainApplication.getAccessManager().findGuidBy(address)
+        val searchWalletGuid = App.getAccessManager().findGuidBy(address)
 
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_PUB_KEY)
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_WALLET_NAME)
@@ -214,13 +230,17 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
     fun getWalletData(guid: String): String {
         return if (TextUtils.isEmpty(guid)) {
             ""
-        } else prefs.getGlobalValue(guid + PrefsUtil.KEY_ENCRYPTED_WALLET, "")
+        } else {
+            prefs.getGlobalValue(guid + PrefsUtil.KEY_ENCRYPTED_WALLET, "")
+        }
     }
 
     fun getWalletName(guid: String): String {
         return if (TextUtils.isEmpty(guid)) {
             ""
-        } else prefs.getGlobalValue(guid + PrefsUtil.KEY_WALLET_NAME, "")
+        } else {
+            prefs.getGlobalValue(guid + PrefsUtil.KEY_WALLET_NAME, "")
+        }
     }
 
     fun getWalletAddress(guid: String): String {
@@ -235,7 +255,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
         if (TextUtils.isEmpty(address)) {
             return ""
         }
-        return prefs.getValue(BlockchainApplication.getAccessManager().findGuidBy(address),
+        return prefs.getValue(App.getAccessManager().findGuidBy(address),
                 PrefsUtil.KEY_PUB_KEY, "")
     }
 
@@ -290,5 +310,28 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
         val intent = Intent(context, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
+    }
+
+    fun addActivity() {
+        activityCounter++
+    }
+
+    fun removeActivity() {
+        activityCounter--
+        if (wallet != null) {
+            val timer = Timer()
+            val timerTask = object : TimerTask() {
+                override fun run() {
+                    if (activityCounter == 0) {
+                        resetWallet()
+                    }
+                }
+            }
+            timer.schedule(timerTask, SESSION_LIFE_AFTER_MINIMIZE)
+        }
+    }
+
+    companion object {
+        const val SESSION_LIFE_AFTER_MINIMIZE = 5000L
     }
 }

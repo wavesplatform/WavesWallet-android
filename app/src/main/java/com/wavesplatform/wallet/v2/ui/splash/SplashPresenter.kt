@@ -4,7 +4,7 @@ import android.content.Intent
 import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.wallet.BlockchainApplication
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
@@ -31,7 +31,7 @@ class SplashPresenter @Inject constructor(val keyAccountHelper: PublicKeyAccount
             }
         }
 
-        if (TextUtils.isEmpty(BlockchainApplication.getAccessManager().getLoggedInGuid())) {
+        if (TextUtils.isEmpty(App.getAccessManager().getLoggedInGuid())) {
             viewState.onNotLoggedIn()
         } else {
             val pubKey = prefsUtil.getValue(PrefsUtil.KEY_PUB_KEY, "")

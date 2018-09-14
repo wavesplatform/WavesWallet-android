@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.enter
 
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.BlockchainApplication
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.data.auth.IncorrectPinException
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -15,24 +15,24 @@ class EnterPassCodePresenter @Inject constructor() : BasePresenter<EnterPasscode
     lateinit var step: CreatePassCodeActivity.CreatePassCodeStep
 
     fun validate(guid: String, passCode: String) {
-        BlockchainApplication
+        App
                 .getAccessManager()
                 .validatePassCodeObservable(guid, passCode)
                 .subscribe({ password ->
-                    BlockchainApplication.getAccessManager().resetPassCodeInputFails()
+                    App.getAccessManager().resetPassCodeInputFails()
                     viewState.onSuccessValidatePassCode(password, passCode)
                 }, { error ->
                     if (error !is IncorrectPinException) {
                         Log.e(javaClass.simpleName, "Failed to validate pin", error)
                     } else {
-                        BlockchainApplication.getAccessManager().incrementPassCodeInputFails()
+                        App.getAccessManager().incrementPassCodeInputFails()
                     }
                     viewState.onFailValidatePassCode(overMaxWrongPassCodes(), error.message)
                 })
     }
 
     private fun overMaxWrongPassCodes(): Boolean {
-        return BlockchainApplication.getAccessManager()
+        return App.getAccessManager()
                 .getPassCodeInputFails() >= MAX_AVAILABLE_TIMES
     }
 

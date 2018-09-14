@@ -10,7 +10,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.vicpin.krealmextensions.queryAllAsync
-import com.wavesplatform.wallet.BlockchainApplication
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -47,7 +47,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, icon = R.drawable.ic_toolbar_back_black)
 
-        val user = BlockchainApplication.getAccessManager().createAddressBookCurrentAccount()
+        val user = App.getAccessManager().createAddressBookCurrentAccount()
         text_address.text = user!!.address
         Glide.with(image_avatar.context)
                 .load(Identicon.create(

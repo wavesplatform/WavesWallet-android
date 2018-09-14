@@ -8,7 +8,7 @@ import android.hardware.Camera;
 import android.support.v7.app.AlertDialog;
 import android.view.MotionEvent;
 
-import com.wavesplatform.wallet.BlockchainApplication;
+import com.wavesplatform.wallet.App;
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.v1.injection.Injector;
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom;
@@ -35,7 +35,7 @@ public class AppUtil {
     }
 
     public void clearCredentialsAndRestart() {
-        BlockchainApplication.getAccessManager().setCurrentAccount("");
+        App.getAccessManager().setLastLoggedInGuid("");
         restartApp();
     }
 

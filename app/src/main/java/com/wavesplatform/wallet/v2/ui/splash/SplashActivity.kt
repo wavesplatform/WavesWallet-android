@@ -4,10 +4,9 @@ import android.os.Bundle
 import android.text.TextUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.wallet.BlockchainApplication
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
@@ -20,12 +19,8 @@ class SplashActivity : BaseActivity(), SplashView {
     override fun onNotLoggedIn() {
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
         if (preferencesHelper.isTutorialPassed()) {
-
-            if (!TextUtils.isEmpty(BlockchainApplication.getAccessManager().getLastLoggedInGuid())
-                    && TextUtils.isEmpty(BlockchainApplication.getAccessManager().getLoggedInGuid())) {
-                launchActivity<EnterPassCodeActivity>() {
-                    putExtra(EnterPassCodeActivity.KEY_INTENT_PROCESS_LOGIN, true)
-                }
+            if (!TextUtils.isEmpty(App.getAccessManager().getLastLoggedInGuid())) {
+                launchActivity<com.wavesplatform.wallet.v2.ui.home.MainActivity>(clear = true)
             } else {
                 launchActivity<WelcomeActivity>()
             }
@@ -52,6 +47,8 @@ class SplashActivity : BaseActivity(), SplashView {
     fun providePresenter(): SplashPresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_splash
+
+    override fun askPassCode() = false
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {

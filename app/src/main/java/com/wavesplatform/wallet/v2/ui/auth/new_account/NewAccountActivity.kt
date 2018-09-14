@@ -9,7 +9,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.wavesplatform.wallet.BlockchainApplication
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -49,7 +49,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         button_create_account.click {
-            if (BlockchainApplication.getAccessManager()
+            if (App.getAccessManager()
                             .isAccountNameExist(edit_account_name.text.toString())) {
                 toast(getString(R.string.new_account_exist_error))
             } else {

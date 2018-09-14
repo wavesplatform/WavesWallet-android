@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.wallet.BlockchainApplication
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.Constants
@@ -128,21 +128,21 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
     }
 
     private fun writePassword(passCode: String) {
-        val guid = BlockchainApplication.getAccessManager().getLoggedInGuid()
+        val guid = App.getAccessManager().getLoggedInGuid()
         try {
             val oldWallet = WavesWallet(
-                    BlockchainApplication.getAccessManager()
+                    App.getAccessManager()
                             .getCurrentWavesWalletEncryptedData(),
                     edit_old_password.text.toString()
             )
             val newWallet = WavesWallet(oldWallet.seed)
             val newPassWord = edit_confirm_password.text.toString()
 
-            BlockchainApplication.getAccessManager().storePassword(
+            App.getAccessManager().storePassword(
                     guid, newWallet.publicKeyStr,
                     newWallet.getEncryptedData(newPassWord))
 
-            BlockchainApplication
+            App
                     .getAccessManager()
                     .writePassCodeObservable(guid, newPassWord, passCode)
                     .subscribe({
