@@ -121,13 +121,16 @@ class NodeDataManager @Inject constructor() : DataManager() {
                 })
     }
 
-    fun createAlias(createAliasRequest: AliasRequest): Observable<AliasRequest> {
-        createAliasRequest.signature = "" // TODO: Need to sign request
-        createAliasRequest.senderPublicKey = publicKeyAccountHelper.publicKeyAccount?.publicKeyStr
-        createAliasRequest.type = 10
+    fun createAlias(createAliasRequest: AliasRequest, privateKey: ByteArray, publicKeyStr: String): Observable<Alias> {
+        createAliasRequest.senderPublicKey = publicKeyStr
         createAliasRequest.fee = Constants.WAVES_FEE
         createAliasRequest.timestamp = currentTimeMillis
+        createAliasRequest.sign(privateKey)
         return nodeService.createAlias(createAliasRequest)
+                .map({
+                    it.address = publicKeyAccountHelper.publicKeyAccount?.address
+                    return@map it
+                })
     }
 
     fun loadTransactions(): Observable<Pair<List<Transaction>?, List<Transaction>?>> {

@@ -23,7 +23,9 @@ object Constants {
     val SUPPORT_SITE = "https://support.wavesplatform.com/"
     val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
 
-    val WAVES_FEE = 10000
+    val WAVES_FEE = 100000L
+    val VERSION = 2
+    val ADDRESS_SCHEME = 'W'
 
     val SELL_ORDER_TYPE = "sell"
     val BUY_ORDER_TYPE = "buy"

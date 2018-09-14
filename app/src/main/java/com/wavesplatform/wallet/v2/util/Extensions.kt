@@ -42,8 +42,11 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.google.common.primitives.Bytes
+import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.color.b
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import kotlinx.android.synthetic.main.dialog_security_centre.*
@@ -69,6 +72,9 @@ fun Context.notAvailable() {
     toast(getString(R.string.common_msg_in_development))
 }
 
+fun ByteArray.arrayWithSize(): ByteArray {
+    return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
+}
 
 fun Activity.openUrlWithChromeTab(url: String) {
     SimpleChromeCustomTabs.getInstance()

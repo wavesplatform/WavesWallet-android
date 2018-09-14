@@ -21,10 +21,10 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
                 }))
     }
 
-    fun createAlias(alias: String) {
+    fun createAlias(alias: String, privateKey: ByteArray, publicKeyStr: String) {
         aliasRequest.alias = alias
 
-        addSubscription(nodeDataManager.createAlias(aliasRequest)
+        addSubscription(nodeDataManager.createAlias(aliasRequest, privateKey, publicKeyStr)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     viewState.successCreateAlias(it)
