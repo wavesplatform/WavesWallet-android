@@ -65,9 +65,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         val historyFragment = HistoryFragment.newInstance()
         val profileFragment = ProfileFragment.newInstance()
 
-        val elevationListener = object : OnElevationChangeListener {
-            override fun onChange(elevate: Boolean) {
-                enableElevation(elevate)
+        val elevationListener = object : OnElevationAppBarChangeListener {
+            override fun onChange(elevateEnable: Boolean) {
+                enableElevation(elevateEnable)
             }
         }
 
@@ -302,7 +302,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         private const val TAG_CENTRAL_TAB = "central_tab"
     }
 
-    interface OnElevationChangeListener {
-        fun onChange(elevate: Boolean)
+    interface OnElevationAppBarChangeListener {
+        fun onChange(elevateEnable: Boolean)
     }
 }

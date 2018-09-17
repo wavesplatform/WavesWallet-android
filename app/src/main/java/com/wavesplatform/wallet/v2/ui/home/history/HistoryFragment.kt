@@ -17,7 +17,7 @@ class HistoryFragment : BaseFragment(), HistoryView {
     @Inject
     @InjectPresenter
     lateinit var presenter: HistoryPresenter
-    private var onElevationChangeListener: MainActivity.OnElevationChangeListener? = null
+    private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
     @ProvidePresenter
     fun providePresenter(): HistoryPresenter = presenter
@@ -50,13 +50,13 @@ class HistoryFragment : BaseFragment(), HistoryView {
         stl_history.setViewPager(viewpager_history)
         stl_history.currentTab = 0
         appbar_layout.addOnOffsetChangedListener { _, verticalOffset ->
-            onElevationChangeListener.notNull {
-                onElevationChangeListener?.onChange(verticalOffset == 0)
+            onElevationAppBarChangeListener.notNull {
+                onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
             }
         }
     }
 
-    fun setOnElevationChangeListener(listener: MainActivity.OnElevationChangeListener) {
-        this.onElevationChangeListener = listener
+    fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
+        this.onElevationAppBarChangeListener = listener
     }
 }

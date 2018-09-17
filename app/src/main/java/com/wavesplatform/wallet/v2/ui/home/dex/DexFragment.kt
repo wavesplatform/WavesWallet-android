@@ -35,7 +35,7 @@ class DexFragment : BaseFragment(), DexView {
     @Inject
     lateinit var adapter: DexAdapter
     var menu: Menu? = null
-    private var onElevationChangeListener: MainActivity.OnElevationChangeListener? = null
+    private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
 
     override fun configLayoutRes(): Int = R.layout.fragment_dex_new
@@ -64,8 +64,8 @@ class DexFragment : BaseFragment(), DexView {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             root_scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-                onElevationChangeListener.notNull {
-                    onElevationChangeListener?.onChange(scrollY == 0)
+                onElevationAppBarChangeListener.notNull {
+                    onElevationAppBarChangeListener?.onChange(scrollY == 0)
                 }
             }
         }
@@ -104,8 +104,8 @@ class DexFragment : BaseFragment(), DexView {
         }
     }
 
-    fun setOnElevationChangeListener(listener: MainActivity.OnElevationChangeListener) {
-        this.onElevationChangeListener = listener
+    fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
+        this.onElevationAppBarChangeListener = listener
     }
 
     override fun afterFailedLoadMarkets() {

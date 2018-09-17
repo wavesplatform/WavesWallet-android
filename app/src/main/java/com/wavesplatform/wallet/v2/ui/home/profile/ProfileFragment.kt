@@ -46,7 +46,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @Inject
     lateinit var nodeDataManager: NodeDataManager
     var subscriptions: CompositeDisposable = CompositeDisposable()
-    private var onElevationChangeListener: MainActivity.OnElevationChangeListener? = null
+    private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
 
     @ProvidePresenter
@@ -113,8 +113,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             root_scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-                onElevationChangeListener.notNull {
-                    onElevationChangeListener?.onChange(scrollY == 0)
+                onElevationAppBarChangeListener.notNull {
+                    onElevationAppBarChangeListener?.onChange(scrollY == 0)
                 }
             }
         }
@@ -242,8 +242,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
     }
 
-    fun setOnElevationChangeListener(listener: MainActivity.OnElevationChangeListener) {
-        this.onElevationChangeListener = listener
+    fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
+        this.onElevationAppBarChangeListener = listener
     }
 
     companion object {

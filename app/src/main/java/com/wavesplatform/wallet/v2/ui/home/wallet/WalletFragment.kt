@@ -17,7 +17,7 @@ class WalletFragment : BaseFragment(), WalletView {
     @InjectPresenter
     lateinit var presenter: WalletPresenter
     private lateinit var adapter: WalletFragmentPageAdapter
-    private var onElevationChangeListener: MainActivity.OnElevationChangeListener? = null
+    private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
     @ProvidePresenter
     fun providePresenter(): WalletPresenter = presenter
@@ -41,8 +41,8 @@ class WalletFragment : BaseFragment(), WalletView {
         setupUI()
     }
 
-    fun setOnElevationChangeListener(listener: MainActivity.OnElevationChangeListener) {
-        this.onElevationChangeListener = listener
+    fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
+        this.onElevationAppBarChangeListener = listener
     }
 
     private fun setupUI() {
@@ -50,8 +50,8 @@ class WalletFragment : BaseFragment(), WalletView {
         stl_wallet.setViewPager(viewpager_wallet)
         stl_wallet.currentTab = 0
         appbar_layout.addOnOffsetChangedListener { _, verticalOffset ->
-            onElevationChangeListener.notNull {
-                onElevationChangeListener?.onChange(verticalOffset == 0)
+            onElevationAppBarChangeListener.notNull {
+                onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
             }
         }
     }
