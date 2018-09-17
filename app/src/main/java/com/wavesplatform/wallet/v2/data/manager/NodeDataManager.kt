@@ -4,6 +4,7 @@ import com.vicpin.krealmextensions.deleteAll
 import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.payload.TransactionsInfo
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v2.data.Constants
@@ -119,14 +120,17 @@ class NodeDataManager @Inject constructor() : DataManager() {
                 }
     }
 
-    fun createAlias(createAliasRequest: AliasRequest, privateKey: ByteArray, publicKeyStr: String): Observable<Alias> {
-        createAliasRequest.senderPublicKey = publicKeyStr
+    fun createAlias(createAliasRequest: AliasRequest): Observable<Alias> {
+        createAliasRequest.senderPublicKey = App.getAccessManager().getWallet()?.publicKeyStr
         createAliasRequest.fee = Constants.WAVES_FEE
         createAliasRequest.timestamp = currentTimeMillis
-        createAliasRequest.sign(privateKey)
+        App.getAccessManager().getWallet()?.privateKey.notNull {
+            createAliasRequest.sign(it)
+        }
         return nodeService.createAlias(createAliasRequest)
                 .map({
                     it.address = publicKeyAccountHelper.publicKeyAccount?.address
+                    it.save()
                     return@map it
                 })
     }

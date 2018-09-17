@@ -46,8 +46,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
     lateinit var presenter: ProfilePresenter
     @Inject
     lateinit var nodeDataManager: NodeDataManager
-    var subscriptions: CompositeDisposable = CompositeDisposable()
-
 
     @ProvidePresenter
     fun providePresenter(): ProfilePresenter = presenter
@@ -130,8 +128,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
 
         textView_version.text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
-        subscriptions.add(nodeDataManager.currentBlocksHeight()
-                .subscribe { textView_height.text = it.height.toString() })
+        textView_height.text = presenter.preferenceHelper.currentBlocksHeight.toString()
     }
 
     private fun sendFeedbackToSupport() {
@@ -174,11 +171,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onPause() {
         SimpleChromeCustomTabs.getInstance().disconnectFrom(baseActivity)
         super.onPause()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        subscriptions.clear()
     }
 
     private fun setCurrentLangFlag() {

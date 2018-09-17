@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.wavesplatform.wallet.BlockchainApplication
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.Constants
@@ -91,24 +90,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                 }))
 
         button_create_alias.click {
-            launchActivity<EnterPassCodeActivity>(
-                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) { }
-//            presenter.createAlias(edit_new_alias_symbol.text.toString(), wallet.privateKey)
-        }
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
-                if (resultCode == Constants.RESULT_OK) {
-                    val password = data!!.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
-                    val wallet = WavesWallet(BlockchainApplication.getAccessManager()
-                            .getCurrentWavesWalletEncryptedData(), password)
-                    presenter.createAlias(edit_new_alias_symbol.text.toString(), wallet.privateKey, wallet.publicKeyStr)
-                }
-            }
+            presenter.createAlias(edit_new_alias_symbol.text.toString())
         }
     }
 
