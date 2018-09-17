@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatEditText
 import android.text.InputType
 import android.text.TextUtils
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
@@ -41,6 +42,9 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     override fun configLayoutRes() = R.layout.activity_enter_passcode
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
+                icon = R.drawable.ic_toolbar_back_black)
+
         text_use_acc_password.click {
             val guid = getGuid()
             if (TextUtils.isEmpty(guid)) {

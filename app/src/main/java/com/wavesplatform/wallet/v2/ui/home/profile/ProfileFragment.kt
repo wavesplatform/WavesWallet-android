@@ -107,19 +107,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         initFingerPrintControl()
 
-
-        if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
-            skip_backup_indicator.setBackgroundColor(ContextCompat
-                    .getColor(context!!, R.color.error500))
-            skip_backup_indicator_image.setImageDrawable(ContextCompat
-                    .getDrawable(context!!, R.drawable.ic_info_error_500))
-        } else {
-            skip_backup_indicator.setBackgroundColor(ContextCompat
-                    .getColor(context!!, R.color.success400))
-            skip_backup_indicator_image.setImageDrawable(ContextCompat
-                    .getDrawable(context!!, R.drawable.ic_check_18_success_400))
-        }
-
         textView_version.text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
         subscriptions.add(nodeDataManager.currentBlocksHeight()
                 .subscribe { textView_height.text = it.height.toString() })
@@ -131,6 +118,25 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 }
             }
         }
+    }
+
+    private fun checkBackUp() {
+        if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
+            skip_backup_indicator.setBackgroundColor(ContextCompat
+                    .getColor(context!!, R.color.error500))
+            skip_backup_indicator_image.setImageDrawable(ContextCompat
+                    .getDrawable(context!!, R.drawable.ic_info_error_500))
+        } else {
+            skip_backup_indicator.setBackgroundColor(ContextCompat
+                    .getColor(context!!, R.color.success400))
+            skip_backup_indicator_image.setImageDrawable(ContextCompat
+                    .getDrawable(context!!, R.drawable.ic_check_18_success_400))
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        checkBackUp()
     }
 
     private fun initFingerPrintControl() {

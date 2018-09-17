@@ -11,7 +11,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -94,8 +94,9 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
                         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
                             launchActivity<CreatePassCodeActivity>(options = intent.extras)
                         } else {
-                            App.getAccessManager().setCurrentAccountBackupSkipped()
-                            launchActivity<MainActivity> { }
+                            App.getAccessManager().setCurrentAccountBackupDone()
+                            setResult(Constants.RESULT_OK)
+                            finish()
                         }
                     }
                 } else {
