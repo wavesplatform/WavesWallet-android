@@ -109,7 +109,7 @@ public class MarketsActivity extends BaseAuthActivity implements MarketsViewMode
                 show.setVisible(false);
                 hide.setVisible(true);
                 mMarketsAdapter.setShowUnVerifiedAssets(true);
-                mMarketsAdapter.setNewData(mMarketsAdapter.allData);
+                mMarketsAdapter.setNewData(new ArrayList<>(mMarketsAdapter.allData));
                 mMarketsAdapter.currentData = mMarketsAdapter.allData;
             }, 150);
             return true;
