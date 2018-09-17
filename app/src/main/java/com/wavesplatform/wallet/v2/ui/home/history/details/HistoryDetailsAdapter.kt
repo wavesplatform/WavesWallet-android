@@ -32,6 +32,7 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
         }
 
         layout.image_history_type.setImageDrawable(transaction.transactionType().icon())
+        layout.text_amount_value_in_dollar.gone()
 
         when (transaction.transactionType()) {
             TransactionType.SENT_TYPE -> {
@@ -67,7 +68,7 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                         if (transaction.order1?.sender != publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
                         else transaction.order2
 
-
+                layout.text_amount_value_in_dollar.visiable()
                 if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
                     layout.text_amount_value_in_dollar.text = "-${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.issueTransaction?.name}"
                     layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"

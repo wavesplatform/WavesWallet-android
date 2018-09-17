@@ -49,7 +49,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view,  true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         recycle_favorite_assets.layoutManager = LinearLayoutManager(this)
         recycle_favorite_assets.adapter = adapterFavorites

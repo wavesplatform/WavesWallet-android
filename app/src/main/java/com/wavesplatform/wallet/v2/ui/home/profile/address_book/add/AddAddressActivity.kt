@@ -1,11 +1,14 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.address_book.add
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.onDrawableClickListener
@@ -16,9 +19,15 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.R.id.button_save
 import com.wavesplatform.wallet.R.id.edit_address
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
+import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
+import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
+import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_add_address.*
 import pers.victor.ext.addTextChangedListener
@@ -47,7 +56,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.add_address_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view,  true, getString(R.string.add_address_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         // TODO: set Text before if need
 
@@ -61,7 +70,10 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
                         if (edit_address.tag == R.drawable.ic_deladdress_24_error_400) {
                             edit_address.setText("")
                         } else if (edit_address.tag == R.drawable.ic_qrcode_24_basic_500) {
-                            toast("Open scan QR code")
+                            IntentIntegrator(this@AddAddressActivity).setRequestCode(ScanSeedFragment.REQUEST_SCAN_QR_CODE)
+                                    .setOrientationLocked(true)
+                                    .setCaptureActivity(QrCodeScannerActivity::class.java)
+                                    .initiateScan()
                         }
                     }
                 }
@@ -127,4 +139,18 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
         button_save.isEnabled = presenter.isAllFieldsValid()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val result = IntentIntegrator.parseActivityResult(resultCode, data)
+                    result.contents.notNull {
+                        edit_address.setText(it.trim())
+                    }
+                }
+
+            }
+        }
+    }
 }

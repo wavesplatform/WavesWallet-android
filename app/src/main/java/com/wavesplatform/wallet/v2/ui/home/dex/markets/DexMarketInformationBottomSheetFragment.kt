@@ -27,10 +27,10 @@ class DexMarketInformationBottomSheetFragment : BaseBottomSheetDialogFragment() 
         rootView.text_price_asset_value.text = market?.priceAsset
 
         rootView.image_copy_amount_asset.click {
-            rootView.text_amount_asset_value.copyToClipboard(it, R.drawable.ic_copy_18_submit_400)
+            it.copyToClipboard(rootView.text_amount_asset_value.text.toString(), R.drawable.ic_copy_18_submit_400)
         }
         rootView.image_copy_price_asset.click {
-            rootView.text_price_asset_value.copyToClipboard(it, R.drawable.ic_copy_18_submit_400)
+            it.copyToClipboard(rootView.text_price_asset_value.text.toString(), R.drawable.ic_copy_18_submit_400)
         }
 
         return rootView

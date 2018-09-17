@@ -1,8 +1,10 @@
 package com.wavesplatform.wallet.v2.data.manager
 
+import com.vicpin.krealmextensions.deleteAll
 import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.payload.TransactionsInfo
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v2.data.Constants
@@ -64,7 +66,11 @@ class NodeDataManager @Inject constructor() : DataManager() {
                         spam.add(SpamAsset(scanner.nextLine().split(",")[0]))
                     }
                     scanner.close()
+
+                    // clear old spam list and save new
+                    deleteAll<SpamAsset>()
                     spam.saveAll()
+
                     return@map spam
                 }
                 .flatMap { spamAssets ->
@@ -114,13 +120,19 @@ class NodeDataManager @Inject constructor() : DataManager() {
                 }
     }
 
-    fun createAlias(createAliasRequest: AliasRequest): Observable<AliasRequest> {
-        createAliasRequest.signature = "" // TODO: Need to sign request
-        createAliasRequest.senderPublicKey = publicKeyAccountHelper.publicKeyAccount?.publicKeyStr
-        createAliasRequest.type = 10
+    fun createAlias(createAliasRequest: AliasRequest): Observable<Alias> {
+        createAliasRequest.senderPublicKey = App.getAccessManager().getWallet()?.publicKeyStr
         createAliasRequest.fee = Constants.WAVES_FEE
         createAliasRequest.timestamp = currentTimeMillis
+        App.getAccessManager().getWallet()?.privateKey.notNull {
+            createAliasRequest.sign(it)
+        }
         return nodeService.createAlias(createAliasRequest)
+                .map({
+                    it.address = publicKeyAccountHelper.publicKeyAccount?.address
+                    it.save()
+                    return@map it
+                })
     }
 
     fun loadTransactions(): Observable<Pair<List<Transaction>?, List<Transaction>?>> {

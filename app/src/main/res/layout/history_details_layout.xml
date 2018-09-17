@@ -64,5 +64,5 @@
         android:text="≈ 00 000.00 US Dollar"
         android:textColor="@color/disabled500"
         android:textSize="12sp"
-        android:visibility="visible" />
+        android:visibility="gone" />
 </LinearLayout>

@@ -6,12 +6,8 @@ import com.wavesplatform.wallet.v1.request.IssueTransactionRequest
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.AliasesResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalances
-import com.wavesplatform.wallet.v2.data.model.remote.response.Height
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import io.reactivex.Observable
-import io.reactivex.Single
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -41,7 +37,7 @@ interface NodeService {
     fun broadcastReissue(@Body tx: ReissueTransactionRequest): Observable<ReissueTransactionRequest>
 
     @POST("transactions/broadcast")
-    fun createAlias(@Body createAliasRequest: AliasRequest): Observable<AliasRequest>
+    fun createAlias(@Body createAliasRequest: AliasRequest): Observable<Alias>
 
     @GET("transactions/unconfirmed")
     fun unconfirmedTransactions(): Observable<List<Transaction>>

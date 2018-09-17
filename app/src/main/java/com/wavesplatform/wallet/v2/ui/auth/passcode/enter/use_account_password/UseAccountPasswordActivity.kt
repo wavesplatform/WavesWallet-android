@@ -42,7 +42,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
+        setupToolbar(toolbar_view,  true,
                 icon = R.drawable.ic_toolbar_back_black)
         if (intent.hasExtra(EnterPassCodeActivity.KEY_INTENT_GUID)) {
             guid = intent.extras.getString(EnterPassCodeActivity.KEY_INTENT_GUID)

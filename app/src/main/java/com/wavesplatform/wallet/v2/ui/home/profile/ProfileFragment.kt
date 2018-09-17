@@ -36,6 +36,11 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import pers.victor.ext.toast
 import javax.inject.Inject
+import android.content.ActivityNotFoundException
+import android.net.Uri
+import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
+
 
 
 class ProfileFragment : BaseFragment(), ProfileView {
@@ -78,6 +83,15 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
         card_network.click {
             launchActivity<NetworkActivity> { }
+        }
+        card_support.click {
+            openUrlWithChromeTab(Constants.SUPPORT_SITE)
+        }
+        card_rate_app.click {
+            openAppInPlayMarket()
+        }
+        card_feedback.click {
+            sendFeedbackToSupport()
         }
         button_delete_account.click {
             val alertDialog = AlertDialog.Builder(baseActivity).create()
@@ -139,6 +153,22 @@ class ProfileFragment : BaseFragment(), ProfileView {
         checkBackUp()
     }
 
+    private fun sendFeedbackToSupport() {
+        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", Constants.SUPPORT_EMAIL, null))
+        startActivity(Intent.createChooser(emailIntent, getString(R.string.common_feedback_title)))
+    }
+
+    private fun openAppInPlayMarket() {
+        val uri = Uri.parse("market://details?id=" + Constants.PRODUCATION_PACKAGE_NAME)
+        val myAppLinkToMarket = Intent(Intent.ACTION_VIEW, uri)
+        try {
+            startActivity(myAppLinkToMarket)
+        } catch (e: ActivityNotFoundException) {
+            toast(getString(R.string.common_market_error))
+        }
+    }
+
     private fun initFingerPrintControl() {
         if (FingerprintAuthDialogFragment.isAvailable(context!!)) {
             fingerprint_switch.setOnCheckedChangeListener(null)
@@ -157,11 +187,12 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onResume() {
         super.onResume()
         setCurrentLangFlag()
+        SimpleChromeCustomTabs.getInstance().connectTo(baseActivity)
     }
 
     override fun onPause() {
+        SimpleChromeCustomTabs.getInstance().disconnectFrom(baseActivity)
         super.onPause()
-        subscriptions.clear()
     }
 
     private fun setCurrentLangFlag() {

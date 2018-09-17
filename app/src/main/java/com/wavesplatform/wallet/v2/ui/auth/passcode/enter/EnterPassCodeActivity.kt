@@ -102,8 +102,9 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                     App.getAccessManager().setLastLoggedInGuid("")
                     launchActivity<WelcomeActivity>()
                 }
+
             } else {
-                setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
+                setupToolbar(toolbar_view, true,
                         icon = R.drawable.ic_toolbar_back_black)
             }
         }

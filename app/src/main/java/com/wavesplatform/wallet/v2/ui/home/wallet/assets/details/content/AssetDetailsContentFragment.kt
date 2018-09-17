@@ -58,11 +58,11 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         view_pager_transaction_history.pageMargin = dp2px(7)
 
         image_copy_issuer.click {
-            text_view_issuer_value.copyToClipboard(it)
+            it.copyToClipboard(text_view_issuer_value.text.toString())
         }
 
         image_copy_id.click {
-            text_view_id_value.copyToClipboard(it)
+            it.copyToClipboard(text_view_id_value.text.toString())
         }
 
         card_burn.click {

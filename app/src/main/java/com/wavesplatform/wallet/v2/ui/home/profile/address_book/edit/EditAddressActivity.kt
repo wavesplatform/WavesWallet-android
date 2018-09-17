@@ -30,20 +30,6 @@ import javax.inject.Inject
 
 
 class EditAddressActivity : BaseActivity(), EditAddressView {
-    override fun successEditAddress(addressBookUser: AddressBookUser?) {
-        val newIntent = Intent()
-        newIntent.putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, addressBookUser)
-        newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(BUNDLE_POSITION, -1))
-        setResult(Constants.RESULT_OK, newIntent)
-        finish()
-    }
-
-    override fun successDeleteAddress() {
-        val newIntent = Intent()
-        newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(BUNDLE_POSITION, -1))
-        setResult(Constants.RESULT_OK_NO_RESULT, newIntent)
-        finish()
-    }
 
     @Inject
     @InjectPresenter
@@ -56,7 +42,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.edit_address_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view,  true, getString(R.string.edit_address_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         presenter.addressBookUser = intent.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
 
@@ -93,8 +79,6 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
                     isFieldsValid()
                 }))
 
-        fillFields()
-
         if (edit_address.text.isEmpty()) edit_address.tag = R.drawable.ic_qrcode_24_basic_500
         else edit_address.tag = R.drawable.ic_deladdress_24_error_400
 
@@ -118,6 +102,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         }
 
         configureWithType()
+        fillFields()
     }
 
     private fun configureWithType() {
@@ -157,6 +142,21 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
 
     fun isFieldsValid() {
         button_save.isEnabled = presenter.isAllFieldsValid()
+    }
+
+    override fun successEditAddress(addressBookUser: AddressBookUser?) {
+        val newIntent = Intent()
+        newIntent.putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, addressBookUser)
+        newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(BUNDLE_POSITION, -1))
+        setResult(Constants.RESULT_OK, newIntent)
+        finish()
+    }
+
+    override fun successDeleteAddress() {
+        val newIntent = Intent()
+        newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(BUNDLE_POSITION, -1))
+        setResult(Constants.RESULT_OK_NO_RESULT, newIntent)
+        finish()
     }
 
 }

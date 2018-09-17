@@ -12,13 +12,16 @@ import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
+import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatImageView
@@ -39,10 +42,15 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.google.common.primitives.Bytes
+import com.google.common.primitives.Shorts
+import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.color.b
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import kotlinx.android.synthetic.main.dialog_security_centre.*
+import kotlinx.android.synthetic.main.fragment_receive.view.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.toast
@@ -62,6 +70,36 @@ fun Context.isNetworkConnection(): Boolean {
 
 fun Context.notAvailable() {
     toast(getString(R.string.common_msg_in_development))
+}
+
+fun ByteArray.arrayWithSize(): ByteArray {
+    return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
+}
+
+fun Activity.openUrlWithChromeTab(url: String) {
+    SimpleChromeCustomTabs.getInstance()
+            .withFallback({
+                openUrlWithIntent(url)
+            }).withIntentCustomizer({
+                it.withToolbarColor(findColor(R.color.submit400))
+            })
+            .navigateTo(Uri.parse(url), this)
+}
+
+fun Fragment.openUrlWithChromeTab(url: String) {
+    SimpleChromeCustomTabs.getInstance()
+            .withFallback({
+                activity?.openUrlWithIntent(url)
+            }).withIntentCustomizer({
+                it.withToolbarColor(findColor(R.color.submit400))
+            })
+            .navigateTo(Uri.parse(url), activity)
+
+}
+
+fun Activity.openUrlWithIntent(url: String) {
+    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    startActivity(browserIntent)
 }
 
 fun Transaction.transactionType(): TransactionType {
@@ -141,27 +179,37 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
     }
 }
 
-fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: Int = R.drawable.ic_copy_18_black) {
-    clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), this.text.toString())
-    toast(this.context.getString(R.string.common_copied_to_clipboard))
-
-    imageView.notNull { image ->
-        image.setImageDrawable(ContextCompat.getDrawable(this.context, R.drawable.ic_check_18_success_400))
-        runDelayed(1500, {
-            this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, copyIcon)) }
-        })
-    }
-}
-
 fun String.stripZeros(): String {
     if (this == "0.0") return this
     return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
 }
 
+fun Fragment.showSnackbar(@StringRes msg: Int, @ColorRes color: Int? = null, during: Int = Snackbar.LENGTH_LONG) {
+    view.notNull { v ->
+        Snackbar.make(v.findViewById(android.R.id.content), getString(msg), during)
+                .withColor(color)
+                .show()
+    }
+}
+
+fun Activity.showSnackbar(@StringRes msg: Int, @ColorRes color: Int? = null, during: Int = Snackbar.LENGTH_LONG) {
+    Snackbar.make(findViewById(android.R.id.content), getString(msg), during)
+            .withColor(color)
+            .show()
+}
+
+fun View.showSnackbar(@StringRes msg: Int, @ColorRes color: Int? = null, during: Int = Snackbar.LENGTH_LONG) {
+    if (context is Activity) {
+        Snackbar.make(this, context.getString(msg), during)
+                .withColor(color)
+                .show()
+    }
+}
+
 
 fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_18_black) {
     clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), text)
-    toast(this.context.getString(R.string.common_copied_to_clipboard))
+    showSnackbar(R.string.common_copied_to_clipboard, R.color.success500_0_94, Snackbar.LENGTH_SHORT)
 
     this.notNull { image ->
         image.setImageDrawable(ContextCompat.getDrawable(this.context, R.drawable.ic_check_18_success_400))
@@ -170,6 +218,18 @@ fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_1
         }
     }
 
+}
+
+fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: Int = R.drawable.ic_copy_18_black) {
+    clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), this.text.toString())
+    showSnackbar(R.string.common_copied_to_clipboard, R.color.success500_0_94, Snackbar.LENGTH_SHORT)
+
+    imageView.notNull { image ->
+        image.setImageDrawable(ContextCompat.getDrawable(this.context, R.drawable.ic_check_18_success_400))
+        runDelayed(1500, {
+            this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, copyIcon)) }
+        })
+    }
 }
 
 inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
@@ -369,7 +429,7 @@ inline fun <reified T : Any> Context.launchActivity(
     }
 }
 
-fun Snackbar.withColor(@ColorInt colorInt: Int?): Snackbar {
+fun Snackbar.withColor(@ColorRes colorInt: Int?): Snackbar {
     colorInt.notNull {
         this.view.setBackgroundColor(findColor(it))
     }

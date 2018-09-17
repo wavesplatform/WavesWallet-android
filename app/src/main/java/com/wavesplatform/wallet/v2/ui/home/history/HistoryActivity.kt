@@ -13,7 +13,7 @@ class HistoryActivity : BaseActivity() {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.leasing_history_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.leasing_history_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         val fragment = HistoryFragment.newInstance().apply {
             arguments = intent.extras

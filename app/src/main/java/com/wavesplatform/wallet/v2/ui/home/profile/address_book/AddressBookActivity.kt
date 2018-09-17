@@ -22,10 +22,12 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressAc
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showSnackbar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_address_book.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -59,7 +61,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
 
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.address_book_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.address_book_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         eventSubscriptions.add(RxTextView.textChanges(edit_search)
                 .skipInitialValue()
@@ -133,6 +135,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                     item.notNull {
                         adapter.addData(it)
                         adapter.allData.add(it)
+                        configureSearchVisibility()
                     }
                 }
             }
@@ -155,12 +158,18 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                         if (it != -1) {
                             adapter.remove(it)
                             adapter.allData.removeAt(it)
+                            configureSearchVisibility()
                             showSnackbar(R.string.address_book_success_deleted, R.color.success500_0_94)
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun configureSearchVisibility() {
+        if (adapter.allData.isEmpty()) edit_search.gone()
+        else edit_search.visiable()
     }
 
 
@@ -182,9 +191,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
     }
 
     override fun afterSuccessGetAddress(list: List<AddressBookUser>) {
-        if (list.isEmpty()) {
-            edit_search.gone()
-        }
+        configureSearchVisibility()
         adapter.allData = ArrayList(list)
         adapter.setNewData(list)
         adapter.emptyView = getEmptyView()
