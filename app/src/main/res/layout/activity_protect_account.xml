@@ -64,7 +64,9 @@
                 android:backgroundTint="@color/accent50"
                 android:inputType="text"
                 android:paddingBottom="20dp"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:nextFocusForward="@+id/til_create_password"
+                />
         </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
 
         <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
@@ -88,7 +90,9 @@
                 android:backgroundTint="@color/accent50"
                 android:inputType="textPassword"
                 android:paddingBottom="20dp"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:nextFocusForward="@+id/edit_confirm_password"
+                />
         </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
 
         <com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout
