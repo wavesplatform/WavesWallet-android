@@ -35,7 +35,7 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
     override fun configLayoutRes(): Int = R.layout.activity_confirm_backup_pharse
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
+        setupToolbar(toolbar_view,  true,
                 getString(R.string.confirm_backup), R.drawable.ic_toolbar_back_black)
         val seedArray = intent?.getSerializableExtra(
                 BackupPhraseActivity.KEY_INTENT_SEED_AS_ARRAY) as Array<*>

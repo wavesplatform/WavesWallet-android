@@ -35,7 +35,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.token_burn_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.token_burn_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         image_asset_icon.isOval = true
         image_asset_icon.setAsset(AssetBalance(assetId = "Soblevo", issueTransaction = IssueTransaction(id = "Soblevo",name = "Soblevo")))

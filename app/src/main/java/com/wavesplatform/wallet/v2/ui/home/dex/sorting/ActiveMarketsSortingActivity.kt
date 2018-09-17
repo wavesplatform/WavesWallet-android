@@ -44,7 +44,7 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         recycle_markets.layoutManager = LinearLayoutManager(this)
         recycle_markets.adapter = adapter

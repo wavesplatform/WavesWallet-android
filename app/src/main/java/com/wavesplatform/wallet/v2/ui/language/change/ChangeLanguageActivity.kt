@@ -39,7 +39,7 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.profile_language_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.profile_language_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         recycle_language.layoutManager = LinearLayoutManager(this)
         recycle_language.adapter = adapter

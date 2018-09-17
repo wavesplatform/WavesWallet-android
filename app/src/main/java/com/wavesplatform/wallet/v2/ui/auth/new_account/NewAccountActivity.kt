@@ -43,7 +43,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     override fun configLayoutRes() = R.layout.activity_new_account
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true,
+        setupToolbar(toolbar_view, true,
                 getString(R.string.new_account_toolbar_title), R.drawable.ic_toolbar_back_black)
         isFieldsValid()
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)

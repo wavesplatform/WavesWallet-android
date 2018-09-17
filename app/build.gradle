@@ -82,21 +82,21 @@ android {
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
-            buildConfigField 'String', 'SPAM_URL', '"https://github-proxy.wvservices.com/wavesplatform/waves-community/master/"'
+            buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
         }
         dev {
             applicationIdSuffix ".dev"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
-            buildConfigField 'String', 'SPAM_URL', '"https://github-proxy.wvservices.com/wavesplatform/waves-community/master/"'
+            buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
         }
         devTest {
             applicationIdSuffix ".test"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
-            buildConfigField 'String', 'SPAM_URL', '"https://github-proxy.wvservices.com/wavesplatform/waves-community/master/"'
+            buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
         }
     }
     compileOptions {

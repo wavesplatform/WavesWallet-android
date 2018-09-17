@@ -46,7 +46,7 @@ class SendActivity : BaseActivity(), SendView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, getString(R.string.send_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title), R.drawable.ic_toolbar_back_black)
         checkAddressFieldAndSetAction()
 
         text_choose_from_address.click {

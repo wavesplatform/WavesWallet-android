@@ -45,7 +45,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, View.OnClickListener { onBackPressed() }, true, icon = R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view,  true, icon = R.drawable.ic_toolbar_back_black)
 
         view_pager.adapter = adapterAvatar
         view_pager.offscreenPageLimit = 3

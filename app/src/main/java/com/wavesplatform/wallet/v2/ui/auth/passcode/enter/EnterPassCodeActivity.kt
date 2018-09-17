@@ -41,6 +41,9 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     override fun configLayoutRes() = R.layout.activity_enter_passcode
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setupToolbar(toolbar_view, true,
+                icon = R.drawable.ic_toolbar_back_black)
+
         text_use_acc_password.click {
             val guid = getGuid()
             if (TextUtils.isEmpty(guid)) {

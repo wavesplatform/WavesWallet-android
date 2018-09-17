@@ -5,6 +5,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import kotlinx.android.synthetic.main.wallet_asset_item.view.*
 import javax.inject.Inject
 
@@ -19,9 +20,11 @@ class AssetsAdapter @Inject constructor(var publicKeyAccountHelper: PublicKeyAcc
                         == publicKeyAccountHelper.publicKeyAccount?.address)
                 .setGone(R.id.image_down_arrow, item.isGateway)
                 .setGone(R.id.text_tag_spam, item.isSpam)
-                .setGone(R.id.text_bitcoin_value, !item.isSpam)
+//                .setGone(R.id.text_bitcoin_value, !item.isSpam)
 
         helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)
+
+        helper.itemView.text_asset_value.makeTextHalfBold()
     }
 }

@@ -669,6 +669,8 @@
     <string name="common_kkk_quantity">%skkk</string>
     <string name="common_load_more_status">Loading…</string>
     <string name="common_dash">&#8211;</string>
+    <string name="common_feedback_title">Send feedback</string>
+    <string name="common_market_error">Unable to find market app</string>
 
     <!-- Language-->
     <string name="choose_language_russia">Русский</string>
@@ -965,6 +967,10 @@
     <string name="new_alias_create">Create</string>
     <string name="new_alias_symbol_name">Symbolic name to your address</string>
     <string name="new_alias_success_create">You created a new alias!</string>
+    <string name="new_alias_min_validation_error">Minimum 4 characters</string>
+    <string name="new_alias_max_validation_error">30 characters maximum</string>
+    <string name="new_alias_invalid_char_validation_error">Invalid character</string>
+    <string name="new_alias_already_use_validation_error">Already in use</string>
 
     <!-- BACKUP PHARSE-->
     <string name="backup_pharse">Backup pharse</string>
