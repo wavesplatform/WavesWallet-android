@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AlertDialog
 import android.text.TextPaint
 import android.text.style.ClickableSpan
@@ -16,13 +17,11 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragmentPageAdapter
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
@@ -61,11 +60,27 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
         setupBottomNavigation()
 
-        fragments.add(WalletFragment.newInstance())
-        fragments.add(DexFragment.newInstance())
+        val walletFragment = WalletFragment.newInstance()
+        val dexFragment = DexFragment.newInstance()
+        val historyFragment = HistoryFragment.newInstance()
+        val profileFragment = ProfileFragment.newInstance()
+
+        val elevationListener = object : OnElevationChangeListener {
+            override fun onChange(elevate: Boolean) {
+                enableElevation(elevate)
+            }
+        }
+
+        walletFragment.setOnElevationChangeListener(elevationListener)
+        dexFragment.setOnElevationChangeListener(elevationListener)
+        historyFragment.setOnElevationChangeListener(elevationListener)
+        profileFragment.setOnElevationChangeListener(elevationListener)
+
+        fragments.add(walletFragment)
+        fragments.add(dexFragment)
         fragments.add(QuickActionBottomSheetFragment.newInstance())
-        fragments.add(HistoryFragment.newInstance())
-        fragments.add(ProfileFragment.newInstance())
+        fragments.add(historyFragment)
+        fragments.add(profileFragment)
 
         onTabSelected(tab_navigation.getTabAt(WALLET_SCREEN))
     }
@@ -128,9 +143,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     public fun enableElevation(enable: Boolean) {
         if (enable) {
-            appbar_layout.elevation = 0F
+            ViewCompat.setElevation(appbar_layout, 0F)
         } else {
-            appbar_layout.elevation = ViewUtils.convertDpToPixel(8F, this)
+            ViewCompat.setElevation(appbar_layout, 8F)
         }
     }
 
@@ -172,7 +187,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             WALLET_SCREEN -> {
                 openFragment(R.id.frame_fragment_container, fragments[WALLET_SCREEN])
                 toolbar_general.title = getString(R.string.wallet_toolbar_title)
-                toolbar_general.elevation = 0F
             }
             DEX_SCREEN -> {
                 openFragment(R.id.frame_fragment_container, fragments[DEX_SCREEN])
@@ -286,5 +300,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
         private const val TAG_NOT_CENTRAL_TAB = "not_central_tab"
         private const val TAG_CENTRAL_TAB = "central_tab"
+    }
+
+    interface OnElevationChangeListener {
+        fun onChange(elevate: Boolean)
     }
 }

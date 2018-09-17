@@ -164,6 +164,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
 
     fun resetWallet() {
         wallet = null
+        loggedInGuid = ""
     }
 
     fun setWallet(guid: String, password: String) {

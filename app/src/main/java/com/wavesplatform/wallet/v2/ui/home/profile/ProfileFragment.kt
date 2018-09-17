@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.profile
 
 import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -20,6 +21,7 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
@@ -28,11 +30,13 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
+import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import pers.victor.ext.toast
 import javax.inject.Inject
+
 
 class ProfileFragment : BaseFragment(), ProfileView {
 
@@ -42,6 +46,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @Inject
     lateinit var nodeDataManager: NodeDataManager
     var subscriptions: CompositeDisposable = CompositeDisposable()
+    private var onElevationChangeListener: MainActivity.OnElevationChangeListener? = null
 
 
     @ProvidePresenter
@@ -118,6 +123,14 @@ class ProfileFragment : BaseFragment(), ProfileView {
         textView_version.text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
         subscriptions.add(nodeDataManager.currentBlocksHeight()
                 .subscribe { textView_height.text = it.height.toString() })
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            root_scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+                onElevationChangeListener.notNull {
+                    onElevationChangeListener?.onChange(scrollY == 0)
+                }
+            }
+        }
     }
 
     private fun initFingerPrintControl() {
@@ -223,11 +236,12 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
     }
 
+    fun setOnElevationChangeListener(listener: MainActivity.OnElevationChangeListener) {
+        this.onElevationChangeListener = listener
+    }
+
     companion object {
 
-        /**
-         * @return ProfileFragment instance
-         * */
         fun newInstance(): ProfileFragment {
             return ProfileFragment()
         }

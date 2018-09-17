@@ -6,10 +6,10 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_history.*
-import pers.victor.ext.dp2px
 import javax.inject.Inject
 
 class HistoryFragment : BaseFragment(), HistoryView {
@@ -17,6 +17,7 @@ class HistoryFragment : BaseFragment(), HistoryView {
     @Inject
     @InjectPresenter
     lateinit var presenter: HistoryPresenter
+    private var onElevationChangeListener: MainActivity.OnElevationChangeListener? = null
 
     @ProvidePresenter
     fun providePresenter(): HistoryPresenter = presenter
@@ -47,14 +48,15 @@ class HistoryFragment : BaseFragment(), HistoryView {
         }
 
         stl_history.setViewPager(viewpager_history)
+        stl_history.currentTab = 0
         appbar_layout.addOnOffsetChangedListener { _, verticalOffset ->
-            val offsetForShowShadow = appbar_layout.totalScrollRange - dp2px(9)
-            if (-verticalOffset > offsetForShowShadow) {
-                viewpager_history.setPagingEnabled(false)
-            } else {
-                viewpager_history.setPagingEnabled(true)
+            onElevationChangeListener.notNull {
+                onElevationChangeListener?.onChange(verticalOffset == 0)
             }
         }
-        stl_history.currentTab = 0
+    }
+
+    fun setOnElevationChangeListener(listener: MainActivity.OnElevationChangeListener) {
+        this.onElevationChangeListener = listener
     }
 }

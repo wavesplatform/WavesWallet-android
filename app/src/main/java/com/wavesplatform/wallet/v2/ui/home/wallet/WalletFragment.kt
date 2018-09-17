@@ -5,6 +5,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import javax.inject.Inject
 
@@ -15,6 +17,7 @@ class WalletFragment : BaseFragment(), WalletView {
     @InjectPresenter
     lateinit var presenter: WalletPresenter
     private lateinit var adapter: WalletFragmentPageAdapter
+    private var onElevationChangeListener: MainActivity.OnElevationChangeListener? = null
 
     @ProvidePresenter
     fun providePresenter(): WalletPresenter = presenter
@@ -38,9 +41,18 @@ class WalletFragment : BaseFragment(), WalletView {
         setupUI()
     }
 
+    fun setOnElevationChangeListener(listener: MainActivity.OnElevationChangeListener) {
+        this.onElevationChangeListener = listener
+    }
+
     private fun setupUI() {
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
         stl_wallet.currentTab = 0
+        appbar_layout.addOnOffsetChangedListener { _, verticalOffset ->
+            onElevationChangeListener.notNull {
+                onElevationChangeListener?.onChange(verticalOffset == 0)
+            }
+        }
     }
 }
