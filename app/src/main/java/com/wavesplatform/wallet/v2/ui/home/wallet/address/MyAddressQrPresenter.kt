@@ -16,7 +16,7 @@ import javax.inject.Inject
 @InjectViewState
 class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView>() {
 
-    private fun generateQrCodeObservable(uri: String, dimensions: Int): Observable<Bitmap> {
+    private fun generateQrCodeObservable(uri: String?, dimensions: Int): Observable<Bitmap> {
         return Observable.defer {
             var bitmap: Bitmap? = null
             val qrCodeEncoder = QRCodeEncoder(uri, null, Contents.Type.TEXT, BarcodeFormat.QR_CODE.toString(), dimensions)
@@ -35,7 +35,7 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
     }
 
 
-    fun generateAvatars(address: String, image: AppCompatImageView) {
+    fun generateAvatars(address: String?, image: AppCompatImageView) {
         Observable.fromCallable {
             return@fromCallable Identicon.create(address,
                     Identicon.Options.Builder()
@@ -47,7 +47,7 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
                 }
     }
 
-    fun generateQRCode(text: String, size: Int) {
+    fun generateQRCode(text: String?, size: Int) {
         addSubscription(generateQrCodeObservable(text, size)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe { viewState.showQRCode(it) })

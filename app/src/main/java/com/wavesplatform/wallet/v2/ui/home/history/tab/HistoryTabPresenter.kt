@@ -33,52 +33,52 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     fun loadTransactions() {
         val singleData: Single<List<Transaction>> = when (type) {
             HistoryTabFragment.all -> {
-                queryAllAsSingle()
+                queryAllAsSingle<Transaction>()
             }
             HistoryTabFragment.exchanged -> {
-                queryAsSingle { `in`("transactionTypeId", arrayOf(Constants.ID_EXCHANGE_TYPE)) }
+                queryAsSingle<Transaction> { `in`("transactionTypeId", arrayOf(Constants.ID_EXCHANGE_TYPE)) }
             }
             HistoryTabFragment.issued -> {
-                queryAsSingle {
+                queryAsSingle<Transaction> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_TOKEN_REISSUE_TYPE,
                             Constants.ID_TOKEN_BURN_TYPE, Constants.ID_TOKEN_GENERATION_TYPE))
                 }
             }
             HistoryTabFragment.leased -> {
-                queryAsSingle {
+                queryAsSingle<Transaction> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_INCOMING_LEASING_TYPE,
                             Constants.ID_CANCELED_LEASING_TYPE, Constants.ID_STARTED_LEASING_TYPE))
                 }
             }
             HistoryTabFragment.send -> {
-                queryAsSingle {
+                queryAsSingle<Transaction> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_SENT_TYPE, Constants.ID_MASS_SEND_TYPE))
                 }
             }
             HistoryTabFragment.received -> {
-                queryAsSingle {
+                queryAsSingle<Transaction> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_RECEIVED_TYPE, Constants.ID_MASS_RECEIVE_TYPE,
                             Constants.ID_MASS_SPAM_RECEIVE_TYPE, Constants.ID_SPAM_RECEIVE_TYPE))
                 }
             }
             HistoryTabFragment.leasing_all -> {
-                queryAsSingle {
+                queryAsSingle<Transaction> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_STARTED_LEASING_TYPE,
                             Constants.ID_INCOMING_LEASING_TYPE, Constants.ID_CANCELED_LEASING_TYPE))
                 }
             }
             HistoryTabFragment.leasing_active_now -> {
-                queryAsSingle {
+                queryAsSingle<Transaction> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_STARTED_LEASING_TYPE))
                 }
             }
             HistoryTabFragment.leasing_canceled -> {
-                queryAsSingle {
+                queryAsSingle<Transaction> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_CANCELED_LEASING_TYPE))
                 }
             }
             else -> {
-                queryAllAsSingle()
+                queryAllAsSingle<Transaction>()
             }
         }
 

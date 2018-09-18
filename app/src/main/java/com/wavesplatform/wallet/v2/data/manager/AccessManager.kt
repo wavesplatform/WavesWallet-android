@@ -170,8 +170,8 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
 
     fun setWallet(guid: String, password: String) {
         wallet = WavesWallet(getWalletData(guid), password)
-        authHelper.configureDB(wallet?.address)
         setLastLoggedInGuid(guid)
+        authHelper.configureDB(wallet?.address)
     }
 
     fun getWallet(): WavesWallet? {

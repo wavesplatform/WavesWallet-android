@@ -8,16 +8,19 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatTextView
+import android.util.Log
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.vicpin.krealmextensions.RealmConfigStore
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
+import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
@@ -98,6 +101,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 App.getAccessManager().deleteCurrentWavesWallet()
                 presenter.prefsUtil.logOut()
                 presenter.appUtil.restartApp()
+                clearRealmConfiguration()
                 dialog.dismiss()
             }
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel)) { dialog, _ ->
@@ -192,10 +196,19 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun logout() {
+        clearRealmConfiguration()
         App.getAccessManager().setLastLoggedInGuid("")
         activity?.finish()
         presenter.appUtil.restartApp()
         toast(getString(R.string.profile_general_logout))
+    }
+
+    private fun clearRealmConfiguration() {
+        baseActivity.stopService(Intent(baseActivity, UpdateApiDataService::class.java))
+        val f = RealmConfigStore::class.java.getDeclaredField("configMap") //NoSuchFieldException
+        f.isAccessible = true
+        val iWantThis = f.get(RealmConfigStore::class.java) as MutableMap<*, *>
+        iWantThis.clear()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

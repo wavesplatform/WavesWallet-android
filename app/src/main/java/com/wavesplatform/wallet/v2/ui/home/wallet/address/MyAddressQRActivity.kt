@@ -46,11 +46,10 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view,  true, icon = R.drawable.ic_toolbar_back_black)
 
-        val user = App.getAccessManager().createAddressBookCurrentAccount()
-        text_address.text = user!!.address
+        text_address.text = App.getAccessManager().getWallet()?.address
         Glide.with(image_avatar.context)
                 .load(Identicon.create(
-                        user.address,
+                        App.getAccessManager().getWallet()?.address,
                         Identicon.Options.Builder().setRandomBlankColor().create()))
                 .apply(RequestOptions().circleCrop())
                 .into(image_avatar)
@@ -90,8 +89,8 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
             }
         }
 
-        presenter.generateAvatars(user.address, image_avatar)
-        presenter.generateQRCode(user.address, resources.getDimension(R.dimen._200sdp).toInt())
+        presenter.generateAvatars(App.getAccessManager().getWallet()?.address, image_avatar)
+        presenter.generateQRCode(App.getAccessManager().getWallet()?.address, resources.getDimension(R.dimen._200sdp).toInt())
     }
 
     override fun showQRCode(qrCode: Bitmap?) {
