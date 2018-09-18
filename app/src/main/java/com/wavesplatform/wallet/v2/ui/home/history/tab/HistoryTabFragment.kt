@@ -23,6 +23,7 @@ import pers.victor.ext.inflate
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import java.util.*
 import javax.inject.Inject
 
 
@@ -38,7 +39,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     @Inject
     lateinit var adapter: HistoryItemAdapter
     lateinit var layoutManager: LinearLayoutManager
-
+    var changeTabBarVisibilityListener: ChangeTabBarVisibilityListener? = null
 
     override fun configLayoutRes(): Int = R.layout.fragment_history_tab
 
@@ -95,7 +96,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         nested_scroll_view.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             if (v.getChildAt(v.childCount - 1) != null) {
                 if (scrollY >= v.getChildAt(v.childCount - 1).measuredHeight - v.measuredHeight - dp2px(50) && scrollY > oldScrollY) {
-                    if (presenter.needLoadMore) {
+                    if (presenter.needLoadMore && adapter.data.isNotEmpty()) {
                         if (layoutManager.childCount + layoutManager.findFirstVisibleItemPosition() >= layoutManager.itemCount) {
                             if (presenter.loadMoreCompleted) {
                                 presenter.loadMoreCompleted = false
@@ -112,7 +113,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
             }
         })
 
-        adapter.footerLayout.load_more_loading_view.visiable()
         presenter.loadTransactions()
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
@@ -144,7 +144,27 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     }
 
     override fun afterSuccessLoadTransaction(data: ArrayList<HistoryItem>, type: String?) {
+        // hide tab bar layout if not data available and show empty view
+        if (type == HistoryTabFragment.all && data.isEmpty()) {
+            changeTabBarVisibilityListener?.changeTabBarVisibility(false)
+        } else if (type == HistoryTabFragment.all && data.isNotEmpty()) {
+            changeTabBarVisibilityListener?.changeTabBarVisibility(true)
+        }
+        if (data.isEmpty()) {
+            // TODO: Fix(delete) after optimization bottom tab navigation
+            if (adapter.emptyView != null) {
+                if (adapter.emptyView.parent != null) {
+                    (adapter.emptyView.parent as ViewGroup).removeView(adapter.emptyView)
+                }
+            }
+            adapter.emptyView = getEmptyView()
+        }
+
         adapter.setNewData(data)
+    }
+
+    private fun getEmptyView(): View {
+        return inflate(R.layout.layout_empty_data)
     }
 
     override fun afterSuccessLoadMoreTransaction(data: ArrayList<HistoryItem>, type: String?) {
@@ -156,5 +176,9 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
             goneLoadMoreView()
             presenter.loadMoreCompleted = true
         }
+    }
+
+    interface ChangeTabBarVisibilityListener {
+        fun changeTabBarVisibility(show: Boolean)
     }
 }

@@ -1,20 +1,20 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell
 
 import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.flyco.tablayout.listener.OnTabSelectListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
-import kotlinx.android.synthetic.main.buy_and_sell_bottom_sheet_dialog_layout.view.*
-import pers.victor.ext.findColor
-import android.animation.ValueAnimator
-import android.util.Log
 import kotlinx.android.synthetic.main.buy_and_sell_bottom_sheet_dialog_layout.*
+import kotlinx.android.synthetic.main.buy_and_sell_bottom_sheet_dialog_layout.view.*
 import pers.victor.ext.dp2px
+import pers.victor.ext.findColor
 
 
 class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment() {

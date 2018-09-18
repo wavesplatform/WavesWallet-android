@@ -31,6 +31,8 @@ public class PrefsUtil {
     public static final String KEY_USE_FINGERPRINT = "use_fingerprint";
     public static final String KEY_ENCRYPTED_PIN = "encrypted_pin";
 
+    public static final String  KEY_DEFAULT_ASSETS = "key_default_assets";
+
     public static final String KEY_AB_NAMES = "address_book_names";
     public static final String KEY_AB_ADDRESSES = "address_book_addresses";
 

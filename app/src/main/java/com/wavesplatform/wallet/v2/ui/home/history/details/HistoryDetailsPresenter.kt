@@ -1,8 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.history.details
 
-import android.widget.TextView
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.R.string.fee
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil

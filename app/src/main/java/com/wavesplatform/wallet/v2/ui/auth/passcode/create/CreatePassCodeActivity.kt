@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v7.widget.AppCompatTextView
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App

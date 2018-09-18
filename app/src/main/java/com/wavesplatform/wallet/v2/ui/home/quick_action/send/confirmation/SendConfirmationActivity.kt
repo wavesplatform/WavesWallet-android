@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import android.os.Bundle
-import android.view.View
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter

@@ -1,9 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit
 
-import android.content.DialogInterface
 import com.arellomobile.mvp.InjectViewState
-import com.google.common.base.Predicates
-import com.google.common.base.Predicates.equalTo
 import com.vicpin.krealmextensions.delete
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save

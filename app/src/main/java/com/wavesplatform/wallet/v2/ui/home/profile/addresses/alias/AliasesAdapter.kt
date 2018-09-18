@@ -1,7 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias
 
-import android.support.v7.widget.AppCompatImageView
-import android.support.v7.widget.AppCompatTextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R

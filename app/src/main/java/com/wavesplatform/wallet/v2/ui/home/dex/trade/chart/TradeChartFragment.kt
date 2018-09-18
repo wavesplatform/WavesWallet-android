@@ -6,11 +6,9 @@ import android.view.MotionEvent
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.CandleData
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.dex.details.DexDetailsActivity
 import com.wavesplatform.wallet.v1.ui.dex.details.chart.CandleTouchListener
 import com.wavesplatform.wallet.v1.ui.dex.details.chart.OnCandleGestureListener
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment

@@ -5,7 +5,6 @@ import android.text.TextUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
@@ -17,7 +16,6 @@ import javax.inject.Inject
 class SplashActivity : BaseActivity(), SplashView {
 
     override fun onNotLoggedIn() {
-        authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
         if (preferencesHelper.isTutorialPassed()) {
             if (!TextUtils.isEmpty(App.getAccessManager().getLastLoggedInGuid())) {
                 launchActivity<com.wavesplatform.wallet.v2.ui.home.MainActivity>(clear = true)
@@ -31,7 +29,6 @@ class SplashActivity : BaseActivity(), SplashView {
     }
 
     override fun onStartMainActivity(publicKey: String) {
-        authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
         if (preferencesHelper.isTutorialPassed()) {
             launchActivity<WelcomeActivity>()
         } else {

@@ -12,7 +12,6 @@ import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.id.white_block
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity

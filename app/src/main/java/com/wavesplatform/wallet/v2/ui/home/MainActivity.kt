@@ -14,7 +14,6 @@ import android.view.View
 import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
@@ -22,7 +21,6 @@ import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragmentPageAdapter
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
@@ -51,9 +49,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_general)
         needChangeStatusBarColorOnMenuOpen(false)
-
-        //TODO: clear this
-        authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
 
         presenter.loadAliases()
 

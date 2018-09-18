@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation
 
 import android.os.Bundle
-import android.view.View
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_confirm_leasing.*

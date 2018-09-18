@@ -1,24 +1,19 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.sell
 
 import android.os.Bundle
-import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.widget.Button
-import android.widget.TextView
-import javax.inject.Inject
-
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSucessActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import kotlinx.android.synthetic.main.fragment_trade_sell.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
+import javax.inject.Inject
 
 
 class TradeSellFragment : BaseFragment(), TradeSellView {

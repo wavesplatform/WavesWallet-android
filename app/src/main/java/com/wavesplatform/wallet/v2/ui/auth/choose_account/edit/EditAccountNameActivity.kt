@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.auth.choose_account.edit
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide

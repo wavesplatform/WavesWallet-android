@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide

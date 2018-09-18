@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.color.v
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -18,9 +17,7 @@ import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.notNull
-import kotlinx.android.synthetic.main.activity_asset_details.*
 import kotlinx.android.synthetic.main.fragment_asset_details_content.*
-import kotlinx.android.synthetic.main.spinner_balance_header.view.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.text.SimpleDateFormat

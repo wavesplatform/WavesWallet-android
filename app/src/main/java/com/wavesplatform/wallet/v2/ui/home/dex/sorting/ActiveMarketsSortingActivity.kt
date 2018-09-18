@@ -4,25 +4,19 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.View
-import javax.inject.Inject
-
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
-import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingAdapter
 import kotlinx.android.synthetic.main.activity_active_markets_sorting.*
 import kotlinx.android.synthetic.main.dex_active_markets_sorting_item.view.*
 import pers.victor.ext.*
+import javax.inject.Inject
 
 
 class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {

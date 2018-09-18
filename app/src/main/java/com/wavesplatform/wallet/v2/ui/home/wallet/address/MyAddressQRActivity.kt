@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
@@ -56,7 +55,6 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
                 .apply(RequestOptions().circleCrop())
                 .into(image_avatar)
 
-        publicKeyAccountHelper.publicKeyAccount?.address
         frame_share.click {
             shareAddress()
         }

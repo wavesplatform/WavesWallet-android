@@ -1,7 +1,9 @@
 package com.wavesplatform.wallet.v2.ui.home.profile
 
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -9,6 +11,7 @@ import android.support.v7.widget.AppCompatTextView
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
@@ -28,15 +31,11 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
-import io.reactivex.disposables.CompositeDisposable
+import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import pers.victor.ext.toast
 import javax.inject.Inject
-import android.content.ActivityNotFoundException
-import android.net.Uri
-import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
-import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
 
 
 class ProfileFragment : BaseFragment(), ProfileView {

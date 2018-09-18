@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_dex_new.*
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 class DexFragment : BaseFragment(), DexView {
 

@@ -18,7 +18,6 @@ import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
 import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.fragment_enter_seed_manually.*
-import kotlinx.android.synthetic.main.spinner_item.view.*
 import org.apache.commons.io.Charsets
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click

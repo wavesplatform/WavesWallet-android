@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.address
 
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.support.v7.widget.AppCompatImageView
 import com.arellomobile.mvp.InjectViewState
 import com.google.zxing.BarcodeFormat
@@ -12,7 +11,6 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Observable
-import java.util.*
 import javax.inject.Inject
 
 @InjectViewState
