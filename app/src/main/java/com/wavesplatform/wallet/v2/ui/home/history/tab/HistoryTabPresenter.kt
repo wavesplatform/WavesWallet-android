@@ -23,7 +23,6 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     var totalHeaders = 0
     var type: String? = "all"
     var needLoadMore: Boolean = true
-    var loadMoreCompleted = true
     val hashOfTimestamp = hashMapOf<Long, Long>()
     var assetBalance: AssetBalance? = null
 

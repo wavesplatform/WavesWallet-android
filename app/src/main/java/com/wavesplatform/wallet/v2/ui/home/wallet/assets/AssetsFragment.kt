@@ -75,7 +75,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
         recycle_assets_not_hidden.layoutManager = LinearLayoutManager(baseActivity)
         recycle_assets_not_hidden.adapter = adapter
         recycle_assets_not_hidden.isNestedScrollingEnabled = false
-        addFooter(adapter)
 
         recycle_assets_hidden.layoutManager = LinearLayoutManager(baseActivity)
         recycle_assets_hidden.adapter = adapterHiddenAssets
@@ -148,15 +147,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 adapterHiddenAssets.data.size.toString())
         text_spam_assets.text = getString(R.string.wallet_assets_spam_category,
                 spamAssetsAdapter.data.size.toString())
-    }
-
-    private fun addFooter(adapter: AssetsAdapter) {
-        if (adapter.footerLayout != null) {
-            if (adapter.footerLayout.parent != null) {
-                (adapter.footerLayout.parent as ViewGroup).removeView(adapter.footerLayout)
-            }
-        }
-        adapter.addFooterView(inflate(R.layout.view_load_more, null, false))
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {

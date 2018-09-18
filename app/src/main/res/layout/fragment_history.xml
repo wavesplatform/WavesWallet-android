@@ -48,9 +48,4 @@
         android:overScrollMode="never"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <include
-        android:visibility="gone"
-        android:id="@+id/layout_empty"
-        layout="@layout/layout_empty_data"/>
-
 </android.support.design.widget.CoordinatorLayout>
