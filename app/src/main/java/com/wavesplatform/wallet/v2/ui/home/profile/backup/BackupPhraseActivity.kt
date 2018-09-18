@@ -61,7 +61,8 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
         }
 
         button_written_down.click {
-            launchActivity<ConfirmBackupPhraseActivity>(options = intent.extras) {
+            launchActivity<ConfirmBackupPhraseActivity>(
+                    requestCode = REQUEST_CONFIRM_BACKUP, options = intent.extras) {
                 putExtra(KEY_INTENT_SEED_AS_ARRAY, phraseList.toTypedArray())
                 if (intent.hasExtra(ProfileFragment.KEY_INTENT_SET_BACKUP)) {
                     putExtra(ProfileFragment.KEY_INTENT_SET_BACKUP, true)
@@ -99,10 +100,17 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
                     finish()
                 }
             }
+
+            REQUEST_CONFIRM_BACKUP -> {
+                if (resultCode == Constants.RESULT_OK) {
+                    finish()
+                }
+            }
         }
     }
 
     companion object {
         const val KEY_INTENT_SEED_AS_ARRAY = "intent_seed_as_array"
+        const val REQUEST_CONFIRM_BACKUP = 5555
     }
 }

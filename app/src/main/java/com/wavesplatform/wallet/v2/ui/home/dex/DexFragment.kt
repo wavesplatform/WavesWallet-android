@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.dex
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
@@ -11,15 +12,16 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.Market
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_dex_new.*
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 class DexFragment : BaseFragment(), DexView {
 
@@ -33,6 +35,8 @@ class DexFragment : BaseFragment(), DexView {
     @Inject
     lateinit var adapter: DexAdapter
     var menu: Menu? = null
+    private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
+
 
     override fun configLayoutRes(): Int = R.layout.fragment_dex_new
 
@@ -55,6 +59,14 @@ class DexFragment : BaseFragment(), DexView {
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             launchActivity<TradeActivity> {
                 putExtra(TradeActivity.BUNDLE_MARKET, this@DexFragment.adapter.getItem(position))
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            root_scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                onElevationAppBarChangeListener.notNull {
+                    onElevationAppBarChangeListener?.onChange(scrollY == 0)
+                }
             }
         }
     }
@@ -90,6 +102,10 @@ class DexFragment : BaseFragment(), DexView {
             menu?.findItem(R.id.action_sorting)?.isVisible = true
             adapter.setNewData(list)
         }
+    }
+
+    fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
+        this.onElevationAppBarChangeListener = listener
     }
 
     override fun afterFailedLoadMarkets() {

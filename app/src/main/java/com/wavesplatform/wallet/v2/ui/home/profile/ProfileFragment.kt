@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.profile
 
 import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -20,6 +21,7 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
@@ -28,6 +30,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
+import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
@@ -39,6 +42,7 @@ import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
 
 
+
 class ProfileFragment : BaseFragment(), ProfileView {
 
     @Inject
@@ -46,6 +50,9 @@ class ProfileFragment : BaseFragment(), ProfileView {
     lateinit var presenter: ProfilePresenter
     @Inject
     lateinit var nodeDataManager: NodeDataManager
+    var subscriptions: CompositeDisposable = CompositeDisposable()
+    private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
+
 
     @ProvidePresenter
     fun providePresenter(): ProfilePresenter = presenter
@@ -114,7 +121,20 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         initFingerPrintControl()
 
+        textView_version.text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        subscriptions.add(nodeDataManager.currentBlocksHeight()
+                .subscribe { textView_height.text = it.height.toString() })
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            root_scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+                onElevationAppBarChangeListener.notNull {
+                    onElevationAppBarChangeListener?.onChange(scrollY == 0)
+                }
+            }
+        }
+    }
+
+    private fun checkBackUp() {
         if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
             skip_backup_indicator.setBackgroundColor(ContextCompat
                     .getColor(context!!, R.color.error500))
@@ -126,9 +146,11 @@ class ProfileFragment : BaseFragment(), ProfileView {
             skip_backup_indicator_image.setImageDrawable(ContextCompat
                     .getDrawable(context!!, R.drawable.ic_check_18_success_400))
         }
+    }
 
-        textView_version.text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
-        textView_height.text = presenter.preferenceHelper.currentBlocksHeight.toString()
+    override fun onStart() {
+        super.onStart()
+        checkBackUp()
     }
 
     private fun sendFeedbackToSupport() {
@@ -251,11 +273,12 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
     }
 
+    fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
+        this.onElevationAppBarChangeListener = listener
+    }
+
     companion object {
 
-        /**
-         * @return ProfileFragment instance
-         * */
         fun newInstance(): ProfileFragment {
             return ProfileFragment()
         }

@@ -4,10 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -21,11 +20,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsAct
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_assets.*
-import kotlinx.android.synthetic.main.view_load_more.view.*
 import pers.victor.ext.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
@@ -61,9 +56,9 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            runAsync({
+            runAsync {
                 presenter.loadAssetsBalance()
-            })
+            }
         }
 
         setupUI()
