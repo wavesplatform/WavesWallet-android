@@ -92,6 +92,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                             assetBalance.isFiatMoney = it.isFiatMoney
                                             assetBalance.isGateway = it.isGateway
                                             assetBalance.isSpam = it.isSpam
+                                            assetBalance.position = it.position
                                         }
                                     }
                                 }

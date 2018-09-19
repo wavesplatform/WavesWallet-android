@@ -30,6 +30,7 @@ import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
+import pers.victor.ext.showFragment
 import javax.inject.Inject
 
 
@@ -40,6 +41,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     lateinit var presenter: MainPresenter
     private var accountFirstOpenDialog: AlertDialog? = null
     private val fragments = arrayListOf<Fragment>()
+    private var activeFragment = Fragment()
 
     @ProvidePresenter
     fun providePresenter(): MainPresenter = presenter
@@ -55,12 +57,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         showFirstOpenAlert(preferencesHelper.isAccountFirstOpen())
 
         setupBottomNavigation()
-
-        fragments.add(WalletFragment.newInstance())
-        fragments.add(DexFragment.newInstance())
-        fragments.add(QuickActionBottomSheetFragment.newInstance())
-        fragments.add(HistoryFragment.newInstance())
-        fragments.add(ProfileFragment.newInstance())
 
         onTabSelected(tab_navigation.getTabAt(WALLET_SCREEN))
     }
@@ -146,6 +142,39 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 getCustomView(R.drawable.ic_tabbar_profile_default)).setTag(TAG_NOT_CENTRAL_TAB))
 
         tab_navigation.addOnTabSelectedListener(this)
+
+        setupBottomNavigationFragments()
+    }
+
+    private fun setupBottomNavigationFragments() {
+        val bundle = Bundle().apply {
+            val tabs = arrayListOf(
+                    HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)),
+                    HistoryTab(HistoryTabFragment.send, getString(R.string.history_sent)),
+                    HistoryTab(HistoryTabFragment.received, getString(R.string.history_received)),
+                    HistoryTab(HistoryTabFragment.exchanged, getString(R.string.history_exchanged)),
+                    HistoryTab(HistoryTabFragment.leased, getString(R.string.history_leased)),
+                    HistoryTab(HistoryTabFragment.issued, getString(R.string.history_issued)))
+            putParcelableArrayList(HistoryFragment.BUNDLE_TABS, tabs)
+        }
+
+        fragments.add(WalletFragment.newInstance())
+        fragments.add(DexFragment.newInstance())
+        fragments.add(QuickActionBottomSheetFragment.newInstance())
+        fragments.add(HistoryFragment.newInstance().apply {
+            arguments = bundle
+        })
+        fragments.add(ProfileFragment.newInstance())
+
+        val transaction = supportFragmentManager.beginTransaction()
+        fragments.forEach { fragment ->
+            if (fragment !is QuickActionBottomSheetFragment) {
+                transaction.add(R.id.frame_fragment_container, fragment, fragment::class.java.simpleName).hide(fragment)
+            }
+        }
+        transaction.commitAllowingStateLoss()
+
+        activeFragment = fragments[WALLET_SCREEN]
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -165,12 +194,12 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun onTabSelected(tab: TabLayout.Tab?) {
         when (tab?.position) {
             WALLET_SCREEN -> {
-                openFragment(R.id.frame_fragment_container, fragments[WALLET_SCREEN])
+                showNewTabFragment(fragments[WALLET_SCREEN])
                 toolbar_general.title = getString(R.string.wallet_toolbar_title)
                 toolbar_general.elevation = 0F
             }
             DEX_SCREEN -> {
-                openFragment(R.id.frame_fragment_container, fragments[DEX_SCREEN])
+                showNewTabFragment(fragments[DEX_SCREEN])
                 toolbar_general.title = getString(R.string.dex_toolbar_title)
             }
             QUICK_ACTION_SCREEN -> {
@@ -181,26 +210,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 }
             }
             HISTORY_SCREEN -> {
-                val bundle = Bundle().apply {
-                    val tabs = arrayListOf(
-                            HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)),
-                            HistoryTab(HistoryTabFragment.send, getString(R.string.history_sent)),
-                            HistoryTab(HistoryTabFragment.received, getString(R.string.history_received)),
-                            HistoryTab(HistoryTabFragment.exchanged, getString(R.string.history_exchanged)),
-                            HistoryTab(HistoryTabFragment.leased, getString(R.string.history_leased)),
-                            HistoryTab(HistoryTabFragment.issued, getString(R.string.history_issued)))
-                    putParcelableArrayList(HistoryFragment.BUNDLE_TABS, tabs)
-                }
-
-                val fragment = HistoryFragment.newInstance().apply {
-                    arguments = bundle
-                }
-
-                openFragment(R.id.frame_fragment_container, fragment)
+                showNewTabFragment(fragments[HISTORY_SCREEN])
                 toolbar_general.title = getString(R.string.history_toolbar_title)
             }
             PROFILE_SCREEN -> {
-                openFragment(R.id.frame_fragment_container, fragments[PROFILE_SCREEN])
+                showNewTabFragment(fragments[PROFILE_SCREEN])
                 toolbar_general.title = getString(R.string.profile_toolbar_title)
             }
         }
@@ -208,6 +222,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         if (tab?.position != QUICK_ACTION_SCREEN) {
             selectedTabs(tab)
         }
+    }
+
+    private fun showNewTabFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().hide(activeFragment).show(fragment).commitAllowingStateLoss()
+        activeFragment = fragment
     }
 
     /**

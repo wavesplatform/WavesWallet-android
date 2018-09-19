@@ -55,11 +55,9 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun configLayoutRes(): Int = R.layout.fragment_assets
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
             runAsync {
                 presenter.loadAssetsBalance()
             }
-        }
 
         setupUI()
     }

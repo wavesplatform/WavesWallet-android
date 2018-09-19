@@ -72,15 +72,12 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         layoutManager = LinearLayoutManager(baseActivity)
         recycle_history.layoutManager = layoutManager
         recycle_history.adapter = adapter
-        recycle_history.isNestedScrollingEnabled = false
 
         presenter.type = arguments?.getString("type")
         presenter.assetBalance = arguments?.getParcelable<AssetBalance>(HistoryFragment.BUNDLE_ASSET)
 
         runAsync {
-            if (savedInstanceState == null) {
-                presenter.loadTransactions()
-            }
+            presenter.loadTransactions()
         }
 
         adapter.setLoadMoreView(CustomLoadMoreView())
@@ -95,8 +92,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                 }
             }
         }, recycle_history)
-
-        presenter.loadTransactions()
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val historyItem = adapter.getItem(position) as HistoryItem
@@ -134,12 +129,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
     private fun configureEmptyView(data: ArrayList<HistoryItem>) {
         if (data.isEmpty()) {
-            // TODO: Fix(delete) after optimization bottom tab navigation
-            if (adapter.emptyView != null) {
-                if (adapter.emptyView.parent != null) {
-                    (adapter.emptyView.parent as ViewGroup).removeView(adapter.emptyView)
-                }
-            }
             adapter.setEmptyView(R.layout.layout_empty_data)
         }
     }
