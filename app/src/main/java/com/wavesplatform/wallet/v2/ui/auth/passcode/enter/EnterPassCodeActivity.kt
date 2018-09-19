@@ -6,7 +6,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatEditText
 import android.text.InputType
 import android.text.TextUtils
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
@@ -102,7 +101,6 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                     App.getAccessManager().setLastLoggedInGuid("")
                     launchActivity<WelcomeActivity>()
                 }
-
             } else {
                 setupToolbar(toolbar_view, true,
                         icon = R.drawable.ic_toolbar_back_black)

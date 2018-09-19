@@ -63,11 +63,11 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
             }
 
             try {
-                val seed = randomString()
-                pinStore.writePassword(guid, passCode, seed)
+                val keyPassword = randomString()
+                pinStore.writePassword(guid, passCode, keyPassword)
                         .subscribe({ _ ->
                             val encryptedPassword = AESUtil.encrypt(
-                                    password, seed, AESUtil.PIN_PBKDF2_ITERATIONS)
+                                    password, keyPassword, AESUtil.PIN_PBKDF2_ITERATIONS)
                             prefs.setValue(guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, encryptedPassword)
                             if (!subscriber.isDisposed) {
                                 subscriber.onComplete()

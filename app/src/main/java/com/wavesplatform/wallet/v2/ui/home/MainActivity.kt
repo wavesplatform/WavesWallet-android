@@ -53,7 +53,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
         //TODO: clear this
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
-
         presenter.loadAliases()
 
         showFirstOpenAlert(preferencesHelper.isAccountFirstOpen())
