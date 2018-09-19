@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 
 import android.app.Dialog
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.AppCompatTextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -15,6 +16,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.withColor
 import kotlinx.android.synthetic.main.activity_create_passcode.*
 import javax.inject.Inject
 
@@ -31,7 +33,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
     override fun configLayoutRes() = R.layout.activity_create_passcode
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view,  false,
+        setupToolbar(toolbar_view, false,
                 icon = R.drawable.ic_toolbar_back_black)
 
         presenter.step = CreatePassCodeStep.CREATE
@@ -92,17 +94,20 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                             launchActivity<MainActivity>(clear = true)
                         }
                     })
+        } else if (intent.hasExtra(KEY_INTENT_GUID)) {
+            finish()
         } else {
             launchActivity<MainActivity>(clear = true)
+
         }
     }
 
     override fun onFailCreatePassCode() {
         showProgressBar(false)
-        ToastCustom.makeText(this@CreatePassCodeActivity,
-                getString(R.string.create_pin_failed),
-                ToastCustom.LENGTH_SHORT,
-                ToastCustom.TYPE_ERROR)
+        Snackbar.make(findViewById(R.id.content), getString(R.string.create_pin_failed),
+                Snackbar.LENGTH_LONG)
+                .withColor(R.color.error400)
+                .show()
     }
 
     private fun moveToCreateStep() {

@@ -8,20 +8,17 @@ import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
-import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatImageView
@@ -46,12 +43,12 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.color.b
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import kotlinx.android.synthetic.main.dialog_security_centre.*
-import kotlinx.android.synthetic.main.fragment_receive.view.*
-import pers.victor.ext.*
+import pers.victor.ext.activityManager
+import pers.victor.ext.app
+import pers.victor.ext.clipboardManager
+import pers.victor.ext.findColor
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
@@ -78,11 +75,11 @@ fun ByteArray.arrayWithSize(): ByteArray {
 
 fun Activity.openUrlWithChromeTab(url: String) {
     SimpleChromeCustomTabs.getInstance()
-            .withFallback({
+            .withFallback {
                 openUrlWithIntent(url)
-            }).withIntentCustomizer({
+            }.withIntentCustomizer {
                 it.withToolbarColor(findColor(R.color.submit400))
-            })
+            }
             .navigateTo(Uri.parse(url), this)
 }
 

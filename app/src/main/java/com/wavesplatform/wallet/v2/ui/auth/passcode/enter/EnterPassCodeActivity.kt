@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.enter
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatEditText
 import android.text.InputType
@@ -11,7 +12,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
-import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
@@ -22,6 +22,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.withColor
 import kotlinx.android.synthetic.main.activity_enter_passcode.*
 import pers.victor.ext.click
 import pers.victor.ext.toast
@@ -139,10 +140,9 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     override fun onFailValidatePassCode(overMaxWrongPassCode: Boolean, errorMessage: String?) {
         showProgressBar(false)
         if (overMaxWrongPassCode) {
-            ToastCustom.makeText(this@EnterPassCodeActivity,
-                    getString(R.string.pin_4_strikes),
-                    ToastCustom.LENGTH_SHORT,
-                    ToastCustom.TYPE_ERROR)
+            Snackbar.make(findViewById(R.id.content), getString(R.string.pin_4_strikes), Snackbar.LENGTH_LONG)
+                    .withColor(R.color.error400)
+                    .show()
             showRequestPasswordDialog()
         } else {
             val message = if (TextUtils.isEmpty(errorMessage)) {
@@ -150,10 +150,11 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
             } else {
                 getString(R.string.unexpected_error) + " ($errorMessage)"
             }
-            ToastCustom.makeText(this@EnterPassCodeActivity, message,
-                    ToastCustom.LENGTH_SHORT, ToastCustom.TYPE_ERROR)
-            finish()
+            Snackbar.make(findViewById(R.id.content), message, Snackbar.LENGTH_LONG)
+                    .withColor(R.color.error400)
+                    .show()
         }
+        pass_keypad.clearPassCode()
     }
 
     private fun showFingerPrint() {

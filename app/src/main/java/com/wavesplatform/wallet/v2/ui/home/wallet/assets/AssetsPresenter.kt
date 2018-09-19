@@ -22,9 +22,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     .flatMap { tryUpdateWithApi(withApiUpdate, it) }
                     .map { createTripleSortedLists(it) }
                     .subscribe({
-                        runOnUiThread {
-                            postSuccess(it, withApiUpdate, false)
-                        }
+                        postSuccess(it, withApiUpdate, false)
                     }, {
                         runOnUiThread {
                             viewState.afterFailedLoadAssets()
@@ -44,9 +42,11 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     private fun postSuccess(it: Triple<List<AssetBalance>, List<AssetBalance>, List<AssetBalance>>,
                             withApiUpdate: Boolean,
                             fromDb: Boolean) {
-        viewState.afterSuccessLoadHiddenAssets(it.second)
-        viewState.afterSuccessLoadSpamAssets(it.third)
-        viewState.afterSuccessLoadAssets(it.first, fromDb, withApiUpdate)
+        runOnUiThread {
+            viewState.afterSuccessLoadHiddenAssets(it.second)
+            viewState.afterSuccessLoadSpamAssets(it.third)
+            viewState.afterSuccessLoadAssets(it.first, fromDb, withApiUpdate)
+        }
     }
 
     private fun createTripleSortedLists(list: List<AssetBalance>): Triple<List<AssetBalance>, List<AssetBalance>, List<AssetBalance>> {

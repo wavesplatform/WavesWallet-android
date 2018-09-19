@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relative_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -117,6 +116,7 @@
                 android:imeOptions="actionNext"
                 android:textColorHint="@color/basic500"
                 android:backgroundTint="@color/accent50"
+                android:nextFocusForward="@id/edit_create_password"
                 android:inputType="text"
                 android:maxLength="20"
                 android:paddingBottom="20dp"
@@ -142,6 +142,7 @@
                 android:imeOptions="actionNext"
                 android:textColorHint="@color/basic500"
                 android:backgroundTint="@color/accent50"
+                android:nextFocusForward="@id/edit_confirm_password"
                 android:inputType="textPassword"
                 android:paddingBottom="20dp"
                 android:singleLine="true" />

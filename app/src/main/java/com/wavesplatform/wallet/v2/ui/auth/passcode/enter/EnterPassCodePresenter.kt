@@ -15,8 +15,7 @@ class EnterPassCodePresenter @Inject constructor() : BasePresenter<EnterPasscode
     lateinit var step: CreatePassCodeActivity.CreatePassCodeStep
 
     fun validate(guid: String, passCode: String) {
-        App
-                .getAccessManager()
+        App.getAccessManager()
                 .validatePassCodeObservable(guid, passCode)
                 .subscribe({ password ->
                     App.getAccessManager().resetPassCodeInputFails()

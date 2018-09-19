@@ -159,7 +159,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                             adapter.remove(it)
                             adapter.allData.removeAt(it)
                             configureSearchVisibility()
-                            showSnackbar(R.string.address_book_success_deleted, R.color.success500_0_94)
+                            showSnackbar(R.string.address_book_success_deleted, R.color.success500)
                         }
                     }
                 }
