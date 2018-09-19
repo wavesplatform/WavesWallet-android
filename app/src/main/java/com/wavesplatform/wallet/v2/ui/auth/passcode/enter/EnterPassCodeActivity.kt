@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatEditText
 import android.text.InputType
 import android.text.TextUtils
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
@@ -41,8 +42,6 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     override fun configLayoutRes() = R.layout.activity_enter_passcode
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, true,
-                icon = R.drawable.ic_toolbar_back_black)
 
         text_use_acc_password.click {
             val guid = getGuid()
@@ -93,13 +92,20 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         if (TextUtils.isEmpty(guid)) {
             finish()
         } else {
-            text_title.text = App.getAccessManager().getWalletName(guid)
-            text_subtitle.text = App.getAccessManager().getWalletAddress(guid)
-            text_subtitle.visiable()
-            logout.visiable()
-            logout.click {
-                App.getAccessManager().setLastLoggedInGuid("")
-                launchActivity<WelcomeActivity>()
+            if (intent.hasExtra(KEY_INTENT_GUID)) {
+                text_title.text = App.getAccessManager().getWalletName(guid)
+                text_subtitle.text = App.getAccessManager().getWalletAddress(guid)
+                text_subtitle.visiable()
+                logout.visiable()
+                logout.click {
+                    App.getAccessManager().resetWallet()
+                    App.getAccessManager().setLastLoggedInGuid("")
+                    launchActivity<WelcomeActivity>()
+                }
+
+            } else {
+                setupToolbar(toolbar_view, true,
+                        icon = R.drawable.ic_toolbar_back_black)
             }
         }
     }

@@ -98,6 +98,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         try {
             wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
             val guid = UUID.randomUUID().toString()
+            loggedInGuid = guid
             prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, guid)
             prefs.addGlobalListValue(PrefsUtil.LIST_WALLET_GUIDS, guid)
             prefs.setValue(PrefsUtil.KEY_PUB_KEY, wallet!!.publicKeyStr)
@@ -166,6 +167,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
 
     fun resetWallet() {
         wallet = null
+        loggedInGuid = ""
     }
 
     fun setWallet(guid: String, password: String) {
@@ -281,7 +283,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         prefs.removeValue(PrefsUtil.KEY_PIN_FAILS)
     }
 
-    fun setCurrentAccountBackupSkipped() {
+    fun setCurrentAccountBackupDone() {
         prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, false)
     }
 
