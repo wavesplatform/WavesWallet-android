@@ -98,8 +98,8 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                 text_subtitle.visiable()
                 logout.visiable()
                 logout.click {
-                    App.getAccessManager().resetWallet()
                     App.getAccessManager().setLastLoggedInGuid("")
+                    App.getAccessManager().resetWallet()
                     launchActivity<WelcomeActivity>()
                 }
             } else {

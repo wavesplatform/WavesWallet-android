@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -19,12 +20,11 @@ class SplashActivity : BaseActivity(), SplashView {
     override fun onNotLoggedIn() {
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
         if (preferencesHelper.isTutorialPassed()) {
-            if (!TextUtils.isEmpty(App.getAccessManager().getLastLoggedInGuid())) {
-                launchActivity<com.wavesplatform.wallet.v2.ui.home.MainActivity>(clear = true)
-            } else {
+            if (TextUtils.isEmpty(App.getAccessManager().getLastLoggedInGuid())) {
                 launchActivity<WelcomeActivity>()
+            } else {
+                launchActivity<MainActivity>(clear = true)
             }
-
         } else {
             launchActivity<ChooseLanguageActivity>()
         }
@@ -33,7 +33,7 @@ class SplashActivity : BaseActivity(), SplashView {
     override fun onStartMainActivity(publicKey: String) {
         authHelper.startMainActivityAndCreateNewDBIfKeyValid(this, BuildConfig.PUBLIC_KEY)
         if (preferencesHelper.isTutorialPassed()) {
-            launchActivity<WelcomeActivity>()
+            launchActivity<MainActivity>(clear = true)
         } else {
             launchActivity<ChooseLanguageActivity>()
         }

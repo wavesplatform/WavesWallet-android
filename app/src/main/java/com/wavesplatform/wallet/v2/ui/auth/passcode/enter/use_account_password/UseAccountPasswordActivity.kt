@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.View
+import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
@@ -71,16 +71,29 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
             }
         }
 
+        edit_account_password.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE && button_sign_in.isEnabled) {
+                goNext()
+                true
+            } else {
+                false
+            }
+        }
+
         button_sign_in.click {
-            if (!TextUtils.isEmpty(guid)) {
-                try {
-                    WavesWallet(App.getAccessManager().getWalletData(guid),
-                            edit_account_password.text.toString())
-                    launchActivity<CreatePassCodeActivity>(options = createDataBundle())
-                    App.getAccessManager().resetPassCodeInputFails()
-                } catch (e: Exception) {
-                    toast(getString(R.string.enter_passcode_error_wrong_password))
-                }
+            goNext()
+        }
+    }
+
+    private fun goNext() {
+        if (!TextUtils.isEmpty(guid)) {
+            try {
+                WavesWallet(App.getAccessManager().getWalletData(guid),
+                        edit_account_password.text.toString())
+                launchActivity<CreatePassCodeActivity>(options = createDataBundle())
+                App.getAccessManager().resetPassCodeInputFails()
+            } catch (e: Exception) {
+                toast(getString(R.string.enter_passcode_error_wrong_password))
             }
         }
     }
