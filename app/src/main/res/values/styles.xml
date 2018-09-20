@@ -90,7 +90,7 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
-    <style name="AppThemeV2.MainActivity" parent="AppThemeV2.NoActionBar.Translucent.WhiteStatusBar">
+    <style name="AppThemeV2.MainActivity" parent="AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
         <item name="drawerArrowStyle">@style/DrawerIconBlack</item>
         <item name="actionMenuTextColor">@color/disabled900</item>
     </style>
