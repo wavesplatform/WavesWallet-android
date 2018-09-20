@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.profile.change_password
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.util.Log
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -13,7 +12,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.withColor
+import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -152,10 +151,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                     })
 
         } catch (e: Exception) {
-            Snackbar.make(findViewById(R.id.content), getString(R.string.change_password_error),
-                    Snackbar.LENGTH_LONG)
-                    .withColor(R.color.error400)
-                    .show()
+            showError(R.string.change_password_error, R.id.content)
         }
     }
 }

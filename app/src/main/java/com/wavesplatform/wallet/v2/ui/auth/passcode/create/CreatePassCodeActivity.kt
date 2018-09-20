@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.widget.AppCompatTextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -16,7 +15,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.withColor
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_create_passcode.*
 import javax.inject.Inject
 
@@ -104,10 +103,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     override fun onFailCreatePassCode() {
         showProgressBar(false)
-        Snackbar.make(findViewById(R.id.content), getString(R.string.create_pin_failed),
-                Snackbar.LENGTH_LONG)
-                .withColor(R.color.error400)
-                .show()
+        showError(R.string.create_pin_failed, R.id.content)
     }
 
     private fun moveToCreateStep() {

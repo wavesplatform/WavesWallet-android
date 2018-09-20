@@ -65,11 +65,10 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 rootView.recycle_aliases.isNestedScrollingEnabled = false
                 rootView.recycle_aliases.adapter = adapter
 
-                queryAllAsync<Alias>({
+                queryAllAsync<Alias> {
                     val ownAliases = it.filter { it.own }
-
                     adapter.setNewData(ownAliases)
-                })
+                }
 
                 rootView.relative_about_alias.click {
                     if (rootView.expandable_layout_hidden.isExpanded) {

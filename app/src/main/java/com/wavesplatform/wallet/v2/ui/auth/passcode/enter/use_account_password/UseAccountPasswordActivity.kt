@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -23,7 +24,6 @@ import io.github.anderscheow.validator.rules.common.MinRule
 import kotlinx.android.synthetic.main.activity_use_account_password.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
-import pers.victor.ext.toast
 import javax.inject.Inject
 
 
@@ -47,7 +47,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         if (intent.hasExtra(EnterPassCodeActivity.KEY_INTENT_GUID)) {
             guid = intent.extras.getString(EnterPassCodeActivity.KEY_INTENT_GUID)
             if (!TextUtils.isEmpty(guid)) {
-                setAccountData(guid!!)
+                setAccountData(guid)
             }
         }
 
@@ -93,7 +93,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
                 launchActivity<CreatePassCodeActivity>(options = createDataBundle())
                 App.getAccessManager().resetPassCodeInputFails()
             } catch (e: Exception) {
-                toast(getString(R.string.enter_passcode_error_wrong_password))
+                showError(R.string.enter_passcode_error_wrong_password, R.id.content)
             }
         }
     }

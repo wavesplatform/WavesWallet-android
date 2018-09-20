@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.auth.new_account
 import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.widget.AppCompatImageView
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -16,7 +15,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.withColor
+import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -143,10 +142,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     private fun goNext() {
         if (presenter.isAllFieldsValid()) {
             if (App.getAccessManager().isAccountNameExist(edit_account_name.text.toString())) {
-                Snackbar.make(findViewById(R.id.relative_root),
-                        getString(R.string.new_account_exist_error), Snackbar.LENGTH_LONG)
-                        .withColor(R.color.error400)
-                        .show()
+                showError(R.string.new_account_exist_error, R.id.relative_root)
             } else {
                 launchActivity<SecretPhraseActivity>(options = createDataBundle())
             }

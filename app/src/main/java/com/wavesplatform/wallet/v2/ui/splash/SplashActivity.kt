@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.splash
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -12,6 +13,8 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.setSystemBarTheme
+import pyxis.uzuki.live.richutilskt.utils.setStatusNavBarColor
 import javax.inject.Inject
 
 
@@ -50,8 +53,14 @@ class SplashActivity : BaseActivity(), SplashView {
 
     override fun askPassCode() = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStatusNavBarColor(Color.WHITE)
+    }
+
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setSystemBarTheme(false)
         presenter.storeIncomingURI(intent)
         presenter.resolveNextAction()
     }

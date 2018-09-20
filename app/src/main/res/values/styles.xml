@@ -90,7 +90,7 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
-    <style name="AppThemeV2.MainActivity" parent="AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
+    <style name="AppThemeV2.MainActivity" parent="AppThemeV2.NoActionBar.Translucent.WhiteStatusBar">
         <item name="drawerArrowStyle">@style/DrawerIconBlack</item>
         <item name="actionMenuTextColor">@color/disabled900</item>
     </style>
@@ -115,6 +115,7 @@
 
     <style name="AppThemeV2.NoActionBar.Translucent.Splash" parent="AppThemeV2.NoActionBar.Translucent.WhiteStatusBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
