@@ -4,11 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity

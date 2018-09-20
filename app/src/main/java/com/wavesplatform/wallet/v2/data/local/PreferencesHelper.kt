@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.data.local
 
 import android.content.Context
 import com.pddstudio.preferences.encrypted.EncryptedPreferences
-import com.wavesplatform.wallet.v2.data.local.PreferencesHelper.Companion.KEY_TUTORIAL
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import javax.inject.Inject
 

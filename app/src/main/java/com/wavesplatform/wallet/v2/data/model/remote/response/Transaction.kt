@@ -1,18 +1,13 @@
 package com.wavesplatform.wallet.v2.data.model.remote.response
 
-import android.os.Parcelable
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
 import com.google.common.base.Optional
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.api.NodeManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
-import kotlinx.android.parcel.Parcelize
 import org.apache.commons.lang3.ArrayUtils
 
 @RealmClass

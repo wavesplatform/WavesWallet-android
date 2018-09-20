@@ -7,13 +7,11 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
-import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants

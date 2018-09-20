@@ -5,7 +5,6 @@ import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.ScrollView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext

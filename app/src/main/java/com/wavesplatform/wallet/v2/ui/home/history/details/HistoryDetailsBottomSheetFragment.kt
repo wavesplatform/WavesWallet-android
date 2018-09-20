@@ -14,33 +14,28 @@ import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.string.asset
-import com.wavesplatform.wallet.R.string.fee
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
+import com.wavesplatform.wallet.v2.util.*
+import dagger.android.support.AndroidSupportInjection
 import io.github.kbiakov.codeview.CodeView
 import io.github.kbiakov.codeview.highlight.ColorThemeData
 import io.github.kbiakov.codeview.highlight.SyntaxColors
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
-import kotlin.collections.ArrayList
 import pers.victor.ext.*
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
-import com.wavesplatform.wallet.v2.util.*
-import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.history_details_layout.view.*
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
 
@@ -60,8 +55,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
     @Inject
     lateinit var historyDetailsAdapter: HistoryDetailsAdapter
-    @Inject
-    lateinit var publicKeyAccountHelper: PublicKeyAccountHelper
 
 
     @ProvidePresenter
@@ -226,11 +219,11 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 val priceTitle = exchangeView?.findViewById<AppCompatTextView>(R.id.history_details_btc_price)
 
                 val myOrder =
-                        if (transaction.order1?.sender == publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
+                        if (transaction.order1?.sender == App.getAccessManager().getWallet()?.address) transaction.order1
                         else transaction.order2
 
                 val pairOrder =
-                        if (transaction.order1?.sender != publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
+                        if (transaction.order1?.sender != App.getAccessManager().getWallet()?.address) transaction.order1
                         else transaction.order2
 
                 if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {

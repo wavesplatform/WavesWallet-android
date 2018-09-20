@@ -3,11 +3,8 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.id.image_transaction
-import com.wavesplatform.wallet.R.string.asset
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
 import com.wavesplatform.wallet.v2.util.icon
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.title

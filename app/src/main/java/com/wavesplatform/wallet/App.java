@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.v1.util.ApplicationLifeCycle;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 import com.wavesplatform.wallet.v1.util.annotations.Thunk;
 import com.wavesplatform.wallet.v1.util.exceptions.LoggingExceptionHandler;
+import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias;
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
@@ -55,7 +56,10 @@ public class App extends DaggerApplication {
     @Thunk
     static final String TAG = App.class.getSimpleName();
     private static final String RX_ERROR_TAG = "RxJava Error";
-    @Inject PrefsUtil mPrefsUtil;
+    @Inject
+    PrefsUtil mPrefsUtil;
+    @Inject
+    AuthHelper authHelper;
     private static Context sContext;
     private static AccessManager accessManager;
 
@@ -98,26 +102,10 @@ public class App extends DaggerApplication {
 
         new LoggingExceptionHandler();
 
-        RealmConfiguration config = new RealmConfiguration.Builder()
-                .name(String.format("%s.realm", mPrefsUtil.getValue(PrefsUtil.KEY_PUB_KEY, "")))
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        RealmConfigStore.Companion.init(AssetBalance.class, config);
-        RealmConfigStore.Companion.init(IssueTransaction.class, config);
-        RealmConfigStore.Companion.init(Transaction.class, config);
-        RealmConfigStore.Companion.init(Transfer.class, config);
-        RealmConfigStore.Companion.init(AssetPair.class, config);
-        RealmConfigStore.Companion.init(Order.class, config);
-        RealmConfigStore.Companion.init(Lease.class, config);
-        RealmConfigStore.Companion.init(Alias.class, config);
-        RealmConfigStore.Companion.init(SpamAsset.class, config);
-        RealmConfigStore.Companion.init(AddressBookUser.class, config);
-        DBHelper.getInstance().setRealmConfig(config);
-
         RxJavaPlugins.setErrorHandler(throwable -> Log.e(RX_ERROR_TAG, throwable.getMessage(), throwable));
 
         AppUtil appUtil = new AppUtil(this);
-        accessManager = new AccessManager(mPrefsUtil, appUtil);
+        accessManager = new AccessManager(mPrefsUtil, appUtil, authHelper);
 
         AccessState.getInstance().initAccessState(
                 new PrefsUtil(this),

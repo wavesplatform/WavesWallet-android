@@ -5,7 +5,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.Market
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
 import java.util.*
 import javax.inject.Inject
 

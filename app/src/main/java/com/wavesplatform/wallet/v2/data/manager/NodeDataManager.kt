@@ -14,7 +14,6 @@ import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.isAppOnForeground
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.app
 import pers.victor.ext.currentTimeMillis
@@ -93,6 +92,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                             assetBalance.isFiatMoney = it.isFiatMoney
                                             assetBalance.isGateway = it.isGateway
                                             assetBalance.isSpam = it.isSpam
+                                            assetBalance.position = it.position
                                         }
                                     }
                                 }
@@ -128,24 +128,22 @@ class NodeDataManager @Inject constructor() : DataManager() {
             createAliasRequest.sign(it)
         }
         return nodeService.createAlias(createAliasRequest)
-                .map({
-                    it.address = publicKeyAccountHelper.publicKeyAccount?.address
+                .map {
+                    it.address = getAddress()
                     it.save()
                     return@map it
-                })
+                }
     }
 
-    fun loadTransactions(): Observable<Pair<List<Transaction>?, List<Transaction>?>> {
+    fun loadTransactions(): Observable<List<Transaction>> {
         return Observable.interval(0, 15, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap {
                     if (app.isAppOnForeground()) {
-                        return@flatMap Observable.zip(nodeService.transactionList(getAddress(), currentLoadTransactionLimitPerRequest).map { r -> r[0] },
-                                nodeService.unconfirmedTransactions(), BiFunction<List<Transaction>, List<Transaction>, Pair<List<Transaction>, List<Transaction>>> { t1, t2 ->
-                            return@BiFunction Pair(t1, t2)
-                        })
+                        return@flatMap nodeService.transactionList(getAddress(), currentLoadTransactionLimitPerRequest)
+                                .map { r -> r[0] }
                     } else {
-                        return@flatMap Observable.just(Pair(null, null))
+                        return@flatMap Observable.just(listOf<Transaction>())
                     }
 
                 }

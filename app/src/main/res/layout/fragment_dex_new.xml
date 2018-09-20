@@ -12,13 +12,15 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:visibility="visible"
             android:id="@+id/linear_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
             android:orientation="vertical"
             android:paddingBottom="16dp"
-            android:paddingTop="16dp">
+            android:paddingTop="16dp"
+            android:visibility="visible">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_last_update"
@@ -40,51 +42,49 @@
 
         <LinearLayout
             android:id="@+id/linear_empty"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="24dp"
+            android:layout_gravity="center"
             android:orientation="vertical"
-            android:layout_gravity="center">
+            android:padding="24dp"
+            android:visibility="gone">
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_gravity="center_horizontal"
-                app:srcCompat="@drawable/ic_userimg_dex_80_multy"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/ic_userimg_dex_80_multy" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:textSize="20sp"
-                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="14dp"
-                android:layout_gravity="center_horizontal"
-                app:fontFamily="@font/roboto_medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/dex_empty_title"
-                />
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:fontFamily="@font/roboto_medium" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:layout_marginTop="8dp"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/disabled500"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
                 android:text="@string/dex_empty_subtitle"
-                />
+                android:textColor="@color/disabled500"
+                android:textSize="14sp" />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/button_add_markets"
-                android:layout_marginTop="44dp"
                 style="@style/WavesButton"
                 android:layout_width="match_parent"
-                android:enabled="true"
                 android:layout_height="48dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="24dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="44dp"
+                android:enabled="true"
                 android:text="@string/dex_empty_button_text" />
 
 

@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R

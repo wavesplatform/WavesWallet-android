@@ -2,25 +2,20 @@ package com.wavesplatform.wallet.v2.ui.home.dex.markets
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View
-import javax.inject.Inject
-
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.Market
-import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dex_markets.*
 import pers.victor.ext.gone
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
 class DexMarketsActivity : BaseActivity(), DexMarketsView {

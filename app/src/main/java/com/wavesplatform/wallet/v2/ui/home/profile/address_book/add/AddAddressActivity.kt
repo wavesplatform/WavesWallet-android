@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.text.TextUtils
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
@@ -13,26 +11,18 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.vicpin.krealmextensions.queryAsFlowable
-import com.vicpin.krealmextensions.queryFirst
-import com.vicpin.krealmextensions.queryFirstAsync
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.id.button_save
-import com.wavesplatform.wallet.R.id.edit_address
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
-import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
-import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_add_address.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
-import pyxis.uzuki.live.richutilskt.utils.toast
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

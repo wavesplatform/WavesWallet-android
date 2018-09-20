@@ -6,14 +6,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.rules.AlphabetRule
-import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.util.launchActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode

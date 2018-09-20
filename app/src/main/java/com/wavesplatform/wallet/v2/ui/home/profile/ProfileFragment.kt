@@ -1,21 +1,27 @@
 package com.wavesplatform.wallet.v2.ui.home.profile
 
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatTextView
+import android.util.Log
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.vicpin.krealmextensions.RealmConfigStore
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
+import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
@@ -32,14 +38,11 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.disposables.CompositeDisposable
+import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import pers.victor.ext.toast
 import javax.inject.Inject
-import android.content.ActivityNotFoundException
-import android.net.Uri
-import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
-import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
 
 
 
@@ -106,6 +109,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 App.getAccessManager().deleteCurrentWavesWallet()
                 presenter.prefsUtil.logOut()
                 presenter.appUtil.restartApp()
+                clearRealmConfiguration()
                 dialog.dismiss()
             }
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel)) { dialog, _ ->
@@ -121,9 +125,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         initFingerPrintControl()
 
-        textView_version.text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
-        subscriptions.add(nodeDataManager.currentBlocksHeight()
-                .subscribe { textView_height.text = it.height.toString() })
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             root_scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
@@ -146,7 +147,11 @@ class ProfileFragment : BaseFragment(), ProfileView {
             skip_backup_indicator_image.setImageDrawable(ContextCompat
                     .getDrawable(context!!, R.drawable.ic_check_18_success_400))
         }
+
+        textView_version.text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        textView_height.text = presenter.preferenceHelper.currentBlocksHeight.toString()
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -215,10 +220,19 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun logout() {
+        clearRealmConfiguration()
         App.getAccessManager().setLastLoggedInGuid("")
         activity?.finish()
         presenter.appUtil.restartApp()
         toast(getString(R.string.profile_general_logout))
+    }
+
+    private fun clearRealmConfiguration() {
+        baseActivity.stopService(Intent(baseActivity, UpdateApiDataService::class.java))
+        val f = RealmConfigStore::class.java.getDeclaredField("configMap") //NoSuchFieldException
+        f.isAccessible = true
+        val configMap = f.get(RealmConfigStore::class.java) as MutableMap<*, *>
+        configMap.clear()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

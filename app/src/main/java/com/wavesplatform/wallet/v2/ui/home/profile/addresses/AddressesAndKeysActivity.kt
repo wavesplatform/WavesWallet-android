@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.profile.addresses
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.vicpin.krealmextensions.queryAllAsync

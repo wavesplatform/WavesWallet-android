@@ -128,8 +128,12 @@ class LeasingFragment : BaseFragment(), LeasingView {
         text_available_balance.makeTextHalfBold()
         text_leased.text = MoneyUtil.getScaledText(leasedValue, wavesAsset)
         text_total.text = wavesAsset.getDisplayBalance()
-        wavesAsset.balance.notNull {
-            progress_of_leasing.progress = ((leasedValue * 100) / it).toInt()
+        wavesAsset.balance.notNull { wavesBalance ->
+            if (wavesBalance != 0L) {
+                progress_of_leasing.progress = ((leasedValue * 100) / wavesBalance).toInt()
+            } else {
+                progress_of_leasing.progress = 0
+            }
         }
     }
 

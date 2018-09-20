@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v2.data.model.remote.response
 
-import java.util.ArrayList
+import java.util.*
 
 data class Markets(
         var matcherPublicKey: String? = null,

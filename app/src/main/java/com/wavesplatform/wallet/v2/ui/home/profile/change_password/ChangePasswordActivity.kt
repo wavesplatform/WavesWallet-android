@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.home.profile.change_password
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App

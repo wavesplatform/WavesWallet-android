@@ -5,10 +5,10 @@ import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
@@ -19,7 +19,7 @@ import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
-class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var mContext: Context, var publicKeyAccountHelper: PublicKeyAccountHelper) : PagerAdapter() {
+class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var mContext: Context) : PagerAdapter() {
     var items: MutableList<HistoryItem> = arrayListOf()
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
@@ -66,11 +66,11 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
                 }
                 TransactionType.EXCHANGE_TYPE -> {
                     var myOrder =
-                            if (item?.t?.order1?.sender == publicKeyAccountHelper.publicKeyAccount?.address) item?.t?.order1
+                            if (item?.t?.order1?.sender == App.getAccessManager().getWallet()?.address) item?.t?.order1
                             else item?.t?.order2
 
                     var pairOrder =
-                            if (item?.t?.order1?.sender != publicKeyAccountHelper.publicKeyAccount?.address) item?.t?.order1
+                            if (item?.t?.order1?.sender != App.getAccessManager().getWallet()?.address) item?.t?.order1
                             else item?.t?.order2
 
 

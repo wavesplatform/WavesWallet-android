@@ -2,10 +2,10 @@ package com.wavesplatform.wallet.v2.ui.home.history
 
 import com.chad.library.adapter.base.BaseSectionQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.recycle_item_history.view.*
@@ -14,7 +14,7 @@ import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
-class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicKeyAccountHelper) :
+class HistoryItemAdapter @Inject constructor() :
         BaseSectionQuickAdapter<HistoryItem, BaseViewHolder>(R.layout.recycle_item_history, R.layout.asset_header, null) {
 
     override fun convertHead(helper: BaseViewHolder?, item: HistoryItem?) {
@@ -63,11 +63,11 @@ class HistoryItemAdapter @Inject constructor(var publicKeyAccountHelper: PublicK
                     }
                     TransactionType.EXCHANGE_TYPE -> {
                         val myOrder =
-                                if (item?.t?.order1?.sender == publicKeyAccountHelper.publicKeyAccount?.address) item?.t?.order1
+                                if (item?.t?.order1?.sender == App.getAccessManager().getWallet()?.address) item?.t?.order1
                                 else item?.t?.order2
 
                         val pairOrder =
-                                if (item?.t?.order1?.sender != publicKeyAccountHelper.publicKeyAccount?.address) item?.t?.order1
+                                if (item?.t?.order1?.sender != App.getAccessManager().getWallet()?.address) item?.t?.order1
                                 else item?.t?.order2
 
 
