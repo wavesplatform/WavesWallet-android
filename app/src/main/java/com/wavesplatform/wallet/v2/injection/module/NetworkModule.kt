@@ -30,7 +30,6 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
-import kotlin.jvm.java
 
 @Module
 class NetworkModule {

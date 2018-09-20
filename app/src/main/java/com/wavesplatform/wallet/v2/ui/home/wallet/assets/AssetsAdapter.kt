@@ -4,15 +4,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.wallet_asset_item.view.*
 import javax.inject.Inject
 
-class AssetsAdapter @Inject constructor(var publicKeyAccountHelper: PublicKeyAccountHelper) :
+class AssetsAdapter @Inject constructor() :
         RecyclerView.Adapter<AssetsAdapter.AssetsBaseViewHolder>() {
 
     var data = arrayListOf<AssetBalance>()
@@ -44,7 +44,7 @@ class AssetsAdapter @Inject constructor(var publicKeyAccountHelper: PublicKeyAcc
             View.GONE
         }
         holder.itemView.text_my_asset.visibility = if (item.issueTransaction?.sender
-                == publicKeyAccountHelper.publicKeyAccount?.address) {
+                == App.getAccessManager().getWallet()?.address) {
             View.VISIBLE
         } else {
             View.GONE

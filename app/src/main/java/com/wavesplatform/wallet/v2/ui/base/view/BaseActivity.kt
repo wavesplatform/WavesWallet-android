@@ -23,8 +23,6 @@ import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
-import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
@@ -70,10 +68,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     lateinit var nodeDataManager: NodeDataManager
     @Inject
     lateinit var preferencesHelper: PreferencesHelper
-    @Inject
-    lateinit var authHelper: AuthHelper
-    @Inject
-    lateinit var publicKeyAccountHelper: PublicKeyAccountHelper
 
     private var progressDialog: ProgressDialog? = null
 

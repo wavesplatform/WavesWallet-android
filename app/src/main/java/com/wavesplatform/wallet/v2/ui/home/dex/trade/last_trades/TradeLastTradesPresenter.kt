@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v2.data.model.local.MyOrderItem
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.history.TestObject
 import java.util.*

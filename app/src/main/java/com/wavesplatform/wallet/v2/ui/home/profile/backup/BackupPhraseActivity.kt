@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.home.profile.backup
 import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.View
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter

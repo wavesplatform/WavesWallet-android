@@ -6,7 +6,10 @@ import com.wavesplatform.wallet.v1.request.IssueTransactionRequest
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalances
+import com.wavesplatform.wallet.v2.data.model.remote.response.Height
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.GET

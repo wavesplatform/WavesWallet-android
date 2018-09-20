@@ -3,10 +3,10 @@ package com.wavesplatform.wallet.v2.ui.home.history.details
 import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
@@ -19,10 +19,8 @@ import javax.inject.Inject
 
 class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
 
-    @Inject lateinit var publicKeyAccountHelper: PublicKeyAccountHelper
-
     var mData: List<Transaction> = arrayListOf()
-    
+
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
         val transaction = mData[position]
         val layout = inflate(R.layout.history_details_layout, collection, false) as ViewGroup
@@ -61,11 +59,11 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
             }
             TransactionType.EXCHANGE_TYPE -> {
                 var myOrder =
-                        if (transaction.order1?.sender == publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
+                        if (transaction.order1?.sender == App.getAccessManager().getWallet()?.address) transaction.order1
                         else transaction.order2
 
                 var pairOrder =
-                        if (transaction.order1?.sender != publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
+                        if (transaction.order1?.sender != App.getAccessManager().getWallet()?.address) transaction.order1
                         else transaction.order2
 
                 layout.text_amount_value_in_dollar.visiable()

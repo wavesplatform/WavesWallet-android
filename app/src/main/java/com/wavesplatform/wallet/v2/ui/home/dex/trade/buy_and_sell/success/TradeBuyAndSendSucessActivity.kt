@@ -1,17 +1,14 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success
 
 import android.os.Bundle
-import javax.inject.Inject
-
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_trade_send_and_buy_sucess.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
+import javax.inject.Inject
 
 
 class TradeBuyAndSendSucessActivity : BaseActivity(), TradeBuyAndSendSucessView {

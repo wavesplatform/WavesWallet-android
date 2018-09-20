@@ -2,20 +2,17 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import javax.inject.Inject
-
 import com.arellomobile.mvp.presenter.InjectPresenter
-
-import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment;
-
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.OrderbookItem
+import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import kotlinx.android.synthetic.main.fragment_trade_orderbook.*
 import kotlinx.android.synthetic.main.layout_empty_data.*
 import pers.victor.ext.click
-import java.util.ArrayList
+import java.util.*
+import javax.inject.Inject
 
 
 class TradeOrderbookFragment : BaseFragment(), TradeOrderbookView {

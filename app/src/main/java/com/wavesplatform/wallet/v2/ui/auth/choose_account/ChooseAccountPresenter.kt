@@ -1,13 +1,12 @@
 package com.wavesplatform.wallet.v2.ui.auth.choose_account
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.ui.auth.WalletItem
 import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 
 @InjectViewState

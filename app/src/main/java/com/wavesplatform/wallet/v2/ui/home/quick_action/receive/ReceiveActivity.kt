@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
-import android.view.View
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_receive.*

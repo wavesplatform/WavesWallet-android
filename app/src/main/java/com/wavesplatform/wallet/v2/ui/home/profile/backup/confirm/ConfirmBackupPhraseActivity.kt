@@ -20,7 +20,6 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.activity_confirm_backup_pharse.*
 import pers.victor.ext.*
-import java.lang.StringBuilder
 import javax.inject.Inject
 
 class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {

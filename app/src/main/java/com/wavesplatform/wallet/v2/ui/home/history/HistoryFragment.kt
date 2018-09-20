@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.history
 
 import android.os.Bundle
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -10,6 +11,10 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_history.*
+import pers.victor.ext.dp2px
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
 class HistoryFragment : BaseFragment(), HistoryView {
@@ -40,7 +45,24 @@ class HistoryFragment : BaseFragment(), HistoryView {
     private fun setupUI() {
         val tabs = arguments?.getParcelableArrayList<HistoryTab>(BUNDLE_TABS)
         val list = tabs?.map {
-            return@map Pair(HistoryTabFragment.newInstance(it.data, arguments?.getParcelable(BUNDLE_ASSET)), it.title)
+            val fragment = HistoryTabFragment.newInstance(it.data, arguments?.getParcelable(BUNDLE_ASSET))
+            fragment.changeTabBarVisibilityListener = object : HistoryTabFragment.ChangeTabBarVisibilityListener {
+                override fun changeTabBarVisibility(show: Boolean) {
+                    if (show) {
+                        appbar_layout.setExpanded(true, false)
+                        appbar_layout.visiable()
+                    } else {
+                        if (appbar_layout.visibility != View.GONE) {
+                            appbar_layout.setExpanded(false, false)
+                            runDelayed(100) {
+                                appbar_layout.gone()
+                            }
+                        }
+                    }
+                }
+            }
+
+            return@map Pair(fragment, it.title)
         }?.toMutableList()
 
         list.notNull {

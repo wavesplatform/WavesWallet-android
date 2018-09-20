@@ -12,6 +12,7 @@ import com.wavesplatform.wallet.v1.data.services.PinStoreService
 import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import io.reactivex.Completable
@@ -23,7 +24,7 @@ import java.security.SecureRandom
 import java.util.*
 
 
-class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) {
+class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, private var authHelper: AuthHelper) {
 
     private val pinStore = PinStoreService()
     private var loggedInGuid: String = ""
@@ -103,6 +104,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
             prefs.setValue(PrefsUtil.KEY_PUB_KEY, wallet!!.publicKeyStr)
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
             prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet!!.getEncryptedData(password))
+            authHelper.configureDB(wallet?.address)
             if (skipBackup) {
                 prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, true)
             }
@@ -171,6 +173,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil) 
     fun setWallet(guid: String, password: String) {
         wallet = WavesWallet(getWalletData(guid), password)
         setLastLoggedInGuid(guid)
+        authHelper.configureDB(wallet?.address)
     }
 
     fun getWallet(): WavesWallet? {

@@ -14,12 +14,14 @@ import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.vicpin.krealmextensions.RealmConfigStore
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
+import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
@@ -35,6 +37,7 @@ import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActi
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.disposables.CompositeDisposable
+import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import javax.inject.Inject
@@ -103,6 +106,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 App.getAccessManager().deleteCurrentWavesWallet()
                 presenter.prefsUtil.logOut()
                 presenter.appUtil.restartApp()
+                clearRealmConfiguration()
                 dialog.dismiss()
             }
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel)) { dialog, _ ->
@@ -118,9 +122,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         initFingerPrintControl()
 
-        textView_version.text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
-        subscriptions.add(nodeDataManager.currentBlocksHeight()
-                .subscribe { textView_height.text = it.height.toString() })
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             root_scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
@@ -143,7 +144,11 @@ class ProfileFragment : BaseFragment(), ProfileView {
             skip_backup_indicator_image.setImageDrawable(ContextCompat
                     .getDrawable(context!!, R.drawable.ic_check_18_success_400))
         }
+
+        textView_version.text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        textView_height.text = presenter.preferenceHelper.currentBlocksHeight.toString()
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -212,11 +217,20 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun logout() {
+        clearRealmConfiguration()
         App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
         val intent = Intent(context, WelcomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+    }
+
+    private fun clearRealmConfiguration() {
+        baseActivity.stopService(Intent(baseActivity, UpdateApiDataService::class.java))
+        val f = RealmConfigStore::class.java.getDeclaredField("configMap") //NoSuchFieldException
+        f.isAccessible = true
+        val configMap = f.get(RealmConfigStore::class.java) as MutableMap<*, *>
+        configMap.clear()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

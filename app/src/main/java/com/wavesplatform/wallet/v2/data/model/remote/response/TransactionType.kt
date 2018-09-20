@@ -4,8 +4,6 @@ import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.local.Language
-import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
 
 enum class TransactionType(var id: Int,
                            @DrawableRes var image: Int,

@@ -14,11 +14,11 @@ import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.helpers.PublicKeyAccountHelper
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
@@ -55,8 +55,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
     @Inject
     lateinit var historyDetailsAdapter: HistoryDetailsAdapter
-    @Inject
-    lateinit var publicKeyAccountHelper: PublicKeyAccountHelper
 
 
     @ProvidePresenter
@@ -221,11 +219,11 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 val priceTitle = exchangeView?.findViewById<AppCompatTextView>(R.id.history_details_btc_price)
 
                 val myOrder =
-                        if (transaction.order1?.sender == publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
+                        if (transaction.order1?.sender == App.getAccessManager().getWallet()?.address) transaction.order1
                         else transaction.order2
 
                 val pairOrder =
-                        if (transaction.order1?.sender != publicKeyAccountHelper.publicKeyAccount?.address) transaction.order1
+                        if (transaction.order1?.sender != App.getAccessManager().getWallet()?.address) transaction.order1
                         else transaction.order2
 
                 if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {

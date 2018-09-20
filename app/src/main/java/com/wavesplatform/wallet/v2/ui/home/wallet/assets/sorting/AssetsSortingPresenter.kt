@@ -1,15 +1,10 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
-import android.os.Bundle
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsync
-import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 

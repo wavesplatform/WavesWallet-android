@@ -5,21 +5,17 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import com.vicpin.krealmextensions.queryFirst
-import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.Order
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.notNull
 import dagger.android.AndroidInjection
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import javax.inject.Inject
 
 
@@ -51,39 +47,37 @@ class UpdateApiDataService : Service() {
         subscriptions.add(nodeDataManager.loadTransactions()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
-                    it.first.notNull {
-                        if (it.isNotEmpty()) {
-                            val sortedList = it.sortedByDescending { it.timestamp }
+                    if (it.isNotEmpty()) {
+                        val sortedList = it.sortedByDescending { it.timestamp }
 
-                            val firstTransaction = queryFirst<Transaction>({ equalTo("id", sortedList[0].id) })
-                            val lastTransaction = queryFirst<Transaction>({ equalTo("id", sortedList[sortedList.size - 1].id) })
+                        val firstTransaction = queryFirst<Transaction>({ equalTo("id", sortedList[0].id) })
+                        val lastTransaction = queryFirst<Transaction>({ equalTo("id", sortedList[sortedList.size - 1].id) })
 
-                            if (lastTransaction == null) {
-                                // all list is new, need load more
+                        if (lastTransaction == null) {
+                            // all list is new, need load more
 
-                                if (currentLimit >= maxLimit) currentLimit = 50
+                            if (currentLimit >= maxLimit) currentLimit = 50
 
-                                if (prevLimit == defaultLimit) {
-                                    saveToDb(it)
-                                } else {
-                                    try {
-                                        saveToDb(it.subList(prevLimit - 1, it.size - 1))
-                                    } catch (e: Exception) {
-                                        currentLimit = 50
-                                    }
-                                }
-
-                                // save previous count of loaded transactions for future cut list
-                                prevLimit = currentLimit
-
-                                // multiply current limit
-                                currentLimit *= 2
-                                nodeDataManager.currentLoadTransactionLimitPerRequest = currentLimit
-
-                            } else if (firstTransaction == null) {
-                                // only few new transaction
+                            if (prevLimit == defaultLimit) {
                                 saveToDb(it)
+                            } else {
+                                try {
+                                    saveToDb(it.subList(prevLimit - 1, it.size - 1))
+                                } catch (e: Exception) {
+                                    currentLimit = 50
+                                }
                             }
+
+                            // save previous count of loaded transactions for future cut list
+                            prevLimit = currentLimit
+
+                            // multiply current limit
+                            currentLimit *= 2
+                            nodeDataManager.currentLoadTransactionLimitPerRequest = currentLimit
+
+                        } else if (firstTransaction == null) {
+                            // only few new transaction
+                            saveToDb(it)
                         }
                     }
                 }, {
