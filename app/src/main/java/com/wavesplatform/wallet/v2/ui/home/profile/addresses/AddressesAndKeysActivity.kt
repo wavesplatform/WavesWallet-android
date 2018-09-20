@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.profile.addresses
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.vicpin.krealmextensions.queryAllAsync
@@ -36,7 +35,6 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
     override fun configLayoutRes(): Int = R.layout.activity_profile_addresses_and_keys
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setStatusBarColor(R.color.white)
         setupToolbar(toolbar_view, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         val user = App.getAccessManager().createAddressBookCurrentAccount()

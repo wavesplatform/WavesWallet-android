@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account
 
 import android.os.Bundle
-import android.view.View
+import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
@@ -49,9 +49,7 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
         isFieldsValid()
 
         button_create_account.click {
-            if (intent.hasExtra(NewAccountActivity.KEY_INTENT_SEED)) {
-                launchActivity<CreatePassCodeActivity>(options = createDataBundle())
-            }
+            goNext()
         }
 
         val nameValidation = Validation(til_account_name)
@@ -131,9 +129,26 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
             }
         }
 
+        edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                goNext()
+                true
+            } else {
+                false
+            }
+        }
+
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_SEED)) {
             seed = intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED)
             setAccountData()
+        }
+    }
+
+    private fun goNext() {
+        if (presenter.isAllFieldsValid()) {
+            if (intent.hasExtra(NewAccountActivity.KEY_INTENT_SEED)) {
+                launchActivity<CreatePassCodeActivity>(options = createDataBundle())
+            }
         }
     }
 

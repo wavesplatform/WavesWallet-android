@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home.profile.change_password
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
@@ -104,7 +105,22 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
             }
         }
 
+        edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                goNext()
+                true
+            } else {
+                false
+            }
+        }
+
         button_confirm.click {
+            goNext()
+        }
+    }
+
+    private fun goNext() {
+        if (presenter.isAllFieldsValid()) {
             launchActivity<EnterPassCodeActivity>(
                     requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
         }
