@@ -64,12 +64,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupUI()
 
-        presenter.loadAliases()
-    }
-
-    override fun onStart() {
-        super.onStart()
         skeletonScreen.notNull { it.show() }
+        presenter.loadAliases()
         presenter.loadAssetsBalance()
     }
 
@@ -182,7 +178,9 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         adapter.setNewData(assets)
-        skeletonScreen.notNull { it.hide() }
+        if (withApiUpdate) {
+            skeletonScreen.notNull { it.hide() }
+        }
     }
 
     override fun afterSuccessLoadHiddenAssets(assets: List<AssetBalance>) {
@@ -194,7 +192,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
             relative_hidden_block.gone()
         }
 
-        adapter.setNewData(assets)
+        adapterHiddenAssets.setNewData(assets)
         text_hidden_assets.text = getString(
                 R.string.wallet_assets_hidden_category, assets.size.toString())
     }
@@ -207,7 +205,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
             expandable_layout_spam.gone()
             relative_spam_block.gone()
         }
-        adapter.setNewData(assets)
+        spamAssetsAdapter.setNewData(assets)
         text_spam_assets.text = getString(
                 R.string.wallet_assets_spam_category, assets.size.toString())
     }

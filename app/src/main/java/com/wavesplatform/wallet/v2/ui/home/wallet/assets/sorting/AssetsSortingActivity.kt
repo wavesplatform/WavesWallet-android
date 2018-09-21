@@ -137,7 +137,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
                 val originalPos = IntArray(2)
                 viewHolder.itemView.card_asset.getLocationOnScreen(originalPos)
-                view_drag_bg.y = originalPos[1].toFloat()
+                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
                 view_drag_bg.visiable()
 
                 viewHolder.itemView.card_asset.cardElevation = dp2px(4).toFloat()
@@ -147,7 +147,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 presenter.needToUpdate = true
                 val originalPos = IntArray(2)
                 target.itemView.card_asset.getLocationOnScreen(originalPos)
-                view_drag_bg.y = originalPos[1].toFloat()
+                view_drag_bg.y = originalPos[1].toFloat()- getStatusBarHeight()
             }
 
             override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {

@@ -16,31 +16,31 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
 
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
         runAsync {
-            queryAllAsSingle<AssetBalance>().toObservable()
+            addSubscription(queryAllAsSingle<AssetBalance>().toObservable()
                     .subscribeOn(Schedulers.io())
-                    .map { createTripleSortedLists(it) }
-                    //.doOnNext { postSuccess(it, withApiUpdate, true) }
+//                    .map { createTripleSortedLists(it.toMutableList()) }
+//                    .doOnNext { postSuccess(it, withApiUpdate, true) }
                     .flatMap { tryUpdateWithApi(withApiUpdate, it) }
-                    .map { createTripleSortedLists(it) }
+                    .map { createTripleSortedLists(it.toMutableList()) }
                     .subscribe({
                         postSuccess(it, withApiUpdate, false)
                     }, {
                         runOnUiThread {
                             viewState.afterFailedLoadAssets()
                         }
-                    })
+                    }))
         }
     }
 
-    private fun tryUpdateWithApi(withApiUpdate: Boolean, it: Triple<List<AssetBalance>, List<AssetBalance>, List<AssetBalance>>): Observable<List<AssetBalance>>? {
+    private fun tryUpdateWithApi(withApiUpdate: Boolean, it: List<AssetBalance>): Observable<List<AssetBalance>>? {
         return if (withApiUpdate) {
-            nodeDataManager.loadAssets(it.third)
+            nodeDataManager.loadAssets(it)
         } else {
-            Observable.just(it.third)
+            Observable.just(it)
         }
     }
 
-    private fun postSuccess(it: Triple<List<AssetBalance>, List<AssetBalance>, List<AssetBalance>>,
+    private fun postSuccess(it: Triple<MutableList<AssetBalance>, MutableList<AssetBalance>, MutableList<AssetBalance>>,
                             withApiUpdate: Boolean,
                             fromDb: Boolean) {
         runOnUiThread {
@@ -50,10 +50,10 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
     }
 
-    private fun createTripleSortedLists(list: List<AssetBalance>): Triple<List<AssetBalance>, List<AssetBalance>, List<AssetBalance>> {
-        val hiddenList = list.filter { it.isHidden && !it.isSpam }.sortedBy { it.position }
-        val sortedToFirstFavoriteList = list.filter { !it.isHidden && !it.isSpam }.sortedByDescending({ it.isGateway }).sortedBy { it.position }.sortedByDescending({ it.isFavorite })
-        val spamList = list.filter { it.isSpam }
+    private fun createTripleSortedLists(list: MutableList<AssetBalance>): Triple<MutableList<AssetBalance>, MutableList<AssetBalance>, MutableList<AssetBalance>> {
+        val hiddenList = list.filter { it.isHidden && !it.isSpam }.sortedBy { it.position }.toMutableList()
+        val sortedToFirstFavoriteList = list.filter { !it.isHidden && !it.isSpam }.sortedByDescending({ it.isGateway }).sortedBy { it.position }.sortedByDescending({ it.isFavorite }).toMutableList()
+        val spamList = list.filter { it.isSpam }.toMutableList()
         return Triple(sortedToFirstFavoriteList, hiddenList, spamList)
     }
 
