@@ -30,7 +30,6 @@ import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
-import pers.victor.ext.showFragment
 import javax.inject.Inject
 
 

@@ -85,9 +85,9 @@ class UpdateApiDataService : Service() {
                     Log.d("test", "test")
                 }))
         subscriptions.add(nodeDataManager.currentBlocksHeight()
-                .subscribe({
+                .subscribe {
 
-                }))
+                })
         return Service.START_NOT_STICKY
     }
 
@@ -96,7 +96,7 @@ class UpdateApiDataService : Service() {
             if (trans.assetId.isNullOrEmpty()) {
                 trans.asset = Constants.defaultAssets[0]
             } else {
-                trans.asset = queryFirst<AssetBalance>({ equalTo("assetId", trans.assetId) })
+                trans.asset = queryFirst<AssetBalance> { equalTo("assetId", trans.assetId) }
             }
 
             if (trans.recipient.contains("alias")) {
@@ -104,9 +104,9 @@ class UpdateApiDataService : Service() {
                 aliasName.notNull {
                     subscriptions.add(apiDataManager.loadAlias(it)
                             .compose(RxUtil.applyObservableDefaultSchedulers())
-                            .subscribe({
+                            .subscribe {
                                 trans.recipientAddress = it.address
-                            }))
+                            })
                 }
             } else {
                 trans.recipientAddress = trans.recipient
