@@ -37,12 +37,8 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        val user = App.getAccessManager().createAddressBookCurrentAccount()
-        user.notNull {
-            text_address.text = user!!.address
-            text_public_key.text = App.getAccessManager()
-                    .findPublicKeyBy(user.address)
-        }
+        text_address.text = App.getAccessManager().getWallet()?.address
+        text_public_key.text = App.getAccessManager().getWallet()?.publicKeyStr
 
         queryAllAsync<Alias> { aliases ->
             val ownAliases = aliases.filter { it.own }
