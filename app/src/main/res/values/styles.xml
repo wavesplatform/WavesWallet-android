@@ -113,7 +113,11 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
-    <style name="AppThemeV2.NoActionBar.Translucent.Splash" parent="AppThemeV2.NoActionBar.Translucent.WhiteStatusBar">
+    <style name="AppThemeV2.NoActionBar.Translucent.Fullscreen" parent="AppThemeV2.NoActionBar.Translucent.WhiteStatusBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="AppThemeV2.NoActionBar.Translucent.Splash" parent="AppThemeV2.NoActionBar.Translucent.Fullscreen">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 

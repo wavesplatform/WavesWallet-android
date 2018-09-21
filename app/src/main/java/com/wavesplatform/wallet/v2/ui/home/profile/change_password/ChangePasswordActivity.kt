@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home.profile.change_password
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
@@ -12,6 +13,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -38,7 +40,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view,  true,
+        setupToolbar(toolbar_view, true,
                 getString(R.string.change_password_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
@@ -103,7 +105,22 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
             }
         }
 
+        edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                goNext()
+                true
+            } else {
+                false
+            }
+        }
+
         button_confirm.click {
+            goNext()
+        }
+    }
+
+    private fun goNext() {
+        if (presenter.isAllFieldsValid()) {
             launchActivity<EnterPassCodeActivity>(
                     requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
         }
@@ -130,8 +147,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         val guid = App.getAccessManager().getLoggedInGuid()
         try {
             val oldWallet = WavesWallet(
-                    App.getAccessManager()
-                            .getCurrentWavesWalletEncryptedData(),
+                    App.getAccessManager().getCurrentWavesWalletEncryptedData(),
                     edit_old_password.text.toString()
             )
             val newWallet = WavesWallet(oldWallet.seed)
@@ -141,8 +157,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                     guid, newWallet.publicKeyStr,
                     newWallet.getEncryptedData(newPassWord))
 
-            App
-                    .getAccessManager()
+            App.getAccessManager()
                     .writePassCodeObservable(guid, newPassWord, passCode)
                     .subscribe({
                         toast(getString(R.string.change_password_success))
@@ -152,7 +167,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                     })
 
         } catch (e: Exception) {
-            toast(getString(R.string.change_password_error))
+            showError(R.string.change_password_error, R.id.content)
         }
     }
 }

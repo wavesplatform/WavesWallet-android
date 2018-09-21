@@ -37,7 +37,7 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint() {
                             App.getAccessManager().setUseFingerPrint(true)
-                            launchActivity<MainActivity>(clear = true) { }
+                            launchActivity<MainActivity>(clear = true)
                         }
                     })
         }

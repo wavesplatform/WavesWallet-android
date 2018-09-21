@@ -9,7 +9,6 @@ import javax.inject.Inject
 class ActiveMarketsSortingAdapter @Inject constructor() : BaseItemDraggableAdapter<TestObject, BaseViewHolder>(R.layout.dex_active_markets_sorting_item,null) {
 
     override fun convert(helper: BaseViewHolder, item: TestObject) {
-        helper
-                .addOnClickListener(R.id.image_delete)
+        helper.addOnClickListener(R.id.image_delete)
     }
 }

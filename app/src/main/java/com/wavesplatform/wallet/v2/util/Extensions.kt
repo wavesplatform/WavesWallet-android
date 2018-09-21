@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.ColorRes
+import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -75,21 +76,21 @@ fun ByteArray.arrayWithSize(): ByteArray {
 
 fun Activity.openUrlWithChromeTab(url: String) {
     SimpleChromeCustomTabs.getInstance()
-            .withFallback({
+            .withFallback {
                 openUrlWithIntent(url)
-            }).withIntentCustomizer({
+            }.withIntentCustomizer {
                 it.withToolbarColor(findColor(R.color.submit400))
-            })
+            }
             .navigateTo(Uri.parse(url), this)
 }
 
 fun Fragment.openUrlWithChromeTab(url: String) {
     SimpleChromeCustomTabs.getInstance()
-            .withFallback({
+            .withFallback {
                 activity?.openUrlWithIntent(url)
-            }).withIntentCustomizer({
+            }.withIntentCustomizer {
                 it.withToolbarColor(findColor(R.color.submit400))
-            })
+            }
             .navigateTo(Uri.parse(url), activity)
 
 }
@@ -172,7 +173,11 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
         // Fetch the current flags.
         val lFlags = this.window.decorView.systemUiVisibility
         // Update the SystemUiVisibility dependening on whether we want a Light or Dark theme.
-        this.window.decorView.systemUiVisibility = if (pIsDark) lFlags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv() else lFlags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        this.window.decorView.systemUiVisibility = if (pIsDark) {
+            lFlags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+        } else {
+            lFlags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
     }
 }
 
@@ -203,6 +208,28 @@ fun View.showSnackbar(@StringRes msg: Int, @ColorRes color: Int? = null, during:
     }
 }
 
+fun Activity.showSuccess(@StringRes msgId: Int, @IdRes viewId: Int) {
+    showSuccess(getString(msgId), viewId)
+}
+
+fun Activity.showSuccess(msg: String, @IdRes viewId: Int) {
+    showMessage(msg, viewId, R.color.success500)
+}
+
+fun Activity.showError(@StringRes msgId: Int, @IdRes viewId: Int) {
+    showMessage(getString(msgId), viewId, R.color.error400)
+}
+
+fun Activity.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
+    showMessage(msg, viewId, color)
+}
+
+fun Activity.showMessage(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
+    Snackbar.make(findViewById(viewId), msg, Snackbar.LENGTH_LONG)
+            .withColor(color)
+            .show()
+}
+
 
 fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_18_black) {
     clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), text)
@@ -223,9 +250,9 @@ fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: In
 
     imageView.notNull { image ->
         image.setImageDrawable(ContextCompat.getDrawable(this.context, R.drawable.ic_check_18_success_400))
-        runDelayed(1500, {
+        runDelayed(1500) {
             this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, copyIcon)) }
-        })
+        }
     }
 }
 

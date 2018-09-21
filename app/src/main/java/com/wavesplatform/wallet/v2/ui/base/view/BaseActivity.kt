@@ -97,14 +97,14 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     public override fun onResume() {
         super.onResume()
+        App.getAccessManager().addActivity()
+        askPassCodeIfNeed()
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ errorEvent ->
                     mErrorManager.showError(this,
                             errorEvent.retrofitException, errorEvent.retrySubject)
                 }, { t: Throwable? -> t?.printStackTrace() }))
-        App.getAccessManager().addActivity()
-        askPassCodeIfNeed()
     }
 
     public override fun onPause() {
@@ -151,10 +151,10 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         if (title.isNotEmpty()) mActionBar?.title = title
         else mActionBar?.title = " "
 
-        toolbar.setNavigationOnClickListener({
+        toolbar.setNavigationOnClickListener {
             hideKeyboard()
             onClickListener()
-        })
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -228,8 +228,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     protected fun setStatusBarColor(@ColorRes intColorRes: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(this, intColorRes)
         }
     }

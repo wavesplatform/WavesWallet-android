@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
@@ -15,6 +16,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -22,7 +24,6 @@ import io.github.anderscheow.validator.rules.common.MinRule
 import kotlinx.android.synthetic.main.activity_use_account_password.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
-import pers.victor.ext.toast
 import javax.inject.Inject
 
 
@@ -46,7 +47,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         if (intent.hasExtra(EnterPassCodeActivity.KEY_INTENT_GUID)) {
             guid = intent.extras.getString(EnterPassCodeActivity.KEY_INTENT_GUID)
             if (!TextUtils.isEmpty(guid)) {
-                setAccountData(guid!!)
+                setAccountData(guid)
             }
         }
 
@@ -70,16 +71,29 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
             }
         }
 
+        edit_account_password.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE && button_sign_in.isEnabled) {
+                goNext()
+                true
+            } else {
+                false
+            }
+        }
+
         button_sign_in.click {
-            if (!TextUtils.isEmpty(guid)) {
-                try {
-                    WavesWallet(App.getAccessManager().getWalletData(guid),
-                            edit_account_password.text.toString())
-                    launchActivity<CreatePassCodeActivity>(options = createDataBundle())
-                    App.getAccessManager().resetPassCodeInputFails()
-                } catch (e: Exception) {
-                    toast(getString(R.string.enter_passcode_error_wrong_password))
-                }
+            goNext()
+        }
+    }
+
+    private fun goNext() {
+        if (!TextUtils.isEmpty(guid)) {
+            try {
+                WavesWallet(App.getAccessManager().getWalletData(guid),
+                        edit_account_password.text.toString())
+                launchActivity<CreatePassCodeActivity>(options = createDataBundle())
+                App.getAccessManager().resetPassCodeInputFails()
+            } catch (e: Exception) {
+                showError(R.string.enter_passcode_error_wrong_password, R.id.content)
             }
         }
     }

@@ -1,30 +1,76 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.wallet_asset_item.view.*
 import javax.inject.Inject
 
 class AssetsAdapter @Inject constructor() :
-        BaseQuickAdapter<AssetBalance, BaseViewHolder>(R.layout.wallet_asset_item, null) {
+        RecyclerView.Adapter<AssetsAdapter.AssetsBaseViewHolder>() {
 
-    override fun convert(helper: BaseViewHolder, item: AssetBalance) {
-        helper.setText(R.id.text_asset_name, item.getName())
-                .setText(R.id.text_asset_value, item.getDisplayBalance())
-                .setGone(R.id.image_favourite, item.isFavorite)
-                .setGone(R.id.text_my_asset, item.issueTransaction?.sender
-                        == App.getAccessManager().getWallet()?.address)
-                .setGone(R.id.image_down_arrow, item.isGateway)
-                .setGone(R.id.text_tag_spam, item.isSpam)
-//                .setGone(R.id.text_bitcoin_value, !item.isSpam)
+    var data = arrayListOf<AssetBalance>()
+    var onClickListener: OnItemClick? = null
 
-        helper.itemView.image_asset_icon.isOval = true
-        helper.itemView.image_asset_icon.setAsset(item)
+    fun update(data: List<AssetBalance>) {
+        this.data.clear()
+        this.data.addAll(data)
+        notifyDataSetChanged()
+    }
 
-        helper.itemView.text_asset_value.makeTextHalfBold()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssetsBaseViewHolder {
+        val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.wallet_asset_item, parent, false)
+        return AssetsBaseViewHolder(view)
+    }
+
+    override fun getItemCount(): Int {
+        return data.size
+    }
+
+    override fun onBindViewHolder(holder: AssetsBaseViewHolder, position: Int) {
+        val item = data[position]
+        holder.itemView.text_asset_name.text = item.getName()
+        holder.itemView.text_asset_value.text = item.getDisplayBalance()
+        holder.itemView.image_favourite.visibility = if (item.isFavorite) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+        holder.itemView.text_my_asset.visibility = if (item.issueTransaction?.sender
+                == App.getAccessManager().getWallet()?.address) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+        holder.itemView.image_down_arrow.visibility = if (item.isGateway) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+        holder.itemView.text_tag_spam.visibility = if (item.isSpam) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+        holder.itemView.image_asset_icon.isOval = true
+        holder.itemView.image_asset_icon.setAsset(item)
+        holder.itemView.text_asset_value.makeTextHalfBold()
+
+        onClickListener.notNull { onClick ->
+            holder.itemView.setOnClickListener {onClick.onClick(item, position)}
+        }
+    }
+
+    class AssetsBaseViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    interface OnItemClick {
+        fun onClick(assetBalance: AssetBalance, position: Int)
     }
 }

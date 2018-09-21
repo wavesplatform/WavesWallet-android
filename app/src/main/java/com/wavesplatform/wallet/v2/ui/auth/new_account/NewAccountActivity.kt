@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
@@ -14,6 +15,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -25,7 +27,6 @@ import kotlinx.android.synthetic.main.activity_new_account.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.children
 import pers.victor.ext.click
-import pers.victor.ext.toast
 import javax.inject.Inject
 
 
@@ -49,12 +50,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         button_create_account.click {
-            if (App.getAccessManager()
-                            .isAccountNameExist(edit_account_name.text.toString())) {
-                toast(getString(R.string.new_account_exist_error))
-            } else {
-                launchActivity<SecretPhraseActivity>(options = createDataBundle())
-            }
+            goNext()
         }
 
         val nameValidation = Validation(til_account_name)
@@ -131,7 +127,26 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
             }
         }
 
+        edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                goNext()
+                true
+            } else {
+                false
+            }
+        }
+
         presenter.generateSeeds(this, linear_images.children as List<AppCompatImageView>)
+    }
+
+    private fun goNext() {
+        if (presenter.isAllFieldsValid()) {
+            if (App.getAccessManager().isAccountNameExist(edit_account_name.text.toString())) {
+                showError(R.string.new_account_exist_error, R.id.relative_root)
+            } else {
+                launchActivity<SecretPhraseActivity>(options = createDataBundle())
+            }
+        }
     }
 
     private fun createDataBundle(): Bundle {

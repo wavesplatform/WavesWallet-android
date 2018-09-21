@@ -8,6 +8,7 @@
     android:background="@color/basic50">
 
     <LinearLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -15,9 +16,9 @@
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="14dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/profile_general_setting"
             android:textColor="@color/disabled500" />
 
@@ -488,8 +489,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    tools:text="985219"
-                    android:textColor="@color/disabled900" />
+                    android:textColor="@color/disabled900"
+                    tools:text="985219" />
             </LinearLayout>
 
             <LinearLayout
@@ -537,12 +538,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:clickable="true"
-            android:background="?attr/selectableItemBackground"
-            android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginTop="24dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
             android:drawablePadding="16dp"
             android:gravity="center"
             android:padding="16dp"
@@ -551,14 +552,14 @@
             android:textColor="@color/white">
 
             <android.support.v7.widget.AppCompatTextView
-                android:drawableLeft="@drawable/ic_topbar_logout"
                 android:layout_width="wrap_content"
-                android:text="@string/profile_general_logout"
-                android:textColor="@color/black"
-                android:gravity="center"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_topbar_logout"
                 android:drawablePadding="14dp"
-                android:layout_height="wrap_content" />
+                android:gravity="center"
+                android:text="@string/profile_general_logout"
+                android:textColor="@color/black" />
 
         </FrameLayout>
     </LinearLayout>

@@ -6,10 +6,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatTextView
-import android.util.Log
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -34,16 +34,13 @@ import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
+import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.disposables.CompositeDisposable
 import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
-import pers.victor.ext.toast
 import javax.inject.Inject
-
 
 
 class ProfileFragment : BaseFragment(), ProfileView {
@@ -53,7 +50,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     lateinit var presenter: ProfilePresenter
     @Inject
     lateinit var nodeDataManager: NodeDataManager
-    var subscriptions: CompositeDisposable = CompositeDisposable()
+    private var subscriptions: CompositeDisposable = CompositeDisposable()
     private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
 
@@ -170,7 +167,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         try {
             startActivity(myAppLinkToMarket)
         } catch (e: ActivityNotFoundException) {
-            toast(getString(R.string.common_market_error))
+            showSnackbar(R.string.common_market_error, R.color.error400, Snackbar.LENGTH_LONG)
         }
     }
 
@@ -222,9 +219,10 @@ class ProfileFragment : BaseFragment(), ProfileView {
     private fun logout() {
         clearRealmConfiguration()
         App.getAccessManager().setLastLoggedInGuid("")
-        activity?.finish()
-        presenter.appUtil.restartApp()
-        toast(getString(R.string.profile_general_logout))
+        App.getAccessManager().resetWallet()
+        val intent = Intent(context, WelcomeActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 
     private fun clearRealmConfiguration() {

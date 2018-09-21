@@ -19,20 +19,23 @@ public class PinStoreService {
         pincodesReference = FirebaseDatabase.getInstance().getReference().child(PINCODES);
     }
 
-    public Observable<Boolean> writePassword(String guid, String passCode, String encryptedPassword) {
+    public Observable<Boolean> writePassword(String guid, String passCode, String keyPassword) {
         return Observable.create(emitter ->
-                pincodesReference.child(guid).removeValue().addOnCompleteListener(task ->
-                        pincodesReference
-                                .child(guid)
-                                .child(passCode)
-                                .setValue(encryptedPassword, (err, ref) -> {
-                                    if (err == null) {
-                                        emitter.onNext(true);
-                                        emitter.onComplete();
-                                    } else {
-                                        emitter.onError(err.toException());
-                                    }
-                                })));
+                pincodesReference
+                        .child(guid)
+                        .removeValue()
+                        .addOnCompleteListener(task ->
+                                pincodesReference
+                                        .child(guid)
+                                        .child(passCode)
+                                        .setValue(keyPassword, (err, ref) -> {
+                                            if (err == null) {
+                                                emitter.onNext(true);
+                                                emitter.onComplete();
+                                            } else {
+                                                emitter.onError(err.toException());
+                                            }
+                                        })));
     }
 
     public Observable<String> readPassword(String guid, String passCode, int tryCount) {
