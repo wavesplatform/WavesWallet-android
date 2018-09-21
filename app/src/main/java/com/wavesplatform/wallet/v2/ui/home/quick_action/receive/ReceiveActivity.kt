@@ -13,6 +13,7 @@ class ReceiveActivity : BaseActivity(), ReceiveView {
     override fun configLayoutRes(): Int = R.layout.activity_receive
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.receive_toolbar), R.drawable.ic_toolbar_back_black)
 
         setupUI()

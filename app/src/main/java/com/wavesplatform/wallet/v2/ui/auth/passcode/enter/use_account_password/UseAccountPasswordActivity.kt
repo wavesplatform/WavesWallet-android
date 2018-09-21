@@ -42,7 +42,6 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setStatusBarColor(R.color.white)
         setupToolbar(toolbar_view,  true,
                 icon = R.drawable.ic_toolbar_back_black)
         if (intent.hasExtra(EnterPassCodeActivity.KEY_INTENT_GUID)) {

@@ -48,6 +48,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     var eventSubscriptions: CompositeDisposable = CompositeDisposable()
 
     lateinit var toolbar: Toolbar
+    var translucentStatusBar = false
     protected var mActionBar: ActionBar? = null
     val baseFragmentManager: FragmentManager
         get() = super.getSupportFragmentManager()
@@ -88,7 +89,9 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setStatusBarColor(R.color.basic50)
+        if (!translucentStatusBar) {
+            setStatusBarColor(R.color.white)
+        }
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(configLayoutRes())
         Timber.tag(javaClass.simpleName)

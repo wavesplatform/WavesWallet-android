@@ -40,7 +40,6 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setStatusBarColor(R.color.white)
         setupToolbar(toolbar_view, true,
                 getString(R.string.change_password_toolbar_title), R.drawable.ic_toolbar_back_black)
 

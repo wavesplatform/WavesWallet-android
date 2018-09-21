@@ -36,7 +36,6 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
     override fun configLayoutRes(): Int = R.layout.activity_profile_addresses_and_keys
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setStatusBarColor(R.color.white)
         setupToolbar(toolbar_view, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         text_address.text = App.getAccessManager().getWallet()?.address

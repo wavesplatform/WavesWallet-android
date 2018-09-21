@@ -41,7 +41,6 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setStatusBarColor(R.color.white)
         setupToolbar(toolbar_view,  true, getString(R.string.edit_address_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         presenter.addressBookUser = intent.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)

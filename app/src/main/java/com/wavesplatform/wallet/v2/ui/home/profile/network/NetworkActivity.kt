@@ -23,7 +23,6 @@ class NetworkActivity : BaseActivity(), NetworkView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setStatusBarColor(R.color.white)
         setupToolbar(toolbar_view, true, getString(R.string.network_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         edit_spam_filter.setText(BuildConfig.SPAM_URL)

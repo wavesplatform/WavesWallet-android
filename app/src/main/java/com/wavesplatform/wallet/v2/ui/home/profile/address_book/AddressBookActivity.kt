@@ -60,7 +60,6 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setStatusBarColor(R.color.white)
         setupToolbar(toolbar_view, true, getString(R.string.address_book_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         eventSubscriptions.add(RxTextView.textChanges(edit_search)
