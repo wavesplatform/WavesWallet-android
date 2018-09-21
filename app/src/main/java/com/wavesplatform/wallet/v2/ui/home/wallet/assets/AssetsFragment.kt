@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
+import com.wavesplatform.wallet.v2.util.isMyServiceRunning
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
@@ -170,8 +171,10 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
     override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean, withApiUpdate: Boolean) {
         if (!fromDB) {
-            val intent = Intent(baseActivity, UpdateApiDataService::class.java)
-            baseActivity.startService(intent)
+            if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)){
+                val intent = Intent(baseActivity, UpdateApiDataService::class.java)
+                baseActivity.startService(intent)
+            }
             swipe_container?.isRefreshing = false
         } else if (!withApiUpdate) {
             swipe_container?.isRefreshing = false
