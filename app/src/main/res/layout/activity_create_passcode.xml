@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/content">
+    android:background="@color/white">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"
@@ -15,31 +16,30 @@
 
     <TextView
         android:id="@+id/text_title"
-        android:layout_marginTop="16dp"
-        android:layout_below="@+id/toolbar_view"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="@color/black"
+        android:layout_below="@+id/toolbar_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:gravity="center_horizontal"
         android:text="@string/create_passcode_create_title"
-        />
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
     <com.wavesplatform.wallet.v2.ui.custom.PinDotsLayout
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="62dp"
-        android:layout_width="wrap_content"
         android:id="@+id/pdl_dots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/text_title"
-        android:layout_height="wrap_content"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="62dp"
+        android:layout_marginTop="24dp" />
 
     <com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
         android:id="@+id/pass_keypad"
-        app:is_fingerprint_available="false"
-        android:layout_below="@+id/pdl_dots"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pdl_dots"
+        app:is_fingerprint_available="false" />
 
 </RelativeLayout>

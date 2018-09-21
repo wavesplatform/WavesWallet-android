@@ -60,6 +60,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.white)
         setupToolbar(toolbar_view, true, getString(R.string.address_book_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         eventSubscriptions.add(RxTextView.textChanges(edit_search)
@@ -190,15 +191,15 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
     }
 
     override fun afterSuccessGetAddress(list: List<AddressBookUser>) {
-        configureSearchVisibility()
         adapter.allData = ArrayList(list)
         adapter.setNewData(list)
         adapter.emptyView = getEmptyView()
+        configureSearchVisibility()
     }
 
     override fun afterFailedGetAddress() {
-        configureSearchVisibility()
         adapter.emptyView = getEmptyView()
+        configureSearchVisibility()
     }
 
     private fun getEmptyView(): View {

@@ -32,6 +32,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
     override fun configLayoutRes() = R.layout.activity_create_passcode
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.white)
         setupToolbar(toolbar_view, false,
                 icon = R.drawable.ic_toolbar_back_black)
 
