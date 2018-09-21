@@ -13,7 +13,7 @@ import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.custom.Identicon
+import com.wavesplatform.wallet.v2.ui.custom.Identicon2
 import com.wavesplatform.wallet.v2.util.launchActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -47,6 +47,8 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
         val seedValidation = Validation(til_seed)
                 .and(NotEmptyRule(" "))
 
+        val ico = Identicon2.Identity(Identicon2.defaultOptions)
+
         edit_seed.addTextChangedListener {
             on { s, start, before, count ->
                 validator
@@ -56,9 +58,9 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                                 if (values.isNotEmpty() && values[0].length > 24 ) {
                                     val wallet = WavesWallet(values[0].toByteArray(Charsets.UTF_8))
                                     Glide.with(activity)
-                                            .load(Identicon.create(
+                                            .load(ico.createImage(
                                                     wallet.address,
-                                                    Identicon.Options.Builder().setRandomBlankColor().create()))
+                                                    192))
                                             .apply(RequestOptions().circleCrop())
                                             .into(image_asset!!)
                                     address_asset.text = wallet.address

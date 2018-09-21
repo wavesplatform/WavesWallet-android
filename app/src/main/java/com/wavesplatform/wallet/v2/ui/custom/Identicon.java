@@ -17,17 +17,17 @@ public class Identicon {
         return createBitmap(seed, config.rows, config.size, config.blankColor);
     }
 
-    private static Bitmap createBitmap(String seed, int rows, int size, int blankColor) {
+    private static Bitmap createBitmap(String hash, int rows, int size, int blankColor) {
         if (size % rows != 0) {
             size = size + (rows - (size % rows));
         }
         Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565);
         int block = size / rows;
-        boolean[][] mapping = mapToBit(seed, rows);
+        boolean[][] mapping = mapToBit(hash, rows);
         if (mapping == null) {
             return bitmap;
         }
-        int tintColor = getColor(seed);
+        int tintColor = getColor(hash);
         int[] pixels = new int[block * block];
         int[] blankPixels = new int[block * block];
 
