@@ -52,8 +52,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         setupToolbar(toolbar_general)
         needChangeStatusBarColorOnMenuOpen(false)
 
-        presenter.loadAliases()
-
         showFirstOpenAlert(preferencesHelper.isAccountFirstOpen())
 
         setupBottomNavigation()

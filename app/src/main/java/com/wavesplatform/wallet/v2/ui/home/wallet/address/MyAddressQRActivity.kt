@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_my_address_qr.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
+import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
@@ -58,19 +59,21 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
             shareAddress()
         }
 
-        queryAllAsync<Alias> { aliases ->
-            val ownAliases = aliases.filter { it.own }
+        runAsync {
+            queryAllAsync<Alias> { aliases ->
+                val ownAliases = aliases.filter { it.own }
 
-            text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
+                text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
 
-            card_aliases.click {
-                val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
-                if (ownAliases.isEmpty()) {
-                    bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
-                } else {
-                    bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
+                card_aliases.click {
+                    val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
+                    if (ownAliases.isEmpty()) {
+                        bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
+                    } else {
+                        bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
+                    }
+                    bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
                 }
-                bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
             }
         }
 

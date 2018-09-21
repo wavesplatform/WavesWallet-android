@@ -4,6 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -54,5 +55,12 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         val sortedToFirstFavoriteList = list.filter { !it.isHidden && !it.isSpam }.sortedByDescending({ it.isGateway }).sortedBy { it.position }.sortedByDescending({ it.isFavorite })
         val spamList = list.filter { it.isSpam }
         return Triple(sortedToFirstFavoriteList, hiddenList, spamList)
+    }
+
+    fun loadAliases() {
+        addSubscription(apiDataManager.loadAliases()
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({
+                }))
     }
 }

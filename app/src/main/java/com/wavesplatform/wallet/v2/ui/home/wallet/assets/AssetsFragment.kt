@@ -62,6 +62,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupUI()
+
+        presenter.loadAliases()
     }
 
     override fun onStart() {
@@ -171,7 +173,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
     override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean, withApiUpdate: Boolean) {
         if (!fromDB) {
-            if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)){
+            if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)) {
                 val intent = Intent(baseActivity, UpdateApiDataService::class.java)
                 baseActivity.startService(intent)
             }
