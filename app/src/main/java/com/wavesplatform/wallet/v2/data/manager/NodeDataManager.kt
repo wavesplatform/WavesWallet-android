@@ -7,6 +7,7 @@ import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.payload.TransactionsInfo
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
@@ -96,9 +97,18 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                         }
                                     }
                                 }
+
                                 it.first.balances.forEachIndexed { index, assetBalance ->
                                     assetBalance.isSpam = spamAssets.any {
                                         it.assetId == assetBalance.assetId
+                                    }
+                                }
+                                if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+                                    val size = it.first.balances.size
+
+                                    it.first.balances.forEachIndexed { index, assetBalance ->
+                                        assetBalance.isSpam = false
+                                        assetBalance.position = size + 1
                                     }
                                 }
                                 it.first.balances.saveAll()

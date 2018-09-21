@@ -22,6 +22,7 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
@@ -62,6 +63,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     @Inject
     lateinit var mRxEventBus: RxEventBus
+    @Inject
+    lateinit var prefsUtil: PrefsUtil
     @Inject
     lateinit var mErrorManager: ErrorManager
     @Inject

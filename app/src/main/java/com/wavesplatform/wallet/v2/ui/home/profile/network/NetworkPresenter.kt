@@ -6,5 +6,13 @@ import javax.inject.Inject
 
 @InjectViewState
 class NetworkPresenter @Inject constructor() : BasePresenter<NetworkView>() {
+    var spamUrlFieldValid: Boolean = false
+    var spamFilterEnableValid: Boolean = false
+
+
+    fun isAllFieldsValid(): Boolean {
+        return spamUrlFieldValid || spamFilterEnableValid
+    }
+
 
 }

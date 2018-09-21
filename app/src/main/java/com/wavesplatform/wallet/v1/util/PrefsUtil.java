@@ -32,6 +32,8 @@ public class PrefsUtil {
     public static final String KEY_ENCRYPTED_PIN = "encrypted_pin";
 
     public static final String KEY_DEFAULT_ASSETS = "key_default_assets";
+    public static final String KEY_DISABLE_SPAM_FILTER = "disable_spam_filter";
+    public static final String KEY_SPAM_URL = "spam_url";
 
     public static final String KEY_AB_NAMES = "address_book_names";
     public static final String KEY_AB_ADDRESSES = "address_book_addresses";
