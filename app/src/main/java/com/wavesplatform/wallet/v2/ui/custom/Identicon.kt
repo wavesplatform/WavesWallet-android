@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
 import com.wavesplatform.wallet.v2.ui.custom.Identicon.Options.Palette.Colors
+import java.util.*
 
 class Identicon {
 
@@ -24,10 +25,10 @@ class Identicon {
         val bitmap = Bitmap.createBitmap(sideSizePx, sideSizePx, Bitmap.Config.RGB_565)
         for (row in 0 until grid.rows) {
             for (cell in 0 until grid.cells) {
-                val color = color(Point(cell, row), matrix = matrix, colors = colors).toArgb()
+                val color = color(Point(cell, row), matrix = matrix, colors = colors)
                 val pixels = IntArray(w * h)
                 for (p in 0 until w * h) {
-                    pixels[p] = color
+                    pixels[p] = Color.rgb(color[0], color[1], color[2])
                 }
                 bitmap.setPixels(pixels, 0, h, cell * w, row * h, w, h)
             }
@@ -64,22 +65,19 @@ class Identicon {
         return string[index].toString()
     }
 
-    private fun colorRange(hash: String, range: Options.Range): Color {
+    private fun colorRange(hash: String, range: Options.Range): Array<Int> {
         val symbols: List<String> = hash.map { it.toString() }
-        val colors = arrayOfNulls<Float>(3)
+        val colors = arrayOfNulls<Int>(3)
         val length = range.length
         val step = range.step
         for (i in 0 until 3) {
             val begin = Math.round(-(7F / length) - length * 3 - step * i)
             val end = hash.length - (step * i).toInt()
             val symbolsForColor = slice(symbols, begin, end)
-            colors[i] = colorValue(symbolsForColor, length).toFloat()
+            colors[i] = colorValue(symbolsForColor, length)
         }
 
-        return Color.valueOf(
-                colors[0]!! / 255,
-                colors[1]!! / 255,
-                colors[2]!! / 255)
+        return arrayOf(colors[0]!!, colors[1]!!, colors[2]!!)
     }
 
     private fun slice(symbols: List<String>, beginIndex: Int, endIndex: Int): List<String> {
@@ -123,9 +121,9 @@ class Identicon {
     }
 
     private fun colors(options: Options, hash: String): Colors {
-        lateinit var backgroundColor: Color
-        lateinit var mainColor: Color
-        lateinit var hollowColor: Color
+        val backgroundColor: Array<Int>
+        val mainColor: Array<Int>
+        val hollowColor: Array<Int>
 
         when (options.palette) {
             Options.Palette.RandomColor -> {
@@ -139,10 +137,10 @@ class Identicon {
                 hollowColor = options.palette.hollow
             }
         }
-        return Colors(background = backgroundColor, main = mainColor, hollow = hollowColor)
+        return Colors(backgroundColor, mainColor, hollowColor)
     }
 
-    private fun color(point: Point, matrix: Array<Array<Int?>>, colors: Colors): Color {
+    private fun color(point: Point, matrix: Array<Array<Int?>>, colors: Colors): Array<Int> {
         if (point.x < (matrix.size / 2.0)) {
             var cellIndex = Math.max(0, matrix.size - 1)
             cellIndex = Math.max(Math.min(cellIndex, (point.x)), 0)
@@ -177,9 +175,30 @@ class Identicon {
         sealed class Palette {
             object RandomColor : Palette()
             data class Colors(
-                    val background: Color,
-                    val main: Color,
-                    val hollow: Color) : Palette()
+                    val background: Array<Int>,
+                    val main: Array<Int>,
+                    val hollow: Array<Int>) : Palette() {
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) return true
+                    if (javaClass != other?.javaClass) return false
+
+                    other as Colors
+
+                    if (!Arrays.equals(background, other.background)) return false
+                    if (!Arrays.equals(main, other.main)) return false
+                    if (!Arrays.equals(hollow, other.hollow)) return false
+
+                    return true
+                }
+
+                override fun hashCode(): Int {
+                    var result = Arrays.hashCode(background)
+                    result = 31 * result + Arrays.hashCode(main)
+                    result = 31 * result + Arrays.hashCode(hollow)
+                    return result
+                }
+            }
         }
 
         data class Range(
