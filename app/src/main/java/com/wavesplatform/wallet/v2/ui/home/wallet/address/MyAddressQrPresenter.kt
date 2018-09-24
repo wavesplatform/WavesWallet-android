@@ -16,6 +16,8 @@ import javax.inject.Inject
 @InjectViewState
 class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView>() {
 
+    private val identicon = Identicon()
+
     private fun generateQrCodeObservable(uri: String?, dimensions: Int): Observable<Bitmap> {
         return Observable.defer {
             var bitmap: Bitmap? = null
@@ -37,10 +39,7 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
 
     fun generateAvatars(address: String?, image: AppCompatImageView) {
         Observable.fromCallable {
-            return@fromCallable Identicon.create(address,
-                    Identicon.Options.Builder()
-                            .setRandomBlankColor()
-                            .create())
+            return@fromCallable identicon.createImage(address)
         }.compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     viewState.afterSuccessGenerateAvatar(it, image)

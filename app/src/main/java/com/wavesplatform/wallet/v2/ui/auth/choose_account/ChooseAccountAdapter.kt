@@ -17,15 +17,14 @@ class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressBookU
 
     var allData: MutableList<AddressBookUser> = arrayListOf()
     var chooseAccountOnClickListener: ChooseAccountOnClickListener? = null
+    private val identicon = Identicon()
 
     override fun convert(helper: BaseViewHolder, item: AddressBookUser) {
         helper.setText(R.id.text_address, item.address)
                 .setText(R.id.text_name, item.name)
 
         Glide.with(helper.itemView.context)
-                .load(Identicon.create(
-                        item.address,
-                        Identicon.Options.Builder().setRandomBlankColor().create()))
+                .load(identicon.createImage(item.address))
                 .apply(RequestOptions().circleCrop())
                 .into(helper.getView(R.id.image_asset))
 

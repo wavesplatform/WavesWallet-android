@@ -7,7 +7,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v1.data.auth.WalletManager
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.ui.custom.Identicon2
+import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Observable
 import org.apache.commons.io.Charsets
@@ -19,7 +19,7 @@ class NewAccountPresenter @Inject constructor() : BasePresenter<NewAccountView>(
     var avatarValid = false
     var createPasswordFieldValid = false
     var confirmPasswordFieldValid = false
-    val ico = Identicon2.Identity(Identicon2.defaultOptions)
+    private val identicon = Identicon()
 
     fun isAllFieldsValid(): Boolean {
         return accountNameFieldValid && createPasswordFieldValid && confirmPasswordFieldValid && avatarValid
@@ -31,7 +31,7 @@ class NewAccountPresenter @Inject constructor() : BasePresenter<NewAccountView>(
                 .map {
                     val seed = WalletManager.createWalletSeed(context)
                     val wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
-                    return@map Triple(seed, ico.createImage(wallet.address, 192), it)
+                    return@map Triple(seed, identicon.createImage(wallet.address), it)
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe { t ->
