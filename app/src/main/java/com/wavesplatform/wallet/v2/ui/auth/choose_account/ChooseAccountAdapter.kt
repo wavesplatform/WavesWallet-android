@@ -24,7 +24,7 @@ class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressBookU
                 .setText(R.id.text_name, item.name)
 
         Glide.with(helper.itemView.context)
-                .load(identicon.createImage(item.address))
+                .load(identicon.create(item.address))
                 .apply(RequestOptions().circleCrop())
                 .into(helper.getView(R.id.image_asset))
 

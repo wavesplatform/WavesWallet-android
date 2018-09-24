@@ -14,7 +14,7 @@ class Identicon {
         this.options = defaultOptions
     }
 
-    fun createImage(hash: String?): Bitmap {
+    fun create(hash: String?): Bitmap {
         val grid = options.grid
         val colors = colors(options, hash ?: "")
         val sideSizePx = options.sideSizePx

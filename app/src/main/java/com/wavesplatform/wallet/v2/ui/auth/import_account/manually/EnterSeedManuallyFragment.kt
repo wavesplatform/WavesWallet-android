@@ -58,7 +58,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                                 if (values.isNotEmpty() && values[0].length > 24 ) {
                                     val wallet = WavesWallet(values[0].toByteArray(Charsets.UTF_8))
                                     Glide.with(activity)
-                                            .load(identicon.createImage(wallet.address))
+                                            .load(identicon.create(wallet.address))
                                             .apply(RequestOptions().circleCrop())
                                             .into(image_asset!!)
                                     address_asset.text = wallet.address

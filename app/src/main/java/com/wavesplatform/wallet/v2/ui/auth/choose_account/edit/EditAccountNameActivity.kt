@@ -43,7 +43,7 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
         val address = presenter.account?.address
         text_address.text = address
         Glide.with(this)
-                .load(Identicon().createImage(address))
+                .load(Identicon().create(address))
                 .apply(RequestOptions().circleCrop())
                 .into(image_asset)
 

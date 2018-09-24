@@ -49,7 +49,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
         val address = App.getAccessManager().getWallet()?.address
         text_address.text = address
         Glide.with(image_avatar.context)
-                .load(Identicon().createImage(address))
+                .load(Identicon().create(address))
                 .apply(RequestOptions().circleCrop())
                 .into(image_avatar)
 

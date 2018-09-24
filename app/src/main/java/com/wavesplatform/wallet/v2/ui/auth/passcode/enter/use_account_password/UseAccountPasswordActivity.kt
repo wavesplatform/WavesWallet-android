@@ -113,7 +113,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         val address = App.getAccessManager().getWalletAddress(guid)
         account_address.text = address
         Glide.with(applicationContext)
-                .load(Identicon().createImage(address))
+                .load(Identicon().create(address))
                 .apply(RequestOptions().circleCrop())
                 .into(image_asset)
     }

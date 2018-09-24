@@ -165,7 +165,7 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
     private fun setAccountData() {
         val wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
         Glide.with(applicationContext)
-                .load(Identicon().createImage(wallet.address))
+                .load(Identicon().create(wallet.address))
                 .apply(RequestOptions().circleCrop())
                 .into(image_account_icon)
         text_account_address.text = wallet.address

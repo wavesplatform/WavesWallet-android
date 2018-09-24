@@ -31,7 +31,7 @@ class NewAccountPresenter @Inject constructor() : BasePresenter<NewAccountView>(
                 .map {
                     val seed = WalletManager.createWalletSeed(context)
                     val wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
-                    return@map Triple(seed, identicon.createImage(wallet.address), it)
+                    return@map Triple(seed, identicon.create(wallet.address), it)
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe { t ->
