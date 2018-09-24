@@ -24,10 +24,10 @@ class Identicon {
         val bitmap = Bitmap.createBitmap(sideSizePx, sideSizePx, Bitmap.Config.RGB_565)
         for (row in 0 until grid.rows) {
             for (cell in 0 until grid.cells) {
-                val color = color(Point(cell, row), matrix = matrix, colors = colors)
+                val color = color(Point(cell, row), matrix = matrix, colors = colors).toArgb()
                 val pixels = IntArray(w * h)
                 for (p in 0 until w * h) {
-                    pixels[p] = color.toArgb()
+                    pixels[p] = color
                 }
                 bitmap.setPixels(pixels, 0, h, cell * w, row * h, w, h)
             }
