@@ -3,14 +3,15 @@ package com.wavesplatform.wallet.v2.data.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.notNull
@@ -27,12 +28,19 @@ class UpdateApiDataService : Service() {
     lateinit var apiDataManager: ApiDataManager
     @Inject
     lateinit var transactionUtil: TransactionUtil
+    @Inject
+    lateinit var rxEventBus: RxEventBus
     var subscriptions: CompositeDisposable = CompositeDisposable()
+    var allAssets = arrayListOf<AssetBalance>()
 
     var currentLimit = 100
     var prevLimit = 100
     var defaultLimit = 100
     var maxLimit = 10000
+
+    companion object {
+        var BUNDLE_ASSETS = "assets"
+    }
 
     override fun onCreate() {
         AndroidInjection.inject(this)
@@ -40,6 +48,13 @@ class UpdateApiDataService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        allAssets = intent.getParcelableArrayListExtra(BUNDLE_ASSETS)
+
+        subscriptions.add(rxEventBus.filteredObservable(Events.NewAssetsList::class.java)
+                .subscribe {
+                    allAssets = it.assets
+                })
+
         val transaction = queryFirst<Transaction>()
         if (transaction == null) {
             nodeDataManager.currentLoadTransactionLimitPerRequest = maxLimit
@@ -82,7 +97,6 @@ class UpdateApiDataService : Service() {
                     }
                 }, {
                     it.printStackTrace()
-                    Log.d("test", "test")
                 }))
         subscriptions.add(nodeDataManager.currentBlocksHeight()
                 .subscribe {
@@ -96,7 +110,7 @@ class UpdateApiDataService : Service() {
             if (trans.assetId.isNullOrEmpty()) {
                 trans.asset = Constants.defaultAssets[0]
             } else {
-                trans.asset = queryFirst<AssetBalance> { equalTo("assetId", trans.assetId) }
+                trans.asset = allAssets.firstOrNull { it.assetId == trans.assetId }
             }
 
             if (trans.recipient.contains("alias")) {
@@ -117,13 +131,13 @@ class UpdateApiDataService : Service() {
                         if (trans.order1?.assetPair?.amountAsset.isNullOrEmpty()) {
                             Constants.defaultAssets[0]
                         } else {
-                            queryFirst<AssetBalance>({ equalTo("assetId", trans.order1?.assetPair?.amountAsset) })
+                            allAssets.firstOrNull { it.assetId == trans.order1?.assetPair?.amountAsset }
                         }
                 val priceAsset =
                         if (trans.order1?.assetPair?.priceAsset.isNullOrEmpty()) {
                             Constants.defaultAssets[0]
                         } else {
-                            queryFirst<AssetBalance>({ equalTo("assetId", trans.order1?.assetPair?.priceAsset) })
+                            allAssets.firstOrNull { it.assetId == trans.order1?.assetPair?.priceAsset }
                         }
 
 
@@ -137,6 +151,7 @@ class UpdateApiDataService : Service() {
             trans.transactionTypeId = transactionUtil.getTransactionType(trans)
         }
         it.saveAll()
+        rxEventBus.post(Events.NeedUpdateHistoryScreen())
     }
 
     override fun onBind(intent: Intent): IBinder? {

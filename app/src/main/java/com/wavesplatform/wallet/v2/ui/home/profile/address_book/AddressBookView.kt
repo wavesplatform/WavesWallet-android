@@ -4,5 +4,5 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface AddressBookView : BaseMvpView {
     fun afterSuccessGetAddress(list: List<AddressBookUser>)
-
+    fun afterFailedGetAddress()
 }

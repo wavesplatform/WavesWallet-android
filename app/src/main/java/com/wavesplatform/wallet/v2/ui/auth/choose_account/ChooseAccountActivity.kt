@@ -40,6 +40,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     override fun configLayoutRes(): Int = R.layout.activit_choose_account
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view,  true,
                 getString(R.string.choose_account), R.drawable.ic_toolbar_back_black)
 

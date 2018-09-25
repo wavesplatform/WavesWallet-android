@@ -4,6 +4,7 @@
     android:animateLayoutChanges="true"
     android:orientation="vertical"
     android:id="@+id/relative_root"
+    android:background="@color/white"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar

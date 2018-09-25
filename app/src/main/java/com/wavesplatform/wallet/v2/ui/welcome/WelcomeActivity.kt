@@ -52,6 +52,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view)
 //        val icon = findDrawable(R.drawable.avd_anim)
 //        icon.notNull {

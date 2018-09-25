@@ -47,6 +47,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view,  true, icon = R.drawable.ic_toolbar_back_black)
 
         view_pager.adapter = adapterAvatar

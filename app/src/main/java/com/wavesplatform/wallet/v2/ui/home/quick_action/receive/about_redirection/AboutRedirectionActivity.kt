@@ -8,7 +8,14 @@ import kotlinx.android.synthetic.main.activity_about_redirection.*
 import pers.victor.ext.click
 
 class AboutRedirectionActivity : BaseActivity(), AboutRedirectionView {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        translucentStatusBar = true
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
+
         button_okay.click {
             setResult(Constants.RESULT_OK)
             finish()

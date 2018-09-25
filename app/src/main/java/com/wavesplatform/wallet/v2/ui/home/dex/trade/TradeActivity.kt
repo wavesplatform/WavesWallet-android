@@ -30,8 +30,12 @@ class TradeActivity : BaseActivity(), TradeView {
     override fun configLayoutRes() = R.layout.activity_trade
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        translucentStatusBar = true
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setStatusBarColor(R.color.submit400)
         setupToolbar(toolbar_view,  true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
 
         viewpageer_trade.adapter = TradeFragmentPageAdapter(supportFragmentManager, arrayOf(getString(R.string.dex_trade_tab_orderbook), getString(R.string.dex_trade_tab_chart),

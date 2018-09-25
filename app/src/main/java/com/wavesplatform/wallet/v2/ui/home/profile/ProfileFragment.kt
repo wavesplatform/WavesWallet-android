@@ -13,14 +13,12 @@ import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
-import com.vicpin.krealmextensions.RealmConfigStore
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
-import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
@@ -35,7 +33,6 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import javax.inject.Inject
@@ -48,7 +45,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
     lateinit var presenter: ProfilePresenter
     @Inject
     lateinit var nodeDataManager: NodeDataManager
-    private var subscriptions: CompositeDisposable = CompositeDisposable()
     private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
 
@@ -102,9 +98,9 @@ class ProfileFragment : BaseFragment(), ProfileView {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                     getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->
                 App.getAccessManager().deleteCurrentWavesWallet()
+
                 presenter.prefsUtil.logOut()
                 presenter.appUtil.restartApp()
-                clearRealmConfiguration()
                 dialog.dismiss()
             }
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel)) { dialog, _ ->
@@ -215,20 +211,11 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun logout() {
-        clearRealmConfiguration()
         App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
         val intent = Intent(context, WelcomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-    }
-
-    private fun clearRealmConfiguration() {
-        baseActivity.stopService(Intent(baseActivity, UpdateApiDataService::class.java))
-        val f = RealmConfigStore::class.java.getDeclaredField("configMap") //NoSuchFieldException
-        f.isAccessible = true
-        val configMap = f.get(RealmConfigStore::class.java) as MutableMap<*, *>
-        configMap.clear()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

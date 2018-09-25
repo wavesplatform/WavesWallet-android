@@ -2,7 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
 
     <android.support.v7.widget.Toolbar
@@ -38,9 +37,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="14dp"
-                android:foreground="?attr/selectableItemBackground"
-                android:clickable="true"
                 android:background="@drawable/shape_rect_bordered_accent50"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:paddingBottom="10dp"
                 android:paddingLeft="14dp"
                 android:paddingRight="14dp"
@@ -118,8 +117,7 @@
                         android:layout_marginRight="16dp"
                         android:layout_toLeftOf="@+id/image_address_copy"
                         android:textColor="@color/disabled900"
-                        tools:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW"
-                        />
+                        tools:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW" />
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/image_address_copy"
@@ -169,8 +167,7 @@
                         android:layout_marginRight="16dp"
                         android:layout_toLeftOf="@+id/image_public_key_copy"
                         android:textColor="@color/disabled900"
-                        tools:text="4T25bAunzydwvzkJcQ9f378UzGRqyUcDXLS4xgam7JQQ"
-                        />
+                        tools:text="4T25bAunzydwvzkJcQ9f378UzGRqyUcDXLS4xgam7JQQ" />
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/image_public_key_copy"
@@ -204,13 +201,13 @@
                 android:textColor="@color/disabled500" />
 
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/relative_private_key_block"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp">
+                android:layout_marginTop="6dp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:visibility="gone">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_private_key"
@@ -220,8 +217,7 @@
                     android:layout_marginRight="16dp"
                     android:layout_toLeftOf="@+id/image_private_key_copy"
                     android:textColor="@color/disabled900"
-                    tools:text="4T25bAunzydwvzkJcQ9f378UzGRqyUcDXLS4xgam7JQQ_private"
-                    />
+                    tools:text="4T25bAunzydwvzkJcQ9f378UzGRqyUcDXLS4xgam7JQQ_private" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_private_key_copy"

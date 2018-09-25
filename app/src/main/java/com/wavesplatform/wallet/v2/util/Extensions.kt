@@ -66,6 +66,16 @@ fun Context.isNetworkConnection(): Boolean {
     return activeNetwork != null && activeNetwork.isConnectedOrConnecting
 }
 
+fun Context.isMyServiceRunning(serviceClass: Class<*>): Boolean {
+    for (service in activityManager.getRunningServices(Integer.MAX_VALUE)) {
+        if (serviceClass.name == service.service.className) {
+            return true
+        }
+    }
+    return false
+}
+
+
 fun Context.notAvailable() {
     toast(getString(R.string.common_msg_in_development))
 }

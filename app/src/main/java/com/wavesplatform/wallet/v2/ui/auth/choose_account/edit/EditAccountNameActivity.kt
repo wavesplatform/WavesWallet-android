@@ -34,6 +34,7 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
     override fun configLayoutRes(): Int = R.layout.activity_edit_account_name
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view,  true, getString(R.string.edit_account_name), R.drawable.ic_toolbar_back_black)
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
