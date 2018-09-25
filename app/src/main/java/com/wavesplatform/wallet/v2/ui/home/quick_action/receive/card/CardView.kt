@@ -6,6 +6,6 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 interface CardView :BaseMvpView{
     fun showWaves(assets: List<AssetBalance>?)
     fun showRate(rate: String?)
-    fun showLimits(min: String?, max: String?)
+    fun showLimits(min: String?, max: String?, fiat: String?)
 
 }

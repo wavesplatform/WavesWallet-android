@@ -1,15 +1,18 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card
 
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
+import android.view.LayoutInflater
+import android.widget.RadioButton
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.web.WebActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeStyled
 import kotlinx.android.synthetic.main.fragment_card.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -24,11 +27,6 @@ class CardFragment : BaseFragment(), CardView {
     @InjectPresenter
     lateinit var presenter: CardPresenter
 
-    private var crypto: String? = null
-    private var address: String? = null
-    private var amount: String? = null
-    private var fiat: String? = null
-
     @ProvidePresenter
     fun providePresenter(): CardPresenter = presenter
 
@@ -42,22 +40,11 @@ class CardFragment : BaseFragment(), CardView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        crypto = "WAVES"
-        address = App.getAccessManager().getWallet()!!.address
-        amount = edit_amount.text.toString()
-        fiat = "USD"
-
         edit_asset.isEnabled = false
-
         button_continue.click {
-            val link = "https://coinomat.com/api/v2/indacoin/buy.php?" +
-                    "crypto=$crypto" +
-                    "&fiat=$fiat" +
-                    "&address=$address" +
-                    "&amount=$amount"
             launchActivity<WebActivity> {
                 putExtra(WebActivity.KEY_INTENT_TITLE, "Coinomat.com")
-                putExtra(WebActivity.KEY_INTENT_LINK, link)
+                putExtra(WebActivity.KEY_INTENT_LINK, presenter.createLink())
             }
         }
 
@@ -65,26 +52,31 @@ class CardFragment : BaseFragment(), CardView {
                 .filter { charSequence -> charSequence.length > 1 }
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .subscribe { string ->
-                    amount = edit_amount.text.toString()
-                    presenter.loadRate(crypto, address, fiat, amount)
+                    presenter.loadRate(string.toString())
                 }
 
+
+        fiat_change.click {
+            showDialogFiatChange()
+        }
+
         presenter.loadAssets()
-        presenter.loadRate(crypto, address, fiat, amount)
-        presenter.loadLimits(crypto, address, fiat)
+        setFiat("USD")
     }
 
     override fun showWaves(assets: List<AssetBalance>?) {
-        setAssetBalance(assets?.get(0))
+        if (assets != null && assets.isNotEmpty()) {
+            setAssetBalance(assets[0])
+        }
     }
 
     override fun showRate(rate: String?) {
         text_amount_in_dollar.text = "≈ $rate WAVES"
     }
 
-    override fun showLimits(min: String?, max: String?) {
+    override fun showLimits(min: String?, max: String?, fiat: String?) {
         if (min != null && max != null) {
-            limits.text = getString(R.string.receive_limits, min, max)
+            limits.text = getString(R.string.receive_limit, min, fiat, max, fiat)
         }
     }
 
@@ -102,5 +94,32 @@ class CardFragment : BaseFragment(), CardView {
         container_asset.visiable()
         container_info.visiable()
         button_continue.isEnabled = true
+    }
+
+    private fun showDialogFiatChange() {
+        val alertDialog = AlertDialog.Builder(baseActivity).create()
+        alertDialog.setTitle(getString(R.string.receive_fiat_choose_dialog_title))
+        val view = LayoutInflater.from(baseActivity)
+                .inflate(R.layout.receive_fiat_choose_dialog, null)
+        view.findViewById<RadioButton>(R.id.radioButton_usd).click {
+            setFiat("USD")
+            alertDialog.dismiss()
+        }
+        view.findViewById<RadioButton>(R.id.radioButton_eur).click {
+            setFiat("EURO")
+            alertDialog.dismiss()
+        }
+        alertDialog.setView(view)
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
+                getString(R.string.receive_fiat_choose_dialog_cancel)) { dialog, _ ->
+            dialog.dismiss()
+        }
+        alertDialog.show()
+        alertDialog.makeStyled()
+    }
+
+    private fun setFiat(value: String) {
+        amount_title.text = getString(R.string.receive_amount_title, value)
+        presenter.loadWithFiat(value)
     }
 }

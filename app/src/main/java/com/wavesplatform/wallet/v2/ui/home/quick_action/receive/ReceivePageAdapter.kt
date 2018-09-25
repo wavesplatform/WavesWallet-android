@@ -7,13 +7,13 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card.CardFragment
-import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency.СryptocurrencyFragment
+import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency.CryptoCurrencyFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
 
 class ReceivePageAdapter(fm: FragmentManager?, var context: Context) : FragmentStatePagerAdapter(fm) {
 
     private var data: MutableList<BaseFragment> = arrayListOf(
-            СryptocurrencyFragment.newInstance(),
+            CryptoCurrencyFragment.newInstance(),
             InvoiceFragment.newInstance(),
             CardFragment.newInstance())
 

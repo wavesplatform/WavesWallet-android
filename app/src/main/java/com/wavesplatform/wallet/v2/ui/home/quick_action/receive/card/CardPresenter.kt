@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -15,6 +16,11 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
 
     @Inject
     lateinit var coinomatManager: CoinomatManager
+
+    private var crypto: String? = "WAVES"
+    private var address: String? = App.getAccessManager().getWallet()!!.address
+    private var amount: String? = "30"
+    private var fiat: String? = "USD"
 
     fun loadAssets() {
         runAsync {
@@ -33,7 +39,14 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
         }
     }
 
-    fun loadRate(crypto: String?, address: String?, fiat: String?, amount: String?) {
+    fun loadWithFiat(fiat: String) {
+        this.fiat = fiat
+        loadRate(amount)
+        loadLimits()
+    }
+
+    fun loadRate(amount: String?) {
+        this.amount = amount
         runAsync {
             addSubscription(coinomatManager.loadRate(crypto, address, fiat, amount).subscribe({ rate ->
                 runOnUiThread {
@@ -45,15 +58,23 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
         }
     }
 
-    fun loadLimits(crypto: String?, address: String?, fiat: String?) {
+    fun loadLimits() {
         runAsync {
             addSubscription(coinomatManager.loadLimits(crypto, address, fiat).subscribe({ limits ->
                 runOnUiThread {
-                    viewState.showLimits(limits.min, limits.max)
+                    viewState.showLimits(limits.min, limits.max, fiat)
                 }
             }, {
                 it.printStackTrace()
             }))
         }
+    }
+
+    fun createLink(): String {
+        return "https://coinomat.com/api/v2/indacoin/buy.php?" +
+                "crypto=$crypto" +
+                "&fiat=$fiat" +
+                "&address=$address" +
+                "&amount=$amount"
     }
 }
