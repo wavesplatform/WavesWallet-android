@@ -99,9 +99,9 @@ class UpdateApiDataService : Service() {
                     it.printStackTrace()
                 }))
         subscriptions.add(nodeDataManager.currentBlocksHeight()
-                .subscribe({
+                .subscribe {
 
-                }))
+                })
         return Service.START_NOT_STICKY
     }
 
@@ -118,9 +118,9 @@ class UpdateApiDataService : Service() {
                 aliasName.notNull {
                     subscriptions.add(apiDataManager.loadAlias(it)
                             .compose(RxUtil.applyObservableDefaultSchedulers())
-                            .subscribe({
+                            .subscribe {
                                 trans.recipientAddress = it.address
-                            }))
+                            })
                 }
             } else {
                 trans.recipientAddress = trans.recipient

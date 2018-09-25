@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatTextView
@@ -14,15 +13,12 @@ import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
-import com.vicpin.krealmextensions.RealmConfigStore
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.db.DBHelper
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
-import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
@@ -37,9 +33,6 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
-import io.reactivex.disposables.CompositeDisposable
-import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
-import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import javax.inject.Inject
@@ -76,7 +69,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
             launchActivity<ChangeLanguageActivity> { }
         }
         card_change_password.click {
-            launchActivity<ChangePasswordActivity> { }
+            launchActivity<ChangePasswordActivity>(requestCode = REQUEST_CHANGE_PASSWORD) { }
         }
         card_change_passcode.click {
             launchActivity<EnterPassCodeActivity>(
@@ -168,7 +161,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         try {
             startActivity(myAppLinkToMarket)
         } catch (e: ActivityNotFoundException) {
-            showSnackbar(R.string.common_market_error, R.color.error400, Snackbar.LENGTH_LONG)
+            showError(R.string.common_market_error, R.id.root_scrollView)
         }
     }
 
@@ -251,6 +244,12 @@ class ProfileFragment : BaseFragment(), ProfileView {
                     }
                 }
             }
+
+            REQUEST_CHANGE_PASSWORD -> {
+                if (resultCode == Constants.RESULT_OK) {
+                    showSuccess(R.string.change_password_success, R.id.root_scrollView)
+                }
+            }
         }
     }
 
@@ -290,5 +289,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
         const val KEY_INTENT_SET_BACKUP = "intent_set_backup"
         const val REQUEST_ENTER_PASS_CODE_FOR_CHANGE = 5551
         const val REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT = 5552
+        const val REQUEST_CHANGE_PASSWORD = 5553
     }
 }

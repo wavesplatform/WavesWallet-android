@@ -112,12 +112,8 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         account_name.text = App.getAccessManager().getWalletName(guid)
         val address = App.getAccessManager().getWalletAddress(guid)
         account_address.text = address
-        val bitmap = Identicon.create(address,
-                Identicon.Options.Builder()
-                        .setRandomBlankColor()
-                        .create())
         Glide.with(applicationContext)
-                .load(bitmap)
+                .load(Identicon().create(address))
                 .apply(RequestOptions().circleCrop())
                 .into(image_asset)
     }
