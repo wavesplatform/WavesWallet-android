@@ -18,6 +18,10 @@ public class DBHelper {
         this.realmConfiguration = realmConfiguration;
     }
 
+    public RealmConfiguration getRealmConfig() {
+        return realmConfiguration;
+    }
+
     public Realm getRealm() {
         return Realm.getInstance(realmConfiguration);
     }

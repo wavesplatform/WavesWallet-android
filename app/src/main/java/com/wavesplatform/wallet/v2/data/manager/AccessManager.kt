@@ -4,22 +4,30 @@ import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
+import com.vicpin.krealmextensions.RealmConfigStore
+import com.vicpin.krealmextensions.deleteAll
+import com.vicpin.krealmextensions.executeTransaction
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.crypto.AESUtil
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v1.data.services.PinStoreService
+import com.wavesplatform.wallet.v1.db.DBHelper
 import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.exceptions.Exceptions
+import io.realm.Realm
 import org.apache.commons.io.Charsets
 import org.spongycastle.util.encoders.Hex
+import pers.victor.ext.app
 import java.security.SecureRandom
 import java.util.*
 
@@ -166,6 +174,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
     }
 
     fun resetWallet() {
+        clearRealmConfiguration()
         wallet = null
         loggedInGuid = ""
     }
@@ -200,10 +209,34 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             false
         } else {
             deleteWavesWallet(currentUser.address)
+            deleteRealmDBForAccount()
+            clearRealmConfiguration()
             true
         }
     }
 
+    private fun clearRealmConfiguration() {
+        app.stopService(Intent(app, UpdateApiDataService::class.java))
+        val f = RealmConfigStore::class.java.getDeclaredField("configMap") //NoSuchFieldException
+        f.isAccessible = true
+        val configMap = f.get(RealmConfigStore::class.java) as MutableMap<*, *>
+        configMap.clear()
+    }
+
+    fun deleteRealmDBForAccount() {
+        executeTransaction {
+            deleteAll<AssetBalance>()
+            deleteAll<IssueTransaction>()
+            deleteAll<Transaction>()
+            deleteAll<Transfer>()
+            deleteAll<AssetPair>()
+            deleteAll<Order>()
+            deleteAll<Lease>()
+            deleteAll<Alias>()
+            deleteAll<SpamAsset>()
+            deleteAll<AddressBookUser>()
+        }
+    }
 
     fun deleteWavesWallet(address: String) {
         val searchWalletGuid = App.getAccessManager().findGuidBy(address)
