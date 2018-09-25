@@ -13,6 +13,7 @@ import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -30,6 +31,14 @@ import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class AssetsFragment : BaseFragment(), AssetsView {
+    override fun startServiceToLoadData(assets: ArrayList<AssetBalance>) {
+        if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)) {
+            val intent = Intent(baseActivity, UpdateApiDataService::class.java)
+            intent.putParcelableArrayListExtra(UpdateApiDataService.BUNDLE_ASSETS, assets)
+            baseActivity.startService(intent)
+        }
+        rxEventBus.post(Events.NewAssetsList(ArrayList(assets)))
+    }
 
     @Inject
     @InjectPresenter
@@ -167,13 +176,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
     }
 
     override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean, withApiUpdate: Boolean) {
-        if (!fromDB) {
-            if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)) {
-                val intent = Intent(baseActivity, UpdateApiDataService::class.java)
-                baseActivity.startService(intent)
-            }
-            swipe_container?.isRefreshing = false
-        } else if (!withApiUpdate) {
+        if (!fromDB || !withApiUpdate) {
             swipe_container?.isRefreshing = false
         }
 

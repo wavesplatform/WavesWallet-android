@@ -21,6 +21,10 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
 //                    .map { createTripleSortedLists(it.toMutableList()) }
 //                    .doOnNext { postSuccess(it, withApiUpdate, true) }
                     .flatMap { tryUpdateWithApi(withApiUpdate, it) }
+                    .map {
+                        viewState.startServiceToLoadData(ArrayList(it))
+                        return@map it
+                    }
                     .map { createTripleSortedLists(it.toMutableList()) }
                     .subscribe({
                         postSuccess(it, withApiUpdate, false)
