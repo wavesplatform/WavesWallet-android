@@ -48,8 +48,6 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view,  true, getString(R.string.add_address_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        // TODO: set Text before if need
-
         if (edit_address.text.isEmpty()) edit_address.tag = R.drawable.ic_qrcode_24_basic_500
         else edit_address.tag = R.drawable.ic_deladdress_24_error_400
 

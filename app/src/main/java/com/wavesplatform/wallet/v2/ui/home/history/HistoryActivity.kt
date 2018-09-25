@@ -12,6 +12,7 @@ class HistoryActivity : BaseActivity() {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.leasing_history_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         val fragment = HistoryFragment.newInstance().apply {

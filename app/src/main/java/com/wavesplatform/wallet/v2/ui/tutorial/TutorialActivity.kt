@@ -28,6 +28,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
     override fun configLayoutRes() = R.layout.activity_tutorial
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         adapter.items = arrayListOf(1, 2, 3, 4, 5)
         adapter.listener = object : TutorialAdapter.EndOfScrollListener {
             override fun onEndOfScroll(position: Int) {

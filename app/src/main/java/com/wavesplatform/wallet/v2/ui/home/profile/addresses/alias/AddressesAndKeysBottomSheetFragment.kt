@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_layout.view.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.toast
+import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 
@@ -65,9 +66,11 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 rootView.recycle_aliases.isNestedScrollingEnabled = false
                 rootView.recycle_aliases.adapter = adapter
 
-                queryAllAsync<Alias> {
-                    val ownAliases = it.filter { it.own }
-                    adapter.setNewData(ownAliases)
+                runAsync {
+                    queryAllAsync<Alias> {
+                        val ownAliases = it.filter { it.own }
+                        adapter.setNewData(ownAliases)
+                    }
                 }
 
                 rootView.relative_about_alias.click {

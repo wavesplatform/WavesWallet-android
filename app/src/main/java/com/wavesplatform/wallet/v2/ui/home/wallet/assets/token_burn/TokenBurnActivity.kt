@@ -30,6 +30,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.token_burn_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         image_asset_icon.isOval = true

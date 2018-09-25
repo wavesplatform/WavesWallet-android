@@ -8,16 +8,19 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
+import com.wavesplatform.wallet.v2.util.isMyServiceRunning
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
@@ -28,6 +31,14 @@ import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class AssetsFragment : BaseFragment(), AssetsView {
+    override fun startServiceToLoadData(assets: ArrayList<AssetBalance>) {
+        if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)) {
+            val intent = Intent(baseActivity, UpdateApiDataService::class.java)
+            intent.putParcelableArrayListExtra(UpdateApiDataService.BUNDLE_ASSETS, assets)
+            baseActivity.startService(intent)
+        }
+        rxEventBus.post(Events.NewAssetsList(ArrayList(assets)))
+    }
 
     @Inject
     @InjectPresenter
@@ -61,11 +72,9 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupUI()
-    }
 
-    override fun onStart() {
-        super.onStart()
         skeletonScreen.notNull { it.show() }
+        presenter.loadAliases()
         presenter.loadAssetsBalance()
     }
 
@@ -95,33 +104,31 @@ class AssetsFragment : BaseFragment(), AssetsView {
         recycle_spam_assets.adapter = spamAssetsAdapter
         recycle_spam_assets.isNestedScrollingEnabled = false
 
-        adapter.onClickListener = object : AssetsAdapter.OnItemClick {
-            override fun onClick(assetBalance: AssetBalance, position: Int) {
-                launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
-                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, assetBalance)
-                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position)
-                }
+
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            val item = this.adapter.getItem(position) as AssetBalance
+            launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position)
             }
         }
 
-        adapterHiddenAssets.onClickListener = object : AssetsAdapter.OnItemClick {
-            override fun onClick(assetBalance: AssetBalance, position: Int) {
-                launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
-                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, assetBalance)
-                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION,
-                            position + this@AssetsFragment.adapter.data.size)
-                }
+        adapterHiddenAssets.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            val item = this.adapterHiddenAssets.getItem(position) as AssetBalance
+            launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION,
+                        position + this@AssetsFragment.adapter.data.size)
             }
         }
 
-        spamAssetsAdapter.onClickListener = object : AssetsAdapter.OnItemClick {
-            override fun onClick(assetBalance: AssetBalance, position: Int) {
-                launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
-                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, assetBalance)
-                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION,
-                            position + this@AssetsFragment.adapterHiddenAssets.data.size
-                                    + this@AssetsFragment.adapter.data.size)
-                }
+        spamAssetsAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            val item = this.spamAssetsAdapter.getItem(position) as AssetBalance
+            launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION,
+                        position + this@AssetsFragment.adapterHiddenAssets.data.size
+                                + this@AssetsFragment.adapter.data.size)
             }
         }
 
@@ -169,16 +176,14 @@ class AssetsFragment : BaseFragment(), AssetsView {
     }
 
     override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean, withApiUpdate: Boolean) {
-        if (!fromDB) {
-            val intent = Intent(baseActivity, UpdateApiDataService::class.java)
-            baseActivity.startService(intent)
-            swipe_container?.isRefreshing = false
-        } else if (!withApiUpdate) {
+        if (!fromDB || !withApiUpdate) {
             swipe_container?.isRefreshing = false
         }
 
-        adapter.update(assets)
-        skeletonScreen.notNull { it.hide() }
+        adapter.setNewData(assets)
+        if (withApiUpdate) {
+            skeletonScreen.notNull { it.hide() }
+        }
     }
 
     override fun afterSuccessLoadHiddenAssets(assets: List<AssetBalance>) {
@@ -190,7 +195,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
             relative_hidden_block.gone()
         }
 
-        adapterHiddenAssets.update(assets)
+        adapterHiddenAssets.setNewData(assets)
         text_hidden_assets.text = getString(
                 R.string.wallet_assets_hidden_category, assets.size.toString())
     }
@@ -203,7 +208,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
             expandable_layout_spam.gone()
             relative_spam_block.gone()
         }
-        spamAssetsAdapter.update(assets)
+        spamAssetsAdapter.setNewData(assets)
         text_spam_assets.text = getString(
                 R.string.wallet_assets_spam_category, assets.size.toString())
     }

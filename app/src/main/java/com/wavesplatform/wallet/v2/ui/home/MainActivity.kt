@@ -49,10 +49,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun configLayoutRes() = R.layout.activity_main_v2
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_general)
         needChangeStatusBarColorOnMenuOpen(false)
-
-        presenter.loadAliases()
 
         showFirstOpenAlert(preferencesHelper.isAccountFirstOpen())
 
