@@ -83,6 +83,7 @@ android {
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
+            buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/v2/indacoin/"'
         }
         dev {
             applicationIdSuffix ".dev"
@@ -90,6 +91,7 @@ android {
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
+            buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/v2/indacoin/"'
         }
         devTest {
             applicationIdSuffix ".test"
@@ -97,6 +99,7 @@ android {
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
+            buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/v2/indacoin/"'
         }
     }
     compileOptions {

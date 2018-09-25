@@ -12,6 +12,7 @@ import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.remote.ApiService
+import com.wavesplatform.wallet.v2.data.remote.CoinomatService
 import com.wavesplatform.wallet.v2.data.remote.NodeService
 import com.wavesplatform.wallet.v2.data.remote.SpamService
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
@@ -106,6 +107,22 @@ class NetworkModule {
         return retrofit
     }
 
+    @Singleton
+    @Named("CoinomatRetrofit")
+    @Provides
+    internal fun provideCoinomatRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(BuildConfig.COINOMAT_URL)
+                .client(httpClient)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+        RetrofitCache.getInstance().addRetrofit(retrofit)
+        return retrofit
+    }
+
 
     @Singleton
     @Named("ApiRetrofit")
@@ -138,6 +155,12 @@ class NetworkModule {
     @Provides
     internal fun provideSpamService(@Named("SpamRetrofit") retrofit: Retrofit): SpamService {
         return retrofit.create(SpamService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    internal fun provideCoinomatService(@Named("CoinomatRetrofit") retrofit: Retrofit): CoinomatService {
+        return retrofit.create(CoinomatService::class.java)
     }
 
     @Named("timeout")
