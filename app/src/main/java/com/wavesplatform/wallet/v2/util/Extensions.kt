@@ -129,15 +129,16 @@ fun AlertDialog.makeStyled() {
 }
 
 fun Context.isAppOnForeground(): Boolean {
-    val appProcesses: MutableList<ActivityManager.RunningAppProcessInfo>? = activityManager.runningAppProcesses
-            ?: return false
-    val packageName = getPackageName();
+    val appProcesses: MutableList<ActivityManager.RunningAppProcessInfo>?
+            = activityManager.runningAppProcesses ?: return false
+    val packageName = packageName
     appProcesses?.forEach {
-        if (it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && it.processName.equals(packageName)) {
-            return true;
+        if (it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+                && it.processName.equals(packageName)) {
+            return true
         }
     }
-    return false;
+    return false
 }
 
 fun Context.getToolBarHeight(): Int {
