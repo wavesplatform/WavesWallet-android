@@ -22,7 +22,6 @@ import io.github.anderscheow.validator.rules.common.MinRule
 import kotlinx.android.synthetic.main.activity_change_password.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
-import pers.victor.ext.toast
 import javax.inject.Inject
 
 
@@ -160,7 +159,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
             App.getAccessManager()
                     .writePassCodeObservable(guid, newPassWord, passCode)
                     .subscribe({
-                        toast(getString(R.string.change_password_success))
+                        setResult(Constants.RESULT_OK)
                         finish()
                     }, { throwable ->
                         Log.e("CreatePassCodeActivity", throwable.message)

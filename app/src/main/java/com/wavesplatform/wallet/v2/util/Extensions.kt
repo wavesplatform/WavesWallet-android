@@ -186,9 +186,26 @@ fun String.stripZeros(): String {
     return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
 }
 
-fun Fragment.showSnackbar(@StringRes msg: Int, @ColorRes color: Int? = null, during: Int = Snackbar.LENGTH_LONG) {
+
+fun Fragment.showSuccess(@StringRes msgId: Int, @IdRes viewId: Int) {
+    showSuccess(getString(msgId), viewId)
+}
+
+fun Fragment.showSuccess(msg: String, @IdRes viewId: Int) {
+    showMessage(msg, viewId, R.color.success500)
+}
+
+fun Fragment.showError(@StringRes msgId: Int, @IdRes viewId: Int) {
+    showError(getString(msgId), viewId)
+}
+
+fun Fragment.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
+    showMessage(msg, viewId, R.color.error400)
+}
+
+fun Fragment.showMessage(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
     view.notNull { v ->
-        Snackbar.make(v.findViewById(android.R.id.content), getString(msg), during)
+        Snackbar.make(v.findViewById(viewId), msg, Snackbar.LENGTH_LONG)
                 .withColor(color)
                 .show()
     }

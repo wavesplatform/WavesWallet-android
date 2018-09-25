@@ -18,6 +18,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar_view"
         android:layout_margin="16dp"
+        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
         <TextView
