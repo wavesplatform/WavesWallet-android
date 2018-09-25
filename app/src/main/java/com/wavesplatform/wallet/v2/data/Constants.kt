@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.data
 
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 
 object Constants {
@@ -82,6 +83,8 @@ object Constants {
             Pair("y", R.color.y),
             Pair("z", R.color.z),
             Pair("persist", R.color.persist))
+
+    val wavesAssetInfo = AssetInfo(id = "", precision = 8, name = "WAVES", quantity = 10000000000000000L)
 
     val defaultAssets = listOf<AssetBalance>(
             AssetBalance("", quantity = 10000000000000000L, isFavorite = true, issueTransaction = IssueTransaction(name = "WAVES", decimals = 8), isGateway = true),

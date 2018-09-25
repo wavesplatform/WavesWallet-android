@@ -68,23 +68,23 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
 
                 layout.text_amount_value_in_dollar.visiable()
                 if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                    layout.text_amount_value_in_dollar.text = "-${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.issueTransaction?.name}"
+                    layout.text_amount_value_in_dollar.text = "-${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.name}"
                     layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                 } else {
-                    layout.text_amount_value_in_dollar.text = "+${MoneyUtil.getScaledText(transaction.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.issueTransaction?.name}"
+                    layout.text_amount_value_in_dollar.text = "+${MoneyUtil.getScaledText(transaction.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.name}"
                     layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                 }
 
                 showTag = Constants.defaultAssets.any({
-                    it.assetId == pairOrder?.assetPair?.priceAssetObject?.assetId || pairOrder?.assetPair?.priceAssetObject?.assetId.isNullOrEmpty()
+                    it.assetId == pairOrder?.assetPair?.priceAssetObject?.id || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
                 })
 
                 if (showTag) {
                     layout.text_tag.visiable()
-                    layout.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.issueTransaction?.name
+                    layout.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.name
                 } else {
                     layout.text_tag.gone()
-                    layout.text_amount_value_in_dollar.text = "${layout.text_amount_value_in_dollar.text} ${pairOrder?.assetPair?.priceAssetObject?.issueTransaction?.name}"
+                    layout.text_amount_value_in_dollar.text = "${layout.text_amount_value_in_dollar.text} ${pairOrder?.assetPair?.priceAssetObject?.name}"
                 }
             }
             TransactionType.DATA_TYPE -> {
@@ -125,15 +125,15 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 && transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE && transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE) {
             if (showTag) {
                 layout.text_tag.visiable()
-                layout.text_tag.text = transaction.asset?.issueTransaction?.name
+                layout.text_tag.text = transaction.asset?.name
             } else {
                 layout.text_tag.gone()
-                layout.text_amount_or_title.text = "${layout.text_amount_or_title.text} ${transaction.asset?.issueTransaction?.name}"
+                layout.text_amount_or_title.text = "${layout.text_amount_or_title.text} ${transaction.asset?.name}"
             }
         } else if (transaction.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
             layout.text_tag.gone()
             layout.text_tag_spam.visiable()
-            layout.text_amount_or_title.text = "${layout.text_amount_or_title.text} ${transaction.asset?.issueTransaction?.name}"
+            layout.text_amount_or_title.text = "${layout.text_amount_or_title.text} ${transaction.asset?.name}"
         }
 
 

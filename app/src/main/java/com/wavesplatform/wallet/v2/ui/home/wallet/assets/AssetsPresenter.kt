@@ -29,6 +29,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     .subscribe({
                         postSuccess(it, withApiUpdate, false)
                     }, {
+                        it.printStackTrace()
                         runOnUiThread {
                             viewState.afterFailedLoadAssets()
                         }
