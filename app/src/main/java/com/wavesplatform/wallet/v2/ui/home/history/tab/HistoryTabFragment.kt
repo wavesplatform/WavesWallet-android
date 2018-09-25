@@ -2,12 +2,14 @@ package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CustomLoadMoreView
@@ -85,6 +87,16 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                 .frozen(false)
                 .show()
 
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
+                .subscribe {
+                    presenter.totalHeaders = 0
+                    presenter.hashOfTimestamp = hashMapOf()
+                    presenter.needLoadMore = true
+                    runAsync {
+                        presenter.loadTransactions()
+                    }
+                })
+
         runAsync {
             presenter.loadTransactions()
         }
@@ -129,6 +141,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     }
 
     override fun afterSuccessLoadTransaction(data: ArrayList<HistoryItem>, type: String?) {
+        Log.d("historydev", "data size: ${data.size}")
         configureTabLayout(type, data)
         configureEmptyView(data)
         adapter.setNewData(data)

@@ -12,5 +12,6 @@ class Events {
     class ErrorEvent(val retrofitException: RetrofitException, val retrySubject: PublishSubject<Events.RetryEvent>)
 
     class RetryEvent
+    class NeedUpdateHistoryScreen()
 
 }

@@ -7,10 +7,12 @@ import android.util.Log
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.notNull
@@ -27,6 +29,8 @@ class UpdateApiDataService : Service() {
     lateinit var apiDataManager: ApiDataManager
     @Inject
     lateinit var transactionUtil: TransactionUtil
+    @Inject
+    lateinit var rxEventBus: RxEventBus
     var subscriptions: CompositeDisposable = CompositeDisposable()
 
     var currentLimit = 100
@@ -137,6 +141,8 @@ class UpdateApiDataService : Service() {
             trans.transactionTypeId = transactionUtil.getTransactionType(trans)
         }
         it.saveAll()
+        Log.d("historydev", "on service send event")
+        rxEventBus.post(Events.NeedUpdateHistoryScreen())
     }
 
     override fun onBind(intent: Intent): IBinder? {

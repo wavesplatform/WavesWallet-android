@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.MvpAppCompatFragment
+import com.wavesplatform.wallet.v2.util.RxEventBus
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
@@ -28,6 +29,8 @@ abstract class BaseFragment : MvpAppCompatFragment(), BaseView, BaseMvpView, Has
 
     val toolbar: Toolbar
         get() = baseActivity.toolbar
+
+    @Inject lateinit var rxEventBus: RxEventBus
 
     @Inject
     lateinit var childFragmentInjector: DispatchingAndroidInjector<Fragment>
