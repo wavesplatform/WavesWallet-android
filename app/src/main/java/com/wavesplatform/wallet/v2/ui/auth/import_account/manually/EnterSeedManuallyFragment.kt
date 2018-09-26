@@ -47,6 +47,8 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
         val seedValidation = Validation(til_seed)
                 .and(NotEmptyRule(" "))
 
+        val identicon = Identicon()
+
         edit_seed.addTextChangedListener {
             on { s, start, before, count ->
                 validator
@@ -56,9 +58,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                                 if (values.isNotEmpty() && values[0].length > 24 ) {
                                     val wallet = WavesWallet(values[0].toByteArray(Charsets.UTF_8))
                                     Glide.with(activity)
-                                            .load(Identicon.create(
-                                                    wallet.address,
-                                                    Identicon.Options.Builder().setRandomBlankColor().create()))
+                                            .load(identicon.create(wallet.address))
                                             .apply(RequestOptions().circleCrop())
                                             .into(image_asset!!)
                                     address_asset.text = wallet.address

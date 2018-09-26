@@ -19,6 +19,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar_view"
         android:layout_margin="16dp"
+        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
         <TextView
@@ -39,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:animateLayoutChanges="true"
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatImageView

@@ -47,20 +47,20 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
 
         eventSubscriptions.add(RxTextView.textChanges(edit_search)
                 .skipInitialValue()
-                .map({
+                .map {
                     if (it.isNotEmpty()) {
                         edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, R.drawable.ic_clear_24_basic_500, 0)
                     } else {
                         edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, 0, 0)
                     }
                     return@map it.toString()
-                })
+                }
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
+                .subscribe {
                     adapter.filter(it)
-                }))
+                })
 
 
         edit_search.setDrawableClickListener(object : onDrawableClickListener {
@@ -89,12 +89,12 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position -> }
 
             // finish activity with result and timeout
-            runDelayed(500, {
+            runDelayed(500) {
                 setResult(Activity.RESULT_OK, Intent().apply {
                     putExtra(BUNDLE_ASSET_ITEM, item)
                 })
                 finish()
-            })
+            }
         }
     }
 

@@ -42,23 +42,12 @@ class UpdateApiDataService : Service() {
     var defaultLimit = 100
     var maxLimit = 10000
 
-//    companion object {
-//        var BUNDLE_ASSETS = "assets"
-//    }
-
     override fun onCreate() {
         AndroidInjection.inject(this)
         super.onCreate()
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-//        allAssets = intent.getParcelableArrayListExtra(BUNDLE_ASSETS)
-//
-//        subscriptions.add(rxEventBus.filteredObservable(Events.NewAssetsList::class.java)
-//                .subscribe {
-//                    allAssets = it.assets
-//                })
-
         val transaction = queryFirst<Transaction>()
         if (transaction == null) {
             nodeDataManager.currentLoadTransactionLimitPerRequest = maxLimit

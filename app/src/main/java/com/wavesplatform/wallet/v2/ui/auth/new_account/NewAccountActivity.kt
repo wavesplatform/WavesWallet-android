@@ -164,10 +164,6 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                 .apply(RequestOptions().circleCrop())
                 .into(imageView)
 
-        if (linear_images.children.isNotEmpty() && linear_images.children[0] == imageView) {
-            setImageActive(seed, imageView)
-        }
-
         imageView.click {
             setImageActive(seed, it)
         }

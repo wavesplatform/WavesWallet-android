@@ -48,11 +48,10 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
         setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view,  true, icon = R.drawable.ic_toolbar_back_black)
 
-        text_address.text = App.getAccessManager().getWallet()?.address
+        val address = App.getAccessManager().getWallet()?.address
+        text_address.text = address
         Glide.with(image_avatar.context)
-                .load(Identicon.create(
-                        App.getAccessManager().getWallet()?.address,
-                        Identicon.Options.Builder().setRandomBlankColor().create()))
+                .load(Identicon().create(address))
                 .apply(RequestOptions().circleCrop())
                 .into(image_avatar)
 

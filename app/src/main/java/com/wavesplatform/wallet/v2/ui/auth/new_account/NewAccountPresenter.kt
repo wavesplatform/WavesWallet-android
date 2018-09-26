@@ -19,6 +19,7 @@ class NewAccountPresenter @Inject constructor() : BasePresenter<NewAccountView>(
     var avatarValid = false
     var createPasswordFieldValid = false
     var confirmPasswordFieldValid = false
+    private val identicon = Identicon()
 
     fun isAllFieldsValid(): Boolean {
         return accountNameFieldValid && createPasswordFieldValid && confirmPasswordFieldValid && avatarValid
@@ -30,11 +31,7 @@ class NewAccountPresenter @Inject constructor() : BasePresenter<NewAccountView>(
                 .map {
                     val seed = WalletManager.createWalletSeed(context)
                     val wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
-                    val bitmap = Identicon.create(wallet.address,
-                            Identicon.Options.Builder()
-                                    .setRandomBlankColor()
-                                    .create())
-                    return@map Triple(seed, bitmap, it)
+                    return@map Triple(seed, identicon.create(wallet.address), it)
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe { t ->

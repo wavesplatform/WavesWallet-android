@@ -41,12 +41,10 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
         presenter.account = intent.getParcelableExtra(ChooseAccountActivity.KEY_INTENT_ITEM_ADDRESS)
 
         text_name.text = presenter.account?.name
-        text_address.text = presenter.account?.address
-
+        val address = presenter.account?.address
+        text_address.text = address
         Glide.with(this)
-                .load(Identicon.create(
-                        presenter.account?.address,
-                        Identicon.Options.Builder().setRandomBlankColor().create()))
+                .load(Identicon().create(address))
                 .apply(RequestOptions().circleCrop())
                 .into(image_asset)
 
