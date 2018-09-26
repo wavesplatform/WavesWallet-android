@@ -1,8 +1,10 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card
 
+import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -17,10 +19,17 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
     @Inject
     lateinit var coinomatManager: CoinomatManager
 
-    private var crypto: String? = "WAVES"
+    private var crypto: String = "WAVES"
     private var address: String? = App.getAccessManager().getWallet()!!.address
-    private var amount: String? = "30"
-    private var fiat: String? = "USD"
+    private var amount: String = "0"
+    private var fiat: String = "USD"
+    private var min: Float = 0F
+    private var max: Float = 0F
+    private var asset: AssetBalance? = null
+
+    fun isValid(): Boolean {
+        return !TextUtils.isEmpty(amount) && amount.toFloat() > min && amount.toFloat() < max
+    }
 
     fun loadAssets() {
         runAsync {
@@ -31,21 +40,27 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
                     .compose(RxUtil.applySingleDefaultSchedulers())
                     .subscribe({ assets ->
                         runOnUiThread {
-                            viewState.showWaves(assets)
+                            if (assets != null && assets.isNotEmpty()) {
+                                asset = assets[0]
+                                viewState.showWaves(asset)
+                            } else {
+                                viewState.showError(App.getAppContext()
+                                        .getString(R.string.receive_error_asset_getting))
+                            }
                         }
                     }, {
-                        it.printStackTrace()
+                        viewState.showError(App.getAppContext()
+                                .getString(R.string.receive_error_network))
                     }))
         }
     }
 
-    fun loadWithFiat(fiat: String) {
+    fun fiatChanged(fiat: String) {
         this.fiat = fiat
-        loadRate(amount)
         loadLimits()
     }
 
-    fun loadRate(amount: String?) {
+    fun amountChanged(amount: String) {
         this.amount = amount
         runAsync {
             addSubscription(coinomatManager.loadRate(crypto, address, fiat, amount).subscribe({ rate ->
@@ -53,19 +68,31 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
                     viewState.showRate(rate)
                 }
             }, {
-                it.printStackTrace()
+                viewState.showError(App.getAppContext()
+                        .getString(R.string.receive_error_network))
             }))
         }
     }
 
-    fun loadLimits() {
+    private fun loadLimits() {
         runAsync {
             addSubscription(coinomatManager.loadLimits(crypto, address, fiat).subscribe({ limits ->
+                min = if (limits?.min == null) {
+                    0F
+                } else {
+                    limits.min!!.toFloat()
+                }
+                max = if (limits?.max == null) {
+                    0F
+                } else {
+                    limits.max!!.toFloat()
+                }
                 runOnUiThread {
                     viewState.showLimits(limits.min, limits.max, fiat)
                 }
             }, {
-                it.printStackTrace()
+                viewState.showError(App.getAppContext()
+                        .getString(R.string.receive_error_network))
             }))
         }
     }

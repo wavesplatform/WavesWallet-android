@@ -13,6 +13,8 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.web.WebActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
+import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_card.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -32,42 +34,35 @@ class CardFragment : BaseFragment(), CardView {
 
     override fun configLayoutRes(): Int = R.layout.fragment_card
 
-    companion object {
-
-        fun newInstance(): CardFragment {
-            return CardFragment()
-        }
-    }
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         edit_asset.isEnabled = false
         button_continue.click {
-            launchActivity<WebActivity> {
-                putExtra(WebActivity.KEY_INTENT_TITLE, "Coinomat.com")
-                putExtra(WebActivity.KEY_INTENT_LINK, presenter.createLink())
+            if (presenter.isValid()) {
+                launchActivity<WebActivity> {
+                    putExtra(WebActivity.KEY_INTENT_TITLE, "Coinomat.com")
+                    putExtra(WebActivity.KEY_INTENT_LINK, presenter.createLink())
+                }
+            } else {
+                showError(getString(R.string.receive_error_amount))
             }
         }
 
         RxTextView.textChanges(edit_amount)
-                .filter { charSequence -> charSequence.length > 1 }
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .subscribe { string ->
-                    presenter.loadRate(string.toString())
+                    presenter.amountChanged(string.toString())
                 }
-
 
         fiat_change.click {
             showDialogFiatChange()
         }
 
         presenter.loadAssets()
-        setFiat("USD")
+        setFiat(USD)
     }
 
-    override fun showWaves(assets: List<AssetBalance>?) {
-        if (assets != null && assets.isNotEmpty()) {
-            setAssetBalance(assets[0])
-        }
+    override fun showWaves(asset: AssetBalance?) {
+        asset.notNull { setAssetBalance(it) }
     }
 
     override fun showRate(rate: String?) {
@@ -78,6 +73,10 @@ class CardFragment : BaseFragment(), CardView {
         if (min != null && max != null) {
             limits.text = getString(R.string.receive_limit, min, fiat, max, fiat)
         }
+    }
+
+    override fun showError(message: String) {
+        showError(message, R.id.content)
     }
 
     private fun setAssetBalance(assetBalance: AssetBalance?) {
@@ -102,12 +101,12 @@ class CardFragment : BaseFragment(), CardView {
         val view = LayoutInflater.from(baseActivity)
                 .inflate(R.layout.receive_fiat_choose_dialog, null)
         view.findViewById<RadioButton>(R.id.radioButton_usd).click {
-            setFiat("USD")
             alertDialog.dismiss()
+            setFiat(USD)
         }
         view.findViewById<RadioButton>(R.id.radioButton_eur).click {
-            setFiat("EURO")
             alertDialog.dismiss()
+            setFiat(EURO)
         }
         alertDialog.setView(view)
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
@@ -120,6 +119,16 @@ class CardFragment : BaseFragment(), CardView {
 
     private fun setFiat(value: String) {
         amount_title.text = getString(R.string.receive_amount_title, value)
-        presenter.loadWithFiat(value)
+        presenter.fiatChanged(value)
+    }
+
+    companion object {
+
+        const val USD = "USD"
+        const val EURO = "EURO"
+
+        fun newInstance(): CardFragment {
+            return CardFragment()
+        }
     }
 }

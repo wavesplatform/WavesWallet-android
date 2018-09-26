@@ -1142,6 +1142,9 @@
     <string name="receive_amount_title">Amount in %1$s</string>
     <string name="receive_payment_method">Payment method</string>
     <string name="receive_limit">The minimum is %1$s %2$s, the maximum is %3$s %4$s</string>
+    <string name="receive_error_amount">Wrong amount. Check limits</string>
+    <string name="receive_error_network">Error getting data. Try again later</string>
+    <string name="receive_error_asset_getting">Error getting asset. Try again later</string>
     <string name="receive_fiat_choose_dialog_title">Choose Currency</string>
     <string name="receive_fiat_choose_dialog_usd">USD</string>
     <string name="receive_fiat_choose_dialog_euro">EURO</string>
