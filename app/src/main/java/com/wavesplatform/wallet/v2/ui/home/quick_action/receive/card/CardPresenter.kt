@@ -26,6 +26,13 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
     private var min: Float = 0F
     private var max: Float = 0F
     private var asset: AssetBalance? = null
+    private var rate = ""
+
+    fun invalidate() {
+        viewState.showWaves(asset)
+        viewState.showRate(rate)
+        viewState.showLimits(min.toString(), max.toString(), fiat)
+    }
 
     fun isValid(): Boolean {
         return !TextUtils.isEmpty(amount) && amount.toFloat() > min && amount.toFloat() < max
@@ -64,6 +71,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
         this.amount = amount
         runAsync {
             addSubscription(coinomatManager.loadRate(crypto, address, fiat, amount).subscribe({ rate ->
+                this.rate = rate
                 runOnUiThread {
                     viewState.showRate(rate)
                 }

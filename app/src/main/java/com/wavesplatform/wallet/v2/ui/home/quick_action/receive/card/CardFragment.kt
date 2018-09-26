@@ -56,9 +56,16 @@ class CardFragment : BaseFragment(), CardView {
         fiat_change.click {
             showDialogFiatChange()
         }
+    }
 
-        presenter.loadAssets()
-        setFiat(USD)
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState == null) {
+            presenter.loadAssets()
+            setFiat(USD)
+        } else {
+            presenter.invalidate()
+        }
     }
 
     override fun showWaves(asset: AssetBalance?) {
