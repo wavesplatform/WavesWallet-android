@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.wavesplatform.wallet.v2.data.model.remote.response.CoinomatLimit
+import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.Limit
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -10,7 +10,7 @@ class CoinomatManager @Inject constructor() : DataManager() {
         return coinomatService.rate(crypto, address, fiat, amount)
     }
 
-    fun loadLimits(crypto: String?, address: String?, fiat: String?): Observable<CoinomatLimit> {
+    fun loadLimits(crypto: String?, address: String?, fiat: String?): Observable<Limit> {
         return coinomatService.limits(crypto, address, fiat)
     }
 
