@@ -6,6 +6,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.github.anderscheow.validator.Validation
@@ -38,7 +39,7 @@ class NetworkActivity : BaseActivity(), NetworkView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.network_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        edit_spam_filter.setText(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, BuildConfig.SPAM_URL))
+        edit_spam_filter.setText(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM))
 
         switch_spam_filter.isChecked = prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)
         switch_spam_filter.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -50,7 +51,7 @@ class NetworkActivity : BaseActivity(), NetworkView {
             on { s, start, before, count ->
                 val spamUrlValidation = Validation(til_spam_filter)
                         .and(NotEmptyRule(R.string.new_account_account_name_validation_required_error))
-                        .and(NotEqualRule((prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, BuildConfig.SPAM_URL)), " "))
+                        .and(NotEqualRule((prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM)), " "))
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
@@ -68,7 +69,7 @@ class NetworkActivity : BaseActivity(), NetworkView {
         }
 
         button_set_default.click {
-            edit_spam_filter.setText(BuildConfig.SPAM_URL)
+            edit_spam_filter.setText(Constants.URL_SPAM)
             switch_spam_filter.isChecked = false
         }
 
