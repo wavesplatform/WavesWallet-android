@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.ColorRes
+import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -65,6 +66,16 @@ fun Context.isNetworkConnection(): Boolean {
     return activeNetwork != null && activeNetwork.isConnectedOrConnecting
 }
 
+fun Context.isMyServiceRunning(serviceClass: Class<*>): Boolean {
+    for (service in activityManager.getRunningServices(Integer.MAX_VALUE)) {
+        if (serviceClass.name == service.service.className) {
+            return true
+        }
+    }
+    return false
+}
+
+
 fun Context.notAvailable() {
     toast(getString(R.string.common_msg_in_development))
 }
@@ -75,21 +86,21 @@ fun ByteArray.arrayWithSize(): ByteArray {
 
 fun Activity.openUrlWithChromeTab(url: String) {
     SimpleChromeCustomTabs.getInstance()
-            .withFallback({
+            .withFallback {
                 openUrlWithIntent(url)
-            }).withIntentCustomizer({
+            }.withIntentCustomizer {
                 it.withToolbarColor(findColor(R.color.submit400))
-            })
+            }
             .navigateTo(Uri.parse(url), this)
 }
 
 fun Fragment.openUrlWithChromeTab(url: String) {
     SimpleChromeCustomTabs.getInstance()
-            .withFallback({
+            .withFallback {
                 activity?.openUrlWithIntent(url)
-            }).withIntentCustomizer({
+            }.withIntentCustomizer {
                 it.withToolbarColor(findColor(R.color.submit400))
-            })
+            }
             .navigateTo(Uri.parse(url), activity)
 
 }
@@ -128,15 +139,16 @@ fun AlertDialog.makeStyled() {
 }
 
 fun Context.isAppOnForeground(): Boolean {
-    val appProcesses: MutableList<ActivityManager.RunningAppProcessInfo>? = activityManager.runningAppProcesses
-            ?: return false
-    val packageName = getPackageName();
+    val appProcesses: MutableList<ActivityManager.RunningAppProcessInfo>?
+            = activityManager.runningAppProcesses ?: return false
+    val packageName = packageName
     appProcesses?.forEach {
-        if (it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && it.processName.equals(packageName)) {
-            return true;
+        if (it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+                && it.processName.equals(packageName)) {
+            return true
         }
     }
-    return false;
+    return false
 }
 
 fun Context.getToolBarHeight(): Int {
@@ -172,7 +184,11 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
         // Fetch the current flags.
         val lFlags = this.window.decorView.systemUiVisibility
         // Update the SystemUiVisibility dependening on whether we want a Light or Dark theme.
-        this.window.decorView.systemUiVisibility = if (pIsDark) lFlags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv() else lFlags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        this.window.decorView.systemUiVisibility = if (pIsDark) {
+            lFlags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+        } else {
+            lFlags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
     }
 }
 
@@ -181,9 +197,26 @@ fun String.stripZeros(): String {
     return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
 }
 
-fun Fragment.showSnackbar(@StringRes msg: Int, @ColorRes color: Int? = null, during: Int = Snackbar.LENGTH_LONG) {
+
+fun Fragment.showSuccess(@StringRes msgId: Int, @IdRes viewId: Int) {
+    showSuccess(getString(msgId), viewId)
+}
+
+fun Fragment.showSuccess(msg: String, @IdRes viewId: Int) {
+    showMessage(msg, viewId, R.color.success500)
+}
+
+fun Fragment.showError(@StringRes msgId: Int, @IdRes viewId: Int) {
+    showError(getString(msgId), viewId)
+}
+
+fun Fragment.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
+    showMessage(msg, viewId, R.color.error400)
+}
+
+fun Fragment.showMessage(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
     view.notNull { v ->
-        Snackbar.make(v.findViewById(android.R.id.content), getString(msg), during)
+        Snackbar.make(v.findViewById(viewId), msg, Snackbar.LENGTH_LONG)
                 .withColor(color)
                 .show()
     }
@@ -201,6 +234,28 @@ fun View.showSnackbar(@StringRes msg: Int, @ColorRes color: Int? = null, during:
                 .withColor(color)
                 .show()
     }
+}
+
+fun Activity.showSuccess(@StringRes msgId: Int, @IdRes viewId: Int) {
+    showSuccess(getString(msgId), viewId)
+}
+
+fun Activity.showSuccess(msg: String, @IdRes viewId: Int) {
+    showMessage(msg, viewId, R.color.success500)
+}
+
+fun Activity.showError(@StringRes msgId: Int, @IdRes viewId: Int) {
+    showMessage(getString(msgId), viewId, R.color.error400)
+}
+
+fun Activity.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
+    showMessage(msg, viewId, color)
+}
+
+fun Activity.showMessage(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
+    Snackbar.make(findViewById(viewId), msg, Snackbar.LENGTH_LONG)
+            .withColor(color)
+            .show()
 }
 
 
@@ -223,9 +278,9 @@ fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: In
 
     imageView.notNull { image ->
         image.setImageDrawable(ContextCompat.getDrawable(this.context, R.drawable.ic_check_18_success_400))
-        runDelayed(1500, {
+        runDelayed(1500) {
             this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, copyIcon)) }
-        })
+        }
     }
 }
 

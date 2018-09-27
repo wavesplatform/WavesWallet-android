@@ -5,5 +5,5 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 import java.util.*
 
 interface AssetDetailsView : BaseMvpView {
-    fun afterSuccessLoadAssets(sortedToFirstFavoriteList: ArrayList<AssetBalance>)
+    fun afterSuccessLoadAssets(sortedToFirstFavoriteList: MutableList<AssetBalance>)
 }

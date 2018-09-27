@@ -29,6 +29,7 @@ class WhatsNewActivity : BaseActivity(), WhatsNewView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view)
 
         adapter.items = populateList()

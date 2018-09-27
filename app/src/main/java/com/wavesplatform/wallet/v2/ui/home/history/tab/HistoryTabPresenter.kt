@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.history.tab
 
+import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
@@ -23,7 +24,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     var totalHeaders = 0
     var type: String? = "all"
     var needLoadMore: Boolean = true
-    val hashOfTimestamp = hashMapOf<Long, Long>()
+    var hashOfTimestamp = hashMapOf<Long, Long>()
     var assetBalance: AssetBalance? = null
 
     companion object {
@@ -31,6 +32,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     }
 
     fun loadTransactions() {
+        Log.d("historydev", "on presenter")
         val singleData: Single<List<Transaction>> = when (type) {
             HistoryTabFragment.all -> {
                 queryAllAsSingle<Transaction>()

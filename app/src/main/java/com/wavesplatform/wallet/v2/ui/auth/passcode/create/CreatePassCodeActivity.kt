@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_create_passcode.*
 import javax.inject.Inject
 
@@ -31,7 +32,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
     override fun configLayoutRes() = R.layout.activity_create_passcode
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view,  false,
+        setupToolbar(toolbar_view, false,
                 icon = R.drawable.ic_toolbar_back_black)
 
         presenter.step = CreatePassCodeStep.CREATE
@@ -92,18 +93,17 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                             launchActivity<MainActivity>(clear = true)
                         }
                     })
+        } else if (intent.hasExtra(KEY_INTENT_GUID)) {
+            finish()
         } else {
             launchActivity<MainActivity>(clear = true)
+
         }
     }
 
     override fun onFailCreatePassCode() {
         showProgressBar(false)
-        ToastCustom.makeText(this@CreatePassCodeActivity,
-                getString(R.string.create_pin_failed),
-                ToastCustom.LENGTH_SHORT,
-                ToastCustom.TYPE_ERROR)
-        finish()
+        showError(R.string.create_pin_failed, R.id.content)
     }
 
     private fun moveToCreateStep() {

@@ -15,10 +15,4 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
         return checkedAboutBackup && checkedAboutFundsOnDevice && checkedAboutTerms
     }
 
-    fun loadAliases() {
-        addSubscription(apiDataManager.loadAliases()
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({
-                }))
-    }
 }

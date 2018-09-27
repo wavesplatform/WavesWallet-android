@@ -26,8 +26,8 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
 
         addSubscription(nodeDataManager.createAlias(aliasRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({
+                .subscribe {
                     viewState.successCreateAlias(it)
-                }))
+                })
     }
 }

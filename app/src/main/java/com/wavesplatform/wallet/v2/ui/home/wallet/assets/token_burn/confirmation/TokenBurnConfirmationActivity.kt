@@ -27,6 +27,11 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
     override fun configLayoutRes() = R.layout.activity_token_burn_confirmation
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        translucentStatusBar = true
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.token_burn_confirmation_toolbar_title), R.drawable.ic_toolbar_back_white)
 

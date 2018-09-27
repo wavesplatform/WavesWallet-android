@@ -82,7 +82,7 @@
                     android:backgroundTint="@color/accent50"
                     android:hint="@string/enter_seed_manually_hint_your_seed"
                     android:imeOptions="actionDone"
-                    android:inputType="textMultiLine|textLongMessage"
+                    android:inputType="textMultiLine"
                     android:lines="3"
                     android:paddingBottom="20dp"
                     android:textColorHint="@color/basic500" />

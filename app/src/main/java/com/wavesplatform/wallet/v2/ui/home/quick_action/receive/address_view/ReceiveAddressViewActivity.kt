@@ -30,6 +30,12 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
 
     override fun configLayoutRes(): Int = R.layout.activity_receive_address_view
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        translucentStatusBar = true
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         val assetBalance = intent?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
 

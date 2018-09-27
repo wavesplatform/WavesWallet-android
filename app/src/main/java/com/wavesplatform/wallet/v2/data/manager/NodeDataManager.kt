@@ -30,33 +30,6 @@ class NodeDataManager @Inject constructor() : DataManager() {
     var pendingTransactions: List<Transaction> = ArrayList()
     var currentLoadTransactionLimitPerRequest = 100
 
-//    fun loadAssetsFromDBAndNetwork(): Observable<List<AssetBalance>> {
-//        return Observable.mergeDelayError(queryAllAsFlowable<AssetBalance>().toObservable(), nodeService.assetsBalance(getAddress())
-//                .map({ assets ->
-//
-//                    // merge db data and API data
-//                    executeTransaction {
-//                        assets.balances.forEachIndexed({ index, assetBalance ->
-//                            val dbAsset = queryFirst<AssetBalance>({ equalTo("assetId", assetBalance.assetId) })
-//                            dbAsset.notNull {
-//                                assetBalance.isHidden = it.isHidden
-//                                assetBalance.isFavorite = it.isFavorite
-//                            }
-//                        })
-//                        assets.balances.saveAll()
-//                    }
-//
-//                    return@map queryAll<AssetBalance>()
-//                }), nodeService.wavesBalance(getAddress())
-//                .map {
-//                    val currentWaves = Constants.defaultAssets[0]
-//                    currentWaves.balance = it.balance
-//                    currentWaves.save()
-//                    return@map arrayListOf<AssetBalance>(currentWaves)
-//                })
-//
-//    }
-
     fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
         return spamService.spamAssets()
                 .map {
@@ -175,7 +148,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
         return nodeService.activeLeasing(getAddress())
                 .map {
                     return@map it.filter {
-                        it.asset = Constants.defaultAssets[0]
+                        it.asset = Constants.wavesAssetInfo
                         it.transactionTypeId = transactionUtil.getTransactionType(it)
                         it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
                     }

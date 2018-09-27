@@ -1,7 +1,9 @@
 package com.wavesplatform.wallet.v2.ui.auth.import_account.manually
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
@@ -45,19 +47,18 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
         val seedValidation = Validation(til_seed)
                 .and(NotEmptyRule(" "))
 
+        val identicon = Identicon()
+
         edit_seed.addTextChangedListener {
             on { s, start, before, count ->
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
                                 button_continue.isEnabled = true
-
-                                if (values.isNotEmpty()) {
+                                if (values.isNotEmpty() && values[0].length > 24 ) {
                                     val wallet = WavesWallet(values[0].toByteArray(Charsets.UTF_8))
                                     Glide.with(activity)
-                                            .load(Identicon.create(
-                                                    wallet.address,
-                                                    Identicon.Options.Builder().setRandomBlankColor().create()))
+                                            .load(identicon.create(wallet.address))
                                             .apply(RequestOptions().circleCrop())
                                             .into(image_asset!!)
                                     address_asset.text = wallet.address
@@ -69,10 +70,22 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                             }
 
                             override fun onValidateFailed() {
-                                button_continue.isEnabled = false
                                 setSkeleton()
                             }
                         }, seedValidation)
+            }
+        }
+
+        edit_seed.imeOptions = EditorInfo.IME_ACTION_DONE
+        edit_seed.setRawInputType(InputType.TYPE_CLASS_TEXT)
+        edit_seed.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE && button_continue.isEnabled) {
+                launchActivity<ProtectAccountActivity> {
+                    putExtra(NewAccountActivity.KEY_INTENT_SEED, edit_seed.text.toString().trim())
+                }
+                true
+            } else {
+                false
             }
         }
 
@@ -84,6 +97,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
     }
 
     fun setSkeleton() {
+        button_continue.isEnabled = false
         skeleton_address_asset.visibility = View.VISIBLE
         address_asset.visibility = View.GONE
         Glide.with(activity)

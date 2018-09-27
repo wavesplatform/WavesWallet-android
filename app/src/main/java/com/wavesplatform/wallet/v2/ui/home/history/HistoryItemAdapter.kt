@@ -29,9 +29,11 @@ class HistoryItemAdapter @Inject constructor() :
                 it.assetId == item?.t?.assetId || item?.t?.assetId.isNullOrEmpty()
             }
 
+            view.text_tag_spam.gone()
+
             item?.t?.transactionType().notNull {
                 try {
-                    view.text_transaction_name.text = String.format(it.title(), item?.t?.asset?.issueTransaction?.name)
+                    view.text_transaction_name.text = String.format(it.title(), item?.t?.asset?.name)
                 } catch (e: MissingFormatArgumentException) {
                     view.text_transaction_name.text = it.title()
                 }
@@ -72,23 +74,23 @@ class HistoryItemAdapter @Inject constructor() :
 
 
                         if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                            view.text_transaction_name.text = "-${MoneyUtil.getScaledText(item?.t?.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.issueTransaction?.name}"
+                            view.text_transaction_name.text = "-${MoneyUtil.getScaledText(item?.t?.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.name}"
                             view.text_transaction_value.text = "+${MoneyUtil.getScaledText(item?.t?.amount?.times(item?.t?.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                         } else {
-                            view.text_transaction_name.text = "+${MoneyUtil.getScaledText(item?.t?.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.issueTransaction?.name}"
+                            view.text_transaction_name.text = "+${MoneyUtil.getScaledText(item?.t?.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.name}"
                             view.text_transaction_value.text = "-${MoneyUtil.getScaledText(item?.t?.amount?.times(item?.t?.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                         }
 
                         showTag = Constants.defaultAssets.any {
-                            it.assetId == pairOrder?.assetPair?.priceAssetObject?.assetId || pairOrder?.assetPair?.priceAssetObject?.assetId.isNullOrEmpty()
+                            it.assetId == pairOrder?.assetPair?.priceAssetObject?.id || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
                         }
 
                         if (showTag) {
                             view.text_tag.visiable()
-                            view.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.issueTransaction?.name
+                            view.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.name
                         } else {
                             view.text_tag.gone()
-                            view.text_transaction_value.text = "${view.text_transaction_value.text} ${pairOrder?.assetPair?.priceAssetObject?.issueTransaction?.name}"
+                            view.text_transaction_value.text = "${view.text_transaction_value.text} ${pairOrder?.assetPair?.priceAssetObject?.name}"
                         }
                     }
                     TransactionType.DATA_TYPE -> {
@@ -131,15 +133,15 @@ class HistoryItemAdapter @Inject constructor() :
                     && item?.t?.transactionType() != TransactionType.EXCHANGE_TYPE) {
                 if (showTag) {
                     view.text_tag.visiable()
-                    view.text_tag.text = item?.t?.asset?.issueTransaction?.name
+                    view.text_tag.text = item?.t?.asset?.name
                 } else {
                     view.text_tag.gone()
-                    view.text_transaction_value.text = "${view.text_transaction_value.text} ${item?.t?.asset?.issueTransaction?.name}"
+                    view.text_transaction_value.text = "${view.text_transaction_value.text} ${item?.t?.asset?.name}"
                 }
             } else if (item.t?.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || item.t?.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
                 view.text_tag.gone()
                 view.text_tag_spam.visiable()
-                view.text_transaction_value.text = "${view.text_transaction_value.text} ${item.t?.asset?.issueTransaction?.name}"
+                view.text_transaction_value.text = "${view.text_transaction_value.text} ${item.t?.asset?.name}"
             }
 
             view.text_transaction_value.makeTextHalfBold()

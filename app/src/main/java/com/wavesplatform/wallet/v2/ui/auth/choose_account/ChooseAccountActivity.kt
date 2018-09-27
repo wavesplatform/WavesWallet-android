@@ -19,10 +19,10 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showSuccess
 import kotlinx.android.synthetic.main.activit_choose_account.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.inflate
-import pers.victor.ext.toast
 import javax.inject.Inject
 
 class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOnClickListener {
@@ -40,6 +40,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     override fun configLayoutRes(): Int = R.layout.activit_choose_account
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view,  true,
                 getString(R.string.choose_account), R.drawable.ic_toolbar_back_black)
 
@@ -89,7 +90,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
                 App.getAccessManager().deleteWavesWallet(item.address)
                 adapter.remove(position)
             }
-            toast(getString(R.string.choose_account_deleted))
+            showSuccess(R.string.choose_account_deleted, R.id.content)
             adapter.notifyDataSetChanged()
         }
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,

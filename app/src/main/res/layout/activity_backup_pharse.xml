@@ -27,17 +27,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/backup_hint"
-            android:textSize="12sp"
-            android:textColor="@color/basic500" />
+            android:textColor="@color/basic500"
+            android:textSize="12sp" />
 
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/flow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:padding="7dp"
             android:background="@color/basic50"
             android:foreground="@drawable/shape_rect_outline_gray"
+            android:padding="7dp"
             app:alignContent="center"
             app:alignItems="center"
             app:flexWrap="wrap"
@@ -51,12 +51,12 @@
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:textSize="12sp"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
                 android:layout_toLeftOf="@+id/image_copy"
                 android:text="@string/backup_hint_2"
-                android:textColor="@color/basic500" />
+                android:textColor="@color/basic500"
+                android:textSize="12sp" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/image_copy"
@@ -75,9 +75,9 @@
         android:layout_above="@+id/button_written_down"
         android:layout_centerHorizontal="true"
         android:layout_marginRight="16dp"
-        android:textSize="12sp"
         android:text="@string/backup_hint_3"
-        android:textColor="@color/basic500" />
+        android:textColor="@color/basic500"
+        android:textSize="12sp" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/button_written_down"

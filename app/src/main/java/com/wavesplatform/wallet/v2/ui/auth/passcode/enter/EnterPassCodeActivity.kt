@@ -6,13 +6,11 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatEditText
 import android.text.InputType
 import android.text.TextUtils
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
-import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
@@ -23,9 +21,9 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_enter_passcode.*
 import pers.victor.ext.click
-import pers.victor.ext.toast
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
@@ -42,7 +40,6 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     override fun configLayoutRes() = R.layout.activity_enter_passcode
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-
         text_use_acc_password.click {
             val guid = getGuid()
             if (TextUtils.isEmpty(guid)) {
@@ -98,11 +95,10 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                 text_subtitle.visiable()
                 logout.visiable()
                 logout.click {
-                    App.getAccessManager().resetWallet()
                     App.getAccessManager().setLastLoggedInGuid("")
+                    App.getAccessManager().resetWallet()
                     launchActivity<WelcomeActivity>()
                 }
-
             } else {
                 setupToolbar(toolbar_view, true,
                         icon = R.drawable.ic_toolbar_back_black)
@@ -141,10 +137,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     override fun onFailValidatePassCode(overMaxWrongPassCode: Boolean, errorMessage: String?) {
         showProgressBar(false)
         if (overMaxWrongPassCode) {
-            ToastCustom.makeText(this@EnterPassCodeActivity,
-                    getString(R.string.pin_4_strikes),
-                    ToastCustom.LENGTH_SHORT,
-                    ToastCustom.TYPE_ERROR)
+            showError(R.string.pin_4_strikes, R.id.content)
             showRequestPasswordDialog()
         } else {
             val message = if (TextUtils.isEmpty(errorMessage)) {
@@ -152,10 +145,9 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
             } else {
                 getString(R.string.unexpected_error) + " ($errorMessage)"
             }
-            ToastCustom.makeText(this@EnterPassCodeActivity, message,
-                    ToastCustom.LENGTH_SHORT, ToastCustom.TYPE_ERROR)
-            finish()
+            showError(message, R.id.content)
         }
+        pass_keypad.clearPassCode()
     }
 
     private fun showFingerPrint() {
@@ -211,8 +203,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                     }
                     App.getAccessManager().resetPassCodeInputFails()
                 } catch (e: Exception) {
-                    toast(getString(R.string.enter_passcode_error_wrong_password))
-                    finish()
+                    showError(R.string.enter_passcode_error_wrong_password, R.id.content)
                 }
             }
         }

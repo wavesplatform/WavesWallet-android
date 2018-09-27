@@ -23,6 +23,7 @@ import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
@@ -47,7 +48,8 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view,  true, icon = R.drawable.ic_toolbar_back_black)
+        setStatusBarColor(R.color.basic50)
+        setupToolbar(toolbar_view, true, icon = R.drawable.ic_toolbar_back_black)
 
         view_pager.adapter = adapterAvatar
         view_pager.offscreenPageLimit = 3
@@ -101,22 +103,22 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         }
     }
 
-    override fun afterSuccessLoadAssets(sortedToFirstFavoriteList: ArrayList<AssetBalance>) {
+    override fun afterSuccessLoadAssets(sortedToFirstFavoriteList: MutableList<AssetBalance>) {
         // configure top avatars pager
         adapterAvatar.items = sortedToFirstFavoriteList
         adapterAvatar.notifyDataSetChanged()
         view_pager.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0), false)
-        view_pager.post({
+        view_pager.post {
             if (view_pager.beginFakeDrag()) {
                 view_pager.fakeDragBy(0f)
                 view_pager.endFakeDrag()
             }
-        })
+        }
         configureTitleForAssets(view_pager.currentItem)
         showFavorite(view_pager.currentItem)
 
         // configure contents pager
-        view_pager_content.adapter = AssetDetailsContentPageAdapter(supportFragmentManager, sortedToFirstFavoriteList)
+        view_pager_content.adapter = AssetDetailsContentPageAdapter(supportFragmentManager, ArrayList(sortedToFirstFavoriteList))
         view_pager_content.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0), false)
     }
 

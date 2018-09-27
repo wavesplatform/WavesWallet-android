@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account
 
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
@@ -48,9 +49,7 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
         isFieldsValid()
 
         button_create_account.click {
-            if (intent.hasExtra(NewAccountActivity.KEY_INTENT_SEED)) {
-                launchActivity<CreatePassCodeActivity>(options = createDataBundle())
-            }
+            goNext()
         }
 
         val nameValidation = Validation(til_account_name)
@@ -130,9 +129,26 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
             }
         }
 
+        edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                goNext()
+                true
+            } else {
+                false
+            }
+        }
+
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_SEED)) {
             seed = intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED)
             setAccountData()
+        }
+    }
+
+    private fun goNext() {
+        if (presenter.isAllFieldsValid()) {
+            if (intent.hasExtra(NewAccountActivity.KEY_INTENT_SEED)) {
+                launchActivity<CreatePassCodeActivity>(options = createDataBundle())
+            }
         }
     }
 
@@ -148,13 +164,8 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
 
     private fun setAccountData() {
         val wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
-        val bitmap = Identicon.create(wallet.address,
-                Identicon.Options.Builder()
-                        .setRandomBlankColor()
-                        .create())
-
         Glide.with(applicationContext)
-                .load(bitmap)
+                .load(Identicon().create(wallet.address))
                 .apply(RequestOptions().circleCrop())
                 .into(image_account_icon)
         text_account_address.text = wallet.address

@@ -13,6 +13,11 @@ class ConfirmationLeasingActivity : BaseActivity(), ConfirmationLeasingView {
 
     override fun configLayoutRes(): Int = R.layout.activity_confirm_leasing
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        translucentStatusBar = true
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view,true, getString(R.string.confirm_leasing), R.drawable.ic_toolbar_back_white)
 

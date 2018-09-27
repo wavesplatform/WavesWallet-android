@@ -38,6 +38,7 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         recycle_markets.layoutManager = LinearLayoutManager(this)

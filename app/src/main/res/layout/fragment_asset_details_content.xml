@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/text_asset_description"
+    android:background="@color/basic50"
     android:fillViewport="true"
     android:overScrollMode="never">
 
@@ -69,13 +70,13 @@
                             android:layout_marginLeft="4dp"
                             android:background="@drawable/asset_price_border"
                             android:paddingBottom="2dp"
-                            android:visibility="gone"
                             android:paddingEnd="4dp"
                             android:paddingStart="4dp"
                             android:paddingTop="2dp"
                             android:text="$ 00.00"
                             android:textColor="@color/info500"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <LinearLayout

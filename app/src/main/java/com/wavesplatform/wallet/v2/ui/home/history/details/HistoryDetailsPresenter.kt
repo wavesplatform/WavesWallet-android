@@ -10,14 +10,14 @@ import javax.inject.Inject
 class HistoryDetailsPresenter @Inject constructor() : BasePresenter<HistoryDetailsView>() {
 
 
-    inline fun getAssetDetails(assetId: String?, crossinline callback: (AssetBalance) -> Unit) {
-        addSubscription(apiDataManager.assetDetails(assetId)
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({
-                    callback(it)
-                }, {
-                    it.printStackTrace()
-                }))
-    }
+//    inline fun getAssetDetails(assetId: String?, crossinline callback: (AssetBalance) -> Unit) {
+//        addSubscription(apiDataManager.assetDetails(assetId)
+//                .compose(RxUtil.applyObservableDefaultSchedulers())
+//                .subscribe({
+//                    callback(it)
+//                }, {
+//                    it.printStackTrace()
+//                }))
+//    }
 
 }

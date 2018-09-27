@@ -6,25 +6,41 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
+import com.ethanhua.skeleton.Skeleton
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
+import com.wavesplatform.wallet.v2.util.isMyServiceRunning
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
-import pers.victor.ext.*
-import pyxis.uzuki.live.richutilskt.utils.runAsync
+import pers.victor.ext.click
+import pers.victor.ext.gone
+import pers.victor.ext.toast
+import pers.victor.ext.visiable
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 class AssetsFragment : BaseFragment(), AssetsView {
+    override fun startServiceToLoadData(assets: ArrayList<AssetBalance>) {
+        runOnUiThread {
+            if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)) {
+                val intent = Intent(baseActivity, UpdateApiDataService::class.java)
+                baseActivity.startService(intent)
+            }
+        }
+    }
 
     @Inject
     @InjectPresenter
@@ -42,6 +58,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
     @Inject
     lateinit var spamAssetsAdapter: AssetsAdapter
 
+    private var skeletonScreen: RecyclerViewSkeletonScreen? = null
+
     companion object {
         const val RESULT_NEED_UPDATE = "need_update"
         const val REQUEST_SORTING = 111
@@ -55,24 +73,30 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun configLayoutRes(): Int = R.layout.fragment_assets
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-            runAsync {
-                presenter.loadAssetsBalance()
-            }
-
         setupUI()
+
+        skeletonScreen.notNull { it.show() }
+        presenter.loadAliases()
+        presenter.loadAssetsBalance()
     }
 
     private fun setupUI() {
         swipe_container.setColorSchemeResources(R.color.submit400)
         swipe_container.setOnRefreshListener {
-            runAsync {
-                presenter.loadAssetsBalance()
-            }
+            skeletonScreen.notNull { it.show() }
+            presenter.loadAssetsBalance()
         }
 
         recycle_assets_not_hidden.layoutManager = LinearLayoutManager(baseActivity)
         recycle_assets_not_hidden.adapter = adapter
         recycle_assets_not_hidden.isNestedScrollingEnabled = false
+
+        skeletonScreen = Skeleton.bind(recycle_assets_not_hidden)
+                .adapter(recycle_assets_not_hidden.adapter)
+                .color(R.color.basic100)
+                .load(R.layout.item_skeleton_wallet)
+                .frozen(false)
+                .show()
 
         recycle_assets_hidden.layoutManager = LinearLayoutManager(baseActivity)
         recycle_assets_hidden.adapter = adapterHiddenAssets
@@ -81,6 +105,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
         recycle_spam_assets.layoutManager = LinearLayoutManager(baseActivity)
         recycle_spam_assets.adapter = spamAssetsAdapter
         recycle_spam_assets.isNestedScrollingEnabled = false
+
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position) as AssetBalance
@@ -153,15 +178,14 @@ class AssetsFragment : BaseFragment(), AssetsView {
     }
 
     override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean, withApiUpdate: Boolean) {
-        if (!fromDB) {
-            val intent = Intent(baseActivity, UpdateApiDataService::class.java)
-            baseActivity.startService(intent)
-            swipe_container?.isRefreshing = false
-        } else if (!withApiUpdate) {
+        if (!fromDB || !withApiUpdate) {
             swipe_container?.isRefreshing = false
         }
 
         adapter.setNewData(assets)
+        if (withApiUpdate) {
+            skeletonScreen.notNull { it.hide() }
+        }
     }
 
     override fun afterSuccessLoadHiddenAssets(assets: List<AssetBalance>) {

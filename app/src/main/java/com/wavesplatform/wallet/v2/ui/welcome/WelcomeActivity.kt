@@ -52,6 +52,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view)
 //        val icon = findDrawable(R.drawable.avd_anim)
 //        icon.notNull {
@@ -87,9 +88,9 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             override fun transformPage(page: View, position: Float) {
                 val root = page.findViewById<LinearLayout>(R.id.linear_root)
                 if (position <= -1.0F || position >= 1.0F) {
-                    root.alpha = 0.0F;
+                    root.alpha = 0.0F
                 } else if (position == 0.0F) {
-                    root.alpha = 1.0F;
+                    root.alpha = 1.0F
                 } else {
                     root.alpha = 1.0F - Math.abs(position);
                 }
@@ -128,10 +129,10 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         white_block.setWidth(it.width)
         val originalPos = IntArray(2)
         it.getLocationOnScreen(originalPos)
-        white_block.y = originalPos[1].toFloat()
+        white_block.y = originalPos[1].toFloat() - getStatusBarHeight()
         white_block.visiable()
 
-        white_block.post({
+        white_block.post {
             white_block.animate()
                     .scaleX(2f)
                     .scaleY(((screenHeight + white_block.y) / white_block.height).toFloat() + 0.5f)
@@ -141,7 +142,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
                         endAction()
                     }
                     .start()
-        })
+        }
     }
 
     private fun enterAnimation() {
@@ -196,8 +197,6 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             R.id.action_change_language -> {
                 val dialog = ChangeLanguageBottomSheetFragment()
                 dialog.show(supportFragmentManager, dialog::class.java.simpleName)
-//                launchActivity<ChangeWelcomeLanguageActivity>()
-//                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 return true
             }
         }

@@ -12,9 +12,12 @@ import javax.inject.Inject
 @InjectViewState
 class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>() {
     fun loadAssets() {
-        Single.zip(queryAsSingle({ equalTo("isFavorite", true).greaterThan("balance", 0) }),
-                queryAsSingle({ equalTo("isFavorite", false).greaterThan("balance", 0) }),
-                BiFunction<List<AssetBalance>, List<AssetBalance>, Pair<List<AssetBalance>, List<AssetBalance>>> { t1, t2 ->
+        Single.zip(queryAsSingle { equalTo("isFavorite", true)
+                .greaterThan("balance", 0) },
+                queryAsSingle { equalTo("isFavorite", false)
+                        .greaterThan("balance", 0) },
+                BiFunction<List<AssetBalance>, List<AssetBalance>, Pair<List<AssetBalance>,
+                        List<AssetBalance>>> { t1, t2 ->
                     return@BiFunction Pair(t1, t2)
                 }).compose(RxUtil.applySingleDefaultSchedulers())
                 .subscribe({

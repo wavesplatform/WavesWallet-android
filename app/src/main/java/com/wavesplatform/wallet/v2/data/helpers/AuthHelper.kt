@@ -30,7 +30,9 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
         RealmConfigStore.init(Alias::class.java, config)
         RealmConfigStore.init(SpamAsset::class.java, config)
         RealmConfigStore.init(AddressBookUser::class.java, config)
+        RealmConfigStore.init(AssetInfo::class.java, config)
 
+        DBHelper.getInstance().realmConfig = config
         Realm.getInstance(config).isAutoRefresh = false
 
         if (!prefsUtil.getValue(PrefsUtil.KEY_DEFAULT_ASSETS, false)) {
