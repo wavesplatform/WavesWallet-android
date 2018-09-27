@@ -55,10 +55,12 @@ class ApiDataManager @Inject constructor() : DataManager() {
 
     fun assetsInfoByIds(ids: List<String?>): Observable<List<AssetInfo>> {
         return apiService.assetsInfoByIds(ids)
-                .map {
-                    return@map it.data.mapTo(ArrayList()) {
+                .map { it ->
+                    val assetsInfo = it.data.mapTo(ArrayList()) {
                         it.assetInfo
                     }
+                    assetsInfo.saveAll()
+                    return@map assetsInfo
                 }
     }
 
