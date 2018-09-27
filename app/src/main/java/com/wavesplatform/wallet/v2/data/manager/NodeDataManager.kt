@@ -5,9 +5,6 @@ import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.BuildConfig
-import com.wavesplatform.wallet.v1.payload.TransactionsInfo
-import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
@@ -27,8 +24,6 @@ import kotlin.collections.ArrayList
 class NodeDataManager @Inject constructor() : DataManager() {
     @Inject
     lateinit var transactionUtil: TransactionUtil
-    var transactions: List<Transaction> = ArrayList()
-    var pendingTransactions: List<Transaction> = ArrayList()
     var currentLoadTransactionLimitPerRequest = 100
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
@@ -157,48 +152,6 @@ class NodeDataManager @Inject constructor() : DataManager() {
                         it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
                     }
                 }
-    }
-
-
-    private fun unconfirmedTransactionsWithOwnFilter(): Observable<List<Transaction>> {
-        return nodeService.unconfirmedTransactions()
-                .flatMap {
-                    Observable.fromIterable(it)
-                            .map {
-                                if (it.isOwn) it.isPending = true
-                                it
-                            }
-                            .toList()
-                            .toObservable()
-                }
-    }
-
-    fun broadcastIssue(tx: ReissueTransactionRequest): Observable<ReissueTransactionRequest> {
-        return nodeService.broadcastReissue(tx)
-    }
-
-    fun getTransactionsInfo(asset: String): Observable<TransactionsInfo> {
-        return nodeService.getTransactionsInfo(asset)
-    }
-
-    var wavesAsset: AssetBalance = AssetBalance(
-            assetId = "",
-            quantity = 100000000L * 100000000L,
-            issueTransaction = IssueTransaction(
-                    decimals = 8,
-                    quantity = 100000000L * 100000000L,
-                    name = "WAVES"
-            ))
-
-    private fun updatePendingTxs() {
-        for (tx in this.transactions) {
-            val i = pendingTransactions.iterator() as MutableIterator<Transaction>
-            while (i.hasNext()) {
-                if (tx.id == i.next().id) {
-                    i.remove()
-                }
-            }
-        }
     }
 
 }
