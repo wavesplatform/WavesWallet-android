@@ -73,6 +73,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                         }
                                         dbAsset.notNull {
                                             assetBalance.isHidden = it.isHidden
+                                            assetBalance.issueTransaction?.name = it.issueTransaction?.name
                                             assetBalance.isFavorite = it.isFavorite
                                             assetBalance.isFiatMoney = it.isFiatMoney
                                             assetBalance.isGateway = it.isGateway
