@@ -16,15 +16,15 @@ import android.view.View
  */
 class SpacesItemDecoration private constructor(private val itemSplitMarginEven: Int, private val itemSplitMarginLarge: Int, private val itemSplitMarginSmall: Int, private val verticalSpacing: Int) : RecyclerView.ItemDecoration() {
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
+    /*fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
         val layoutParams = view.layoutParams as RecyclerView.LayoutParams
         val itemPosition = layoutParams.viewPosition
-        val childCount = parent.adapter.itemCount
+        val childCount = parent.adapter!!.itemCount
 
         val spanLookup = getSpanLookup(view, parent)
         applyItemHorizontalOffsets(spanLookup, itemPosition, outRect)
         applyItemVerticalOffsets(outRect, itemPosition, childCount, spanLookup.spanCount, spanLookup)
-    }
+    }*/
 
     private fun getSpanLookup(view: View, parent: RecyclerView): SpanLookup {
         val layoutManager = parent.layoutManager

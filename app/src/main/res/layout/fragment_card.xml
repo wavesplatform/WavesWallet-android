@@ -53,6 +53,7 @@
                     android:padding="14dp"
                     android:singleLine="true"
                     android:textColorHint="@color/accent100"
+                    android:background="@null"
                     android:textSize="14sp"
                     android:visibility="visible" />
 

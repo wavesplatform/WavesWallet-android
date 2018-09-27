@@ -1,22 +1,19 @@
 package com.wavesplatform.wallet.v2.ui.home.history
 
 import android.os.Bundle
-import android.util.Log
+import android.support.design.widget.AppBarLayout
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_history.*
-import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
@@ -75,11 +72,12 @@ class HistoryFragment : BaseFragment(), HistoryView {
 
         stl_history.setViewPager(viewpager_history)
         stl_history.currentTab = 0
-        appbar_layout.addOnOffsetChangedListener { _, verticalOffset ->
-            onElevationAppBarChangeListener.notNull {
-                onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
-            }
-        }
+        appbar_layout.addOnOffsetChangedListener(
+                AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                    onElevationAppBarChangeListener.notNull {
+                        onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
+                    }
+                })
     }
 
     fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {

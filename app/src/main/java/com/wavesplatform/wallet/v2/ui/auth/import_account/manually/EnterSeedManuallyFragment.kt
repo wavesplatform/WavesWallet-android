@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -57,10 +58,12 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                                 button_continue.isEnabled = true
                                 if (values.isNotEmpty() && values[0].length > 24 ) {
                                     val wallet = WavesWallet(values[0].toByteArray(Charsets.UTF_8))
-                                    Glide.with(activity)
-                                            .load(identicon.create(wallet.address))
-                                            .apply(RequestOptions().circleCrop())
-                                            .into(image_asset!!)
+                                    activity?.let {
+                                        Glide.with(it)
+                                                .load(identicon.create(wallet.address))
+                                                .apply(RequestOptions().circleCrop())
+                                                .into(image_asset!!)
+                                    }
                                     address_asset.text = wallet.address
                                     address_asset.visibility = View.VISIBLE
                                     skeleton_address_asset.visibility = View.GONE
@@ -100,9 +103,11 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
         button_continue.isEnabled = false
         skeleton_address_asset.visibility = View.VISIBLE
         address_asset.visibility = View.GONE
-        Glide.with(activity)
-                .load(R.drawable.asset_gray_icon)
-                .apply(RequestOptions().circleCrop())
-                .into(image_asset)
+        activity.notNull {
+            Glide.with(it)
+                    .load(R.drawable.asset_gray_icon)
+                    .apply(RequestOptions().circleCrop())
+                    .into(image_asset)
+        }
     }
 }

@@ -26,7 +26,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme"
         tools:replace="allowBackup">
-        <service android:name=".v2.data.service.UpdateApiDataService"></service>
+        <service android:name=".v2.data.service.UpdateApiDataService" />
 
         <activity
             android:name=".v2.ui.splash.SplashActivity"
@@ -341,6 +341,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="532ed93ff155abe216f69842dbea9997d5ebb665" />
     </application>
 
 </manifest>

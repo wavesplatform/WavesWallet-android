@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet
 
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -49,10 +50,11 @@ class WalletFragment : BaseFragment(), WalletView {
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
         stl_wallet.currentTab = 0
-        appbar_layout.addOnOffsetChangedListener { _, verticalOffset ->
-            onElevationAppBarChangeListener.notNull {
-                onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
-            }
-        }
+        appbar_layout.addOnOffsetChangedListener(
+                AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                    onElevationAppBarChangeListener.notNull {
+                        onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
+                    }
+                })
     }
 }

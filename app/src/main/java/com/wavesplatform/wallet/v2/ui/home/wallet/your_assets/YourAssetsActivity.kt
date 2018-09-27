@@ -81,9 +81,9 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as AssetBalance
-            val viewItem = recycle_assets.layoutManager.findViewByPosition(position)
-            val checkBox = viewItem.findViewById<AppCompatCheckBox>(R.id.checkbox_choose)
-            checkBox.isChecked = true
+            val viewItem = (recycle_assets.layoutManager as LinearLayoutManager).findViewByPosition(position)
+            val checkBox = viewItem?.findViewById<AppCompatCheckBox>(R.id.checkbox_choose)
+            checkBox?.isChecked = true
 
             // disable click for next items, which user click before activity will finish
             adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position -> }
