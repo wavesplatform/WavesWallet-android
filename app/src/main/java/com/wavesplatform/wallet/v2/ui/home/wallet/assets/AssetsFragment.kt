@@ -28,16 +28,18 @@ import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.toast
 import pers.victor.ext.visiable
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 class AssetsFragment : BaseFragment(), AssetsView {
     override fun startServiceToLoadData(assets: ArrayList<AssetBalance>) {
-        if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)) {
-            val intent = Intent(baseActivity, UpdateApiDataService::class.java)
-            intent.putParcelableArrayListExtra(UpdateApiDataService.BUNDLE_ASSETS, assets)
-            baseActivity.startService(intent)
+        runOnUiThread {
+            if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)) {
+                val intent = Intent(baseActivity, UpdateApiDataService::class.java)
+                baseActivity.startService(intent)
+            }
         }
-        rxEventBus.post(Events.NewAssetsList(ArrayList(assets)))
     }
 
     @Inject

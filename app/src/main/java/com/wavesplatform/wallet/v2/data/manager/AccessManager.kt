@@ -235,6 +235,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             deleteAll<Alias>()
             deleteAll<SpamAsset>()
             deleteAll<AddressBookUser>()
+            deleteAll<AssetInfo>()
         }
     }
 

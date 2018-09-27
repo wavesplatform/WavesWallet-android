@@ -34,7 +34,7 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
 
         item?.t?.transactionType().notNull {
             try {
-                layout.text_transaction_name.text = String.format(it.title(), item?.t?.asset?.issueTransaction?.name)
+                layout.text_transaction_name.text = String.format(it.title(), item?.t?.asset?.name)
             } catch (e: MissingFormatArgumentException) {
                 layout.text_transaction_name.text = it.title()
             }
@@ -75,23 +75,23 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
 
 
                     if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                        layout.text_transaction_name.text = "-${MoneyUtil.getScaledText(item?.t?.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.issueTransaction?.name}"
+                        layout.text_transaction_name.text = "-${MoneyUtil.getScaledText(item?.t?.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.name}"
                         layout.text_transaction_value.text = "+${MoneyUtil.getScaledText(item?.t?.amount?.times(item?.t?.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                     } else {
-                        layout.text_transaction_name.text = "+${MoneyUtil.getScaledText(item?.t?.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.issueTransaction?.name}"
+                        layout.text_transaction_name.text = "+${MoneyUtil.getScaledText(item?.t?.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.name}"
                         layout.text_transaction_value.text = "-${MoneyUtil.getScaledText(item?.t?.amount?.times(item?.t?.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                     }
 
                     showTag = Constants.defaultAssets.any({
-                        it.assetId == pairOrder?.assetPair?.priceAssetObject?.assetId || pairOrder?.assetPair?.priceAssetObject?.assetId.isNullOrEmpty()
+                        it.assetId == pairOrder?.assetPair?.priceAssetObject?.id || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
                     })
 
                     if (showTag) {
                         layout.text_tag.visiable()
-                        layout.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.issueTransaction?.name
+                        layout.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.name
                     } else {
                         layout.text_tag.gone()
-                        layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${pairOrder?.assetPair?.priceAssetObject?.issueTransaction?.name}"
+                        layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${pairOrder?.assetPair?.priceAssetObject?.name}"
                     }
                 }
                 TransactionType.DATA_TYPE -> {
@@ -134,15 +134,15 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
                 && item?.t?.transactionType() != TransactionType.EXCHANGE_TYPE) {
             if (showTag) {
                 layout.text_tag.visiable()
-                layout.text_tag.text = item?.t?.asset?.issueTransaction?.name
+                layout.text_tag.text = item?.t?.asset?.name
             } else {
                 layout.text_tag.gone()
-                layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${item?.t?.asset?.issueTransaction?.name}"
+                layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${item?.t?.asset?.name}"
             }
         } else if (item?.t?.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || item?.t?.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
             layout.text_tag.gone()
             layout.text_tag_spam.visiable()
-            layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${item?.t?.asset?.issueTransaction?.name}"
+            layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${item?.t?.asset?.name}"
         }
 
 

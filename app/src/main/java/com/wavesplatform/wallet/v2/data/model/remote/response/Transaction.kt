@@ -45,9 +45,9 @@ open class Order(
 @RealmClass
 open class AssetPair(
         @SerializedName("amountAsset") var amountAsset: String? = "",
-        @SerializedName("amountAssetObject") var amountAssetObject: AssetBalance? = AssetBalance(),
+        @SerializedName("amountAssetObject") var amountAssetObject: AssetInfo? = AssetInfo(),
         @SerializedName("priceAsset") var priceAsset: String? = "",
-        @SerializedName("priceAssetObject") var priceAssetObject: AssetBalance? = AssetBalance()
+        @SerializedName("priceAssetObject") var priceAssetObject: AssetInfo? = AssetInfo()
 ) : RealmModel
 
 @RealmClass
@@ -85,6 +85,8 @@ open class Transaction(
         var fee: Long = 0,
         @SerializedName("feeAssetId")
         var feeAssetId: String? = null,
+        @SerializedName("feeAssetObject")
+        var feeAssetObject: AssetInfo? = AssetInfo(),
         @SerializedName("quantity")
         var quantity: Long = 0,
         @SerializedName("price")
@@ -108,7 +110,7 @@ open class Transaction(
         @SerializedName("isPending")
         var isPending: Boolean = false,
         var transactionTypeId: Int = 0,
-        var asset: AssetBalance? = AssetBalance()
+        var asset: AssetInfo? = AssetInfo()
 ) : RealmModel {
 
     val displayAmount: String
