@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.data.remote
 import com.wavesplatform.wallet.v2.data.model.remote.response.AliasData
 import com.wavesplatform.wallet.v2.data.model.remote.response.AliasesResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetsInfoResponse
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,6 +17,6 @@ interface ApiService {
     @GET("aliases/{alias}")
     fun alias(@Path("alias") alias: String?): Observable<AliasData>
 
-    @GET("aliases/{assetId}")
-    fun assetDetails(@Path("assetId") assetId: String?): Observable<AssetBalance>
+    @GET("assets")
+    fun assetsInfoByIds(@Query("ids") ids: List<String?>): Observable<AssetsInfoResponse>
 }

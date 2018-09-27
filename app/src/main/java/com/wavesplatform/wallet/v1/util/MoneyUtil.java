@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v1.util;
 import android.util.SparseArray;
 
 import com.wavesplatform.wallet.v1.payload.AssetBalance;
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -100,6 +101,10 @@ public class MoneyUtil {
 
     public static String getScaledText(Long amount, com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance ab) {
         return getScaledText(amount, ab != null ? ab.getDecimals() : 8);
+    }
+
+    public static String getScaledText(Long amount, AssetInfo assetInfo) {
+        return getScaledText(amount, assetInfo != null ? assetInfo.getPrecision() : 8);
     }
 
     public static String getDisplayWaves(long amount) {

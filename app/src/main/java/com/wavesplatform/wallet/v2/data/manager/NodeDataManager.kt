@@ -138,7 +138,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
         return nodeService.activeLeasing(getAddress())
                 .map {
                     return@map it.filter {
-                        it.asset = Constants.defaultAssets[0]
+                        it.asset = Constants.wavesAssetInfo
                         it.transactionTypeId = transactionUtil.getTransactionType(it)
                         it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
                     }

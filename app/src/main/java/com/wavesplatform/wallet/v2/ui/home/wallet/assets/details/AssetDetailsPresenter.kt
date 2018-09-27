@@ -15,10 +15,11 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
     fun loadAssets() {
         addSubscription(queryAllAsSingle<AssetBalance>()
                 .compose(RxUtil.applySingleDefaultSchedulers())
-                .subscribe({
-                    val sortedToFirstFavoriteList = it.filter({ !it.isHidden && !it.isSpam }).sortedByDescending({ it.isGateway &&  it.isFavorite  }).toCollection(ArrayList())
-                    val hiddenList = it.filter({ it.isHidden }).toCollection(ArrayList())
-                    val spamList = it.filter({ it.isSpam })
+                .subscribe({ it ->
+                    val hiddenList = it.filter { it.isHidden && !it.isSpam }.sortedBy { it.position }.toMutableList()
+                    val sortedToFirstFavoriteList = it.filter { !it.isHidden && !it.isSpam }.sortedByDescending({ it.isGateway }).sortedBy { it.position }.sortedByDescending({ it.isFavorite }).toMutableList()
+                    val spamList = it.filter { it.isSpam }.toMutableList()
+
                     sortedToFirstFavoriteList.addAll(hiddenList)
                     sortedToFirstFavoriteList.addAll(spamList)
 

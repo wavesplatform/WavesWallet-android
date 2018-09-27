@@ -132,15 +132,16 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
             textComment?.gone()
         }
 
-        if (transaction.feeAssetId.isNullOrEmpty()) {
-            feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, 8).stripZeros()} ${Constants.defaultAssets[0].issueTransaction?.name}"
-        } else {
-            presenter.getAssetDetails(transaction.feeAssetId, { asset ->
-                asset.getDecimals()?.let {
-                    feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, it).stripZeros()} ${asset.issueTransaction?.name}"
-                }
-            })
-        }
+        feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()} ${transaction.feeAssetObject?.name}"
+//        if (transaction.feeAssetId.isNullOrEmpty()) {
+//            feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, 8).stripZeros()} ${Constants.defaultAssets[0].issueTransaction?.name}"
+//        } else {
+//            presenter.getAssetDetails(transaction.feeAssetId, { asset ->
+//                asset.getDecimals()?.let {
+//                    feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, it).stripZeros()} ${asset.issueTransaction?.name}"
+//                }
+//            })
+//        }
         confirmation?.text = (preferencesHelper.currentBlocksHeight - transaction.height).toString()
         block?.text = transaction.height.toString()
         timeStamp?.text = transaction.timestamp.date("dd.MM.yyyy 'at' HH:mm")
@@ -227,11 +228,11 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                         else transaction.order2
 
                 if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                    priceTitle?.text = String.format(getString(R.string.history_details_exchange_price), myOrder.assetPair?.priceAssetObject?.issueTransaction?.name)
-                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.issueTransaction?.name}"
+                    priceTitle?.text = String.format(getString(R.string.history_details_exchange_price), myOrder.assetPair?.priceAssetObject?.name)
+                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.name}"
                 } else {
-                    priceTitle?.text = String.format(getString(R.string.history_details_exchange_price), myOrder?.assetPair?.amountAssetObject?.issueTransaction?.name)
-                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)} ${myOrder?.assetPair?.priceAssetObject?.issueTransaction?.name}"
+                    priceTitle?.text = String.format(getString(R.string.history_details_exchange_price), myOrder?.assetPair?.amountAssetObject?.name)
+                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)} ${myOrder?.assetPair?.priceAssetObject?.name}"
                 }
 
                 historyContainer?.addView(exchangeView)
