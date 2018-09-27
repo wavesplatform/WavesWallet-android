@@ -6,6 +6,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -72,6 +73,10 @@ class NetworkActivity : BaseActivity(), NetworkView {
         }
 
         button_save.click {
+            if (presenter.spamFilterEnableValid) {
+                mRxEventBus.post(Events.SpamFilterStateChanged())
+            }
+
             prefsUtil.setValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, switch_spam_filter.isChecked)
             prefsUtil.setValue(PrefsUtil.KEY_SPAM_URL, edit_spam_filter.text.toString())
             finish()

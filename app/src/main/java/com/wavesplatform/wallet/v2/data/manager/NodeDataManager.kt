@@ -30,7 +30,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
     var pendingTransactions: List<Transaction> = ArrayList()
     var currentLoadTransactionLimitPerRequest = 100
 
-    fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
+    fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
         return spamService.spamAssets()
                 .map {
                     val scanner = Scanner(it)
@@ -45,7 +45,17 @@ class NodeDataManager @Inject constructor() : DataManager() {
                     spam.saveAll()
 
                     return@map spam
+                }.map { spamListFromDb ->
+                    if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+                        return@map arrayListOf<SpamAsset>()
+                    } else {
+                        return@map spamListFromDb
+                    }
                 }
+    }
+
+    fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
+        return loadSpamAssets()
                 .flatMap { spamAssets ->
                     return@flatMap nodeService.assetsBalance(getAddress())
                             .flatMap { assets ->
@@ -76,21 +86,13 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                         it.assetId == assetBalance.assetId
                                     }
                                 }
-                                if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-                                    val size = it.first.balances.size
 
-                                    it.first.balances.forEachIndexed { index, assetBalance ->
-                                        assetBalance.isSpam = false
-                                        assetBalance.position = size + 1
-                                    }
-                                }
                                 it.first.balances.saveAll()
 
                                 return@map queryAll<AssetBalance>()
                             }
                             .subscribeOn(Schedulers.io())
                 }
-
     }
 
     fun loadWavesBalance(): Observable<AssetBalance> {
