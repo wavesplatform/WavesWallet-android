@@ -36,7 +36,6 @@ class WhatsNewActivity : BaseActivity(), WhatsNewView {
 
         view_pager.adapter = adapter
         view_pager.offscreenPageLimit = 5
-        view_pager_indicator.setupWithViewPager(view_pager)
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }

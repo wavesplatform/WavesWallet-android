@@ -26,6 +26,10 @@ import pers.victor.ext.*
 import java.util.*
 import javax.inject.Inject
 import kotlin.concurrent.fixedRateTimer
+import android.databinding.adapters.SeekBarBindingAdapter.setProgress
+import com.asksira.loopingviewpager.LoopingViewPager
+
+
 
 
 class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
@@ -33,9 +37,6 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     @Inject
     @InjectPresenter
     lateinit var presenter: WelcomePresenter
-
-    @Inject
-    lateinit var adapter: WelcomeItemsPagerAdapter
 
     private var menu: Menu? = null
 
@@ -83,41 +84,25 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             }
         }
 
-        adapter.items = populateList()
-        view_pager.setPageTransformer(false, object : ViewPager.PageTransformer {
-            override fun transformPage(page: View, position: Float) {
-                val root = page.findViewById<LinearLayout>(R.id.linear_root)
-                if (position <= -1.0F || position >= 1.0F) {
-                    root.alpha = 0.0F
-                } else if (position == 0.0F) {
-                    root.alpha = 1.0F
-                } else {
-                    root.alpha = 1.0F - Math.abs(position);
-                }
+        view_pager.setPageTransformer(false) { page, position ->
+            val root = page.findViewById<LinearLayout>(R.id.linear_root)
+            if (position <= -1.0F || position >= 1.0F) {
+                root.alpha = 0.0F
+            } else if (position == 0.0F) {
+                root.alpha = 1.0F
+            } else {
+                root.alpha = 1.0F - Math.abs(position);
             }
-
-        })
-        view_pager.adapter = adapter
+        }
+        view_pager.adapter = WelcomeItemsPagerAdapter(this, populateList(), true)
         view_pager.offscreenPageLimit = 5
-        view_pager_indicator.setupWithViewPager(view_pager);
-        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-                presenter.state = state
+        view_pager_indicator.count = view_pager.indicatorCount
+        view_pager.setIndicatorPageChangeListener(object : LoopingViewPager.IndicatorPageChangeListener {
+            override fun onIndicatorProgress(selectingPosition: Int, progress: Float) {
+                view_pager_indicator.setProgress(selectingPosition, progress)
             }
 
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-
-            override fun onPageSelected(position: Int) {
-                presenter.nextItemPosition = position
-                presenter.nextItemPosition++
-                if (presenter.nextItemPosition == 4) presenter.nextItemPosition = 0
-            }
-        })
-
-        fixedRateTimer(initialDelay = 5000, period = 5000, action = {
-            if (presenter.state == SCROLL_STATE_IDLE) {
-                runOnUiThread { view_pager.setCurrentItem(presenter.nextItemPosition, true) }
+            override fun onIndicatorPageChange(newIndicatorPosition: Int) {
             }
         })
 
@@ -136,7 +121,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             white_block.animate()
                     .scaleX(2f)
                     .scaleY(((screenHeight + white_block.y) / white_block.height).toFloat() + 0.5f)
-                    .setDuration(500)
+                    .setDuration(300)
                     .setStartDelay(0)
                     .withEndAction {
                         endAction()

@@ -201,13 +201,15 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 
+    implementation 'com.asksira.android:loopingviewpager:1.1.2'
+    implementation 'com.romandanylyk:pageindicatorview:1.0.2'
+
     implementation "org.whispersystems:curve25519-java:0.3.0"
     implementation 'com.bignerdranch.android:recyclerview-multiselect:0.2'
     implementation 'com.github.rubensousa:gravitysnaphelper:1.5'
 
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35'
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
-    implementation 'com.github.vivchar:ViewPagerIndicator:1.1.0'
     debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'
     releaseImplementation 'com.github.markzhai:blockcanary-no-op:1.5.0'
 
