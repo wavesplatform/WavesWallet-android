@@ -28,7 +28,6 @@ import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.toast
 import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
@@ -75,6 +74,14 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 .subscribe {
                     swipe_container.isRefreshing = true
                     presenter.reloadAssetsAfterSpamFilterStateChanged()
+                })
+
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.SpamFilterUrlChanged::class.java)
+                .subscribe {
+                    if (!it.updateTransaction) {
+                        swipe_container.isRefreshing = true
+                        presenter.reloadAssetsAfterSpamUrlChanged()
+                    }
                 })
     }
 

@@ -94,6 +94,7 @@ class NetworkActivity : BaseActivity(), NetworkView {
         if (isValid) {
             prefsUtil.setValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, switch_spam_filter.isChecked)
             prefsUtil.setValue(PrefsUtil.KEY_SPAM_URL, edit_spam_filter.text.toString())
+            mRxEventBus.post(Events.SpamFilterUrlChanged())
             finish()
         } else {
             til_spam_filter.error = getString(R.string.network_spam_url_validation_bad_url)

@@ -16,5 +16,5 @@ class Events {
     class NeedUpdateHistoryScreen
 
     class SpamFilterStateChanged
-    class SpamFilterUrlChanged
+    class SpamFilterUrlChanged(var updateTransaction: Boolean = false)
 }

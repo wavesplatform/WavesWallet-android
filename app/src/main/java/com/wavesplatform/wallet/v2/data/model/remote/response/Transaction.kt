@@ -107,6 +107,8 @@ open class Transaction(
         var totalAmount: Long = 0,
         @SerializedName("transfers")
         var transfers: RealmList<Transfer> = RealmList(),
+        @SerializedName("data")
+        var data: RealmList<Data> = RealmList(),
         @SerializedName("isPending")
         var isPending: Boolean = false,
         var transactionTypeId: Int = 0,
@@ -139,6 +141,13 @@ open class Transaction(
     }
 
 }
+
+@RealmClass
+open class Data(
+        @SerializedName("key") var key: String = "",
+        @SerializedName("type") var type: String = "",
+        @SerializedName("value") var value: String = ""
+) : RealmModel
 
 @RealmClass
 open class Transfer(

@@ -2,9 +2,9 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.vicpin.krealmextensions.queryAllAsync
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -63,7 +63,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
 
                         assetsListFromDb.forEach { asset ->
                             asset.isSpam = spamListFromDb.any { it.assetId == asset.assetId }
-                            if (assetsListFromDb.any { it.position != -1 }){
+                            if (assetsListFromDb.any { it.position != -1 }) {
                                 if (asset.position == -1) {
                                     asset.position = assetsListFromDb.size + 1
                                 }
@@ -80,6 +80,46 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     })
         }
     }
+
+    fun reloadAssetsAfterSpamUrlChanged() {
+        runAsync {
+            addSubscription(nodeDataManager.loadSpamAssets()
+                    .flatMap { newSpamAssets ->
+                        Observable.zip(
+                                queryAllAsSingle<AssetBalance>().toObservable(),
+                                Observable.just(newSpamAssets),
+                                BiFunction { t1: List<AssetBalance>, t2: List<SpamAsset> ->
+                                    return@BiFunction Pair(t1, t2)
+                                })
+                    }
+                    .map {
+                        rxEventBus.post(Events.SpamFilterUrlChanged(true))
+                        return@map it
+                    }
+                    .map { pairOfData ->
+                        val spamListFromDb = pairOfData.second
+                        val assetsListFromDb = pairOfData.first
+
+                        assetsListFromDb.forEach { asset ->
+                            asset.isSpam = spamListFromDb.any { it.assetId == asset.assetId }
+                            if (assetsListFromDb.any { it.position != -1 }) {
+                                if (asset.position == -1) {
+                                    asset.position = assetsListFromDb.size + 1
+                                }
+                            }
+                        }
+
+                        assetsListFromDb.saveAll()
+                        return@map assetsListFromDb
+                    }
+                    .map { createTripleSortedLists(it.toMutableList()) }
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe {
+                        postSuccess(it, false, true)
+                    })
+        }
+    }
+
 
     private fun tryUpdateWithApi(withApiUpdate: Boolean, it: List<AssetBalance>): Observable<List<AssetBalance>>? {
         return if (withApiUpdate) {

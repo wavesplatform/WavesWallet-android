@@ -3,16 +3,12 @@ package com.wavesplatform.wallet.v2.data.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
-import com.google.common.base.Predicates.equalTo
 import com.vicpin.krealmextensions.*
-import com.wavesplatform.wallet.R.string.asset
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
@@ -24,7 +20,6 @@ import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
@@ -56,21 +51,36 @@ class UpdateApiDataService : Service() {
 
         subscriptions.add(rxEventBus.filteredObservable(Events.SpamFilterStateChanged::class.java)
                 .subscribe {
-                    reloadTransactionsAfterSpamFilterStateChanged()
+                    reloadTransactionsAfterSpamSettingsChanged()
+                })
+
+        subscriptions.add(rxEventBus.filteredObservable(Events.SpamFilterUrlChanged::class.java)
+                .subscribe {
+                    if (it.updateTransaction){
+                        reloadTransactionsAfterSpamSettingsChanged(true)
+                    }
                 })
     }
 
-    private fun reloadTransactionsAfterSpamFilterStateChanged() {
+    private fun reloadTransactionsAfterSpamSettingsChanged(afterUrlChanged: Boolean = false) {
         runAsync {
-            val singleData: Single<List<Transaction>> = if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+            val singleData: Single<List<Transaction>> = if (afterUrlChanged) {
                 queryAsSingle<Transaction> {
-                    `in`("transactionTypeId", arrayOf(Constants.ID_MASS_SPAM_RECEIVE_TYPE, Constants.ID_SPAM_RECEIVE_TYPE))
+                    `in`("transactionTypeId", arrayOf(Constants.ID_MASS_SPAM_RECEIVE_TYPE, Constants.ID_SPAM_RECEIVE_TYPE,
+                            Constants.ID_RECEIVED_TYPE, Constants.ID_MASS_RECEIVE_TYPE))
                 }
             } else {
-                queryAsSingle<Transaction> {
-                    `in`("transactionTypeId", arrayOf(Constants.ID_RECEIVED_TYPE, Constants.ID_MASS_RECEIVE_TYPE))
+                if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+                    queryAsSingle<Transaction> {
+                        `in`("transactionTypeId", arrayOf(Constants.ID_MASS_SPAM_RECEIVE_TYPE, Constants.ID_SPAM_RECEIVE_TYPE))
+                    }
+                } else {
+                    queryAsSingle<Transaction> {
+                        `in`("transactionTypeId", arrayOf(Constants.ID_RECEIVED_TYPE, Constants.ID_MASS_RECEIVE_TYPE))
+                    }
                 }
             }
+
             subscriptions.add(Observable.zip(
                     singleData.toObservable(),
                     queryAllAsSingle<SpamAsset>().toObservable()
@@ -95,7 +105,11 @@ class UpdateApiDataService : Service() {
                         }
 
                         transactionListFromDb.forEach { transaction ->
-                            transaction.asset = assetsInfoListFromDb.firstOrNull { it.id == transaction.assetId }
+                            transaction.asset = if (transaction.assetId.isNullOrEmpty()) {
+                                Constants.wavesAssetInfo
+                            } else {
+                                assetsInfoListFromDb.firstOrNull { it.id == transaction.assetId }
+                            }
                             transaction.transactionTypeId = transactionUtil.getTransactionType(transaction)
                         }
 
@@ -178,7 +192,9 @@ class UpdateApiDataService : Service() {
             tempGrabbedAssets.add(transition.feeAssetId)
         }
 
-        val allTransactionsAssets = tempGrabbedAssets.asSequence().filter { !it.isNullOrEmpty() }.distinct().toList()
+        val allTransactionsAssets = tempGrabbedAssets.asSequence().filter { !it.isNullOrEmpty() }.distinct().toMutableList()
+
+
 
         subscriptions.add(apiDataManager.assetsInfoByIds(allTransactionsAssets)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -198,6 +214,8 @@ class UpdateApiDataService : Service() {
                                             .compose(RxUtil.applyObservableDefaultSchedulers())
                                             .subscribe {
                                                 trans.recipientAddress = it.address
+                                                trans.transactionTypeId = transactionUtil.getTransactionType(trans)
+                                                trans.save()
                                             })
                                 }
                             } else {

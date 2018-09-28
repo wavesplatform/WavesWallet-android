@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.data.manager
 
+import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
