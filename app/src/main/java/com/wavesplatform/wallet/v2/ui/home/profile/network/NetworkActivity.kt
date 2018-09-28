@@ -79,8 +79,8 @@ class NetworkActivity : BaseActivity(), NetworkView {
                     presenter.checkValidUrl(edit_spam_filter.text.toString())
                 }
                 presenter.spamFilterEnableValid -> {
-                    mRxEventBus.post(Events.SpamFilterStateChanged())
                     prefsUtil.setValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, switch_spam_filter.isChecked)
+                    mRxEventBus.post(Events.SpamFilterStateChanged())
                     finish()
                 }
                 presenter.spamUrlFieldValid -> {

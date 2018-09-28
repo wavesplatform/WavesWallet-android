@@ -30,6 +30,13 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         viewState.startServiceToLoadData(ArrayList(it))
                         return@map it
                     }
+                    .map {
+                        if (prefsUtil.getValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)) {
+                            rxEventBus.post(Events.SpamFilterUrlChanged(true))
+                        }
+                        prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)
+                        return@map it
+                    }
                     .map { createTripleSortedLists(it.toMutableList()) }
                     .subscribe({
                         postSuccess(it, withApiUpdate, false)
@@ -75,13 +82,17 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     }
                     .map { createTripleSortedLists(it.toMutableList()) }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
-                    .subscribe {
+                    .subscribe({
                         postSuccess(it, false, true)
-                    })
+                    }, {
+                        it.printStackTrace()
+                        viewState.afterFailedUpdateAssets()
+                    }))
         }
     }
 
     fun reloadAssetsAfterSpamUrlChanged() {
+        prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, true)
         runAsync {
             addSubscription(nodeDataManager.loadSpamAssets()
                     .flatMap { newSpamAssets ->
@@ -93,7 +104,10 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                                 })
                     }
                     .map {
-                        rxEventBus.post(Events.SpamFilterUrlChanged(true))
+                        if (prefsUtil.getValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)) {
+                            rxEventBus.post(Events.SpamFilterUrlChanged(true))
+                        }
+                        prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)
                         return@map it
                     }
                     .map { pairOfData ->
@@ -114,9 +128,12 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     }
                     .map { createTripleSortedLists(it.toMutableList()) }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
-                    .subscribe {
+                    .subscribe({
                         postSuccess(it, false, true)
-                    })
+                    }, {
+                        it.printStackTrace()
+                        viewState.afterFailedUpdateAssets()
+                    }))
         }
     }
 

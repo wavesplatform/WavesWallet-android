@@ -18,6 +18,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
@@ -57,7 +58,20 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         setupBottomNavigation()
 
         onTabSelected(tab_navigation.getTabAt(WALLET_SCREEN))
+
+        eventSubscriptions.add(mRxEventBus.filteredObservable(Events.SpamFilterStateChanged::class.java)
+                .subscribe {
+                    presenter.reloadTransactionsAfterSpamSettingsChanged()
+                })
+
+        eventSubscriptions.add(mRxEventBus.filteredObservable(Events.SpamFilterUrlChanged::class.java)
+                .subscribe {
+                    if (it.updateTransaction) {
+                        presenter.reloadTransactionsAfterSpamSettingsChanged(true)
+                    }
+                })
     }
+
 
     private fun showFirstOpenAlert(firstOpen: Boolean) {
         if (!firstOpen) {

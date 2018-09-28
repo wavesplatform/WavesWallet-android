@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.data.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import android.util.Log
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -48,76 +49,6 @@ class UpdateApiDataService : Service() {
     override fun onCreate() {
         AndroidInjection.inject(this)
         super.onCreate()
-
-        subscriptions.add(rxEventBus.filteredObservable(Events.SpamFilterStateChanged::class.java)
-                .subscribe {
-                    reloadTransactionsAfterSpamSettingsChanged()
-                })
-
-        subscriptions.add(rxEventBus.filteredObservable(Events.SpamFilterUrlChanged::class.java)
-                .subscribe {
-                    if (it.updateTransaction){
-                        reloadTransactionsAfterSpamSettingsChanged(true)
-                    }
-                })
-    }
-
-    private fun reloadTransactionsAfterSpamSettingsChanged(afterUrlChanged: Boolean = false) {
-        runAsync {
-            val singleData: Single<List<Transaction>> = if (afterUrlChanged) {
-                queryAsSingle<Transaction> {
-                    `in`("transactionTypeId", arrayOf(Constants.ID_MASS_SPAM_RECEIVE_TYPE, Constants.ID_SPAM_RECEIVE_TYPE,
-                            Constants.ID_RECEIVED_TYPE, Constants.ID_MASS_RECEIVE_TYPE))
-                }
-            } else {
-                if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-                    queryAsSingle<Transaction> {
-                        `in`("transactionTypeId", arrayOf(Constants.ID_MASS_SPAM_RECEIVE_TYPE, Constants.ID_SPAM_RECEIVE_TYPE))
-                    }
-                } else {
-                    queryAsSingle<Transaction> {
-                        `in`("transactionTypeId", arrayOf(Constants.ID_RECEIVED_TYPE, Constants.ID_MASS_RECEIVE_TYPE))
-                    }
-                }
-            }
-
-            subscriptions.add(Observable.zip(
-                    singleData.toObservable(),
-                    queryAllAsSingle<SpamAsset>().toObservable()
-                            .map { spamListFromDb ->
-                                if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-                                    return@map listOf<SpamAsset>()
-                                } else {
-                                    return@map spamListFromDb
-                                }
-                            },
-                    queryAllAsSingle<AssetInfo>().toObservable(),
-                    Function3 { t1: List<Transaction>, t2: List<SpamAsset>, t3: List<AssetInfo> ->
-                        return@Function3 Triple(t1, t2, t3)
-                    })
-                    .subscribe { pairOfData ->
-                        val spamListFromDb = pairOfData.second
-                        val transactionListFromDb = pairOfData.first
-                        val assetsInfoListFromDb = pairOfData.third
-
-                        assetsInfoListFromDb.forEach { assetInfo ->
-                            assetInfo.isSpam = spamListFromDb.any { it.assetId == assetInfo.id }
-                        }
-
-                        transactionListFromDb.forEach { transaction ->
-                            transaction.asset = if (transaction.assetId.isNullOrEmpty()) {
-                                Constants.wavesAssetInfo
-                            } else {
-                                assetsInfoListFromDb.firstOrNull { it.id == transaction.assetId }
-                            }
-                            transaction.transactionTypeId = transactionUtil.getTransactionType(transaction)
-                        }
-
-                        transactionListFromDb.saveAll()
-
-                        rxEventBus.post(Events.NeedUpdateHistoryScreen())
-                    })
-        }
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {

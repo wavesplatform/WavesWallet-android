@@ -182,6 +182,10 @@ class AssetsFragment : BaseFragment(), AssetsView {
         item.isVisible = true
     }
 
+    override fun afterFailedUpdateAssets() {
+        swipe_container?.isRefreshing = false
+    }
+
     override fun startServiceToLoadData(assets: ArrayList<AssetBalance>) {
         runOnUiThread {
             if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)) {
