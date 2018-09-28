@@ -52,6 +52,7 @@ class WalletFragment : BaseFragment(), WalletView {
         appbar_layout.addOnOffsetChangedListener { _, verticalOffset ->
             onElevationAppBarChangeListener.notNull {
                 onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
+                viewpager_wallet.setPagingEnabled(verticalOffset == 0)
             }
         }
     }
