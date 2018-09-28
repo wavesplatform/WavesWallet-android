@@ -53,7 +53,7 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
 
             if (presenter.currentLanguagePosition == -1) {
                 // check new item
-                button_continue.visiable()
+                frame_button_continue.visiable()
                 presenter.currentLanguagePosition = position
                 item.checked = true
                 adapter.setData(position, item)
