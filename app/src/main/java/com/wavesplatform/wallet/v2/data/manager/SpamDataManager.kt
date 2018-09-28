@@ -36,4 +36,23 @@ class SpamDataManager @Inject constructor() : DataManager() {
                 }
     }
 
+    fun isValidNewSpamUrl(url: String): Observable<Boolean> {
+        return spamService.spamAssets(url)
+                .map {
+                    val scanner = Scanner(it)
+                    try {
+                        if (scanner.hasNextLine()) {
+                            val spamAsset = SpamAsset(scanner.nextLine().split(",")[0])
+                            return@map !spamAsset.assetId.isNullOrEmpty()
+                        } else {
+                            return@map false
+                        }
+                    } catch (e: Throwable) {
+                        return@map false
+                    } finally {
+                        scanner.close()
+                    }
+                }
+    }
+
 }
