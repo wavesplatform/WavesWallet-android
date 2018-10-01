@@ -138,16 +138,16 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         showProgressBar(false)
         if (overMaxWrongPassCode) {
             showError(R.string.pin_4_strikes, R.id.content)
+            pass_keypad.passCodesNotMatches()
             showRequestPasswordDialog()
         } else {
-            val message = if (TextUtils.isEmpty(errorMessage)) {
-                getString(R.string.invalid_pin)
+            if (TextUtils.isEmpty(errorMessage)) {
+                pass_keypad.passCodesNotMatches()
             } else {
-                getString(R.string.unexpected_error) + " ($errorMessage)"
+                pass_keypad.passCodesNotMatches()
+                showError(getString(R.string.unexpected_error) + " ($errorMessage)", R.id.content)
             }
-            showError(message, R.id.content)
         }
-        pass_keypad.clearPassCode()
     }
 
     private fun showFingerPrint() {
