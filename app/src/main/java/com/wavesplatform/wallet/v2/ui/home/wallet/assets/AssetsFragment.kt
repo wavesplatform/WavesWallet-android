@@ -83,7 +83,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
     private fun setupUI() {
         swipe_container.setColorSchemeResources(R.color.submit400)
         swipe_container.setOnRefreshListener {
-            skeletonScreen.notNull { it.show() }
             presenter.loadAssetsBalance()
         }
 
