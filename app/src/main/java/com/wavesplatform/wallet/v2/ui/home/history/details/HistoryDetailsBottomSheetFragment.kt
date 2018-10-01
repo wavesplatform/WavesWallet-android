@@ -44,7 +44,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
     var selectedItemPosition: Int = 0
     var selectedItem: Transaction? = null
     var allItems: List<Transaction>? = ArrayList()
-    var historyType: String? = ""
     var viewPager: ViewPager? = null
     var rooView: View? = null
     var inflater: LayoutInflater? = null

@@ -119,7 +119,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
             if (!historyItem.isHeader) {
                 val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
                 bottomSheetFragment.selectedItem = historyItem.t
-                bottomSheetFragment.historyType = arguments?.getString(TYPE)
+
                 val data = adapter?.data as ArrayList<HistoryItem>
                 bottomSheetFragment.allItems = data.filter { !it.isHeader }.map { it.t }
 

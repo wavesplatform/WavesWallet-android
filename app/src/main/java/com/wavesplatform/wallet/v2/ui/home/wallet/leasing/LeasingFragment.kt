@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
@@ -15,6 +16,8 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
+import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
@@ -106,6 +109,17 @@ class LeasingFragment : BaseFragment(), LeasingView {
         recycle_active_leasing.layoutManager = LinearLayoutManager(baseActivity)
         recycle_active_leasing.adapter = adapterActiveAdapter
         recycle_active_leasing.isNestedScrollingEnabled = false
+
+        adapterActiveAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            val historyItem = adapter.getItem(position) as Transaction
+
+            val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
+            bottomSheetFragment.selectedItem = historyItem
+            bottomSheetFragment.allItems = adapter?.data as ArrayList<Transaction>
+
+            bottomSheetFragment.selectedItemPosition = position
+            bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

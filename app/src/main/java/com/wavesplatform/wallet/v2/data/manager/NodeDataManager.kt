@@ -5,11 +5,13 @@ import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R.color.r
 import com.wavesplatform.wallet.v1.payload.TransactionsInfo
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.isAppOnForeground
 import com.wavesplatform.wallet.v2.util.notNull
@@ -25,6 +27,8 @@ import kotlin.collections.ArrayList
 class NodeDataManager @Inject constructor() : DataManager() {
     @Inject
     lateinit var transactionUtil: TransactionUtil
+    @Inject
+    lateinit var apiDataManager: ApiDataManager
     var transactions: List<Transaction> = ArrayList()
     var pendingTransactions: List<Transaction> = ArrayList()
     var currentLoadTransactionLimitPerRequest = 100
@@ -140,8 +144,24 @@ class NodeDataManager @Inject constructor() : DataManager() {
                     return@map it.filter {
                         it.asset = Constants.wavesAssetInfo
                         it.transactionTypeId = transactionUtil.getTransactionType(it)
-                        it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
+                        it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE && it.sender == App.getAccessManager().getWallet()?.address
                     }
+                }
+                .flatMap {
+                    return@flatMap Observable.fromIterable(it)
+                            .flatMap { transaction ->
+                                if (transaction.recipient.contains("alias")) {
+                                    val aliasName = transaction.recipient.substringAfterLast(":")
+                                    return@flatMap apiDataManager.loadAlias(aliasName)
+                                            .flatMap {
+                                                transaction.recipientAddress = it.address
+                                                return@flatMap Observable.just(transaction)
+                                            }
+                                } else {
+                                    transaction.recipientAddress = transaction.recipient
+                                    return@flatMap Observable.just(transaction)
+                                }
+                            }.toList().toObservable()
                 }
     }
 
