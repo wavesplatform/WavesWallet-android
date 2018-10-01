@@ -45,12 +45,12 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
         val rotation = AnimationUtils.loadAnimation(this, R.anim.rotate)
         rotation.fillAfter = true
         image_loader.startAnimation(rotation)
-        runDelayed(2000, {
+        runDelayed(2000) {
             image_loader.clearAnimation()
             card_progress.gone()
             card_address_view.visiable()
             image_close.visiable()
-        })
+        }
 
         image_close.click {
             finish()
@@ -85,10 +85,21 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
             toolbar_view.title = getString(R.string.receive_address_waves_address)
         }
 
-        presenter.generateQRCode(text_address.text.toString(), resources.getDimension(R.dimen._200sdp).toInt())
+        val text: String
+        if (intent.hasExtra(KEY_INTENT_QR_DATA)) {
+            text = intent.getStringExtra(KEY_INTENT_QR_DATA)
+            text_invoice_link.text = text
+        } else {
+            text = text_address.text.toString()
+        }
+        presenter.generateQRCode(text, resources.getDimension(R.dimen._200sdp).toInt())
     }
 
     override fun showQRCode(qrCode: Bitmap?) {
         image_view_recipient_action.setImageBitmap(qrCode)
+    }
+
+    companion object {
+        const val KEY_INTENT_QR_DATA = "intent_qr_data"
     }
 }

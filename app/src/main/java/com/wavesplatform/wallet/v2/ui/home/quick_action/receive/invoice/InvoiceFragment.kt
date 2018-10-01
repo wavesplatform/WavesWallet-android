@@ -3,8 +3,10 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -12,11 +14,17 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.Rec
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_invoice.*
-import pers.victor.ext.*
+import pers.victor.ext.click
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
+import pers.victor.ext.visiableIf
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class InvoiceFragment : BaseFragment(), InvoiceView {
+
     @Inject
     @InjectPresenter
     lateinit var presenter: InvoicePresenter
@@ -26,12 +34,18 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
 
     override fun configLayoutRes(): Int = R.layout.fragment_invoice
 
+    override fun showRate(rate: String?) {
+        text_amount_in_dollar.text = "≈ $rate USD"
+    }
+
+    override fun showError(message: String) {
+        showError(message, R.id.content)
+    }
+
     companion object {
-        var REQUEST_SELECT_ASSET = 10001
-        var INVOICE_SCREEN = "invoice"
-        /**
-         * @return InvoiceFragment instance
-         * */
+        const val REQUEST_SELECT_ASSET = 10001
+        const val INVOICE_SCREEN = "invoice"
+
         fun newInstance(): InvoiceFragment {
             return InvoiceFragment()
         }
@@ -40,7 +54,9 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
     override fun onViewReady(savedInstanceState: Bundle?) {
 
         text_use_total_balance.click {
-            toast("Total balance")
+            presenter.assetBalance.notNull {
+                edit_amount.setText(it.getDisplayBalance())
+            }
         }
         text_leasing_0_100.click {
             edit_amount.setText("0.100")
@@ -62,8 +78,24 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             launchActivity<ReceiveAddressViewActivity> {
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
                 putExtra(INVOICE_SCREEN, true)
+                putExtra(ReceiveAddressViewActivity.KEY_INTENT_QR_DATA, createLink())
             }
         }
+
+        RxTextView.textChanges(edit_amount)
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .subscribe { string ->
+                    if (TextUtils.isEmpty(string)) {
+                        //showRate("0")
+                    } else {
+                        val value = string.toString()
+                        if (value.toDouble() > 0) {
+                            presenter.amountChanged(value)
+                        } else {
+                            //showRate("0")
+                        }
+                    }
+                }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -97,5 +129,11 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         container_asset.visiable()
 
         button_continue.isEnabled = true
+    }
+
+    private fun createLink(): String {
+        return "https//client.wavesplatform.com/#send/${presenter.assetBalance!!.assetId}?" +
+                "recipient=${presenter.address}&" +
+                "amount=${presenter.amount}"
     }
 }

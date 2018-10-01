@@ -22,7 +22,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
     private var crypto: String = "WAVES"
     private var address: String? = App.getAccessManager().getWallet()!!.address
     private var amount: String = "0"
-    private var fiat: String = "USD"
+    var fiat: String = "USD"
     private var min: Float = 0F
     private var max: Float = 0F
     private var asset: AssetBalance? = null
@@ -65,10 +65,15 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
     fun fiatChanged(fiat: String) {
         this.fiat = fiat
         loadLimits()
+        loadRate()
     }
 
     fun amountChanged(amount: String) {
         this.amount = amount
+        loadRate()
+    }
+
+    private fun loadRate() {
         runAsync {
             addSubscription(coinomatManager.loadRate(crypto, address, fiat, amount).subscribe({ rate ->
                 this.rate = rate

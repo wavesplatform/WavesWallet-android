@@ -7,6 +7,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
@@ -17,6 +18,7 @@ import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import pers.victor.ext.visiableIf
+import java.math.BigDecimal
 import javax.inject.Inject
 
 class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
@@ -34,9 +36,6 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
 
         var REQUEST_SELECT_ASSET = 10001
 
-        /**
-         * @return CryptoCurrencyFragment instance
-         * */
         fun newInstance(): CryptoCurrencyFragment {
             return CryptoCurrencyFragment()
         }
@@ -44,7 +43,9 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         edit_asset.click {
-            launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+            launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) {
+                putExtra(YourAssetsActivity.CRYPTO_CURRENCY, true)
+            }
         }
         container_asset.click {
             launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
@@ -54,12 +55,15 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
             }
         }
+        button_continue.isEnabled = false
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        presenter.assetBalance.notNull {
-            setAssetBalance(it)
+        if (savedInstanceState != null) {
+            presenter.assetBalance.notNull {
+                setAssetBalance(it)
+            }
         }
     }
 
@@ -69,6 +73,22 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
             val assetBalance = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
             setAssetBalance(assetBalance)
         }
+    }
+
+    override fun showTunnel(tunnel: GetTunnel?) {
+        val min = BigDecimal(tunnel?.tunnel?.inMin).toPlainString()
+        limits.text = getString(R.string.receive_minimum_amount,
+                min,
+                tunnel?.tunnel?.currencyFrom)
+        warning.text = getString(R.string.receive_warning_will_send,
+                min,
+                tunnel?.tunnel?.currencyFrom)
+        warning_crypto.text = getString(R.string.receive_warning_crypto, tunnel?.tunnel?.currencyFrom)
+        button_continue.isEnabled = true
+    }
+
+    override fun showError(message: String?) {
+
     }
 
     private fun setAssetBalance(assetBalance: AssetBalance?) {
@@ -88,5 +108,9 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         container_info.visiable()
 
         button_continue.isEnabled = true
+
+        if (assetBalance != null) {
+            presenter.getTunnel(assetBalance.assetId!!)
+        }
     }
 }

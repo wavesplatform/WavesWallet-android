@@ -16,9 +16,9 @@ class ReceiveAddressViewPresenter @Inject constructor():BasePresenter<ReceiveAdd
     fun generateQRCode(text: String, size: Int){
         addSubscription(generateQrCodeObservable(text, size)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({
+                .subscribe {
                     viewState.showQRCode(it)
-                }))
+                })
     }
 
     private fun generateQrCodeObservable(uri: String, dimensions: Int): Observable<Bitmap> {

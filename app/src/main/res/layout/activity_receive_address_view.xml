@@ -203,9 +203,8 @@
                         android:id="@+id/image_view_recipient_action"
                         android:layout_width="@dimen/_200sdp"
                         android:layout_height="@dimen/_200sdp"
-                        android:layout_below="@+id/linear_buttons"
+                        android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="8dp"
                         android:scaleType="fitXY" />
 
                     <android.support.v7.widget.AppCompatTextView
@@ -225,7 +224,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/image_line_2"
@@ -235,15 +235,19 @@
                         android:background="@drawable/shape_dashed_line"
                         android:layerType="software" />
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal"
                         android:layout_marginTop="14dp">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:id="@+id/qr_data_layout"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_marginEnd="8dp"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:layout_width="wrap_content"
@@ -257,15 +261,16 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
-                                android:text="https://wav.es/xPAK3z"
-                                android:textColor="@color/disabled900" />
+                                android:textColor="@color/disabled900"
+                                tools:text="https//client.wavesplatform.com/#send/GWgADgean6zKWsby3wVQ1TSSWCCFZT9t28nZ2N5vweT8?recipient=3PCAB4sHXgvtu5NPoen6EXR5yaNbvsEA8Fj&amount=0.100" />
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/copy_share_layout"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0"
+                            android:gravity="center"
                             android:orientation="horizontal">
 
                             <android.support.v7.widget.AppCompatImageView
@@ -283,7 +288,7 @@
                                 android:clickable="true"
                                 app:srcCompat="@drawable/ic_share_18_submit_400" />
                         </LinearLayout>
-                    </RelativeLayout>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <android.support.v7.widget.AppCompatButton

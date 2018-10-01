@@ -36,12 +36,8 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
 
     override fun configLayoutRes() = R.layout.activity_your_assets
 
-    companion object {
-        var BUNDLE_ASSET_ITEM = "asset"
-    }
-
-
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.basic50)
 
         setupToolbar(toolbar_view,  true, getString(R.string.your_assets_toolbar_title), R.drawable.ic_toolbar_back_black)
 
@@ -77,7 +73,11 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         recycle_assets.adapter = adapter
         adapter.bindToRecyclerView(recycle_assets)
 
-        presenter.loadAssets()
+        if (intent.hasExtra(CRYPTO_CURRENCY)) {
+            presenter.loadCryptoAssets()
+        } else {
+            presenter.loadAssets()
+        }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as AssetBalance
@@ -103,4 +103,8 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         adapter.setNewData(assets)
     }
 
+    companion object {
+        const val BUNDLE_ASSET_ITEM = "asset"
+        const val CRYPTO_CURRENCY = "crypto_currency"
+    }
 }

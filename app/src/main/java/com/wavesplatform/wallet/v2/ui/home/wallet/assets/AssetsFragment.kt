@@ -13,7 +13,6 @@ import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -28,7 +27,6 @@ import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.toast
 import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
@@ -83,7 +81,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
     private fun setupUI() {
         swipe_container.setColorSchemeResources(R.color.submit400)
         swipe_container.setOnRefreshListener {
-            skeletonScreen.notNull { it.show() }
             presenter.loadAssetsBalance()
         }
 

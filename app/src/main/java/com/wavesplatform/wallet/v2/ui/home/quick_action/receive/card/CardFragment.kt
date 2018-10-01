@@ -73,7 +73,7 @@ class CardFragment : BaseFragment(), CardView {
     }
 
     override fun showRate(rate: String?) {
-        text_amount_in_dollar.text = "≈ $rate WAVES"
+        text_amount_in_dollar.text = "≈ $rate ${presenter.fiat}"
     }
 
     override fun showLimits(min: String?, max: String?, fiat: String?) {
@@ -107,14 +107,24 @@ class CardFragment : BaseFragment(), CardView {
         alertDialog.setTitle(getString(R.string.receive_fiat_choose_dialog_title))
         val view = LayoutInflater.from(baseActivity)
                 .inflate(R.layout.receive_fiat_choose_dialog, null)
-        view.findViewById<RadioButton>(R.id.radioButton_usd).click {
+        val usdButton = view.findViewById<RadioButton>(R.id.radioButton_usd)
+        val euroButton = view.findViewById<RadioButton>(R.id.radioButton_eur)
+
+        if (presenter.fiat == USD) {
+            usdButton.isChecked = true
+        } else {
+            euroButton.isChecked = true
+        }
+
+        usdButton.click {
             alertDialog.dismiss()
             setFiat(USD)
         }
-        view.findViewById<RadioButton>(R.id.radioButton_eur).click {
+        euroButton.click {
             alertDialog.dismiss()
             setFiat(EURO)
         }
+
         alertDialog.setView(view)
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
                 getString(R.string.receive_fiat_choose_dialog_cancel)) { dialog, _ ->
