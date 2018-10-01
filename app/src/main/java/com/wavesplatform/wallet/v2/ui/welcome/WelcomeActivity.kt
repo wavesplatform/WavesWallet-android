@@ -30,8 +30,6 @@ import android.databinding.adapters.SeekBarBindingAdapter.setProgress
 import com.asksira.loopingviewpager.LoopingViewPager
 
 
-
-
 class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
     @Inject
@@ -181,6 +179,11 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         when (item.itemId) {
             R.id.action_change_language -> {
                 val dialog = ChangeLanguageBottomSheetFragment()
+                dialog.languageChooseListener = object : ChangeLanguageBottomSheetFragment.LanguageSelectListener {
+                    override fun onLanguageSelected() {
+                        menu.notNull { updateMenuTitle() }
+                    }
+                }
                 dialog.show(supportFragmentManager, dialog::class.java.simpleName)
                 return true
             }
@@ -202,7 +205,6 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
     override fun onResume() {
         super.onResume()
-        menu.notNull { updateMenuTitle() }
     }
 
 }

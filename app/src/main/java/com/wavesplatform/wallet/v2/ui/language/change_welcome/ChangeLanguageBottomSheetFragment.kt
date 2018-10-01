@@ -21,11 +21,11 @@ import java.util.*
 import javax.inject.Inject
 
 
-class ChangeLanguageBottomSheetFragment @Inject constructor(): BaseBottomSheetDialogFragment() {
+class ChangeLanguageBottomSheetFragment @Inject constructor() : BaseBottomSheetDialogFragment() {
 
     var adapter: LanguageAdapter = LanguageAdapter()
     var preferenceHelper: PreferencesHelper = PreferencesHelper(app)
-
+    var languageChooseListener: LanguageSelectListener? = null
     var currentLanguagePosition: Int = -1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -69,6 +69,7 @@ class ChangeLanguageBottomSheetFragment @Inject constructor(): BaseBottomSheetDi
                 saveLanguage(it.language.code)
                 LocaleChanger.setLocale(Locale(getString(it.language.code).toLowerCase()))
             }
+            languageChooseListener?.onLanguageSelected()
             dismiss()
         }
 
@@ -91,5 +92,9 @@ class ChangeLanguageBottomSheetFragment @Inject constructor(): BaseBottomSheetDi
 
     fun saveLanguage(lang: Int) {
         preferenceHelper.setLanguage(lang)
+    }
+
+    interface LanguageSelectListener {
+        fun onLanguageSelected()
     }
 }
