@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_title"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="62dp"
+        android:layout_marginBottom="36dp"
         android:layout_marginTop="24dp" />
 
     <com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
