@@ -7,6 +7,7 @@ import android.support.v7.widget.AppCompatEditText
 import android.text.InputType
 import android.text.TextUtils
 import android.view.LayoutInflater
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
@@ -26,6 +27,7 @@ import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_enter_passcode.*
 import pers.victor.ext.click
+import pers.victor.ext.inflate
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
@@ -175,7 +177,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         val alertDialog = AlertDialog.Builder(this).create()
         alertDialog.setCancelable(false)
         alertDialog.setTitle(getString(R.string.enter_passcode_too_many_attempts_dialog_title))
-        alertDialog.setMessage(getString(R.string.enter_passcode_too_many_attempts_dialog_description))
+        alertDialog.setView(getDescriptionView())
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                 getString(R.string.enter_passcode_too_many_attempts_dialog_positive_btn_txt)) { dialog, _ ->
             dialog.dismiss()
@@ -187,6 +189,10 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         }
         alertDialog.show()
         alertDialog.makeStyled()
+    }
+
+    private fun getDescriptionView(): View? {
+        return inflate(R.layout.layout_many_attepmts)
     }
 
     companion object {
