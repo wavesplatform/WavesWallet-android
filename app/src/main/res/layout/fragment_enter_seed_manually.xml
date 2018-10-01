@@ -73,7 +73,7 @@
                 android:id="@+id/til_seed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="52dp"
+                android:layout_marginTop="24dp"
                 android:textColorHint="@color/basic500"
                 app:errorEnabled="true"
                 app:hintTextAppearance="@style/TextLabel"
@@ -88,7 +88,8 @@
                     android:hint="@string/enter_seed_manually_hint_your_seed"
                     android:imeOptions="actionDone"
                     android:inputType="textMultiLine"
-                    android:lines="3"
+                    android:lines="2"
+                    android:maxLines="3"
                     android:paddingBottom="20dp"
                     android:textColorHint="@color/basic500" />
             </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
