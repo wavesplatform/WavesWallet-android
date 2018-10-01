@@ -156,9 +156,9 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
     private fun configureTabLayout(type: String?, data: ArrayList<HistoryItem>) {
         // hide tab bar layout if not data available and show empty view
-        if (type == all && data.isEmpty()) {
+        if ((type == all || type == leasing_all) && data.isEmpty()) {
             changeTabBarVisibilityListener?.changeTabBarVisibility(false)
-        } else if (type == all && data.isNotEmpty()) {
+        } else if ((type == all || type == leasing_all) && data.isNotEmpty()) {
             changeTabBarVisibilityListener?.changeTabBarVisibility(true)
         }
     }
