@@ -29,6 +29,7 @@ import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.children
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
 
@@ -131,8 +132,10 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
 
         edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                goNext()
                 hideKeyboard()
+                runDelayed(250) {
+                    goNext()
+                }
                 true
             } else {
                 false

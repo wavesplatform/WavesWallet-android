@@ -1063,6 +1063,10 @@
     <string name="enter_passcode_title">Enter Passcode</string>
     <string name="enter_passcode_forgot_passcode">Forgot passcode?</string>
     <string name="enter_passcode_use_account_password">Use account password</string>
+    <string name="enter_passcode_too_many_attempts_dialog_title">Too many attempts</string>
+    <string name="enter_passcode_too_many_attempts_dialog_description">To unlock, sign in with your account password</string>
+    <string name="enter_passcode_too_many_attempts_dialog_positive_btn_txt">ENTER PASSWORD</string>
+    <string name="enter_passcode_too_many_attempts_dialog_negative_btn_txt">CANCEL</string>
 
     <!--Start leasing-->
     <string name="start_leasing_toolbar">Start leasing</string>
