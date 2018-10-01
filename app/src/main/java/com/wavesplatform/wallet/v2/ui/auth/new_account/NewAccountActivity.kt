@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -27,6 +28,7 @@ import kotlinx.android.synthetic.main.activity_new_account.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.children
 import pers.victor.ext.click
+import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import javax.inject.Inject
 
 
@@ -130,6 +132,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 goNext()
+                hideKeyboard()
                 true
             } else {
                 false
@@ -146,6 +149,10 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
             } else {
                 launchActivity<SecretPhraseActivity>(options = createDataBundle())
             }
+        } else if (!presenter.avatarValid) {
+            val animation = AnimationUtils.loadAnimation(this, R.anim.shake_error)
+            linear_images?.startAnimation(animation)
+            showError(R.string.new_account_avatar_error, R.id.relative_root)
         }
     }
 

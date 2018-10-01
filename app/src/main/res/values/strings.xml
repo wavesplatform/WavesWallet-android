@@ -750,6 +750,7 @@
     <string name="new_account_avatar_title">Choose your address avatar</string>
     <string name="new_account_avatar_description">This avatar is unique. You cannot change it later.</string>
     <string name="new_account_exist_error">This account name exist</string>
+    <string name="new_account_avatar_error">Please select avatar</string>
 
     <!-- Secret Phrase -->
     <string name="secret_phrase_no_backup_no_money">No Backup, No Money</string>
