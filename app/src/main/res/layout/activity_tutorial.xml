@@ -7,21 +7,11 @@
     android:layout_height="match_parent"
     android:background="@color/basic50">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:fitsSystemWindows="true" />
-
-    <android.support.v4.view.ViewPager
+    <com.wavesplatform.wallet.v2.ui.custom.SwipeDisableViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/card_control"
-        android:layout_below="@+id/toolbar_view"
-        android:layout_marginTop="24dp" />
-
+        android:layout_above="@+id/card_control" />
 
     <View
         android:background="@drawable/gradient_tutorial_transparent_block"
