@@ -37,7 +37,7 @@ class ErrorManager @Inject constructor(val mRxEventBus: RxEventBus, val mPrefere
 
     private fun handleNetworkError(retrofitException: RetrofitException) {
         // TODO: call method from activity or show here
-        mActivity.showNetworkError()
+//        mActivity.showNetworkError()
     }
 
 

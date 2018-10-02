@@ -24,7 +24,6 @@ import pers.victor.ext.*
 abstract class BaseDrawerActivity : BaseActivity() {
 
     private lateinit var slidingRootNav: SlidingRootNav
-    private var changeStatusBarColor = true
     private var view: View? = null
     private var drawerIcon = findDrawable(R.drawable.ic_toolbar_menu)
 
@@ -51,11 +50,6 @@ abstract class BaseDrawerActivity : BaseActivity() {
                 .addDragListener { progress ->
                     slidingRootNav.layout.linear_drawer.scaleX = 1.5f - (progress / 2)
                     slidingRootNav.layout.linear_drawer.scaleY = 1.5f - (progress / 2)
-
-                    if (changeStatusBarColor){
-                        if (progress > 0.5) setSystemBarTheme(false)
-                        else setSystemBarTheme(true)
-                    }
                 }
                 .withMenuOpened(false)
                 .withSavedState(savedInstanceState)
@@ -167,10 +161,6 @@ abstract class BaseDrawerActivity : BaseActivity() {
     override fun onPause() {
         SimpleChromeCustomTabs.getInstance().disconnectFrom(this)
         super.onPause()
-    }
-
-    fun needChangeStatusBarColorOnMenuOpen(change: Boolean){
-        changeStatusBarColor = change
     }
 
     fun changeDrawerMenuIcon(icon: Drawable?){

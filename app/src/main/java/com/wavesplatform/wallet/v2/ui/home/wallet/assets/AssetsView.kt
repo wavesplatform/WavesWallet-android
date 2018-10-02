@@ -11,5 +11,6 @@ interface AssetsView :BaseMvpView{
     fun afterSuccessLoadHiddenAssets(assets: List<AssetBalance>)
     fun afterSuccessLoadSpamAssets(assets: List<AssetBalance>)
     fun afterFailedLoadAssets()
+    fun afterFailedUpdateAssets()
     fun startServiceToLoadData(assets: ArrayList<AssetBalance>)
 }

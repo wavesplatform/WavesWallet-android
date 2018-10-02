@@ -4,13 +4,12 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import com.google.common.base.Predicates.equalTo
 import com.vicpin.krealmextensions.*
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
@@ -19,7 +18,10 @@ import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.notNull
 import dagger.android.AndroidInjection
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Function3
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
@@ -34,6 +36,8 @@ class UpdateApiDataService : Service() {
     lateinit var transactionUtil: TransactionUtil
     @Inject
     lateinit var rxEventBus: RxEventBus
+    @Inject
+    lateinit var prefsUtil: PrefsUtil
     var subscriptions: CompositeDisposable = CompositeDisposable()
     var allAssets = arrayListOf<AssetInfo>()
 
@@ -60,6 +64,7 @@ class UpdateApiDataService : Service() {
                         val sortedList = it.sortedByDescending { it.timestamp }
 
                         runAsync {
+                            // check if exist last transaction
                             queryAsync<Transaction>({ equalTo("id", sortedList[sortedList.size - 1].id) }, {
                                 if (it.isEmpty()) {
                                     // all list is new, need load more
@@ -84,6 +89,7 @@ class UpdateApiDataService : Service() {
                                     nodeDataManager.currentLoadTransactionLimitPerRequest = currentLimit
 
                                 } else {
+                                    // check if exist first transaction
                                     queryAsync<Transaction>({ equalTo("id", sortedList[0].id) }, {
                                         if (it.isEmpty()) {
                                             // only few new transaction
@@ -93,14 +99,6 @@ class UpdateApiDataService : Service() {
                                 }
                             })
                         }
-//                        val firstTransaction = queryFirst<Transaction> { equalTo("id", sortedList[0].id) }
-//                        val lastTransaction = queryFirst<Transaction> { equalTo("id", sortedList[sortedList.size - 1].id) }
-//
-//                        if (lastTransaction == null) {
-//
-//                        } else if (firstTransaction == null) {
-//
-//                        }
                     }
                 }, {
                     it.printStackTrace()
@@ -125,7 +123,9 @@ class UpdateApiDataService : Service() {
             tempGrabbedAssets.add(transition.feeAssetId)
         }
 
-        val allTransactionsAssets = tempGrabbedAssets.asSequence().filter { !it.isNullOrEmpty() }.distinct().toList()
+        val allTransactionsAssets = tempGrabbedAssets.asSequence().filter { !it.isNullOrEmpty() }.distinct().toMutableList()
+
+
 
         subscriptions.add(apiDataManager.assetsInfoByIds(allTransactionsAssets)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -145,6 +145,8 @@ class UpdateApiDataService : Service() {
                                             .compose(RxUtil.applyObservableDefaultSchedulers())
                                             .subscribe {
                                                 trans.recipientAddress = it.address
+                                                trans.transactionTypeId = transactionUtil.getTransactionType(trans)
+                                                trans.save()
                                             })
                                 }
                             } else {
@@ -188,7 +190,6 @@ class UpdateApiDataService : Service() {
                 arrayList.forEach { newAsset ->
                     if (!allAssets.any { it.id == newAsset.id }) {
                         if (spams.any { it.assetId == newAsset.id }) {
-                            Log.d("servicehistory", "isSpam: true")
                             newAsset.isSpam = true
                         }
                         allAssets.add(newAsset)

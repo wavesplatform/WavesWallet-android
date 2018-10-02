@@ -52,9 +52,10 @@ class WalletFragment : BaseFragment(), WalletView {
         stl_wallet.currentTab = 0
         appbar_layout.addOnOffsetChangedListener(
                 AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
-                    onElevationAppBarChangeListener.notNull {
-                        onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
-                    }
-                })
+            onElevationAppBarChangeListener.notNull {
+                onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
+                viewpager_wallet.setPagingEnabled(verticalOffset == 0)
+            }
+        })
     }
 }

@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.data.manager
 
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.remote.ApiService
 import com.wavesplatform.wallet.v2.data.remote.CoinomatService
@@ -20,6 +21,8 @@ open class DataManager @Inject constructor() {
     lateinit var coinomatService: CoinomatService
     @Inject
     lateinit var preferencesHelper: PreferencesHelper
+    @Inject
+    lateinit var prefsUtil: PrefsUtil
 
     fun getAddress(): String? {
         return App.getAccessManager().getWallet()?.address

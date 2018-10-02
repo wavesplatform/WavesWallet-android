@@ -17,9 +17,9 @@ class AssetsSortingAdapter @Inject constructor() : BaseItemDraggableAdapter<Asse
                 .setVisible(R.id.text_my_asset, item.issueTransaction?.sender == App.getAccessManager().getWallet()?.address)
                 .setOnCheckedChangeListener(R.id.switch_visible, null) // fix bug with incorrect call listener
                 .setChecked(R.id.switch_visible, !item.isHidden)
-                .setOnCheckedChangeListener(R.id.switch_visible, { buttonView, isChecked ->
+                .setOnCheckedChangeListener(R.id.switch_visible) { buttonView, isChecked ->
                     onHiddenChangeListener?.onHiddenStateChanged(item, isChecked)
-                })
+                }
                 .setGone(R.id.switch_visible, item.configureVisibleState)
                 .setGone(R.id.image_down_arrow, item.isGateway)
                 .setGone(R.id.image_drag, !item.configureVisibleState)

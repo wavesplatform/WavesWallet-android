@@ -14,6 +14,7 @@ class Events {
 
     class RetryEvent
     class NeedUpdateHistoryScreen
-    class NewAssetsList(var assets: ArrayList<AssetBalance>)
 
+    class SpamFilterStateChanged
+    class SpamFilterUrlChanged(var updateTransaction: Boolean = false)
 }

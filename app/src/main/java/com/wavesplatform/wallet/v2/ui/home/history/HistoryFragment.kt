@@ -72,12 +72,13 @@ class HistoryFragment : BaseFragment(), HistoryView {
 
         stl_history.setViewPager(viewpager_history)
         stl_history.currentTab = 0
-        appbar_layout.addOnOffsetChangedListener(
+        appbar_layout.addOnOffsetChangedListener (
                 AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
-                    onElevationAppBarChangeListener.notNull {
-                        onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
-                    }
-                })
+            onElevationAppBarChangeListener.notNull {
+                onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
+                viewpager_history.setPagingEnabled(verticalOffset == 0)
+            }
+        })
     }
 
     fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
