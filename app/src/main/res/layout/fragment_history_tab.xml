@@ -13,8 +13,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingBottom="58dp"
-        android:visibility="visible" />
+        android:paddingBottom="24dp"/>
 
 </FrameLayout>
 

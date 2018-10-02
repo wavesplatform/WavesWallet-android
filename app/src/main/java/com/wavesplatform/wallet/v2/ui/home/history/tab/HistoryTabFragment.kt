@@ -57,11 +57,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
         const val TYPE = "type"
 
-        const val PRE_LOAD_NUMBER = 7
 
-        /**
-         * @return HistoryTabFragment instance
-         * */
         fun newInstance(type: String, asset: AssetBalance?): HistoryTabFragment {
             val historyDateItemFragment = HistoryTabFragment()
             val bundle = Bundle()
@@ -91,7 +87,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                 .subscribe {
                     presenter.totalHeaders = 0
                     presenter.hashOfTimestamp = hashMapOf()
-                    presenter.needLoadMore = true
                     runAsync {
                         presenter.loadTransactions()
                     }
@@ -100,19 +95,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         runAsync {
             presenter.loadTransactions()
         }
-
-        adapter.setLoadMoreView(CustomLoadMoreView())
-        adapter.setPreLoadNumber(PRE_LOAD_NUMBER)
-        adapter.setOnLoadMoreListener({
-            if (!presenter.needLoadMore) {
-                //Data are all loaded.
-                adapter.loadMoreEnd()
-            } else {
-                runAsync {
-                    presenter.loadMore(adapter.data.size)
-                }
-            }
-        }, recycle_history)
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val historyItem = adapter.getItem(position) as HistoryItem
@@ -131,12 +113,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                 bottomSheetFragment.selectedItemPosition = position - sectionSize
                 bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
             }
-        }
-    }
-
-    override fun goneLoadMoreView() {
-        runOnUiThread {
-            adapter.loadMoreComplete()
         }
     }
 
@@ -161,11 +137,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         } else if ((type == all || type == leasing_all) && data.isNotEmpty()) {
             changeTabBarVisibilityListener?.changeTabBarVisibility(true)
         }
-    }
-
-    override fun afterSuccessLoadMoreTransaction(data: ArrayList<HistoryItem>, type: String?) {
-        adapter.loadMoreComplete()
-        adapter.addData(data)
     }
 
     interface ChangeTabBarVisibilityListener {

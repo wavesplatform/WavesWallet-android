@@ -23,13 +23,8 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     var allItemsFromDb = listOf<Transaction>()
     var totalHeaders = 0
     var type: String? = "all"
-    var needLoadMore: Boolean = true
     var hashOfTimestamp = hashMapOf<Long, Long>()
     var assetBalance: AssetBalance? = null
-
-    companion object {
-        var PER_PAGE = 25
-    }
 
     fun loadTransactions() {
         Log.d("historydev", "on presenter")
@@ -85,8 +80,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         }
 
         addSubscription(singleData
-                .map({
-
+                .map {
                     // all history
                     allItemsFromDb = it.sortedByDescending({ it.timestamp })
 
@@ -98,12 +92,8 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                         }
                     }
 
-                    if (allItemsFromDb.size > 50) {
-                        return@map sortAndConfigToUi(allItemsFromDb.subList(0, PER_PAGE))
-                    } else {
-                        return@map sortAndConfigToUi(allItemsFromDb)
-                    }
-                })
+                    return@map sortAndConfigToUi(allItemsFromDb)
+                }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -112,33 +102,6 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
                 }))
     }
-
-    fun loadMore(currentItemsSize: Int) {
-        val itemsWithoutHeaders = currentItemsSize - totalHeaders
-
-        if (itemsWithoutHeaders == allItemsFromDb.size) {
-            needLoadMore = false
-            viewState.goneLoadMoreView()
-            return
-        }
-
-        val toIndex = if (itemsWithoutHeaders + PER_PAGE >= allItemsFromDb.size) {
-            allItemsFromDb.size
-        } else {
-            itemsWithoutHeaders + PER_PAGE
-        }
-
-        addSubscription(Single.just(allItemsFromDb.subList(itemsWithoutHeaders, toIndex))
-                .map {
-                    return@map sortAndConfigToUi(it)
-                }
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    viewState.afterSuccessLoadMoreTransaction(it, type)
-                }, {}))
-    }
-
 
     private fun sortAndConfigToUi(it: List<Transaction>): ArrayList<HistoryItem> {
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale(app.getString(preferenceHelper.getLanguage())))
