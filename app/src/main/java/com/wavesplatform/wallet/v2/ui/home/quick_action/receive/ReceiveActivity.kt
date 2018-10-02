@@ -39,7 +39,6 @@ class ReceiveActivity : BaseActivity(), ReceiveView {
 
         viewpager_receive.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
-
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {

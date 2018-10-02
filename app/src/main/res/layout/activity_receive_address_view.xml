@@ -275,7 +275,7 @@
                                 android:id="@+id/image_copy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="24dp"
+                                android:padding="10dp"
                                 android:clickable="true"
                                 app:srcCompat="@drawable/ic_copy_18_submit_400" />
 
@@ -283,6 +283,7 @@
                                 android:id="@+id/image_share"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:padding="10dp"
                                 android:clickable="true"
                                 app:srcCompat="@drawable/ic_share_18_submit_400" />
                         </LinearLayout>

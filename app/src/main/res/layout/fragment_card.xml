@@ -26,7 +26,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -34,11 +34,12 @@
             android:clipToPadding="true"
             app:cardBackgroundColor="@color/basic50"
             app:cardCornerRadius="2dp"
-            app:cardElevation="2dp">
+            app:cardElevation="0dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_rect_bordered_accent50">
 
                 <EditText
                     android:id="@+id/edit_asset"
@@ -182,7 +183,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -205,8 +206,10 @@
                     android:hint="0"
                     android:inputType="numberDecimal"
                     android:padding="14dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/roboto_medium"
                     android:singleLine="true"
-                    android:text="0"
                     android:textColorHint="@color/accent100" />
 
                 <android.support.v7.widget.AppCompatTextView

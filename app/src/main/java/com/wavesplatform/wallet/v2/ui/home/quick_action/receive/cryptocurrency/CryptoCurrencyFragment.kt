@@ -3,9 +3,13 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -50,18 +54,12 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         if (arguments == null) {
-            edit_asset.click {
-                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) {
-                    putExtra(YourAssetsActivity.CRYPTO_CURRENCY, true)
-                }
-            }
-            container_asset.click {
-                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
-            }
+            assetChangeEnable(true)
         } else {
             val assetBalance = arguments!!.getParcelable<AssetBalance>(
                     YourAssetsActivity.BUNDLE_ASSET_ITEM)
             setAssetBalance(assetBalance)
+            assetChangeEnable(false)
         }
 
         button_continue.click {
@@ -130,6 +128,37 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
 
         if (assetBalance != null) {
             presenter.getTunnel(assetBalance.assetId!!)
+        }
+    }
+
+    private fun assetChangeEnable(enable: Boolean) {
+        if (enable) {
+            edit_asset.click {
+                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) {
+                    putExtra(YourAssetsActivity.CRYPTO_CURRENCY, true)
+                }
+            }
+            container_asset.click {
+                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+            }
+            image_change.visibility = View.VISIBLE
+            ViewCompat.setElevation(edit_asset_card, ViewUtils.convertDpToPixel(4f, activity!!))
+            edit_asset_layout.background = null
+            edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
+                    activity!!, R.color.white))
+        } else {
+            edit_asset.click {
+
+            }
+            container_asset.click {
+
+            }
+            image_change.visibility = View.GONE
+            ViewCompat.setElevation(edit_asset_card, 0F)
+            edit_asset_layout.background = ContextCompat.getDrawable(
+                    activity!!, R.drawable.shape_rect_bordered_accent50)
+            edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
+                    activity!!, R.color.basic50))
         }
     }
 }

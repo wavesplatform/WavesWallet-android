@@ -3,11 +3,15 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
 import android.text.TextUtils
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
@@ -60,16 +64,12 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         if (arguments == null) {
-            edit_asset.click {
-                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
-            }
-            container_asset.click {
-                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
-            }
+            assetChangeEnable(true)
         } else {
             val assetBalance = arguments!!.getParcelable<AssetBalance>(
                     YourAssetsActivity.BUNDLE_ASSET_ITEM)
             setAssetBalance(assetBalance)
+            assetChangeEnable(false)
         }
 
         text_use_total_balance.click {
@@ -148,5 +148,34 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         return "https//client.wavesplatform.com/#send/${presenter.assetBalance!!.assetId}?" +
                 "recipient=${presenter.address}&" +
                 "amount=${presenter.amount}"
+    }
+
+    private fun assetChangeEnable(enable: Boolean) {
+        if (enable) {
+            edit_asset.click {
+                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+            }
+            container_asset.click {
+                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+            }
+            image_change.visibility = View.VISIBLE
+            ViewCompat.setElevation(edit_asset_card, ViewUtils.convertDpToPixel(4f, activity!!))
+            edit_asset_layout.background = null
+            edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
+                    activity!!, R.color.white))
+        } else {
+            edit_asset.click {
+
+            }
+            container_asset.click {
+
+            }
+            image_change.visibility = View.GONE
+            ViewCompat.setElevation(edit_asset_card, 0F)
+            edit_asset_layout.background = ContextCompat.getDrawable(
+                    activity!!, R.drawable.shape_rect_bordered_accent50)
+            edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
+                    activity!!, R.color.basic50))
+        }
     }
 }
