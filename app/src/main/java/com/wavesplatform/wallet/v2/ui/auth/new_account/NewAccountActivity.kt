@@ -59,6 +59,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         val nameValidation = Validation(til_account_name)
                 .and(NotEmptyRule(R.string.new_account_account_name_validation_required_error))
                 .and(MaxRule(20, R.string.new_account_account_name_validation_length_error))
+                .and(MaxRule(20, R.string.new_account_account_name_validation_length_error))
 
         val passwordValidation = Validation(til_create_password)
                 .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
@@ -171,8 +172,14 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     override fun afterSuccessGenerateAvatar(seed: String, bitmap: Bitmap, imageView: AppCompatImageView) {
         Glide.with(applicationContext)
                 .load(bitmap)
-                .apply(RequestOptions().circleCrop())
+                .apply(RequestOptions()
+                        .error(R.drawable.shape_white_oval)
+                        .placeholder(R.drawable.shape_white_oval)
+                        .dontAnimate()
+                        .circleCrop())
                 .into(imageView)
+
+        imageView.setBackgroundResource(R.drawable.shape_outline)
 
         imageView.click {
             setImageActive(seed, it)
