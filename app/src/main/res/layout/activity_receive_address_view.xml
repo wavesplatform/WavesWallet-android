@@ -19,7 +19,6 @@
         app:titleTextAppearance="@style/Toolbar.Title"
         app:titleTextColor="@color/white">
 
-
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_close"
             android:layout_width="wrap_content"
@@ -124,11 +123,11 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/toolbar_view"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_address"
@@ -139,8 +138,8 @@
                         android:paddingLeft="14dp"
                         android:paddingRight="14dp"
                         android:paddingTop="10dp"
-                        android:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW"
-                        android:textColor="@color/disabled900" />
+                        android:textColor="@color/disabled900"
+                        tools:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW" />
 
 
                     <LinearLayout
@@ -203,21 +202,19 @@
                         android:id="@+id/image_view_recipient_action"
                         android:layout_width="@dimen/_200sdp"
                         android:layout_height="@dimen/_200sdp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
                         android:scaleType="fitXY" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_view_qr_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/image_view_recipient_action"
-                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
                         android:text="@string/receive_address_your_qr_code"
                         android:textColor="@color/disabled500"
                         android:textSize="12sp" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/container_invoice_link"
@@ -238,16 +235,16 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="14dp">
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:id="@+id/qr_data_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
-                            android:orientation="vertical"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:layout_width="wrap_content"
@@ -262,7 +259,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
                                 android:textColor="@color/disabled900"
-                                tools:text="https//client.wavesplatform.com/#send/GWgADgean6zKWsby3wVQ1TSSWCCFZT9t28nZ2N5vweT8?recipient=3PCAB4sHXgvtu5NPoen6EXR5yaNbvsEA8Fj&amount=0.100" />
+                                tools:text="https//client.wavesplatform.com/#send/GWgADgean6zKWsby3wVQ1TSSWCCFZT9t28nZ2N5vweT8?recipient=3PCAB4sHXgvtu5NPoen6EXR5yaNbvsEA8Fj&quot;amount=0.100" />
                         </LinearLayout>
 
                         <LinearLayout

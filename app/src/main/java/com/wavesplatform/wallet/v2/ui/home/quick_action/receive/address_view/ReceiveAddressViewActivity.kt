@@ -3,9 +3,11 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -34,6 +36,8 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
         super.onCreate(savedInstanceState)
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -86,11 +90,13 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
         }
 
         val text: String
+        val address = App.getAccessManager().getWallet()?.address ?: ""
+        text_address.text = address
         if (intent.hasExtra(KEY_INTENT_QR_DATA)) {
             text = intent.getStringExtra(KEY_INTENT_QR_DATA)
             text_invoice_link.text = text
         } else {
-            text = text_address.text.toString()
+            text = address
         }
         presenter.generateQRCode(text, resources.getDimension(R.dimen._200sdp).toInt())
     }
