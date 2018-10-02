@@ -206,7 +206,7 @@
                     android:inputType="numberDecimal"
                     android:padding="14dp"
                     android:singleLine="true"
-                    android:text="30"
+                    android:text="0"
                     android:textColorHint="@color/accent100" />
 
                 <android.support.v7.widget.AppCompatTextView
