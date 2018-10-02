@@ -57,8 +57,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.ScrollToTopEvent::class.java)
                 .subscribe {
-                    if (it.position == MainActivity.PROFILE_SCREEN){
-                        root_scrollView.smoothScrollTo(0,0)
+                    if (it.position == MainActivity.PROFILE_SCREEN) {
+                        root_scrollView.scrollTo(0, 0)
                     }
                 })
 

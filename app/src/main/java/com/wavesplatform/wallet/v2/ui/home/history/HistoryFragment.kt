@@ -65,7 +65,7 @@ class HistoryFragment : BaseFragment(), HistoryView {
         }?.toMutableList()
 
         list.notNull {
-            viewpager_history.adapter = FragmentPageAdapter(childFragmentManager, it)
+            viewpager_history.adapter = HistoryFragmentPageAdapter(childFragmentManager, it)
             viewpager_history.offscreenPageLimit = 7
         }
 

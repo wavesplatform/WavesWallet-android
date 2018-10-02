@@ -74,7 +74,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.ScrollToTopEvent::class.java)
                 .subscribe {
                     if (it.position == MainActivity.HISTORY_SCREEN) {
-                        recycle_history.smoothScrollToPosition(0)
+                        recycle_history.scrollToPosition(0)
                         changeTabBarVisibilityListener?.changeTabBarVisibility(true)
                     }
                 })
