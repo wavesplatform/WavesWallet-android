@@ -7,6 +7,7 @@ import android.text.TextUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
@@ -14,6 +15,7 @@ import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_import_account.*
 import javax.inject.Inject
 
@@ -51,13 +53,25 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
-                if (resultCode == Constants.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
                     val seed = result.contents
                     if (!TextUtils.isEmpty(seed)) {
-                        launchActivity<ProtectAccountActivity> {
-                            putExtra(NewAccountActivity.KEY_INTENT_SEED, seed)
+                        when {
+                            App.getAccessManager().isAccountWithSeedExist(seed) -> {
+                                showError(R.string.enter_seed_manually_validation_seed_exists_error, R.id.root_view)
+                            }
+                            seed.length < 24 -> {
+                                showError(R.string.enter_seed_manually_validation_seed_is_invalid_error, R.id.root_view)
+                            }
+                            else -> {
+                                launchActivity<ProtectAccountActivity> {
+                                    putExtra(NewAccountActivity.KEY_INTENT_SEED, seed)
+                                }
+                            }
                         }
+                    } else {
+                        showError(R.string.enter_seed_manually_validation_seed_is_invalid_error, R.id.root_view)
                     }
                 }
             }

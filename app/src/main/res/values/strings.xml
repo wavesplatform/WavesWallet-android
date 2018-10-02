@@ -742,6 +742,7 @@
     <string name="new_account_account_name_hint">Account name</string>
     <string name="new_account_account_name_validation_length_error">Max: 20 symbols</string>
     <string name="new_account_account_name_validation_required_error">Name is required</string>
+    <string name="new_account_account_name_validation_already_exist_error">Account name already use</string>
     <string name="new_account_create_password_hint">Create a password</string>
     <string name="new_account_create_password_validation_length_error">at least 8 characters</string>
     <string name="new_account_confirm_password_hint">Confirm password</string>
@@ -749,7 +750,6 @@
     <string name="new_account_continue">Continue</string>
     <string name="new_account_avatar_title">Choose your address avatar</string>
     <string name="new_account_avatar_description">This avatar is unique. You cannot change it later.</string>
-    <string name="new_account_exist_error">This account name exist</string>
     <string name="new_account_avatar_error">Please select avatar</string>
 
     <!-- Secret Phrase -->
@@ -1120,6 +1120,9 @@
     <string name="enter_seed_manually_continue">Continue</string>
     <string name="enter_seed_manually_hint">Your seed is the 15 words you saved\nwhen creating your account</string>
     <string name="enter_seed_manually_hint_your_seed">Your account seed</string>
+    <string name="enter_seed_manually_validation_required_seed_error">Seed is required</string>
+    <string name="enter_seed_manually_validation_seed_exists_error">Seed already use</string>
+    <string name="enter_seed_manually_validation_seed_is_invalid_error">Seed is invalid</string>
 
 
     <!--Quick action dialog-->

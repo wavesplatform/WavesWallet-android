@@ -144,12 +144,27 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
 
     fun isAccountNameExist(checkedName: String): Boolean {
         if (TextUtils.isEmpty(checkedName)) {
-            return true
+            return false
         }
 
         val guids = prefs.getGlobalValueList(PrefsUtil.LIST_WALLET_GUIDS)
         for (guid in guids) {
             if (checkedName == prefs.getValue(guid, PrefsUtil.KEY_WALLET_NAME, "")) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun isAccountWithSeedExist(seed: String): Boolean {
+        if (TextUtils.isEmpty(seed)) {
+            return false
+        }
+
+        val tempWallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
+        val guids = prefs.getGlobalValueList(PrefsUtil.LIST_WALLET_GUIDS)
+        for (guid in guids) {
+            if (tempWallet.publicKeyStr == prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "")) {
                 return true
             }
         }
