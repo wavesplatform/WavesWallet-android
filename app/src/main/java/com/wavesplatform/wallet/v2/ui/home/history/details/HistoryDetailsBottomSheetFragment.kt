@@ -13,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -33,9 +34,11 @@ import dagger.android.support.AndroidSupportInjection
 import io.github.kbiakov.codeview.CodeView
 import io.github.kbiakov.codeview.highlight.ColorThemeData
 import io.github.kbiakov.codeview.highlight.SyntaxColors
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -373,9 +376,14 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                         "}"
                 codeView?.setCode(code);
                 codeView?.getOptions()?.withTheme(customTheme)
-                imageCopyData?.click {
-                    it.copyToClipboard(code)
-                }
+
+                eventSubscriptions.add(RxView.clicks(imageCopyData!!)
+                        .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            imageCopyData.copyToClipboard(code)
+                        })
+
                 historyContainer?.addView(dataView)
                 historyContainer?.addView(baseInfoLayout)
             }
