@@ -31,7 +31,12 @@ public class PrefsUtil {
     public static final String KEY_USE_FINGERPRINT = "use_fingerprint";
     public static final String KEY_ENCRYPTED_PIN = "encrypted_pin";
 
+    public static final String KEY_ACCOUNT_FIRST_OPEN = "key_account_first_open";
+
     public static final String KEY_DEFAULT_ASSETS = "key_default_assets";
+    public static final String KEY_DISABLE_SPAM_FILTER = "disable_spam_filter";
+    public static final String KEY_SPAM_URL = "spam_url";
+    public static final String KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS = "key_need_update_transaction_after_change_spam_settings";
 
     public static final String KEY_AB_NAMES = "address_book_names";
     public static final String KEY_AB_ADDRESSES = "address_book_addresses";

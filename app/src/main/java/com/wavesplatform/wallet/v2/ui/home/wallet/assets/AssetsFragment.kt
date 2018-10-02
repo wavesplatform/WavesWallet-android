@@ -28,19 +28,10 @@ import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.toast
 import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 class AssetsFragment : BaseFragment(), AssetsView {
-    override fun startServiceToLoadData(assets: ArrayList<AssetBalance>) {
-        runOnUiThread {
-            if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)) {
-                val intent = Intent(baseActivity, UpdateApiDataService::class.java)
-                baseActivity.startService(intent)
-            }
-        }
-    }
 
     @Inject
     @InjectPresenter
@@ -78,6 +69,20 @@ class AssetsFragment : BaseFragment(), AssetsView {
         skeletonScreen.notNull { it.show() }
         presenter.loadAliases()
         presenter.loadAssetsBalance()
+
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.SpamFilterStateChanged::class.java)
+                .subscribe {
+                    swipe_container.isRefreshing = true
+                    presenter.reloadAssetsAfterSpamFilterStateChanged()
+                })
+
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.SpamFilterUrlChanged::class.java)
+                .subscribe {
+                    if (!it.updateTransaction) {
+                        swipe_container.isRefreshing = true
+                        presenter.reloadAssetsAfterSpamUrlChanged()
+                    }
+                })
     }
 
     private fun setupUI() {
@@ -175,6 +180,19 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun onPrepareOptionsMenu(menu: Menu) {
         val item = menu.findItem(R.id.action_sorting)
         item.isVisible = true
+    }
+
+    override fun afterFailedUpdateAssets() {
+        swipe_container?.isRefreshing = false
+    }
+
+    override fun startServiceToLoadData(assets: ArrayList<AssetBalance>) {
+        runOnUiThread {
+            if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)) {
+                val intent = Intent(baseActivity, UpdateApiDataService::class.java)
+                baseActivity.startService(intent)
+            }
+        }
     }
 
     override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean, withApiUpdate: Boolean) {

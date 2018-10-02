@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.data.manager
 
+import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
@@ -55,10 +56,12 @@ class ApiDataManager @Inject constructor() : DataManager() {
 
     fun assetsInfoByIds(ids: List<String?>): Observable<List<AssetInfo>> {
         return apiService.assetsInfoByIds(ids)
-                .map {
-                    return@map it.data.mapTo(ArrayList()) {
+                .map { it ->
+                    val assetsInfo = it.data.mapTo(ArrayList()) {
                         it.assetInfo
                     }
+                    assetsInfo.saveAll()
+                    return@map assetsInfo
                 }
     }
 
