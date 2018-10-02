@@ -12,7 +12,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.custom.CustomLoadMoreView
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryItemAdapter
@@ -20,9 +20,11 @@ import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomS
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_history_tab.*
 import pyxis.uzuki.live.richutilskt.utils.runAsync
-import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.util.*
 import javax.inject.Inject
+import android.support.v7.widget.LinearSmoothScroller
+import android.support.v7.widget.RecyclerView
+import com.wavesplatform.wallet.v2.ui.custom.SpeedyLinearLayoutManager
 
 
 class HistoryTabFragment : BaseFragment(), HistoryTabView {
@@ -69,7 +71,16 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        layoutManager = LinearLayoutManager(baseActivity)
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.ScrollToTopEvent::class.java)
+                .subscribe {
+                    if (it.position == MainActivity.HISTORY_SCREEN) {
+                        recycle_history.smoothScrollToPosition(0)
+                        changeTabBarVisibilityListener?.changeTabBarVisibility(true)
+                    }
+                })
+
+
+        layoutManager = SpeedyLinearLayoutManager(baseActivity)
         recycle_history.layoutManager = layoutManager
         recycle_history.adapter = adapter
 

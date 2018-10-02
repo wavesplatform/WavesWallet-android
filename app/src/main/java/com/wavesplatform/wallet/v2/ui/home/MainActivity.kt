@@ -17,6 +17,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
@@ -26,6 +27,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.util.makeLinks
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
 import pers.victor.ext.click
@@ -174,6 +176,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         historyFragment.setOnElevationChangeListener(elevationListener)
         profileFragment.setOnElevationChangeListener(elevationListener)
 
+
         fragments.add(walletFragment)
         fragments.add(dexFragment)
         fragments.add(QuickActionBottomSheetFragment.newInstance())
@@ -192,6 +195,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
+        tab?.position.notNull { position ->
+            mRxEventBus.post(Events.ScrollToTopEvent(position))
+        }
         when (tab?.position) {
             QUICK_ACTION_SCREEN -> {
                 val quickActionDialog = QuickActionBottomSheetFragment()
@@ -305,11 +311,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     companion object {
-        private const val WALLET_SCREEN = 0
-        private const val DEX_SCREEN = 1
-        private const val QUICK_ACTION_SCREEN = 2
-        private const val HISTORY_SCREEN = 3
-        private const val PROFILE_SCREEN = 4
+        const val WALLET_SCREEN = 0
+        const val DEX_SCREEN = 1
+        const val QUICK_ACTION_SCREEN = 2
+        const val HISTORY_SCREEN = 3
+        const val PROFILE_SCREEN = 4
 
         private const val TAG_NOT_CENTRAL_TAB = "not_central_tab"
         private const val TAG_CENTRAL_TAB = "central_tab"

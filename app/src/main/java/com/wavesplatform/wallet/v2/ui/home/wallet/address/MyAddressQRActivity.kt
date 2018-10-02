@@ -80,14 +80,14 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
         frame_copy.click {
             text_copy.text = getString(R.string.common_copied)
             text_copy.setTextColor(findColor(R.color.success400))
-            text_copy.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_18_success_400, 0, 0, 0);
+            text_copy.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_18_success_400, 0, 0, 0)
             text_address.copyToClipboard()
 
             runDelayed(1500) {
                 this.text_copy.notNull {
                     text_copy.text = getString(R.string.my_address_qr_copy)
-                    text_copy.setTextColor(findColor(R.color.black))
-                    text_copy.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_copy_18_submit_400, 0, 0, 0);
+                    text_copy.setTextColor(findColor(R.color.submit400))
+                    text_copy.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_copy_18_submit_400, 0, 0, 0)
                 }
             }
         }

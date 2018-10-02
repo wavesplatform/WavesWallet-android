@@ -14,6 +14,5 @@ class Events {
 
     class RetryEvent
     class NeedUpdateHistoryScreen
-    class NewAssetsList(var assets: ArrayList<AssetBalance>)
-
+    class ScrollToTopEvent(var position: Int)
 }
