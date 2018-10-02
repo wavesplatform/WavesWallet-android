@@ -10,6 +10,8 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
+import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.ui.web.WebActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
@@ -35,6 +37,20 @@ class CardFragment : BaseFragment(), CardView {
     override fun configLayoutRes(): Int = R.layout.fragment_card
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        if (arguments == null) {
+            edit_asset.click {
+                launchActivity<YourAssetsActivity>(InvoiceFragment.REQUEST_SELECT_ASSET) { }
+            }
+            container_asset.click {
+                launchActivity<YourAssetsActivity>(InvoiceFragment.REQUEST_SELECT_ASSET) { }
+            }
+        } else {
+            val assetBalance = arguments!!.getParcelable<AssetBalance>(
+                    YourAssetsActivity.BUNDLE_ASSET_ITEM)
+            setAssetBalance(assetBalance)
+        }
+
+
         edit_asset.isEnabled = false
         button_continue.click {
             if (presenter.isValid()) {
@@ -144,8 +160,15 @@ class CardFragment : BaseFragment(), CardView {
         const val USD = "USD"
         const val EURO = "EURO"
 
-        fun newInstance(): CardFragment {
-            return CardFragment()
+        fun newInstance(assetBalance: AssetBalance?): CardFragment {
+            val fragment =  CardFragment()
+            if (assetBalance == null) {
+                return fragment
+            }
+            val args = Bundle()
+            args.putParcelable(YourAssetsActivity.BUNDLE_ASSET_ITEM, assetBalance)
+            fragment.arguments = args
+            return fragment
         }
     }
 }

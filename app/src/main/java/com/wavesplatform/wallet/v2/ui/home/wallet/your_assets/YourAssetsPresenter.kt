@@ -16,12 +16,29 @@ import javax.inject.Inject
 
 @InjectViewState
 class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>() {
-    fun loadAssets() {
+
+    var greaterZeroBalance: Boolean = true
+
+    fun loadAssets(greaterZeroBalance: Boolean) {
+        this.greaterZeroBalance = greaterZeroBalance
         runAsync {
-            Single.zip(queryAsSingle { equalTo("isFavorite", true)
-                    .greaterThan("balance", 0) },
-                    queryAsSingle { equalTo("isFavorite", false)
-                            .greaterThan("balance", 0) },
+            val favorite: Single<List<AssetBalance>>
+            val notFavorite: Single<List<AssetBalance>>
+            if (this.greaterZeroBalance) {
+                favorite = queryAsSingle {
+                    equalTo("isFavorite", true)
+                            .greaterThan("balance", 0)
+                }
+                notFavorite = queryAsSingle {
+                    equalTo("isFavorite", false)
+                            .greaterThan("balance", 0)
+                }
+            } else {
+                favorite = queryAsSingle { equalTo("isFavorite", true) }
+                notFavorite = queryAsSingle { equalTo("isFavorite", false) }
+            }
+
+            Single.zip(favorite, notFavorite,
                     BiFunction<List<AssetBalance>, List<AssetBalance>, Pair<List<AssetBalance>,
                             List<AssetBalance>>> { t1, t2 ->
                         return@BiFunction Pair(t1, t2)
@@ -39,12 +56,20 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
         }
     }
 
-    fun loadCryptoAssets() {
+    fun loadCryptoAssets(greaterZeroBalance: Boolean) {
+        this.greaterZeroBalance = greaterZeroBalance
         runAsync {
-            val singleData: Single<List<AssetBalance>> = queryAsSingle {
-                greaterThan("balance", 0)
-                        .`in`("assetId", Constants.defaultCrypto)
+            val singleData: Single<List<AssetBalance>> = if (this.greaterZeroBalance) {
+                queryAsSingle {
+                    greaterThan("balance", 0)
+                            .`in`("assetId", Constants.defaultCrypto)
+                }
+            } else {
+                queryAsSingle {
+                    `in`("assetId", Constants.defaultCrypto)
+                }
             }
+
             addSubscription(singleData
                     .map {
                         return@map it

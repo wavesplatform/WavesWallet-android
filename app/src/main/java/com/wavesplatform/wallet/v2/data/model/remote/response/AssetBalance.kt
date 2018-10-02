@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.data.model.remote.response
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import io.realm.RealmModel
 import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
@@ -58,6 +59,33 @@ open class AssetBalance(
 
     fun isWaves(): Boolean {
         return assetId.isNullOrEmpty()
+    }
+
+
+
+    companion object {
+
+        fun isFiat(assetId: String): Boolean {
+            for (fiat in Constants.defaultFiat) {
+                if (assetId == fiat) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        fun isGateway(assetId: String): Boolean {
+            if (assetId == "") {
+                return false
+            }
+
+            for (fiat in Constants.defaultCrypto) {
+                if (assetId == fiat) {
+                    return true
+                }
+            }
+            return false
+        }
     }
 }
 

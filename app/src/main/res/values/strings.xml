@@ -1337,4 +1337,7 @@
     <!--Leasing history-->
     <string name="leasing_history_toolbar_title">History</string>
 
+    <string name="your_asset_activity_all">All list</string>
+    <string name="your_asset_activity_greater_zero">Greater Zero</string>
+
 </resources>

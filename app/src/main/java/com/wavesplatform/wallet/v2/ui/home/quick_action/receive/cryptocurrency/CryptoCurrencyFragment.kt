@@ -36,20 +36,34 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
 
         var REQUEST_SELECT_ASSET = 10001
 
-        fun newInstance(): CryptoCurrencyFragment {
-            return CryptoCurrencyFragment()
+        fun newInstance(assetBalance: AssetBalance?): CryptoCurrencyFragment {
+            val fragment =  CryptoCurrencyFragment()
+            if (assetBalance == null) {
+                return fragment
+            }
+            val args = Bundle()
+            args.putParcelable(YourAssetsActivity.BUNDLE_ASSET_ITEM, assetBalance)
+            fragment.arguments = args
+            return fragment
         }
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        edit_asset.click {
-            launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) {
-                putExtra(YourAssetsActivity.CRYPTO_CURRENCY, true)
+        if (arguments == null) {
+            edit_asset.click {
+                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) {
+                    putExtra(YourAssetsActivity.CRYPTO_CURRENCY, true)
+                }
             }
+            container_asset.click {
+                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+            }
+        } else {
+            val assetBalance = arguments!!.getParcelable<AssetBalance>(
+                    YourAssetsActivity.BUNDLE_ASSET_ITEM)
+            setAssetBalance(assetBalance)
         }
-        container_asset.click {
-            launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
-        }
+
         button_continue.click {
             launchActivity<ReceiveAddressViewActivity> {
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
@@ -76,14 +90,19 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
     }
 
     override fun showTunnel(tunnel: GetTunnel?) {
-        val min = BigDecimal(tunnel?.tunnel?.inMin).toPlainString()
+        if (tunnel?.tunnel == null) {
+            button_continue.isEnabled = false
+            return
+        }
+
+        val min = BigDecimal(tunnel.tunnel?.inMin).toPlainString()
         limits.text = getString(R.string.receive_minimum_amount,
                 min,
-                tunnel?.tunnel?.currencyFrom)
+                tunnel.tunnel?.currencyFrom)
         warning.text = getString(R.string.receive_warning_will_send,
                 min,
-                tunnel?.tunnel?.currencyFrom)
-        warning_crypto.text = getString(R.string.receive_warning_crypto, tunnel?.tunnel?.currencyFrom)
+                tunnel.tunnel?.currencyFrom)
+        warning_crypto.text = getString(R.string.receive_warning_crypto, tunnel.tunnel?.currencyFrom)
         button_continue.isEnabled = true
     }
 

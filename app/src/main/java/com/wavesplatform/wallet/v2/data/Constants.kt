@@ -123,4 +123,8 @@ object Constants {
             "2mX5DzVKWrAJw8iwdJnV2qtoeVG9h5nTDpTqC1wb1WEN",
             "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H")
 
+    val defaultFiat = arrayOf(
+            "Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU",
+            "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck")
+
 }

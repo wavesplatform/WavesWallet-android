@@ -1263,4 +1263,6 @@
     <!--What's new-->
     <string name="whats_new_next">Next</string>
     <string name="whats_new_okay">Okay</string>
+    <string name="your_asset_activity_all">All list</string>
+    <string name="your_asset_activity_greater_zero">Greater Zero</string>
 </resources>

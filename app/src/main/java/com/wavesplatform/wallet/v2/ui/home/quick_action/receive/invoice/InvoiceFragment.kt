@@ -46,12 +46,31 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         const val REQUEST_SELECT_ASSET = 10001
         const val INVOICE_SCREEN = "invoice"
 
-        fun newInstance(): InvoiceFragment {
-            return InvoiceFragment()
+        fun newInstance(assetBalance: AssetBalance?): InvoiceFragment {
+            val fragment =  InvoiceFragment()
+            if (assetBalance == null) {
+                return fragment
+            }
+            val args = Bundle()
+            args.putParcelable(YourAssetsActivity.BUNDLE_ASSET_ITEM, assetBalance)
+            fragment.arguments = args
+            return fragment
         }
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        if (arguments == null) {
+            edit_asset.click {
+                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+            }
+            container_asset.click {
+                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+            }
+        } else {
+            val assetBalance = arguments!!.getParcelable<AssetBalance>(
+                    YourAssetsActivity.BUNDLE_ASSET_ITEM)
+            setAssetBalance(assetBalance)
+        }
 
         text_use_total_balance.click {
             presenter.assetBalance.notNull {
@@ -68,12 +87,6 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             edit_amount.setText("0.00500000")
         }
 
-        edit_asset.click {
-            launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
-        }
-        container_asset.click {
-            launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
-        }
         button_continue.click {
             launchActivity<ReceiveAddressViewActivity> {
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
