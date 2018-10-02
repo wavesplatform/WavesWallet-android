@@ -27,8 +27,9 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_copy_data"
-            android:layout_marginTop="38dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="4dp"
+            android:padding="8dp"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             app:srcCompat="@drawable/ic_copy_18_black"
