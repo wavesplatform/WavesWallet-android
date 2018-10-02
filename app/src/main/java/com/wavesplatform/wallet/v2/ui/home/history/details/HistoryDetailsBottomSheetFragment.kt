@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.history.details
 
+import android.content.ClipData
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
@@ -95,16 +96,17 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
     }
 
     private fun copyToClipboard(textToCopy: String, view: TextView, btnText: Int) {
+        clipboardManager.primaryClip = ClipData.newPlainText(getString(R.string.app_name), textToCopy)
         view.text = getString(R.string.common_copied)
         view.setTextColor(findColor(R.color.success400))
-        view.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_18_success_400, 0, 0, 0);
-        runDelayed(1500, {
+        view.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_18_success_400, 0, 0, 0)
+        runDelayed(1500) {
             this.context.notNull {
                 view.text = getString(btnText)
                 view.setTextColor(findColor(R.color.black))
-                view.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_copy_18_black, 0, 0, 0);
+                view.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_copy_18_black, 0, 0, 0)
             }
-        })
+        }
     }
 
     private fun setupView(transaction: Transaction) {
@@ -135,15 +137,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         }
 
         feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()} ${transaction.feeAssetObject?.name}"
-//        if (transaction.feeAssetId.isNullOrEmpty()) {
-//            feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, 8).stripZeros()} ${Constants.defaultAssets[0].issueTransaction?.name}"
-//        } else {
-//            presenter.getAssetDetails(transaction.feeAssetId, { asset ->
-//                asset.getDecimals()?.let {
-//                    feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, it).stripZeros()} ${asset.issueTransaction?.name}"
-//                }
-//            })
-//        }
+
         confirmation?.text = (preferencesHelper.currentBlocksHeight - transaction.height).toString()
         block?.text = transaction.height.toString()
         timeStamp?.text = transaction.timestamp.date("dd.MM.yyyy 'at' HH:mm")
@@ -160,12 +154,19 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
 
         /** Add click to copy buttons **/
-        bottomBtns?.container_copy_tx_id?.click {
-            copyToClipboard(transaction.id, bottomBtns.text_copy_tx_id, R.string.history_details_copy_tx_id)
-        }
-        bottomBtns?.container_copy_all_data?.click {
-            copyToClipboard(transaction.id, bottomBtns.text_copy_all_data, R.string.history_details_copy_all_data)
-        }
+        eventSubscriptions.add(RxView.clicks(bottomBtns?.container_copy_tx_id!!)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    copyToClipboard(transaction.id, bottomBtns.text_copy_tx_id, R.string.history_details_copy_tx_id)
+                })
+
+        eventSubscriptions.add(RxView.clicks(bottomBtns.container_copy_all_data!!)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    copyToClipboard(transaction.id, bottomBtns.text_copy_all_data, R.string.history_details_copy_all_data)
+                })
 
         historyContainer?.removeAllViews()
 
@@ -501,7 +502,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AddressBookActivity.REQUEST_EDIT_ADDRESS || requestCode == AddressBookActivity.REQUEST_ADD_ADDRESS) {
-            if (resultCode == Constants.RESULT_OK) {
+            if (resultCode == Constants.RESULT_OK || resultCode == Constants.RESULT_OK_NO_RESULT) {
                 selectedItem?.let {
                     setupView(it)
                 }
