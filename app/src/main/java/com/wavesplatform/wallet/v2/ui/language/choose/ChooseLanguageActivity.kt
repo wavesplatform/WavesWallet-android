@@ -104,10 +104,10 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
             relative_root.animate()
                     .translationY(dp2px(50).toFloat())
                     .alpha(0f)
-                    .setDuration(400)
+                    .setDuration(350)
                     .withEndAction {
                         launchActivity<TutorialActivity>()
-                        overridePendingTransition(0, 0)
+                        overridePendingTransition( 0, R.anim.fade_out );
                     }
                     .start()
         }
