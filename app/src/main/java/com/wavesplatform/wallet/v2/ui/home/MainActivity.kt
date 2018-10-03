@@ -16,6 +16,7 @@ import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
@@ -52,14 +53,26 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_general)
-        needChangeStatusBarColorOnMenuOpen(false)
 
-        showFirstOpenAlert(preferencesHelper.isAccountFirstOpen())
+        showFirstOpenAlert(prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, false))
 
         setupBottomNavigation()
 
         onTabSelected(tab_navigation.getTabAt(WALLET_SCREEN))
+
+        eventSubscriptions.add(mRxEventBus.filteredObservable(Events.SpamFilterStateChanged::class.java)
+                .subscribe {
+                    presenter.reloadTransactionsAfterSpamSettingsChanged()
+                })
+
+        eventSubscriptions.add(mRxEventBus.filteredObservable(Events.SpamFilterUrlChanged::class.java)
+                .subscribe {
+                    if (it.updateTransaction) {
+                        presenter.reloadTransactionsAfterSpamSettingsChanged(true)
+                    }
+                })
     }
+
 
     private fun showFirstOpenAlert(firstOpen: Boolean) {
         if (!firstOpen) {
@@ -110,7 +123,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 arrayOf(siteClick))
 
         view.button_confirm.click {
-            preferencesHelper.setAccountFirstOpen(true)
+            prefsUtil.setValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true)
             accountFirstOpenDialog?.cancel()
         }
 

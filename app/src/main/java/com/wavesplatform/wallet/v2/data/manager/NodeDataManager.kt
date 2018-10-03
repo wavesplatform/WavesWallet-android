@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R.color.r
 import com.wavesplatform.wallet.v1.payload.TransactionsInfo
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
@@ -33,8 +34,8 @@ class NodeDataManager @Inject constructor() : DataManager() {
     var pendingTransactions: List<Transaction> = ArrayList()
     var currentLoadTransactionLimitPerRequest = 100
 
-    fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
-        return spamService.spamAssets()
+    fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
+        return spamService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM))
                 .map {
                     val scanner = Scanner(it)
                     val spam = arrayListOf<SpamAsset>()
@@ -48,7 +49,17 @@ class NodeDataManager @Inject constructor() : DataManager() {
                     spam.saveAll()
 
                     return@map spam
+                }.map { spamListFromDb ->
+                    if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+                        return@map arrayListOf<SpamAsset>()
+                    } else {
+                        return@map spamListFromDb
+                    }
                 }
+    }
+
+    fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
+        return loadSpamAssets()
                 .flatMap { spamAssets ->
                     return@flatMap nodeService.assetsBalance(getAddress())
                             .flatMap { assets ->
@@ -65,6 +76,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                         }
                                         dbAsset.notNull {
                                             assetBalance.isHidden = it.isHidden
+                                            assetBalance.issueTransaction?.name = it.issueTransaction?.name
                                             assetBalance.isFavorite = it.isFavorite
                                             assetBalance.isFiatMoney = it.isFiatMoney
                                             assetBalance.isGateway = it.isGateway
@@ -73,18 +85,19 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                         }
                                     }
                                 }
+
                                 it.first.balances.forEachIndexed { index, assetBalance ->
                                     assetBalance.isSpam = spamAssets.any {
                                         it.assetId == assetBalance.assetId
                                     }
                                 }
+
                                 it.first.balances.saveAll()
 
                                 return@map queryAll<AssetBalance>()
                             }
                             .subscribeOn(Schedulers.io())
                 }
-
     }
 
     fun loadWavesBalance(): Observable<AssetBalance> {
@@ -163,48 +176,6 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                 }
                             }.toList().toObservable()
                 }
-    }
-
-
-    private fun unconfirmedTransactionsWithOwnFilter(): Observable<List<Transaction>> {
-        return nodeService.unconfirmedTransactions()
-                .flatMap {
-                    Observable.fromIterable(it)
-                            .map {
-                                if (it.isOwn) it.isPending = true
-                                it
-                            }
-                            .toList()
-                            .toObservable()
-                }
-    }
-
-    fun broadcastIssue(tx: ReissueTransactionRequest): Observable<ReissueTransactionRequest> {
-        return nodeService.broadcastReissue(tx)
-    }
-
-    fun getTransactionsInfo(asset: String): Observable<TransactionsInfo> {
-        return nodeService.getTransactionsInfo(asset)
-    }
-
-    var wavesAsset: AssetBalance = AssetBalance(
-            assetId = "",
-            quantity = 100000000L * 100000000L,
-            issueTransaction = IssueTransaction(
-                    decimals = 8,
-                    quantity = 100000000L * 100000000L,
-                    name = "WAVES"
-            ))
-
-    private fun updatePendingTxs() {
-        for (tx in this.transactions) {
-            val i = pendingTransactions.iterator() as MutableIterator<Transaction>
-            while (i.hasNext()) {
-                if (tx.id == i.next().id) {
-                    i.remove()
-                }
-            }
-        }
     }
 
 }

@@ -74,6 +74,7 @@ class HistoryFragment : BaseFragment(), HistoryView {
         appbar_layout.addOnOffsetChangedListener { _, verticalOffset ->
             onElevationAppBarChangeListener.notNull {
                 onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
+                viewpager_history.setPagingEnabled(verticalOffset == 0)
             }
         }
     }

@@ -7,17 +7,11 @@
     android:orientation="vertical"
     android:padding="24dp">
 
-    <android.support.v7.widget.AppCompatImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        app:srcCompat="@drawable/ic_userimg_done_80_success_400" />
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp"
         android:text="@string/dialog_account_first_open_title"
         android:textColor="@color/black"
         android:textSize="16sp"

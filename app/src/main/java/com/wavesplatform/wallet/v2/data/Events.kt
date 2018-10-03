@@ -15,4 +15,7 @@ class Events {
     class RetryEvent
     class NeedUpdateHistoryScreen
     class ScrollToTopEvent(var position: Int)
+
+    class SpamFilterStateChanged
+    class SpamFilterUrlChanged(var updateTransaction: Boolean = false)
 }

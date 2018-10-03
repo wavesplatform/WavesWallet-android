@@ -1022,6 +1022,8 @@
     <string name="network_switch_off_spam_filtering">Switch off spam filtering</string>
     <string name="network_set_default">Set default</string>
     <string name="network_save">Save</string>
+    <string name="network_spam_url_validation_bad_url">Bad url</string>
+    <string name="network_spam_url_validation_url_empty">Url is required</string>
 
     <!--Choose account-->
     <string name="choose_account">Choose account</string>

@@ -15,6 +15,7 @@ import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
+import com.google.gson.Gson
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -58,6 +59,9 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
     @Inject
     lateinit var historyDetailsAdapter: HistoryDetailsAdapter
+
+    @Inject
+    lateinit var gson: Gson
 
 
     @ProvidePresenter
@@ -362,27 +366,15 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                         android.R.color.transparent, R.color.basic700, android.R.color.transparent, android.R.color.transparent, android.R.color.transparent, android.R.color.transparent),
                         R.color.basic50, android.R.color.transparent, android.R.color.transparent, R.color.basic50)
 
-                val code = "{\n" +
-                        "\t\"key\" : \"test long\",\n" +
-                        "\t\"type\" : \"integer\",\n" +
-                        "\t\"value\" : 1001\n" +
-                        "}, {\n" +
-                        "\t\"key\" : \"test true\",\n" +
-                        "\t\"type\" : \"boolean\",\n" +
-                        "\t\"value\" : true\n" +
-                        "}, {\n" +
-                        "\t\"key\" : \"test false\",\n" +
-                        "\t\"type\" : \"boolean\",\n" +
-                        "\"value\" : true\n" +
-                        "}"
-                codeView?.setCode(code);
+
+                codeView?.setCode(gson.toJson(transaction.data))
                 codeView?.getOptions()?.withTheme(customTheme)
 
                 eventSubscriptions.add(RxView.clicks(imageCopyData!!)
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
-                            imageCopyData.copyToClipboard(code)
+                            imageCopyData.copyToClipboard(gson.toJson(transaction.data))
                         })
 
                 historyContainer?.addView(dataView)
