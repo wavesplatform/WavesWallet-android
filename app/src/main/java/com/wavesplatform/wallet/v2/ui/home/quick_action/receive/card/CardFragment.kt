@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.widget.RadioButton
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.ethanhua.skeleton.Skeleton
+import com.ethanhua.skeleton.SkeletonScreen
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -30,6 +32,7 @@ class CardFragment : BaseFragment(), CardView {
     @Inject
     @InjectPresenter
     lateinit var presenter: CardPresenter
+    private var skeletonScreen: SkeletonScreen? = null
 
     @ProvidePresenter
     fun providePresenter(): CardPresenter = presenter
@@ -63,6 +66,7 @@ class CardFragment : BaseFragment(), CardView {
             }
         }
 
+
         RxTextView.textChanges(edit_amount)
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .subscribe { string ->
@@ -72,6 +76,13 @@ class CardFragment : BaseFragment(), CardView {
         fiat_change.click {
             showDialogFiatChange()
         }
+
+        skeletonScreen = Skeleton.bind(limits)
+                .color(R.color.basic100)
+                .load(R.layout.item_skeleton_limits)
+                .show()
+
+        setFiat(USD)
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -93,12 +104,14 @@ class CardFragment : BaseFragment(), CardView {
     }
 
     override fun showLimits(min: String?, max: String?, fiat: String?) {
+        skeletonScreen!!.hide()
         if (min != null && max != null) {
             limits.text = getString(R.string.receive_limit, min, fiat, max, fiat)
         }
     }
 
     override fun showError(message: String) {
+        skeletonScreen!!.hide()
         showError(message, R.id.content)
     }
 
@@ -153,6 +166,7 @@ class CardFragment : BaseFragment(), CardView {
     private fun setFiat(value: String) {
         amount_title.text = getString(R.string.receive_amount_title, value)
         presenter.fiatChanged(value)
+        skeletonScreen!!.show()
     }
 
     companion object {

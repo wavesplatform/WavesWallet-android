@@ -151,13 +151,21 @@
                         android:layout_marginTop="18dp"
                         android:orientation="horizontal">
 
-                        <FrameLayout
+                        <LinearLayout
                             android:id="@+id/frame_copy"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:background="?attr/selectableItemBackground"
                             android:clickable="true">
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/text_copy_image"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/ic_copy_18_submit_400" />
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/text_copy"
@@ -165,14 +173,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:drawablePadding="10dp"
-                                android:drawableStart="@drawable/ic_copy_18_submit_400"
                                 android:gravity="center"
                                 android:paddingBottom="10dp"
                                 android:paddingTop="10dp"
                                 android:text="@string/receive_address_copy"
                                 android:textColor="@color/submit400" />
 
-                        </FrameLayout>
+                        </LinearLayout>
 
 
                         <FrameLayout

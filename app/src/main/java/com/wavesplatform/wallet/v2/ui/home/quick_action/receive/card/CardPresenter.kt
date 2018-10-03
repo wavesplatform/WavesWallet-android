@@ -74,6 +74,13 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
     }
 
     private fun loadRate() {
+        if (TextUtils.isEmpty(amount) || amount == "0") {
+            runOnUiThread {
+                viewState.showRate("0")
+            }
+            return
+        }
+
         runAsync {
             addSubscription(coinomatManager.loadRate(crypto, address, fiat, amount).subscribe({ rate ->
                 this.rate = rate
@@ -81,8 +88,10 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
                     viewState.showRate(rate)
                 }
             }, {
-                viewState.showError(App.getAppContext()
-                        .getString(R.string.receive_error_network))
+                runOnUiThread {
+                    viewState.showError(App.getAppContext()
+                            .getString(R.string.receive_error_network))
+                }
             }))
         }
     }
@@ -104,8 +113,10 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
                     viewState.showLimits(limits.min, limits.max, fiat)
                 }
             }, {
-                viewState.showError(App.getAppContext()
-                        .getString(R.string.receive_error_network))
+                runOnUiThread {
+                    viewState.showError(App.getAppContext()
+                            .getString(R.string.receive_error_network))
+                }
             }))
         }
     }

@@ -8,6 +8,8 @@ import android.support.v4.view.ViewCompat
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.ethanhua.skeleton.Skeleton
+import com.ethanhua.skeleton.SkeletonScreen
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -30,6 +32,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
     @Inject
     @InjectPresenter
     lateinit var presenter: СryptocurrencyPresenter
+    private var skeletonScreen: SkeletonScreen? = null
 
     @ProvidePresenter
     fun providePresenter(): СryptocurrencyPresenter = presenter
@@ -74,6 +77,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         super.onViewStateRestored(savedInstanceState)
         if (savedInstanceState != null) {
             presenter.assetBalance.notNull {
+                skeletonScreen!!.show()
                 setAssetBalance(it)
             }
         }
@@ -88,6 +92,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
     }
 
     override fun showTunnel(tunnel: GetTunnel?) {
+        skeletonScreen!!.hide()
         if (tunnel?.tunnel == null) {
             button_continue.isEnabled = false
             return
@@ -95,8 +100,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
 
         val min = BigDecimal(tunnel.tunnel?.inMin).toPlainString()
         limits.text = getString(R.string.receive_minimum_amount,
-                min,
-                tunnel.tunnel?.currencyFrom)
+                min, tunnel.tunnel?.currencyFrom)
         warning.text = getString(R.string.receive_warning_will_send,
                 min,
                 tunnel.tunnel?.currencyFrom)
@@ -105,7 +109,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
     }
 
     override fun showError(message: String?) {
-
+        skeletonScreen!!.hide()
     }
 
     private fun setAssetBalance(assetBalance: AssetBalance?) {
@@ -122,12 +126,16 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
 
         edit_asset.gone()
         container_asset.visiable()
-        container_info.visiable()
 
         button_continue.isEnabled = true
 
         if (assetBalance != null) {
             presenter.getTunnel(assetBalance.assetId!!)
+            skeletonScreen = Skeleton.bind(container_info)
+                    .color(R.color.basic100)
+                    .load(R.layout.item_skeleton_crypto_warning)
+                    .show()
+            container_info.visiable()
         }
     }
 
@@ -139,7 +147,9 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
                 }
             }
             container_asset.click {
-                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) {
+                    putExtra(YourAssetsActivity.CRYPTO_CURRENCY, true)
+                }
             }
             image_change.visibility = View.VISIBLE
             ViewCompat.setElevation(edit_asset_card, ViewUtils.convertDpToPixel(4f, activity!!))

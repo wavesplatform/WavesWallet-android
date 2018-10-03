@@ -70,10 +70,12 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
         }
 
         frame_copy.click {
-            text_address.copyToClipboard()
+            text_copy_image.copyToClipboard(text_address.text.toString(),
+                    copyIcon = R.drawable.ic_copy_18_submit_400)
         }
         image_copy.click {
-            text_invoice_link.copyToClipboard()
+            it.copyToClipboard(text_invoice_link.text.toString(),
+                    copyIcon = R.drawable.ic_copy_18_submit_400)
         }
         image_share.click {
             val sharingIntent = Intent(Intent.ACTION_SEND)

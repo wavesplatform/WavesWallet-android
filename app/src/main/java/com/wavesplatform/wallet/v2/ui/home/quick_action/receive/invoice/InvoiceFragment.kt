@@ -5,11 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
-import android.text.TextUtils
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -18,13 +16,11 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.Rec
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_invoice.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import pers.victor.ext.visiableIf
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class InvoiceFragment : BaseFragment(), InvoiceView {
@@ -37,14 +33,6 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
     fun providePresenter(): InvoicePresenter = presenter
 
     override fun configLayoutRes(): Int = R.layout.fragment_invoice
-
-    override fun showRate(rate: String?) {
-        text_amount_in_dollar.text = "≈ $rate USD"
-    }
-
-    override fun showError(message: String) {
-        showError(message, R.id.content)
-    }
 
     companion object {
         const val REQUEST_SELECT_ASSET = 10001
@@ -94,21 +82,6 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
                 putExtra(ReceiveAddressViewActivity.KEY_INTENT_QR_DATA, createLink())
             }
         }
-
-        RxTextView.textChanges(edit_amount)
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .subscribe { string ->
-                    if (TextUtils.isEmpty(string)) {
-                        //showRate("0")
-                    } else {
-                        val value = string.toString()
-                        if (value.toDouble() > 0) {
-                            presenter.amountChanged(value)
-                        } else {
-                            //showRate("0")
-                        }
-                    }
-                }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
