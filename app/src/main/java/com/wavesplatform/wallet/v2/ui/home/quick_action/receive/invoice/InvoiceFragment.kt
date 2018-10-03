@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
+import android.text.TextUtils
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -16,6 +17,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.Rec
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_invoice.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -76,10 +78,15 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         }
 
         button_continue.click {
-            launchActivity<ReceiveAddressViewActivity> {
-                putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
-                putExtra(INVOICE_SCREEN, true)
-                putExtra(ReceiveAddressViewActivity.KEY_INTENT_QR_DATA, createLink())
+            val amount = edit_amount.text.toString()
+            if (!TextUtils.isEmpty(amount) && amount.toDouble() > 0) {
+                launchActivity<ReceiveAddressViewActivity> {
+                    putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
+                    putExtra(INVOICE_SCREEN, true)
+                    putExtra(ReceiveAddressViewActivity.KEY_INTENT_QR_DATA, createLink())
+                }
+            } else {
+                showError(getString(R.string.receive_error_amount), R.id.content)
             }
         }
     }

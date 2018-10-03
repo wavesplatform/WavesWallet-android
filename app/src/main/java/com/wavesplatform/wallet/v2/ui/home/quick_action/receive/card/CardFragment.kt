@@ -82,7 +82,7 @@ class CardFragment : BaseFragment(), CardView {
         }
 
         skeletonScreen = Skeleton.bind(limits)
-                .color(R.color.basic100)
+                .color(R.color.basic50)
                 .load(R.layout.item_skeleton_limits)
                 .show()
 

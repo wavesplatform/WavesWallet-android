@@ -132,7 +132,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         if (assetBalance != null) {
             presenter.getTunnel(assetBalance.assetId!!)
             skeletonScreen = Skeleton.bind(container_info)
-                    .color(R.color.basic100)
+                    .color(R.color.basic50)
                     .load(R.layout.item_skeleton_crypto_warning)
                     .show()
             container_info.visiable()
