@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_success.*
 import pers.victor.ext.click
 import javax.inject.Inject
@@ -32,12 +33,14 @@ class SuccessActivity : BaseActivity(), SuccessView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        val title = intent.extras.getString(KEY_INTENT_TITLE, "")
-        val subtitle = intent.extras.getString(KEY_INTENT_SUBTITLE, "")
-        text_title.text = title
-        text_subtitle.text = subtitle
-        button_ok.click {
-            launchActivity<MainActivity>(clear = true)
+        intent.extras.notNull {
+            val title = it.getString(KEY_INTENT_TITLE, "")
+            val subtitle = it.getString(KEY_INTENT_SUBTITLE, "")
+            text_title.text = title
+            text_subtitle.text = subtitle
+            button_ok.click {
+                launchActivity<MainActivity>(clear = true)
+            }
         }
     }
 
