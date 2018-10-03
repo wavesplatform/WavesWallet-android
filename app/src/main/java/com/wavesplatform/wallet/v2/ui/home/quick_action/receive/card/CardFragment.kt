@@ -1,5 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
@@ -14,7 +16,6 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
-import com.wavesplatform.wallet.v2.ui.web.WebActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
@@ -57,10 +58,8 @@ class CardFragment : BaseFragment(), CardView {
         edit_asset.isEnabled = false
         button_continue.click {
             if (presenter.isValid()) {
-                launchActivity<WebActivity> {
-                    putExtra(WebActivity.KEY_INTENT_TITLE, "Coinomat.com")
-                    putExtra(WebActivity.KEY_INTENT_LINK, presenter.createLink())
-                }
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(presenter.createLink()))
+                startActivity(browserIntent)
             } else {
                 showError(getString(R.string.receive_error_amount))
             }

@@ -11,9 +11,11 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.copyToClipboard
+import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_receive_address_view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -57,10 +59,10 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
         }
 
         image_close.click {
-            finish()
+            launchActivity<MainActivity>(clear = true)
         }
         button_close.click {
-            finish()
+            launchActivity<MainActivity>(clear = true)
         }
         frame_share.click {
             val sharingIntent = Intent(Intent.ACTION_SEND)
