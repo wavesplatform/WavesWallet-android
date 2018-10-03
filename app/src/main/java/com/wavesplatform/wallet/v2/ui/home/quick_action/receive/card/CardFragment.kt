@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
+import com.wavesplatform.wallet.v2.ui.success.SuccessActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
@@ -58,6 +59,10 @@ class CardFragment : BaseFragment(), CardView {
         edit_asset.isEnabled = false
         button_continue.click {
             if (presenter.isValid()) {
+                launchActivity<SuccessActivity> {
+                    putExtra(SuccessActivity.KEY_INTENT_TITLE, getString(R.string.coinomat_success_title))
+                    putExtra(SuccessActivity.KEY_INTENT_SUBTITLE, getString(R.string.coinomat_success_subtitle))
+                }
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(presenter.createLink()))
                 startActivity(browserIntent)
             } else {
@@ -99,7 +104,7 @@ class CardFragment : BaseFragment(), CardView {
     }
 
     override fun showRate(rate: String?) {
-        text_amount_in_dollar.text = "≈ $rate ${presenter.fiat}"
+        text_amount_in_dollar.text = "≈ $rate WAVES"
     }
 
     override fun showLimits(min: String?, max: String?, fiat: String?) {

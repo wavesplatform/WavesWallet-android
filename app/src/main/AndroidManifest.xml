@@ -341,6 +341,10 @@
             android:name="com.wavesplatform.wallet.v2.ui.web.WebActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+        <activity
+            android:name="com.wavesplatform.wallet.v2.ui.success.SuccessActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

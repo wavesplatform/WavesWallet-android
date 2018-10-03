@@ -69,7 +69,9 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
     }
 
     fun amountChanged(amount: String) {
-        this.amount = amount
+        if (!TextUtils.isEmpty(amount)) {
+            this.amount = amount
+        }
         loadRate()
     }
 

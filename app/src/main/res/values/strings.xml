@@ -1341,5 +1341,7 @@
 
     <string name="your_asset_activity_all">All list</string>
     <string name="your_asset_activity_greater_zero">Greater Zero</string>
+    <string name="coinomat_success_title">You have been redirected to «Indacoin»</string>
+    <string name="coinomat_success_subtitle">After payment has been made your balance will be updated</string>
 
 </resources>
