@@ -1046,6 +1046,7 @@
     <string name="create_passcode_create_title">Create a passcode</string>
     <string name="create_passcode_create_new_title">Create a new passcode</string>
     <string name="create_passcode_verify_title">Verify your passcode</string>
+    <string name="create_passcode_validation_already_use_error">Passcode already use</string>
 
     <!--Use fingerprint-->
     <string name="use_fingerprint_submit_txt">Use fingerprint</string>
