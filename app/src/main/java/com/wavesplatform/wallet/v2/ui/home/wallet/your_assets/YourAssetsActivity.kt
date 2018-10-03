@@ -38,7 +38,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
     override fun configLayoutRes() = R.layout.activity_your_assets
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setStatusBarColor(R.color.basic50)
+        setStatusBarColor(R.color.white)
 
         setupToolbar(toolbar_view,  true, getString(R.string.your_assets_toolbar_title), R.drawable.ic_toolbar_back_black)
 
