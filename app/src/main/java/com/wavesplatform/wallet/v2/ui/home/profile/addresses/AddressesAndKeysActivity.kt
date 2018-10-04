@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -17,11 +18,13 @@ import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndK
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
@@ -57,17 +60,26 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
             }
         }
 
-        image_address_copy.click {
-            it.copyToClipboard(text_address.text.toString())
-        }
+        eventSubscriptions.add(RxView.clicks(image_address_copy)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    image_address_copy.copyToClipboard(text_address.text.toString())
+                })
 
-        image_public_key_copy.click {
-            it.copyToClipboard(text_public_key.text.toString())
-        }
+        eventSubscriptions.add(RxView.clicks(image_public_key_copy)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    image_public_key_copy.copyToClipboard(text_public_key.text.toString())
+                })
 
-        image_private_key_copy.click {
-            it.copyToClipboard(text_private_key.text.toString())
-        }
+        eventSubscriptions.add(RxView.clicks(image_private_key_copy)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    image_private_key_copy.copyToClipboard(text_private_key.text.toString())
+                })
 
         button_show.click {
             launchActivity<EnterPassCodeActivity>(

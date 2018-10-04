@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
@@ -54,6 +55,13 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun configLayoutRes(): Int = R.layout.fragment_profile
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.ScrollToTopEvent::class.java)
+                .subscribe {
+                    if (it.position == MainActivity.PROFILE_SCREEN) {
+                        root_scrollView.scrollTo(0, 0)
+                    }
+                })
+
         card_address_book.click {
             launchActivity<AddressBookActivity> { }
         }

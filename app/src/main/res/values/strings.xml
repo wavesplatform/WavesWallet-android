@@ -742,6 +742,7 @@
     <string name="new_account_account_name_hint">Account name</string>
     <string name="new_account_account_name_validation_length_error">Max: 20 symbols</string>
     <string name="new_account_account_name_validation_required_error">Name is required</string>
+    <string name="new_account_account_name_validation_already_exist_error">Account name already use</string>
     <string name="new_account_create_password_hint">Create a password</string>
     <string name="new_account_create_password_validation_length_error">at least 8 characters</string>
     <string name="new_account_confirm_password_hint">Confirm password</string>
@@ -749,7 +750,7 @@
     <string name="new_account_continue">Continue</string>
     <string name="new_account_avatar_title">Choose your address avatar</string>
     <string name="new_account_avatar_description">This avatar is unique. You cannot change it later.</string>
-    <string name="new_account_exist_error">This account name exist</string>
+    <string name="new_account_avatar_error">Please select avatar</string>
 
     <!-- Secret Phrase -->
     <string name="secret_phrase_no_backup_no_money">No Backup, No Money</string>
@@ -1012,6 +1013,8 @@
     <string name="change_password_confirm">Confirm</string>
     <string name="change_password_success">Change password successful</string>
     <string name="change_password_error">Change password failed. Check old password</string>
+    <string name="change_password_validation_new_password_already_use_error">Password already use</string>
+    <string name="change_password_validation_old_password_wrong_error">Wrong password</string>
 
     <!--Network-->
     <string name="network_toolbar_title">Network</string>
@@ -1043,6 +1046,8 @@
     <string name="create_passcode_create_title">Create a passcode</string>
     <string name="create_passcode_create_new_title">Create a new passcode</string>
     <string name="create_passcode_verify_title">Verify your passcode</string>
+    <string name="create_passcode_validation_already_use_error">Passcode already use</string>
+    <string name="create_passcode_successful">Change passcode successful</string>
 
     <!--Use fingerprint-->
     <string name="use_fingerprint_submit_txt">Use fingerprint</string>
@@ -1064,6 +1069,10 @@
     <string name="enter_passcode_title">Enter Passcode</string>
     <string name="enter_passcode_forgot_passcode">Forgot passcode?</string>
     <string name="enter_passcode_use_account_password">Use account password</string>
+    <string name="enter_passcode_too_many_attempts_dialog_title">Too many attempts</string>
+    <string name="enter_passcode_too_many_attempts_dialog_description">To unlock, sign in with your account password</string>
+    <string name="enter_passcode_too_many_attempts_dialog_positive_btn_txt">ENTER PASSWORD</string>
+    <string name="enter_passcode_too_many_attempts_dialog_negative_btn_txt">CANCEL</string>
 
     <!--Start leasing-->
     <string name="start_leasing_toolbar">Start leasing</string>
@@ -1117,6 +1126,9 @@
     <string name="enter_seed_manually_continue">Continue</string>
     <string name="enter_seed_manually_hint">Your seed is the 15 words you saved\nwhen creating your account</string>
     <string name="enter_seed_manually_hint_your_seed">Your account seed</string>
+    <string name="enter_seed_manually_validation_required_seed_error">Seed is required</string>
+    <string name="enter_seed_manually_validation_seed_exists_error">Seed already use</string>
+    <string name="enter_seed_manually_validation_seed_is_invalid_error">Seed is invalid</string>
 
 
     <!--Quick action dialog-->

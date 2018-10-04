@@ -57,6 +57,8 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_assets"
+                android:clipToPadding="false"
+                android:paddingBottom="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:overScrollMode="never" />

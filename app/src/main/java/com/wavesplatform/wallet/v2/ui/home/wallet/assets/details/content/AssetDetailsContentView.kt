@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 
 interface AssetDetailsContentView : BaseMvpView {
     fun showLastTransactions(data: MutableList<HistoryItem>)

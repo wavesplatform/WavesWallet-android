@@ -41,8 +41,19 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
         pass_keypad.setPadClickedListener(object : PassCodeEntryKeypad.OnPinEntryPadClickedListener {
             override fun onPassCodeEntered(passCode: String) {
                 if (presenter.step == CreatePassCodeStep.CREATE) {
-                    presenter.passCode = passCode
-                    moveToVerifyStep()
+                    val oldPassCode = intent.getStringExtra(KEY_INTENT_PASS_CODE)
+                    if (oldPassCode.isNullOrEmpty()) {
+                        presenter.passCode = passCode
+                        moveToVerifyStep()
+                    } else {
+                        if (oldPassCode == passCode) {
+                            pass_keypad.passCodesNotMatches()
+                            showError(R.string.create_passcode_validation_already_use_error, R.id.content)
+                        }else{
+                            presenter.passCode = passCode
+                            moveToVerifyStep()
+                        }
+                    }
                 } else if (presenter.step == CreatePassCodeStep.VERIFY) {
                     if (presenter.passCode == passCode) {
                         saveAccount(passCode)

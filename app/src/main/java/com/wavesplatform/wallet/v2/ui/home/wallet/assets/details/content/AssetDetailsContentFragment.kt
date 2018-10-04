@@ -4,24 +4,27 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.notNull
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_asset_details_content.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -54,13 +57,19 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         view_pager_transaction_history.setPadding(dp2px(14), 0, dp2px(14), 0);
         view_pager_transaction_history.pageMargin = dp2px(7)
 
-        image_copy_issuer.click {
-            it.copyToClipboard(text_view_issuer_value.text.toString())
-        }
+        eventSubscriptions.add(RxView.clicks(image_copy_issuer)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    image_copy_issuer.copyToClipboard(text_view_issuer_value.text.toString())
+                })
 
-        image_copy_id.click {
-            it.copyToClipboard(text_view_id_value.text.toString())
-        }
+        eventSubscriptions.add(RxView.clicks(image_copy_id)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    image_copy_id.copyToClipboard(text_view_id_value.text.toString())
+                })
 
         card_burn.click {
             launchActivity<TokenBurnActivity> { }

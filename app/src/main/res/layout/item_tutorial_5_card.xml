@@ -16,7 +16,7 @@
             android:id="@+id/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="?android:actionBarSize"
             android:lineSpacingExtra="10sp"
             android:text="@string/card_tutorial_5_title"
             android:textColor="@color/disabled500"

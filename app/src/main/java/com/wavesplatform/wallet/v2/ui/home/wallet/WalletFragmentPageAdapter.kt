@@ -7,14 +7,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
 
 class WalletFragmentPageAdapter(
-        fm: FragmentManager?, var titles: Array<String>) : FragmentPagerAdapter(fm) {
-
-    private val fragments = arrayListOf<Fragment>()
-
-    init {
-        fragments.add(AssetsFragment.newInstance())
-        fragments.add(LeasingFragment.newInstance())
-    }
+        fm: FragmentManager?, var fragments: ArrayList<Fragment>, var titles: Array<String>) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         when (position) {

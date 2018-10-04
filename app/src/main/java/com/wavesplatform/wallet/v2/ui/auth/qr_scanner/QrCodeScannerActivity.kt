@@ -8,6 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.journeyapps.barcodescanner.CaptureManager
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
+import com.journeyapps.barcodescanner.ViewfinderView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_qr_code_scanner.*
@@ -33,6 +34,8 @@ class QrCodeScannerActivity : BaseActivity(), QrCodeScannerView,
     override fun onViewReady(savedInstanceState: Bundle?) {
         zxing_barcode_scanner.setTorchListener(this)
 
+        disableLaser(zxing_barcode_scanner)
+
         // if the device does not have flashlight in its camera,
         // then remove the switch flashlight button...
         if (!hasFlash()) {
@@ -49,6 +52,12 @@ class QrCodeScannerActivity : BaseActivity(), QrCodeScannerView,
         capture = CaptureManager(this, zxing_barcode_scanner)
         capture.initializeFromIntent(intent, savedInstanceState)
         capture.decode()
+    }
+
+    private fun disableLaser(decoratedBarcodeView: DecoratedBarcodeView) {
+        val scannerAlphaField = ViewfinderView::class.java.getDeclaredField("SCANNER_ALPHA")
+        scannerAlphaField.isAccessible = true
+        scannerAlphaField.set(decoratedBarcodeView.viewFinder, intArrayOf(0))
     }
 
     override fun onResume() {

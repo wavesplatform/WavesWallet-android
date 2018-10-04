@@ -1,26 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:attrs="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relative_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/basic50">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:fitsSystemWindows="true" />
-
-    <android.support.v4.view.ViewPager
+    <com.wavesplatform.wallet.v2.ui.custom.SwipeDisableViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/card_control"
-        android:layout_below="@+id/toolbar_view"
-        android:layout_marginTop="24dp" />
-
+        android:layout_above="@+id/card_control" />
 
     <View
         android:background="@drawable/gradient_tutorial_transparent_block"
@@ -49,17 +40,17 @@
             android:paddingRight="14dp"
             android:paddingTop="14dp">
 
-            <com.github.vivchar.viewpagerindicator.ViewPagerIndicator
+            <com.rd.PageIndicatorView
                 android:id="@+id/view_pager_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                app:delimiterSize="6dp"
-                app:itemScale="1"
-                app:itemSelectedTint="@color/black"
-                app:itemSize="6dp"
-                app:itemTint="@color/basic200" />
-
+                app:piv_animationType="slide"
+                app:piv_interactiveAnimation="true"
+                app:piv_selectedColor="@color/black"
+                app:piv_viewPager="@id/view_pager"
+                app:piv_unselectedColor="@color/basic200"
+                attrs:piv_radius="3.5dp" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_next"

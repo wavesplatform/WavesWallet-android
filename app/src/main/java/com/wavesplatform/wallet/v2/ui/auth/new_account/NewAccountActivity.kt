@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.rules.AccountNameRule
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -27,6 +29,8 @@ import kotlinx.android.synthetic.main.activity_new_account.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.children
 import pers.victor.ext.click
+import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
 
@@ -56,6 +60,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         val nameValidation = Validation(til_account_name)
                 .and(NotEmptyRule(R.string.new_account_account_name_validation_required_error))
                 .and(MaxRule(20, R.string.new_account_account_name_validation_length_error))
+                .and(AccountNameRule(R.string.new_account_account_name_validation_already_exist_error))
 
         val passwordValidation = Validation(til_create_password)
                 .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
@@ -129,7 +134,10 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
 
         edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                goNext()
+                hideKeyboard()
+                runDelayed(250) {
+                    goNext()
+                }
                 true
             } else {
                 false
@@ -141,11 +149,11 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
 
     private fun goNext() {
         if (presenter.isAllFieldsValid()) {
-            if (App.getAccessManager().isAccountNameExist(edit_account_name.text.toString())) {
-                showError(R.string.new_account_exist_error, R.id.relative_root)
-            } else {
-                launchActivity<SecretPhraseActivity>(options = createDataBundle())
-            }
+            launchActivity<SecretPhraseActivity>(options = createDataBundle())
+        } else if (!presenter.avatarValid) {
+            val animation = AnimationUtils.loadAnimation(this, R.anim.shake_error)
+            linear_images?.startAnimation(animation)
+            showError(R.string.new_account_avatar_error, R.id.relative_root)
         }
     }
 
@@ -161,8 +169,14 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     override fun afterSuccessGenerateAvatar(seed: String, bitmap: Bitmap, imageView: AppCompatImageView) {
         Glide.with(applicationContext)
                 .load(bitmap)
-                .apply(RequestOptions().circleCrop())
+                .apply(RequestOptions()
+                        .error(R.drawable.shape_white_oval)
+                        .placeholder(R.drawable.shape_white_oval)
+                        .dontAnimate()
+                        .circleCrop())
                 .into(imageView)
+
+        imageView.setBackgroundResource(R.drawable.shape_outline)
 
         imageView.click {
             setImageActive(seed, it)

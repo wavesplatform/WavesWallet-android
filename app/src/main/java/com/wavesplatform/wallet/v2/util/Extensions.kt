@@ -130,17 +130,20 @@ fun TransactionType.title(): String {
 }
 
 fun AlertDialog.makeStyled() {
-    val titleTextView = this.findViewById<TextView>(R.id.alertTitle);
+    val titleTextView = this.findViewById<TextView>(R.id.alertTitle)
     val buttonPositive = this.findViewById<Button>(android.R.id.button1)
     val buttonNegative = this.findViewById<Button>(android.R.id.button2)
     buttonPositive?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
     buttonNegative?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
     titleTextView?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+
+    buttonPositive?.setTextColor(findColor(R.color.submit300))
+    buttonNegative?.setTextColor(findColor(R.color.submit300))
 }
 
 fun Context.isAppOnForeground(): Boolean {
-    val appProcesses: MutableList<ActivityManager.RunningAppProcessInfo>?
-            = activityManager.runningAppProcesses ?: return false
+    val appProcesses: MutableList<ActivityManager.RunningAppProcessInfo>? = activityManager.runningAppProcesses
+            ?: return false
     val packageName = packageName
     appProcesses?.forEach {
         if (it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND

@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.rules.AccountNameRule
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity.Companion.KEY_INTENT_ITEM_POSITION
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -15,6 +16,7 @@ import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
+import io.github.anderscheow.validator.rules.common.MaxRule
 import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.activity_edit_account_name.*
 import pers.victor.ext.addTextChangedListener
@@ -35,7 +37,7 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
-        setupToolbar(toolbar_view,  true, getString(R.string.edit_account_name), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.edit_account_name), R.drawable.ic_toolbar_back_black)
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         presenter.account = intent.getParcelableExtra(ChooseAccountActivity.KEY_INTENT_ITEM_ADDRESS)
@@ -63,7 +65,9 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
         }
 
         val nameValidation = Validation(til_name)
-                .and(NotEmptyRule(R.string.edit_account_new_name_validation_required_error))
+                .and(NotEmptyRule(R.string.new_account_account_name_validation_required_error))
+                .and(MaxRule(20, R.string.new_account_account_name_validation_length_error))
+                .and(AccountNameRule(R.string.new_account_account_name_validation_already_exist_error))
 
         edit_name.addTextChangedListener {
             on { s, start, before, count ->

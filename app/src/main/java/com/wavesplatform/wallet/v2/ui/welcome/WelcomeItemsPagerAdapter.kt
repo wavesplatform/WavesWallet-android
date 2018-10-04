@@ -1,44 +1,28 @@
 package com.wavesplatform.wallet.v2.ui.welcome
 
 import android.content.Context
-import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+
+import com.asksira.loopingviewpager.LoopingPagerAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
-import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import kotlinx.android.synthetic.main.item_welcome.view.*
-import java.util.*
-import javax.inject.Inject
+import pers.victor.ext.inflate
 
-class WelcomeItemsPagerAdapter @Inject constructor(@ApplicationContext var mContext: Context) : PagerAdapter() {
-    var items: ArrayList<WelcomeItem> = arrayListOf()
+import java.util.ArrayList
 
-    override fun instantiateItem(collection: ViewGroup, position: Int): Any {
-        val layout = LayoutInflater.from(mContext).inflate(R.layout.item_welcome, collection, false) as ViewGroup
+class WelcomeItemsPagerAdapter(context: Context, itemList: ArrayList<WelcomeItem>, isInfinite: Boolean) : LoopingPagerAdapter<WelcomeItem>(context, itemList, isInfinite) {
 
-        layout.image_welcome_photo.setImageResource(items[position].image)
-        layout.text_title.setText(items[position].title)
-        layout.text_descr.setText(items[position].description)
-
-        collection.addView(layout)
-        return layout
+    override fun inflateView(viewType: Int, container: ViewGroup, listPosition: Int): View {
+        return inflate(R.layout.item_welcome, container, false)
     }
 
-    override fun destroyItem(collection: ViewGroup, position: Int, view: Any) {
-        collection.removeView(view as View)
-    }
-
-    override fun getPageWidth(position: Int): Float {
-        return 1f
-    }
-
-    override fun getCount(): Int {
-        return items.size
-    }
-
-    override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view === `object`
+    override fun bindView(convertView: View, listPosition: Int, viewType: Int) {
+        convertView.image_welcome_photo.setImageResource(itemList[listPosition].image)
+        convertView.text_title.setText(itemList[listPosition].title)
+        convertView.text_descr.setText(itemList[listPosition].description)
     }
 }

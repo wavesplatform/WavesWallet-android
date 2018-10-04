@@ -2,6 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
+    xmlns:attrs="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/basic50"
@@ -24,16 +25,16 @@
         android:layout_below="@+id/toolbar_view"
         android:layout_marginTop="14dp">
 
-
-        <com.wavesplatform.wallet.v2.ui.custom.WrapContentHeightViewPager
+        <com.asksira.loopingviewpager.LoopingViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:isInfinite="true"
+            app:autoScroll="false"/>
 
     </RelativeLayout>
 
-
-    <com.github.vivchar.viewpagerindicator.ViewPagerIndicator
+    <com.rd.PageIndicatorView
         android:id="@+id/view_pager_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,11 +42,11 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginTop="24dp"
-        app:delimiterSize="6dp"
-        app:itemScale="1"
-        app:itemSelectedTint="@color/black"
-        app:itemSize="6dp"
-        app:itemTint="@color/basic200" />
+        app:piv_animationType="slide"
+        app:piv_interactiveAnimation="true"
+        app:piv_selectedColor="@color/black"
+        app:piv_unselectedColor="@color/basic200"
+        attrs:piv_radius="3.5dp" />
 
     <Button
         android:id="@+id/button_create_account"

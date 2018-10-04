@@ -2,18 +2,17 @@ package com.wavesplatform.wallet.v2.ui.home.profile.change_password
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.rules.EqualsAccountPasswordRule
+import com.wavesplatform.wallet.v2.data.rules.NotEqualsAccountPasswordRule
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.showError
+import com.wavesplatform.wallet.v2.util.notNull
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -22,6 +21,7 @@ import io.github.anderscheow.validator.rules.common.MinRule
 import kotlinx.android.synthetic.main.activity_change_password.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
+import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import javax.inject.Inject
 
 
@@ -44,12 +44,17 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
 
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
+        launchActivity<EnterPassCodeActivity>(
+                requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
+
         val oldPasswordValidation = Validation(til_old_password)
                 .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
-
+                .and(EqualsAccountPasswordRule(R.string.change_password_validation_old_password_wrong_error))
 
         val newPasswordValidation = Validation(til_new_password)
                 .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
+                .and(NotEqualsAccountPasswordRule(R.string.change_password_validation_new_password_already_use_error))
+
 
         edit_old_password.addTextChangedListener {
             on { s, start, before, count ->
@@ -81,6 +86,22 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                                 isFieldsValid()
                             }
                         }, newPasswordValidation)
+                if (edit_confirm_password.text.isNotEmpty()) {
+                    val confirmPasswordValidation = Validation(til_confirm_password)
+                            .and(EqualRule(edit_new_password.text.toString(),
+                                    R.string.new_account_confirm_password_validation_match_error))
+                    validator.validate(object : Validator.OnValidateListener {
+                        override fun onValidateSuccess(values: List<String>) {
+                            presenter.confirmPasswordFieldValid = true
+                            isFieldsValid()
+                        }
+
+                        override fun onValidateFailed() {
+                            presenter.confirmPasswordFieldValid = false
+                            isFieldsValid()
+                        }
+                    }, confirmPasswordValidation)
+                }
             }
         }
 
@@ -106,6 +127,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
 
         edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboard()
                 goNext()
                 true
             } else {
@@ -120,8 +142,8 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
 
     private fun goNext() {
         if (presenter.isAllFieldsValid()) {
-            launchActivity<EnterPassCodeActivity>(
-                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
+            showProgressBar(true)
+            presenter.writePassword(edit_old_password.text.toString(), edit_new_password.text.toString())
         }
     }
 
@@ -135,38 +157,20 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
 
             EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    writePassword(data!!.extras
-                            .getString(EnterPassCodeActivity.KEY_INTENT_PASS_CODE))
+                    data.notNull { intent ->
+                        presenter.passCode = intent.extras.getString(EnterPassCodeActivity.KEY_INTENT_PASS_CODE)
+                    }
+                } else {
+                    setResult(Constants.RESULT_CANCELED)
+                    finish()
                 }
             }
         }
     }
 
-    private fun writePassword(passCode: String) {
-        val guid = App.getAccessManager().getLoggedInGuid()
-        try {
-            val oldWallet = WavesWallet(
-                    App.getAccessManager().getCurrentWavesWalletEncryptedData(),
-                    edit_old_password.text.toString()
-            )
-            val newWallet = WavesWallet(oldWallet.seed)
-            val newPassWord = edit_confirm_password.text.toString()
-
-            App.getAccessManager().storePassword(
-                    guid, newWallet.publicKeyStr,
-                    newWallet.getEncryptedData(newPassWord))
-
-            App.getAccessManager()
-                    .writePassCodeObservable(guid, newPassWord, passCode)
-                    .subscribe({
-                        setResult(Constants.RESULT_OK)
-                        finish()
-                    }, { throwable ->
-                        Log.e("CreatePassCodeActivity", throwable.message)
-                    })
-
-        } catch (e: Exception) {
-            showError(R.string.change_password_error, R.id.content)
-        }
+    override fun afterSuccessChangePassword() {
+        showProgressBar(false)
+        setResult(Constants.RESULT_OK)
+        finish()
     }
 }

@@ -6,11 +6,14 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
+import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import dagger.android.support.AndroidSupportInjection
@@ -34,7 +37,8 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
             }
         }
 
-    @Inject lateinit var adapter: AliasesAdapter
+    @Inject
+    lateinit var adapter: AliasesAdapter
 
     companion object {
         var TYPE_EMPTY = 1
@@ -61,6 +65,7 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
             }
             TYPE_CONTENT -> {
                 adapter = AliasesAdapter()
+                adapter.subscriptions = eventSubscriptions
                 rootView = inflater.inflate(R.layout.bottom_sheet_dialog_aliases_layout, container, false)
                 rootView.recycle_aliases.layoutManager = LinearLayoutManager(this.context)
                 rootView.recycle_aliases.isNestedScrollingEnabled = false
