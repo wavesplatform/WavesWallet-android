@@ -25,6 +25,8 @@ import javax.inject.Inject
 import android.support.v7.widget.LinearSmoothScroller
 import android.support.v7.widget.RecyclerView
 import com.wavesplatform.wallet.v2.ui.custom.SpeedyLinearLayoutManager
+import com.oushangfeng.pinnedsectionitemdecoration.PinnedHeaderItemDecoration
+import pers.victor.ext.inflate
 
 
 class HistoryTabFragment : BaseFragment(), HistoryTabView {
@@ -41,6 +43,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     lateinit var layoutManager: LinearLayoutManager
     var changeTabBarVisibilityListener: ChangeTabBarVisibilityListener? = null
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
+    private var headerItemDecoration: PinnedHeaderItemDecoration? = null
 
     override fun configLayoutRes(): Int = R.layout.fragment_history_tab
 
@@ -87,6 +90,9 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         presenter.type = arguments?.getString("type")
         presenter.assetBalance = arguments?.getParcelable<AssetBalance>(HistoryFragment.BUNDLE_ASSET)
 
+        adapter.bindToRecyclerView(recycle_history)
+
+
         skeletonScreen = Skeleton.bind(recycle_history)
                 .adapter(recycle_history.adapter)
                 .color(R.color.basic100)
@@ -108,27 +114,32 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            if (position == 0) return@OnItemClickListener // handle click on empty space
+
             val historyItem = adapter.getItem(position) as HistoryItem
-            if (!historyItem.isHeader) {
+            if (historyItem.header.isEmpty()) {
                 val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
-                bottomSheetFragment.selectedItem = historyItem.t
+                bottomSheetFragment.selectedItem = historyItem.data
 
                 val data = adapter?.data as ArrayList<HistoryItem>
-                bottomSheetFragment.allItems = data.filter { !it.isHeader }.map { it.t }
+                bottomSheetFragment.allItems = data.filter { it.header.isEmpty() }.map { it.data }
 
                 var sectionSize = 0
                 for (i in 0..position) {
-                    if (data[i].isHeader) sectionSize++
+                    if (data[i].header.isNotEmpty()) sectionSize++
                 }
 
                 bottomSheetFragment.selectedItemPosition = position - sectionSize
                 bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
             }
         }
+
+        headerItemDecoration = PinnedHeaderItemDecoration.Builder(HistoryItem.TYPE_HEADER)
+                .disableHeaderClick(true).create()
+        recycle_history.addItemDecoration(headerItemDecoration)
     }
 
     override fun afterSuccessLoadTransaction(data: ArrayList<HistoryItem>, type: String?) {
-        Log.d("historydev", "data size: ${data.size}")
         configureTabLayout(type, data)
         configureEmptyView(data)
         adapter.setNewData(data)

@@ -208,6 +208,7 @@ dependencies {
     implementation 'com.bignerdranch.android:recyclerview-multiselect:0.2'
     implementation 'com.github.rubensousa:gravitysnaphelper:1.5'
 
+    implementation 'com.oushangfeng:PinnedSectionItemDecoration:1.3.0'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35'
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
     debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'

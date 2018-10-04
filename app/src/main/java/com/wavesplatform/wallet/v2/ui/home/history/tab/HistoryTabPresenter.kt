@@ -99,7 +99,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 .subscribe({
                     viewState.afterSuccessLoadTransaction(it, type)
                 }, {
-
+                    it.printStackTrace()
                 }))
     }
 
@@ -108,19 +108,23 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
         val sortedList = it
                 .mapTo(mutableListOf()) {
-                    HistoryItem(it)
+                    HistoryItem(HistoryItem.TYPE_DATA, it)
                 }
 
         val list = arrayListOf<HistoryItem>()
 
         sortedList.forEach {
-            val date = (it.t.timestamp) / (1000 * 60 * 60 * 24)
+            val date = (it.data.timestamp) / (1000 * 60 * 60 * 24)
             if (hashOfTimestamp[date] == null) {
                 hashOfTimestamp[date] = date
-                list.add(HistoryItem(true, dateFormat.format(Date(it.t.timestamp)).capitalize()))
+                list.add(HistoryItem(HistoryItem.TYPE_HEADER, dateFormat.format(Date(it.data.timestamp)).capitalize()))
                 totalHeaders++
             }
             list.add(it)
+        }
+
+        if (list.isNotEmpty()) {
+            list.add(0, HistoryItem(HistoryItem.TYPE_EMPTY, ""))
         }
 
         return list

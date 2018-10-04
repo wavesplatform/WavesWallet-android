@@ -24,13 +24,13 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
                         if (assetBalance?.isWaves() == true) it.assetId.isNullOrEmpty()
                         else it.assetId == assetBalance?.assetId
                     }
-                    .mapTo(ArrayList(), { HistoryItem(it) })
+                    .mapTo(ArrayList()) { HistoryItem(HistoryItem.TYPE_DATA, it) }
                     .take(10)
                     .toMutableList()
 
-            runOnUiThread({
+            runOnUiThread {
                 viewState.showLastTransactions(list)
-            })
+            }
         }
     }
 }
