@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="14dp"
-    android:paddingEnd="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingEnd="8dp"
     android:paddingStart="16dp"
-    android:layout_height="wrap_content">
+    android:paddingTop="6dp">
 
-    <android.support.v7.widget.AppCompatTextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/text_alias_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:gravity="center"
         android:text="makstorch"
         android:textColor="@color/disabled900" />
@@ -21,8 +21,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:clickable="true"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:padding="8dp"
         app:srcCompat="@drawable/ic_copy_18_submit_400" />
 
     <android.support.v7.widget.AppCompatImageView
@@ -30,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_below="@+id/image_copy"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="6dp"
         android:layerType="software"
         app:srcCompat="@drawable/shape_dashed_line" />
 

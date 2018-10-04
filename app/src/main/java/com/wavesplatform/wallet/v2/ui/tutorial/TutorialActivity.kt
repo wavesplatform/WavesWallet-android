@@ -35,6 +35,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
                 if (position == view_pager.currentItem) {
                     text_next.setTextColor(findColor(R.color.black))
                     text_next.isClickable = true
+                    view_pager.setPagingEnabled(true)
                 }
             }
 
@@ -42,6 +43,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
                 if (position == view_pager.currentItem) {
                     text_next.setTextColor(findColor(R.color.accent100))
                     text_next.isClickable = false
+                    view_pager.setPagingEnabled(false)
                 }
             }
         }
@@ -52,7 +54,6 @@ class TutorialActivity : BaseActivity(), TutorialView {
 
         view_pager.adapter = adapter
         view_pager.offscreenPageLimit = 5
-        view_pager_indicator.setupWithViewPager(view_pager)
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }

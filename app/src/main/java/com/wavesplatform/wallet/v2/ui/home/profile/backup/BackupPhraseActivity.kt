@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
@@ -17,10 +18,12 @@ import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_backup_pharse.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.findColor
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -69,12 +72,15 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
             }
         }
 
-        image_copy.click {
-            image_copy.copyToClipboard(phraseList.toString()
-                    .replace("[", "")
-                    .replace("]", "")
-                    .replace(",", ""), R.drawable.ic_copy_18_submit_400)
-        }
+        eventSubscriptions.add(RxView.clicks(image_copy)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    image_copy.copyToClipboard(phraseList.toString()
+                            .replace("[", "")
+                            .replace("]", "")
+                            .replace(",", ""), R.drawable.ic_copy_18_submit_400)
+                })
     }
 
     private fun buildLabel(text: String): TextView {

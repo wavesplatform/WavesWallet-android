@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/text_header_text"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="12sp"
-    android:paddingBottom="16dp"
-    android:paddingStart="16dp"
+    android:background="@color/basic50"
+    android:layout_marginBottom="8dp"
+    android:paddingBottom="8dp"
     android:paddingEnd="16dp"
-    android:paddingTop="20dp"
-    android:textColor="@color/disabled500">
+    android:paddingStart="16dp"
+    android:paddingTop="8dp">
 
-</android.support.v7.widget.AppCompatTextView>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/disabled500"
+        android:textSize="12sp">
+
+    </android.support.v7.widget.AppCompatTextView>
+</FrameLayout>

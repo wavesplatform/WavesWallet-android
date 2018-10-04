@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
+import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -16,11 +17,13 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceF
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_receive_address_view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
@@ -71,20 +74,32 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
             startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.app_name)))
         }
 
-        frame_copy.click {
-            text_copy_image.copyToClipboard(text_address.text.toString(),
-                    copyIcon = R.drawable.ic_copy_18_submit_400)
-        }
-        image_copy.click {
-            it.copyToClipboard(text_invoice_link.text.toString(),
-                    copyIcon = R.drawable.ic_copy_18_submit_400)
-        }
-        image_share.click {
-            val sharingIntent = Intent(Intent.ACTION_SEND)
-            sharingIntent.type = "text/plain"
-            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text_invoice_link.text)
-            startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.app_name)))
-        }
+        eventSubscriptions.add(RxView.clicks(frame_copy)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    text_copy_image.copyToClipboard(text_address.text.toString(),
+                            copyIcon = R.drawable.ic_copy_18_submit_400)
+                })
+
+        eventSubscriptions.add(RxView.clicks(image_copy)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    image_copy.copyToClipboard(text_invoice_link.text.toString(),
+                            copyIcon = R.drawable.ic_copy_18_submit_400)
+                })
+
+        eventSubscriptions.add(RxView.clicks(image_share)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    val sharingIntent = Intent(Intent.ACTION_SEND)
+                    sharingIntent.type = "text/plain"
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text_invoice_link.text)
+                    startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.app_name)))
+                })
+
         if (intent.getBooleanExtra(InvoiceFragment.INVOICE_SCREEN, false)) {
             container_invoice_link.visiable()
             image_down_arrow.gone()

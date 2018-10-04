@@ -9,6 +9,7 @@ import android.support.design.widget.BottomSheetDialogFragment
 import android.widget.FrameLayout
 import com.wavesplatform.wallet.v2.util.getToolBarHeight
 import com.wavesplatform.wallet.v2.util.notNull
+import io.reactivex.disposables.CompositeDisposable
 import pers.victor.ext.getStatusBarHeight
 import pers.victor.ext.screenHeight
 import pers.victor.ext.setHeight
@@ -26,6 +27,8 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpV
     var extraTopMargin = 0
     val baseActivity: BaseActivity
         get() = activity as BaseActivity
+    var eventSubscriptions: CompositeDisposable = CompositeDisposable()
+
 
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -49,5 +52,10 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpV
 
         // Do something with your dialog like setContentView() or whatever
         return dialog
+    }
+
+    override fun onDestroyView() {
+        eventSubscriptions.clear()
+        super.onDestroyView()
     }
 }

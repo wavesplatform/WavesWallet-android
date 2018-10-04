@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/basic50"
+    android:descendantFocusability="beforeDescendants"
     android:fitsSystemWindows="true"
-    android:focusable="true"
-    android:focusableInTouchMode="false">
+    android:focusableInTouchMode="true"
+    android:focusable="true">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"
@@ -35,6 +36,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:paddingBottom="16dp"

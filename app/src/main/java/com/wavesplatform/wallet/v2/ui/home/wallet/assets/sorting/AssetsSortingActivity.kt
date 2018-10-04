@@ -41,8 +41,6 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
     @Inject
     lateinit var adapterFavorites: AssetsFavoriteSortingAdapter
 
-
-
     override fun configLayoutRes() = R.layout.activity_assets_sorting
 
 

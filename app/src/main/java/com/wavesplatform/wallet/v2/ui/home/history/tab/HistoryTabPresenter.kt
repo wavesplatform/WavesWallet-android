@@ -8,7 +8,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -23,13 +23,8 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     var allItemsFromDb = listOf<Transaction>()
     var totalHeaders = 0
     var type: String? = "all"
-    var needLoadMore: Boolean = true
     var hashOfTimestamp = hashMapOf<Long, Long>()
     var assetBalance: AssetBalance? = null
-
-    companion object {
-        var PER_PAGE = 25
-    }
 
     fun loadTransactions() {
         Log.d("historydev", "on presenter")
@@ -85,8 +80,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         }
 
         addSubscription(singleData
-                .map({
-
+                .map {
                     // all history
                     allItemsFromDb = it.sortedByDescending({ it.timestamp })
 
@@ -98,66 +92,39 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                         }
                     }
 
-                    if (allItemsFromDb.size > 50) {
-                        return@map sortAndConfigToUi(allItemsFromDb.subList(0, PER_PAGE))
-                    } else {
-                        return@map sortAndConfigToUi(allItemsFromDb)
-                    }
-                })
+                    return@map sortAndConfigToUi(allItemsFromDb)
+                }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     viewState.afterSuccessLoadTransaction(it, type)
                 }, {
-
+                    it.printStackTrace()
                 }))
     }
-
-    fun loadMore(currentItemsSize: Int) {
-        val itemsWithoutHeaders = currentItemsSize - totalHeaders
-
-        if (itemsWithoutHeaders == allItemsFromDb.size) {
-            needLoadMore = false
-            viewState.goneLoadMoreView()
-            return
-        }
-
-        val toIndex = if (itemsWithoutHeaders + PER_PAGE >= allItemsFromDb.size) {
-            allItemsFromDb.size
-        } else {
-            itemsWithoutHeaders + PER_PAGE
-        }
-
-        addSubscription(Single.just(allItemsFromDb.subList(itemsWithoutHeaders, toIndex))
-                .map {
-                    return@map sortAndConfigToUi(it)
-                }
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    viewState.afterSuccessLoadMoreTransaction(it, type)
-                }, {}))
-    }
-
 
     private fun sortAndConfigToUi(it: List<Transaction>): ArrayList<HistoryItem> {
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale(app.getString(preferenceHelper.getLanguage())))
 
         val sortedList = it
                 .mapTo(mutableListOf()) {
-                    HistoryItem(it)
+                    HistoryItem(HistoryItem.TYPE_DATA, it)
                 }
 
         val list = arrayListOf<HistoryItem>()
 
         sortedList.forEach {
-            val date = (it.t.timestamp) / (1000 * 60 * 60 * 24)
+            val date = (it.data.timestamp) / (1000 * 60 * 60 * 24)
             if (hashOfTimestamp[date] == null) {
                 hashOfTimestamp[date] = date
-                list.add(HistoryItem(true, dateFormat.format(Date(it.t.timestamp)).capitalize()))
+                list.add(HistoryItem(HistoryItem.TYPE_HEADER, dateFormat.format(Date(it.data.timestamp)).capitalize()))
                 totalHeaders++
             }
             list.add(it)
+        }
+
+        if (list.isNotEmpty()) {
+            list.add(0, HistoryItem(HistoryItem.TYPE_EMPTY, ""))
         }
 
         return list

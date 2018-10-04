@@ -11,7 +11,7 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.assets_detailed_history_item.view.*
 import pers.victor.ext.gone
@@ -26,60 +26,60 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
         val layout = LayoutInflater.from(mContext).inflate(R.layout.assets_detailed_history_item, collection, false)
         val item = items[position]
 
-        layout.image_transaction.setImageDrawable(item?.t?.transactionType()?.icon())
+        layout.image_transaction.setImageDrawable(item.data.transactionType()?.icon())
 
         var showTag = Constants.defaultAssets.any({
-            it.assetId == item?.t?.assetId || item?.t?.assetId.isNullOrEmpty()
+            it.assetId == item.data.assetId || item.data.assetId.isNullOrEmpty()
         })
 
-        item?.t?.transactionType().notNull {
+        item.data.transactionType().notNull {
             try {
-                layout.text_transaction_name.text = String.format(it.title(), item?.t?.asset?.name)
+                layout.text_transaction_name.text = String.format(it.title(), item.data.asset?.name)
             } catch (e: MissingFormatArgumentException) {
                 layout.text_transaction_name.text = it.title()
             }
 
             when (it) {
                 TransactionType.SENT_TYPE -> {
-                    item?.t?.amount.notNull {
-                        layout.text_transaction_value.text = "-${MoneyUtil.getScaledText(it, item?.t?.asset)}"
+                    item.data.amount.notNull {
+                        layout.text_transaction_value.text = "-${MoneyUtil.getScaledText(it, item.data.asset)}"
                     }
                 }
                 TransactionType.RECEIVED_TYPE -> {
-                    item?.t?.amount.notNull {
-                        layout.text_transaction_value.text = "+${MoneyUtil.getScaledText(it, item?.t?.asset)}"
+                    item.data.amount.notNull {
+                        layout.text_transaction_value.text = "+${MoneyUtil.getScaledText(it, item.data.asset)}"
                     }
                 }
                 TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE, TransactionType.MASS_RECEIVE_TYPE -> {
-                    if (item?.t?.transfers != null && item.t?.transfers!!.isNotEmpty()) {
-                        val sum = item.t.transfers.sumByLong { it.amount }
+                    if (item.data.transfers != null && item.data.transfers!!.isNotEmpty()) {
+                        val sum = item.data.transfers.sumByLong { it.amount }
                         if (it == TransactionType.MASS_SPAM_RECEIVE_TYPE || it == TransactionType.MASS_RECEIVE_TYPE) {
-                            layout.text_transaction_value.text = "+${MoneyUtil.getScaledText(sum.toLong(), item.t?.asset)}"
+                            layout.text_transaction_value.text = "+${MoneyUtil.getScaledText(sum.toLong(), item.data?.asset)}"
                         } else {
-                            layout.text_transaction_value.text = "-${MoneyUtil.getScaledText(sum.toLong(), item.t?.asset)}"
+                            layout.text_transaction_value.text = "-${MoneyUtil.getScaledText(sum.toLong(), item.data?.asset)}"
                         }
                     }
 
                 }
                 TransactionType.CREATE_ALIAS_TYPE -> {
-                    layout.text_transaction_value.text = item?.t?.alias
+                    layout.text_transaction_value.text = item.data.alias
                 }
                 TransactionType.EXCHANGE_TYPE -> {
                     var myOrder =
-                            if (item?.t?.order1?.sender == App.getAccessManager().getWallet()?.address) item?.t?.order1
-                            else item?.t?.order2
+                            if (item.data.order1?.sender == App.getAccessManager().getWallet()?.address) item.data.order1
+                            else item.data.order2
 
                     var pairOrder =
-                            if (item?.t?.order1?.sender != App.getAccessManager().getWallet()?.address) item?.t?.order1
-                            else item?.t?.order2
+                            if (item.data.order1?.sender != App.getAccessManager().getWallet()?.address) item.data.order1
+                            else item.data.order2
 
 
                     if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                        layout.text_transaction_name.text = "-${MoneyUtil.getScaledText(item?.t?.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.name}"
-                        layout.text_transaction_value.text = "+${MoneyUtil.getScaledText(item?.t?.amount?.times(item?.t?.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
+                        layout.text_transaction_name.text = "-${MoneyUtil.getScaledText(item.data.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.name}"
+                        layout.text_transaction_value.text = "+${MoneyUtil.getScaledText(item.data.amount?.times(item.data.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                     } else {
-                        layout.text_transaction_name.text = "+${MoneyUtil.getScaledText(item?.t?.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.name}"
-                        layout.text_transaction_value.text = "-${MoneyUtil.getScaledText(item?.t?.amount?.times(item?.t?.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
+                        layout.text_transaction_name.text = "+${MoneyUtil.getScaledText(item.data.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.name}"
+                        layout.text_transaction_value.text = "-${MoneyUtil.getScaledText(item.data.amount?.times(item.data.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                     }
 
                     showTag = Constants.defaultAssets.any({
@@ -98,51 +98,51 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
                     layout.text_transaction_value.text = mContext.getString(R.string.history_data_type_title)
                 }
                 TransactionType.CANCELED_LEASING_TYPE -> {
-                    item?.t?.lease?.amount.notNull {
-                        layout.text_transaction_value.text = MoneyUtil.getScaledText(it.toLong(), item?.t?.asset)
+                    item.data.lease?.amount.notNull {
+                        layout.text_transaction_value.text = MoneyUtil.getScaledText(it.toLong(), item.data.asset)
                     }
                 }
                 TransactionType.TOKEN_GENERATION_TYPE -> {
-                    val quantity = MoneyUtil.getScaledText(item?.t?.quantity
-                            ?: 0, item?.t?.asset).substringBefore(".")
+                    val quantity = MoneyUtil.getScaledText(item.data.quantity
+                            ?: 0, item.data.asset).substringBefore(".")
                     layout.text_transaction_value.text = quantity
                 }
                 TransactionType.TOKEN_BURN_TYPE -> {
-                    item?.t?.amount.notNull {
-                        val afterDot = MoneyUtil.getScaledText(it, item?.t?.asset).substringAfter(".").toInt()
+                    item.data.amount.notNull {
+                        val afterDot = MoneyUtil.getScaledText(it, item.data.asset).substringAfter(".").toInt()
                         var amount = ""
 
-                        if (afterDot == 0) amount = MoneyUtil.getScaledText(it, item?.t?.asset).substringBefore(".")
-                        else amount = MoneyUtil.getScaledText(it, item?.t?.asset)
+                        if (afterDot == 0) amount = MoneyUtil.getScaledText(it, item.data.asset).substringBefore(".")
+                        else amount = MoneyUtil.getScaledText(it, item.data.asset)
 
                         layout.text_transaction_value.text = "-$amount"
                     }
                 }
                 TransactionType.TOKEN_REISSUE_TYPE -> {
-                    layout.text_transaction_value.text = "+${item?.t?.amount}"
+                    layout.text_transaction_value.text = "+${item.data.amount}"
                 }
                 else -> {
-                    item?.t?.amount.notNull {
-                        layout.text_transaction_value.text = MoneyUtil.getScaledText(it, item?.t?.asset)
+                    item.data.amount.notNull {
+                        layout.text_transaction_value.text = MoneyUtil.getScaledText(it, item.data.asset)
                     }
                 }
             }
         }
 
-        if (item?.t?.transactionType() != TransactionType.CREATE_ALIAS_TYPE && item?.t?.transactionType() != TransactionType.DATA_TYPE
-                && item?.t?.transactionType() != TransactionType.SPAM_RECEIVE_TYPE && item?.t?.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
-                && item?.t?.transactionType() != TransactionType.EXCHANGE_TYPE) {
+        if (item.data.transactionType() != TransactionType.CREATE_ALIAS_TYPE && item.data.transactionType() != TransactionType.DATA_TYPE
+                && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
+                && item.data.transactionType() != TransactionType.EXCHANGE_TYPE) {
             if (showTag) {
                 layout.text_tag.visiable()
-                layout.text_tag.text = item?.t?.asset?.name
+                layout.text_tag.text = item.data.asset?.name
             } else {
                 layout.text_tag.gone()
-                layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${item?.t?.asset?.name}"
+                layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${item.data.asset?.name}"
             }
-        } else if (item?.t?.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || item?.t?.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
+        } else if (item.data.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || item.data.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
             layout.text_tag.gone()
             layout.text_tag_spam.visiable()
-            layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${item?.t?.asset?.name}"
+            layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${item.data.asset?.name}"
         }
 
 

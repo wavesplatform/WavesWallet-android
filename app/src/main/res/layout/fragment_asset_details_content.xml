@@ -463,8 +463,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:orientation="vertical">
 
 
@@ -473,6 +471,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginBottom="24dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/shape_dashed_line"
                 android:layerType="software" />
@@ -481,6 +481,8 @@
                 android:id="@+id/text_view_asset_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
                 android:text="@string/asset_details_asset_info"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -490,6 +492,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
                 android:text="@string/asset_details_name"
                 android:textColor="@color/disabled500"
                 android:textSize="14sp" />
@@ -499,6 +503,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
                 android:text="&amp;AssetName&amp;"
                 android:textColor="@color/disabled900"
                 android:textSize="14sp" />
@@ -508,6 +514,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
                 android:text="@string/asset_details_issuer"
                 android:textColor="@color/disabled500"
                 android:textSize="14sp" />
@@ -515,12 +523,14 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp">
+                android:paddingEnd="8dp"
+                android:paddingStart="16dp">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_view_issuer_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_toStartOf="@+id/image_copy_issuer"
                     android:text="3PC4roN512iugc6xGVTTM2XkoWKEdSiiscd"
@@ -534,6 +544,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="8dp"
                     app:srcCompat="@drawable/ic_copy_18_black" />
 
             </RelativeLayout>
@@ -542,7 +553,9 @@
                 android:id="@+id/text_view_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
                 android:text="@string/asset_details_id"
                 android:textColor="@color/disabled500"
                 android:textSize="14sp" />
@@ -551,11 +564,13 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp">
+                android:paddingEnd="8dp"
+                android:paddingStart="16dp">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_view_id_value"
                     android:layout_width="match_parent"
+                    android:layout_marginTop="8dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_toStartOf="@+id/image_copy_id"
@@ -570,6 +585,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="8dp"
                     app:srcCompat="@drawable/ic_copy_18_black" />
 
             </RelativeLayout>
@@ -577,8 +593,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -636,6 +654,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
                 android:text="@string/asset_details_description"
                 android:textColor="@color/disabled500"
                 android:textSize="14sp" />
@@ -646,6 +666,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="34dp"
                 android:layout_marginTop="6dp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
                 android:text="The Waves Platform is a global public blockchain platform, founded in 2016. Waves Platform’s mission is to reinvent the DNA of entrepreneurship around the world by providing a shared infrastructure, offering easy-to-use, highly functional tools to make blockchain available to every person or organisation that can benefit from it."
                 android:textColor="@color/disabled900"
                 android:textSize="14sp" />

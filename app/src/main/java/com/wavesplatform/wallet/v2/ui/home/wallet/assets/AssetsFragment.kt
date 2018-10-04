@@ -17,6 +17,8 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
@@ -50,6 +52,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
     lateinit var spamAssetsAdapter: AssetsAdapter
 
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
+    var changeTabBarVisibilityListener: HistoryTabFragment.ChangeTabBarVisibilityListener? = null
 
     companion object {
         const val RESULT_NEED_UPDATE = "need_update"
@@ -65,6 +68,14 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupUI()
+
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.ScrollToTopEvent::class.java)
+                .subscribe {
+                    if (it.position == MainActivity.WALLET_SCREEN) {
+//                        nested_scroll_view.smoothScrollTo(0, 0)
+//                        changeTabBarVisibilityListener?.changeTabBarVisibility(true)
+                    }
+                })
 
         skeletonScreen.notNull { it.show() }
         presenter.loadAliases()

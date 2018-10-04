@@ -6,6 +6,8 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatEditText
 import android.text.InputType
 import android.text.TextUtils
+import android.view.LayoutInflater
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
@@ -21,9 +23,11 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_enter_passcode.*
 import pers.victor.ext.click
+import pers.victor.ext.inflate
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
@@ -41,14 +45,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         text_use_acc_password.click {
-            val guid = getGuid()
-            if (TextUtils.isEmpty(guid)) {
-                restartApp()
-            } else {
-                launchActivity<UseAccountPasswordActivity> {
-                    putExtra(KEY_INTENT_GUID, guid)
-                }
-            }
+            startUsePasswordScreen()
         }
 
         val isProcessSetFingerprint = intent.hasExtra(KEY_INTENT_PROCESS_SET_FINGERPRINT)
@@ -95,13 +92,28 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                 text_subtitle.visiable()
                 logout.visiable()
                 logout.click {
-                    App.getAccessManager().setLastLoggedInGuid("")
-                    App.getAccessManager().resetWallet()
-                    launchActivity<WelcomeActivity>()
+                    clearAndLogout()
                 }
             } else {
                 setupToolbar(toolbar_view, true,
                         icon = R.drawable.ic_toolbar_back_black)
+            }
+        }
+    }
+
+    fun clearAndLogout() {
+        App.getAccessManager().setLastLoggedInGuid("")
+        App.getAccessManager().resetWallet()
+        launchActivity<WelcomeActivity>()
+    }
+
+    fun startUsePasswordScreen() {
+        val guid = getGuid()
+        if (TextUtils.isEmpty(guid)) {
+            restartApp()
+        } else {
+            launchActivity<UseAccountPasswordActivity> {
+                putExtra(KEY_INTENT_GUID, guid)
             }
         }
     }
@@ -137,17 +149,16 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     override fun onFailValidatePassCode(overMaxWrongPassCode: Boolean, errorMessage: String?) {
         showProgressBar(false)
         if (overMaxWrongPassCode) {
-            showError(R.string.pin_4_strikes, R.id.content)
+            pass_keypad.passCodesNotMatches()
             showRequestPasswordDialog()
         } else {
-            val message = if (TextUtils.isEmpty(errorMessage)) {
-                getString(R.string.invalid_pin)
+            if (TextUtils.isEmpty(errorMessage)) {
+                pass_keypad.passCodesNotMatches()
             } else {
-                getString(R.string.unexpected_error) + " ($errorMessage)"
+                pass_keypad.passCodesNotMatches()
+                showError(getString(R.string.unexpected_error) + " ($errorMessage)", R.id.content)
             }
-            showError(message, R.id.content)
         }
-        pass_keypad.clearPassCode()
     }
 
     private fun showFingerPrint() {
@@ -163,50 +174,25 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     override fun askPassCode() = false
 
     private fun showRequestPasswordDialog() {
-        val password = AppCompatEditText(this)
-        password.inputType = InputType.TYPE_CLASS_TEXT or
-                InputType.TYPE_TEXT_VARIATION_PASSWORD or
-                InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-        password.hint = getString(R.string.password_entry)
-
-        AlertDialog.Builder(this, R.style.AlertDialogStyle)
-                .setTitle(R.string.app_name)
-                .setMessage(getString(R.string.pin_4_strikes))
-                .setView(ViewUtils.getAlertDialogEditTextLayout(this, password))
-                .setCancelable(false)
-                .setNegativeButton(android.R.string.cancel) { _, _ ->
-                    restartApp()
-                }
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    val passwordStr = password.text.toString()
-                    if (passwordStr.isEmpty()) {
-                        password.error = getString(R.string.invalid_password_too_short)
-                    } else {
-                        tryLaunchRecreatePassCode(passwordStr)
-                    }
-                }.show()
+        val alertDialog = AlertDialog.Builder(this).create()
+        alertDialog.setCancelable(false)
+        alertDialog.setTitle(getString(R.string.enter_passcode_too_many_attempts_dialog_title))
+        alertDialog.setView(getDescriptionView())
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
+                getString(R.string.enter_passcode_too_many_attempts_dialog_positive_btn_txt)) { dialog, _ ->
+            dialog.dismiss()
+            startUsePasswordScreen()
+        }
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.enter_passcode_too_many_attempts_dialog_negative_btn_txt)) { dialog, _ ->
+            dialog.dismiss()
+            clearAndLogout()
+        }
+        alertDialog.show()
+        alertDialog.makeStyled()
     }
 
-    private fun tryLaunchRecreatePassCode(password: String) {
-        val guid = getGuid()
-
-        if (TextUtils.isEmpty(guid)) {
-            restartApp()
-        } else {
-            if (!TextUtils.isEmpty(guid)) {
-                try {
-                    WavesWallet(App.getAccessManager().getWalletData(guid), password)
-                    launchActivity<CreatePassCodeActivity> {
-                        putExtra(CreatePassCodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE, true)
-                        putExtra(KEY_INTENT_GUID, guid)
-                        putExtra(NewAccountActivity.KEY_INTENT_PASSWORD, password)
-                    }
-                    App.getAccessManager().resetPassCodeInputFails()
-                } catch (e: Exception) {
-                    showError(R.string.enter_passcode_error_wrong_password, R.id.content)
-                }
-            }
-        }
+    private fun getDescriptionView(): View? {
+        return inflate(R.layout.layout_many_attepmts)
     }
 
     companion object {

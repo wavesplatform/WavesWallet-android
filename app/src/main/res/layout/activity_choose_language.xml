@@ -11,35 +11,61 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/image_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:srcCompat="@drawable/ic_logo" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycle_language"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/button_continue"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="160dp"
-            android:alpha="0"
-            android:overScrollMode="never"
-            android:translationY="-40dp" />
+            android:fillViewport="true"
+            android:overScrollMode="never">
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button_continue"
-            style="@style/WavesButton"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:descendantFocusability="beforeDescendants"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:srcCompat="@drawable/ic_logo" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycle_language"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginTop="160dp"
+                    android:alpha="0"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:paddingBottom="64dp"
+                    android:translationY="-40dp" />
+
+            </RelativeLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+        <FrameLayout
+            android:id="@+id/frame_button_continue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="24dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:text="@string/choose_language_continue"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:background="@drawable/gradient_language_block">
 
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/button_continue"
+                style="@style/WavesButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/choose_language_continue"
+               />
+        </FrameLayout>
     </RelativeLayout>
 </FrameLayout>

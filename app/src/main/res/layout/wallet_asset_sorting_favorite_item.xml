@@ -21,8 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="14dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="14dp"
             android:paddingTop="10dp">
 
             <android.support.v7.widget.AppCompatImageView
@@ -32,9 +32,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:clickable="true"
-                android:padding="4dp"
+                android:padding="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="6dp"
                 app:srcCompat="@drawable/ic_favorite_14_submit_300" />
 
             <RelativeLayout
