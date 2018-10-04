@@ -11,6 +11,7 @@ import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import kotlinx.android.synthetic.main.wallet_asset_item.view.*
+import kotlinx.android.synthetic.main.wallet_header_item.view.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import javax.inject.Inject
@@ -47,6 +48,11 @@ class AssetsAdapter @Inject constructor() :
             TYPE_HEADER -> {
                 val item = item as WalletSectionItem
                 helper.setText(R.id.text_header, item.header)
+                if (item.isExpanded) {
+                    helper.itemView.image_arrow.rotation = 0f
+                } else {
+                    helper.itemView.image_arrow.rotation = 180f
+                }
 
                 helper.itemView.click {
                     val pos = helper.adapterPosition

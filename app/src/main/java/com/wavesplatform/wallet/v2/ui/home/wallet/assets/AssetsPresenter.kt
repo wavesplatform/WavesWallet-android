@@ -22,6 +22,7 @@ import javax.inject.Inject
 
 @InjectViewState
 class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
+    var needToScroll: Boolean = false
 
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
         runAsync {

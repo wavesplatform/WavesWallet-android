@@ -19,7 +19,6 @@ import com.oushangfeng.pinnedsectionitemdecoration.callback.OnHeaderClickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -37,7 +36,6 @@ import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.isVisible
 import pers.victor.ext.toast
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
@@ -113,11 +111,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
             override fun onHeaderClick(view: View, id: Int, position: Int) {
                 when (id) {
                     R.id.header -> {
-//                        adapter.collapse(position, true)
-                        recycle_assets.scrollToPosition(position)
-                        runDelayed(150) {
-                            recycle_assets.smoothScrollBy(0, -dp2px(1))
-                        }
+                        presenter.needToScroll = true
+                        recycle_assets.smoothScrollToPosition(position)
                     }
                 }
             }
@@ -134,6 +129,15 @@ class AssetsFragment : BaseFragment(), AssetsView {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 if (headerItemDecoration?.pinnedHeaderView?.image_arrow?.isVisible() == true) {
                     headerItemDecoration?.pinnedHeaderView?.image_arrow?.gone()
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (presenter.needToScroll) {
+                        presenter.needToScroll = false
+                        recycle_assets.smoothScrollBy(0, -dp2px(1))
+                    }
                 }
             }
         })
@@ -157,39 +161,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, positionWithoutSection)
             }
         }
-
-//        text_hidden_assets.click {
-//            if (expandable_layout_hidden.isExpanded) {
-//                expandable_layout_hidden.collapse()
-//                image_arrowup.animate()
-//                        .rotation(180f)
-//                        .setDuration(500)
-//                        .start()
-//            } else {
-//                expandable_layout_hidden.expand()
-//                image_arrowup.animate()
-//                        .rotation(0f)
-//                        .setDuration(500)
-//                        .start()
-//            }
-//        }
-//
-//        text_spam_assets.click {
-//            if (expandable_layout_spam.isExpanded) {
-//                expandable_layout_spam.collapse()
-//                image_arrowup_spam.animate()
-//                        .rotation(180f)
-//                        .setDuration(500)
-//                        .start()
-//            } else {
-//                expandable_layout_spam.expand()
-//                image_arrowup_spam.animate()
-//                        .rotation(0f)
-//                        .setDuration(500)
-//                        .start()
-//            }
-//        }
-
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -219,33 +190,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
         if (withApiUpdate) {
             skeletonScreen.notNull { it.hide() }
         }
-    }
-
-    override fun afterSuccessLoadHiddenAssets(assets: List<AssetBalance>) {
-//        if (assets.isNotEmpty()) {
-//            expandable_layout_hidden.visiable()
-//            relative_hidden_block.visiable()
-//        } else {
-//            expandable_layout_hidden.gone()
-//            relative_hidden_block.gone()
-//        }
-//
-//        adapterHiddenAssets.setNewData(assets)
-//        text_hidden_assets.text = getString(
-//                R.string.wallet_assets_hidden_category, assets.size.toString())
-    }
-
-    override fun afterSuccessLoadSpamAssets(assets: List<AssetBalance>) {
-//        if (assets.isNotEmpty()) {
-//            expandable_layout_spam.visiable()
-//            relative_spam_block.visiable()
-//        } else {
-//            expandable_layout_spam.gone()
-//            relative_spam_block.gone()
-//        }
-//        spamAssetsAdapter.setNewData(assets)
-//        text_spam_assets.text = getString(
-//                R.string.wallet_assets_spam_category, assets.size.toString())
     }
 
     override fun afterFailedLoadAssets() {
