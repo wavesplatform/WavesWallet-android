@@ -8,5 +8,4 @@ interface CardView :BaseMvpView{
     fun showRate(rate: String?)
     fun showLimits(min: String?, max: String?, fiat: String?)
     fun showError(message: String)
-
 }

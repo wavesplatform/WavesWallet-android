@@ -23,7 +23,7 @@ class ReceivePageAdapter(fm: FragmentManager?, var context: Context,
                 data = arrayListOf(
                         CryptoCurrencyFragment.newInstance(assetBalance),
                         InvoiceFragment.newInstance(assetBalance),
-                        CardFragment.newInstance(assetBalance))
+                        CardFragment.newInstance())
                 titles = arrayOf(
                         context.getString(R.string.receive_cryptocurrency),
                         context.getString(R.string.receive_invoice),
@@ -32,7 +32,7 @@ class ReceivePageAdapter(fm: FragmentManager?, var context: Context,
             assetBalance!!.isWaves() -> {
                 data = arrayListOf(
                         InvoiceFragment.newInstance(assetBalance),
-                        CardFragment.newInstance(assetBalance))
+                        CardFragment.newInstance())
                 titles = arrayOf(
                         context.getString(R.string.receive_invoice),
                         context.getString(R.string.receive_card))

@@ -8,7 +8,9 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
@@ -38,21 +40,16 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
         return !TextUtils.isEmpty(amount) && amount.toFloat() > min && amount.toFloat() < max
     }
 
-    fun loadAssets() {
+    fun loadWaves() {
         runAsync {
-            addSubscription(queryAsSingle<AssetBalance> {
-                equalTo("isFavorite", true)
-                        .greaterThan("balance", 0)
-            }
-                    .compose(RxUtil.applySingleDefaultSchedulers())
-                    .subscribe({ assets ->
-                        runOnUiThread {
-                            if (assets != null && assets.isNotEmpty()) {
-                                asset = assets[0]
-                                viewState.showWaves(asset)
-                            } else {
-                                viewState.showError(App.getAppContext()
-                                        .getString(R.string.receive_error_asset_getting))
+            val singleData: Single<List<AssetBalance>> = queryAsSingle { equalTo("assetId", "") }
+            addSubscription(singleData
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        if (it.size == 1) {
+                            runOnUiThread {
+                                viewState.showWaves(it[0])
                             }
                         }
                     }, {
