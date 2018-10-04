@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -14,19 +13,15 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryItemAdapter
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_history_tab.*
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.util.*
 import javax.inject.Inject
-import android.support.v7.widget.LinearSmoothScroller
-import android.support.v7.widget.RecyclerView
 import com.wavesplatform.wallet.v2.ui.custom.SpeedyLinearLayoutManager
 import com.oushangfeng.pinnedsectionitemdecoration.PinnedHeaderItemDecoration
-import pers.victor.ext.inflate
 
 
 class HistoryTabFragment : BaseFragment(), HistoryTabView {
@@ -39,7 +34,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     fun providePresenter(): HistoryTabPresenter = presenter
 
     @Inject
-    lateinit var adapter: HistoryItemAdapter
+    lateinit var adapter: HistoryTabItemAdapter
     lateinit var layoutManager: LinearLayoutManager
     var changeTabBarVisibilityListener: ChangeTabBarVisibilityListener? = null
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null

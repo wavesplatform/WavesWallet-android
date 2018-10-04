@@ -41,20 +41,6 @@ class ApiDataManager @Inject constructor() : DataManager() {
         }
     }
 
-//    fun assetDetails(assetId: String?): Observable<AssetBalance> {
-//        val assetBalance = if (assetId.isNullOrEmpty()){
-//            Constants.defaultAssets[0]
-//        }else{
-//            queryFirst<AssetBalance> { equalTo("assetId", assetId) }
-//        }
-//
-//        return if (assetBalance != null) {
-//            Observable.just(assetBalance)
-//        } else {
-//            apiService.assetDetails(assetId)
-//        }
-//    }
-
     fun assetsInfoByIds(ids: List<String?>): Observable<List<AssetInfo>> {
         return apiService.assetsInfoByIds(ids)
                 .map { it ->

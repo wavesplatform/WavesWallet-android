@@ -18,7 +18,6 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity

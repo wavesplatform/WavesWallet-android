@@ -6,7 +6,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.util.transactionType
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject

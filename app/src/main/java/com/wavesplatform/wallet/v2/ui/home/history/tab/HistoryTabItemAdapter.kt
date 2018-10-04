@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.home.history
+package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -15,10 +15,11 @@ import java.util.*
 import javax.inject.Inject
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
 import android.support.v7.widget.RecyclerView
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import pers.victor.ext.dp2px
 
 
-class HistoryItemAdapter @Inject constructor() :
+class HistoryTabItemAdapter @Inject constructor() :
         BaseMultiItemQuickAdapter<HistoryItem, BaseViewHolder>(null) {
 
     init {

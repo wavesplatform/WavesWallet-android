@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.home.history
+package com.wavesplatform.wallet.v2.data.model.local
 
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction

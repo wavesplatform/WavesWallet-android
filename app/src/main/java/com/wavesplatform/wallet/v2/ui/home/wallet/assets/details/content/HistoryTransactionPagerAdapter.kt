@@ -11,7 +11,7 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryItem
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.assets_detailed_history_item.view.*
 import pers.victor.ext.gone
