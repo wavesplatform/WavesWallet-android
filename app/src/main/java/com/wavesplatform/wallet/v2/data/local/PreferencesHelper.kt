@@ -18,13 +18,13 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     }
 
     companion object {
-        val PREF_FILE_NAME = "android_waves_pref_file"
-        val KEY_TUTORIAL = "keyTutorial"
-        val KEY_CURRENT_BLOCKS_HEIGHT = "currentBlocksHeight"
-        val KEY_LANGUAGE = "keyLanguage"
-        val KEY_ACCOUNT_FIRST_OPEN = "key_account_first_open"
-        val KEY_DEFAULT_ASSETS = "key_default_assets"
-        val KEY_SHOW_SAVE_SEED_WARNING = "key_show_save_seed_warning"
+        const val PREF_FILE_NAME = "android_waves_pref_file"
+        const val KEY_TUTORIAL = "keyTutorial"
+        const val KEY_CURRENT_BLOCKS_HEIGHT = "currentBlocksHeight"
+        const val KEY_LANGUAGE = "keyLanguage"
+        const val KEY_ACCOUNT_FIRST_OPEN = "key_account_first_open"
+        const val KEY_DEFAULT_ASSETS = "key_default_assets"
+        const val KEY_SHOW_SAVE_SEED_WARNING = "key_show_save_seed_warning"
     }
 
     var currentBlocksHeight: Int
@@ -65,8 +65,8 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     }
 
 
-    fun getShowSaveSeedWarningTime(guid: String): Int {
-        return mPref.getInt(KEY_SHOW_SAVE_SEED_WARNING + guid, 0)
+    fun getShowSaveSeedWarningTime(guid: String): Long {
+        return mPref.getLong(KEY_SHOW_SAVE_SEED_WARNING + guid, 0)
     }
 
     fun setShowSaveSeedWarningTime(guid: String, time: Long) {
