@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
+import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -57,8 +58,17 @@ class ApiDataManager @Inject constructor() : DataManager() {
     fun assetsInfoByIds(ids: List<String?>): Observable<List<AssetInfo>> {
         return apiService.assetsInfoByIds(ids)
                 .map { it ->
-                    val assetsInfo = it.data.mapTo(ArrayList()) {
-                        it.assetInfo
+                    val assetsInfo = it.data.mapTo(ArrayList()) { assetInfoData ->
+                        val defaultAsset = Constants.defaultAssets.firstOrNull { it.assetId == assetInfoData.assetInfo.id }
+
+                        defaultAsset.notNull { assetBalance ->
+                            assetBalance.getName().notNull {
+                                assetInfoData.assetInfo.name = it
+                            }
+
+                        }
+
+                        return@mapTo assetInfoData.assetInfo
                     }
                     assetsInfo.saveAll()
                     return@map assetsInfo
