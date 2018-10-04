@@ -66,8 +66,12 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         }
 
         button_continue.click {
-            launchActivity<ReceiveAddressViewActivity> {
-                putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
+            if (presenter.tunnel != null && presenter.tunnel!!.tunnel != null) {
+                launchActivity<ReceiveAddressViewActivity> {
+                    putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
+                    putExtra(YourAssetsActivity.BUNDLE_ADDRESS,
+                            presenter.tunnel!!.tunnel!!.walletFrom ?: "")
+                }
             }
         }
         button_continue.isEnabled = false

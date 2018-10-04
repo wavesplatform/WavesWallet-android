@@ -127,6 +127,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
 
     companion object {
         const val BUNDLE_ASSET_ITEM = "asset"
+        const val BUNDLE_ADDRESS = "address"
         const val CRYPTO_CURRENCY = "crypto_currency"
     }
 }

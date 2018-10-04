@@ -9,6 +9,7 @@ import android.text.TextUtils
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -82,6 +83,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             if (!TextUtils.isEmpty(amount) && amount.toDouble() > 0) {
                 launchActivity<ReceiveAddressViewActivity> {
                     putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
+                    putExtra(YourAssetsActivity.BUNDLE_ADDRESS, App.getAccessManager().getWallet()?.address ?: "")
                     putExtra(INVOICE_SCREEN, true)
                     putExtra(ReceiveAddressViewActivity.KEY_INTENT_QR_DATA, createLink())
                 }
@@ -127,7 +129,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
     private fun createLink(): String {
         return "https//client.wavesplatform.com/#send/${presenter.assetBalance!!.assetId}?" +
                 "recipient=${presenter.address}&" +
-                "amount=${presenter.amount}"
+                "amount=${edit_amount.text}"
     }
 
     private fun assetChangeEnable(enable: Boolean) {

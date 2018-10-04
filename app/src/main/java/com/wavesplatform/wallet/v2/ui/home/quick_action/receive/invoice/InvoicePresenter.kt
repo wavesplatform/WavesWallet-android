@@ -14,5 +14,4 @@ class InvoicePresenter @Inject constructor() :BasePresenter<InvoiceView>(){
     lateinit var coinomatManager: CoinomatManager
     var assetBalance: AssetBalance? = null
     var address: String? = App.getAccessManager().getWallet()!!.address
-    var amount: String? = "0"
 }

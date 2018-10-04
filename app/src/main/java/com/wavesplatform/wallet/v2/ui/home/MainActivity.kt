@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -15,6 +16,7 @@ import android.view.View
 import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -72,6 +74,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 })
     }
 
+    override fun onResume() {
+        super.onResume()
+        showBackUpSeedWarningIfNeed()
+    }
 
     private fun showFirstOpenAlert(firstOpen: Boolean) {
         if (!firstOpen) {
@@ -129,7 +135,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         return view
     }
 
-    public fun enableElevation(enable: Boolean) {
+    fun enableElevation(enable: Boolean) {
         if (enable) {
             ViewCompat.setElevation(appbar_layout, 0F)
         } else {
@@ -318,6 +324,26 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         return customTab
     }
 
+    private fun showBackUpSeedWarningIfNeed() {
+        if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
+            val currentGuid = App.getAccessManager().getLastLoggedInGuid()
+            val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
+            val now = System.currentTimeMillis()
+            if (now > lastTime + MIN_15) {
+                val snackBar = Snackbar.make(root!!.findViewById(R.id.root_scrollView), "",
+                        Snackbar.LENGTH_INDEFINITE)
+                val layout = snackBar.view as Snackbar.SnackbarLayout
+                layout.removeAllViews()
+                layout.click { snackBar.dismiss() }
+                val snackView = layoutInflater.inflate(R.layout.backup_seed_warning_snackbar, null)
+                layout.setPadding(0, 0, 0, 0)
+                layout.addView(snackView, 0)
+                snackBar.show()
+                preferencesHelper.setShowSaveSeedWarningTime(currentGuid, now)
+            }
+        }
+    }
+
     companion object {
         private const val WALLET_SCREEN = 0
         private const val DEX_SCREEN = 1
@@ -327,6 +353,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
         private const val TAG_NOT_CENTRAL_TAB = "not_central_tab"
         private const val TAG_CENTRAL_TAB = "central_tab"
+
+        private const val MIN_15 = 54_000_000
     }
 
     interface OnElevationAppBarChangeListener {

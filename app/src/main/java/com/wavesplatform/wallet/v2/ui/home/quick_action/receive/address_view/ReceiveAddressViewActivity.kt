@@ -94,8 +94,13 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
         }
 
         val text: String
-        val address = App.getAccessManager().getWallet()?.address ?: ""
+        val address = if (intent.hasExtra(YourAssetsActivity.BUNDLE_ADDRESS)) {
+            intent.getStringExtra(YourAssetsActivity.BUNDLE_ADDRESS)
+        } else {
+            App.getAccessManager().getWallet()?.address ?: ""
+        }
         text_address.text = address
+
         if (intent.hasExtra(KEY_INTENT_QR_DATA)) {
             text = intent.getStringExtra(KEY_INTENT_QR_DATA)
             text_invoice_link.text = text
