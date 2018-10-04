@@ -86,7 +86,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                                 isFieldsValid()
                             }
                         }, newPasswordValidation)
-                if (edit_confirm_password.text.isNotEmpty()) {
+                if (edit_confirm_password.text!!.isNotEmpty()) {
                     val confirmPasswordValidation = Validation(til_confirm_password)
                             .and(EqualRule(edit_new_password.text.toString(),
                                     R.string.new_account_confirm_password_validation_match_error))

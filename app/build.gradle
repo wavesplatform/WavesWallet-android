@@ -146,7 +146,7 @@ def getAppName() {
     def stringsFile = android.sourceSets.main.res.sourceFiles.find { it.name.equals 'strings.xml' }
     String s = new XmlParser().parse(stringsFile).string.find { it.@name.equals 'app_name' }.text();
     def all = s.replaceAll(" ", "_")
-    return all.replaceAll("\"", "");
+    return all.replaceAll("\"", "")
 }
 
 kapt {
