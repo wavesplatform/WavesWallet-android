@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
+import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.wallet_asset_item.view.*
 import kotlinx.android.synthetic.main.wallet_header_item.view.*
 import pers.victor.ext.click
@@ -65,16 +66,13 @@ class AssetsAdapter @Inject constructor() :
             }
             TYPE_ASSET, TYPE_HIDDEN_ASSET, TYPE_SPAM_ASSET -> {
                 try {
-                    val param = helper.itemView.card_asset.layoutParams as RecyclerView.LayoutParams
-
                     if (data[helper.adapterPosition + 1].itemType == TYPE_HEADER) {
-                        helper.itemView.card_asset.layoutParams = param
-                        param.bottomMargin = dp2px(18)
+                        helper.itemView.card_asset.setMargins(bottom = dp2px(18))
                     } else {
-                        param.bottomMargin = dp2px(8)
+                        helper.itemView.card_asset.setMargins(bottom = dp2px(6))
                     }
-                    helper.itemView.card_asset.layoutParams = param
                 } catch (e: Throwable) {
+                    helper.itemView.card_asset.setMargins(bottom = dp2px(6))
                     e.printStackTrace()
                 }
 

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            android:paddingBottom="16dp" />
+            android:paddingBottom="18dp" />
 
     </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
