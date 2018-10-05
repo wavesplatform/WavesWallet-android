@@ -183,12 +183,17 @@ class AssetsFragment : BaseFragment(), AssetsView {
     }
 
     override fun afterSuccessLoadAssets(assets: ArrayList<MultiItemEntity>, fromDB: Boolean, withApiUpdate: Boolean) {
-        if (fromDB) {
-            swipe_container?.isRefreshing = true
-            skeletonScreen.notNull { it.hide() }
-        } else {
+        if (withApiUpdate){
+            if (fromDB) {
+                swipe_container?.isRefreshing = true
+                skeletonScreen.notNull { it.hide() }
+            } else {
+                swipe_container?.isRefreshing = false
+            }
+        }else{
             swipe_container?.isRefreshing = false
         }
+
 
         adapter.setNewData(assets)
     }
