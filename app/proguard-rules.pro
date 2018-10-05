@@ -36,11 +36,6 @@
     native <methods>;
 }
 
-# BaseRecyclerViewAdapterHelper
--keep class com.chad.library.adapter.** {
-   *;
-}
-
 -keep class android.support.v7.widget.SearchView { *; }
 
 # Enums
@@ -102,14 +97,10 @@
 -dontnote com.google.common.cache.Striped64,com.google.common.cache.Striped64$Cell
 
 
--dontwarn com.squareup.okhttp.**
 -keep class com.squareup.okhttp.** { *; }
 -keep interface com.squareup.okhttp.** { *; }
--dontwarn okio.**
 -dontnote com.squareup.okhttp.internal.Platform
 
--dontwarn retrofit.**
--keep class retrofit.** { *; }
 -dontwarn com.octo.android.robospice.retrofit.RetrofitJackson**
 -dontwarn retrofit.appengine.UrlFetchClient
 -keepclasseswithmembers class * {
@@ -122,7 +113,6 @@
 -keep class javax.inject.** { *; }
 -dontwarn org.apache.http.**
 -dontwarn android.net.http.AndroidHttpClient
--dontwarn retrofit.**
 
 -dontwarn sun.misc.**
 
@@ -242,7 +232,6 @@
 -keep class okio.** { *;}
 -dontwarn sun.security.**
 -keep class sun.security.** { *;}
--dontwarn okio.**
 -dontwarn okhttp3.**
 
 # Rxjava rules
@@ -273,26 +262,7 @@
 -keepclasseswithmembernames class retrofit2.ServiceMethod { *; }
 -keepclasseswithmembernames class retrofit2.OkHttpCall { *; }
 
-
-
-
-# ButterKnife rules
--keep class butterknife.** { *; }
--dontwarn butterknife.internal.**
--keep class **$$ViewBinder { *; }
-
--keepclasseswithmembernames class * {
-    @butterknife.* <fields>;
-}
-
--keepclasseswithmembernames class * {
-    @butterknife.* <methods>;
-}
-
 -dontwarn com.google.errorprone.annotations.*
-
-# Retrolambda rules
--dontwarn java.lang.invoke.*
 
 # Retrofit rules
 -dontwarn retrofit.**
@@ -304,28 +274,11 @@
 -dontwarn okio.**
 -dontwarn com.squareup.okhttp.**
 
-# Otto rules
--keepclassmembers class ** {
-    @com.squareup.otto.Subscribe public *;
-    @com.squareup.otto.Produce public *;
-}
-
 # RxJava rules
 # RxAndroid will soon ship with rules so this may not be needed in the future
 # https://github.com/ReactiveX/RxAndroid/issues/219
 -dontwarn sun.misc.Unsafe
 -keep class rx.internal.util.unsafe.** { *; }
-
-# EasyAdapter rules
--keepclassmembers class * extends uk.co.ribot.easyadapter.ItemViewHolder {
-    public <init>(...);
- }
-
- -keep class com.chad.library.adapter.** {
- *;
- }
-
--dontwarn com.beloo.widget.chipslayoutmanager.Orientation
 
 # Gson rules
 -keep class sun.misc.Unsafe { *; }
@@ -333,20 +286,6 @@
 # Keep non static or private fields of models so Gson can find their names
 -keepclassmembers class com.filmsinfo.android.data.model.** {
     !static !private <fields>;
-}
-# Some models used by gson are inner classes inside the retrofit serviceё
--keepclassmembers class com.wavesplatform.wallet.v2.data.remote.SpamService** {
-    !static !private <fields>;
-}
--keepclassmembers class com.wavesplatform.wallet.v2.data.remote.NodeService** {
-    !static !private <fields>;
-}
--keepclassmembers class com.wavesplatform.wallet.v2.data.remote.ApiService** {
-    !static !private <fields>;
-}
-
--keepclassmembernames interface * {
-    @retrofit.http.* <methods>;
 }
 
 -keep class com.wavesplatform.wallet.v2.data.remote.SpamService { *; }
