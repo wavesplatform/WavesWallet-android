@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -109,17 +110,12 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
         val headerClickListener = object : OnHeaderClickAdapter() {
             override fun onHeaderClick(view: View, id: Int, position: Int) {
-                when (id) {
-                    R.id.header -> {
-                        presenter.needToScroll = true
-                        recycle_assets.smoothScrollToPosition(position)
-                    }
-                }
+                presenter.needToScroll = true
+                recycle_assets.smoothScrollToPosition(position)
             }
         }
 
         headerItemDecoration = PinnedHeaderItemDecoration.Builder(AssetsAdapter.TYPE_HEADER)
-                .setClickIds(R.id.header)
                 .disableHeaderClick(false)
                 .setHeaderClickListener(headerClickListener)
                 .create()
@@ -127,8 +123,13 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
         recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                if (headerItemDecoration?.pinnedHeaderView?.image_arrow?.isVisible() == true) {
-                    headerItemDecoration?.pinnedHeaderView?.image_arrow?.gone()
+                if (headerItemDecoration?.pinnedHeaderView != null) {
+                    swipe_container.isEnabled = false
+                    if (headerItemDecoration?.pinnedHeaderView?.image_arrow?.isVisible() == true) {
+                        headerItemDecoration?.pinnedHeaderView?.image_arrow?.gone()
+                    }
+                } else {
+                    swipe_container.isEnabled = true
                 }
             }
 
