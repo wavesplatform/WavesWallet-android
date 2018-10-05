@@ -12,12 +12,14 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.random
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.app
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
+import java.util.*
 import javax.inject.Inject
 
 @InjectViewState
@@ -26,11 +28,15 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
 
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
         runAsync {
+            var dbAssets = mutableListOf<AssetBalance>()
             addSubscription(queryAllAsSingle<AssetBalance>().toObservable()
                     .subscribeOn(Schedulers.io())
-//                    .map { createTripleSortedLists(it.toMutableList()) }
-//                    .doOnNext { postSuccess(it, withApiUpdate, true) }
-                    .flatMap { tryUpdateWithApi(withApiUpdate, it) }
+                    .map {
+                        dbAssets = it.toMutableList()
+                        return@map createTripleSortedLists(it.toMutableList())
+                    }
+                    .doOnNext { postSuccess(it, withApiUpdate, true) }
+                    .flatMap { tryUpdateWithApi(withApiUpdate, dbAssets) }
                     .map {
                         // start update service if need
                         viewState.startServiceToLoadData(ArrayList(it))
@@ -155,7 +161,11 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                             withApiUpdate: Boolean,
                             fromDb: Boolean) {
         val listToShow = arrayListOf<MultiItemEntity>()
+
+        // add all main assets
         listToShow.addAll(it.first)
+
+        // check if hidden assets exists and create section with them
         if (it.second.isNotEmpty()) {
             val hiddenSection = WalletSectionItem(app.getString(R.string.wallet_assets_hidden_category,
                     it.second.size.toString()))
@@ -164,6 +174,8 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
             }
             listToShow.add(hiddenSection)
         }
+
+        // check if spam assets exists and create section with them
         if (it.third.isNotEmpty()) {
             val spamSection = WalletSectionItem(app.getString(R.string.wallet_assets_spam_category,
                     it.third.size.toString()))
@@ -172,9 +184,9 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
             }
             listToShow.add(spamSection)
         }
+
+        // show all assets with sections
         runOnUiThread {
-//            viewState.afterSuccessLoadHiddenAssets(it.second)
-//            viewState.afterSuccessLoadSpamAssets(it.third)
             viewState.afterSuccessLoadAssets(listToShow, fromDb, withApiUpdate)
         }
     }

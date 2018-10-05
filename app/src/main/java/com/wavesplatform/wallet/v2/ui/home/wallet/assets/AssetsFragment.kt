@@ -182,14 +182,14 @@ class AssetsFragment : BaseFragment(), AssetsView {
     }
 
     override fun afterSuccessLoadAssets(assets: ArrayList<MultiItemEntity>, fromDB: Boolean, withApiUpdate: Boolean) {
-        if (!fromDB || !withApiUpdate) {
+        if (fromDB) {
+            swipe_container?.isRefreshing = true
+            skeletonScreen.notNull { it.hide() }
+        } else {
             swipe_container?.isRefreshing = false
         }
 
         adapter.setNewData(assets)
-        if (withApiUpdate) {
-            skeletonScreen.notNull { it.hide() }
-        }
     }
 
     override fun afterFailedLoadAssets() {
@@ -229,5 +229,4 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
         return super.onOptionsItemSelected(item)
     }
-
 }
