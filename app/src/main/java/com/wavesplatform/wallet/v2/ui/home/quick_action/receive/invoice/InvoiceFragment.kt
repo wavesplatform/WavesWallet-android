@@ -109,15 +109,24 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
     }
 
     private fun setAssetBalance(assetBalance: AssetBalance?) {
+        if (assetBalance == null) {
+            return
+        }
+
         presenter.assetBalance = assetBalance
 
         image_asset_icon.isOval = true
         image_asset_icon.setAsset(assetBalance)
-        text_asset_name.text = assetBalance?.getName()
-        text_asset_value.text = assetBalance?.getDisplayBalance()
+        text_asset_name.text = assetBalance.getName()
+        text_asset_value.text = assetBalance.getDisplayBalance()
+        image_down_arrow.visibility = if (assetBalance.isGateway) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
 
         image_is_favourite.visiableIf {
-            assetBalance?.isFavorite!!
+            assetBalance.isFavorite
         }
 
         edit_asset.gone()

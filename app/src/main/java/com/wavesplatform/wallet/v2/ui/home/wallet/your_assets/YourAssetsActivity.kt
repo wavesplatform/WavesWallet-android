@@ -114,11 +114,10 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
                 } else {
                     presenter.loadAssets(!presenter.greaterZeroBalance)
                 }
-
                 item.title = if (presenter.greaterZeroBalance) {
-                    getString(R.string.your_asset_activity_greater_zero)
-                } else {
                     getString(R.string.your_asset_activity_all)
+                } else {
+                    getString(R.string.your_asset_activity_greater_zero)
                 }
             }
         }

@@ -443,7 +443,7 @@ inline fun <reified T : Any> Activity.launchActivity(
 inline fun <reified T : Any> Fragment.launchActivity(
         requestCode: Int = -1,
         clear: Boolean = false,
-        withoutAnimation: Boolean = false,
+        withoutAnimation: Boolean = true,
         options: Bundle? = null,
         noinline init: Intent.() -> Unit = {}) {
 
@@ -460,7 +460,9 @@ inline fun <reified T : Any> Fragment.launchActivity(
     } else {
         startActivity(intent)
     }
-    if (withoutAnimation) activity?.overridePendingTransition(0, 0)
+    if (withoutAnimation) {
+        activity?.overridePendingTransition(R.anim.start_new_show,  R.anim.start_current_hide)
+    }
 }
 
 inline fun <reified T : Any> Context.launchActivity(

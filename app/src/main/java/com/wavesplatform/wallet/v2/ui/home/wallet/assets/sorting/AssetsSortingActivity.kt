@@ -154,11 +154,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             }
         })
 
-
-        // load assets from DB
-        runAsync({
-            presenter.loadAssets()
-        })
+        runAsync { presenter.loadAssetsFromDb() }
     }
 
     override fun showFavoriteAssets(favorites: List<AssetBalance>) {
@@ -177,12 +173,12 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_assets_visibility -> {
-                adapter.data.forEach({
+                adapter.data.forEach {
                     it.configureVisibleState = !it.configureVisibleState
-                })
-                adapterFavorites.data.forEach({
+                }
+                adapterFavorites.data.forEach {
                     it.configureVisibleState = !it.configureVisibleState
-                })
+                }
                 adapter.notifyDataSetChanged()
                 return true
             }
