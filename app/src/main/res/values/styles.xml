@@ -40,6 +40,8 @@
         <item name="android:fontFamily">@font/roboto</item>
         <item name="fontFamily">@font/roboto</item>
         <item name="actionMenuTextAppearance">@style/MenuItemTextAppearance</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <style name="SubmitEditText">
@@ -87,6 +89,7 @@
 
     <style name="AppThemeV2.NoActionBar.Translucent.DarkStatusBar" parent="AppThemeV2.NoActionBar.Translucent">
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:navigationBarColor">@color/basic50</item>
     </style>
 
     <style name="AppThemeV2.MainActivity" parent="AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
