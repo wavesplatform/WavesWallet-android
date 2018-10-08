@@ -52,7 +52,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         setupToolbar(toolbar_view, true, icon = R.drawable.ic_toolbar_back_black)
 
         view_pager.adapter = adapterAvatar
-        view_pager.offscreenPageLimit = 3
+        view_pager.offscreenPageLimit = 10
         view_pager.clipToPadding = false
         view_pager.setPadding(dp2px(160) / 2 - dp2px(24), 0, dp2px(160) / 2 - dp2px(24), 0)
         view_pager.setPageTransformer(false, AlphaScalePageTransformer(0.58f))
