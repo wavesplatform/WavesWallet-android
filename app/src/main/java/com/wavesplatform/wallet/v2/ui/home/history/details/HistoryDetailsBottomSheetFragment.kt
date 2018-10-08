@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
+import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
@@ -218,8 +219,13 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
                 historyContainer?.addView(startLeaseView)
                 historyContainer?.addView(commentBlock)
-                historyContainer?.addView(baseInfoLayout)
-                historyContainer?.addView(cancelLeasingBtn)
+                if (transaction.status == LeasingStatus.ACTIVE.status) {
+                    status?.text = getString(R.string.history_details_active_now)
+                    historyContainer?.addView(baseInfoLayout)
+                    historyContainer?.addView(cancelLeasingBtn)
+                } else {
+                    historyContainer?.addView(baseInfoLayout)
+                }
             }
             TransactionType.EXCHANGE_TYPE -> {
                 val exchangeView = inflater?.inflate(R.layout.fragment_bottom_sheet_exchange_layout, historyContainer, false)
@@ -265,8 +271,11 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 val textCancelLeasingFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_cancel_leasing_from_address)
                 val imageAddressAction = receiveView?.findViewById<AppCompatImageView>(R.id.image_address_action)
 
-
                 textCancelLeasingFromAddress?.text = transaction.sender
+
+                if (transaction.status == LeasingStatus.ACTIVE.status) {
+                    status?.text = getString(R.string.history_details_active_now)
+                }
 
                 resolveExistOrNoAddress(textCancelLeasingFromName, textCancelLeasingFromAddress, imageAddressAction)
 
