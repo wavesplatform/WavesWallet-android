@@ -52,13 +52,6 @@ android {
         debug {
             multiDexEnabled false
             buildConfigField "boolean", "DOGFOOD", "false"
-            def propsFile = file('wallet.properties')
-            if (propsFile.exists()) {
-                def props = new Properties()
-                props.load(new FileInputStream(propsFile))
-                def wallet = props['publicKey'].toString()
-                buildConfigField "String", "PUBLIC_KEY", "\"${wallet}\""
-            }
         }
     }
 

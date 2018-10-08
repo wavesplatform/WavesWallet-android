@@ -92,11 +92,6 @@
         <item name="android:navigationBarColor">@color/white</item>
     </style>
 
-    <style name="AppThemeV2.MainActivity" parent="AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
-        <item name="drawerArrowStyle">@style/DrawerIconBlack</item>
-        <item name="actionMenuTextColor">@color/disabled900</item>
-    </style>
-
     <style name="AppThemeV2.AssetsSoring" parent="AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
         <item name="actionMenuTextColor">@color/disabled900</item>
         <item name="actionButtonStyle">@style/AppTheme.Widget.ActionButton</item>

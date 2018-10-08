@@ -54,8 +54,8 @@
         <activity
             android:name=".v2.ui.home.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.MainActivity"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".v1.ui.dex.markets.add.AddMarketActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />

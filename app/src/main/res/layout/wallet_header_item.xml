@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/basic50"
+    android:paddingBottom="8dp"
+    android:layout_marginBottom="8dp"
+    android:paddingTop="8dp">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_toStartOf="@+id/image_arrow"
+        android:text="Hidden assets (2)"
+        android:textColor="@color/basic500" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:rotation="180"
+        app:srcCompat="@drawable/ic_arrowup_basic_300" />
+</RelativeLayout>
