@@ -21,9 +21,7 @@ import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 
 class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
@@ -49,6 +47,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view, true, icon = R.drawable.ic_toolbar_back_black)
 
         view_pager.adapter = adapterAvatar

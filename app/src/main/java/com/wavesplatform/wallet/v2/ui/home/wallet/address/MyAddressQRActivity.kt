@@ -3,13 +3,13 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.address
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.jakewharton.rxbinding2.view.RxView
-import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
@@ -22,7 +22,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_my_address_qr.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
-import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -62,6 +61,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view, true, icon = R.drawable.ic_toolbar_back_black)
 
         val address = App.getAccessManager().getWallet()?.address

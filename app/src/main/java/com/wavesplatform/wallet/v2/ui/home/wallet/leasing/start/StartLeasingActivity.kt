@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
@@ -28,6 +29,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.start_leasing_toolbar), R.drawable.ic_toolbar_back_black)
 
         text_choose_from_address.click {

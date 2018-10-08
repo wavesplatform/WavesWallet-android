@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.auth.choose_account
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
@@ -41,6 +42,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view,  true,
                 getString(R.string.choose_account), R.drawable.ic_toolbar_back_black)
 

@@ -96,13 +96,13 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         }
     }
 
-    fun clearAndLogout() {
+    private fun clearAndLogout() {
         App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
         launchActivity<WelcomeActivity>()
     }
 
-    fun startUsePasswordScreen() {
+    private fun startUsePasswordScreen() {
         val guid = getGuid()
         if (TextUtils.isEmpty(guid)) {
             restartApp()
@@ -123,7 +123,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         }
     }
 
-    fun validate(passCode: String) {
+    private fun validate(passCode: String) {
         showProgressBar(true)
         presenter.validate(getGuid(), passCode)
     }
@@ -162,8 +162,13 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     }
 
     override fun onBackPressed() {
-        launchActivity<SplashActivity>(clear = true){
-            putExtra(SplashActivity.EXIT, true)
+        if (intent.hasExtra(KEY_INTENT_GUID)) {
+            launchActivity<SplashActivity>(clear = true) {
+                putExtra(SplashActivity.EXIT, true)
+            }
+        } else {
+            setResult(Constants.RESULT_CANCELED)
+            finish()
         }
     }
 

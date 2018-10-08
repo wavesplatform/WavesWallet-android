@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.web
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.KeyEvent
 import android.webkit.WebViewClient
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -28,6 +29,7 @@ class WebActivity : BaseActivity(), WebView {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
 
         if (!intent.hasExtra(KEY_INTENT_LINK)) {
             finish()
