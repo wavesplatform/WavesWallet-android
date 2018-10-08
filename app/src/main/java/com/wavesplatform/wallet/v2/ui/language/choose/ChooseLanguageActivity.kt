@@ -39,8 +39,6 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
     override fun configLayoutRes() = R.layout.activity_choose_language
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-//        image_logo.translationY = getStatusBarHeight().toFloat()
-
         recycle_language.layoutManager = LinearLayoutManager(this)
         recycle_language.adapter = adapter
 
@@ -78,7 +76,6 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
             }
             exitAnimation()
         }
-
         enterAnimation()
     }
 
@@ -87,7 +84,6 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
             image_logo.animate()
                     .translationY(-(image_logo.y - dp2px(80)))
                     .setDuration(500)
-                    .setStartDelay(500)
                     .withEndAction {
                         recycle_language.animate()
                                 .alpha(1f)
@@ -107,10 +103,9 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
                     .setDuration(350)
                     .withEndAction {
                         launchActivity<TutorialActivity>()
-                        overridePendingTransition( 0, R.anim.fade_out );
+                        overridePendingTransition(0, R.anim.fade_out)
                     }
                     .start()
         }
     }
-
 }

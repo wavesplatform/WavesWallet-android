@@ -962,6 +962,8 @@
     <string name="profile_general_delete_account_dialog_cancel">Cancel</string>
     <string name="profile_general_delete_account_dialog_warning">You did not save your SEED</string>
     <string name="profile_general_delete_account_dialog_deleted">Deleted</string>
+    <string name="profile_save_seed_warning_title">Save your backup phrase (SEED)</string>
+    <string name="profile_save_seed_warning_subtitle">Store your SEED safely, it is the only way to restore your wallet</string>
 
     <!-- NEW ALIAS -->
     <string name="new_alias_toolbar_title">New alias</string>
@@ -1149,13 +1151,21 @@
     <string name="receive_asset">Asset</string>
     <string name="receive_sellect_asset">Select your asset or from the list</string>
     <string name="receive_continue">Continue</string>
-    <string name="receive_minimum_amount">The minimum amount of deposit is 0.001 BTC</string>
-    <string name="receive_will_send">If you will send less than 0.001 BTC, you will lose that money.</string>
-    <string name="receive_will_send_only_btc">Send only BTC to this deposit address</string>
-    <string name="receive_will_send_other_currency">Sending any other currency to this address may result in the loss of your deposit.</string>
+    <string name="receive_minimum_amount">The minimum amount of deposit is %1$s %2$s</string>
+    <string name="receive_warning_will_send">If you will send less than %1$s %2$s, you will lose that money.</string>
+    <string name="receive_warning_crypto">Send only %1$s to this deposit address</string>
     <string name="receive_amount">Amount</string>
+    <string name="receive_will_send_other_currency">Sending any other currency to this address may result in the loss of your deposit.</string>
+    <string name="receive_amount_title">Amount in %1$s</string>
     <string name="receive_payment_method">Payment method</string>
-    <string name="receive_minimum_30">The minimum is 30 USD, the maximum is 200 USD</string>
+    <string name="receive_limit">The minimum is %1$s %2$s, the maximum is %3$s %4$s</string>
+    <string name="receive_error_amount">Wrong amount. Check limits</string>
+    <string name="receive_error_network">Error getting data. Try again later</string>
+    <string name="receive_error_asset_getting">Error getting asset. Try again later</string>
+    <string name="receive_fiat_choose_dialog_title">Choose Currency</string>
+    <string name="receive_fiat_choose_dialog_usd">USD</string>
+    <string name="receive_fiat_choose_dialog_euro">EURO</string>
+    <string name="receive_fiat_choose_dialog_cancel">Cancel</string>
     <string name="receive_makink_payment">For making a payment from your card you will be redirected to the merchant\'s website</string>
     <string name="receive_not_verified">Your account is not verified</string>
     <string name="receive_step_1">Step 1</string>
@@ -1342,5 +1352,10 @@
 
     <!--Leasing history-->
     <string name="leasing_history_toolbar_title">History</string>
+
+    <string name="your_asset_activity_all">All</string>
+    <string name="your_asset_activity_greater_zero">Non empty</string>
+    <string name="coinomat_success_title">You have been redirected to «Indacoin»</string>
+    <string name="coinomat_success_subtitle">After payment has been made your balance will be updated</string>
 
 </resources>

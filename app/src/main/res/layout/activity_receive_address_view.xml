@@ -15,10 +15,10 @@
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
         android:fontFamily="@font/roboto"
+        android:layout_marginTop="24dp"
         app:title="@string/receive_address_view_toolbar"
         app:titleTextAppearance="@style/Toolbar.Title"
         app:titleTextColor="@color/white">
-
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_close"
@@ -124,11 +124,11 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/toolbar_view"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_address"
@@ -139,8 +139,8 @@
                         android:paddingLeft="14dp"
                         android:paddingRight="14dp"
                         android:paddingTop="10dp"
-                        android:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW"
-                        android:textColor="@color/disabled900" />
+                        android:textColor="@color/disabled900"
+                        tools:text="3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW" />
 
 
                     <LinearLayout
@@ -151,13 +151,21 @@
                         android:layout_marginTop="18dp"
                         android:orientation="horizontal">
 
-                        <FrameLayout
+                        <LinearLayout
                             android:id="@+id/frame_copy"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:background="?attr/selectableItemBackground"
                             android:clickable="true">
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/text_copy_image"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/ic_copy_18_submit_400" />
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/text_copy"
@@ -165,14 +173,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:drawablePadding="10dp"
-                                android:drawableStart="@drawable/ic_copy_18_submit_400"
                                 android:gravity="center"
                                 android:paddingBottom="10dp"
                                 android:paddingTop="10dp"
                                 android:text="@string/receive_address_copy"
                                 android:textColor="@color/submit400" />
 
-                        </FrameLayout>
+                        </LinearLayout>
 
 
                         <FrameLayout
@@ -203,29 +210,27 @@
                         android:id="@+id/image_view_recipient_action"
                         android:layout_width="@dimen/_200sdp"
                         android:layout_height="@dimen/_200sdp"
-                        android:layout_below="@+id/linear_buttons"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center_horizontal"
                         android:scaleType="fitXY" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_view_qr_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/image_view_recipient_action"
-                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
                         android:text="@string/receive_address_your_qr_code"
                         android:textColor="@color/disabled500"
                         android:textSize="12sp" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/container_invoice_link"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/image_line_2"
@@ -235,14 +240,18 @@
                         android:background="@drawable/shape_dashed_line"
                         android:layerType="software" />
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp">
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:id="@+id/qr_data_layout"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
                             android:orientation="vertical">
 
                             <android.support.v7.widget.AppCompatTextView
@@ -257,22 +266,23 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
-                                android:text="https://wav.es/xPAK3z"
-                                android:textColor="@color/disabled900" />
+                                android:textColor="@color/disabled900"
+                                tools:text="https//client.wavesplatform.com/#send/GWgADgean6zKWsby3wVQ1TSSWCCFZT9t28nZ2N5vweT8?recipient=3PCAB4sHXgvtu5NPoen6EXR5yaNbvsEA8Fj&quot;amount=0.100" />
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/copy_share_layout"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0"
+                            android:gravity="center"
                             android:orientation="horizontal">
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/image_copy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="24dp"
+                                android:padding="10dp"
                                 android:clickable="true"
                                 app:srcCompat="@drawable/ic_copy_18_submit_400" />
 
@@ -280,10 +290,11 @@
                                 android:id="@+id/image_share"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:padding="10dp"
                                 android:clickable="true"
                                 app:srcCompat="@drawable/ic_share_18_submit_400" />
                         </LinearLayout>
-                    </RelativeLayout>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <android.support.v7.widget.AppCompatButton

@@ -11,7 +11,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.rules.AccountNameRule
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
@@ -93,7 +92,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                         isFieldsValid()
                     }
                 }, passwordValidation)
-                if (edit_confirm_password.text.isNotEmpty()) {
+                if (edit_confirm_password.text!!.isNotEmpty()) {
                     val confirmPasswordValidation = Validation(til_confirm_password)
                             .and(EqualRule(edit_create_password.text.toString(),
                                     R.string.new_account_confirm_password_validation_match_error))

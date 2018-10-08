@@ -70,21 +70,21 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
 
         eventSubscriptions.add(RxTextView.textChanges(edit_name)
                 .skipInitialValue()
-                .map({
+                .map {
                     return@map it.toString()
-                })
+                }
                 .debounce(350, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
-                .flatMap({
+                .flatMap {
                     return@flatMap queryAsFlowable<AddressBookUser> { equalTo("name", it) }.toObservable()
-                })
-                .map({
-                    presenter.nameFieldValid = edit_name.text.isNotEmpty() && it.isEmpty()
-                })
+                }
+                .map {
+                    presenter.nameFieldValid = edit_name.text!!.isNotEmpty() && it.isEmpty()
+                }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ name ->
+                .subscribe { name ->
                     isFieldsValid()
-                }))
+                })
 
         button_save.click {
             presenter.saveAddress(edit_address.text.toString(), edit_name.text.toString())

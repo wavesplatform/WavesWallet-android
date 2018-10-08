@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.AppCompatCheckBox
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -16,7 +18,6 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_your_assets.*
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -36,12 +37,8 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
 
     override fun configLayoutRes() = R.layout.activity_your_assets
 
-    companion object {
-        var BUNDLE_ASSET_ITEM = "asset"
-    }
-
-
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.white)
 
         setupToolbar(toolbar_view,  true, getString(R.string.your_assets_toolbar_title), R.drawable.ic_toolbar_back_black)
 
@@ -77,24 +74,25 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         recycle_assets.adapter = adapter
         adapter.bindToRecyclerView(recycle_assets)
 
-        presenter.loadAssets()
+        if (intent.hasExtra(CRYPTO_CURRENCY)) {
+            presenter.loadCryptoAssets(true)
+        } else {
+            presenter.loadAssets(true)
+        }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as AssetBalance
-            val viewItem = recycle_assets.layoutManager.findViewByPosition(position)
-            val checkBox = viewItem.findViewById<AppCompatCheckBox>(R.id.checkbox_choose)
-            checkBox.isChecked = true
+            val viewItem = (recycle_assets.layoutManager as LinearLayoutManager).findViewByPosition(position)
+            val checkBox = viewItem?.findViewById<AppCompatCheckBox>(R.id.checkbox_choose)
+            checkBox?.isChecked = true
 
             // disable click for next items, which user click before activity will finish
             adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position -> }
 
-            // finish activity with result and timeout
-            runDelayed(500) {
-                setResult(Activity.RESULT_OK, Intent().apply {
-                    putExtra(BUNDLE_ASSET_ITEM, item)
-                })
-                finish()
-            }
+            setResult(Activity.RESULT_OK, Intent().apply {
+                putExtra(BUNDLE_ASSET_ITEM, item)
+            })
+            finish()
         }
     }
 
@@ -103,4 +101,32 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         adapter.setNewData(assets)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_your_assets, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_sorting -> {
+                if (intent.hasExtra(CRYPTO_CURRENCY)) {
+                    presenter.loadCryptoAssets(!presenter.greaterZeroBalance)
+                } else {
+                    presenter.loadAssets(!presenter.greaterZeroBalance)
+                }
+                item.title = if (presenter.greaterZeroBalance) {
+                    getString(R.string.your_asset_activity_all)
+                } else {
+                    getString(R.string.your_asset_activity_greater_zero)
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        const val BUNDLE_ASSET_ITEM = "asset"
+        const val BUNDLE_ADDRESS = "address"
+        const val CRYPTO_CURRENCY = "crypto_currency"
+    }
 }

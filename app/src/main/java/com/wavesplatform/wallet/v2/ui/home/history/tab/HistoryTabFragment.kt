@@ -7,21 +7,21 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
+import com.oushangfeng.pinnedsectionitemdecoration.PinnedHeaderItemDecoration
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.custom.SpeedyLinearLayoutManager
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
-import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_history_tab.*
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.util.*
 import javax.inject.Inject
-import com.wavesplatform.wallet.v2.ui.custom.SpeedyLinearLayoutManager
-import com.oushangfeng.pinnedsectionitemdecoration.PinnedHeaderItemDecoration
 
 
 class HistoryTabFragment : BaseFragment(), HistoryTabView {
@@ -38,7 +38,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     lateinit var layoutManager: LinearLayoutManager
     var changeTabBarVisibilityListener: ChangeTabBarVisibilityListener? = null
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
-    private var headerItemDecoration: PinnedHeaderItemDecoration? = null
+    private lateinit var headerItemDecoration: PinnedHeaderItemDecoration
 
     override fun configLayoutRes(): Int = R.layout.fragment_history_tab
 

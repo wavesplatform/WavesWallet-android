@@ -3,24 +3,19 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.enter
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.AppCompatEditText
-import android.text.InputType
 import android.text.TextUtils
-import android.view.LayoutInflater
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
-import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
+import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
@@ -101,13 +96,13 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         }
     }
 
-    fun clearAndLogout() {
+    private fun clearAndLogout() {
         App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
         launchActivity<WelcomeActivity>()
     }
 
-    fun startUsePasswordScreen() {
+    private fun startUsePasswordScreen() {
         val guid = getGuid()
         if (TextUtils.isEmpty(guid)) {
             restartApp()
@@ -128,7 +123,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         }
     }
 
-    fun validate(passCode: String) {
+    private fun validate(passCode: String) {
         showProgressBar(true)
         presenter.validate(getGuid(), passCode)
     }
@@ -167,8 +162,14 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     }
 
     override fun onBackPressed() {
-        setResult(Constants.RESULT_CANCELED)
-        finish()
+        if (intent.hasExtra(KEY_INTENT_GUID)) {
+            launchActivity<SplashActivity>(clear = true) {
+                putExtra(SplashActivity.EXIT, true)
+            }
+        } else {
+            setResult(Constants.RESULT_CANCELED)
+            finish()
+        }
     }
 
     override fun askPassCode() = false

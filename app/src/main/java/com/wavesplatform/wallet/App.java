@@ -7,15 +7,14 @@ import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.franmontiel.localechanger.LocaleChanger;
 import com.github.moduth.blockcanary.BlockCanary;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
-import com.vicpin.krealmextensions.RealmConfigStore;
 import com.wavesplatform.wallet.v1.data.access.AccessState;
 import com.wavesplatform.wallet.v1.data.access.DexAccessState;
 import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
 import com.wavesplatform.wallet.v1.data.services.PinStoreService;
-import com.wavesplatform.wallet.v1.db.DBHelper;
 import com.wavesplatform.wallet.v1.injection.Injector;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v1.util.AppUtil;
@@ -25,17 +24,7 @@ import com.wavesplatform.wallet.v1.util.annotations.Thunk;
 import com.wavesplatform.wallet.v1.util.exceptions.LoggingExceptionHandler;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
-import com.wavesplatform.wallet.v2.data.model.remote.response.Alias;
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetPair;
-import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction;
-import com.wavesplatform.wallet.v2.data.model.remote.response.Lease;
-import com.wavesplatform.wallet.v2.data.model.remote.response.Order;
-import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset;
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction;
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,10 +34,10 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
+import io.fabric.sdk.android.Fabric;
 import io.github.kbiakov.codeview.classifier.CodeProcessor;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import pers.victor.ext.Ext;
 
 public class App extends DaggerApplication {
@@ -76,6 +65,7 @@ public class App extends DaggerApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         sContext = this;
         List<Locale> SUPPORTED_LOCALES =
                 Arrays.asList(

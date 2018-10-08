@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/basic50">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,8 +24,9 @@
             android:textSize="12sp" />
 
         <android.support.v7.widget.CardView
+            android:id="@+id/edit_asset_card"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -35,6 +37,7 @@
             app:cardElevation="2dp">
 
             <RelativeLayout
+                android:id="@+id/edit_asset_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -62,7 +65,8 @@
                     android:layout_toLeftOf="@+id/image_change"
                     android:clickable="true"
                     android:padding="10dp"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -149,7 +153,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -171,20 +176,22 @@
                     android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/limits"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="4sp"
-                        android:text="@string/receive_minimum_amount"
                         android:textColor="@color/black"
                         android:textSize="12sp"
+                        tools:text="@string/receive_minimum_amount"
                         app:fontFamily="@font/roboto_bold" />
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/warning"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:lineSpacingExtra="4sp"
-                        android:text="@string/receive_will_send"
+                        tools:text="@string/receive_warning_will_send"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -211,10 +218,11 @@
                     android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/warning_crypto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="4sp"
-                        android:text="@string/receive_will_send_only_btc"
+                        tools:text="@string/receive_warning_crypto"
                         android:textColor="@color/disabled500"
                         android:textSize="12sp"
                         app:fontFamily="@font/roboto_bold" />

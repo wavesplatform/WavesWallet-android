@@ -67,7 +67,7 @@ class SendActivity : BaseActivity(), SendView {
 
         edit_amount.addTextChangedListener {
             on { s, start, before, count ->
-                if (edit_amount.text.isNotEmpty()){
+                if (edit_amount.text!!.isNotEmpty()){
                     horizontal_amount_suggestion.gone()
                 }else{
                     horizontal_amount_suggestion.visiable()
@@ -91,7 +91,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun checkAddressFieldAndSetAction() {
-        if (edit_address.text.isNotEmpty()) {
+        if (edit_address.text!!.isNotEmpty()) {
             image_view_recipient_action.setImageResource(R.drawable.ic_deladdress_24_error_400)
             image_view_recipient_action.tag = R.drawable.ic_deladdress_24_error_400
             horizontal_recipient_suggestion.gone()

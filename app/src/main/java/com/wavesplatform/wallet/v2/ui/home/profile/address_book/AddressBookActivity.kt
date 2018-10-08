@@ -107,9 +107,10 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                     putExtra(BUNDLE_TYPE, SCREEN_TYPE_EDITABLE)
                 }
             } else if (this.adapter.screenType == AddressBookScreenType.CHOOSE.type) {
-                val viewItem = recycle_addresses.layoutManager.findViewByPosition(position)
-                val checkBox = viewItem.findViewById<AppCompatCheckBox>(R.id.checkbox_choose)
-                checkBox.isChecked = true
+                val viewItem = (recycle_addresses.layoutManager as LinearLayoutManager)
+                        .findViewByPosition(position)
+                val checkBox = viewItem?.findViewById<AppCompatCheckBox>(R.id.checkbox_choose)
+                checkBox?.isChecked = true
 
                 // disable click for next items, which user click before activity will finish
                 adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position -> }
