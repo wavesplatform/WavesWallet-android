@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -46,6 +47,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view,  true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         recycle_favorite_assets.layoutManager = LinearLayoutManager(this)
