@@ -67,10 +67,10 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                         .map { return@map Pair(assets, it) }
                                         .subscribeOn(Schedulers.io())
                             }
-                            .map {
+                            .map { pair ->
                                 if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
                                     // merge db data and API data
-                                    it.first.balances.forEachIndexed { index, assetBalance ->
+                                    pair.first.balances.forEachIndexed { index, assetBalance ->
                                         val dbAsset = assetsFromDb.firstOrNull { dbAsset ->
                                             dbAsset.assetId == assetBalance.assetId
                                         }
@@ -86,13 +86,21 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                     }
                                 }
 
-                                it.first.balances.forEachIndexed { index, assetBalance ->
+                                pair.first.balances.forEachIndexed { index, assetBalance ->
                                     assetBalance.isSpam = spamAssets.any {
                                         it.assetId == assetBalance.assetId
                                     }
                                 }
 
-                                it.first.balances.saveAll()
+                                if (pair.first.balances.any { it.position != -1 }) {
+                                    pair.first.balances.forEach {
+                                        if (it.position == -1) {
+                                            it.position = pair.first.balances.size + 1
+                                        }
+                                    }
+                                }
+
+                                pair.first.balances.saveAll()
 
                                 return@map queryAll<AssetBalance>()
                             }

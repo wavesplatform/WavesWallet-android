@@ -3,14 +3,20 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
+import com.oushangfeng.pinnedsectionitemdecoration.PinnedHeaderItemDecoration
+import com.oushangfeng.pinnedsectionitemdecoration.callback.OnHeaderClickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
@@ -26,12 +32,14 @@ import com.wavesplatform.wallet.v2.util.isMyServiceRunning
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
-import pers.victor.ext.click
+import kotlinx.android.synthetic.main.wallet_header_item.view.*
+import pers.victor.ext.dp2px
 import pers.victor.ext.gone
+import pers.victor.ext.isVisible
 import pers.victor.ext.toast
-import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
+
 
 class AssetsFragment : BaseFragment(), AssetsView {
 
@@ -45,13 +53,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
     @Inject
     lateinit var adapter: AssetsAdapter
 
-    @Inject
-    lateinit var adapterHiddenAssets: AssetsAdapter
-
-    @Inject
-    lateinit var spamAssetsAdapter: AssetsAdapter
-
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
+    private var headerItemDecoration: PinnedHeaderItemDecoration? = null
     var changeTabBarVisibilityListener: HistoryTabFragment.ChangeTabBarVisibilityListener? = null
 
     companion object {
@@ -72,8 +75,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.ScrollToTopEvent::class.java)
                 .subscribe {
                     if (it.position == MainActivity.WALLET_SCREEN) {
-//                        nested_scroll_view.smoothScrollTo(0, 0)
-//                        changeTabBarVisibilityListener?.changeTabBarVisibility(true)
+                        recycle_assets.scrollToPosition(0)
+                        changeTabBarVisibilityListener?.changeTabBarVisibility(true)
                     }
                 })
 
@@ -102,89 +105,63 @@ class AssetsFragment : BaseFragment(), AssetsView {
             presenter.loadAssetsBalance()
         }
 
-        recycle_assets_not_hidden.layoutManager = LinearLayoutManager(baseActivity)
-        recycle_assets_not_hidden.adapter = adapter
-        recycle_assets_not_hidden.isNestedScrollingEnabled = false
+        recycle_assets.layoutManager = LinearLayoutManager(baseActivity)
+        adapter.bindToRecyclerView(recycle_assets)
 
-        skeletonScreen = Skeleton.bind(recycle_assets_not_hidden)
-                .adapter(recycle_assets_not_hidden.adapter)
+        val headerClickListener = object : OnHeaderClickAdapter() {
+            override fun onHeaderClick(view: View, id: Int, position: Int) {
+                presenter.needToScroll = true
+                recycle_assets.smoothScrollToPosition(position)
+            }
+        }
+
+        headerItemDecoration = PinnedHeaderItemDecoration.Builder(AssetsAdapter.TYPE_HEADER)
+                .disableHeaderClick(false)
+                .setHeaderClickListener(headerClickListener)
+                .create()
+        recycle_assets.addItemDecoration(headerItemDecoration)
+
+        recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                if (headerItemDecoration?.pinnedHeaderView != null) {
+                    swipe_container.isEnabled = false
+                    if (headerItemDecoration?.pinnedHeaderView?.image_arrow?.isVisible() == true) {
+                        headerItemDecoration?.pinnedHeaderView?.image_arrow?.gone()
+                    }
+                } else {
+                    swipe_container.isEnabled = true
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (presenter.needToScroll) {
+                        presenter.needToScroll = false
+                        recycle_assets.smoothScrollBy(0, -dp2px(1))
+                    }
+                }
+            }
+        })
+
+        skeletonScreen = Skeleton.bind(recycle_assets)
+                .adapter(recycle_assets.adapter)
                 .color(R.color.basic100)
                 .load(R.layout.item_skeleton_wallet)
                 .frozen(false)
                 .show()
 
-        recycle_assets_hidden.layoutManager = LinearLayoutManager(baseActivity)
-        recycle_assets_hidden.adapter = adapterHiddenAssets
-        recycle_assets_hidden.isNestedScrollingEnabled = false
-
-        recycle_spam_assets.layoutManager = LinearLayoutManager(baseActivity)
-        recycle_spam_assets.adapter = spamAssetsAdapter
-        recycle_spam_assets.isNestedScrollingEnabled = false
-
-
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position) as AssetBalance
+            val positionWithoutSection = when {
+                item.isHidden -> position - 1 // minus hidden section header
+                item.isSpam -> position - 2 // minus hidden and spam sections header
+                else -> position // no changes
+            }
             launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position)
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, positionWithoutSection)
             }
         }
-
-        adapterHiddenAssets.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = this.adapterHiddenAssets.getItem(position) as AssetBalance
-            launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION,
-                        position + this@AssetsFragment.adapter.data.size)
-            }
-        }
-
-        spamAssetsAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = this.spamAssetsAdapter.getItem(position) as AssetBalance
-            launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION,
-                        position + this@AssetsFragment.adapterHiddenAssets.data.size
-                                + this@AssetsFragment.adapter.data.size)
-            }
-        }
-
-        text_hidden_assets.click {
-            if (expandable_layout_hidden.isExpanded) {
-                expandable_layout_hidden.collapse()
-                image_arrowup.animate()
-                        .rotation(180f)
-                        .setDuration(500)
-                        .start()
-            } else {
-                expandable_layout_hidden.expand()
-                image_arrowup.animate()
-                        .rotation(0f)
-                        .setDuration(500)
-                        .start()
-            }
-        }
-
-        text_spam_assets.click {
-            if (expandable_layout_spam.isExpanded) {
-                expandable_layout_spam.collapse()
-                image_arrowup_spam.animate()
-                        .rotation(180f)
-                        .setDuration(500)
-                        .start()
-            } else {
-                expandable_layout_spam.expand()
-                image_arrowup_spam.animate()
-                        .rotation(0f)
-                        .setDuration(500)
-                        .start()
-            }
-        }
-
-        text_hidden_assets.text = getString(R.string.wallet_assets_hidden_category,
-                adapterHiddenAssets.data.size.toString())
-        text_spam_assets.text = getString(R.string.wallet_assets_spam_category,
-                spamAssetsAdapter.data.size.toString())
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -205,42 +182,20 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
     }
 
-    override fun afterSuccessLoadAssets(assets: List<AssetBalance>, fromDB: Boolean, withApiUpdate: Boolean) {
-        if (!fromDB || !withApiUpdate) {
+    override fun afterSuccessLoadAssets(assets: ArrayList<MultiItemEntity>, fromDB: Boolean, withApiUpdate: Boolean) {
+        if (withApiUpdate){
+            if (fromDB) {
+                swipe_container?.isRefreshing = true
+                skeletonScreen.notNull { it.hide() }
+            } else {
+                swipe_container?.isRefreshing = false
+            }
+        }else{
             swipe_container?.isRefreshing = false
         }
 
+
         adapter.setNewData(assets)
-        if (withApiUpdate) {
-            skeletonScreen.notNull { it.hide() }
-        }
-    }
-
-    override fun afterSuccessLoadHiddenAssets(assets: List<AssetBalance>) {
-        if (assets.isNotEmpty()) {
-            expandable_layout_hidden.visiable()
-            relative_hidden_block.visiable()
-        } else {
-            expandable_layout_hidden.gone()
-            relative_hidden_block.gone()
-        }
-
-        adapterHiddenAssets.setNewData(assets)
-        text_hidden_assets.text = getString(
-                R.string.wallet_assets_hidden_category, assets.size.toString())
-    }
-
-    override fun afterSuccessLoadSpamAssets(assets: List<AssetBalance>) {
-        if (assets.isNotEmpty()) {
-            expandable_layout_spam.visiable()
-            relative_spam_block.visiable()
-        } else {
-            expandable_layout_spam.gone()
-            relative_spam_block.gone()
-        }
-        spamAssetsAdapter.setNewData(assets)
-        text_spam_assets.text = getString(
-                R.string.wallet_assets_spam_category, assets.size.toString())
     }
 
     override fun afterFailedLoadAssets() {
@@ -280,5 +235,4 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
         return super.onOptionsItemSelected(item)
     }
-
 }

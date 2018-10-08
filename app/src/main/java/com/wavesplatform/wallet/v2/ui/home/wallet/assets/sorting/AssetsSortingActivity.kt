@@ -156,9 +156,9 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
 
         // load assets from DB
-        runAsync({
+        runAsync {
             presenter.loadAssets()
-        })
+        }
     }
 
     override fun showFavoriteAssets(favorites: List<AssetBalance>) {

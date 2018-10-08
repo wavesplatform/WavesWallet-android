@@ -40,23 +40,19 @@ class HistoryTabItemAdapter @Inject constructor() :
     }
 
     override fun convert(helper: BaseViewHolder, item: HistoryItem) {
-        val currentPosition = data.indexOf(item)
         when (item.itemType) {
             HistoryItem.TYPE_HEADER -> {
                 helper.setText(R.id.text_header_text, item?.header)
             }
             HistoryItem.TYPE_DATA -> {
                 try {
-                    val param = helper.itemView.card_history.layoutParams as RecyclerView.LayoutParams
-
-                    if (data[currentPosition + 1].header.isNotEmpty()) {
-                        helper.itemView.card_history.layoutParams = param
-                        param.bottomMargin = dp2px(18)
+                    if (data[helper.adapterPosition + 1].header.isNotEmpty()) {
+                        helper.itemView.card_history.setMargins(bottom = dp2px(18))
                     } else {
-                        param.bottomMargin = dp2px(8)
+                        helper.itemView.card_history.setMargins(bottom = dp2px(8))
                     }
-                    helper.itemView.card_history.layoutParams = param
                 } catch (e: Throwable) {
+                    helper.itemView.card_history.setMargins(bottom = dp2px(8))
                     e.printStackTrace()
                 }
 

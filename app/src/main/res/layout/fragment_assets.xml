@@ -6,126 +6,20 @@
     android:layout_height="match_parent"
     android:background="@color/basic50">
 
-    <android.support.v4.widget.NestedScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/nested_scroll_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never">
+        android:animateLayoutChanges="true"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_assets"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:descendantFocusability="blocksDescendants"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true">
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="18dp" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_assets_not_hidden"
-                android:layout_width="match_parent"
-                android:paddingBottom="18dp"
-                android:clipToPadding="false"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never" />
-
-            <RelativeLayout
-                android:id="@+id/relative_hidden_block"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="8dp"
-                android:layout_marginBottom="6dp"
-                android:visibility="gone">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_hidden_assets"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:paddingEnd="16dp"
-                    android:paddingStart="16dp"
-                    android:text="Hidden assets (2)"
-                    android:textColor="@color/basic500" />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_arrowup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:rotation="180"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="16dp"
-                    app:srcCompat="@drawable/ic_arrowup_basic_300" />
-            </RelativeLayout>
-
-            <net.cachapa.expandablelayout.ExpandableLayout
-                android:id="@+id/expandable_layout_hidden"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:el_duration="500"
-                app:el_parallax="0.5">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycle_assets_hidden"
-                    android:layout_width="match_parent"
-                    android:paddingBottom="18dp"
-                    android:clipToPadding="false"
-                    android:layout_height="wrap_content"
-                    android:overScrollMode="never" />
-
-            </net.cachapa.expandablelayout.ExpandableLayout>
-
-            <RelativeLayout
-                android:id="@+id/relative_spam_block"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="8dp"
-                android:layout_marginBottom="6dp"
-                android:visibility="gone">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_spam_assets"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:paddingEnd="16dp"
-                    android:paddingStart="16dp"
-                    android:text="Spam assets (2)"
-                    android:textColor="@color/basic500" />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_arrowup_spam"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:rotation="180"
-                    android:layout_marginEnd="16dp"
-                    app:srcCompat="@drawable/ic_arrowup_basic_300" />
-            </RelativeLayout>
-
-            <net.cachapa.expandablelayout.ExpandableLayout
-                android:id="@+id/expandable_layout_spam"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:el_duration="500"
-                app:el_parallax="0.5">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycle_spam_assets"
-                    android:layout_width="match_parent"
-                    android:paddingBottom="18dp"
-                    android:clipToPadding="false"
-                    android:layout_height="wrap_content"
-                    android:overScrollMode="never" />
-
-            </net.cachapa.expandablelayout.ExpandableLayout>
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

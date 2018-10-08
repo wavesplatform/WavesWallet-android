@@ -1,8 +1,10 @@
 package com.wavesplatform.wallet.v2.data.model.remote.response
 
 import android.os.Parcelable
+import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import io.realm.RealmModel
 import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
@@ -35,7 +37,16 @@ open class AssetBalance(
         var isFavorite: Boolean = false,
         var isGateway: Boolean = false,
         var isSpam: Boolean = false
-) : RealmModel, Parcelable {
+) : RealmModel, Parcelable, MultiItemEntity {
+
+    override fun getItemType(): Int {
+        return when {
+            isSpam -> AssetsAdapter.TYPE_SPAM_ASSET
+            isHidden -> AssetsAdapter.TYPE_HIDDEN_ASSET
+            else -> AssetsAdapter.TYPE_ASSET
+        }
+    }
+
     fun getDecimals(): Int? {
         return if (issueTransaction != null) issueTransaction?.decimals else 8
     }
