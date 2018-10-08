@@ -124,11 +124,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         super.onDestroy()
     }
 
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(R.anim.finish_previous_show, R.anim.finish_current_hide)
-    }
-
     protected open fun askPassCode() = true
 
     private fun askPassCodeIfNeed() {

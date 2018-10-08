@@ -89,7 +89,7 @@
 
     <style name="AppThemeV2.NoActionBar.Translucent.DarkStatusBar" parent="AppThemeV2.NoActionBar.Translucent">
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="android:navigationBarColor">@color/basic50</item>
+        <item name="android:navigationBarColor">@color/white</item>
     </style>
 
     <style name="AppThemeV2.MainActivity" parent="AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
@@ -134,6 +134,10 @@
         <item name="android:windowBackground">@color/overlayDark</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
+    </style>
+
+    <style name="BottomSheetDialogBgDimDisabled" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
     <style name="WavesButton" parent="android:style/Widget.Button">

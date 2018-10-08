@@ -22,7 +22,7 @@ class AssetsSortingAdapter @Inject constructor() : BaseItemDraggableAdapter<Asse
                     onHiddenChangeListener?.onHiddenStateChanged(item, isChecked)
                 }
                 .setGone(R.id.switch_visible, item.configureVisibleState)
-                .setGone(R.id.image_down_arrow, item.isWaves() || !item.isGateway)
+                .setGone(R.id.image_down_arrow, !item.isGateway)
                 .setGone(R.id.image_drag, !item.configureVisibleState)
 
         helper.itemView.image_asset_icon.isOval = true
