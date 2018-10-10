@@ -33,7 +33,7 @@ interface CoinomatService {
                      @Query("lang") lang: String?): Observable<GetTunnel>
 
     // https://coinomat.com/api/v1/get_xrate.php?f=WETH&t=ETH&lang=ru_RU
-    @GET("api/v1/get_xrate.php")
+    @GET("v1/get_xrate.php")
     fun getXrate(@Query("f") from: String?,
                   @Query("t") to: String?,
                   @Query("lang") lang: String?): Observable<Xrate>
