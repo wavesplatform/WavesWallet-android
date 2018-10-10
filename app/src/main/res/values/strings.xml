@@ -1225,7 +1225,7 @@
     <!--Send Success-->
     <string name="send_success_do_you_want_to_save_this_address">Do you want to save this address?</string>
     <string name="send_success_your_transaction_is_on_the_way">Your transaction is on the way!</string>
-    <string name="send_success_you_have_sent_sum">You have sent 0.00138696 WAVES</string>
+    <string name="send_success_you_have_sent_sum">You have sent %1$s %2$s</string>
     <string name="send_success_okay">Okay</string>
 
     <!--Receive address view-->

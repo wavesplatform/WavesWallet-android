@@ -9,6 +9,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.payload.IssueTransaction
+import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
@@ -16,10 +18,12 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ASSET
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_send.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
@@ -67,27 +71,33 @@ class SendActivity : BaseActivity(), SendView {
 
         edit_amount.addTextChangedListener {
             on { s, start, before, count ->
-                if (edit_amount.text!!.isNotEmpty()){
+                if (edit_amount.text!!.isNotEmpty()) {
                     horizontal_amount_suggestion.gone()
-                }else{
+                } else {
                     horizontal_amount_suggestion.visiable()
                 }
             }
         }
 
         image_view_recipient_action.click {
-            if (it.tag == R.drawable.ic_deladdress_24_error_400){
+            if (it.tag == R.drawable.ic_deladdress_24_error_400) {
                 edit_address.text = null
-            }else if(it.tag == R.drawable.ic_qrcode_24_basic_500){
+            } else if (it.tag == R.drawable.ic_qrcode_24_basic_500) {
                 launchActivity<QrCodeScannerActivity> { }
             }
         }
 
-        button_continue.click {
-            launchActivity<SendConfirmationActivity> {  }
+        button_continue.click { presenter.sendClicked() }
+    }
+
+    override fun onShowError(res: Int, toastType: String) {
+        showError(res, R.id.root)
+    }
+
+    override fun onShowPaymentDetails(details: PaymentConfirmationDetails) {
+        launchActivity<SendConfirmationActivity> {
+            putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
         }
-
-
     }
 
     private fun checkAddressFieldAndSetAction() {
@@ -96,10 +106,10 @@ class SendActivity : BaseActivity(), SendView {
             image_view_recipient_action.tag = R.drawable.ic_deladdress_24_error_400
             horizontal_recipient_suggestion.gone()
             presenter.selectedAsset.notNull {
-                if (it.isFiatMoney){
+                if (it.isFiatMoney) {
                     relative_gateway_fee.gone()
                     relative_fiat_fee.visiable()
-                }else{
+                } else {
                     relative_fiat_fee.gone()
                     relative_gateway_fee.visiable()
                 }
@@ -114,6 +124,7 @@ class SendActivity : BaseActivity(), SendView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
+
             ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
 
@@ -136,6 +147,26 @@ class SendActivity : BaseActivity(), SendView {
                     val asset = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
                     asset.notNull {
                         presenter.selectedAsset = asset
+                        asset.notNull {
+                            val tr = IssueTransaction(
+                                    it.issueTransaction!!.type!!,
+                                    it.issueTransaction!!.id!!,
+                                    it.issueTransaction!!.sender!!,
+                                    it.issueTransaction!!.timestamp!!,
+                                    0,
+                                    it.issueTransaction!!.fee!!.toLong(),
+                                    it.issueTransaction!!.name!!,
+                                    it.issueTransaction!!.description,
+                                    it.issueTransaction!!.quantity!!,
+                                    it.issueTransaction!!.decimals!!,
+                                    it.issueTransaction!!.reissuable!!)
+                            presenter.sendingAsset = com.wavesplatform.wallet.v1.payload.AssetBalance(
+                                    it.assetId,
+                                    it.balance!!,
+                                    it.reissuable!!,
+                                    it.quantity!!,
+                                    tr)
+                        }
                         checkAddressFieldAndSetAction()
                         relative_chosen_coin.visiable()
                         text_asset_hint.gone()
@@ -146,9 +177,9 @@ class SendActivity : BaseActivity(), SendView {
                         text_asset_name.text = it.getName()
 
                         text_asset_value.text = it.getDisplayBalance()
-                        if (it.isFavorite){
+                        if (it.isFavorite) {
                             image_asset_is_favourite.visiable()
-                        }else{
+                        } else {
                             image_asset_is_favourite.gone()
                         }
                     }

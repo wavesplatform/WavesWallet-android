@@ -1,9 +1,9 @@
 package com.wavesplatform.wallet.v1.ui.assets;
 
-import com.wavesplatform.wallet.v1.api.NodeManager;
-import com.wavesplatform.wallet.v1.util.MoneyUtil;
+import com.wavesplatform.wallet.App;
 import com.wavesplatform.wallet.v1.payload.AssetBalance;
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest;
+import com.wavesplatform.wallet.v1.util.MoneyUtil;
 
 public class PaymentConfirmationDetails {
 
@@ -28,7 +28,7 @@ public class PaymentConfirmationDetails {
 
     public static PaymentConfirmationDetails fromRequest(AssetBalance ab, TransferTransactionRequest req) {
         PaymentConfirmationDetails d = new PaymentConfirmationDetails();
-        d.fromLabel = NodeManager.get().getAddress();
+        d.fromLabel = App.getAccessManager().getWallet().getAddress();
         d.toLabel = req.recipient;
         d.amount = MoneyUtil.getScaledText(req.amount, ab);
         d.fee = MoneyUtil.getDisplayWaves(req.fee);

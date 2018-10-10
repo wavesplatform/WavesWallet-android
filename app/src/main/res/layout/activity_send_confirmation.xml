@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
+        android:layout_marginTop="24dp"
         app:titleTextAppearance="@style/Toolbar.Title"
         app:titleTextColor="@color/white" />
 
@@ -229,7 +230,7 @@
     </android.support.v7.widget.CardView>
 
     <RelativeLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/relative_success"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -276,9 +277,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="8dp"
-                    android:text="@string/send_success_you_have_sent_sum"
                     android:textColor="@color/disabled500"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    tools:text="@string/send_success_you_have_sent_sum"
+                    />
 
                 <Button
                     android:id="@+id/button_okay"
@@ -331,6 +333,7 @@
                     />
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/sent_to_address"
                     android:layout_marginTop="2dp"
                     android:layout_below="@+id/text_do_you_want"
                     android:textColor="@color/basic700"
@@ -338,7 +341,7 @@
                     android:layout_width="match_parent"
                     android:layout_marginEnd="8dp"
                     android:layout_height="wrap_content"
-                    android:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"
+                    tools:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"
                     />
 
                 <android.support.v7.widget.AppCompatImageView
