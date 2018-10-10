@@ -46,7 +46,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
-        setupToolbar(toolbar_view,  true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         recycle_favorite_assets.layoutManager = LinearLayoutManager(this)
         recycle_favorite_assets.adapter = adapterFavorites
@@ -145,7 +145,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 presenter.needToUpdate = true
                 val originalPos = IntArray(2)
                 target.itemView.card_asset.getLocationOnScreen(originalPos)
-                view_drag_bg.y = originalPos[1].toFloat()- getStatusBarHeight()
+                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
             }
 
             override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
@@ -154,11 +154,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             }
         })
 
-
-        // load assets from DB
-        runAsync {
-            presenter.loadAssets()
-        }
+        presenter.loadAssets()
     }
 
     override fun showFavoriteAssets(favorites: List<AssetBalance>) {

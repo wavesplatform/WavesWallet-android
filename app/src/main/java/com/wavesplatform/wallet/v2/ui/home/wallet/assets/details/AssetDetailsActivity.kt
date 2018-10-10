@@ -92,7 +92,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         spam_tag.gone()
 
         when {
-            item.isWaves() -> text_asset_description.setText(R.string.asset_details_waves_token)
+            item.isWaves -> text_asset_description.setText(R.string.asset_details_waves_token)
             item.isGateway -> text_asset_description.setText(R.string.asset_details_cryptocurrency)
             item.isFiatMoney -> text_asset_description.setText(R.string.asset_details_flat_money)
             item.isSpam -> {
@@ -134,7 +134,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     private fun changeFavorite() {
-        if (!adapterAvatar.items[view_pager.currentItem].isWaves()) {
+        if (!adapterAvatar.items[view_pager.currentItem].isWaves) {
             if (adapterAvatar.items[view_pager.currentItem].isFavorite) {
                 unmarkAsFavorite()
             } else {

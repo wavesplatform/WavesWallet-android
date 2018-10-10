@@ -10,15 +10,15 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.arrayWithSize
 import java.nio.charset.Charset
 
-
-data class AliasRequest(
-        @SerializedName("type") val type: Int = 10,
-        @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+data class CreateLeasingRequest(
+        @SerializedName("type") val type: Int = 8,
+        @SerializedName("senderPublicKey") var senderPublicKey: String = "",
+        @SerializedName("amount") var amount: Long = 0,
         @SerializedName("fee") var fee: Long = 0,
+        @SerializedName("recipient") var recipient: String = "",
         @SerializedName("timestamp") var timestamp: Long = 0,
         @SerializedName("signature") var signature: String? = null,
-        @SerializedName("alias") var alias: String = ""
-
+        @Transient var isAlias: Boolean = false
 ) {
 
     fun toSignBytes(): ByteArray {
@@ -27,11 +27,12 @@ data class AliasRequest(
                     Base58.decode(senderPublicKey),
                     Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
                             byteArrayOf(Constants.ADDRESS_SCHEME.toByte()),
-                            alias.toByteArray(Charset.forName("UTF-8")).arrayWithSize()).arrayWithSize(),
+                            recipient.toByteArray(Charset.forName("UTF-8")).arrayWithSize()).arrayWithSize(),
+                    Longs.toByteArray(amount),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp))
         } catch (e: Exception) {
-            Log.e("AliasRequest", "Couldn't create toSignBytes", e)
+            Log.e("CreateLeasingRequest", "Couldn't create toSignBytes", e)
             ByteArray(0)
         }
 

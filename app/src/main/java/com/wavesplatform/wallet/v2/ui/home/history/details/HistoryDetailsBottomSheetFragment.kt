@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatTextView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -46,7 +47,6 @@ import javax.inject.Inject
 
 
 class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), HistoryDetailsView {
-
     var selectedItemPosition: Int = 0
     var selectedItem: Transaction? = null
     var allItems: List<Transaction>? = ArrayList()
@@ -221,6 +221,17 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 historyContainer?.addView(commentBlock)
                 if (transaction.status == LeasingStatus.ACTIVE.status) {
                     status?.text = getString(R.string.history_details_active_now)
+                    cancelLeasingBtn?.findViewById<FrameLayout>(R.id.frame_cancel_button)?.click {
+                        showProgressBar(true)
+                        presenter.cancelLeasing(transaction.id) {
+                            showProgressBar(false)
+                            selectedItem?.let {
+                                it.status = LeasingStatus.CANCELED.status
+                                setupView(it)
+                            }
+                        }
+                    }
+
                     historyContainer?.addView(baseInfoLayout)
                     historyContainer?.addView(cancelLeasingBtn)
                 } else {

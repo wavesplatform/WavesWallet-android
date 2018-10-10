@@ -90,7 +90,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                     // history only for detailed asset
                     assetBalance.notNull {
                         allItemsFromDb = allItemsFromDb.filter {
-                            if (assetBalance?.isWaves() == true) it.assetId.isNullOrEmpty()
+                            if (assetBalance?.isWaves == true) it.assetId.isNullOrEmpty()
                             else it.assetId == assetBalance?.assetId
                         }
                     }

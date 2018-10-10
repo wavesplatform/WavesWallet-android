@@ -46,7 +46,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view,  true, getString(R.string.add_address_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.add_address_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         if (edit_address.text.isEmpty()) edit_address.tag = R.drawable.ic_qrcode_24_basic_500
         else edit_address.tag = R.drawable.ic_deladdress_24_error_400
@@ -60,6 +60,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
                         } else if (edit_address.tag == R.drawable.ic_qrcode_24_basic_500) {
                             IntentIntegrator(this@AddAddressActivity).setRequestCode(ScanSeedFragment.REQUEST_SCAN_QR_CODE)
                                     .setOrientationLocked(true)
+                                    .setBeepEnabled(false)
                                     .setCaptureActivity(QrCodeScannerActivity::class.java)
                                     .initiateScan()
                         }
@@ -70,21 +71,21 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
 
         eventSubscriptions.add(RxTextView.textChanges(edit_name)
                 .skipInitialValue()
-                .map({
+                .map {
                     return@map it.toString()
-                })
+                }
                 .debounce(350, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
-                .flatMap({
+                .flatMap {
                     return@flatMap queryAsFlowable<AddressBookUser> { equalTo("name", it) }.toObservable()
-                })
-                .map({
+                }
+                .map {
                     presenter.nameFieldValid = edit_name.text.isNotEmpty() && it.isEmpty()
-                })
+                }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ name ->
+                .subscribe { name ->
                     isFieldsValid()
-                }))
+                })
 
         button_save.click {
             presenter.saveAddress(edit_address.text.toString(), edit_name.text.toString())

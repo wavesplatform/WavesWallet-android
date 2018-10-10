@@ -33,6 +33,7 @@ class ScanSeedFragment : BaseFragment(), ScanSeedView {
         button_scan.click {
             IntentIntegrator(baseActivity).setRequestCode(REQUEST_SCAN_QR_CODE)
                     .setOrientationLocked(true)
+                    .setBeepEnabled(false)
                     .setCaptureActivity(QrCodeScannerActivity::class.java)
                     .initiateScan()
         }

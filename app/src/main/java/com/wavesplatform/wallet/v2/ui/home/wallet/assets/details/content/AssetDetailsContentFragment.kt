@@ -145,7 +145,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         }
 
         // hide token burn if WAVES
-        card_burn.goneIf { assetBalance?.isWaves() == true }
+        card_burn.goneIf { assetBalance?.isWaves == true }
 
         // configure view if SPAM
         linear_last_transactions.goneIf { assetBalance?.isSpam == true }

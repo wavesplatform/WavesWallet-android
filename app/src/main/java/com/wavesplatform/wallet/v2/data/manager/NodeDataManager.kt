@@ -1,18 +1,15 @@
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.vicpin.krealmextensions.deleteAll
-import com.vicpin.krealmextensions.queryAll
-import com.vicpin.krealmextensions.save
-import com.vicpin.krealmextensions.saveAll
+import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R.color.r
-import com.wavesplatform.wallet.v1.payload.TransactionsInfo
-import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
+import com.wavesplatform.wallet.R.color.i
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
-import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.isAppOnForeground
 import com.wavesplatform.wallet.v2.util.notNull
@@ -25,7 +22,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class NodeDataManager @Inject constructor() : DataManager() {
+class NodeDataManager @Inject constructor() : BaseDataManager() {
     @Inject
     lateinit var transactionUtil: TransactionUtil
     @Inject
@@ -82,6 +79,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
                                             assetBalance.isGateway = it.isGateway
                                             assetBalance.isSpam = it.isSpam
                                             assetBalance.position = it.position
+                                            assetBalance.isWaves = it.isWaves
                                         }
                                     }
                                 }
@@ -131,6 +129,17 @@ class NodeDataManager @Inject constructor() : DataManager() {
                     it.save()
                     return@map it
                 }
+    }
+
+    fun cancelLeasing(cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction> {
+        cancelLeasingRequest.senderPublicKey = App.getAccessManager().getWallet()?.publicKeyStr
+        cancelLeasingRequest.fee = Constants.WAVES_FEE
+        cancelLeasingRequest.timestamp = currentTimeMillis
+
+        App.getAccessManager().getWallet()?.privateKey.notNull {
+            cancelLeasingRequest.sign(it)
+        }
+        return nodeService.cancelLeasing(cancelLeasingRequest)
     }
 
     fun loadTransactions(): Observable<List<Transaction>> {

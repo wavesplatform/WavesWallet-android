@@ -35,6 +35,7 @@ open class AssetBalance(
         @Ignore var isChecked: Boolean = false,
         var isFiatMoney: Boolean = false,
         var isFavorite: Boolean = false,
+        var isWaves: Boolean = false,
         var isGateway: Boolean = false,
         var isSpam: Boolean = false
 ) : RealmModel, Parcelable, MultiItemEntity {
@@ -65,10 +66,6 @@ open class AssetBalance(
 
     fun getDisplayBalanceWithUnit(): String {
         return getDisplayBalance() + " " + getName()
-    }
-
-    fun isWaves(): Boolean {
-        return assetId.isNullOrEmpty()
     }
 }
 
