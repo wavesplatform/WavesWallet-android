@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.data.remote
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.CreateTunnel
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.Limit
+import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.Xrate
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -30,4 +31,10 @@ interface CoinomatService {
                      @Query("k1") k1: String?,
                      @Query("k2") k2: String?,
                      @Query("lang") lang: String?): Observable<GetTunnel>
+
+    // https://coinomat.com/api/v1/get_xrate.php?f=WETH&t=ETH&lang=ru_RU
+    @GET("api/v1/get_xrate.php")
+    fun getXrate(@Query("f") from: String?,
+                  @Query("t") to: String?,
+                  @Query("lang") lang: String?): Observable<Xrate>
 }
