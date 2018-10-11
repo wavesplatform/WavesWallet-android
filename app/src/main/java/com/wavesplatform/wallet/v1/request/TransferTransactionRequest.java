@@ -5,7 +5,6 @@ import android.util.Log;
 import com.google.common.base.Charsets;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
-import com.google.common.primitives.Shorts;
 import com.wavesplatform.wallet.v1.crypto.Base58;
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider;
 import com.wavesplatform.wallet.v1.crypto.Hash;
@@ -21,7 +20,7 @@ public class TransferTransactionRequest {
 
     public String assetId;
     public String senderPublicKey;
-    public String recipient;
+    public String recipientAddress;
     public long amount;
     public long timestamp;
     public String feeAssetId;
@@ -34,11 +33,16 @@ public class TransferTransactionRequest {
     public TransferTransactionRequest() {
     }
 
-    public TransferTransactionRequest(String assetId, String senderPublicKey, String recipient, long amount,
-                                      long timestamp, long fee, String attachment) {
+    public TransferTransactionRequest(String assetId,
+                                      String senderPublicKey,
+                                      String recipientAddress,
+                                      long amount,
+                                      long timestamp,
+                                      long fee,
+                                      String attachment) {
         this.assetId = assetId;
         this.senderPublicKey = senderPublicKey;
-        this.recipient = recipient;
+        this.recipientAddress = recipientAddress;
         this.amount = amount;
         this.timestamp = timestamp;
         this.fee = fee;
@@ -60,7 +64,7 @@ public class TransferTransactionRequest {
                     timestampBytes,
                     amountBytes,
                     feeBytes,
-                    Base58.decode(recipient),
+                    Base58.decode(recipientAddress),
                     SignUtil.arrayWithSize(attachment));
         } catch (Exception e) {
             Log.e("Wallet", "Couldn't create seed", e);
@@ -89,7 +93,7 @@ public class TransferTransactionRequest {
     public TransferTransaction createDisplayTransaction() {
         TransferTransaction tt = new TransferTransaction(4, Base58.encode(Hash.fastHash(toSignBytes())),
                 AddressUtil.addressFromPublicKey(senderPublicKey), timestamp, amount, fee,
-                assetId, recipient, attachment);
+                assetId, recipientAddress, attachment);
         tt.isPending = true;
         return tt;
     }

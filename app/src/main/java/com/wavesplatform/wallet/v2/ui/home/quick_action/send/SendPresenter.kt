@@ -59,7 +59,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     private fun validateTransfer(tx: TransferTransactionRequest): Int {
         if (selectedAsset == null || TextUtils.isEmpty(address) || TextUtils.isEmpty(amount)) {
             R.string.send_transaction_error_check_fields
-        } else if (!AddressUtil.isValidAddress(tx.recipient)) {
+        } else if (!AddressUtil.isValidAddress(tx.recipientAddress)) {
             return R.string.invalid_address
         } else if (tx.attachmentSize > TransferTransactionRequest.MaxAttachmentSize) {
             return R.string.attachment_too_long
@@ -69,7 +69,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return R.string.invalid_amount
         } else if (tx.fee <= 0 || tx.fee < TransferTransactionRequest.MinFee) {
             return R.string.insufficient_fee
-        } else if (App.getAccessManager().getWallet()!!.address == tx.recipient) {
+        } else if (App.getAccessManager().getWallet()!!.address == tx.recipientAddress) {
             return R.string.send_to_same_address_warning
         } else if (!isFundSufficient(tx)) {
             return R.string.insufficient_funds
@@ -122,7 +122,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     companion object {
         const val CUSTOM_FEE: String = "0.001"
         const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
-        private const val LANG: String = "ru_RU"
+        const val LANG: String = "ru_RU"
         private val feeAsset: AssetBalance = AssetBalance(
                 quantity = 100000000L * 100000000L,
                 issueTransaction = IssueTransaction(

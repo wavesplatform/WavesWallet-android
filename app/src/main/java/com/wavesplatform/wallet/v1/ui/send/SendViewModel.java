@@ -231,7 +231,7 @@ public class SendViewModel extends BaseViewModel {
     }
 
     private int validateTransfer(TransferTransactionRequest tx) {
-        if (!AddressUtil.isValidAddress(tx.recipient)) {
+        if (!AddressUtil.isValidAddress(tx.recipientAddress)) {
             return R.string.invalid_address;
         } else if (tx.getAttachmentSize() > TransferTransactionRequest.MaxAttachmentSize) {
             return R.string.attachment_too_long;
@@ -241,7 +241,7 @@ public class SendViewModel extends BaseViewModel {
             return R.string.invalid_amount;
         } else if (tx.fee <= 0 || tx.fee < TransferTransactionRequest.MinFee) {
             return R.string.insufficient_fee;
-        } else if (NodeManager.get().getAddress().equals(tx.recipient)) {
+        } else if (NodeManager.get().getAddress().equals(tx.recipientAddress)) {
             return R.string.send_to_same_address_warning;
         } else if (!isFundSufficient(tx)) {
             return R.string.insufficient_funds;

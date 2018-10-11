@@ -7,7 +7,7 @@ interface SendConfirmationView : BaseMvpView {
 
     fun requestPassCode()
     fun onShowTransactionSuccess(signed: TransferTransactionRequest)
-    fun onShowError(res: Int, toastType: String)
+    fun onShowError(res: Int)
     fun showAddressBookUser(name: String)
     fun hideAddressBookUser()
 

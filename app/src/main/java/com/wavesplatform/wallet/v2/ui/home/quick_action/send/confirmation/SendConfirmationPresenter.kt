@@ -1,31 +1,36 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
+import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.api.NodeManager
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
-import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
+import io.reactivex.Single
+import pyxis.uzuki.live.richutilskt.utils.runAsync
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 @InjectViewState
 class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfirmationView>() {
 
+    @Inject
+    lateinit var coinomatManager: CoinomatManager
     private var nodeManager = NodeManager.createInstance(
             App.getAccessManager().getWallet()!!.publicKeyStr)
 
-    var destinationAddress: String? = "0xfedfa2ec820e568da1b826a17c8c95e224cd1843"
-    private var customFee: String? = "0.0001"
-    private var amount: String? = "0.0001"
-    private var attachment: String? = "yo send to ETH"
-
-    var sendingAsset: com.wavesplatform.wallet.v1.payload.AssetBalance? = null
+    var address: String? = ""
+    var amount: String? = ""
+    var attachment: String? = ""
     var selectedAsset: AssetBalance? = null
 
 
@@ -50,22 +55,26 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     }
 
     private fun submitPayment(signed: TransferTransactionRequest) {
-        nodeManager.broadcastTransfer(signed)
-                .compose(RxUtil.applySchedulersToObservable()).subscribe({ tx ->
-                    viewState.onShowTransactionSuccess(signed)
-                }, { err ->
-                    viewState.onShowError(R.string.transaction_failed, ToastCustom.TYPE_ERROR)
-                })
+        if (AssetBalance.isGateway(signed.assetId)) {
+            createGateAndPayment()
+        } else {
+            nodeManager.broadcastTransfer(signed)
+                    .compose(RxUtil.applySchedulersToObservable()).subscribe({ tx ->
+                        viewState.onShowTransactionSuccess(signed)
+                    }, { err ->
+                        viewState.onShowError(R.string.transaction_failed)
+                    })
+        }
     }
 
     private fun getTxRequest(): TransferTransactionRequest {
         return TransferTransactionRequest(
-                sendingAsset!!.assetId,
+                selectedAsset!!.assetId,
                 App.getAccessManager().getWallet()!!.publicKeyStr,
-                destinationAddress,
-                MoneyUtil.getUnscaledValue(amount, sendingAsset),
+                address,
+                MoneyUtil.getUnscaledValue(amount, selectedAsset),
                 System.currentTimeMillis(),
-                MoneyUtil.getUnscaledWaves(customFee),
+                MoneyUtil.getUnscaledWaves(SendPresenter.CUSTOM_FEE),
                 attachment)
     }
 
@@ -77,8 +86,52 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             viewState.hideAddressBookUser()
         } else {
             viewState.showAddressBookUser(addressBookUser.name)
-
         }
     }
 
+    private fun createGateAndPayment() {
+        runAsync {
+            val assetId = selectedAsset!!.assetId
+            val findAsset: Single<List<AssetInfo>> = queryAsSingle {
+                equalTo("id", assetId)
+            }
+            addSubscription(
+                    findAsset.toObservable()
+                            .flatMap {
+                                val currencyTo = it[0].ticker
+                                val currencyFrom = "W$currencyTo"
+                                coinomatManager.createTunnel(
+                                        currencyFrom,
+                                        currencyTo,
+                                        address)
+                            }
+                            .flatMap { createTunnel ->
+                                coinomatManager.getTunnel(
+                                        createTunnel.tunnelId,
+                                        createTunnel.k1,
+                                        createTunnel.k2,
+                                        SendPresenter.LANG)
+                            }
+                            .flatMap {
+                                address = it.tunnel!!.walletTo
+                                val signedTransaction = signTransaction()
+                                if (signedTransaction == null) {
+                                    null
+                                } else {
+                                    nodeManager.broadcastTransfer(signedTransaction)
+                                }
+                            }
+                            .subscribe(
+                                    { request ->
+                                        runOnUiThread {
+                                            viewState.onShowTransactionSuccess(request)
+                                        }
+                                    },
+                                    {
+                                        runOnUiThread {
+                                            viewState.onShowError(R.string.receive_error_network)
+                                        }
+                                    }))
+        }
+    }
 }
