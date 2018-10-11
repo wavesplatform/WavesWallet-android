@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.CreateLeasingRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.isAppOnForeground
@@ -17,6 +18,7 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.app
 import pers.victor.ext.currentTimeMillis
+import retrofit2.http.Body
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -142,6 +144,17 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         return nodeService.cancelLeasing(cancelLeasingRequest)
     }
 
+    fun startLeasing(createLeasingRequest: CreateLeasingRequest, recipientIsAlias: Boolean): Observable<Transaction> {
+        createLeasingRequest.senderPublicKey = App.getAccessManager().getWallet()?.publicKeyStr
+        createLeasingRequest.fee = Constants.WAVES_FEE
+        createLeasingRequest.timestamp = currentTimeMillis
+
+        App.getAccessManager().getWallet()?.privateKey.notNull {
+            createLeasingRequest.sign(it, recipientIsAlias)
+        }
+        return nodeService.createLeasing(createLeasingRequest)
+    }
+
     fun loadTransactions(): Observable<List<Transaction>> {
         return Observable.interval(0, 15, TimeUnit.SECONDS)
                 .retry(3)
@@ -154,6 +167,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     }
 
                 }
+                .onErrorResumeNext(Observable.empty())
     }
 
     fun currentBlocksHeight(): Observable<Height> {
@@ -166,6 +180,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     preferencesHelper.currentBlocksHeight = it.height
                     return@map it
                 }
+                .onErrorResumeNext(Observable.empty())
     }
 
     fun activeLeasing(): Observable<List<Transaction>> {

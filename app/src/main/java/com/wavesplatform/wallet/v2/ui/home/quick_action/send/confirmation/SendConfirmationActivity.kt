@@ -35,8 +35,8 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             toolbar_view.invisiable()
             card_content.gone()
             card_progress.visiable()
-            var rotation = AnimationUtils.loadAnimation(this@SendConfirmationActivity, R.anim.rotate);
-            rotation.fillAfter = true;
+            var rotation = AnimationUtils.loadAnimation(this@SendConfirmationActivity, R.anim.rotate)
+            rotation.fillAfter = true
             image_loader.startAnimation(rotation);
             runDelayed(2000, {
                 image_loader.clearAnimation()

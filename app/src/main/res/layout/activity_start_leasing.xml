@@ -46,6 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
+                android:animateLayoutChanges="true"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/basic50_rounded_border"
@@ -90,16 +91,37 @@
                     android:textSize="12sp" />
             </RelativeLayout>
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="24dp"
-                android:lineSpacingExtra="4sp"
-                android:text="@string/start_leasing_generator"
-                android:textColor="@color/basic500"
-                android:textSize="12sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="24dp"
+                    android:lineSpacingExtra="4sp"
+                    android:text="@string/start_leasing_generator"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_address_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="24dp"
+                    android:gravity="right"
+                    android:lineSpacingExtra="4sp"
+                    android:text="@string/start_leasing_validation_is_required_error"
+                    android:textColor="@color/error500"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -181,24 +203,45 @@
 
             </LinearLayout>
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="24dp"
-                android:lineSpacingExtra="4sp"
-                android:text="@string/start_leasing_amount"
-                android:textColor="@color/basic500"
-                android:textSize="12sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="24dp"
+                    android:lineSpacingExtra="4sp"
+                    android:text="@string/start_leasing_amount"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_amount_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="16dp"
+                    android:gravity="right"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="24dp"
+                    android:lineSpacingExtra="4sp"
+                    android:text="@string/start_leasing_validation_is_required_error"
+                    android:textColor="@color/error500"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:clipToPadding="true"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="2dp"
@@ -349,6 +392,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:clickable="true"
+        android:enabled="false"
         android:text="@string/wallet_leasing_start_lease"
         android:textStyle="bold" />
 
