@@ -59,7 +59,7 @@
                     android:id="@+id/text_sum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="-00000000.00000000"
+                    tools:text="-00000000.00000000"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -75,7 +75,7 @@
                     android:paddingEnd="4dp"
                     android:paddingStart="4dp"
                     android:paddingTop="2dp"
-                    android:text="TAG"
+                    tools:text="TAG"
                     android:textColor="@color/info500"
                     android:textSize="14sp" />
 
@@ -89,9 +89,10 @@
                 android:layout_below="@+id/linear_sum"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                android:text="≈ 00 000.00 US Dollar"
+                tools:text="≈ 00 000.00 US Dollar"
                 android:textColor="@color/disabled500"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:visibility="gone"/>
 
 
             <android.support.v7.widget.AppCompatImageView
@@ -120,7 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_sent_to_title"
-                android:text="Mr. Big Mike"
+                tools:text="Mr. Big Mike"
                 android:textColor="@color/disabled900"
                 android:textSize="14sp" />
 
@@ -130,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_sent_to_name"
                 android:layout_marginTop="1dp"
-                android:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"
+                tools:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"
                 android:textColor="@color/basic700"
                 android:textSize="12sp" />
 
@@ -160,7 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_fee_title"
-                android:text="0.001 Waves"
+                tools:text="0.001 Waves"
                 android:textColor="@color/disabled900"
                 android:textSize="14sp" />
 

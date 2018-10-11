@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -13,6 +14,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
@@ -45,10 +47,21 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, true, getString(R.string.send_confirmation_toolbar_title), R.drawable.ic_toolbar_back_white)
-        button_confirm.click { presenter.confirmSend() }
+        setupToolbar(toolbar_view, true,
+                getString(R.string.send_confirmation_toolbar_title),
+                R.drawable.ic_toolbar_back_white)
 
         presenter.selectedAsset = intent.extras.getParcelable(KEY_INTENT_SELECTED_ASSET)
+        text_sum.text = "-${intent.extras.getString(KEY_INTENT_SELECTED_AMOUNT)}"
+        text_tag.text = presenter.selectedAsset!!.getName()
+        val address = intent.extras.getString(KEY_INTENT_SELECTED_ADDRESS)
+        text_sent_to_address.text = address
+        presenter.getAddressName(address)
+        text_fee_value.text = "${SendPresenter.CUSTOM_FEE} ${SendPresenter.CUSTOM_FEE_ASSET_NAME}"
+
+        button_confirm.click { presenter.confirmSend() }
+
+
         presenter.selectedAsset.notNull {
             val tr = IssueTransaction(
                     it.issueTransaction!!.type!!,
@@ -92,6 +105,19 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         }
     }
 
+    override fun showAddressBookUser(name: String) {
+        if (!TextUtils.isEmpty(name)) {
+            text_sent_to_name.text = name
+            text_sent_to_name.visiable()
+        } else {
+            text_sent_to_name.invisiable()
+        }
+    }
+
+    override fun hideAddressBookUser() {
+        text_sent_to_name.invisiable()
+    }
+
     override fun requestPassCode() {
         launchActivity<EnterPassCodeActivity>(
                 requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
@@ -120,6 +146,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
 
     companion object {
         const val KEY_INTENT_SELECTED_ASSET = "intent_selected_asset"
+        const val KEY_INTENT_SELECTED_ADDRESS = "intent_selected_address"
+        const val KEY_INTENT_SELECTED_AMOUNT = "intent_selected_amount"
     }
-
 }

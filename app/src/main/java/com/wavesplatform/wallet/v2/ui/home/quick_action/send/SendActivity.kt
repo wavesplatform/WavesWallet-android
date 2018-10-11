@@ -4,32 +4,37 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.util.Log
-import android.widget.Toast
+import android.text.TextUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
+import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.payload.IssueTransaction
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ADDRESS
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_AMOUNT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ASSET
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
+import java.math.BigDecimal
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -53,7 +58,7 @@ class SendActivity : BaseActivity(), SendView {
         setStatusBarColor(R.color.basic50)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title), R.drawable.ic_toolbar_back_black)
-        checkAddressFieldAndSetAction()
+        checkAddressFieldAndSetAction(edit_address.text.toString())
 
         text_choose_from_address.click {
             launchActivity<AddressBookActivity>(requestCode = StartLeasingActivity.REQUEST_CHOOSE_ADDRESS) {
@@ -65,18 +70,19 @@ class SendActivity : BaseActivity(), SendView {
             launchActivity<YourAssetsActivity>(requestCode = REQUEST_YOUR_ASSETS)
         }
 
-        edit_address.addTextChangedListener {
-            on { s, start, before, count ->
-                checkAddressFieldAndSetAction()
-            }
-        }
+        eventSubscriptions.add(RxTextView.textChanges(edit_address)
+                .skipInitialValue()
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    checkAddressFieldAndSetAction(it.toString())
+                })
 
         edit_amount.addTextChangedListener {
-            on { s, start, before, count ->
+            on { s, _, _, _ ->
                 if (edit_amount.text!!.isNotEmpty()) {
-                    horizontal_amount_suggestion.gone()
-                } else {
-                    horizontal_amount_suggestion.visiable()
+                    presenter.amount = s.toString()
                 }
             }
         }
@@ -90,20 +96,47 @@ class SendActivity : BaseActivity(), SendView {
         }
 
         button_continue.click { presenter.sendClicked() }
+
+        text_use_total_balance.click {
+            presenter.selectedAsset.notNull {
+                edit_amount.setText(it.getDisplayBalance())
+            }
+        }
+        text_leasing_0_100.click { edit_amount.setText("0.100") }
+        text_leasing_0_100000.click { edit_amount.setText("0.00100000") }
+        text_leasing_0_500000.click { edit_amount.setText("0.00500000") }
     }
 
-    override fun onShowError(res: Int, toastType: String) {
+    override fun onShowError(res: Int) {
         showError(res, R.id.root)
     }
 
     override fun onShowPaymentDetails(details: PaymentConfirmationDetails) {
         launchActivity<SendConfirmationActivity> {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
+            putExtra(KEY_INTENT_SELECTED_ADDRESS, presenter.address)
+            putExtra(KEY_INTENT_SELECTED_AMOUNT, presenter.amount)
         }
     }
 
-    private fun checkAddressFieldAndSetAction() {
-        if (edit_address.text!!.isNotEmpty()) {
+    override fun showXRate(xRate: XRate?) {
+        relative_gateway_fee.visiable()
+        gateway_fee.text = getString(
+                R.string.send_gateway_info_gateway_fee,
+                BigDecimal(xRate?.fee).toString(),
+                xRate?.toTxt)
+        gateway_limits.text = getString(
+                R.string.send_gateway_info_gateway_limits,
+                xRate!!.toTxt,
+                BigDecimal(xRate.inMin!!).toString(),
+                BigDecimal(xRate.inMax!!).toString())
+        gateway_warning.text = getString(R.string.send_gateway_info_gateway_warning,
+                xRate.toTxt)
+    }
+
+    private fun checkAddressFieldAndSetAction(address: String) {
+        if (address.isNotEmpty()) {
+            presenter.address = address
             image_view_recipient_action.setImageResource(R.drawable.ic_deladdress_24_error_400)
             image_view_recipient_action.tag = R.drawable.ic_deladdress_24_error_400
             horizontal_recipient_suggestion.gone()
@@ -126,50 +159,36 @@ class SendActivity : BaseActivity(), SendView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-
             ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
-                val result = IntentIntegrator.parseActivityResult(resultCode, data)
-
-                if (result.contents == null) {
-                    Log.d("MainActivity", "Cancelled scan")
-                } else {
-                    Log.d("MainActivity", "Scanned")
-                    Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
-                    // TODO: Change to real scanned address
+                if (resultCode == Activity.RESULT_OK) {
+                    val result = IntentIntegrator.parseActivityResult(resultCode, data)
+                    val address = result.contents
+                    if (!TextUtils.isEmpty(address)) {
+                        edit_address.setText(address)
+                    } else {
+                        showError(R.string.enter_seed_manually_validation_seed_is_invalid_error, R.id.root_view)
+                    }
                 }
             }
+
             StartLeasingActivity.REQUEST_CHOOSE_ADDRESS -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val addressTestObject = data?.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
                     edit_address.setText(addressTestObject?.address)
                 }
             }
+
             REQUEST_YOUR_ASSETS -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val asset = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
                     asset.notNull {
                         presenter.selectedAsset = asset
-                        asset.notNull {
-                            val tr = IssueTransaction(
-                                    it.issueTransaction!!.type!!,
-                                    it.issueTransaction!!.id!!,
-                                    it.issueTransaction!!.sender!!,
-                                    it.issueTransaction!!.timestamp!!,
-                                    0,
-                                    it.issueTransaction!!.fee!!.toLong(),
-                                    it.issueTransaction!!.name!!,
-                                    it.issueTransaction!!.description,
-                                    it.issueTransaction!!.quantity!!,
-                                    it.issueTransaction!!.decimals!!,
-                                    it.issueTransaction!!.reissuable!!)
-                            presenter.sendingAsset = com.wavesplatform.wallet.v1.payload.AssetBalance(
-                                    it.assetId,
-                                    it.balance!!,
-                                    it.reissuable!!,
-                                    it.quantity!!,
-                                    tr)
+
+                        if (AssetBalance.isGateway(it.assetId!!)) {
+                            presenter.loadXRate(it)
                         }
-                        checkAddressFieldAndSetAction()
+
+                        checkAddressFieldAndSetAction(edit_address.text.toString())
                         relative_chosen_coin.visiable()
                         text_asset_hint.gone()
 
@@ -189,5 +208,4 @@ class SendActivity : BaseActivity(), SendView {
             }
         }
     }
-
 }

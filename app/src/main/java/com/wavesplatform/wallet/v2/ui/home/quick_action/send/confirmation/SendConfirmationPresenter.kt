@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
+import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.api.NodeManager
@@ -10,6 +11,7 @@ import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import javax.inject.Inject
 
 @InjectViewState
@@ -65,6 +67,18 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 System.currentTimeMillis(),
                 MoneyUtil.getUnscaledWaves(customFee),
                 attachment)
+    }
+
+    fun getAddressName(address: String) {
+        val addressBookUser = queryFirst<AddressBookUser> {
+            equalTo("address", address)
+        }
+        if (addressBookUser == null) {
+            viewState.hideAddressBookUser()
+        } else {
+            viewState.showAddressBookUser(addressBookUser.name)
+
+        }
     }
 
 }
