@@ -698,7 +698,7 @@
     <!--Tutorial-->
     <string name="card_tutorial_next">Next</string>
     <string name="card_tutorial_understand">I Understand</string>
-    <string name="tutorial_card_1_title">Welcome to the\nWaves Platform!</string>
+    <string name="tutorial_card_1_title">Welcome to the Waves Platform!</string>
     <string name="tutorial_card_1_description">Please take some time to understand some important things for your own safety. 🙏 \n\nWe cannot recover your funds or freeze your account if you visit a phishing site or lose your backup phrase (aka SEED phrase).\n\nBy continuing to use our platform, you agree to accept all risks associated with the loss of your SEED, including but not limited to the inability to obtain your funds and dispose of them. In case you lose your SEED, you agree and acknowledge that the Waves Platform would not be responsible for the negative consequences of this.</string>
     <string name="tutorial_card_2_title">What you need to know about your SEED</string>
     <string name="tutorial_card_2_description">When registering your account, you will be asked to save your secret phrase (Seed) and to protect your account with a password. On normal centralized servers, special attention is paid to the password, which can be changed and reset via email, if the need arises. However, on decentralized platforms such as Waves, everything is arranged differently:</string>
