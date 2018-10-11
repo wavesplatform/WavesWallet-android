@@ -85,7 +85,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         addSubscription(singleData
                 .map {
                     // all history
-                    allItemsFromDb = it.sortedByDescending({ it.timestamp })
+                    allItemsFromDb = it.sortedByDescending { it.timestamp }
 
                     // history only for detailed asset
                     assetBalance.notNull {

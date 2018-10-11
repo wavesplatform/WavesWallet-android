@@ -22,23 +22,25 @@ class LeasingPresenter @Inject constructor() : BasePresenter<LeasingView>() {
 
     fun getActiveLeasing() {
         runAsync {
-                addSubscription(Observable.zip(nodeDataManager.loadWavesBalance(),
-                        queryAsSingle<Transaction> {
-                            equalTo("status", LeasingStatus.ACTIVE.status)
-                                    .and()
-                                    .equalTo("transactionTypeId", Constants.ID_STARTED_LEASING_TYPE)
-                        }.toObservable(),
-                        BiFunction { t1: AssetBalance, t2: List<Transaction> ->
-                            return@BiFunction Pair(t1, t2)
-                        })
-                        .compose(RxUtil.applySchedulersToObservable())
-                        .subscribe {
-                            val leasedSum = it.second.sumByLong { it.amount }
-                            viewState.showBalances(it.first,
-                                    leasedSum, it.first.balance?.minus(leasedSum))
-                            viewState.showActiveLeasingTransaction(it.second)
-                        })
-            }
+            addSubscription(Observable.zip(nodeDataManager.loadWavesBalance(),
+                    queryAsSingle<Transaction> {
+                        equalTo("status", LeasingStatus.ACTIVE.status)
+                                .and()
+                                .equalTo("transactionTypeId", Constants.ID_STARTED_LEASING_TYPE)
+                    }.map {
+                        return@map ArrayList(it.sortedByDescending { it.timestamp })
+                    }.toObservable(),
+                    BiFunction { t1: AssetBalance, t2: List<Transaction> ->
+                        return@BiFunction Pair(t1, t2)
+                    })
+                    .compose(RxUtil.applySchedulersToObservable())
+                    .subscribe {
+                        val leasedSum = it.second.sumByLong { it.amount }
+                        viewState.showBalances(it.first,
+                                leasedSum, it.first.balance?.minus(leasedSum))
+                        viewState.showActiveLeasingTransaction(it.second)
+                    })
         }
-
     }
+
+}
