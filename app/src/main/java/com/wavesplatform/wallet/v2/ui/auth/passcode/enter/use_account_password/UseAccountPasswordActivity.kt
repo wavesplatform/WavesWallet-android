@@ -10,6 +10,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
+import com.wavesplatform.wallet.v2.data.rules.EqualsAccountPasswordRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
@@ -23,6 +24,7 @@ import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
 import io.github.anderscheow.validator.rules.common.MinRule
+import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.activity_use_account_password.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
@@ -44,7 +46,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view,  true,
+        setupToolbar(toolbar_view, true,
                 icon = R.drawable.ic_toolbar_back_black)
         if (intent.hasExtra(EnterPassCodeActivity.KEY_INTENT_GUID)) {
             guid = intent.extras.getString(EnterPassCodeActivity.KEY_INTENT_GUID)
@@ -56,7 +58,8 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         val accountPasswordValidation = Validation(til_account_password)
-                .and(MinTrimRule(8, R.string.new_account_create_password_validation_length_error))
+                .and(NotEmptyRule(" "))
+                .and(EqualsAccountPasswordRule(R.string.change_password_validation_old_password_wrong_error, guid))
 
         edit_account_password.applySpaceFilter()
 

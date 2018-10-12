@@ -1014,7 +1014,7 @@
     <string name="change_password_success">Change password successful</string>
     <string name="change_password_error">Change password failed. Check old password</string>
     <string name="change_password_validation_new_password_already_use_error">Password already use</string>
-    <string name="change_password_validation_old_password_wrong_error">Wrong password</string>
+    <string name="change_password_validation_old_password_wrong_error">Wrong</string>
 
     <!--Network-->
     <string name="network_toolbar_title">Network</string>

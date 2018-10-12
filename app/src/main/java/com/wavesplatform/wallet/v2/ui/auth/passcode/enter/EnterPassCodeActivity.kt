@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
@@ -104,7 +105,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     fun clearAndLogout() {
         App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
-        launchActivity<WelcomeActivity>()
+        launchActivity<ChooseAccountActivity>()
     }
 
     fun startUsePasswordScreen() {
