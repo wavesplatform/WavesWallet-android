@@ -68,14 +68,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
     fun providePresenter(): HistoryDetailsPresenter = presenter
 
 
-    @Inject
-    lateinit var preferencesHelper: PreferencesHelper
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
@@ -500,5 +492,12 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 }
             }
         }
+    }
+
+
+    fun configureData(selectedItem: Transaction, selectedPosition: Int, allItems: List<Transaction>) {
+        this.selectedItem = selectedItem
+        this.selectedItemPosition = selectedPosition
+        this.allItems = allItems
     }
 }

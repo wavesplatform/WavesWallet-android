@@ -123,10 +123,8 @@ class LeasingFragment : BaseFragment(), LeasingView {
             val historyItem = adapter.getItem(position) as Transaction
 
             val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
-            bottomSheetFragment.selectedItem = historyItem
-            bottomSheetFragment.allItems = adapter?.data as ArrayList<Transaction>
 
-            bottomSheetFragment.selectedItemPosition = position
+            bottomSheetFragment.configureData(historyItem, position, adapter.data as ArrayList<Transaction>)
             bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
         }
     }

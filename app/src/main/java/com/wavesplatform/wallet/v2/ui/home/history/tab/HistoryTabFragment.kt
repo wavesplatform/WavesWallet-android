@@ -114,17 +114,24 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
             val historyItem = adapter.getItem(position) as HistoryItem
             if (historyItem.header.isEmpty()) {
                 val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
-                bottomSheetFragment.selectedItem = historyItem.data
 
                 val data = adapter?.data as ArrayList<HistoryItem>
-                bottomSheetFragment.allItems = data.filter { it.header.isEmpty() }.map { it.data }
+                val allItems = data.asSequence()
+                        .filter {
+                            it.header.isEmpty()
+                        }
+                        .map { it.data }
+                        .toList()
 
                 var sectionSize = 0
                 for (i in 0..position) {
                     if (data[i].header.isNotEmpty()) sectionSize++
                 }
+                var count = data.count { it.header.isNotEmpty() }
 
-                bottomSheetFragment.selectedItemPosition = position - sectionSize
+                val selectedPositionWithoutHeaders = position - sectionSize
+
+                bottomSheetFragment.configureData(historyItem.data, selectedPositionWithoutHeaders, allItems)
                 bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
             }
         }
