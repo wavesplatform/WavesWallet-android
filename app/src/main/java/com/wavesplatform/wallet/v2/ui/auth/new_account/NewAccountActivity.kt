@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
+import android.text.InputFilter
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
@@ -17,6 +18,7 @@ import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.util.applySpaceFilter
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
@@ -64,6 +66,9 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
 
         val passwordValidation = Validation(til_create_password)
                 .and(MinTrimRule(8, R.string.new_account_create_password_validation_length_error))
+
+        edit_confirm_password.applySpaceFilter()
+        edit_create_password.applySpaceFilter()
 
         edit_account_name.addTextChangedListener {
             on { s, start, before, count ->
