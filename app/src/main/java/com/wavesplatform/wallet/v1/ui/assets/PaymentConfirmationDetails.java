@@ -31,7 +31,7 @@ public class PaymentConfirmationDetails {
             com.wavesplatform.wallet.v1.payload.AssetBalance ab, TransferTransactionRequest req) {
         PaymentConfirmationDetails d = new PaymentConfirmationDetails();
         d.fromLabel = App.getAccessManager().getWallet().getAddress();
-        d.toLabel = req.recipientAddress;
+        d.toLabel = req.address;
         d.amount = MoneyUtil.getScaledText(req.amount, ab);
         d.fee = MoneyUtil.getDisplayWaves(req.fee);
         d.amountUnit = ab.getName();
@@ -43,7 +43,7 @@ public class PaymentConfirmationDetails {
     public static PaymentConfirmationDetails fromRequest(AssetBalance ab, TransferTransactionRequest req) {
         PaymentConfirmationDetails d = new PaymentConfirmationDetails();
         d.fromLabel = App.getAccessManager().getWallet().getAddress();
-        d.toLabel = req.recipientAddress;
+        d.toLabel = req.address;
         d.amount = MoneyUtil.getScaledText(req.amount, ab);
         d.fee = MoneyUtil.getDisplayWaves(req.fee);
         d.amountUnit = ab.getName();

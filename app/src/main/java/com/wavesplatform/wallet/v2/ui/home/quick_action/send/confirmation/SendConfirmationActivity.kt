@@ -98,7 +98,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                     R.string.send_success_you_have_sent_sum,
                     signed.amount.toString(),
                     assetInfo!!.ticker)
-            sent_to_address.text = signed.recipientAddress
+            sent_to_address.text = signed.address
             button_okay.click {
                 launchActivity<MainActivity>(clear = true)
             }
