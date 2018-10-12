@@ -10,8 +10,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -77,7 +77,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 })
     }
 
-    override fun onShowTransactionSuccess(signed: TransferTransactionRequest) {
+    override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {
         toolbar_view.invisiable()
         card_content.gone()
         card_progress.visiable()
@@ -98,7 +98,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                     R.string.send_success_you_have_sent_sum,
                     signed.amount.toString(),
                     assetInfo!!.ticker)
-            sent_to_address.text = signed.address
+            sent_to_address.text = signed.recipient
             button_okay.click {
                 launchActivity<MainActivity>(clear = true)
             }

@@ -7,9 +7,9 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.api.NodeManager
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
-import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
+import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -43,7 +43,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         }
     }
 
-    private fun signTransaction(): TransferTransactionRequest? {
+    private fun signTransaction(): TransactionsBroadcastRequest? {
         val pk = App.getAccessManager().getWallet()!!.privateKey
         return if (pk != null) {
             val signed = getTxRequest()
@@ -54,24 +54,24 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         }
     }
 
-    private fun submitPayment(signed: TransferTransactionRequest) {
+    private fun submitPayment(signed: TransactionsBroadcastRequest) {
         if (AssetBalance.isGateway(signed.assetId)) {
             createGateAndPayment()
         } else {
-            nodeManager.broadcastTransfer(signed)
+            nodeManager.transactionsBroadcast(signed)
                     .compose(RxUtil.applySchedulersToObservable()).subscribe({ tx ->
                         viewState.onShowTransactionSuccess(signed)
-                    }, { err ->
+                    }, { _ ->
                         viewState.onShowError(R.string.transaction_failed)
                     })
         }
     }
 
-    private fun getTxRequest(): TransferTransactionRequest {
-        return TransferTransactionRequest(
-                selectedAsset!!.assetId,
+    private fun getTxRequest(): TransactionsBroadcastRequest {
+        return TransactionsBroadcastRequest(
+                selectedAsset!!.assetId ?: "",
                 App.getAccessManager().getWallet()!!.publicKeyStr,
-                address,
+                address ?: "",
                 MoneyUtil.getUnscaledValue(amount, selectedAsset),
                 System.currentTimeMillis(),
                 MoneyUtil.getUnscaledWaves(SendPresenter.CUSTOM_FEE),
@@ -118,7 +118,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                                 if (signedTransaction == null) {
                                     null
                                 } else {
-                                    nodeManager.broadcastTransfer(signedTransaction)
+                                    nodeManager.transactionsBroadcast(signedTransaction)
                                 }
                             }
                             .subscribe(
