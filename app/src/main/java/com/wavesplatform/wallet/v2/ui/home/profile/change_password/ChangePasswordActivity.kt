@@ -20,6 +20,7 @@ import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
 import io.github.anderscheow.validator.rules.common.EqualRule
 import io.github.anderscheow.validator.rules.common.MinRule
+import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.activity_change_password.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
@@ -50,7 +51,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                 requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
 
         val oldPasswordValidation = Validation(til_old_password)
-                .and(MinTrimRule(8, R.string.new_account_create_password_validation_length_error))
+                .and(NotEmptyRule(" "))
                 .and(EqualsAccountPasswordRule(R.string.change_password_validation_old_password_wrong_error))
 
         val newPasswordValidation = Validation(til_new_password)

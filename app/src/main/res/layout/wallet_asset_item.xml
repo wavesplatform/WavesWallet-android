@@ -77,17 +77,6 @@
             app:layout_constraintTop_toTopOf="@+id/text_my_asset"
             app:srcCompat="@drawable/ic_favorite_mini" />
 
-        <com.wavesplatform.wallet.v2.ui.custom.SpamTag
-            android:id="@+id/text_tag_spam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="4dp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/image_favourite"
-            app:layout_constraintStart_toEndOf="@+id/image_favourite"
-            app:layout_constraintTop_toTopOf="@+id/image_favourite" />
-
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_asset_value"
             android:layout_width="wrap_content"
@@ -101,6 +90,16 @@
             app:layout_constraintBottom_toBottomOf="@+id/image_asset_icon"
             app:layout_constraintStart_toEndOf="@+id/image_asset_icon" />
 
+        <com.wavesplatform.wallet.v2.ui.custom.SpamTag
+            android:id="@+id/text_tag_spam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="4dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/text_asset_value"
+            app:layout_constraintStart_toEndOf="@+id/text_asset_value"
+            app:layout_constraintTop_toTopOf="@+id/text_asset_value" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_bitcoin_value"
