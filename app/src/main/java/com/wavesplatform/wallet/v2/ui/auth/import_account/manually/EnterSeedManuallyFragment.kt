@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
+import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.data.rules.SeedRule
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -19,7 +20,6 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
-import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.fragment_enter_seed_manually.*
 import org.apache.commons.io.Charsets
 import pers.victor.ext.addTextChangedListener
@@ -46,7 +46,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
 
         validator = Validator.with(baseActivity).setMode(Mode.CONTINUOUS)
         val seedValidation = Validation(til_seed)
-                .and(NotEmptyRule(getString(R.string.enter_seed_manually_validation_required_seed_error)))
+                .and(NotEmptyTrimRule(getString(R.string.enter_seed_manually_validation_required_seed_error)))
                 .and(SeedRule(getString(R.string.enter_seed_manually_validation_seed_exists_error)))
 
         val identicon = Identicon()
@@ -58,7 +58,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                             override fun onValidateSuccess(values: List<String>) {
                                 button_continue.isEnabled = true
                                 if (values.isNotEmpty() && values[0].length > 24) {
-                                    val wallet = WavesWallet(values[0].toByteArray(Charsets.UTF_8))
+                                    val wallet = WavesWallet(values[0].trim().toByteArray(Charsets.UTF_8))
                                     Glide.with(activity)
                                             .load(identicon.create(wallet.address))
                                             .apply(RequestOptions().circleCrop())

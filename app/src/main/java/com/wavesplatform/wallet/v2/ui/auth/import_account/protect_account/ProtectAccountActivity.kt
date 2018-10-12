@@ -8,6 +8,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
+import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
+import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -19,7 +21,6 @@ import io.github.anderscheow.validator.constant.Mode
 import io.github.anderscheow.validator.rules.common.EqualRule
 import io.github.anderscheow.validator.rules.common.MaxRule
 import io.github.anderscheow.validator.rules.common.MinRule
-import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.activity_protect_account.*
 import org.apache.commons.io.Charsets
 import pers.victor.ext.addTextChangedListener
@@ -53,11 +54,11 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
         }
 
         val nameValidation = Validation(til_account_name)
-                .and(NotEmptyRule(R.string.new_account_account_name_validation_required_error))
+                .and(NotEmptyTrimRule(R.string.new_account_account_name_validation_required_error))
                 .and(MaxRule(20, R.string.new_account_account_name_validation_length_error))
 
         val passwordValidation = Validation(til_create_password)
-                .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
+                .and(MinTrimRule(8, R.string.new_account_create_password_validation_length_error))
 
         edit_account_name.addTextChangedListener {
             on { s, start, before, count ->
@@ -89,9 +90,9 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
                                 isFieldsValid()
                             }
                         }, passwordValidation)
-                if (edit_confirm_password.text.isNotEmpty()) {
+                if (edit_confirm_password.text.trim().isNotEmpty()) {
                     val confirmPasswordValidation = Validation(til_confirm_password)
-                            .and(EqualRule(edit_create_password.text.toString(),
+                            .and(EqualRule(edit_create_password.text.trim().toString(),
                                     R.string.new_account_confirm_password_validation_match_error))
                     validator
                             .validate(object : Validator.OnValidateListener {
@@ -112,7 +113,7 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
         edit_confirm_password.addTextChangedListener {
             on { s, start, before, count ->
                 val confirmPasswordValidation = Validation(til_confirm_password)
-                        .and(EqualRule(edit_create_password.text.toString(),
+                        .and(EqualRule(edit_create_password.text.trim().toString(),
                                 R.string.new_account_confirm_password_validation_match_error))
                 validator
                         .validate(object : Validator.OnValidateListener {
@@ -156,9 +157,9 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
         val options = Bundle()
         options.putString(NewAccountActivity.KEY_INTENT_SEED, seed)
         options.putString(NewAccountActivity.KEY_INTENT_ACCOUNT_NAME,
-                edit_account_name.text.toString())
+                edit_account_name.text.toString().trim())
         options.putString(NewAccountActivity.KEY_INTENT_PASSWORD,
-                edit_confirm_password.text.toString())
+                edit_confirm_password.text.toString().trim())
         return options
     }
 

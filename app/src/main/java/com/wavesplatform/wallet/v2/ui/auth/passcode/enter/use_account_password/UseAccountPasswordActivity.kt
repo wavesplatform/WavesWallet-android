@@ -10,6 +10,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
+import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
@@ -54,7 +55,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         val accountPasswordValidation = Validation(til_account_password)
-                .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
+                .and(MinTrimRule(8, R.string.new_account_create_password_validation_length_error))
 
         edit_account_password.addTextChangedListener {
             on { s, start, before, count ->
@@ -89,7 +90,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         if (!TextUtils.isEmpty(guid)) {
             try {
                 WavesWallet(App.getAccessManager().getWalletData(guid),
-                        edit_account_password.text.toString())
+                        edit_account_password.text.toString().trim())
                 launchActivity<CreatePassCodeActivity>(options = createDataBundle())
                 App.getAccessManager().resetPassCodeInputFails()
             } catch (e: Exception) {
@@ -104,7 +105,7 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         val options = Bundle()
         options.putBoolean(CreatePassCodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE, true)
         options.putString(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
-        options.putString(NewAccountActivity.KEY_INTENT_PASSWORD, edit_account_password.text.toString())
+        options.putString(NewAccountActivity.KEY_INTENT_PASSWORD, edit_account_password.text.toString().trim())
         return options
     }
 
