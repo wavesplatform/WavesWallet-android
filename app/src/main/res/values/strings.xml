@@ -1033,7 +1033,7 @@
     <string name="choose_account_delete_title">Delete account?</string>
     <string name="choose_account_delete_msg">Are you sure you want to delete this account?</string>
     <string name="choose_account_cancel">Cancel</string>
-    <string name="choose_account_yes">Yes</string>
+    <string name="choose_account_yes">Delete</string>
     <string name="choose_account_deleted">Deleted</string>
 
     <!--Edit account name-->
