@@ -90,10 +90,20 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
         skeletonScreen = Skeleton.bind(recycle_history)
                 .adapter(recycle_history.adapter)
+                .shimmer(true)
+                .count(5)
                 .color(R.color.basic100)
                 .load(R.layout.item_skeleton_wallet)
                 .frozen(false)
                 .show()
+
+        // make skeleton as designed
+        recycle_history.post {
+            recycle_history.layoutManager.findViewByPosition(1)?.alpha = 0.7f
+            recycle_history.layoutManager.findViewByPosition(2)?.alpha = 0.5f
+            recycle_history.layoutManager.findViewByPosition(3)?.alpha = 0.4f
+            recycle_history.layoutManager.findViewByPosition(4)?.alpha = 0.2f
+        }
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
                 .subscribe {
