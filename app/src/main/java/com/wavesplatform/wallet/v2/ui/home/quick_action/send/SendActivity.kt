@@ -4,13 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
 import android.text.TextUtils
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
+import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
@@ -66,8 +69,11 @@ class SendActivity : BaseActivity(), SendView {
             }
         }
 
-        card_asset.click {
-            launchActivity<YourAssetsActivity>(requestCode = REQUEST_YOUR_ASSETS)
+        if (intent.hasExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM)) {
+            setAsset(intent.getParcelableExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM))
+            assetChangeEnable(false)
+        } else {
+            assetChangeEnable(true)
         }
 
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
@@ -180,32 +186,58 @@ class SendActivity : BaseActivity(), SendView {
 
             REQUEST_YOUR_ASSETS -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    val asset = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
-                    asset.notNull {
-                        presenter.selectedAsset = asset
-
-                        if (AssetBalance.isGateway(it.assetId!!)) {
-                            presenter.loadXRate(it)
-                        }
-
-                        checkAddressFieldAndSetAction(edit_address.text.toString())
-                        relative_chosen_coin.visiable()
-                        text_asset_hint.gone()
-
-                        image_asset_icon.isOval = true
-                        image_asset_icon.setAsset(it)
-
-                        text_asset_name.text = it.getName()
-
-                        text_asset_value.text = it.getDisplayBalance()
-                        if (it.isFavorite) {
-                            image_asset_is_favourite.visiable()
-                        } else {
-                            image_asset_is_favourite.gone()
-                        }
-                    }
+                    setAsset(data?.getParcelableExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM))
                 }
             }
+        }
+    }
+
+    private fun setAsset(asset: AssetBalance?) {
+        asset.notNull {
+            presenter.selectedAsset = asset
+
+            if (AssetBalance.isGateway(it.assetId!!)) {
+                presenter.loadXRate(it)
+            }
+
+            checkAddressFieldAndSetAction(edit_address.text.toString())
+            relative_chosen_coin.visiable()
+            text_asset_hint.gone()
+
+            image_asset_icon.isOval = true
+            image_asset_icon.setAsset(it)
+
+            text_asset_name.text = it.getName()
+
+            text_asset_value.text = it.getDisplayBalance()
+            if (it.isFavorite) {
+                image_asset_is_favourite.visiable()
+            } else {
+                image_asset_is_favourite.gone()
+            }
+        }
+    }
+
+    private fun assetChangeEnable(enable: Boolean) {
+        if (enable) {
+            card_asset.click {
+                launchActivity<YourAssetsActivity>(requestCode = REQUEST_YOUR_ASSETS)
+            }
+            image_change.visibility = View.VISIBLE
+            ViewCompat.setElevation(card_asset, ViewUtils.convertDpToPixel(4f, this))
+            asset_layout.background = null
+            card_asset.setCardBackgroundColor(ContextCompat.getColor(
+                    this, R.color.white))
+        } else {
+            card_asset.click {
+
+            }
+            image_change.visibility = View.GONE
+            ViewCompat.setElevation(card_asset, 0F)
+            asset_layout.background = ContextCompat.getDrawable(
+                    this, R.drawable.shape_rect_bordered_accent50)
+            card_asset.setCardBackgroundColor(ContextCompat.getColor(
+                    this, R.color.basic50))
         }
     }
 }

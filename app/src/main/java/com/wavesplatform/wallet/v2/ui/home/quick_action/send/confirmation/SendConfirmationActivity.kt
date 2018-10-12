@@ -16,6 +16,9 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
@@ -59,7 +62,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.address = intent.extras.getString(KEY_INTENT_SELECTED_ADDRESS)
         presenter.amount = intent.extras.getString(KEY_INTENT_SELECTED_AMOUNT)
 
-        text_sum.text = "-${presenter.amount}"
+        text_sum.text = "- ${presenter.amount}"
         text_tag.text = presenter.selectedAsset!!.getName()
         text_sent_to_address.text = presenter.address
         presenter.getAddressName(presenter.address!!)
@@ -98,14 +101,29 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                     R.string.send_success_you_have_sent_sum,
                     signed.amount.toString(),
                     assetInfo!!.ticker)
-            sent_to_address.text = signed.recipient
             button_okay.click {
                 launchActivity<MainActivity>(clear = true)
             }
 
-            add_address.click {
+            setSaveAddress(signed)
+        }
+    }
 
+    private fun setSaveAddress(signed: TransactionsBroadcastRequest) {
+        val addressBookUser = queryFirst<AddressBookUser> {
+            equalTo("address", signed.recipient)
+        }
+        if (addressBookUser == null) {
+            sent_to_address.text = signed.recipient
+            add_address.visiable()
+            add_address.click {
+                launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
+                    putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(signed.recipient, ""))
+                }
             }
+        } else {
+            add_address.gone()
         }
     }
 

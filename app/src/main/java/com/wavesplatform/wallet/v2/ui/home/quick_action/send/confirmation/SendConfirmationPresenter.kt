@@ -113,7 +113,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                                         SendPresenter.LANG)
                             }
                             .flatMap {
-                                address = it.tunnel!!.walletTo
+                                address = it.tunnel!!.walletFrom
                                 val signedTransaction = signTransaction()
                                 if (signedTransaction == null) {
                                     null
