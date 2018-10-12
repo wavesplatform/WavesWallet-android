@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <RadioButton
+        android:id="@+id/radioButton_usd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:text="@string/receive_fiat_choose_dialog_usd" />
+
+    <RadioButton
+        android:id="@+id/radioButton_eur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:text="@string/receive_fiat_choose_dialog_euro" />
+</RadioGroup>

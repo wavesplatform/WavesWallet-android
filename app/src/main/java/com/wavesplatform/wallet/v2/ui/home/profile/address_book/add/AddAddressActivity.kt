@@ -80,7 +80,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
                     return@flatMap queryAsFlowable<AddressBookUser> { equalTo("name", it) }.toObservable()
                 }
                 .map {
-                    presenter.nameFieldValid = edit_name.text.isNotEmpty() && it.isEmpty()
+                    presenter.nameFieldValid = edit_name?.text?.isNotEmpty() == true && it.isEmpty()
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { name ->

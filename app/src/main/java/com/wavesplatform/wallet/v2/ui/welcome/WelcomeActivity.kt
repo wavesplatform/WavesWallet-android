@@ -1,16 +1,13 @@
 package com.wavesplatform.wallet.v2.ui.welcome
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.ViewPager
-import android.support.v4.view.ViewPager.SCROLL_STATE_IDLE
+import android.support.v4.content.ContextCompat
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.asksira.loopingviewpager.LoopingViewPager
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
@@ -22,12 +19,9 @@ import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageBott
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_welcome.*
-import pers.victor.ext.*
+import pers.victor.ext.click
 import java.util.*
 import javax.inject.Inject
-import kotlin.concurrent.fixedRateTimer
-import android.databinding.adapters.SeekBarBindingAdapter.setProgress
-import com.asksira.loopingviewpager.LoopingViewPager
 
 
 class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
@@ -49,37 +43,27 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         var REQUEST_IMPORT_ACC = 57
     }
 
+    private fun createDataBundle(): Bundle {
+        val options = Bundle()
+        options.putString("animation", "left_slide")
+        return options
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view)
-//        val icon = findDrawable(R.drawable.avd_anim)
-//        icon.notNull {
-//            changeDrawerMenuIcon(it)
-//            if (it is Animatable) {
-//                (it as Animatable).start()
-//            }
-//        }
 
         button_create_account.click {
-            animateWhiteBlock(it) {
-                launchActivity<NewAccountActivity>(REQUEST_NEW_ACCOUNT)
-                overridePendingTransition(0, 0)
-            }
+            launchActivity<NewAccountActivity>(requestCode = REQUEST_NEW_ACCOUNT, options = createDataBundle())
         }
 
         relative_sign_in.click {
-            animateWhiteBlock(it) {
-                launchActivity<ChooseAccountActivity>(REQUEST_SIGN_IN)
-                overridePendingTransition(0, 0)
-            }
+            launchActivity<ChooseAccountActivity>(REQUEST_SIGN_IN)
         }
 
         relative_import_acc.click {
-            animateWhiteBlock(it) {
-                launchActivity<ImportAccountActivity>(REQUEST_IMPORT_ACC)
-                overridePendingTransition(0, 0)
-            }
+            launchActivity<ImportAccountActivity>(REQUEST_IMPORT_ACC)
         }
 
         view_pager.setPageTransformer(false) { page, position ->
@@ -103,51 +87,6 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             override fun onIndicatorPageChange(newIndicatorPosition: Int) {
             }
         })
-
-        enterAnimation()
-    }
-
-    private fun animateWhiteBlock(it: View, endAction: () -> Unit) {
-        white_block.setHeight(it.height)
-        white_block.setWidth(it.width)
-        val originalPos = IntArray(2)
-        it.getLocationOnScreen(originalPos)
-        white_block.y = originalPos[1].toFloat() - getStatusBarHeight()
-        white_block.visiable()
-
-        white_block.post {
-            white_block.animate()
-                    .scaleX(2f)
-                    .scaleY(((screenHeight + white_block.y) / white_block.height).toFloat() + 0.5f)
-                    .setDuration(300)
-                    .setStartDelay(0)
-                    .withEndAction {
-                        endAction()
-                    }
-                    .start()
-        }
-    }
-
-    private fun enterAnimation() {
-//        card_view_welcome.animate()
-//                .scaleY(1f)
-//                .scaleX(1f)
-//                .setStartDelay(500)
-//                .setDuration(250)
-//                .withEndAction {
-//                    linear_sign_in.animate()
-//                            .alpha(1f)
-//                            .setDuration(350)
-//                            .withEndAction {
-//                                relative_top_block.animate()
-//                                        .translationY(0f)
-//                                        .alpha(1f)
-//                                        .setDuration(500)
-//                                        .start()
-//                            }
-//                            .start()
-//                }
-//                .start()
     }
 
     private fun populateList(): ArrayList<WelcomeItem> {
@@ -156,24 +95,6 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
                 WelcomeItem(R.drawable.ic_userimg_dex_80, R.string.welcome_dex_title, R.string.welcome_dex_description),
                 WelcomeItem(R.drawable.ic_userimg_token_80, R.string.welcome_token_title, R.string.welcome_token_description))
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_NEW_ACCOUNT || requestCode == REQUEST_IMPORT_ACC || requestCode == REQUEST_SIGN_IN) {
-            if (resultCode == Activity.RESULT_CANCELED) {
-                white_block.animate()
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .setStartDelay(150)
-                        .setDuration(500)
-                        .withEndAction {
-                            white_block.gone()
-                        }
-                        .start()
-            }
-        }
-    }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -202,9 +123,4 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         val bedMenuItem = menu?.findItem(R.id.action_change_language)
         bedMenuItem?.title = getString(Language.getLanguageByCode(preferencesHelper.getLanguage()).code)
     }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
 }

@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v4.view.ViewPager
 import android.util.Log
 import android.view.LayoutInflater
@@ -34,9 +35,9 @@ class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 arrayOf(getString(R.string.buy_and_sell_dialog_buy_tab), getString(R.string.buy_and_sell_dialog_sell_tab)))
         rootView.viewpager_buy_sell.adapter = adapter
         rootView.stl_buy_sell.setViewPager(rootView.viewpager_buy_sell)
-        if (arguments?.getInt(BUNDLE_OPEN, 0) == OPEN_BUY){
+        if (arguments?.getInt(BUNDLE_OPEN, 0) == OPEN_BUY) {
             rootView.stl_buy_sell.currentTab = 0
-        }else if (arguments?.getInt(BUNDLE_OPEN, 0) == OPEN_SELL){
+        } else if (arguments?.getInt(BUNDLE_OPEN, 0) == OPEN_SELL) {
             rootView.stl_buy_sell.currentTab = 1
         }
         rootView.stl_buy_sell.setOnTabSelectListener(object : OnTabSelectListener {
@@ -56,18 +57,19 @@ class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment() {
             }
         })
 
-        rootView.appbar_layout.addOnOffsetChangedListener({ appBarLayout, verticalOffset ->
-            Log.d("TEST", verticalOffset.toString())
-            val offsetForShowShadow = appbar_layout.totalScrollRange - dp2px(9)
-            if (-verticalOffset > offsetForShowShadow) {
-                rootView.viewpager_buy_sell.setPagingEnabled(false)
-            } else {
-                rootView.viewpager_buy_sell.setPagingEnabled(true)
-            }
-        })
+        rootView.appbar_layout.addOnOffsetChangedListener(
+                AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                    Log.d("TEST", verticalOffset.toString())
+                    val offsetForShowShadow = appbar_layout.totalScrollRange - dp2px(9)
+                    if (-verticalOffset > offsetForShowShadow) {
+                        rootView.viewpager_buy_sell.setPagingEnabled(false)
+                    } else {
+                        rootView.viewpager_buy_sell.setPagingEnabled(true)
+                    }
+                })
 
         val colors = arrayOf<Int>(findColor(R.color.submit400), findColor(R.color.error400))
-        var argbEvaluator = ArgbEvaluator()
+        val argbEvaluator = ArgbEvaluator()
         val mColorAnimation = ValueAnimator.ofObject(argbEvaluator, findColor(R.color.submit400), findColor(R.color.error400))
         mColorAnimation.addUpdateListener(object : ValueAnimator.AnimatorUpdateListener {
             override fun onAnimationUpdate(animation: ValueAnimator?) {

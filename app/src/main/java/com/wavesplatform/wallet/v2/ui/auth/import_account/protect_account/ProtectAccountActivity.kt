@@ -77,34 +77,32 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
         }
         edit_create_password.addTextChangedListener {
             on { s, start, before, count ->
-                validator
-                        .validate(object : Validator.OnValidateListener {
-                            override fun onValidateSuccess(values: List<String>) {
-                                presenter.createPasswrodFieldValid = true
-                                isFieldsValid()
-                            }
+                validator.validate(object : Validator.OnValidateListener {
+                    override fun onValidateSuccess(values: List<String>) {
+                        presenter.createPasswrodFieldValid = true
+                        isFieldsValid()
+                    }
 
-                            override fun onValidateFailed() {
-                                presenter.createPasswrodFieldValid = false
-                                isFieldsValid()
-                            }
-                        }, passwordValidation)
-                if (edit_confirm_password.text.isNotEmpty()) {
+                    override fun onValidateFailed() {
+                        presenter.createPasswrodFieldValid = false
+                        isFieldsValid()
+                    }
+                }, passwordValidation)
+                if (edit_confirm_password.text!!.isNotEmpty()) {
                     val confirmPasswordValidation = Validation(til_confirm_password)
                             .and(EqualRule(edit_create_password.text.toString(),
                                     R.string.new_account_confirm_password_validation_match_error))
-                    validator
-                            .validate(object : Validator.OnValidateListener {
-                                override fun onValidateSuccess(values: List<String>) {
-                                    presenter.confirmPasswordFieldValid = true
-                                    isFieldsValid()
-                                }
+                    validator.validate(object : Validator.OnValidateListener {
+                        override fun onValidateSuccess(values: List<String>) {
+                            presenter.confirmPasswordFieldValid = true
+                            isFieldsValid()
+                        }
 
-                                override fun onValidateFailed() {
-                                    presenter.confirmPasswordFieldValid = false
-                                    isFieldsValid()
-                                }
-                            }, confirmPasswordValidation)
+                        override fun onValidateFailed() {
+                            presenter.confirmPasswordFieldValid = false
+                            isFieldsValid()
+                        }
+                    }, confirmPasswordValidation)
                 }
             }
         }

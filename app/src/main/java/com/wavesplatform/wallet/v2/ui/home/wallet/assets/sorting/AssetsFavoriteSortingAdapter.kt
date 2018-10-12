@@ -16,7 +16,7 @@ class AssetsFavoriteSortingAdapter @Inject constructor() : BaseQuickAdapter<Asse
                 .addOnClickListener(R.id.image_favorite)
                 .setVisible(R.id.text_my_asset, item.issueTransaction?.sender == App.getAccessManager().getWallet()?.address)
 
-        helper.itemView.image_blocked.visiableIf { item.isWaves }
+        helper.itemView.image_blocked.visiableIf { item.isWaves() }
 
         helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)

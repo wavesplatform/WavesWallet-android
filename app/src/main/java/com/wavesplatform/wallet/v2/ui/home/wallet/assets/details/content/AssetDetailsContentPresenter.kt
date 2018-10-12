@@ -16,12 +16,12 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
     var assetBalance: AssetBalance? = null
 
     fun loadLastTransactions() {
-        queryAllAsync<Transaction> {
+        queryAllAsync<Transaction> { it ->
             val list = it
-                    .sortedByDescending({ it.timestamp })
+                    .sortedByDescending { it.timestamp }
                     .filter { it.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE || it.transactionType() != TransactionType.SPAM_RECEIVE_TYPE }
                     .filter {
-                        if (assetBalance?.isWaves == true) it.assetId.isNullOrEmpty()
+                        if (assetBalance?.isWaves() == true) it.assetId.isNullOrEmpty()
                         else it.assetId == assetBalance?.assetId
                     }
                     .mapTo(ArrayList()) { HistoryItem(HistoryItem.TYPE_DATA, it) }

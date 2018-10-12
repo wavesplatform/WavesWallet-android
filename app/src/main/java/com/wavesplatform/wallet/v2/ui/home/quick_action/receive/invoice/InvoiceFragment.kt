@@ -3,19 +3,31 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
+import android.text.TextUtils
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_invoice.*
-import pers.victor.ext.*
+import pers.victor.ext.click
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
+import pers.victor.ext.visiableIf
 import javax.inject.Inject
 
 class InvoiceFragment : BaseFragment(), InvoiceView {
+
     @Inject
     @InjectPresenter
     lateinit var presenter: InvoicePresenter
@@ -26,20 +38,35 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
     override fun configLayoutRes(): Int = R.layout.fragment_invoice
 
     companion object {
-        var REQUEST_SELECT_ASSET = 10001
-        var INVOICE_SCREEN = "invoice"
-        /**
-         * @return InvoiceFragment instance
-         * */
-        fun newInstance(): InvoiceFragment {
-            return InvoiceFragment()
+        const val REQUEST_SELECT_ASSET = 10001
+        const val INVOICE_SCREEN = "invoice"
+
+        fun newInstance(assetBalance: AssetBalance?): InvoiceFragment {
+            val fragment =  InvoiceFragment()
+            if (assetBalance == null) {
+                return fragment
+            }
+            val args = Bundle()
+            args.putParcelable(YourAssetsActivity.BUNDLE_ASSET_ITEM, assetBalance)
+            fragment.arguments = args
+            return fragment
         }
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        if (arguments == null) {
+            assetChangeEnable(true)
+        } else {
+            val assetBalance = arguments!!.getParcelable<AssetBalance>(
+                    YourAssetsActivity.BUNDLE_ASSET_ITEM)
+            setAssetBalance(assetBalance)
+            assetChangeEnable(false)
+        }
 
         text_use_total_balance.click {
-            toast("Total balance")
+            presenter.assetBalance.notNull {
+                edit_amount.setText(it.getDisplayBalance())
+            }
         }
         text_leasing_0_100.click {
             edit_amount.setText("0.100")
@@ -51,17 +78,25 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             edit_amount.setText("0.00500000")
         }
 
-        edit_asset.click {
-            launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
-        }
-        container_asset.click {
-            launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
-        }
         button_continue.click {
-            launchActivity<ReceiveAddressViewActivity> {
-                putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
-                putExtra(INVOICE_SCREEN, true)
+            val amount = edit_amount.text.toString()
+            if (!TextUtils.isEmpty(amount) && amount.toDouble() > 0) {
+                launchActivity<ReceiveAddressViewActivity> {
+                    putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
+                    putExtra(YourAssetsActivity.BUNDLE_ADDRESS, App.getAccessManager().getWallet()?.address ?: "")
+                    putExtra(INVOICE_SCREEN, true)
+                    putExtra(ReceiveAddressViewActivity.KEY_INTENT_QR_DATA, createLink())
+                }
+            } else {
+                showError(getString(R.string.receive_error_amount), R.id.content)
             }
+        }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        presenter.assetBalance.notNull {
+            setAssetBalance(it)
         }
     }
 
@@ -69,21 +104,69 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SELECT_ASSET && resultCode == Activity.RESULT_OK) {
             val assetBalance = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
-            presenter.assetBalance = assetBalance
+            setAssetBalance(assetBalance)
+        }
+    }
 
-            image_asset_icon.isOval = true
-            image_asset_icon.setAsset(assetBalance)
-            text_asset_name.text = assetBalance?.getName()
-            text_asset_value.text = assetBalance?.getDisplayBalance()
+    private fun setAssetBalance(assetBalance: AssetBalance?) {
+        if (assetBalance == null) {
+            return
+        }
 
-            image_is_favourite.visiableIf {
-                assetBalance?.isFavorite!!
+        presenter.assetBalance = assetBalance
+
+        image_asset_icon.isOval = true
+        image_asset_icon.setAsset(assetBalance)
+        text_asset_name.text = assetBalance.getName()
+        text_asset_value.text = assetBalance.getDisplayBalance()
+        image_down_arrow.visibility = if (assetBalance.isGateway) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
+        image_is_favourite.visiableIf {
+            assetBalance.isFavorite
+        }
+
+        edit_asset.gone()
+        container_asset.visiable()
+
+        button_continue.isEnabled = true
+    }
+
+    private fun createLink(): String {
+        return "https//client.wavesplatform.com/#send/${presenter.assetBalance!!.assetId}?" +
+                "recipient=${presenter.address}&" +
+                "amount=${edit_amount.text}"
+    }
+
+    private fun assetChangeEnable(enable: Boolean) {
+        if (enable) {
+            edit_asset.click {
+                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
             }
+            container_asset.click {
+                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+            }
+            image_change.visibility = View.VISIBLE
+            ViewCompat.setElevation(edit_asset_card, ViewUtils.convertDpToPixel(4f, activity!!))
+            edit_asset_layout.background = null
+            edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
+                    activity!!, R.color.white))
+        } else {
+            edit_asset.click {
 
-            edit_asset.gone()
-            container_asset.visiable()
+            }
+            container_asset.click {
 
-            button_continue.isEnabled = true
+            }
+            image_change.visibility = View.GONE
+            ViewCompat.setElevation(edit_asset_card, 0F)
+            edit_asset_layout.background = ContextCompat.getDrawable(
+                    activity!!, R.drawable.shape_rect_bordered_accent50)
+            edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
+                    activity!!, R.color.basic50))
         }
     }
 }

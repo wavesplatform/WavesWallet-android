@@ -17,7 +17,6 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
 import pers.victor.ext.click

@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import io.realm.RealmModel
 import io.realm.annotations.Ignore
@@ -35,7 +36,6 @@ open class AssetBalance(
         @Ignore var isChecked: Boolean = false,
         var isFiatMoney: Boolean = false,
         var isFavorite: Boolean = false,
-        var isWaves: Boolean = false,
         var isGateway: Boolean = false,
         var isSpam: Boolean = false
 ) : RealmModel, Parcelable, MultiItemEntity {
@@ -66,6 +66,37 @@ open class AssetBalance(
 
     fun getDisplayBalanceWithUnit(): String {
         return getDisplayBalance() + " " + getName()
+    }
+
+    fun isWaves(): Boolean {
+        return assetId.isNullOrEmpty()
+    }
+
+
+
+    companion object {
+
+        fun isFiat(assetId: String): Boolean {
+            for (fiat in Constants.defaultFiat) {
+                if (assetId == fiat) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        fun isGateway(assetId: String): Boolean {
+            if (assetId == "") {
+                return false
+            }
+
+            for (fiat in Constants.defaultCrypto) {
+                if (assetId == fiat) {
+                    return true
+                }
+            }
+            return false
+        }
     }
 }
 

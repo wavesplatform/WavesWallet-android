@@ -44,7 +44,9 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
+import com.wavesplatform.wallet.v2.ui.success.SuccessActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
+import com.wavesplatform.wallet.v2.ui.web.WebActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.ui.whats_new.WhatsNewActivity
 import dagger.Module
@@ -237,4 +239,12 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun leasingHistoryActivity(): HistoryActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun webActivity(): WebActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun successActivity(): SuccessActivity
 }

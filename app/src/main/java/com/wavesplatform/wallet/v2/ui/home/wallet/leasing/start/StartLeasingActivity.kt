@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.support.v7.widget.AppCompatTextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import android.support.v4.content.ContextCompat
+import android.util.Log
+import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.App
@@ -49,6 +52,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.start_leasing_toolbar), R.drawable.ic_toolbar_back_black)
 
 
@@ -218,8 +222,10 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             REQUEST_CHOOSE_ADDRESS -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val addressTestObject = data?.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
-                    edit_address.setText(addressTestObject?.address)
-                    edit_address.setSelection(edit_address.text.length)
+                    addressTestObject?.address.notNull {
+                        edit_address.setText(it)
+                        edit_address.setSelection(it.length)
+                    }
                 }
             }
             REQUEST_LEASEING_CONFIRMATION -> {

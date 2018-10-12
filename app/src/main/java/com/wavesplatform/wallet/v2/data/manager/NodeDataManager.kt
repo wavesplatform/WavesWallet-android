@@ -81,7 +81,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                             assetBalance.isGateway = it.isGateway
                                             assetBalance.isSpam = it.isSpam
                                             assetBalance.position = it.position
-                                            assetBalance.isWaves = it.isWaves
                                         }
                                     }
                                 }

@@ -16,18 +16,18 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
     fun loadAssets() {
         runAsync {
 
-        queryAllAsync<AssetBalance> {
-            val favoriteList = it.filter({ it.isFavorite }).toMutableList()
-            val notFavoriteList = it.filter({ !it.isFavorite && !it.isSpam }).sortedBy { it.position }.toMutableList()
+            queryAllAsync<AssetBalance> {
+                val favoriteList = it.filter({ it.isFavorite }).toMutableList()
+                val notFavoriteList = it.filter({ !it.isFavorite && !it.isSpam }).sortedBy { it.position }.toMutableList()
 
-            runOnUiThread {
-                viewState.showFavoriteAssets(favoriteList)
+                runOnUiThread {
+                    viewState.showFavoriteAssets(favoriteList)
 
-                viewState.showNotFavoriteAssets(notFavoriteList)
+                    viewState.showNotFavoriteAssets(notFavoriteList)
 
-                viewState.checkIfNeedToShowLine()
+                    viewState.checkIfNeedToShowLine()
+                }
             }
-        }
         }
     }
 

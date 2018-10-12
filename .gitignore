@@ -49,3 +49,6 @@ wallet.properties
 
 # Environment URLs
 urls.properties
+
+# Crashlytics config
+fabric.properties

@@ -37,11 +37,11 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="drawerArrowStyle">@style/DrawerIconWhite</item>
-        <item name="actionMenuTextColor">@color/white</item>
         <item name="android:fontFamily">@font/roboto</item>
         <item name="fontFamily">@font/roboto</item>
-
-        <!--<item name="actionMenuTextAppearance">@style/MyMenuTextAppearance</item>-->
+        <item name="actionMenuTextAppearance">@style/MenuItemTextAppearance</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <style name="SubmitEditText">
@@ -61,10 +61,11 @@
         <item name="fontFamily">@font/roboto_medium</item>
     </style>
 
-    <style name="MyMenuTextAppearance" parent="android:TextAppearance.Holo.Widget.ActionBar.Menu">
+    <style name="MenuItemTextAppearance" parent="android:TextAppearance.Holo.Widget.ActionBar.Menu">
         <item name="android:textAllCaps">false</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">14sp</item>
+        <item name="actionMenuTextColor">@color/black</item>
     </style>
 
     <style name="DrawerIconWhite" parent="Widget.AppCompat.DrawerArrowToggle">
@@ -88,6 +89,7 @@
 
     <style name="AppThemeV2.NoActionBar.Translucent.DarkStatusBar" parent="AppThemeV2.NoActionBar.Translucent">
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:navigationBarColor">@color/white</item>
     </style>
 
     <style name="AppThemeV2.AssetsSoring" parent="AppThemeV2.NoActionBar.Translucent.DarkStatusBar">
@@ -127,6 +129,10 @@
         <item name="android:windowBackground">@color/overlayDark</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
+    </style>
+
+    <style name="BottomSheetDialogBgDimDisabled" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
     <style name="WavesButton" parent="android:style/Widget.Button">

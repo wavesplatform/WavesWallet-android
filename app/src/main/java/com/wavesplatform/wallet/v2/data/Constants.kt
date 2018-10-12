@@ -88,7 +88,7 @@ object Constants {
     val wavesAssetInfo = AssetInfo(id = "", precision = 8, name = "Waves", quantity = 10000000000000000L)
 
     val defaultAssets = listOf<AssetBalance>(
-            AssetBalance("", quantity = 10000000000000000L, isFavorite = true, issueTransaction = IssueTransaction(name = "Waves", decimals = 8), isGateway = true, isWaves = true),
+            AssetBalance("", quantity = 10000000000000000L, isFavorite = true, issueTransaction = IssueTransaction(name = "Waves", decimals = 8), isGateway = true),
             AssetBalance("8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", id = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", name = "Bitcoin", decimals = 8), isGateway = true),
             AssetBalance("474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", quantity = 10000000000000000, issueTransaction = IssueTransaction(assetId = "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", id = "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", name = "Ethereum", decimals = 8), isGateway = true),
             AssetBalance("Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck", quantity = 100000000000, issueTransaction = IssueTransaction(assetId = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck", id = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck", name = "US Dollar", decimals = 2), isFiatMoney = true, isGateway = true),
@@ -113,5 +113,18 @@ object Constants {
             Pair("2mX5DzVKWrAJw8iwdJnV2qtoeVG9h5nTDpTqC1wb1WEN", R.drawable.logo_lira_48),
             Pair("B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", R.drawable.logo_dash_48))
 //    val URL_ROADMAP = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
+
+    val defaultCrypto = arrayOf(
+            "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS",
+            "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu",
+            "HZk1mbfuJpmxU1Fs4AX5MWLVYtctsNcg6e2C6VKqK8zk",
+            "5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3",
+            "zMFqXuoyrn5w17PFurTqxB7GsS71fp9dfk6XFwxbPCy",
+            "2mX5DzVKWrAJw8iwdJnV2qtoeVG9h5nTDpTqC1wb1WEN",
+            "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H")
+
+    val defaultFiat = arrayOf(
+            "Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU",
+            "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck")
 
 }

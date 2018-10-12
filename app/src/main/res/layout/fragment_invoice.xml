@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -22,8 +23,9 @@
             android:textSize="12sp" />
 
         <android.support.v7.widget.CardView
+            android:id="@+id/edit_asset_card"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -34,6 +36,7 @@
             app:cardElevation="2dp">
 
             <RelativeLayout
+                android:id="@+id/edit_asset_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -156,7 +159,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
@@ -175,11 +178,14 @@
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/text_amount_in_dollar"
                     android:background="@color/white"
+                    android:fontFamily="@font/roboto_medium"
                     android:hint="0"
                     android:inputType="numberDecimal"
                     android:padding="14dp"
                     android:singleLine="true"
-                    android:textColorHint="@color/accent100" />
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/accent100"
+                    android:textSize="16sp" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_amount_in_dollar"
@@ -191,6 +197,7 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="24dp"
                     android:lineSpacingExtra="4sp"
+                    android:visibility="gone"
                     android:text="≈ 0 US Dollar"
                     android:textColor="@color/basic500"
                     android:textSize="12sp" />
