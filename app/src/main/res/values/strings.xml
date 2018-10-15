@@ -1087,6 +1087,9 @@
     <string name="start_leasing_0_100">0.100</string>
     <string name="start_leasing_0_100000">0.00100000</string>
     <string name="start_leasing_0_500000">0.00500000</string>
+    <string name="start_leasing_validation_is_required_error">Not filled out</string>
+    <string name="start_leasing_validation_address_is_invalid_error">The address is not valid</string>
+    <string name="start_leasing_validation_amount_insufficient_error">Insufficient funds</string>
 
     <!--Confirmation leasing-->
     <string name="confirm_leasing">Confirmation</string>
@@ -1094,10 +1097,13 @@
     <string name="confirm_free">Fee</string>
     <string name="confirm_confirm">Confirm</string>
 
+    <!--Confirmation progress-->
+    <string name="confirm_leasing_progress">Loading…</string>
+
     <!--Confirm leasing success-->
     <string name="confirm_leasing_success">Your transaction is on way!</string>
     <string name="confirm_leasing_okay">Okay</string>
-    <string name="confirm_leasing_result_value">You have leased %1$s WAVES</string>
+    <string name="confirm_leasing_result_value">You have leased %1$s %2$s</string>
 
     <!--Use account password-->
     <string name="use_account_password_account_password">Account password</string>

@@ -6,6 +6,8 @@ import com.wavesplatform.wallet.v1.request.IssueTransactionRequest
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.CreateLeasingRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalances
 import com.wavesplatform.wallet.v2.data.model.remote.response.Height
@@ -50,5 +52,11 @@ interface NodeService {
 
     @GET("leasing/active/{address}")
     fun activeLeasing(@Path("address") address: String?): Observable<List<Transaction>>
+
+    @POST("leasing/broadcast/lease")
+    fun createLeasing(@Body createLeasingRequest: CreateLeasingRequest): Observable<Transaction>
+
+    @POST("leasing/broadcast/cancel")
+    fun cancelLeasing(@Body cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction>
 
 }

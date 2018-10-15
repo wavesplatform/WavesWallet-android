@@ -2,15 +2,15 @@ package com.wavesplatform.wallet.v2.data.manager
 
 import com.vicpin.krealmextensions.deleteAll
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
-class SpamDataManager @Inject constructor() : DataManager() {
+class SpamDataManager @Inject constructor() : BaseDataManager() {
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
         return spamService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM))

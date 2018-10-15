@@ -1,12 +1,13 @@
 package com.wavesplatform.wallet.v2.data.manager
 
+import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.CreateTunnel
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.Limit
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class CoinomatManager @Inject constructor() : DataManager() {
+class CoinomatManager @Inject constructor() : BaseDataManager() {
 
     fun loadRate(crypto: String?, address: String?, fiat: String?, amount: String?): Observable<String> {
         return coinomatService.rate(crypto, address, fiat, amount)

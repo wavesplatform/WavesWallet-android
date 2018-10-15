@@ -10,35 +10,32 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.arrayWithSize
 import java.nio.charset.Charset
 
-
-data class AliasRequest(
-        @SerializedName("type") val type: Int = 10,
+data class CancelLeasingRequest(
+        @SerializedName("type") val type: Int = 9,
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
-        @SerializedName("fee") var fee: Long = 0,
+        @SerializedName("txId") var txId: String = "",
         @SerializedName("timestamp") var timestamp: Long = 0,
         @SerializedName("signature") var signature: String? = null,
-        @SerializedName("alias") var alias: String = ""
-
+        @SerializedName("fee") var fee: Long = 0
 ) {
 
     fun toSignBytes(): ByteArray {
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     Base58.decode(senderPublicKey),
-                    Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                            byteArrayOf(Constants.ADDRESS_SCHEME.toByte()),
-                            alias.toByteArray(Charset.forName("UTF-8")).arrayWithSize()).arrayWithSize(),
                     Longs.toByteArray(fee),
-                    Longs.toByteArray(timestamp))
+                    Longs.toByteArray(timestamp),
+                    Base58.decode(txId)
+            )
         } catch (e: Exception) {
-            Log.e("AliasRequest", "Couldn't create toSignBytes", e)
+            Log.e("CancelLeasingRequest", "Couldn't create toSignBytes", e)
             ByteArray(0)
         }
 
     }
 
     fun sign(privateKey: ByteArray) {
-        if (signature == null) {
+        if (signature.isNullOrEmpty()) {
             signature = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()))
         }
     }

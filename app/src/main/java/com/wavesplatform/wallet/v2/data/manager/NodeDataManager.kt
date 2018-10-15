@@ -1,18 +1,16 @@
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.vicpin.krealmextensions.deleteAll
-import com.vicpin.krealmextensions.queryAll
-import com.vicpin.krealmextensions.save
-import com.vicpin.krealmextensions.saveAll
+import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R.color.r
-import com.wavesplatform.wallet.v1.payload.TransactionsInfo
-import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
+import com.wavesplatform.wallet.R.color.i
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.CreateLeasingRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
-import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.isAppOnForeground
 import com.wavesplatform.wallet.v2.util.notNull
@@ -20,12 +18,13 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.app
 import pers.victor.ext.currentTimeMillis
+import retrofit2.http.Body
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class NodeDataManager @Inject constructor() : DataManager() {
+class NodeDataManager @Inject constructor() : BaseDataManager() {
     @Inject
     lateinit var transactionUtil: TransactionUtil
     @Inject
@@ -133,6 +132,28 @@ class NodeDataManager @Inject constructor() : DataManager() {
                 }
     }
 
+    fun cancelLeasing(cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction> {
+        cancelLeasingRequest.senderPublicKey = App.getAccessManager().getWallet()?.publicKeyStr
+        cancelLeasingRequest.fee = Constants.WAVES_FEE
+        cancelLeasingRequest.timestamp = currentTimeMillis
+
+        App.getAccessManager().getWallet()?.privateKey.notNull {
+            cancelLeasingRequest.sign(it)
+        }
+        return nodeService.cancelLeasing(cancelLeasingRequest)
+    }
+
+    fun startLeasing(createLeasingRequest: CreateLeasingRequest, recipientIsAlias: Boolean): Observable<Transaction> {
+        createLeasingRequest.senderPublicKey = App.getAccessManager().getWallet()?.publicKeyStr
+        createLeasingRequest.fee = Constants.WAVES_FEE
+        createLeasingRequest.timestamp = currentTimeMillis
+
+        App.getAccessManager().getWallet()?.privateKey.notNull {
+            createLeasingRequest.sign(it, recipientIsAlias)
+        }
+        return nodeService.createLeasing(createLeasingRequest)
+    }
+
     fun loadTransactions(): Observable<List<Transaction>> {
         return Observable.interval(0, 15, TimeUnit.SECONDS)
                 .retry(3)
@@ -145,6 +166,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
                     }
 
                 }
+                .onErrorResumeNext(Observable.empty())
     }
 
     fun currentBlocksHeight(): Observable<Height> {
@@ -157,6 +179,7 @@ class NodeDataManager @Inject constructor() : DataManager() {
                     preferencesHelper.currentBlocksHeight = it.height
                     return@map it
                 }
+                .onErrorResumeNext(Observable.empty())
     }
 
     fun activeLeasing(): Observable<List<Transaction>> {
