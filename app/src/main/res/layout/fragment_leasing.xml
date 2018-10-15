@@ -204,6 +204,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/relative_active_leasing_title_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
@@ -217,7 +218,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-
                     android:text="Hidden assets (2)"
                     android:textColor="@color/basic500" />
 

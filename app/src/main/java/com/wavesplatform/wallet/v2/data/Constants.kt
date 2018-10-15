@@ -8,53 +8,53 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 object Constants {
 
     // Production
-    val URL_SPAM = "https://raw.githubusercontent.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv"
-    val URL_WAVES_COMMUNITY = "https://wavescommunity.com"
-    val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
-    val URL_WHITEPAPER = "https://wavesplatform.com/files/images/whitepaper_v0.pdf"
-    val URL_TELEGRAM = "https://telegram.me/wavesnews"
-    val URL_GITHUB = "https://github.com/wavesplatform/"
-    val URL_TWITTER = "https://twitter.com/wavesplatform"
-    val URL_FACEBOOK = "https://www.facebook.com/wavesplatform"
-    val URL_DISCORD = "https://discordapp.com/invite/cnFmDyA"
+    const val URL_SPAM = "https://raw.githubusercontent.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv"
+    const val URL_WAVES_COMMUNITY = "https://wavescommunity.com"
+    const val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
+    const val URL_WHITEPAPER = "https://wavesplatform.com/files/images/whitepaper_v0.pdf"
+    const val URL_TELEGRAM = "https://telegram.me/wavesnews"
+    const val URL_GITHUB = "https://github.com/wavesplatform/"
+    const val URL_TWITTER = "https://twitter.com/wavesplatform"
+    const val URL_FACEBOOK = "https://www.facebook.com/wavesplatform"
+    const val URL_DISCORD = "https://discordapp.com/invite/cnFmDyA"
 
-    val ACC_TWITTER = "wavesplatform"
-    val ACC_TELEGRAM = "wavesnews"
+    const val ACC_TWITTER = "wavesplatform"
+    const val ACC_TELEGRAM = "wavesnews"
 
-    val SUPPORT_EMAIL = "support@wavesplatform.com"
-    val SUPPORT_SITE = "https://support.wavesplatform.com/"
-    val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
+    const val SUPPORT_EMAIL = "support@wavesplatform.com"
+    const val SUPPORT_SITE = "https://support.wavesplatform.com/"
+    const val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
 
-    val WAVES_FEE = 100000L
-    val VERSION = 2
-    val ADDRESS_SCHEME = 'W'
+    const val WAVES_FEE = 100000L
+    const val VERSION = 2
+    const val ADDRESS_SCHEME = 'W'
 
-    val SELL_ORDER_TYPE = "sell"
-    val BUY_ORDER_TYPE = "buy"
+    const val SELL_ORDER_TYPE = "sell"
+    const val BUY_ORDER_TYPE = "buy"
 
     // Transaction types
-    val ID_RECEIVED_TYPE = 0
-    val ID_SENT_TYPE = 1
-    val ID_STARTED_LEASING_TYPE = 2
-    val ID_SELF_TRANSFER_TYPE = 3
-    val ID_CANCELED_LEASING_TYPE = 4
-    val ID_TOKEN_GENERATION_TYPE = 5
-    val ID_TOKEN_BURN_TYPE = 6
-    val ID_TOKEN_REISSUE_TYPE = 7
-    val ID_EXCHANGE_TYPE = 8
-    val ID_CREATE_ALIAS_TYPE = 9
-    val ID_INCOMING_LEASING_TYPE = 10
-    val ID_UNRECOGNISED_TYPE = 11
-    val ID_MASS_SEND_TYPE = 12
-    val ID_MASS_RECEIVE_TYPE = 13
-    val ID_SPAM_RECEIVE_TYPE = 14
-    val ID_MASS_SPAM_RECEIVE_TYPE = 15
-    val ID_DATA_TYPE = 16
+    const val ID_RECEIVED_TYPE = 0
+    const val ID_SENT_TYPE = 1
+    const val ID_STARTED_LEASING_TYPE = 2
+    const val ID_SELF_TRANSFER_TYPE = 3
+    const val ID_CANCELED_LEASING_TYPE = 4
+    const val ID_TOKEN_GENERATION_TYPE = 5
+    const val ID_TOKEN_BURN_TYPE = 6
+    const val ID_TOKEN_REISSUE_TYPE = 7
+    const val ID_EXCHANGE_TYPE = 8
+    const val ID_CREATE_ALIAS_TYPE = 9
+    const val ID_INCOMING_LEASING_TYPE = 10
+    const val ID_UNRECOGNISED_TYPE = 11
+    const val ID_MASS_SEND_TYPE = 12
+    const val ID_MASS_RECEIVE_TYPE = 13
+    const val ID_SPAM_RECEIVE_TYPE = 14
+    const val ID_MASS_SPAM_RECEIVE_TYPE = 15
+    const val ID_DATA_TYPE = 16
 
     // Custom Result code
-    val RESULT_CANCELED = 404
-    val RESULT_OK = 200
-    val RESULT_OK_NO_RESULT = 204
+    const val RESULT_CANCELED = 404
+    const val RESULT_OK = 200
+    const val RESULT_OK_NO_RESULT = 204
 
     val alphabetColor = hashMapOf<String, Int>(
             Pair("a", R.color.a),
@@ -85,10 +85,10 @@ object Constants {
             Pair("z", R.color.z),
             Pair("persist", R.color.persist))
 
-    val wavesAssetInfo = AssetInfo(id = "", precision = 8, name = "Waves", quantity = 10000000000000000L)
+    val wavesAssetInfo = AssetInfo(id = "", precision = 8, name = "WAVES", quantity = 10000000000000000L)
 
     val defaultAssets = listOf<AssetBalance>(
-            AssetBalance("", quantity = 10000000000000000L, isFavorite = true, issueTransaction = IssueTransaction(name = "Waves", decimals = 8), isGateway = true),
+            AssetBalance("", quantity = 10000000000000000L, isFavorite = true, issueTransaction = IssueTransaction(name = "WAVES", decimals = 8), isGateway = true),
             AssetBalance("8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", id = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", name = "Bitcoin", decimals = 8), isGateway = true),
             AssetBalance("474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", quantity = 10000000000000000, issueTransaction = IssueTransaction(assetId = "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", id = "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", name = "Ethereum", decimals = 8), isGateway = true),
             AssetBalance("Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck", quantity = 100000000000, issueTransaction = IssueTransaction(assetId = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck", id = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck", name = "US Dollar", decimals = 2), isFiatMoney = true, isGateway = true),
