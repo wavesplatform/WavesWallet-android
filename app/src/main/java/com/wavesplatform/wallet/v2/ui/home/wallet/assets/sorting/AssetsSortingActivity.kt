@@ -169,6 +169,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
     override fun showFavoriteAssets(favorites: List<AssetBalance>) {
         adapterFavorites.setNewData(favorites)
+        progress_bar.hide()
     }
 
     override fun showNotFavoriteAssets(notFavorites: List<AssetBalance>) {
@@ -210,6 +211,11 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
         })
         finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        progress_bar.hide()
     }
 
 }

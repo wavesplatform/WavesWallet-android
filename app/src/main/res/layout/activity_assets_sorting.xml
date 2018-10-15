@@ -32,38 +32,56 @@
         android:layout_below="@+id/toolbar_view"
         android:overScrollMode="never">
 
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:descendantFocusability="blocksDescendants"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_favorite_assets"
+
+
+            <LinearLayout
+                android:id="@+id/linear_recycles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:overScrollMode="never" />
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="vertical">
 
-            <View
-                android:id="@+id/view_divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/accent100" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycle_favorite_assets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_assets"
-                android:clipToPadding="false"
-                android:paddingBottom="24dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never" />
+                <View
+                    android:id="@+id/view_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/accent100" />
 
-        </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycle_assets"
+                    android:clipToPadding="false"
+                    android:paddingBottom="24dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never" />
+
+            </LinearLayout>
+
+            <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                app:progress_image="@drawable/ic_loader_24_submit_400"
+                android:layout_centerInParent="true"
+                android:layout_height="wrap_content" />
+
+
+        </RelativeLayout>
+
 
     </android.support.v4.widget.NestedScrollView>
 
