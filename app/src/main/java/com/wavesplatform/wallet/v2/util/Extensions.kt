@@ -27,6 +27,7 @@ import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -74,6 +75,15 @@ fun Context.isMyServiceRunning(serviceClass: Class<*>): Boolean {
         }
     }
     return false
+}
+
+fun getActionBarHeight(): Int {
+    val tv = TypedValue()
+    return if (app.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+        TypedValue.complexToDimensionPixelSize(tv.data, app.resources.displayMetrics);
+    }else{
+        0
+    }
 }
 
 fun EditText.applySpaceFilter() {

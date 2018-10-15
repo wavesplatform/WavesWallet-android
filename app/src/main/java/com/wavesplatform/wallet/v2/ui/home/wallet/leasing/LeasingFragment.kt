@@ -61,8 +61,8 @@ class LeasingFragment : BaseFragment(), LeasingView {
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.ScrollToTopEvent::class.java)
                 .subscribe {
                     if (it.position == MainActivity.WALLET_SCREEN) {
-//                        nested_scroll_view.smoothScrollTo(0, 0)
-//                        changeTabBarVisibilityListener?.changeTabBarVisibility(true)
+                        nested_scroll_view.smoothScrollTo(0, 0)
+                        changeTabBarVisibilityListener?.changeTabBarVisibility(true)
                     }
                 })
 
@@ -98,6 +98,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
                         .rotation(0f)
                         .setDuration(500)
                         .withEndAction {
+                            changeTabBarVisibilityListener?.changeTabBarVisibility(false)
                             nested_scroll_view.fullScroll(View.FOCUS_DOWN)
                         }
                         .start()
@@ -117,6 +118,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
                         .rotation(0f)
                         .setDuration(500)
                         .withEndAction {
+                            changeTabBarVisibilityListener?.changeTabBarVisibility(false)
                             nested_scroll_view.smoothScrollTo(0, relative_active_leasing_title_container.top + screenHeight / 2)
                         }
                         .start()
