@@ -6,6 +6,8 @@ import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.crypto.Base58
+import com.wavesplatform.wallet.v1.crypto.Hash
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v1.util.AddressUtil
@@ -57,9 +59,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     private fun validateTransfer(tx: TransferTransactionRequest): Int {
-        return 0
-
-        if (selectedAsset == null || TextUtils.isEmpty(address) || TextUtils.isEmpty(amount)) {
+        if (selectedAsset == null || TextUtils.isEmpty(address)) {
             R.string.send_transaction_error_check_fields
         } else if (!AddressUtil.isValidAddress(tx.address)) {
             return R.string.invalid_address
@@ -121,6 +121,22 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
     }
 
+    fun isAddressValid(): Boolean? {
+        if (selectedAsset == null) {
+            return null
+        }
+
+        return when {
+            AssetBalance.isGateway(selectedAsset!!.assetId!!) -> {
+                isValid(queryFirst<AssetInfo> {
+                    equalTo("id", selectedAsset!!.assetId)
+                }!!.ticker, address)
+            }
+            isAlias(address) -> true
+            else -> isWavesAddress(address)
+        }
+    }
+
     companion object {
         const val CUSTOM_FEE: String = "0.001"
         const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
@@ -129,5 +145,57 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 quantity = 100000000L * 100000000L,
                 issueTransaction = IssueTransaction(
                         name = CUSTOM_FEE_ASSET_NAME, quantity = 0, decimals = 8))
+
+        fun isAlias(address: String?): Boolean {
+            return address != null && address.length in 1..34
+        }
+
+        private fun isValid(ticker: String?, address: String?): Boolean? {
+            if (ticker == null) {
+                return null
+            } else if (ticker == "WAVES" || ticker == "") {
+                return address!!.matches("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex())
+            } else if (ticker == "ETH") {
+                return address!!.matches("^0x[0-9a-f]{40}$".toRegex())
+            } else if (ticker == "LTC") {
+                return address!!.matches("^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$".toRegex())
+            } else if (ticker == "ZEC") {
+                return address!!.matches("^t[0-9a-z]{34}$".toRegex())
+            } else if (ticker == "BCH") {
+                return address!!.matches("^([13][a-km-zA-HJ-NP-Z1-9]{25,34}|[qp][a-zA-Z0-9]{41})$".toRegex())
+            } else if (ticker == "DASH") {
+                return address!!.matches("^X[a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex())
+            } else if (ticker == "XMR") {
+                return address!!.matches("([a-km-zA-HJ-NP-Z1-9]{95}|[a-km-zA-HJ-NP-Z1-9]{106})$".toRegex())
+            }
+            return null
+        }
+
+        fun isWavesAddress(address: String?): Boolean {
+            if (address == null) {
+                return false
+            }
+
+            val addressBytes = Base58.decode(address)
+
+            if (addressBytes[0] != 1.toByte() || addressBytes[1] != 87.toByte()) {
+                return false
+            }
+
+            val key = addressBytes.slice(IntRange(0, 21))
+            val check = addressBytes.slice(IntRange(22, 25))
+            val keyHash = hashChain(key).slice(IntRange(0, 3))
+
+            for (i in 0..3) {
+                if (check[i] != keyHash[i]) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        private fun hashChain(input: List<Byte>): List<Byte> {
+            return Hash.secureHash(input.toByteArray()).toList()
+        }
     }
 }

@@ -30,14 +30,12 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import java.math.BigDecimal
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -77,10 +75,6 @@ class SendActivity : BaseActivity(), SendView {
         }
 
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
-                .skipInitialValue()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     checkAddressFieldAndSetAction(it.toString())
                 })
@@ -143,16 +137,37 @@ class SendActivity : BaseActivity(), SendView {
     private fun checkAddressFieldAndSetAction(address: String) {
         if (address.isNotEmpty()) {
             presenter.address = address
+            if (presenter.isAddressValid() == null) {
+                edit_address.setTextColor(ContextCompat.getColor(this, R.color.black))
+            } else {
+                if (presenter.isAddressValid()!!) {
+                    edit_address.setTextColor(ContextCompat.getColor(this, R.color.success500))
+                } else {
+                    edit_address.setTextColor(ContextCompat.getColor(this, R.color.error400))
+                }
+            }
+
             image_view_recipient_action.setImageResource(R.drawable.ic_deladdress_24_error_400)
             image_view_recipient_action.tag = R.drawable.ic_deladdress_24_error_400
             horizontal_recipient_suggestion.gone()
             presenter.selectedAsset.notNull {
-                if (it.isFiatMoney) {
-                    relative_gateway_fee.gone()
-                    relative_fiat_fee.visiable()
-                } else {
-                    relative_fiat_fee.gone()
-                    relative_gateway_fee.visiable()
+                when {
+                    it.isWaves() -> {
+                        relative_gateway_fee.gone()
+                        relative_fiat_fee.gone()
+                    }
+                    it.isGateway -> {
+                        relative_gateway_fee.visiable()
+                        relative_fiat_fee.gone()
+                    }
+                    it.isFiatMoney -> {
+                        relative_gateway_fee.gone()
+                        relative_fiat_fee.visiable()
+                    }
+                    else -> {
+                        relative_gateway_fee.gone()
+                        relative_fiat_fee.gone()
+                    }
                 }
             }
         } else {
