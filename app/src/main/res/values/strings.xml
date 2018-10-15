@@ -866,6 +866,7 @@
     <!-- Wallet Sorting -->
     <string name="wallet_sorting_toolbar_title">Sorting</string>
     <string name="wallet_sorting_toolbar_visibility_action">Visibility</string>
+    <string name="wallet_sorting_toolbar_position_action">Position</string>
 
     <!-- DEX Sorting -->
     <string name="dex_sorting_toolbar_title">Sorting</string>

@@ -6,6 +6,8 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
+import pers.victor.ext.dp2px
+import pers.victor.ext.findColor
 import javax.inject.Inject
 
 class AssetsSortingAdapter @Inject constructor() : BaseItemDraggableAdapter<AssetBalance, BaseViewHolder>(R.layout.wallet_asset_sorting_item, null) {
@@ -18,11 +20,23 @@ class AssetsSortingAdapter @Inject constructor() : BaseItemDraggableAdapter<Asse
                 .setOnCheckedChangeListener(R.id.switch_visible, null) // fix bug with incorrect call listener
                 .setChecked(R.id.switch_visible, !item.isHidden)
                 .setOnCheckedChangeListener(R.id.switch_visible) { buttonView, isChecked ->
+                    if (isChecked) {
+                        helper.itemView.card_asset.setCardBackgroundColor(findColor(R.color.white))
+                        helper.itemView.card_asset.cardElevation = dp2px(2).toFloat()
+                    } else {
+                        helper.itemView.card_asset.setCardBackgroundColor(findColor(android.R.color.transparent))
+                        helper.itemView.card_asset.cardElevation = 0f
+                    }
                     onHiddenChangeListener?.onHiddenStateChanged(item, isChecked)
                 }
                 .setGone(R.id.switch_visible, item.configureVisibleState)
                 .setGone(R.id.image_down_arrow, item.isGateway)
                 .setGone(R.id.image_drag, !item.configureVisibleState)
+
+        if (item.isHidden) {
+            helper.itemView.card_asset.cardElevation = 0f
+            helper.itemView.card_asset.setCardBackgroundColor(findColor(android.R.color.transparent))
+        }
 
         helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)

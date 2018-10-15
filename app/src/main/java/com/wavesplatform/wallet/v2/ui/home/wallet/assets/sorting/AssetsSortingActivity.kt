@@ -46,7 +46,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
-        setupToolbar(toolbar_view,  true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         recycle_favorite_assets.layoutManager = LinearLayoutManager(this)
         recycle_favorite_assets.adapter = adapterFavorites
@@ -138,18 +138,24 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
                 view_drag_bg.visiable()
 
-                viewHolder.itemView.card_asset.cardElevation = dp2px(4).toFloat()
+                if (adapter.getItem(pos)?.isHidden != true) {
+                    viewHolder.itemView.card_asset.cardElevation = dp2px(4).toFloat()
+                }
             }
 
             override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int, target: RecyclerView.ViewHolder, to: Int) {
                 presenter.needToUpdate = true
                 val originalPos = IntArray(2)
                 target.itemView.card_asset.getLocationOnScreen(originalPos)
-                view_drag_bg.y = originalPos[1].toFloat()- getStatusBarHeight()
+                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
             }
 
             override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
-                viewHolder.itemView.card_asset.cardElevation = dp2px(2).toFloat()
+                if (adapter.getItem(pos)?.isHidden == true) {
+                    viewHolder.itemView.card_asset.cardElevation = dp2px(0).toFloat()
+                } else {
+                    viewHolder.itemView.card_asset.cardElevation = dp2px(2).toFloat()
+                }
                 view_drag_bg.gone()
             }
         })
@@ -177,12 +183,14 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_assets_visibility -> {
-                adapter.data.forEach({
+                if (item.title == getString(R.string.wallet_sorting_toolbar_visibility_action)) {
+                    item.title = getString(R.string.wallet_sorting_toolbar_position_action)
+                } else {
+                    item.title = getString(R.string.wallet_sorting_toolbar_visibility_action)
+                }
+                adapter.data.forEach {
                     it.configureVisibleState = !it.configureVisibleState
-                })
-                adapterFavorites.data.forEach({
-                    it.configureVisibleState = !it.configureVisibleState
-                })
+                }
                 adapter.notifyDataSetChanged()
                 return true
             }
