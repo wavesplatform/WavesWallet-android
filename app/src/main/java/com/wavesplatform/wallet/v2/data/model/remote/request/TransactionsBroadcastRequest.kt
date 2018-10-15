@@ -15,7 +15,8 @@ class TransactionsBroadcastRequest(
         @SerializedName("recipient") var recipient: String,
         @SerializedName("amount") var amount: Long,
         @SerializedName("timestamp") var timestamp: Long,
-        @SerializedName("fee") var fee: Long, attachment: String?) {
+        @SerializedName("fee") var fee: Long,
+        attachment: String?) {
 
     @SerializedName("type")
     val type: Int = 4
@@ -73,13 +74,5 @@ class TransactionsBroadcastRequest(
                 0
             }
         }
-
-        /*fun createDisplayTransaction(): TransactionsBroadcastRequest {
-            val tt = TransactionsBroadcastRequest(4, Base58.encode(Hash.fastHash(toSignBytes())),
-                    AddressUtil.addressFromPublicKey(senderPublicKey), timestamp, amount, fee,
-                    assetId, address, attachment)
-            tt.isPending = true
-            return tt
-        }*/
     }
 }
