@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
@@ -105,7 +106,7 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CREATE_ALIAS) {
+        if (requestCode == REQUEST_CREATE_ALIAS && resultCode == Constants.RESULT_OK) {
             when (type) {
                 TYPE_EMPTY -> {
                     dismiss()

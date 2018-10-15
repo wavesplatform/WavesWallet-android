@@ -968,7 +968,7 @@
     <!-- NEW ALIAS -->
     <string name="new_alias_toolbar_title">New alias</string>
     <string name="new_alias_create">Create</string>
-    <string name="new_alias_symbol_name">Symbolic name to your address</string>
+    <string name="new_alias_symbol_name">Symbolic name</string>
     <string name="new_alias_success_create">You created a new alias!</string>
     <string name="new_alias_min_validation_error">Minimum 4 characters</string>
     <string name="new_alias_max_validation_error">30 characters maximum</string>

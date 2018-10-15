@@ -43,7 +43,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     override fun configLayoutRes(): Int = R.layout.activity_create_alias
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, true, getString(R.string.new_alias_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.new_alias_toolbar_title), R.drawable.ic_toolbar_back_black, { onBackPressed() })
 
         val aliasValidation = Validation(til_new_alias_symbol)
                 .and(MinTrimRule(4, R.string.new_alias_min_validation_error))
@@ -100,6 +100,11 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     override fun aliasIsNotAvailable() {
         button_create_alias.isEnabled = false
         til_new_alias_symbol.error = getString(R.string.new_alias_already_use_validation_error)
+    }
+
+    override fun onBackPressed() {
+        setResult(Constants.RESULT_CANCELED)
+        finish()
     }
 
     override fun successCreateAlias(alias: Alias) {
