@@ -73,7 +73,7 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
 
                 val originalPos = IntArray(2)
                 viewHolder.itemView.card_market.getLocationOnScreen(originalPos)
-                view_drag_bg.y = originalPos[1].toFloat()
+                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
                 view_drag_bg.visiable()
 
                 viewHolder.itemView.card_market.cardElevation = dp2px(4).toFloat()
@@ -82,7 +82,7 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
             override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int, target: RecyclerView.ViewHolder, to: Int) {
                 val originalPos = IntArray(2)
                 target.itemView.card_market.getLocationOnScreen(originalPos)
-                view_drag_bg.y = originalPos[1].toFloat()
+                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
             }
 
             override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {

@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
+import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -66,7 +67,9 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
             }
             HistoryTabFragment.leasing_active_now -> {
                 queryAsSingle<Transaction> {
-                    `in`("transactionTypeId", arrayOf(Constants.ID_STARTED_LEASING_TYPE))
+                    equalTo("status", LeasingStatus.ACTIVE.status)
+                            .and()
+                            .equalTo("transactionTypeId", Constants.ID_STARTED_LEASING_TYPE)
                 }
             }
             HistoryTabFragment.leasing_canceled -> {
@@ -82,7 +85,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         addSubscription(singleData
                 .map {
                     // all history
-                    allItemsFromDb = it.sortedByDescending({ it.timestamp })
+                    allItemsFromDb = it.sortedByDescending { it.timestamp }
 
                     // history only for detailed asset
                     assetBalance.notNull {
