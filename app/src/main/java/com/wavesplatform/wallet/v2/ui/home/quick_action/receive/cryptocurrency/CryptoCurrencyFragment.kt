@@ -32,7 +32,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
     @Inject
     @InjectPresenter
     lateinit var presenter: СryptocurrencyPresenter
-    private var skeletonScreen: SkeletonScreen? = null
+    private var skeletonView: SkeletonScreen? = null
 
     @ProvidePresenter
     fun providePresenter(): СryptocurrencyPresenter = presenter
@@ -81,7 +81,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         super.onViewStateRestored(savedInstanceState)
         if (savedInstanceState != null) {
             presenter.assetBalance.notNull {
-                skeletonScreen!!.show()
+                skeletonView!!.show()
                 setAssetBalance(it)
             }
         }
@@ -96,7 +96,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
     }
 
     override fun showTunnel(tunnel: GetTunnel?) {
-        skeletonScreen!!.hide()
+        skeletonView!!.hide()
         if (tunnel?.tunnel == null) {
             button_continue.isEnabled = false
             return
@@ -113,7 +113,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
     }
 
     override fun showError(message: String?) {
-        skeletonScreen!!.hide()
+        skeletonView!!.hide()
     }
 
     private fun setAssetBalance(assetBalance: AssetBalance?) {
@@ -135,7 +135,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
 
         if (assetBalance != null) {
             presenter.getTunnel(assetBalance.assetId!!)
-            skeletonScreen = Skeleton.bind(container_info)
+            skeletonView = Skeleton.bind(container_info)
                     .color(R.color.basic50)
                     .load(R.layout.item_skeleton_crypto_warning)
                     .show()

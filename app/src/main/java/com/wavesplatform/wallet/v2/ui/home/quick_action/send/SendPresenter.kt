@@ -115,7 +115,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                                     viewState.showXRate(xRate)
                                 }
                             }, {
-                                viewState.onShowError(R.string.receive_error_network)
+                                runOnUiThread {
+                                    viewState.showXRateError()
+                                }
                             }))
         }
     }

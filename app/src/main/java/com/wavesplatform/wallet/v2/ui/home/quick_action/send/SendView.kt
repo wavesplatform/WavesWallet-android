@@ -9,5 +9,6 @@ interface SendView : BaseMvpView {
     fun onShowError(res: Int)
     fun onShowPaymentDetails(details: PaymentConfirmationDetails)
     fun showXRate(xRate: XRate?)
+    fun showXRateError()
 
 }

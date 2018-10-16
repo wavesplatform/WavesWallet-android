@@ -11,6 +11,8 @@ import android.view.View
 import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.ethanhua.skeleton.Skeleton
+import com.ethanhua.skeleton.SkeletonScreen
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
@@ -48,6 +50,8 @@ class SendActivity : BaseActivity(), SendView {
     @Inject
     @InjectPresenter
     lateinit var presenter: SendPresenter
+
+    private var skeletonView: SkeletonScreen? = null
 
     @ProvidePresenter
     fun providePresenter(): SendPresenter = presenter
@@ -154,7 +158,8 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun showXRate(xRate: XRate?) {
-        relative_gateway_fee.visiable()
+        skeletonView!!.hide()
+
         gateway_fee.text = getString(
                 R.string.send_gateway_info_gateway_fee,
                 BigDecimal(xRate?.fee).toString(),
@@ -166,6 +171,12 @@ class SendActivity : BaseActivity(), SendView {
                 BigDecimal(xRate.inMax!!).toString())
         gateway_warning.text = getString(R.string.send_gateway_info_gateway_warning,
                 xRate.toTxt)
+    }
+
+    override fun showXRateError() {
+        skeletonView!!.hide()
+        relative_gateway_fee.gone()
+        onShowError(R.string.receive_error_network)
     }
 
     private fun checkAddressFieldAndSetAction(address: String) {
@@ -188,19 +199,15 @@ class SendActivity : BaseActivity(), SendView {
                 when {
                     it.isWaves() -> {
                         relative_gateway_fee.gone()
-                        relative_fiat_fee.gone()
                     }
                     it.isGateway -> {
                         relative_gateway_fee.visiable()
-                        relative_fiat_fee.gone()
                     }
                     it.isFiatMoney -> {
                         relative_gateway_fee.gone()
-                        relative_fiat_fee.visiable()
                     }
                     else -> {
                         relative_gateway_fee.gone()
-                        relative_fiat_fee.gone()
                     }
                 }
             }
@@ -244,11 +251,19 @@ class SendActivity : BaseActivity(), SendView {
     private fun setAsset(asset: AssetBalance?) {
         asset.notNull {
             presenter.selectedAsset = asset
-            relative_gateway_fee.gone()
-            relative_fiat_fee.gone()
-
             if (AssetBalance.isGateway(it.assetId!!)) {
+                relative_gateway_fee.visiable()
+                if (skeletonView == null) {
+                    skeletonView = Skeleton.bind(relative_gateway_fee)
+                            .color(R.color.basic50)
+                            .load(R.layout.item_skeleton_gateway_warning)
+                            .show()
+                } else {
+                    skeletonView!!.show()
+                }
                 presenter.loadXRate(it)
+            } else {
+                relative_gateway_fee.gone()
             }
 
             checkAddressFieldAndSetAction(edit_address.text.toString())
