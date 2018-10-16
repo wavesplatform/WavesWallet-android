@@ -20,7 +20,6 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send_confirmation.*
@@ -72,7 +71,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.getAddressName(presenter.address!!)
         text_fee_value.text = "${SendPresenter.CUSTOM_FEE} ${SendPresenter.CUSTOM_FEE_ASSET_NAME}"
 
-        button_confirm.click { presenter.confirmSend() }
+        button_confirm.click { requestPassCode() }
 
         eventSubscriptions.add(RxTextView.textChanges(edit_optional_message)
                 .skipInitialValue()
@@ -155,10 +154,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         when (requestCode) {
             EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    data.notNull { intent ->
-                        var passCode = intent.extras
-                                .getString(EnterPassCodeActivity.KEY_INTENT_PASS_CODE)
-                    }
+                    presenter.confirmSend()
                 } else {
                     setResult(Constants.RESULT_CANCELED)
                     finish()
