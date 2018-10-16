@@ -16,7 +16,7 @@ class TransactionsBroadcastRequest(
         @SerializedName("amount") var amount: Long,
         @SerializedName("timestamp") var timestamp: Long,
         @SerializedName("fee") var fee: Long,
-        attachment: String?) {
+        @SerializedName("attachment") var attachment: String?) {
 
     @SerializedName("type")
     val type: Int = 4
@@ -24,17 +24,15 @@ class TransactionsBroadcastRequest(
     val version: Int = API_VERSION
     @SerializedName("feeAssetId")
     var feeAssetId: String? = ""
-    @SerializedName("attachment")
-    var attachment: String = attachment ?: ""
     @SerializedName("proofs")
     var proofs = arrayOf("")
     @SerializedName("signature")
     var signature: String = ""
 
-    @SerializedName("sender")
-    var sender: String? = null
+    /*@SerializedName("sender")
+    var sender: String? = ""
     @SerializedName("id")
-    var id: String? = null
+    var id: String? = ""*/
 
     private fun toSignBytes(): ByteArray {
         return try {

@@ -31,7 +31,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
 
     var address: String? = ""
     var amount: String? = ""
-    var attachment: String? = ""
+    var attachment: String? = null
     var selectedAsset: AssetBalance? = null
 
 

@@ -97,10 +97,17 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 equalTo("id", signed.assetId)
             }
 
+            val ticker = if (assetInfo!!.ticker.equals(null)
+                    || assetInfo.ticker.equals("")) {
+                assetInfo.name
+            } else {
+                assetInfo.ticker ?: ""
+            }
+
             text_leasing_result_value.text = getString(
                     R.string.send_success_you_have_sent_sum,
-                    signed.amount.toString(),
-                    assetInfo!!.ticker)
+                    (signed.amount / 10000000).toString(),
+                    ticker)
             button_okay.click {
                 launchActivity<MainActivity>(clear = true)
             }
