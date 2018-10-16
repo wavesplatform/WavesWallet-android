@@ -46,7 +46,7 @@ class HistoryFragment : BaseFragment(), HistoryView {
         val list = tabs?.map {
             val fragment = HistoryTabFragment.newInstance(it.data, arguments?.getParcelable(BUNDLE_ASSET))
             fragment.changeTabBarVisibilityListener = object : HistoryTabFragment.ChangeTabBarVisibilityListener {
-                override fun changeTabBarVisibility(show: Boolean) {
+                override fun changeTabBarVisibility(show: Boolean, onlyExpand: Boolean) {
                     if (show) {
                         appbar_layout.setExpanded(true, false)
                         appbar_layout.visiable()
