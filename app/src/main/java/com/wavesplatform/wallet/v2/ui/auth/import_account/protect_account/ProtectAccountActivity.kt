@@ -9,6 +9,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.rules.AccountNameRule
+import com.wavesplatform.wallet.v2.data.rules.EqualRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -20,7 +21,6 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
-import io.github.anderscheow.validator.rules.common.EqualRule
 import io.github.anderscheow.validator.rules.common.MaxRule
 import io.github.anderscheow.validator.rules.common.MinRule
 import kotlinx.android.synthetic.main.activity_protect_account.*
@@ -84,34 +84,32 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
         }
         edit_create_password.addTextChangedListener {
             on { s, start, before, count ->
-                validator
-                        .validate(object : Validator.OnValidateListener {
-                            override fun onValidateSuccess(values: List<String>) {
-                                presenter.createPasswrodFieldValid = true
-                                isFieldsValid()
-                            }
+                validator.validate(object : Validator.OnValidateListener {
+                    override fun onValidateSuccess(values: List<String>) {
+                        presenter.createPasswrodFieldValid = true
+                        isFieldsValid()
+                    }
 
-                            override fun onValidateFailed() {
-                                presenter.createPasswrodFieldValid = false
-                                isFieldsValid()
-                            }
-                        }, passwordValidation)
-                if (edit_confirm_password.text.trim().isNotEmpty()) {
+                    override fun onValidateFailed() {
+                        presenter.createPasswrodFieldValid = false
+                        isFieldsValid()
+                    }
+                }, passwordValidation)
+                if (edit_confirm_password.text?.trim()?.isNotEmpty() == true) {
                     val confirmPasswordValidation = Validation(til_confirm_password)
-                            .and(EqualRule(edit_create_password.text.trim().toString(),
+                            .and(EqualRule(edit_create_password.text?.trim()?.toString(),
                                     R.string.new_account_confirm_password_validation_match_error))
-                    validator
-                            .validate(object : Validator.OnValidateListener {
-                                override fun onValidateSuccess(values: List<String>) {
-                                    presenter.confirmPasswordFieldValid = true
-                                    isFieldsValid()
-                                }
+                    validator.validate(object : Validator.OnValidateListener {
+                        override fun onValidateSuccess(values: List<String>) {
+                            presenter.confirmPasswordFieldValid = true
+                            isFieldsValid()
+                        }
 
-                                override fun onValidateFailed() {
-                                    presenter.confirmPasswordFieldValid = false
-                                    isFieldsValid()
-                                }
-                            }, confirmPasswordValidation)
+                        override fun onValidateFailed() {
+                            presenter.confirmPasswordFieldValid = false
+                            isFieldsValid()
+                        }
+                    }, confirmPasswordValidation)
                 }
             }
         }
@@ -119,7 +117,7 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
         edit_confirm_password.addTextChangedListener {
             on { s, start, before, count ->
                 val confirmPasswordValidation = Validation(til_confirm_password)
-                        .and(EqualRule(edit_create_password.text.trim().toString(),
+                        .and(EqualRule(edit_create_password.text?.trim()?.toString(),
                                 R.string.new_account_confirm_password_validation_match_error))
                 validator
                         .validate(object : Validator.OnValidateListener {

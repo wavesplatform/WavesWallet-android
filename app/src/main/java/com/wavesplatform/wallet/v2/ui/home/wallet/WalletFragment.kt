@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet
 
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v4.app.Fragment
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -65,12 +66,13 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
         stl_wallet.currentTab = 0
-        appbar_layout.addOnOffsetChangedListener { _, verticalOffset ->
+        appbar_layout.addOnOffsetChangedListener(
+                AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
             onElevationAppBarChangeListener.notNull {
                 onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
                 viewpager_wallet.setPagingEnabled(verticalOffset == 0)
             }
-        }
+        })
     }
 
     override fun changeTabBarVisibility(show: Boolean, onlyExpand: Boolean) {

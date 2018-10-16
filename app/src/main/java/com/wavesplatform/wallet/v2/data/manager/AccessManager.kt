@@ -63,7 +63,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
                 }
     }
 
-    fun writePassCodeObservable(guid: String, password: String, passCode: String): Completable {
+    fun writePassCodeObservable(guid: String, password: String?, passCode: String): Completable {
         appUtil.applyPRNGFixes()
 
         return Completable.create { subscriber ->
@@ -224,8 +224,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             false
         } else {
             deleteWavesWallet(currentUser.address)
-            deleteRealmDBForAccount()
-            clearRealmConfiguration()
             true
         }
     }
@@ -267,6 +265,9 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             loggedInGuid = ""
             prefs.removeGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID)
         }
+
+        deleteRealmDBForAccount()
+        clearRealmConfiguration()
     }
 
     private fun createGuidsListWithout(guidToRemove: String): Array<String> {

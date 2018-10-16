@@ -2,6 +2,7 @@
 <resources>
 
     <!--Tutorial-->
+    <string name="app_name">Waves Wallet</string>
     <string name="card_tutorial_next">Далее</string>
     <string name="card_tutorial_understand">Я понимаю</string>
     <string name="tutorial_card_1_title">Добро пожаловать в Waves Platform!</string>

@@ -3,11 +3,13 @@ package com.wavesplatform.wallet.v2.ui.base.view
 import android.app.Dialog
 import android.os.Bundle
 import android.support.annotation.NonNull
+import android.support.annotation.Nullable
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.widget.FrameLayout
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.getToolBarHeight
 import com.wavesplatform.wallet.v2.util.notNull
 import dagger.android.support.AndroidSupportInjection
@@ -33,6 +35,7 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpV
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.BottomSheetDialogBgDimDisabled)
     }
 
 
@@ -49,10 +52,9 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpV
                 if ((it.height > screenHeight - getStatusBarHeight() - it.context.getToolBarHeight()) || fullScreenHeightEnable) {
                     it.setHeight(screenHeight - getStatusBarHeight() - it.context.getToolBarHeight() - extraTopMargin)
                 }
-                var bottomSheetBehavior = BottomSheetBehavior.from(it)
+                val bottomSheetBehavior = BottomSheetBehavior.from(it)
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 bottomSheetBehavior.peekHeight = it.height
-
             }
         }
 

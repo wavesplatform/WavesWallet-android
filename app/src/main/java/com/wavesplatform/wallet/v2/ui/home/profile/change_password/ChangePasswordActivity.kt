@@ -7,6 +7,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.rules.EqualRule
 import com.wavesplatform.wallet.v2.data.rules.EqualsAccountPasswordRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.data.rules.NotEqualsAccountPasswordRule
@@ -18,7 +19,6 @@ import com.wavesplatform.wallet.v2.util.notNull
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
-import io.github.anderscheow.validator.rules.common.EqualRule
 import io.github.anderscheow.validator.rules.common.MinRule
 import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.activity_change_password.*
@@ -92,9 +92,9 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                                 isFieldsValid()
                             }
                         }, newPasswordValidation)
-                if (edit_confirm_password.text.isNotEmpty()) {
+                if (edit_confirm_password.text!!.isNotEmpty()) {
                     val confirmPasswordValidation = Validation(til_confirm_password)
-                            .and(EqualRule(edit_new_password.text.trim().toString(),
+                            .and(EqualRule(edit_new_password.text?.trim()?.toString(),
                                     R.string.new_account_confirm_password_validation_match_error))
                     validator.validate(object : Validator.OnValidateListener {
                         override fun onValidateSuccess(values: List<String>) {
@@ -114,7 +114,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         edit_confirm_password.addTextChangedListener {
             on { s, start, before, count ->
                 val confirmPasswordValidation = Validation(til_confirm_password)
-                        .and(EqualRule(edit_new_password.text.trim().toString(),
+                        .and(EqualRule(edit_new_password.text?.trim()?.toString(),
                                 R.string.new_account_confirm_password_validation_match_error))
                 validator
                         .validate(object : Validator.OnValidateListener {
@@ -149,7 +149,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
     private fun goNext() {
         if (presenter.isAllFieldsValid()) {
             showProgressBar(true)
-            presenter.writePassword(edit_old_password.text.trim().toString(), edit_new_password.text.trim().toString())
+            presenter.writePassword(edit_old_password.text?.trim()?.toString(), edit_new_password.text?.trim()?.toString())
         }
     }
 

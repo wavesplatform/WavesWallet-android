@@ -3,13 +3,13 @@ package com.wavesplatform.wallet.v2.ui.auth.import_account
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -34,6 +34,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view, true, title = getString(R.string.import_account_toolbar_title), icon = R.drawable.ic_toolbar_back_black)
 
         viewpager_import.adapter = ImportAccountFragmentPageAdapter(supportFragmentManager, arrayOf(getString(R.string.import_account_tab_scan),

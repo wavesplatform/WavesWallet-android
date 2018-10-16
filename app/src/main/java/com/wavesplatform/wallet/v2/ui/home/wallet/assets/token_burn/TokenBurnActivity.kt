@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -31,6 +32,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.token_burn_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         image_asset_icon.isOval = true
@@ -38,7 +40,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
 
 
         edit_amount.addTextChangedListener {
-            on({ s, start, before, count ->
+            on { s, start, before, count ->
                 if (edit_amount.text.isNotEmpty()){
                     horizontal_amount_suggestion.gone()
                     button_continue.isEnabled = true
@@ -46,7 +48,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
                     horizontal_amount_suggestion.visiable()
                     button_continue.isEnabled = false
                 }
-            })
+            }
         }
 
         button_continue.click {

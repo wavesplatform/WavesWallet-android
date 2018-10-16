@@ -21,7 +21,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndK
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.bank.BankFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card.CardFragment
-import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency.СryptocurrencyFragment
+import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency.CryptoCurrencyFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
@@ -68,7 +68,7 @@ abstract class FragmentModule {
 
     @PerFragment
     @ContributesAndroidInjector
-    internal abstract fun cryptocurrencyFragment(): СryptocurrencyFragment
+    internal abstract fun cryptocurrencyFragment(): CryptoCurrencyFragment
 
     @PerFragment
     @ContributesAndroidInjector

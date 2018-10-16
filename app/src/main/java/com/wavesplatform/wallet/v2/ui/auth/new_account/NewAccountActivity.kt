@@ -98,7 +98,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
                         isFieldsValid()
                     }
                 }, passwordValidation)
-                if (edit_confirm_password.text.trim().isNotEmpty()) {
+                if (edit_confirm_password.text?.trim()?.isNotEmpty() == true) {
                     val confirmPasswordValidation = Validation(til_confirm_password)
                             .and(EqualRule(edit_create_password.text.toString(),
                                     R.string.new_account_confirm_password_validation_match_error))
@@ -120,7 +120,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
         edit_confirm_password.addTextChangedListener {
             on { s, start, before, count ->
                 val confirmPasswordValidation = Validation(til_confirm_password)
-                        .and(EqualRule(edit_create_password.text.trim().toString(),
+                        .and(EqualRule(edit_create_password.text?.trim()?.toString(),
                                 R.string.new_account_confirm_password_validation_match_error))
                 validator
                         .validate(object : Validator.OnValidateListener {

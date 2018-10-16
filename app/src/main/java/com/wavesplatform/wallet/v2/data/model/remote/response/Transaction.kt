@@ -79,6 +79,8 @@ open class Transaction(
         var alias: String? = "",
         @SerializedName("attachment")
         var attachment: String? = "",
+        @SerializedName("status")
+        var status: String? = "",
         @SerializedName("lease")
         var lease: Lease? = Lease(),
         @SerializedName("fee")

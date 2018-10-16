@@ -453,7 +453,9 @@ inline fun <reified T : Any> Activity.launchActivity(
     } else {
         startActivity(intent)
     }
-    if (withoutAnimation) overridePendingTransition(0, 0)
+    if (withoutAnimation) {
+        overridePendingTransition(0, 0)
+    }
 }
 
 inline fun <reified T : Any> Fragment.launchActivity(
@@ -476,7 +478,10 @@ inline fun <reified T : Any> Fragment.launchActivity(
     } else {
         startActivity(intent)
     }
-    if (withoutAnimation) activity?.overridePendingTransition(0, 0)
+    if (withoutAnimation) {
+        activity?.overridePendingTransition(0, 0)
+        // todo activity?.overridePendingTransition(R.anim.start_new_show,  R.anim.start_current_hide)
+    }
 }
 
 inline fun <reified T : Any> Context.launchActivity(

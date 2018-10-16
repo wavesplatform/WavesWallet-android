@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndK
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Observable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 @InjectViewState
@@ -59,11 +60,11 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
                 .subscribe { viewState.showQRCode(it) })
     }
 
-    fun loadAliases(){
+    fun loadAliases() {
         runAsync {
             queryAllAsync<Alias> { aliases ->
                 val ownAliases = aliases.filter { it.own }
-                viewState.afterSuccessLoadAliases(ownAliases)
+                runOnUiThread { viewState.afterSuccessLoadAliases(ownAliases) }
             }
         }
     }

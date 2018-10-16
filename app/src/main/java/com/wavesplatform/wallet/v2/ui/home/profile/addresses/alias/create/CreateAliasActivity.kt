@@ -87,7 +87,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                 })
 
         button_create_alias.click {
-            presenter.createAlias(edit_new_alias_symbol.text.trim().toString())
+            presenter.createAlias(edit_new_alias_symbol.text?.trim()?.toString())
         }
     }
 

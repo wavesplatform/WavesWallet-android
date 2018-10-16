@@ -17,7 +17,6 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
 import pers.victor.ext.click
@@ -31,10 +30,10 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
 
     @Inject
     @InjectPresenter
-    lateinit var andKeysPresenter: AddressesAndKeysPresenter
+    lateinit var presenter: AddressesAndKeysPresenter
 
     @ProvidePresenter
-    fun providePresenter(): AddressesAndKeysPresenter = andKeysPresenter
+    fun providePresenter(): AddressesAndKeysPresenter = presenter
 
     override fun configLayoutRes(): Int = R.layout.activity_profile_addresses_and_keys
 
@@ -43,22 +42,6 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
 
         text_address.text = App.getAccessManager().getWallet()?.address
         text_public_key.text = App.getAccessManager().getWallet()?.publicKeyStr
-
-        runAsync {
-            queryAllAsync<Alias> { aliases ->
-                val ownAliases = aliases.filter { it.own }
-                text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
-                relative_alias.click {
-                    val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
-                    if (ownAliases.isEmpty()) {
-                        bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
-                    } else {
-                        bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
-                    }
-                    bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
-                }
-            }
-        }
 
         eventSubscriptions.add(RxView.clicks(image_address_copy)
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
@@ -85,6 +68,8 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
             launchActivity<EnterPassCodeActivity>(
                     requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) { }
         }
+
+        presenter.loadAliases()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -100,6 +85,19 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
                     relative_private_key_block.visiable()
                 }
             }
+        }
+    }
+
+    override fun afterSuccessLoadAliases(ownAliases: List<Alias>) {
+        text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
+        relative_alias.click {
+            val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
+            if (ownAliases.isEmpty()) {
+                bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
+            } else {
+                bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
+            }
+            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
     }
 }

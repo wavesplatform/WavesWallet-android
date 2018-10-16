@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -120,10 +119,11 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 .disableHeaderClick(false)
                 .setHeaderClickListener(headerClickListener)
                 .create()
-        recycle_assets.addItemDecoration(headerItemDecoration)
+        recycle_assets.addItemDecoration(headerItemDecoration!!)
 
         recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (headerItemDecoration?.pinnedHeaderView != null) {
                     swipe_container.isEnabled = false
                     if (headerItemDecoration?.pinnedHeaderView?.image_arrow?.isVisible() == true) {
@@ -134,7 +134,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 }
             }
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     if (presenter.needToScroll) {
                         presenter.needToScroll = false
@@ -156,10 +156,10 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
         // make skeleton as designed
         recycle_assets.post {
-            recycle_assets.layoutManager.findViewByPosition(1)?.alpha = 0.7f
-            recycle_assets.layoutManager.findViewByPosition(2)?.alpha = 0.5f
-            recycle_assets.layoutManager.findViewByPosition(3)?.alpha = 0.4f
-            recycle_assets.layoutManager.findViewByPosition(4)?.alpha = 0.2f
+            recycle_assets.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
+            recycle_assets.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
+            recycle_assets.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
+            recycle_assets.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
         }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->

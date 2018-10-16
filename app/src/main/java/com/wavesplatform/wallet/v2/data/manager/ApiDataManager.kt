@@ -1,18 +1,17 @@
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class ApiDataManager @Inject constructor() : DataManager() {
+class ApiDataManager @Inject constructor() : BaseDataManager() {
 
     fun loadAliases(): Observable<List<Alias>> {
         return apiService.aliases(getAddress())

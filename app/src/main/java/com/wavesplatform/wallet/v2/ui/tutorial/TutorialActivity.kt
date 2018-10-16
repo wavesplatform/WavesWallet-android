@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.tutorial
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -29,6 +30,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         adapter.items = arrayListOf(1, 2, 3, 4, 5)
         adapter.listener = object : TutorialAdapter.EndOfScrollListener {
             override fun onEndOfScroll(position: Int) {

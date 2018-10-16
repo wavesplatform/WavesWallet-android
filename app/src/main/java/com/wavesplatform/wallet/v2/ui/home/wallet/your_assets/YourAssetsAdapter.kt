@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.your_assets
 
+import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
@@ -16,8 +17,13 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
         helper.setText(R.id.text_asset_name, item.getName())
                 .setText(R.id.text_asset_value, item.getDisplayBalance())
                 .setVisible(R.id.image_favourite, item.isFavorite)
-//                .setGone(R.id.image_down_arrow, item.isOut)
 //                .setVisible(R.id.text_tag_spam, item.isSpam)
+        helper.itemView.image_down_arrow.visibility =
+                if (item.isWaves() || AssetBalance.isGateway(item.assetId!!)) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
 
         helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)

@@ -66,6 +66,16 @@ class LeasingFragment : BaseFragment(), LeasingView {
                     }
                 })
 
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
+                .subscribe {
+                    presenter.getActiveLeasing()
+                })
+
+        swipe_container.setColorSchemeResources(R.color.submit400)
+        swipe_container.setOnRefreshListener {
+            presenter.getActiveLeasing()
+        }
+
         presenter.getActiveLeasing()
 
         card_view_history.click {
@@ -79,10 +89,6 @@ class LeasingFragment : BaseFragment(), LeasingView {
                 }
                 putExtras(bundle)
             }
-        }
-
-        button_continue.click {
-            launchActivity<StartLeasingActivity> { }
         }
 
         container_quick_note.click {
@@ -155,6 +161,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
     }
 
     override fun showBalances(wavesAsset: AssetBalance, leasedValue: Long, availableValue: Long?) {
+        swipe_container.isRefreshing = false
         text_available_balance.text = MoneyUtil.getScaledText(availableValue, wavesAsset)
         text_available_balance.makeTextHalfBold()
         text_leased.text = MoneyUtil.getScaledText(leasedValue, wavesAsset)
@@ -166,9 +173,18 @@ class LeasingFragment : BaseFragment(), LeasingView {
                 progress_of_leasing.progress = 0
             }
         }
+
+
+        button_start_lease.click {
+            launchActivity<StartLeasingActivity> {
+                putExtra(StartLeasingActivity.BUNDLE_WAVES, wavesAsset)
+                putExtra(StartLeasingActivity.BUNDLE_AVAILABLE, availableValue)
+            }
+        }
     }
 
     override fun showActiveLeasingTransaction(transactions: List<Transaction>) {
+        swipe_container.isRefreshing = false
         linear_active_leasing.goneIf { transactions.isEmpty() }
         adapterActiveAdapter.setNewData(transactions)
         text_active_leasing.text = getString(R.string.wallet_leasing_active_now, transactions.size.toString())

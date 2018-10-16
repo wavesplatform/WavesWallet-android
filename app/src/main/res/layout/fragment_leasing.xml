@@ -1,348 +1,356 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_container"
     android:layout_width="match_parent"
-    android:id="@+id/nested_scroll_view"
     android:layout_height="match_parent"
-    android:overScrollMode="never">
+    android:background="@color/basic50">
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:descendantFocusability="blocksDescendants"
-        android:orientation="vertical"
-        android:paddingBottom="16dp">
+        android:overScrollMode="never">
 
-        <android.support.v7.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="2dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="@dimen/asset_item_radius"
-            app:cardElevation="2dp">
+            android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
 
-            <LinearLayout
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="24dp"
-                android:paddingEnd="16dp"
-                android:paddingStart="16dp"
-                android:paddingTop="24dp">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_asset_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/wallet_leasing_available_balance"
-                    android:textColor="@color/disabled500" />
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="2dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/asset_item_radius"
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:paddingBottom="24dp"
+                    android:paddingEnd="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="24dp">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_available_balance"
+                        android:id="@+id/text_asset_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="00000000.00000000"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:text="@string/wallet_leasing_available_balance"
+                        android:textColor="@color/disabled500" />
 
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_dollar_value"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="4dp"
-                        android:background="@drawable/asset_price_border"
-                        android:paddingBottom="2dp"
-                        android:paddingEnd="4dp"
-                        android:paddingStart="4dp"
-                        android:paddingTop="2dp"
-                        android:text="$ 00.00"
-                        android:textColor="@color/info500"
-                        android:textSize="12sp"
-                        android:visibility="gone" />
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_available_balance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="00000000.00000000"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_dollar_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="4dp"
+                            android:background="@drawable/asset_price_border"
+                            android:paddingBottom="2dp"
+                            android:paddingEnd="4dp"
+                            android:paddingStart="4dp"
+                            android:paddingTop="2dp"
+                            android:text="$ 00.00"
+                            android:textColor="@color/info500"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progress_of_leasing"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:layout_marginTop="20dp"
+                        android:indeterminate="false"
+                        android:max="100"
+                        android:progress="50"
+                        android:progressDrawable="@drawable/leasign_progress" />
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_leased"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="0.00000000"
+                            android:textColor="@color/disabled900" />
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="8dp"
+                            android:drawableRight="@drawable/circle_shape_submit300"
+                            android:gravity="center"
+                            android:text="@string/wallet_leasing_leased"
+                            android:textColor="@color/disabled500" />
+                    </RelativeLayout>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/view_line_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="14dp"
+                        android:layerType="software"
+                        android:src="@drawable/shape_dashed_line" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="0.00000000"
+                            android:textColor="@color/disabled900" />
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="8dp"
+                            android:drawableRight="@drawable/circle_shape_info50"
+                            android:gravity="center"
+                            android:text="@string/wallet_leasing_total"
+                            android:textColor="@color/disabled500" />
+                    </RelativeLayout>
+
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/view_line_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="14dp"
+                        android:layerType="software"
+                        android:src="@drawable/shape_dashed_line" />
+
+                    <Button
+                        android:id="@+id/button_start_lease"
+                        style="@style/WavesButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="24dp"
+                        android:clickable="true"
+                        android:text="@string/wallet_leasing_start_lease"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <ProgressBar
-                    android:id="@+id/progress_of_leasing"
-                    style="?android:attr/progressBarStyleHorizontal"
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="2dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/asset_item_radius"
+                app:cardElevation="2dp">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_view_history"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="20dp"
-                    android:indeterminate="false"
-                    android:max="100"
-                    android:progress="50"
-                    android:progressDrawable="@drawable/leasign_progress" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:drawableRight="@drawable/ic_arrowright_basic_200"
+                    android:fontFamily="@font/roboto"
+                    android:padding="14dp"
+                    android:text="@string/wallet_leasing_view_history"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/linear_active_leasing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
                 <RelativeLayout
+                    android:id="@+id/relative_active_leasing_title_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp">
+                    android:layout_marginTop="18dp"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_leased"
+                        android:id="@+id/text_active_leasing"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:text="Hidden assets (2)"
+                        android:textColor="@color/basic500" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/image_active_leasing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="0.00000000"
-                        android:textColor="@color/disabled900" />
-
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_gravity="center_vertical"
-                        android:drawablePadding="8dp"
-                        android:drawableRight="@drawable/circle_shape_submit300"
-                        android:gravity="center"
-                        android:text="@string/wallet_leasing_leased"
-                        android:textColor="@color/disabled500" />
+                        android:layout_centerVertical="true"
+                        app:srcCompat="@drawable/ic_arrowup_basic_300" />
                 </RelativeLayout>
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/view_line_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="14dp"
-                    android:layerType="software"
-                    android:src="@drawable/shape_dashed_line" />
-
-                <RelativeLayout
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/expandable_layout_active_leasing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp">
+                    app:el_duration="500"
+                    app:el_expanded="true"
+                    app:el_parallax="0.5">
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_total"
-                        android:layout_width="wrap_content"
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycle_active_leasing"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="0.00000000"
-                        android:textColor="@color/disabled900" />
+                        android:clipToPadding="false"
+                        android:overScrollMode="never"
+                        android:paddingTop="8dp" />
 
+                </net.cachapa.expandablelayout.ExpandableLayout>
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_gravity="center_vertical"
-                        android:drawablePadding="8dp"
-                        android:drawableRight="@drawable/circle_shape_info50"
-                        android:gravity="center"
-                        android:text="@string/wallet_leasing_total"
-                        android:textColor="@color/disabled500" />
-                </RelativeLayout>
-
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/view_line_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="14dp"
-                    android:layerType="software"
-                    android:src="@drawable/shape_dashed_line" />
-
-                <Button
-                    android:id="@+id/button_continue"
-                    style="@style/WavesButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="24dp"
-                    android:clickable="true"
-                    android:text="@string/wallet_leasing_start_lease"
-                    android:textStyle="bold" />
             </LinearLayout>
 
 
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_view_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="2dp"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="@dimen/asset_item_radius"
-            app:cardElevation="2dp">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_view_history"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:drawableRight="@drawable/ic_arrowright_basic_200"
-                android:fontFamily="@font/roboto"
-                android:padding="14dp"
-                android:text="@string/wallet_leasing_view_history"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-        </android.support.v7.widget.CardView>
-
-        <LinearLayout
-            android:id="@+id/linear_active_leasing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
             <RelativeLayout
-                android:id="@+id/relative_active_leasing_title_container"
+                android:id="@+id/container_quick_note"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
+                android:clickable="true"
                 android:paddingBottom="8dp"
                 android:paddingEnd="16dp"
                 android:paddingStart="16dp"
                 android:paddingTop="8dp">
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_active_leasing"
+                    android:id="@+id/text_hidden_assets"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:text="Hidden assets (2)"
+                    android:text="@string/wallet_leasing_quick_note"
                     android:textColor="@color/basic500" />
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_active_leasing"
+                    android:id="@+id/image_arrowup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:rotation="180"
                     app:srcCompat="@drawable/ic_arrowup_basic_300" />
             </RelativeLayout>
 
             <net.cachapa.expandablelayout.ExpandableLayout
-                android:id="@+id/expandable_layout_active_leasing"
+                android:id="@+id/expandable_layout_hidden"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:el_duration="500"
-                app:el_expanded="true"
+                app:el_expanded="false"
                 app:el_parallax="0.5">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycle_active_leasing"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:overScrollMode="never"
-                    android:paddingTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:text="@string/wallet_leasing_quick_note_1"
+                        android:textColor="@color/disabled500"
+                        android:textSize="16sp" />
+
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/view_line_4"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginBottom="14dp"
+                        android:layout_marginTop="14dp"
+                        android:layerType="software"
+                        android:src="@drawable/shape_dashed_line" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_closelease_disabled_500"
+                        android:drawablePadding="16dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="@string/wallet_leasing_quick_note_2"
+                        android:textColor="@color/disabled500"
+                        android:textSize="16sp" />
+
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/view_line_5"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginBottom="14dp"
+                        android:layout_marginTop="14dp"
+                        android:layerType="software"
+                        android:src="@drawable/shape_dashed_line" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:text="@string/wallet_leasing_quick_note_3"
+                        android:textColor="@color/disabled500"
+                        android:textSize="16sp" />
+                </LinearLayout>
             </net.cachapa.expandablelayout.ExpandableLayout>
-
         </LinearLayout>
-
-
-        <RelativeLayout
-            android:id="@+id/container_quick_note"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:clickable="true"
-            android:paddingBottom="8dp"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_hidden_assets"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/wallet_leasing_quick_note"
-                android:textColor="@color/basic500" />
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_arrowup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:rotation="180"
-                app:srcCompat="@drawable/ic_arrowup_basic_300" />
-        </RelativeLayout>
-
-        <net.cachapa.expandablelayout.ExpandableLayout
-            android:id="@+id/expandable_layout_hidden"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:el_duration="500"
-            app:el_expanded="false"
-            app:el_parallax="0.5">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto"
-                    android:text="@string/wallet_leasing_quick_note_1"
-                    android:textColor="@color/disabled500"
-                    android:textSize="16sp" />
-
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/view_line_4"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginBottom="14dp"
-                    android:layout_marginTop="14dp"
-                    android:layerType="software"
-                    android:src="@drawable/shape_dashed_line" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_closelease_disabled_500"
-                    android:drawablePadding="16dp"
-                    android:fontFamily="@font/roboto"
-                    android:text="@string/wallet_leasing_quick_note_2"
-                    android:textColor="@color/disabled500"
-                    android:textSize="16sp" />
-
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/view_line_5"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginBottom="14dp"
-                    android:layout_marginTop="14dp"
-                    android:layerType="software"
-                    android:src="@drawable/shape_dashed_line" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto"
-                    android:text="@string/wallet_leasing_quick_note_3"
-                    android:textColor="@color/disabled500"
-                    android:textSize="16sp" />
-            </LinearLayout>
-        </net.cachapa.expandablelayout.ExpandableLayout>
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>
