@@ -211,6 +211,7 @@
                 android:inputType="text"
                 android:paddingBottom="20dp"
                 android:singleLine="true"
+                android:maxLength="140"
                 android:textColorHint="@color/basic500" />
 
 
