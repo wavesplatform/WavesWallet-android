@@ -38,6 +38,7 @@ import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.isVisible
 import pers.victor.ext.toast
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
@@ -171,6 +172,14 @@ class AssetsFragment : BaseFragment(), AssetsView {
             launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, positionWithoutSection)
+            }
+        }
+
+        adapter.scrollToHeaderListener = object : AssetsAdapter.ScrollToHeaderListener {
+            override fun scrollToHeader(position: Int, itemView: View) {
+                runDelayed(350) {
+                    recycle_assets.smoothScrollBy(0, itemView.y.toInt() - dp2px(1))
+                }
             }
         }
     }

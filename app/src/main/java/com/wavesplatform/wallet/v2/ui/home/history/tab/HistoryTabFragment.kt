@@ -174,6 +174,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     }
 
     interface ChangeTabBarVisibilityListener {
-        fun changeTabBarVisibility(show: Boolean)
+        fun changeTabBarVisibility(show: Boolean, onlyExpand: Boolean = false)
     }
 }

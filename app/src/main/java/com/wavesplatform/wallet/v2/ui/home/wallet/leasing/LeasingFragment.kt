@@ -98,7 +98,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
                         .rotation(0f)
                         .setDuration(500)
                         .withEndAction {
-                            changeTabBarVisibilityListener?.changeTabBarVisibility(false)
+                            changeTabBarVisibilityListener?.changeTabBarVisibility(false, true)
                             nested_scroll_view.fullScroll(View.FOCUS_DOWN)
                         }
                         .start()
@@ -118,8 +118,8 @@ class LeasingFragment : BaseFragment(), LeasingView {
                         .rotation(0f)
                         .setDuration(500)
                         .withEndAction {
-                            changeTabBarVisibilityListener?.changeTabBarVisibility(false)
-                            nested_scroll_view.smoothScrollTo(0, relative_active_leasing_title_container.top + screenHeight / 2)
+                            changeTabBarVisibilityListener?.changeTabBarVisibility(false, true)
+                            nested_scroll_view.smoothScrollTo(0, (linear_active_leasing.y.toInt() + relative_active_leasing_title_container.y.toInt()) - nested_scroll_view.scrollY)
                         }
                         .start()
             }

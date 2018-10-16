@@ -73,15 +73,19 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
         }
     }
 
-    override fun changeTabBarVisibility(show: Boolean) {
+    override fun changeTabBarVisibility(show: Boolean, onlyExpand: Boolean) {
         if (show) {
             appbar_layout.setExpanded(true, false)
-            appbar_layout.visiable()
+            if (!onlyExpand){
+                appbar_layout.visiable()
+            }
         } else {
             if (appbar_layout.visibility != View.GONE) {
                 appbar_layout.setExpanded(false, false)
-                runDelayed(100) {
-                    appbar_layout.gone()
+                if (!onlyExpand){
+                    runDelayed(100) {
+                        appbar_layout.gone()
+                    }
                 }
             }
         }
