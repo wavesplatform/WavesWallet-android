@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
+import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
@@ -132,7 +133,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     override fun onBackPressed() {
         setResult(Activity.RESULT_CANCELED)
-        finish()
+        launchActivity<WelcomeActivity> {  }
         overridePendingTransition(0, android.R.anim.fade_out)
     }
 

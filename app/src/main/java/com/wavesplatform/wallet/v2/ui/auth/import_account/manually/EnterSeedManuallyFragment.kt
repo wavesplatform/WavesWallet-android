@@ -8,6 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
@@ -73,6 +74,16 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
 
                             override fun onValidateFailed() {
                                 setSkeleton()
+                                if (App.getAccessManager().isAccountWithSeedExist(edit_seed.text.toString().trim())) {
+                                    val wallet = WavesWallet(edit_seed.text.toString().trim().toByteArray(Charsets.UTF_8))
+                                    Glide.with(activity)
+                                            .load(identicon.create(wallet.address))
+                                            .apply(RequestOptions().circleCrop())
+                                            .into(image_asset!!)
+                                    address_asset.text = wallet.address
+                                    address_asset.visibility = View.VISIBLE
+                                    skeleton_address_asset.visibility = View.GONE
+                                }
                             }
                         }, seedValidation)
             }

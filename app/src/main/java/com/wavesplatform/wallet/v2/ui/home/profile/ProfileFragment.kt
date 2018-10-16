@@ -221,9 +221,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     private fun logout() {
         App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
-        val intent = Intent(context, WelcomeActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+        launchActivity<WelcomeActivity>(clear = true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

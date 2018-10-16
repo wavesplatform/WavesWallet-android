@@ -105,7 +105,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     fun clearAndLogout() {
         App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
-        launchActivity<ChooseAccountActivity>()
+        launchActivity<ChooseAccountActivity>(clear = true)
     }
 
     fun startUsePasswordScreen() {

@@ -158,7 +158,7 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.welcome.WelcomeActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
