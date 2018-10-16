@@ -126,7 +126,6 @@ class UpdateApiDataService : Service() {
         val allTransactionsAssets = tempGrabbedAssets.asSequence().filter { !it.isNullOrEmpty() }.distinct().toMutableList()
 
 
-
         subscriptions.add(apiDataManager.assetsInfoByIds(allTransactionsAssets)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
@@ -151,6 +150,22 @@ class UpdateApiDataService : Service() {
                                 }
                             } else {
                                 trans.recipientAddress = trans.recipient
+                            }
+
+                            trans.transfers.forEach { trans ->
+                                if (trans.recipient.contains("alias")) {
+                                    val aliasName = trans.recipient.substringAfterLast(":")
+                                    aliasName.notNull {
+                                        subscriptions.add(apiDataManager.loadAlias(it)
+                                                .compose(RxUtil.applyObservableDefaultSchedulers())
+                                                .subscribe {
+                                                    trans.recipientAddress = it.address
+                                                    trans.save()
+                                                })
+                                    }
+                                } else {
+                                    trans.recipientAddress = trans.recipient
+                                }
                             }
 
                             if (trans.order1 != null) {

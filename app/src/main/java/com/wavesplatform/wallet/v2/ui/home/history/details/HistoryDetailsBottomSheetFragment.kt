@@ -305,10 +305,10 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                     val imageAddressAction = addressView?.findViewById<AppCompatImageView>(R.id.image_address_action)
                     val viewDivider = addressView?.findViewById<AppCompatImageView>(R.id.view_divider)
 
-                    resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
-
-                    textSentAddress?.text = transfer.recipient
+                    textSentAddress?.text = transfer.recipientAddress
                     textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset)
+
+                    resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
 
                     if (index >= 3) {
                         showMoreAddress?.visiable()
@@ -327,10 +327,10 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
                                 val transfer = transfers[i]
 
-                                resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
-
-                                textSentAddress?.text = transfer.recipient
+                                textSentAddress?.text = transfer.recipientAddress
                                 textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset)
+
+                                resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
 
                                 if (i == transfers.size - 1) viewDivider?.gone()
 

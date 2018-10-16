@@ -143,7 +143,6 @@ class NodeDataManager @Inject constructor() : DataManager() {
                     } else {
                         return@flatMap Observable.just(listOf<Transaction>())
                     }
-
                 }
     }
 
