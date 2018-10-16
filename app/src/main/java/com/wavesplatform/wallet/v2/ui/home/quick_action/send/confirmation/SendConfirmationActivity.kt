@@ -12,7 +12,6 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -58,12 +57,17 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 getString(R.string.send_confirmation_toolbar_title),
                 R.drawable.ic_toolbar_back_white)
 
-        presenter.selectedAsset = intent.extras.getParcelable(KEY_INTENT_SELECTED_ASSET)
-        presenter.address = intent.extras.getString(KEY_INTENT_SELECTED_ADDRESS)
-        presenter.amount = intent.extras.getString(KEY_INTENT_SELECTED_AMOUNT)
+        if (intent == null || intent.extras == null) {
+            finish()
+        }
+
+        presenter.selectedAsset = intent!!.extras!!.getParcelable(KEY_INTENT_SELECTED_ASSET)
+        presenter.address = intent!!.extras!!.getString(KEY_INTENT_SELECTED_ADDRESS)
+        presenter.amount = intent!!.extras!!.getString(KEY_INTENT_SELECTED_AMOUNT)
+        presenter.assetInfo = queryFirst { equalTo("id", presenter.selectedAsset!!.assetId) }
 
         text_sum.text = "- ${presenter.amount}"
-        text_tag.text = presenter.selectedAsset!!.getName()
+        text_tag.text = presenter.getTicker()
         text_sent_to_address.text = presenter.address
         presenter.getAddressName(presenter.address!!)
         text_fee_value.text = "${SendPresenter.CUSTOM_FEE} ${SendPresenter.CUSTOM_FEE_ASSET_NAME}"
@@ -93,21 +97,10 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             card_progress.gone()
             relative_success.visiable()
 
-            val assetInfo = queryFirst<AssetInfo> {
-                equalTo("id", signed.assetId)
-            }
-
-            val ticker = if (assetInfo!!.ticker.equals(null)
-                    || assetInfo.ticker.equals("")) {
-                assetInfo.name
-            } else {
-                assetInfo.ticker ?: ""
-            }
-
             text_leasing_result_value.text = getString(
                     R.string.send_success_you_have_sent_sum,
                     (signed.amount / 10000000F).toString(),
-                    ticker)
+                    presenter.getTicker())
             button_okay.click {
                 launchActivity<MainActivity>(clear = true)
             }

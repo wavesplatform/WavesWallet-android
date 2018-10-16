@@ -33,6 +33,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var amount: String? = ""
     var attachment: String? = null
     var selectedAsset: AssetBalance? = null
+    var assetInfo: AssetInfo? = null
 
 
     fun confirmSend() {
@@ -41,6 +42,17 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             submitPayment(singed)
         } else {
             viewState.requestPassCode()
+        }
+    }
+
+    fun getTicker(): String {
+        return if (assetInfo == null) {
+            ""
+        } else if (assetInfo!!.ticker.equals(null)
+                || assetInfo!!.ticker.equals("")) {
+            assetInfo!!.name
+        } else {
+            assetInfo!!.ticker ?: ""
         }
     }
 
