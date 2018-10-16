@@ -10,7 +10,6 @@ import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.Hash
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
-import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -61,7 +60,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     private fun validateTransfer(tx: TransferTransactionRequest): Int {
         if (selectedAsset == null || TextUtils.isEmpty(address)) {
             R.string.send_transaction_error_check_fields
-        } else if (!AddressUtil.isValidAddress(tx.address)) {
+        } else if (isAddressValid() != true) {
             return R.string.invalid_address
         } else if (tx.attachmentSize > TransferTransactionRequest.MaxAttachmentSize) {
             return R.string.attachment_too_long

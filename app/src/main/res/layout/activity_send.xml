@@ -227,44 +227,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/linear_recipient_suggestion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_choose_from_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="8dp"
-                        android:background="@drawable/basic100_rounded"
-                        android:lineSpacingExtra="4sp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/send_choose_from_address_book"
-                        android:textColor="@color/basic500"
-                        android:textSize="12sp" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_person"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/basic100_rounded"
-                        android:lineSpacingExtra="4sp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="8dp"
-                        android:text="Mike Node"
-                        android:textColor="@color/basic500"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                    android:orientation="horizontal"/>
 
             </HorizontalScrollView>
 

@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.api.NodeManager
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -60,6 +61,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         } else {
             nodeManager.transactionsBroadcast(signed)
                     .compose(RxUtil.applySchedulersToObservable()).subscribe({ tx ->
+                        saveLastSentAddress(signed.recipient)
                         viewState.onShowTransactionSuccess(signed)
                     }, { _ ->
                         viewState.onShowError(R.string.transaction_failed)
@@ -122,7 +124,9 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                                 }
                             }
                             .subscribe(
-                                    { request ->
+                                    { request
+                                        ->
+                                        saveLastSentAddress(request.recipient)
                                         runOnUiThread {
                                             viewState.onShowTransactionSuccess(request)
                                         }
@@ -132,6 +136,26 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                                             viewState.onShowError(R.string.receive_error_network)
                                         }
                                     }))
+        }
+    }
+
+    private fun saveLastSentAddress(newAddress: String) {
+        val addresses = prefsUtil.getGlobalValueList(PrefsUtil.KEY_LAST_SENT_ADDRESSES)
+        var needAdd = true
+        for (address in addresses) {
+            if (newAddress == address) {
+                needAdd = false
+            }
+        }
+        if (needAdd) {
+            val addressesList = addresses.toMutableList()
+            if (addresses.size < 5) {
+                addressesList.add(newAddress)
+            } else {
+                addressesList.removeAt(0)
+                addressesList.add(newAddress)
+            }
+            prefsUtil.setGlobalValue(PrefsUtil.KEY_LAST_SENT_ADDRESSES, addressesList.toTypedArray())
         }
     }
 }

@@ -5,14 +5,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
+import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
 import android.view.View
+import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
@@ -61,12 +65,6 @@ class SendActivity : BaseActivity(), SendView {
         setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title), R.drawable.ic_toolbar_back_black)
         checkAddressFieldAndSetAction(edit_address.text.toString())
 
-        text_choose_from_address.click {
-            launchActivity<AddressBookActivity>(requestCode = StartLeasingActivity.REQUEST_CHOOSE_ADDRESS) {
-                putExtra(AddressBookActivity.BUNDLE_SCREEN_TYPE, AddressBookActivity.AddressBookScreenType.CHOOSE.type)
-            }
-        }
-
         if (intent.hasExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM)) {
             setAsset(intent.getParcelableExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM))
             assetChangeEnable(false)
@@ -105,6 +103,42 @@ class SendActivity : BaseActivity(), SendView {
         text_leasing_0_100.click { edit_amount.setText("0.100") }
         text_leasing_0_100000.click { edit_amount.setText("0.00100000") }
         text_leasing_0_500000.click { edit_amount.setText("0.00500000") }
+
+        setRecipientSuggestions()
+    }
+
+    private fun setRecipientSuggestions() {
+        val addressBook = layoutInflater
+                .inflate(R.layout.view_text_tag, null) as AppCompatTextView
+        addressBook.text = getText(R.string.send_choose_from_address_book)
+        addressBook.click {
+            launchActivity<AddressBookActivity>(
+                    requestCode = StartLeasingActivity.REQUEST_CHOOSE_ADDRESS) {
+                putExtra(AddressBookActivity.BUNDLE_SCREEN_TYPE,
+                        AddressBookActivity.AddressBookScreenType.CHOOSE.type)
+            }
+        }
+
+        val parameters = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        parameters.marginStart = ViewUtils.convertDpToPixel(4F, this).toInt()
+        addressBook.layoutParams = parameters
+        linear_recipient_suggestion.addView(addressBook)
+
+        val addresses = prefsUtil.getGlobalValueList(PrefsUtil.KEY_LAST_SENT_ADDRESSES)
+        for (address in addresses) {
+            val lastRecipient = layoutInflater
+                    .inflate(R.layout.view_text_tag, null) as AppCompatTextView
+            val addressBookUser = queryFirst<AddressBookUser> {
+                equalTo("address", address)
+            }
+            lastRecipient.text = addressBookUser?.name ?: address
+            lastRecipient.click {
+                edit_address.setText(address)
+            }
+            lastRecipient.layoutParams = parameters
+            linear_recipient_suggestion.addView(lastRecipient)
+        }
     }
 
     override fun onShowError(res: Int) {
@@ -210,6 +244,8 @@ class SendActivity : BaseActivity(), SendView {
     private fun setAsset(asset: AssetBalance?) {
         asset.notNull {
             presenter.selectedAsset = asset
+            relative_gateway_fee.gone()
+            relative_fiat_fee.gone()
 
             if (AssetBalance.isGateway(it.assetId!!)) {
                 presenter.loadXRate(it)
