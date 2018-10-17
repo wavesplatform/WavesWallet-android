@@ -25,7 +25,7 @@ class ChangePasswordPresenter @Inject constructor() : BasePresenter<ChangePasswo
         return oldPasswordFieldValid && newPasswordFieldValid && confirmPasswordFieldValid
     }
 
-    fun writePassword(oldPassword: String, newPassword: String) {
+    fun writePassword(oldPassword: String?, newPassword: String?) {
         val guid = App.getAccessManager().getLoggedInGuid()
         val oldWallet = WavesWallet(
                 App.getAccessManager().getCurrentWavesWalletEncryptedData(),

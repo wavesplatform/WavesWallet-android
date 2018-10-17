@@ -30,7 +30,7 @@
         <attr name="text_color" format="color" />
         <attr name="shape_color" format="color" />
         <attr name="text_size" format="integer" />
-        <attr name="text_number" format="integer"/>
+        <attr name="text_number" format="integer" />
         <attr name="is_uppercase" format="boolean" />
         <attr name="is_bold" format="boolean" />
     </declare-styleable>
@@ -40,5 +40,13 @@
     </declare-styleable>
     <declare-styleable name="PassCodeEntryKeypad">
         <attr name="is_fingerprint_available" format="boolean" />
+    </declare-styleable>
+
+
+    <declare-styleable name="ImageProgressBar">
+        <attr name="progress_image" format="reference" />
+        <attr name="progress_text" format="string" />
+        <attr name="progress_text_color" format="reference|color" />
+        <attr name="progress_duration" format="integer" />
     </declare-styleable>
 </resources>

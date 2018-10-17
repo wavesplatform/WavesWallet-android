@@ -8,28 +8,35 @@ import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.widget.FrameLayout
+import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.getToolBarHeight
 import com.wavesplatform.wallet.v2.util.notNull
+import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import pers.victor.ext.getStatusBarHeight
 import pers.victor.ext.screenHeight
 import pers.victor.ext.setHeight
+import javax.inject.Inject
 
 open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpView {
-    override fun showNetworkError() {
-        baseActivity.showNetworkError()
-    }
-
-    override fun showProgressBar(isShowProgress: Boolean) {
-        baseActivity.showProgressBar(isShowProgress)
-    }
 
     var fullScreenHeightEnable = false
     var extraTopMargin = 0
+
     val baseActivity: BaseActivity
         get() = activity as BaseActivity
     var eventSubscriptions: CompositeDisposable = CompositeDisposable()
+
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        super.onCreate(savedInstanceState)
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.BottomSheetDialogBgDimDisabled)
+    }
 
 
     @NonNull
@@ -55,13 +62,16 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpV
         return dialog
     }
 
+    override fun showNetworkError() {
+        baseActivity.showNetworkError()
+    }
+
+    override fun showProgressBar(isShowProgress: Boolean) {
+        baseActivity.showProgressBar(isShowProgress)
+    }
+
     override fun onDestroyView() {
         eventSubscriptions.clear()
         super.onDestroyView()
-    }
-
-    override fun onCreate(@Nullable savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.BottomSheetDialogBgDimDisabled)
     }
 }

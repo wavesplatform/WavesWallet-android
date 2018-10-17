@@ -34,37 +34,28 @@
                 android:clickable="true"
                 android:padding="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_marginEnd="6dp"
+                android:layout_marginEnd="10dp"
                 app:srcCompat="@drawable/ic_favorite_14_submit_300" />
 
-            <RelativeLayout
+            <com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
+                android:id="@+id/image_asset_icon"
+                android:layout_width="28dp"
                 android:layout_toEndOf="@id/image_favorite"
-                android:id="@+id/container_asset_icon"
-                android:layout_width="wrap_content"
+                android:layout_height="28dp"
                 android:layout_centerVertical="true"
-                android:padding="4dp"
-                android:layout_height="wrap_content">
+                app:text_number="1"
+                app:text_size="16"
+                android:src="@drawable/asset_gray_icon"/>
 
-
-                <com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
-                    android:id="@+id/image_asset_icon"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_centerVertical="true"
-                    app:text_number="1"
-                    app:text_size="16"
-                    android:src="@drawable/asset_gray_icon"/>
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_down_arrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="-4dp"
-                    android:layout_marginStart="-4dp"
-                    android:layout_alignBottom="@+id/image_asset_icon"
-                    app:srcCompat="@drawable/ic_circle_down_arrow" />
-
-            </RelativeLayout>
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_down_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-4dp"
+                android:layout_toEndOf="@id/image_favorite"
+                android:layout_marginStart="-4dp"
+                android:layout_alignBottom="@+id/image_asset_icon"
+                app:srcCompat="@drawable/ic_circle_down_arrow" />
 
 
             <android.support.v7.widget.AppCompatTextView
@@ -74,7 +65,7 @@
                 android:textSize="14sp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_toEndOf="@+id/container_asset_icon"
+                android:layout_toEndOf="@+id/image_asset_icon"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/disabled500"
                 tools:text="Waves" />

@@ -21,7 +21,7 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
                 }))
     }
 
-    fun createAlias(alias: String) {
+    fun createAlias(alias: String?) {
         aliasRequest.alias = alias
 
         addSubscription(nodeDataManager.createAlias(aliasRequest)

@@ -26,7 +26,7 @@ class TopRightErrorTextInputLayout(context: Context, attrs: AttributeSet) : Text
 
         this.post {
             topRightAlignedErrorText.post {
-                topRightAlignedErrorText.translationY = -this.height + topRightAlignedErrorText.height.toFloat() - pers.victor.ext.dp2px(3)
+                topRightAlignedErrorText.translationY = -this.height + topRightAlignedErrorText.height.toFloat()
             }
             if (childCount == 3) {
                 getChildAt(1).gone()

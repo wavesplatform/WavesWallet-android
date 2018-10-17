@@ -155,6 +155,8 @@ open class Data(
 open class Transfer(
         @SerializedName("recipient")
         var recipient: String = "",
+        @SerializedName("recipientAddress")
+        var recipientAddress: String? = "",
         @SerializedName("amount")
         var amount: Long = 0
 ) : RealmModel

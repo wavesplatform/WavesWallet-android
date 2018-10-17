@@ -69,14 +69,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
     fun providePresenter(): HistoryDetailsPresenter = presenter
 
 
-    @Inject
-    lateinit var preferencesHelper: PreferencesHelper
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
@@ -333,10 +325,10 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                     val imageAddressAction = addressView?.findViewById<AppCompatImageView>(R.id.image_address_action)
                     val viewDivider = addressView?.findViewById<AppCompatImageView>(R.id.view_divider)
 
-                    resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
-
-                    textSentAddress?.text = transfer.recipient
+                    textSentAddress?.text = transfer.recipientAddress
                     textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset)
+
+                    resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
 
                     if (index >= 3) {
                         showMoreAddress?.visiable()
@@ -355,10 +347,10 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
                                 val transfer = transfers[i]
 
-                                resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
-
-                                textSentAddress?.text = transfer.recipient
+                                textSentAddress?.text = transfer.recipientAddress
                                 textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset)
+
+                                resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
 
                                 if (i == transfers.size - 1) viewDivider?.gone()
 
@@ -520,5 +512,12 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 }
             }
         }
+    }
+
+
+    fun configureData(selectedItem: Transaction, selectedPosition: Int, allItems: List<Transaction>) {
+        this.selectedItem = selectedItem
+        this.selectedItemPosition = selectedPosition
+        this.allItems = allItems
     }
 }

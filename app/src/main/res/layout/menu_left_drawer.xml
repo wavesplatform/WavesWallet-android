@@ -58,7 +58,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="48dp"
         android:background="@color/accent50" />
@@ -79,7 +79,28 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="48dp"
+        android:background="@color/accent50" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/left_drawer_support"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
+        android:id="@+id/text_support"
+        android:paddingBottom="13dp"
+        android:clickable="true"
+        android:background="?android:selectableItemBackground"
+        android:paddingTop="13dp"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="48dp"
         android:background="@color/accent50" />
@@ -87,7 +108,7 @@
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="86dp"
+        android:layout_marginTop="44dp"
         android:paddingStart="24dp"
         android:paddingEnd="48dp"
         android:lineSpacingExtra="4sp"
@@ -148,17 +169,5 @@
             app:srcCompat="@drawable/ic_s_facebook_28" />
 
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:paddingStart="24dp"
-        android:paddingEnd="48dp"
-        android:layout_marginTop="54dp"
-        android:textColor="@color/basic500"
-        android:lineSpacingExtra="4sp"
-        android:text="@string/left_drawer_waves_platform"
-        />
 
 </LinearLayout>

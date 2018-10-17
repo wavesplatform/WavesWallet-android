@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -28,6 +29,7 @@ import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_leasing.*
 import pers.victor.ext.click
 import pers.victor.ext.goneIf
+import pers.victor.ext.screenHeight
 import javax.inject.Inject
 
 class LeasingFragment : BaseFragment(), LeasingView {
@@ -101,6 +103,10 @@ class LeasingFragment : BaseFragment(), LeasingView {
                 image_arrowup.animate()
                         .rotation(0f)
                         .setDuration(500)
+                        .withEndAction {
+                            changeTabBarVisibilityListener?.changeTabBarVisibility(false, true)
+                            nested_scroll_view.fullScroll(View.FOCUS_DOWN)
+                        }
                         .start()
             }
         }
@@ -117,6 +123,10 @@ class LeasingFragment : BaseFragment(), LeasingView {
                 image_active_leasing.animate()
                         .rotation(0f)
                         .setDuration(500)
+                        .withEndAction {
+                            changeTabBarVisibilityListener?.changeTabBarVisibility(false, true)
+                            nested_scroll_view.smoothScrollTo(0, (linear_active_leasing.y.toInt() + relative_active_leasing_title_container.y.toInt()) - nested_scroll_view.scrollY)
+                        }
                         .start()
             }
         }
@@ -129,10 +139,8 @@ class LeasingFragment : BaseFragment(), LeasingView {
             val historyItem = adapter.getItem(position) as Transaction
 
             val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
-            bottomSheetFragment.selectedItem = historyItem
-            bottomSheetFragment.allItems = adapter?.data as ArrayList<Transaction>
 
-            bottomSheetFragment.selectedItemPosition = position
+            bottomSheetFragment.configureData(historyItem, position, adapter.data as ArrayList<Transaction>)
             bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
         }
     }

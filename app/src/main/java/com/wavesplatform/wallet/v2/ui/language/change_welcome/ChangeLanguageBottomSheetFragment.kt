@@ -14,9 +14,7 @@ import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_change_language_layout.view.*
-import pers.victor.ext.app
-import pers.victor.ext.click
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import java.util.*
 import javax.inject.Inject
 
@@ -24,7 +22,6 @@ import javax.inject.Inject
 class ChangeLanguageBottomSheetFragment @Inject constructor() : BaseBottomSheetDialogFragment() {
 
     var adapter: LanguageAdapter = LanguageAdapter()
-    var preferenceHelper: PreferencesHelper = PreferencesHelper(app)
     var languageChooseListener: LanguageSelectListener? = null
     var currentLanguagePosition: Int = -1
 
@@ -44,9 +41,16 @@ class ChangeLanguageBottomSheetFragment @Inject constructor() : BaseBottomSheetD
 
             if (currentLanguagePosition == position) return@OnItemClickListener
 
+            val languageItemByCode = Language.getLanguageItemByCode(preferencesHelper.getLanguage())
+            val positionCurrent = adapter.data.indexOf(languageItemByCode)
+            if (position == positionCurrent){
+                rootView.button_confirm.invisiable()
+            }else{
+                rootView.button_confirm.visiable()
+            }
+
             if (currentLanguagePosition == -1) {
                 // check new item
-                rootView.button_confirm.visiable()
                 currentLanguagePosition = position
                 item.checked = true
                 adapter.setData(position, item)
@@ -78,7 +82,7 @@ class ChangeLanguageBottomSheetFragment @Inject constructor() : BaseBottomSheetD
     }
 
     private fun markCurrentSelectedLanguage() {
-        val languageItemByCode = Language.getLanguageItemByCode(preferenceHelper.getLanguage())
+        val languageItemByCode = Language.getLanguageItemByCode(preferencesHelper.getLanguage())
         val position = adapter.data.indexOf(languageItemByCode)
         currentLanguagePosition = position
         val languageItem = adapter.getItem(position) as LanguageItem
@@ -91,7 +95,7 @@ class ChangeLanguageBottomSheetFragment @Inject constructor() : BaseBottomSheetD
     }
 
     fun saveLanguage(lang: Int) {
-        preferenceHelper.setLanguage(lang)
+        preferencesHelper.setLanguage(lang)
     }
 
     interface LanguageSelectListener {

@@ -13,6 +13,7 @@ import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
+import com.wavesplatform.wallet.v2.util.openUrlWithIntent
 import com.wavesplatform.wallet.v2.util.setSystemBarTheme
 import com.yarolegovich.slidingrootnav.SlidingRootNav
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
@@ -35,11 +36,11 @@ abstract class BaseDrawerActivity : BaseActivity() {
                 .withRootViewScale(0.87f)
                 .withRootViewElevation(10)
                 .withToolbarMenuToggle(toolbar)
-                .addDragStateListener(object: DragStateListener{
+                .addDragStateListener(object : DragStateListener {
                     override fun onDragEnd(isMenuOpened: Boolean) {
-                        if (isMenuOpened){
+                        if (isMenuOpened) {
                             view?.visiable()
-                        }else{
+                        } else {
                             view?.gone()
                         }
                     }
@@ -50,6 +51,14 @@ abstract class BaseDrawerActivity : BaseActivity() {
                 .addDragListener { progress ->
                     slidingRootNav.layout.linear_drawer.scaleX = 1.5f - (progress / 2)
                     slidingRootNav.layout.linear_drawer.scaleY = 1.5f - (progress / 2)
+
+                    if (progress > 0.02) {
+                        if (window.statusBarColor != R.color.white)
+                            setStatusBarColor(R.color.white)
+                    } else {
+                        if (window.statusBarColor != R.color.basic50)
+                            setStatusBarColor(R.color.basic50)
+                    }
                 }
                 .withMenuOpened(false)
                 .withSavedState(savedInstanceState)
@@ -65,6 +74,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
         slidingRootNav.layout.text_site.click { openUrlWithChromeTab(Constants.URL_WAVES_COMMUNITY) }
         slidingRootNav.layout.text_whitepaper.click { openUrlWithIntent(Constants.URL_WHITEPAPER) }
         slidingRootNav.layout.text_terms.click { openUrlWithIntent(Constants.URL_TERMS) }
+        slidingRootNav.layout.text_support.click { openUrlWithIntent(Constants.SUPPORT_SITE) }
         slidingRootNav.layout.image_discord.click { openDiscord(Constants.URL_DISCORD) }
         slidingRootNav.layout.image_facebook.click { openFacebook(Constants.URL_FACEBOOK) }
         slidingRootNav.layout.image_github.click { openUrlWithChromeTab(Constants.URL_GITHUB) }
@@ -75,13 +85,13 @@ abstract class BaseDrawerActivity : BaseActivity() {
     private fun createCloseView() {
         view = View(this@BaseDrawerActivity)
 
-        val params : ViewGroup.LayoutParams = ViewGroup.LayoutParams(
+        val params: ViewGroup.LayoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, // This will define text view width
                 ViewGroup.LayoutParams.MATCH_PARENT // This will define text view height
         )
         view?.layoutParams = params
         view?.setBackgroundColor(Color.TRANSPARENT)
-        view?.click{
+        view?.click {
             slidingRootNav.closeMenu(true)
         }
         slidingRootNav.layout.findViewById<ViewGroup>(R.id.root).addView(view)
@@ -147,7 +157,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
                 intent = Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=$url"))
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 openUrlWithChromeTab(Constants.URL_TELEGRAM)
             }
         }
@@ -163,7 +173,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
         super.onPause()
     }
 
-    fun changeDrawerMenuIcon(icon: Drawable?){
+    fun changeDrawerMenuIcon(icon: Drawable?) {
         drawerIcon = icon
     }
 }

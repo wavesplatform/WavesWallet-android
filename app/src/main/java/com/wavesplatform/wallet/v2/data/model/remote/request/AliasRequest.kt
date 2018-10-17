@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.wallet.R.string.fee
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
 import com.wavesplatform.wallet.v2.data.Constants
@@ -17,7 +18,7 @@ data class AliasRequest(
         @SerializedName("fee") var fee: Long = 0,
         @SerializedName("timestamp") var timestamp: Long = 0,
         @SerializedName("signature") var signature: String? = null,
-        @SerializedName("alias") var alias: String = ""
+        @SerializedName("alias") var alias: String? = ""
 
 ) {
 
@@ -27,7 +28,7 @@ data class AliasRequest(
                     Base58.decode(senderPublicKey),
                     Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
                             byteArrayOf(Constants.ADDRESS_SCHEME.toByte()),
-                            alias.toByteArray(Charset.forName("UTF-8")).arrayWithSize()).arrayWithSize(),
+                            alias?.toByteArray(Charset.forName("UTF-8"))?.arrayWithSize()).arrayWithSize(),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp))
         } catch (e: Exception) {

@@ -7,17 +7,20 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.rules.EqualRule
 import com.wavesplatform.wallet.v2.data.rules.EqualsAccountPasswordRule
+import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.data.rules.NotEqualsAccountPasswordRule
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.util.applySpaceFilter
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
-import io.github.anderscheow.validator.rules.common.EqualRule
 import io.github.anderscheow.validator.rules.common.MinRule
+import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.activity_change_password.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
@@ -48,13 +51,16 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                 requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
 
         val oldPasswordValidation = Validation(til_old_password)
-                .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
+                .and(NotEmptyRule(" "))
                 .and(EqualsAccountPasswordRule(R.string.change_password_validation_old_password_wrong_error))
 
         val newPasswordValidation = Validation(til_new_password)
-                .and(MinRule(8, R.string.new_account_create_password_validation_length_error))
+                .and(MinTrimRule(8, R.string.new_account_create_password_validation_length_error))
                 .and(NotEqualsAccountPasswordRule(R.string.change_password_validation_new_password_already_use_error))
 
+        edit_confirm_password.applySpaceFilter()
+        edit_new_password.applySpaceFilter()
+        edit_old_password.applySpaceFilter()
 
         edit_old_password.addTextChangedListener {
             on { s, start, before, count ->
@@ -88,7 +94,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
                         }, newPasswordValidation)
                 if (edit_confirm_password.text!!.isNotEmpty()) {
                     val confirmPasswordValidation = Validation(til_confirm_password)
-                            .and(EqualRule(edit_new_password.text.toString(),
+                            .and(EqualRule(edit_new_password.text?.trim()?.toString(),
                                     R.string.new_account_confirm_password_validation_match_error))
                     validator.validate(object : Validator.OnValidateListener {
                         override fun onValidateSuccess(values: List<String>) {
@@ -108,7 +114,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         edit_confirm_password.addTextChangedListener {
             on { s, start, before, count ->
                 val confirmPasswordValidation = Validation(til_confirm_password)
-                        .and(EqualRule(edit_new_password.text.toString(),
+                        .and(EqualRule(edit_new_password.text?.trim()?.toString(),
                                 R.string.new_account_confirm_password_validation_match_error))
                 validator
                         .validate(object : Validator.OnValidateListener {
@@ -143,7 +149,7 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
     private fun goNext() {
         if (presenter.isAllFieldsValid()) {
             showProgressBar(true)
-            presenter.writePassword(edit_old_password.text.toString(), edit_new_password.text.toString())
+            presenter.writePassword(edit_old_password.text?.trim()?.toString(), edit_new_password.text?.trim()?.toString())
         }
     }
 

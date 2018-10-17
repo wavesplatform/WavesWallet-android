@@ -6,6 +6,8 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import kotlinx.android.synthetic.main.wallet_asset_sorting_favorite_item.view.*
+import pers.victor.ext.dp2px
+import pers.victor.ext.findColor
 import pers.victor.ext.visiableIf
 import javax.inject.Inject
 
@@ -15,9 +17,9 @@ class AssetsFavoriteSortingAdapter @Inject constructor() : BaseQuickAdapter<Asse
         helper.setText(R.id.text_asset_name, item.getName())
                 .addOnClickListener(R.id.image_favorite)
                 .setVisible(R.id.text_my_asset, item.issueTransaction?.sender == App.getAccessManager().getWallet()?.address)
+                .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
 
         helper.itemView.image_blocked.visiableIf { item.isWaves() }
-
         helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)
     }

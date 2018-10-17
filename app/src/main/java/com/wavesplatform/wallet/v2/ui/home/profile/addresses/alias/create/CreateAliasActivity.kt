@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.rules.AlphabetRule
+import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -42,10 +43,10 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     override fun configLayoutRes(): Int = R.layout.activity_create_alias
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view, true, getString(R.string.new_alias_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.new_alias_toolbar_title), R.drawable.ic_toolbar_back_black, { onBackPressed() })
 
         val aliasValidation = Validation(til_new_alias_symbol)
-                .and(MinRule(4, R.string.new_alias_min_validation_error))
+                .and(MinTrimRule(4, R.string.new_alias_min_validation_error))
                 .and(MaxRule(30, R.string.new_alias_max_validation_error))
                 .and(AlphabetRule(R.string.new_alias_invalid_char_validation_error))
 
@@ -67,31 +68,31 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
 
         eventSubscriptions.add(RxTextView.textChanges(edit_new_alias_symbol)
                 .skipInitialValue()
-                .map({
+                .map {
                     button_create_alias.isEnabled = false
                     return@map it.toString()
-                })
-                .filter({ !it.isEmpty() })
+                }
+                .filter { !it.isEmpty() }
                 .distinctUntilChanged()
-                .flatMap({
+                .flatMap {
                     return@flatMap Observable.zip(validateObservable, Observable.just(it), BiFunction { t1: Boolean, t2: String ->
                         Pair(t1, t2)
                     })
-                })
-                .filter({ it.first == true })
+                }
+                .filter { it.first == true }
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
+                .subscribe {
                     presenter.loadAlias(it.second)
-                }))
+                })
 
         button_create_alias.click {
-            presenter.createAlias(edit_new_alias_symbol.text.toString())
+            presenter.createAlias(edit_new_alias_symbol.text?.trim()?.toString())
         }
     }
 
     override fun aliasIsAvailable() {
-        button_create_alias.isEnabled = !edit_new_alias_symbol.text.toString().isEmpty()
+        button_create_alias.isEnabled = !edit_new_alias_symbol.text.toString().trim().isEmpty()
         if (til_new_alias_symbol.error == getString(R.string.new_alias_already_use_validation_error))
             til_new_alias_symbol.error = ""
     }
@@ -99,6 +100,11 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     override fun aliasIsNotAvailable() {
         button_create_alias.isEnabled = false
         til_new_alias_symbol.error = getString(R.string.new_alias_already_use_validation_error)
+    }
+
+    override fun onBackPressed() {
+        setResult(Constants.RESULT_CANCELED)
+        finish()
     }
 
     override fun successCreateAlias(alias: Alias) {

@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.widget.NestedScrollView
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -47,8 +48,13 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        setupToolbar(toolbar_view, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
+
+        nested_scroll_view.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+            appbar_layout.isSelected = nested_scroll_view.canScrollVertically(-1)
+        }
 
         recycle_favorite_assets.layoutManager = LinearLayoutManager(this)
         recycle_favorite_assets.adapter = adapterFavorites
@@ -140,7 +146,9 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
                 view_drag_bg.visiable()
 
-                viewHolder.itemView.card_asset.cardElevation = dp2px(4).toFloat()
+                if (adapter.getItem(pos)?.isHidden != true) {
+                    viewHolder.itemView.card_asset.cardElevation = dp2px(4).toFloat()
+                }
             }
 
             override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int, target: RecyclerView.ViewHolder, to: Int) {
@@ -151,7 +159,11 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             }
 
             override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
-                viewHolder.itemView.card_asset.cardElevation = dp2px(2).toFloat()
+                if (adapter.getItem(pos)?.isHidden == true) {
+                    viewHolder.itemView.card_asset.cardElevation = dp2px(0).toFloat()
+                } else {
+                    viewHolder.itemView.card_asset.cardElevation = dp2px(2).toFloat()
+                }
                 view_drag_bg.gone()
             }
         })
@@ -161,6 +173,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
     override fun showFavoriteAssets(favorites: List<AssetBalance>) {
         adapterFavorites.setNewData(favorites)
+        progress_bar.hide()
     }
 
     override fun showNotFavoriteAssets(notFavorites: List<AssetBalance>) {
@@ -175,10 +188,12 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_assets_visibility -> {
-                adapter.data.forEach {
-                    it.configureVisibleState = !it.configureVisibleState
+                if (item.title == getString(R.string.wallet_sorting_toolbar_visibility_action)) {
+                    item.title = getString(R.string.wallet_sorting_toolbar_position_action)
+                } else {
+                    item.title = getString(R.string.wallet_sorting_toolbar_visibility_action)
                 }
-                adapterFavorites.data.forEach {
+                adapter.data.forEach {
                     it.configureVisibleState = !it.configureVisibleState
                 }
                 adapter.notifyDataSetChanged()
@@ -200,6 +215,11 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
         })
         finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        progress_bar.hide()
     }
 
 }
