@@ -63,7 +63,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
                 }
     }
 
-    fun writePassCodeObservable(guid: String, password: String, passCode: String): Completable {
+    fun writePassCodeObservable(guid: String, password: String?, passCode: String): Completable {
         appUtil.applyPRNGFixes()
 
         return Completable.create { subscriber ->

@@ -6,17 +6,20 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
+import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
@@ -81,19 +84,23 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onDeleteClicked(position: Int) {
+        val item = adapter.getItem(position) as AddressBookUser
+        val guid = App.getAccessManager().findGuidBy(item.address)
+
         val alertDialog = AlertDialog.Builder(this).create()
         alertDialog.setTitle(getString(R.string.choose_account_delete_title))
         alertDialog.setMessage(getString(R.string.choose_account_delete_msg))
+        if (prefsUtil.getGuidValue(guid, PrefsUtil.KEY_SKIP_BACKUP, true)) {
+            alertDialog.setView(inflate(R.layout.delete_account_warning_layout, null))
+        }
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                 getString(R.string.choose_account_yes)) { dialog, which ->
             dialog.dismiss()
-            val item = adapter.getItem(position)
-            if (item is AddressBookUser) {
-                App.getAccessManager().deleteWavesWallet(item.address)
-                adapter.remove(position)
-            }
+
+            App.getAccessManager().deleteWavesWallet(item.address)
+            adapter.remove(position)
+
             showSuccess(R.string.choose_account_deleted, R.id.content)
-            adapter.notifyDataSetChanged()
         }
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
                 getString(R.string.choose_account_cancel)) { dialog, which ->
@@ -128,7 +135,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     override fun onBackPressed() {
         setResult(Activity.RESULT_CANCELED)
-        finish()
+        launchActivity<WelcomeActivity> {  }
         overridePendingTransition(0, android.R.anim.fade_out)
     }
 

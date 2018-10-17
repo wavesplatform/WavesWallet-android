@@ -49,7 +49,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                         if (oldPassCode == passCode) {
                             pass_keypad.passCodesNotMatches()
                             showError(R.string.create_passcode_validation_already_use_error, R.id.content)
-                        }else{
+                        } else {
                             presenter.passCode = passCode
                             moveToVerifyStep()
                         }
@@ -143,8 +143,6 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
     override fun onBackPressed() {
         if (presenter.step == CreatePassCodeStep.VERIFY) {
             moveToCreateStep()
-        } else {
-            super.onBackPressed()
         }
     }
 

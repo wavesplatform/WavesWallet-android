@@ -164,7 +164,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     } else {
                         return@flatMap Observable.just(listOf<Transaction>())
                     }
-
                 }
                 .onErrorResumeNext(Observable.empty())
     }

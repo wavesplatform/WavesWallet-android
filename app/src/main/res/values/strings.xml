@@ -698,7 +698,7 @@
     <!--Tutorial-->
     <string name="card_tutorial_next">Next</string>
     <string name="card_tutorial_understand">I Understand</string>
-    <string name="tutorial_card_1_title">Welcome to the\nWaves Platform!</string>
+    <string name="tutorial_card_1_title">Welcome to the Waves Platform!</string>
     <string name="tutorial_card_1_description">Please take some time to understand some important things for your own safety. 🙏 \n\nWe cannot recover your funds or freeze your account if you visit a phishing site or lose your backup phrase (aka SEED phrase).\n\nBy continuing to use our platform, you agree to accept all risks associated with the loss of your SEED, including but not limited to the inability to obtain your funds and dispose of them. In case you lose your SEED, you agree and acknowledge that the Waves Platform would not be responsible for the negative consequences of this.</string>
     <string name="tutorial_card_2_title">What you need to know about your SEED</string>
     <string name="tutorial_card_2_description">When registering your account, you will be asked to save your secret phrase (Seed) and to protect your account with a password. On normal centralized servers, special attention is paid to the password, which can be changed and reset via email, if the need arises. However, on decentralized platforms such as Waves, everything is arranged differently:</string>
@@ -719,6 +719,7 @@
     <string name="left_drawer_site">wavescommunity.com</string>
     <string name="left_drawer_whitepaper">Whitepaper</string>
     <string name="left_drawer_terms_and_conditions">Terms and conditions</string>
+    <string name="left_drawer_support">Support Wavesplatform</string>
     <string name="left_drawer_join_the_waves_community">Join the Waves Community</string>
     <string name="left_drawer_waves_platform">© Waves Platform</string>
 
@@ -865,6 +866,7 @@
     <!-- Wallet Sorting -->
     <string name="wallet_sorting_toolbar_title">Sorting</string>
     <string name="wallet_sorting_toolbar_visibility_action">Visibility</string>
+    <string name="wallet_sorting_toolbar_position_action">Position</string>
 
     <!-- DEX Sorting -->
     <string name="dex_sorting_toolbar_title">Sorting</string>
@@ -968,7 +970,7 @@
     <!-- NEW ALIAS -->
     <string name="new_alias_toolbar_title">New alias</string>
     <string name="new_alias_create">Create</string>
-    <string name="new_alias_symbol_name">Symbolic name to your address</string>
+    <string name="new_alias_symbol_name">Symbolic name</string>
     <string name="new_alias_success_create">You created a new alias!</string>
     <string name="new_alias_min_validation_error">Minimum 4 characters</string>
     <string name="new_alias_max_validation_error">30 characters maximum</string>
@@ -1016,7 +1018,7 @@
     <string name="change_password_success">Change password successful</string>
     <string name="change_password_error">Change password failed. Check old password</string>
     <string name="change_password_validation_new_password_already_use_error">Password already use</string>
-    <string name="change_password_validation_old_password_wrong_error">Wrong password</string>
+    <string name="change_password_validation_old_password_wrong_error">Wrong</string>
 
     <!--Network-->
     <string name="network_toolbar_title">Network</string>
@@ -1035,7 +1037,7 @@
     <string name="choose_account_delete_title">Delete account?</string>
     <string name="choose_account_delete_msg">Are you sure you want to delete this account?</string>
     <string name="choose_account_cancel">Cancel</string>
-    <string name="choose_account_yes">Yes</string>
+    <string name="choose_account_yes">Delete</string>
     <string name="choose_account_deleted">Deleted</string>
 
     <!--Edit account name-->

@@ -27,9 +27,11 @@ import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -75,6 +77,20 @@ fun Context.isMyServiceRunning(serviceClass: Class<*>): Boolean {
     return false
 }
 
+fun getActionBarHeight(): Int {
+    val tv = TypedValue()
+    return if (app.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+        TypedValue.complexToDimensionPixelSize(tv.data, app.resources.displayMetrics);
+    }else{
+        0
+    }
+}
+
+fun EditText.applySpaceFilter() {
+    this.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
+        source.toString().filterNot { it.isWhitespace() }
+    })
+}
 
 fun Context.notAvailable() {
     toast(getString(R.string.common_msg_in_development))

@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.entity.MultiItemEntity
@@ -19,6 +20,8 @@ import javax.inject.Inject
 
 class AssetsAdapter @Inject constructor() :
         BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder>(null) {
+
+    var scrollToHeaderListener: ScrollToHeaderListener? = null
 
     companion object {
         val TYPE_HEADER = 0
@@ -61,6 +64,7 @@ class AssetsAdapter @Inject constructor() :
                         collapse(pos, true)
                     } else {
                         expand(pos, true)
+                        scrollToHeaderListener?.scrollToHeader(helper.adapterPosition, helper.itemView)
                     }
                 }
             }
@@ -82,7 +86,7 @@ class AssetsAdapter @Inject constructor() :
                         .setGone(R.id.image_favourite, item.isFavorite)
                         .setGone(R.id.text_my_asset, item.issueTransaction?.sender
                                 == App.getAccessManager().getWallet()?.address)
-                        .setGone(R.id.image_down_arrow, !item.isGateway)
+                        .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
                         .setGone(R.id.text_tag_spam, item.isSpam)
 //                .setGone(R.id.text_bitcoin_value, !item.isSpam)
 
@@ -93,5 +97,9 @@ class AssetsAdapter @Inject constructor() :
             }
         }
 
+    }
+
+    interface ScrollToHeaderListener {
+        fun scrollToHeader(position: Int, itemView: View)
     }
 }

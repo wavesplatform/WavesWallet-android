@@ -30,12 +30,14 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingAc
 import com.wavesplatform.wallet.v2.util.isMyServiceRunning
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import io.supercharge.shimmerlayout.ShimmerLayout
 import kotlinx.android.synthetic.main.fragment_assets.*
 import kotlinx.android.synthetic.main.wallet_header_item.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.isVisible
 import pers.victor.ext.toast
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
@@ -79,7 +81,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
                     }
                 })
 
-        skeletonScreen.notNull { it.show() }
         presenter.loadAliases()
         presenter.loadAssetsBalance()
 
@@ -143,12 +144,23 @@ class AssetsFragment : BaseFragment(), AssetsView {
             }
         })
 
+
         skeletonScreen = Skeleton.bind(recycle_assets)
                 .adapter(recycle_assets.adapter)
+                .shimmer(true)
+                .count(5)
                 .color(R.color.basic100)
                 .load(R.layout.item_skeleton_wallet)
                 .frozen(false)
                 .show()
+
+        // make skeleton as designed
+        recycle_assets.post {
+            recycle_assets.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
+            recycle_assets.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
+            recycle_assets.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
+            recycle_assets.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
+        }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position) as AssetBalance
@@ -160,6 +172,14 @@ class AssetsFragment : BaseFragment(), AssetsView {
             launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, positionWithoutSection)
+            }
+        }
+
+        adapter.scrollToHeaderListener = object : AssetsAdapter.ScrollToHeaderListener {
+            override fun scrollToHeader(position: Int, itemView: View) {
+                runDelayed(350) {
+                    recycle_assets.smoothScrollBy(0, itemView.y.toInt() - dp2px(1))
+                }
             }
         }
     }
@@ -183,14 +203,14 @@ class AssetsFragment : BaseFragment(), AssetsView {
     }
 
     override fun afterSuccessLoadAssets(assets: ArrayList<MultiItemEntity>, fromDB: Boolean, withApiUpdate: Boolean) {
-        if (withApiUpdate){
+        if (withApiUpdate) {
             if (fromDB) {
                 swipe_container?.isRefreshing = true
                 skeletonScreen.notNull { it.hide() }
             } else {
                 swipe_container?.isRefreshing = false
             }
-        }else{
+        } else {
             swipe_container?.isRefreshing = false
         }
 

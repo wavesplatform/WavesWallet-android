@@ -90,10 +90,20 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
         skeletonScreen = Skeleton.bind(recycle_history)
                 .adapter(recycle_history.adapter)
+                .shimmer(true)
+                .count(5)
                 .color(R.color.basic100)
                 .load(R.layout.item_skeleton_wallet)
                 .frozen(false)
                 .show()
+
+        // make skeleton as designed
+        recycle_history.post {
+            recycle_history.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
+            recycle_history.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
+            recycle_history.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
+            recycle_history.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
+        }
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
                 .subscribe {
@@ -114,17 +124,24 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
             val historyItem = adapter.getItem(position) as HistoryItem
             if (historyItem.header.isEmpty()) {
                 val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
-                bottomSheetFragment.selectedItem = historyItem.data
 
                 val data = adapter?.data as ArrayList<HistoryItem>
-                bottomSheetFragment.allItems = data.filter { it.header.isEmpty() }.map { it.data }
+                val allItems = data.asSequence()
+                        .filter {
+                            it.header.isEmpty()
+                        }
+                        .map { it.data }
+                        .toList()
 
                 var sectionSize = 0
                 for (i in 0..position) {
                     if (data[i].header.isNotEmpty()) sectionSize++
                 }
+                var count = data.count { it.header.isNotEmpty() }
 
-                bottomSheetFragment.selectedItemPosition = position - sectionSize
+                val selectedPositionWithoutHeaders = position - sectionSize
+
+                bottomSheetFragment.configureData(historyItem.data, selectedPositionWithoutHeaders, allItems)
                 bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
             }
         }
@@ -157,6 +174,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     }
 
     interface ChangeTabBarVisibilityListener {
-        fun changeTabBarVisibility(show: Boolean)
+        fun changeTabBarVisibility(show: Boolean, onlyExpand: Boolean = false)
     }
 }
