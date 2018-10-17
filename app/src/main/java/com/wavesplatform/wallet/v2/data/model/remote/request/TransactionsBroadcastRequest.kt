@@ -29,10 +29,10 @@ class TransactionsBroadcastRequest(
     @SerializedName("signature")
     var signature: String = ""
 
-    /*@SerializedName("sender")
+    @SerializedName("sender")
     var sender: String? = ""
     @SerializedName("id")
-    var id: String? = ""*/
+    var id: String? = ""
 
     private fun toSignBytes(): ByteArray {
         return try {

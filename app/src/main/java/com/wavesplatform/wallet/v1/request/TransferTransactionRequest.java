@@ -20,7 +20,7 @@ public class TransferTransactionRequest {
 
     public String assetId;
     public String senderPublicKey;
-    public String address;
+    public String recipient;
     public long amount;
     public long timestamp;
     public String feeAssetId;
@@ -35,14 +35,14 @@ public class TransferTransactionRequest {
 
     public TransferTransactionRequest(String assetId,
                                       String senderPublicKey,
-                                      String address,
+                                      String recipient,
                                       long amount,
                                       long timestamp,
                                       long fee,
                                       String attachment) {
         this.assetId = assetId;
         this.senderPublicKey = senderPublicKey;
-        this.address = address;
+        this.recipient = recipient;
         this.amount = amount;
         this.timestamp = timestamp;
         this.fee = fee;
@@ -64,7 +64,7 @@ public class TransferTransactionRequest {
                     timestampBytes,
                     amountBytes,
                     feeBytes,
-                    Base58.decode(address),
+                    Base58.decode(recipient),
                     SignUtil.arrayWithSize(attachment));
         } catch (Exception e) {
             Log.e("Wallet", "Couldn't create seed", e);
@@ -93,7 +93,7 @@ public class TransferTransactionRequest {
     public TransferTransaction createDisplayTransaction() {
         TransferTransaction tt = new TransferTransaction(4, Base58.encode(Hash.fastHash(toSignBytes())),
                 AddressUtil.addressFromPublicKey(senderPublicKey), timestamp, amount, fee,
-                assetId, address, attachment);
+                assetId, recipient, attachment);
         tt.isPending = true;
         return tt;
     }

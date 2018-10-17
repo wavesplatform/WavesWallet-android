@@ -12,6 +12,7 @@ import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
+import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
@@ -40,11 +41,11 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
     }
 
-    private fun getTxRequest(): TransferTransactionRequest {
-        return TransferTransactionRequest(
-                selectedAsset!!.assetId,
+    private fun getTxRequest(): TransactionsBroadcastRequest {
+        return TransactionsBroadcastRequest(
+                selectedAsset!!.assetId ?: "",
                 App.getAccessManager().getWallet()!!.publicKeyStr,
-                address,
+                address ?: "",
                 MoneyUtil.getUnscaledValue(amount, selectedAsset),
                 System.currentTimeMillis(),
                 MoneyUtil.getUnscaledWaves(CUSTOM_FEE),
@@ -57,12 +58,13 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         viewState.onShowPaymentDetails(details)
     }
 
-    private fun validateTransfer(tx: TransferTransactionRequest): Int {
+    private fun validateTransfer(tx: TransactionsBroadcastRequest): Int {
         if (selectedAsset == null || TextUtils.isEmpty(address)) {
             R.string.send_transaction_error_check_fields
         } else if (isAddressValid() != true) {
             return R.string.invalid_address
-        } else if (tx.attachmentSize > TransferTransactionRequest.MaxAttachmentSize) {
+        } else if (TransactionsBroadcastRequest.getAttachmentSize(tx.attachment)
+                > TransferTransactionRequest.MaxAttachmentSize) {
             return R.string.attachment_too_long
         } else if (tx.amount <= 0) {
             return R.string.invalid_amount
@@ -70,7 +72,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return R.string.invalid_amount
         } else if (tx.fee <= 0 || tx.fee < TransferTransactionRequest.MinFee) {
             return R.string.insufficient_fee
-        } else if (App.getAccessManager().getWallet()!!.address == tx.address) {
+        } else if (App.getAccessManager().getWallet()!!.address == tx.recipient) {
             return R.string.send_to_same_address_warning
         } else if (!isFundSufficient(tx)) {
             return R.string.insufficient_funds
@@ -78,7 +80,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return 0
     }
 
-    private fun isFundSufficient(tx: TransferTransactionRequest): Boolean {
+    private fun isFundSufficient(tx: TransactionsBroadcastRequest): Boolean {
         return if (isSameSendingAndFeeAssets()) {
             tx.amount + tx.fee <= selectedAsset!!.balance!!
         } else {

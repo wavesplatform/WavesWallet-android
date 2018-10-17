@@ -431,10 +431,10 @@ public class SendFragment extends Fragment implements SendViewModel.DataListener
         };
 
         dialogBinding.btnFavorite.setOnClickListener(v -> {
-            AddressBookManager.createEnterNameDialog(getContext(), signed.address, listener).show();
+            AddressBookManager.createEnterNameDialog(getContext(), signed.recipient, listener).show();
         });
 
-        toggleFavorite(signed.address, dialogBinding);
+        toggleFavorite(signed.recipient, dialogBinding);
 
         return successDialog;
 
