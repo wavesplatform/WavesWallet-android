@@ -81,7 +81,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         completeTransactionProcessing()
         text_leasing_result_value.text = getString(
                 R.string.send_success_you_have_sent_sum,
-                (signed.amount / 10000000F).toString(),
+                (signed.amount / 100000000F).toString(),
                 presenter.getTicker())
         button_okay.click {
             launchActivity<MainActivity>(clear = true)

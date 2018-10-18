@@ -6,6 +6,7 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.api.NodeManager
+import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -74,7 +75,11 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         if (AssetBalance.isGateway(signedTransaction.assetId)) {
             createGateAndPayment()
         } else {
-            signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()
+            signedTransaction.attachment = Base58.encode(
+                    (signedTransaction.attachment ?: "").toByteArray())
+            if (signedTransaction.recipient.length <= 30) {
+                signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()
+            }
             nodeManager.transactionsBroadcast(signedTransaction)
                     .compose(RxUtil.applySchedulersToObservable()).subscribe({ tx ->
                         tx.recipient = tx.recipient.clearAlias()
@@ -143,7 +148,12 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                                 if (signedTransaction == null) {
                                     null
                                 } else {
-                                    signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()
+                                    signedTransaction.attachment = Base58.encode(
+                                            (signedTransaction.attachment ?: "").toByteArray())
+                                    if (signedTransaction.recipient.length <= 30) {
+                                        signedTransaction.recipient = signedTransaction
+                                                .recipient.makeAsAlias()
+                                    }
                                     nodeManager.transactionsBroadcast(signedTransaction)
                                 }
                             }

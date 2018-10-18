@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.v1.util.SignUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.arrayWithSize
 import com.wavesplatform.wallet.v2.util.clearAlias
+import java.nio.charset.Charset
 
 
 class TransactionsBroadcastRequest(
@@ -49,7 +50,7 @@ class TransactionsBroadcastRequest(
                     Longs.toByteArray(amount),
                     Longs.toByteArray(fee),
                     getRecipientBytes(recipient),
-                    SignUtil.arrayWithSize(attachment))
+                    SignUtil.arrayWithSize(Base58.encode((attachment ?: "").toByteArray())))
         } catch (e: Exception) {
             Log.e("Wallet", "Couldn't create seed", e)
             ByteArray(0)
@@ -58,11 +59,9 @@ class TransactionsBroadcastRequest(
 
     private fun getRecipientBytes(recipient: String): ByteArray {
         return if (recipient.length <= 30) {
-            val recipientByte = recipient.toByteArray()
-            Bytes.concat(
-                    byteArrayOf(Constants.ALIAS_VERSION.toByte()),
+            Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
                     byteArrayOf(Constants.ADDRESS_SCHEME.toByte()),
-                    recipientByte.arrayWithSize())
+                    recipient.clearAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
         } else {
             Base58.decode(recipient)
         }
