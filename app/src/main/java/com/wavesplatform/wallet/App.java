@@ -1,7 +1,10 @@
 package com.wavesplatform.wallet;
 
 import android.arch.lifecycle.ProcessLifecycleOwner;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.support.multidex.MultiDex;
@@ -25,6 +28,7 @@ import com.wavesplatform.wallet.v1.util.annotations.Thunk;
 import com.wavesplatform.wallet.v1.util.exceptions.LoggingExceptionHandler;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
+import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
 
 import java.util.Arrays;
@@ -99,7 +103,12 @@ public class App extends DaggerApplication {
         AppUtil appUtil = new AppUtil(this);
         accessManager = new AccessManager(mPrefsUtil, appUtil, authHelper);
 
+        // sessions handlers
         ProcessLifecycleOwner.get().getLifecycle().addObserver(new AppLifecycleObserver());
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        BroadcastReceiver mReceiver = new ScreenReceiver();
+        registerReceiver(mReceiver, filter);
 
         AccessState.getInstance().initAccessState(
                 new PrefsUtil(this),
