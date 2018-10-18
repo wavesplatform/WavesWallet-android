@@ -35,7 +35,6 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpV
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.BottomSheetDialogBgDimDisabled)
     }
 
 
