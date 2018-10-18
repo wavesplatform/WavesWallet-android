@@ -129,6 +129,7 @@ class CardFragment : BaseFragment(), CardView {
                 .inflate(R.layout.receive_fiat_choose_dialog, null)
         val usdButton = view.findViewById<RadioButton>(R.id.radioButton_usd)
         val euroButton = view.findViewById<RadioButton>(R.id.radioButton_eur)
+        var currency = presenter.fiat
 
         if (presenter.fiat == USD) {
             usdButton.isChecked = true
@@ -136,19 +137,18 @@ class CardFragment : BaseFragment(), CardView {
             euroButton.isChecked = true
         }
 
-        usdButton.click {
-            alertDialog.dismiss()
-            setFiat(USD)
-        }
-        euroButton.click {
-            alertDialog.dismiss()
-            setFiat(EURO)
-        }
+        usdButton.click { currency = USD }
+        euroButton.click { currency = EURO }
 
         alertDialog.setView(view)
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
                 getString(R.string.receive_fiat_choose_dialog_cancel)) { dialog, _ ->
             dialog.dismiss()
+        }
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
+                getString(R.string.receive_fiat_choose_dialog_ok)) { dialog, _ ->
+            dialog.dismiss()
+            setFiat(currency)
         }
         alertDialog.show()
         alertDialog.makeStyled()
