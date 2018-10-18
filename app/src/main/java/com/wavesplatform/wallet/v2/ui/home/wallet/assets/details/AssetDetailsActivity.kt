@@ -141,22 +141,17 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     private fun unmarkAsFavorite() {
-        adapterAvatar.items[view_pager.currentItem].isFavorite = false
-        runAsync {
-            val assetBalance = queryFirst<AssetBalance>({ equalTo("assetId", adapterAvatar.items[view_pager.currentItem].assetId) })
-            assetBalance?.isFavorite = false
-            assetBalance?.save()
-        }
+        val item = adapterAvatar.items[view_pager.currentItem]
+        item.isFavorite = false
+        item.save()
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_off))
     }
 
     private fun markAsFavorite() {
-        adapterAvatar.items[view_pager.currentItem].isFavorite = true
-        runAsync {
-            var assetBalance = queryFirst<AssetBalance>({ equalTo("assetId", adapterAvatar.items[view_pager.currentItem].assetId) })
-            assetBalance?.isFavorite = true
-            assetBalance?.save()
-        }
+        val item = adapterAvatar.items[view_pager.currentItem]
+        item.isFavorite = true
+        item.isHidden = false
+        item.save()
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_on))
     }
 
