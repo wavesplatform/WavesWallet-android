@@ -39,7 +39,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     @ProvidePresenter
     fun providePresenter(): AssetDetailsContentPresenter = presenter
 
-    @Inject
     lateinit var historyAdapter: HistoryTransactionPagerAdapter
     var formatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm")
 
@@ -52,6 +51,8 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.assetBalance = arguments?.getParcelable<AssetBalance>(BUNDLE_ASSET)
+
+        historyAdapter = HistoryTransactionPagerAdapter(app, fragmentManager)
 
         view_pager_transaction_history.adapter = historyAdapter
         view_pager_transaction_history.offscreenPageLimit = 3
