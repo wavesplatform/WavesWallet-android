@@ -366,27 +366,4 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
-
-    fun addActivity() {
-        activityCounter++
-    }
-
-    fun removeActivity() {
-        activityCounter--
-        if (wallet != null) {
-            val timer = Timer()
-            val timerTask = object : TimerTask() {
-                override fun run() {
-                    if (activityCounter == 0) {
-                        resetWallet()
-                    }
-                }
-            }
-            timer.schedule(timerTask, SESSION_LIFE_AFTER_MINIMIZE)
-        }
-    }
-
-    companion object {
-        const val SESSION_LIFE_AFTER_MINIMIZE = 5000L
-    }
 }

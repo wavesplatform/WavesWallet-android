@@ -256,6 +256,10 @@ dependencies {
     implementation 'com.ethanhua:skeleton:1.1.1'
     implementation 'io.supercharge:shimmerlayout:2.1.0'
 
+
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    kapt "android.arch.lifecycle:compiler:1.1.1"
+
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.thepacific:divider:0.0.2'
     implementation 'com.github.WindSekirun:RichUtilsKt:2.1.5'

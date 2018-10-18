@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet;
 
+import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -81,6 +82,7 @@ public class App extends DaggerApplication {
 
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
         LocaleChanger.initialize(getApplicationContext(), SUPPORTED_LOCALES);
+
         // Init objects first
         Injector.getInstance().init(this);
         CodeProcessor.init(this);
@@ -96,6 +98,8 @@ public class App extends DaggerApplication {
 
         AppUtil appUtil = new AppUtil(this);
         accessManager = new AccessManager(mPrefsUtil, appUtil, authHelper);
+
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(new AppLifecycleObserver());
 
         AccessState.getInstance().initAccessState(
                 new PrefsUtil(this),
