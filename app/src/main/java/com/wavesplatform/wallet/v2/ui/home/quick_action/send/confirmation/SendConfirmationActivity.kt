@@ -18,7 +18,6 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
-import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,8 +26,6 @@ import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.invisiable
 import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -61,22 +58,19 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         }
 
         presenter.selectedAsset = intent!!.extras!!.getParcelable(KEY_INTENT_SELECTED_ASSET)
-        presenter.address = intent!!.extras!!.getString(KEY_INTENT_SELECTED_ADDRESS)
+        presenter.recipient = intent!!.extras!!.getString(KEY_INTENT_SELECTED_RECIPIENT)
         presenter.amount = intent!!.extras!!.getString(KEY_INTENT_SELECTED_AMOUNT)
         presenter.assetInfo = queryFirst { equalTo("id", presenter.selectedAsset!!.assetId) }
 
         text_sum.text = "- ${presenter.amount}"
         text_tag.text = presenter.getTicker()
-        text_sent_to_address.text = presenter.address
-        presenter.getAddressName(presenter.address!!)
-        text_fee_value.text = "${SendPresenter.CUSTOM_FEE} ${SendPresenter.CUSTOM_FEE_ASSET_NAME}"
+        text_sent_to_address.text = presenter.recipient
+        presenter.getAddressName(presenter.recipient!!)
+        text_fee_value.text = "${Constants.WAVES_FEE / 100_000_000F} ${Constants.CUSTOM_FEE_ASSET_NAME}"
 
         button_confirm.click { requestPassCode() }
 
         eventSubscriptions.add(RxTextView.textChanges(edit_optional_message)
-                .skipInitialValue()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     presenter.attachment = it.toString()
@@ -84,6 +78,24 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
     }
 
     override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {
+        completeTransactionProcessing()
+        text_leasing_result_value.text = getString(
+                R.string.send_success_you_have_sent_sum,
+                (signed.amount / 10000000F).toString(),
+                presenter.getTicker())
+        button_okay.click {
+            launchActivity<MainActivity>(clear = true)
+        }
+        setSaveAddress(signed)
+    }
+
+    private fun completeTransactionProcessing() {
+        image_loader.clearAnimation()
+        card_progress.gone()
+        relative_success.visiable()
+    }
+
+    private fun showTransactionProcessing() {
         toolbar_view.invisiable()
         card_content.gone()
         card_progress.visiable()
@@ -91,21 +103,14 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 .loadAnimation(this@SendConfirmationActivity, R.anim.rotate)
         rotation.fillAfter = true
         image_loader.startAnimation(rotation)
-        runDelayed(2000) {
-            image_loader.clearAnimation()
-            card_progress.gone()
-            relative_success.visiable()
+    }
 
-            text_leasing_result_value.text = getString(
-                    R.string.send_success_you_have_sent_sum,
-                    (signed.amount / 10000000F).toString(),
-                    presenter.getTicker())
-            button_okay.click {
-                launchActivity<MainActivity>(clear = true)
-            }
-
-            setSaveAddress(signed)
-        }
+    private fun cancelTransactionProcessing() {
+        image_loader.clearAnimation()
+        toolbar_view.visiable()
+        card_content.visiable()
+        card_progress.gone()
+        relative_success.gone()
     }
 
     private fun setSaveAddress(signed: TransactionsBroadcastRequest) {
@@ -145,6 +150,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
     }
 
     override fun onShowError(res: Int) {
+        cancelTransactionProcessing()
         showError(res, R.id.relative_root)
     }
 
@@ -154,6 +160,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         when (requestCode) {
             EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
                 if (resultCode == Constants.RESULT_OK) {
+                    showTransactionProcessing()
                     presenter.confirmSend()
                 } else {
                     setResult(Constants.RESULT_CANCELED)
@@ -165,7 +172,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
 
     companion object {
         const val KEY_INTENT_SELECTED_ASSET = "intent_selected_asset"
-        const val KEY_INTENT_SELECTED_ADDRESS = "intent_selected_address"
+        const val KEY_INTENT_SELECTED_RECIPIENT = "intent_selected_recipient"
         const val KEY_INTENT_SELECTED_AMOUNT = "intent_selected_amount"
     }
 }

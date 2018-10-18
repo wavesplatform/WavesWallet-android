@@ -7,6 +7,9 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
 import com.wavesplatform.wallet.v1.util.SignUtil
+import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.util.arrayWithSize
+import com.wavesplatform.wallet.v2.util.clearAlias
 
 
 class TransactionsBroadcastRequest(
@@ -21,7 +24,7 @@ class TransactionsBroadcastRequest(
     @SerializedName("type")
     val type: Int = 4
     @SerializedName("version")
-    val version: Int = API_VERSION
+    val version: Int = Constants.VERSION
     @SerializedName("feeAssetId")
     var feeAssetId: String? = ""
     @SerializedName("proofs")
@@ -35,6 +38,7 @@ class TransactionsBroadcastRequest(
     var id: String? = ""
 
     private fun toSignBytes(): ByteArray {
+        recipient = recipient.clearAlias()
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
@@ -44,13 +48,24 @@ class TransactionsBroadcastRequest(
                     Longs.toByteArray(timestamp),
                     Longs.toByteArray(amount),
                     Longs.toByteArray(fee),
-                    Base58.decode(recipient),
+                    getRecipientBytes(recipient),
                     SignUtil.arrayWithSize(attachment))
         } catch (e: Exception) {
             Log.e("Wallet", "Couldn't create seed", e)
             ByteArray(0)
         }
+    }
 
+    private fun getRecipientBytes(recipient: String): ByteArray {
+        return if (recipient.length <= 30) {
+            val recipientByte = recipient.toByteArray()
+            Bytes.concat(
+                    byteArrayOf(Constants.ALIAS_VERSION.toByte()),
+                    byteArrayOf(Constants.ADDRESS_SCHEME.toByte()),
+                    recipientByte.arrayWithSize())
+        } else {
+            Base58.decode(recipient)
+        }
     }
 
     fun sign(privateKey: ByteArray) {
@@ -59,16 +74,14 @@ class TransactionsBroadcastRequest(
     }
 
     companion object {
-        const val API_VERSION = 2
-
         fun getAttachmentSize(attachment: String?): Int {
             if (attachment == null) {
                 return 0
             }
             return try {
-                Base58.decode(attachment).size
-            } catch (invalidBase58: Base58.InvalidBase58) {
-                invalidBase58.printStackTrace()
+                attachment.toByteArray().size
+            } catch (e: Exception) {
+                e.printStackTrace()
                 0
             }
         }

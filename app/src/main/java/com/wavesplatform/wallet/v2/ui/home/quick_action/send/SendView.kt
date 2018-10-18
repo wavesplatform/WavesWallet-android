@@ -10,5 +10,6 @@ interface SendView : BaseMvpView {
     fun onShowPaymentDetails(details: PaymentConfirmationDetails)
     fun showXRate(xRate: XRate?)
     fun showXRateError()
+    fun setRecipientValid(valid: Boolean)
 
 }

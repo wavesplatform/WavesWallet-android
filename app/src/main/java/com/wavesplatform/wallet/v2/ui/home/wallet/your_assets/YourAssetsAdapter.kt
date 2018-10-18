@@ -16,6 +16,7 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
     override fun convert(helper: BaseViewHolder, item: AssetBalance) {
         helper.setText(R.id.text_asset_name, item.getName())
                 .setText(R.id.text_asset_value, item.getDisplayBalance())
+                // .setGone(R.id.text_asset_value, (item.balance == null || item.balance == 0L))
                 .setVisible(R.id.image_favourite, item.isFavorite)
 //                .setVisible(R.id.text_tag_spam, item.isSpam)
         helper.itemView.image_down_arrow.visibility =

@@ -11,6 +11,7 @@ import com.wavesplatform.wallet.v1.crypto.Hash
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -29,8 +30,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     lateinit var coinomatManager: CoinomatManager
 
     var selectedAsset: AssetBalance? = null
-    var address: String? = ""
+    var recipient: String? = ""
     var amount: String? = ""
+    var useAlias: Boolean = false
 
     fun sendClicked() {
         val res = validateTransfer(getTxRequest())
@@ -41,14 +43,38 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
     }
 
+    fun checkAlias(alias: String) {
+        if (alias.length in 4..30) {
+            runAsync {
+                addSubscription(
+                        apiDataManager.loadAlias(alias)
+
+                                .subscribe({ _ ->
+                                    useAlias = true
+                                    runOnUiThread {
+                                        viewState.setRecipientValid(true)
+                                    }
+                                }, {
+                                    useAlias = false
+                                    runOnUiThread {
+                                        viewState.setRecipientValid(false)
+                                    }
+                                }))
+            }
+        } else {
+            useAlias = false
+            viewState.setRecipientValid(false)
+        }
+    }
+
     private fun getTxRequest(): TransactionsBroadcastRequest {
         return TransactionsBroadcastRequest(
                 selectedAsset!!.assetId ?: "",
                 App.getAccessManager().getWallet()!!.publicKeyStr,
-                address ?: "",
+                recipient ?: "",
                 MoneyUtil.getUnscaledValue(amount, selectedAsset),
                 System.currentTimeMillis(),
-                MoneyUtil.getUnscaledWaves(CUSTOM_FEE),
+                Constants.WAVES_FEE,
                 "")
     }
 
@@ -59,9 +85,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     private fun validateTransfer(tx: TransactionsBroadcastRequest): Int {
-        if (selectedAsset == null || TextUtils.isEmpty(address)) {
+        if (selectedAsset == null || TextUtils.isEmpty(recipient)) {
             R.string.send_transaction_error_check_fields
-        } else if (isAddressValid() != true) {
+        } else if (isRecipientValid() != true) {
             return R.string.invalid_address
         } else if (TransactionsBroadcastRequest.getAttachmentSize(tx.attachment)
                 > TransferTransactionRequest.MaxAttachmentSize) {
@@ -124,7 +150,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
     }
 
-    fun isAddressValid(): Boolean? {
+    fun isRecipientValid(): Boolean? {
         if (selectedAsset == null) {
             return null
         }
@@ -133,25 +159,21 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             AssetBalance.isGateway(selectedAsset!!.assetId!!) -> {
                 isValid(queryFirst<AssetInfo> {
                     equalTo("id", selectedAsset!!.assetId)
-                }!!.ticker, address)
+                }!!.ticker, recipient)
             }
-            isAlias(address) -> true
-            else -> isWavesAddress(address)
+            useAlias -> true
+            else -> {
+                isWavesAddress(recipient)
+            }
         }
     }
 
     companion object {
-        const val CUSTOM_FEE: String = "0.001"
-        const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
         const val LANG: String = "ru_RU"
         private val feeAsset: AssetBalance = AssetBalance(
                 quantity = 100000000L * 100000000L,
                 issueTransaction = IssueTransaction(
-                        name = CUSTOM_FEE_ASSET_NAME, quantity = 0, decimals = 8))
-
-        fun isAlias(address: String?): Boolean {
-            return address != null && address.length in 1..34
-        }
+                        name = Constants.CUSTOM_FEE_ASSET_NAME, quantity = 0, decimals = 8))
 
         private fun isValid(ticker: String?, address: String?): Boolean? {
             if (ticker == null) {
@@ -181,13 +203,16 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
             val addressBytes = Base58.decode(address)
 
-            if (addressBytes[0] != 1.toByte() || addressBytes[1] != 87.toByte()) {
+            if (addressBytes[0] != 1.toByte()
+                    || addressBytes[1] != Constants.ADDRESS_SCHEME.toByte()) {
                 return false
             }
 
             val key = addressBytes.slice(IntRange(0, 21))
             val check = addressBytes.slice(IntRange(22, 25))
-            val keyHash = hashChain(key).slice(IntRange(0, 3))
+            val keyHash = Hash.secureHash(key.toByteArray())
+                    .toList()
+                    .slice(IntRange(0, 3))
 
             for (i in 0..3) {
                 if (check[i] != keyHash[i]) {
@@ -195,10 +220,6 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 }
             }
             return true
-        }
-
-        private fun hashChain(input: List<Byte>): List<Byte> {
-            return Hash.secureHash(input.toByteArray()).toList()
         }
     }
 }

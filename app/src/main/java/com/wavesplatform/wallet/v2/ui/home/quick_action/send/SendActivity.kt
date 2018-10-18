@@ -28,9 +28,9 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
-import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ADDRESS
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_AMOUNT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ASSET
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_RECIPIENT
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -92,6 +92,7 @@ class SendActivity : BaseActivity(), SendView {
         image_view_recipient_action.click {
             if (it.tag == R.drawable.ic_deladdress_24_error_400) {
                 edit_address.text = null
+                text_recipient_error.gone()
             } else if (it.tag == R.drawable.ic_qrcode_24_basic_500) {
                 launchActivity<QrCodeScannerActivity> { }
             }
@@ -152,7 +153,7 @@ class SendActivity : BaseActivity(), SendView {
     override fun onShowPaymentDetails(details: PaymentConfirmationDetails) {
         launchActivity<SendConfirmationActivity> {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
-            putExtra(KEY_INTENT_SELECTED_ADDRESS, presenter.address)
+            putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)
             putExtra(KEY_INTENT_SELECTED_AMOUNT, presenter.amount)
         }
     }
@@ -179,17 +180,17 @@ class SendActivity : BaseActivity(), SendView {
         onShowError(R.string.receive_error_network)
     }
 
-    private fun checkAddressFieldAndSetAction(address: String) {
-        if (address.isNotEmpty()) {
-            presenter.address = address
-            if (presenter.isAddressValid() == null) {
-                edit_address.setTextColor(ContextCompat.getColor(this, R.color.black))
-            } else {
-                if (presenter.isAddressValid()!!) {
-                    edit_address.setTextColor(ContextCompat.getColor(this, R.color.success500))
-                } else {
-                    edit_address.setTextColor(ContextCompat.getColor(this, R.color.error400))
+    private fun checkAddressFieldAndSetAction(recipient: String) {
+        if (recipient.isNotEmpty()) {
+            presenter.recipient = recipient
+
+            when {
+                recipient.length <= 30 -> presenter.checkAlias(recipient)
+                presenter.isRecipientValid() == null -> {
+                    text_recipient_error.gone()
+                    edit_address.setTextColor(ContextCompat.getColor(this, R.color.black))
                 }
+                else -> setRecipientValid(presenter.isRecipientValid()!!)
             }
 
             image_view_recipient_action.setImageResource(R.drawable.ic_deladdress_24_error_400)
@@ -215,6 +216,16 @@ class SendActivity : BaseActivity(), SendView {
             image_view_recipient_action.setImageResource(R.drawable.ic_qrcode_24_basic_500)
             image_view_recipient_action.tag = R.drawable.ic_qrcode_24_basic_500
             horizontal_recipient_suggestion.visiable()
+        }
+    }
+
+    override fun setRecipientValid(valid: Boolean) {
+        if (valid) {
+            edit_address.setTextColor(ContextCompat.getColor(this, R.color.success500))
+            text_recipient_error.gone()
+        } else {
+            edit_address.setTextColor(ContextCompat.getColor(this, R.color.error400))
+            text_recipient_error.visiable()
         }
     }
 

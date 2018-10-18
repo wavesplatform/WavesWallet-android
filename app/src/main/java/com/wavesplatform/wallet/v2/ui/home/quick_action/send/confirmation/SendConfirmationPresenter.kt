@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.v1.api.NodeManager
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -16,6 +17,8 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
+import com.wavesplatform.wallet.v2.util.clearAlias
+import com.wavesplatform.wallet.v2.util.makeAsAlias
 import io.reactivex.Single
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
@@ -29,9 +32,9 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     private var nodeManager = NodeManager.createInstance(
             App.getAccessManager().getWallet()!!.publicKeyStr)
 
-    var address: String? = ""
+    var recipient: String? = ""
     var amount: String? = ""
-    var attachment: String? = null
+    var attachment: String = ""
     var selectedAsset: AssetBalance? = null
     var assetInfo: AssetInfo? = null
 
@@ -67,14 +70,16 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         }
     }
 
-    private fun submitPayment(signed: TransactionsBroadcastRequest) {
-        if (AssetBalance.isGateway(signed.assetId)) {
+    private fun submitPayment(signedTransaction: TransactionsBroadcastRequest) {
+        if (AssetBalance.isGateway(signedTransaction.assetId)) {
             createGateAndPayment()
         } else {
-            nodeManager.transactionsBroadcast(signed)
+            signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()
+            nodeManager.transactionsBroadcast(signedTransaction)
                     .compose(RxUtil.applySchedulersToObservable()).subscribe({ tx ->
-                        saveLastSentAddress(signed.recipient)
-                        viewState.onShowTransactionSuccess(signed)
+                        tx.recipient = tx.recipient.clearAlias()
+                        saveLastSentAddress(tx.recipient)
+                        viewState.onShowTransactionSuccess(tx)
                     }, { _ ->
                         viewState.onShowError(R.string.transaction_failed)
                     })
@@ -82,13 +87,19 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     }
 
     private fun getTxRequest(): TransactionsBroadcastRequest {
+        if (recipient == null || recipient!!.length < 4) {
+            recipient = ""
+        } else if (recipient!!.length <= 30) {
+            recipient = recipient!!.makeAsAlias()
+        }
+
         return TransactionsBroadcastRequest(
                 selectedAsset!!.assetId ?: "",
                 App.getAccessManager().getWallet()!!.publicKeyStr,
-                address ?: "",
+                recipient!!,
                 MoneyUtil.getUnscaledValue(amount, selectedAsset),
                 System.currentTimeMillis(),
-                MoneyUtil.getUnscaledWaves(SendPresenter.CUSTOM_FEE),
+                Constants.WAVES_FEE,
                 attachment)
     }
 
@@ -117,7 +128,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                                 coinomatManager.createTunnel(
                                         currencyFrom,
                                         currencyTo,
-                                        address)
+                                        recipient)
                             }
                             .flatMap { createTunnel ->
                                 coinomatManager.getTunnel(
@@ -127,20 +138,22 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                                         SendPresenter.LANG)
                             }
                             .flatMap {
-                                address = it.tunnel!!.walletFrom
+                                recipient = it.tunnel!!.walletFrom
                                 val signedTransaction = signTransaction()
                                 if (signedTransaction == null) {
                                     null
                                 } else {
+                                    signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()
                                     nodeManager.transactionsBroadcast(signedTransaction)
                                 }
                             }
                             .subscribe(
-                                    { request
+                                    { tx
                                         ->
-                                        saveLastSentAddress(request.recipient)
+                                        tx.recipient = tx.recipient.clearAlias()
+                                        saveLastSentAddress(tx.recipient)
                                         runOnUiThread {
-                                            viewState.onShowTransactionSuccess(request)
+                                            viewState.onShowTransactionSuccess(tx)
                                         }
                                     },
                                     {

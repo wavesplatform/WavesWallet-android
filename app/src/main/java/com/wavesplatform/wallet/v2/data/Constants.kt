@@ -26,8 +26,10 @@ object Constants {
     const val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
 
     const val WAVES_FEE = 100000L
+    const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
     const val VERSION = 2
     const val ADDRESS_SCHEME = 'W'
+    const val ALIAS_VERSION = 2
 
     const val SELL_ORDER_TYPE = "sell"
     const val BUY_ORDER_TYPE = "buy"
@@ -56,7 +58,7 @@ object Constants {
     const val RESULT_OK = 200
     const val RESULT_OK_NO_RESULT = 204
 
-    val alphabetColor = hashMapOf<String, Int>(
+    val alphabetColor = hashMapOf(
             Pair("a", R.color.a),
             Pair("b", R.color.b),
             Pair("c", R.color.c),
@@ -87,7 +89,7 @@ object Constants {
 
     val wavesAssetInfo = AssetInfo(id = "", precision = 8, name = "WAVES", quantity = 10000000000000000L)
 
-    val defaultAssets = listOf<AssetBalance>(
+    val defaultAssets = listOf(
             AssetBalance("", quantity = 10000000000000000L, isFavorite = true, issueTransaction = IssueTransaction(name = "WAVES", decimals = 8), isGateway = true),
             AssetBalance("8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", id = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", name = "Bitcoin", decimals = 8), isGateway = true),
             AssetBalance("474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", quantity = 10000000000000000, issueTransaction = IssueTransaction(assetId = "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", id = "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", name = "Ethereum", decimals = 8), isGateway = true),
@@ -100,7 +102,7 @@ object Constants {
             AssetBalance("B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", quantity = 1890000000000000, issueTransaction = IssueTransaction(assetId = "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", id = "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H", name = "DASH", decimals = 8), isGateway = true),
             AssetBalance("5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3", quantity = 1603984700000000, issueTransaction = IssueTransaction(assetId = "5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3", id = "5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3", name = "Monero", decimals = 8), isGateway = true))
 
-    val defaultAssetsAvatar = hashMapOf<String, Int>(
+    val defaultAssetsAvatar = hashMapOf(
             Pair("", R.drawable.logo_waves_48),
             Pair("8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", R.drawable.logo_bitcoin_48),
             Pair("474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu", R.drawable.logo_ethereum_48),
