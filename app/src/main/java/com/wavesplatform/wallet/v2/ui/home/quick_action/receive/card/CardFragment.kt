@@ -94,9 +94,10 @@ class CardFragment : BaseFragment(), CardView {
     }
 
     override fun showLimits(min: String?, max: String?, fiat: String?) {
+        val currency = getCurrency(fiat)
         skeletonScreen!!.hide()
         if (min != null && max != null) {
-            limits.text = getString(R.string.receive_limit, min, fiat, max, fiat)
+            limits.text = getString(R.string.receive_limit, min, currency, max, currency)
         }
     }
 
@@ -154,9 +155,21 @@ class CardFragment : BaseFragment(), CardView {
     }
 
     private fun setFiat(value: String) {
-        amount_title.text = getString(R.string.receive_amount_title, value)
+        amount_title.text = getString(R.string.receive_amount_title, getCurrency(value))
         presenter.fiatChanged(value)
         skeletonScreen!!.show()
+    }
+
+    private fun getCurrency(value: String?): String {
+        if (value.isNullOrEmpty()) {
+            return ""
+        }
+
+        return when (value) {
+            USD -> getString(R.string.receive_fiat_choose_dialog_usd)
+            EURO -> getString(R.string.receive_fiat_choose_dialog_euro)
+            else -> value!!
+        }
     }
 
     companion object {
