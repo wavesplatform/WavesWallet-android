@@ -1174,6 +1174,7 @@
     <string name="receive_fiat_choose_dialog_usd">USD</string>
     <string name="receive_fiat_choose_dialog_euro">EUR</string>
     <string name="receive_fiat_choose_dialog_cancel">Cancel</string>
+    <string name="receive_fiat_choose_dialog_ok">Ok</string>
     <string name="receive_makink_payment">For making a payment from your card you will be redirected to the merchant\'s website</string>
     <string name="receive_not_verified">Your account is not verified</string>
     <string name="receive_step_1">Step 1</string>

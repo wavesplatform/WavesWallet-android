@@ -75,9 +75,9 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         adapter.bindToRecyclerView(recycle_assets)
 
         if (intent.hasExtra(CRYPTO_CURRENCY)) {
-            presenter.loadCryptoAssets(true)
+            presenter.loadCryptoAssets(presenter.greaterZeroBalance)
         } else {
-            presenter.loadAssets(true)
+            presenter.loadAssets(presenter.greaterZeroBalance)
         }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
