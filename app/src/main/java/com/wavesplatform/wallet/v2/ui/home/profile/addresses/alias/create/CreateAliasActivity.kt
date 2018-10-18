@@ -8,14 +8,13 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
-import com.wavesplatform.wallet.v2.data.rules.AlphabetRule
+import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
 import io.github.anderscheow.validator.rules.common.MaxRule
-import io.github.anderscheow.validator.rules.common.MinRule
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
@@ -48,7 +47,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         val aliasValidation = Validation(til_new_alias_symbol)
                 .and(MinTrimRule(4, R.string.new_alias_min_validation_error))
                 .and(MaxRule(30, R.string.new_alias_max_validation_error))
-                .and(AlphabetRule(R.string.new_alias_invalid_char_validation_error))
+                .and(AliasRule(R.string.new_alias_invalid_char_validation_error))
 
         val validateObservable = Observable.create<Boolean> { emitter ->
             try {
