@@ -78,9 +78,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
             changeFavorite()
         }
 
-        runAsync({
-            presenter.loadAssets()
-        })
+        presenter.loadAssets()
     }
 
     private fun configureTitleForAssets(position: Int) {
@@ -92,13 +90,13 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
         when {
             item.isWaves() -> text_asset_description.setText(R.string.asset_details_waves_token)
-            item.isGateway -> text_asset_description.setText(R.string.asset_details_cryptocurrency)
             item.isFiatMoney -> text_asset_description.setText(R.string.asset_details_flat_money)
+            item.isGateway -> text_asset_description.setText(R.string.asset_details_cryptocurrency)
             item.isSpam -> {
                 text_asset_description.gone()
                 spam_tag.visiable()
             }
-            else -> text_asset_description.text = ""
+            else -> text_asset_description.setText(R.string.asset_details_waves_token)
         }
     }
 
