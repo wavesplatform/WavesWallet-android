@@ -15,7 +15,9 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -119,29 +121,37 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 .filter { !it.first }
                 .observeOn(Schedulers.io())
                 .flatMap {
-                    presenter.apiDataManager.loadAlias(it.second)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .map {
-                                if (!it.own) {
-                                    presenter.recipientIsAlias = true
-                                    presenter.nodeAddressValidation = true
-                                    text_address_error.text = ""
-                                    text_address_error.gone()
-                                } else {
+                    if (it.second.matches(Regex(AliasRule.ALIAS_REGEX))) {
+                        return@flatMap presenter.apiDataManager.loadAlias(it.second)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .map {
+                                    if (!it.own) {
+                                        presenter.recipientIsAlias = true
+                                        presenter.nodeAddressValidation = true
+                                        text_address_error.text = ""
+                                        text_address_error.gone()
+                                    } else {
+                                        presenter.recipientIsAlias = false
+                                        presenter.nodeAddressValidation = false
+                                        text_address_error.text = getString(R.string.start_leasing_validation_address_is_invalid_error)
+                                        text_address_error.visiable()
+                                    }
+                                    return@map it
+                                }
+                                .doOnError {
                                     presenter.recipientIsAlias = false
                                     presenter.nodeAddressValidation = false
                                     text_address_error.text = getString(R.string.start_leasing_validation_address_is_invalid_error)
                                     text_address_error.visiable()
                                 }
-                                return@map it
-                            }
-                            .doOnError {
-                                presenter.recipientIsAlias = false
-                                presenter.nodeAddressValidation = false
-                                text_address_error.text = getString(R.string.start_leasing_validation_address_is_invalid_error)
-                                text_address_error.visiable()
-                            }
-                            .onErrorResumeNext(Observable.empty())
+                                .onErrorResumeNext(Observable.empty())
+                    } else {
+                        presenter.recipientIsAlias = false
+                        presenter.nodeAddressValidation = false
+                        text_address_error.text = getString(R.string.start_leasing_validation_address_is_invalid_error)
+                        text_address_error.visiable()
+                        return@flatMap Observable.empty<Alias>()
+                    }
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ isValid ->

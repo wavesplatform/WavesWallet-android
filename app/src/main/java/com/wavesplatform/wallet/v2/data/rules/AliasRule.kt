@@ -12,6 +12,6 @@ class AliasRule : RegexRule {
     constructor(errorMessage: String) : super(ALIAS_REGEX, errorMessage)
 
     companion object {
-        private const val ALIAS_REGEX = "^[a-z0-9\\.@_-]*$"
+        const val ALIAS_REGEX = "^[a-z0-9\\.@_-]*$"
     }
 }
