@@ -26,14 +26,14 @@
             android:id="@+id/edit_asset_card"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginBottom="5dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
             android:clipToPadding="true"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="2dp"
-            app:cardElevation="2dp">
+            app:cardElevation="4dp">
 
             <RelativeLayout
                 android:id="@+id/edit_asset_layout"
@@ -151,7 +151,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="24dp"
             android:lineSpacingExtra="4sp"
             android:text="@string/receive_amount"
             android:textColor="@color/basic500"
@@ -163,10 +162,11 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:clipToPadding="true"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="2dp"
-            app:cardElevation="2dp">
+            app:cardElevation="4dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
