@@ -81,7 +81,7 @@ fun getActionBarHeight(): Int {
     val tv = TypedValue()
     return if (app.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
         TypedValue.complexToDimensionPixelSize(tv.data, app.resources.displayMetrics);
-    }else{
+    } else {
         0
     }
 }
@@ -99,6 +99,17 @@ fun Context.notAvailable() {
 fun ByteArray.arrayWithSize(): ByteArray {
     return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
 }
+
+fun getDeviceName(): String {
+    val manufacturer = Build.MANUFACTURER
+    val model = Build.MODEL
+    return if (model.toLowerCase().startsWith(manufacturer.toLowerCase())) {
+        model.capitalize()
+    } else {
+        manufacturer.capitalize() + " " + model
+    }
+}
+
 
 fun Activity.openUrlWithChromeTab(url: String) {
     SimpleChromeCustomTabs.getInstance()

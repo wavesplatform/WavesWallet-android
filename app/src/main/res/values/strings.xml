@@ -950,6 +950,12 @@
     <string name="profile_general_other">Other</string>
     <string name="profile_general_rate_app">Rate app</string>
     <string name="profile_general_feedback">Feedback</string>
+    <string name="profile_general_feedback_body_extra_title">---Device Info---</string>
+    <string name="profile_general_feedback_body_extra_os_version">OS Version: %s</string>
+    <string name="profile_general_feedback_body_extra_app_version">App Version: %1$s(%2$s)</string>
+    <string name="profile_general_feedback_body_extra_device_model">Device Model: %s</string>
+    <string name="profile_general_feedback_body_extra_language">Language: %s</string>
+    <string name="profile_general_feedback_body_extra_carrier">Carrier: %s</string>
     <string name="profile_general_support_wavesplatform">Support Wavesplatform</string>
     <string name="profile_general_current_height">Current height</string>
     <string name="profile_general_current_version">Version</string>
