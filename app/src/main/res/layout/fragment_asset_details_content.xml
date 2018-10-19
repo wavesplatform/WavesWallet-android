@@ -303,17 +303,32 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:clickable="true"
+                            android:clickable="false"
                             android:foreground="?attr/selectableItemBackgroundBorderless"
                             android:orientation="vertical"
                             android:paddingBottom="16dp"
                             android:paddingTop="24dp">
 
-                            <android.support.v7.widget.AppCompatImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                app:srcCompat="@drawable/ic_t_soon_exchange_28" />
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_gravity="center_horizontal"
+                                    app:srcCompat="@drawable/ic_soonline_28" />
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_gravity="center_horizontal"
+                                    app:srcCompat="@drawable/ic_t_soon_exchange_28" />
+
+                            </RelativeLayout>
+
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:layout_width="wrap_content"
@@ -531,8 +546,8 @@
                     android:id="@+id/text_view_issuer_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
                     android:layout_toStartOf="@+id/image_copy_issuer"
                     android:text="3PC4roN512iugc6xGVTTM2XkoWKEdSiiscd"
                     android:textColor="@color/disabled900"
@@ -571,9 +586,9 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_view_id_value"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="8dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
                     android:layout_toStartOf="@+id/image_copy_id"
                     android:text="3PC4roN512iugc6xGVTTM2XkoWKEdSiiscd"
                     android:textColor="@color/disabled900"
