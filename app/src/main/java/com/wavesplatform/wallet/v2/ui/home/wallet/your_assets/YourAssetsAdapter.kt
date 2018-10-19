@@ -17,19 +17,14 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
         helper.setText(R.id.text_asset_name, item.getName())
                 .setText(R.id.text_asset_value, item.getDisplayBalance())
                 .setVisible(R.id.image_favourite, item.isFavorite)
-        helper.itemView.image_down_arrow.visibility =
-                if (item.isWaves() || AssetBalance.isGateway(item.assetId!!)) {
-                    View.VISIBLE
-                } else {
-                    View.GONE
-                }
+                .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
         helper.itemView.text_asset_value.visibility =
-                if ((item.getDisplayBalance().replace(",", "").toDouble()) == 0.toDouble()) {
+                if ((item.getDisplayBalance().replace(",", "")
+                                .toDouble()) == 0.toDouble()) {
                     View.GONE
                 } else {
                     View.VISIBLE
                 }
-
         helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)
     }
