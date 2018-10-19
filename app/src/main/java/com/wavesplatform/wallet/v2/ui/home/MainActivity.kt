@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.home
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -27,14 +26,18 @@ import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
+import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
+import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeLinks
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import javax.inject.Inject
 
 
@@ -335,15 +338,13 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
             val now = System.currentTimeMillis()
             if (now > lastTime + MIN_15) {
-                val snackBar = Snackbar.make(root!!.findViewById(R.id.root_scrollView), "",
-                        Snackbar.LENGTH_INDEFINITE)
-                val layout = snackBar.view as Snackbar.SnackbarLayout
-                layout.removeAllViews()
-                layout.click { snackBar.dismiss() }
-                val snackView = layoutInflater.inflate(R.layout.backup_seed_warning_snackbar, null)
-                layout.setPadding(0, 0, 0, 0)
-                layout.addView(snackView, 0)
-                snackBar.show()
+                warning_container.visiable()
+                warning_container.click {
+                    it.gone()
+                    launchActivity<BackupPhraseActivity> {
+                        putExtra(ProfileFragment.KEY_INTENT_SET_BACKUP, true)
+                    }
+                }
                 preferencesHelper.setShowSaveSeedWarningTime(currentGuid, now)
             }
         }

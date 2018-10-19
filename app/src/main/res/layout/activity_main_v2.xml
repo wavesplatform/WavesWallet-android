@@ -30,19 +30,32 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="-2dp"
+        android:animateLayoutChanges="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <FrameLayout
             android:id="@+id/frame_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:background="@color/blockchain_pearl_white"
-            android:paddingBottom="54dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tab_navigation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/warning_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/tab_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:animateLayoutChanges="true"
+            android:visibility="gone">
+
+            <include layout="@layout/backup_seed_warning_snackbar"/>
+
+        </FrameLayout>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_navigation"

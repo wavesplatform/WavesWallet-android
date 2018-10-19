@@ -240,6 +240,10 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         }
     }
 
+    protected fun setNavigationBarColor(@ColorRes intColorRes: Int) {
+        window.navigationBarColor = ContextCompat.getColor(this, intColorRes)
+    }
+
     protected fun restartApp() {
         App.getAccessManager().restartApp(this)
     }

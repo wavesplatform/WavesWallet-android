@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.welcome
 
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
@@ -51,7 +50,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
+        setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view)
 
         button_create_account.click {
