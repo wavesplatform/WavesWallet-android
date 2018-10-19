@@ -41,8 +41,8 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     override fun configLayoutRes() = R.layout.activity_asset_details
 
     companion object {
-        var BUNDLE_ASSET_BALANCE_ITEM = "assetBalance"
         var BUNDLE_ASSET_POSITION = "position"
+        var BUNDLE_ASSET_TYPE = "type"
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -78,7 +78,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
             changeFavorite()
         }
 
-        presenter.loadAssets()
+        presenter.loadAssets(intent.getIntExtra(BUNDLE_ASSET_TYPE, 0))
     }
 
     private fun configureTitleForAssets(position: Int) {

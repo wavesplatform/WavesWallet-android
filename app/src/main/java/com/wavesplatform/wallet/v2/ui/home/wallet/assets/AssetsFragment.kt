@@ -165,12 +165,12 @@ class AssetsFragment : BaseFragment(), AssetsView {
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position) as AssetBalance
             val positionWithoutSection = when {
-                item.isHidden -> position - 1 // minus hidden section header
-                item.isSpam -> position - 2 // minus hidden and spam sections header
+                item.isHidden -> position - 1 - adapter.data.count { (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET } // minus hidden section header and all clear assets
+                item.isSpam -> position - 2 - adapter.data.count { (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET } - adapter.data.count { (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HIDDEN_ASSET } // minus hidden and spam sections header and all clear and hidden assets
                 else -> position // no changes
             }
             launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_BALANCE_ITEM, item)
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType)
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, positionWithoutSection)
             }
         }
