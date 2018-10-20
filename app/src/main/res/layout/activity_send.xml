@@ -1,5 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/basic50"
@@ -54,6 +56,7 @@
                 app:cardElevation="1dp">
 
                 <RelativeLayout
+                    android:id="@+id/asset_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/basic50_rounded_border"
@@ -63,7 +66,7 @@
                         android:id="@+id/relative_chosen_coin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_toStartOf="@+id/image_arrows"
+                        android:layout_toStartOf="@+id/image_change"
                         android:visibility="gone">
 
 
@@ -120,7 +123,7 @@
                         android:textSize="16sp" />
 
                     <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/image_arrows"
+                        android:id="@+id/image_change"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -161,7 +164,6 @@
 
             </RelativeLayout>
 
-
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -170,6 +172,7 @@
                 android:layout_marginTop="8dp"
                 android:clipToPadding="true"
                 android:translationZ="1dp"
+                android:animateLayoutChanges="true"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="1dp">
@@ -224,44 +227,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/linear_recipient_suggestion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_choose_from_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="8dp"
-                        android:background="@drawable/basic100_rounded"
-                        android:lineSpacingExtra="4sp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/send_choose_from_address_book"
-                        android:textColor="@color/basic500"
-                        android:textSize="12sp" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_person"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/basic100_rounded"
-                        android:lineSpacingExtra="4sp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="8dp"
-                        android:text="Mike Node"
-                        android:textColor="@color/basic500"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                    android:orientation="horizontal"/>
 
             </HorizontalScrollView>
 
@@ -281,24 +255,25 @@
                     app:srcCompat="@drawable/ic_info_18_warning_600" />
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/gateway_fee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:layout_toEndOf="@+id/image_info"
-                    android:text="@string/send_gateway_info_gateway_fee_is_0_001_btc"
+                    tools:text="@string/send_gateway_info_gateway_fee"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:fontFamily="@font/roboto_bold" />
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_fee_desc"
+                    android:id="@+id/gateway_limits"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/image_info"
                     android:layout_marginStart="14dp"
                     android:layout_marginTop="2dp"
                     android:layout_toEndOf="@+id/image_info"
-                    android:text="@string/send_gateway_info_we_detected_bitcoin_address_and_will_send_your_money_through_coinomat_gateway_to_that_address_minimum_amount_is_0_001_btc_maximum_amount_is_20_btc"
+                    tools:text="@string/send_gateway_info_gateway_limits"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
@@ -306,7 +281,7 @@
                     android:id="@+id/relative_do_not_withdraw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_fee_desc"
+                    android:layout_below="@+id/gateway_limits"
                     android:layout_marginTop="19dp">
 
 
@@ -318,12 +293,13 @@
                         app:srcCompat="@drawable/ic_warning_18_disabled_500" />
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/gateway_warning"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="14dp"
                         android:layout_toEndOf="@+id/image_warning"
-                        android:text="@string/send_gateway_info_do_not_withdraw_bitcoin_to_an_ico_we_will_not_credit_your_account_with_tokens_from_that_sale"
+                        tools:text="@string/send_gateway_info_gateway_warning"
                         android:textColor="@color/disabled500"
                         android:textSize="12sp" />
 
@@ -491,7 +467,8 @@
                         android:lineSpacingExtra="4sp"
                         android:text="≈ $ 00 000.00"
                         android:textColor="@color/basic500"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:visibility="gone"/>
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 

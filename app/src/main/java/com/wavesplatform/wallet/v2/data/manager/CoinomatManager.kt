@@ -4,6 +4,7 @@ import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.CreateTunnel
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.Limit
+import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -25,4 +26,7 @@ class CoinomatManager @Inject constructor() : BaseDataManager() {
         return coinomatService.getTunnel(xtId, k1, k2, lang)
     }
 
+    fun getXRate(from: String?, to: String?, lang: String): Observable<XRate> {
+        return coinomatService.getXRate(from, to, lang)
+    }
 }

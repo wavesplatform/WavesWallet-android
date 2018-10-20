@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v1.request.IssueTransactionRequest;
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest;
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
+import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -165,6 +166,10 @@ public class NodeManager {
 
     public Observable<TransferTransactionRequest> broadcastTransfer(TransferTransactionRequest tx) {
         return service.broadcastTransfer(tx);
+    }
+
+    public Observable<TransactionsBroadcastRequest> transactionsBroadcast(TransactionsBroadcastRequest tx) {
+        return service.transactionsBroadcast(tx);
     }
 
     public Observable<IssueTransactionRequest> broadcastIssue(IssueTransactionRequest tx) {

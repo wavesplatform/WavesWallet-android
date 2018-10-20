@@ -6,7 +6,7 @@ import com.wavesplatform.wallet.v1.crypto.Base58;
 
 public class SignUtil {
     public static byte[] arrayWithSize(String s) throws Base58.InvalidBase58 {
-        if (s != null) {
+        if (s != null && s.length() > 0) {
             byte[] b = Base58.decode(s);
             return Bytes.concat(Shorts.toByteArray((short) b.length), b);
         } else {

@@ -36,7 +36,6 @@ class СryptocurrencyPresenter @Inject constructor() : BasePresenter<Сryptocurr
                         coinomatManager.createTunnel(currencyFrom, currencyTo, address)
                     }
                             .flatMap { createTunnel ->
-                                createTunnel.k1
                                 coinomatManager.getTunnel(
                                         createTunnel.tunnelId,
                                         createTunnel.k1,
