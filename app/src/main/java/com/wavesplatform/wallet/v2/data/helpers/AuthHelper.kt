@@ -20,6 +20,8 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
                 .deleteRealmIfMigrationNeeded()
                 .build()
 
+        Realm.compactRealm(config)
+
         RealmConfigStore.init(AssetBalance::class.java, config)
         RealmConfigStore.init(IssueTransaction::class.java, config)
         RealmConfigStore.init(Transaction::class.java, config)

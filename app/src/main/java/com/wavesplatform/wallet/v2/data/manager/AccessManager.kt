@@ -8,6 +8,7 @@ import com.vicpin.krealmextensions.RealmConfigStore
 import com.vicpin.krealmextensions.deleteAll
 import com.vicpin.krealmextensions.executeTransaction
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R.color.e
 import com.wavesplatform.wallet.v1.crypto.AESUtil
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
@@ -21,6 +22,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
+import com.wavesplatform.wallet.v2.util.deleteRecursive
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.exceptions.Exceptions
@@ -28,6 +30,7 @@ import io.realm.Realm
 import org.apache.commons.io.Charsets
 import org.spongycastle.util.encoders.Hex
 import pers.victor.ext.app
+import java.io.File
 import java.security.SecureRandom
 import java.util.*
 
@@ -236,19 +239,16 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         configMap.clear()
     }
 
-    fun deleteRealmDBForAccount() {
-        executeTransaction {
-            deleteAll<AssetBalance>()
-            deleteAll<IssueTransaction>()
-            deleteAll<Transaction>()
-            deleteAll<Transfer>()
-            deleteAll<AssetPair>()
-            deleteAll<Order>()
-            deleteAll<Lease>()
-            deleteAll<Alias>()
-            deleteAll<SpamAsset>()
-            deleteAll<AddressBookUser>()
-            deleteAll<AssetInfo>()
+    private fun deleteRealmDBForAccount(address: String) {
+        // force delete db
+        try {
+            val dbFile = File(DBHelper.getInstance().realmConfig.realmDirectory, String.format("%s.realm", address))
+            val dbLockFile = File(DBHelper.getInstance().realmConfig.realmDirectory, String.format("%s.realm.lock", address))
+            dbFile.delete()
+            dbLockFile.delete()
+            deleteRecursive(File(DBHelper.getInstance().realmConfig.realmDirectory, String.format("%s.realm.management", address)))
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -266,7 +266,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             prefs.removeGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID)
         }
 
-        deleteRealmDBForAccount()
+        deleteRealmDBForAccount(address)
         clearRealmConfiguration()
     }
 

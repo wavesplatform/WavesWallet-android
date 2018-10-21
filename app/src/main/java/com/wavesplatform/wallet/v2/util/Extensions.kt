@@ -110,6 +110,14 @@ fun getDeviceName(): String {
     }
 }
 
+fun deleteRecursive(fileOrDirectory: File) {
+    if (fileOrDirectory.isDirectory)
+        for (child in fileOrDirectory.listFiles()!!)
+            deleteRecursive(child)
+
+    fileOrDirectory.delete()
+}
+
 
 fun Activity.openUrlWithChromeTab(url: String) {
     SimpleChromeCustomTabs.getInstance()
