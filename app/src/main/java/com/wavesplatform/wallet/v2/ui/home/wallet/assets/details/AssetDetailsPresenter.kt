@@ -13,6 +13,8 @@ import javax.inject.Inject
 @InjectViewState
 class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsView>() {
     var needToUpdate: Boolean = false
+    var isShow = true
+    var scrollRange: Float = -1f
 
     fun loadAssets(itemType: Int) {
         runAsync {

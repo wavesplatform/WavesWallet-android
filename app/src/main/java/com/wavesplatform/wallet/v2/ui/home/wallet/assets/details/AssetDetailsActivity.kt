@@ -2,8 +2,10 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.Menu
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -49,6 +51,24 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         setStatusBarColor(R.color.basic50)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view, true, icon = R.drawable.ic_toolbar_back_black)
+
+        app_bar_layout.addOnOffsetChangedListener(
+                AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                    if (presenter.scrollRange == -1f) {
+                        presenter.scrollRange = app_bar_layout.totalScrollRange.toFloat()
+                    }
+                    linear_top_content.alpha = (presenter.scrollRange + verticalOffset) / presenter.scrollRange
+
+                    if (presenter.scrollRange + verticalOffset == 0f) {
+                        view_pager.setPagingEnabled(false)
+                        toolbar_view.title = text_asset_name.text.toString()
+                        presenter.isShow = true
+                    } else if(presenter.isShow) {
+                        view_pager.setPagingEnabled(true)
+                        toolbar_view.title = " "
+                        presenter.isShow = false
+                    }
+                })
 
         view_pager.adapter = adapterAvatar
         view_pager.offscreenPageLimit = 10
