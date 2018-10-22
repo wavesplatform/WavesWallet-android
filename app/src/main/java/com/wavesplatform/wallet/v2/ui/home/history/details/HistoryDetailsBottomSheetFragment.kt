@@ -15,16 +15,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.jakewharton.rxbinding2.view.RxView
 import com.google.gson.Gson
+import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
@@ -33,8 +33,8 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActiv
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.util.*
-import dagger.android.support.AndroidSupportInjection
 import io.github.kbiakov.codeview.CodeView
 import io.github.kbiakov.codeview.highlight.ColorThemeData
 import io.github.kbiakov.codeview.highlight.SyntaxColors
@@ -85,7 +85,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         }
         rooView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.click {
             viewPager?.currentItem = viewPager?.currentItem!! + 1
-
             checkStepIconState()
         }
 
@@ -184,7 +183,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
             }
             TransactionType.SENT_TYPE -> {
                 val sendView = inflater?.inflate(R.layout.fragment_bottom_sheet_send_layout, historyContainer, false)
-                val resendBtn = inflater?.inflate(R.layout.resen_btn, historyContainer, false)
                 val sentToName = sendView?.findViewById<AppCompatTextView>(R.id.text_sent_to_name)
                 val sentAddress = sendView?.findViewById<AppCompatTextView>(R.id.text_sent_address)
                 val imageAddressAction = sendView?.findViewById<AppCompatImageView>(R.id.image_address_action)
@@ -196,7 +194,33 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 historyContainer?.addView(sendView)
                 historyContainer?.addView(commentBlock)
                 historyContainer?.addView(baseInfoLayout)
-                historyContainer?.addView(resendBtn)
+
+                val assetBalance = queryFirst<AssetBalance> {
+                    equalTo("assetId", transaction.assetId ?: "")
+                }
+                if (assetBalance != null && (!assetBalance.isGateway
+                                || assetBalance.isWaves() || assetBalance.isFiatMoney)) {
+                    val resendBtn = inflater?.inflate(R.layout.resend_btn, historyContainer, false)
+                    resendBtn!!.findViewById<View>(R.id.button_send_again).click {
+                        launchActivity<SendActivity> {
+                            putExtra(SendActivity.KEY_INTENT_REPEAT_TRANSACTION, true)
+                            putExtra(SendActivity.KEY_INTENT_TRANSACTION_ASSET_BALANCE, assetBalance)
+                            putExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT,
+                                    MoneyUtil.getScaledText(transaction.amount, transaction.asset))
+                            putExtra(SendActivity.KEY_INTENT_TRANSACTION_RECIPIENT,
+                                    transaction.recipientAddress)
+                            if (showCommentBlock) {
+                                putExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT,
+                                        String(Base58.decode(transaction.attachment)))
+                            } else {
+                                putExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT, "")
+                            }
+                        }
+                    }
+                    historyContainer?.addView(resendBtn)
+                }
+
+
             }
             TransactionType.STARTED_LEASING_TYPE -> {
                 val startLeaseView = inflater?.inflate(R.layout.fragment_bottom_sheet_start_lease_layout, historyContainer, false)
@@ -314,7 +338,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 val massSendLayout = inflater?.inflate(R.layout.fragment_bottom_sheet_mass_send_layout, null, false)
                 val addressContainer = massSendLayout?.findViewById<LinearLayout>(R.id.container_address)
                 val showMoreAddress = massSendLayout?.findViewById<TextView>(R.id.text_show_more_address)
-                val button = inflater?.inflate(R.layout.resen_btn, null, false)
+                val button = inflater?.inflate(R.layout.resend_btn, null, false)
 
                 val transfers: MutableList<Transfer> = transaction.transfers.toMutableList()
 

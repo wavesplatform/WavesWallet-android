@@ -75,9 +75,9 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                     layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                 }
 
-                showTag = Constants.defaultAssets.any({
+                showTag = Constants.defaultAssets.any {
                     it.assetId == pairOrder?.assetPair?.priceAssetObject?.id || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
-                })
+                }
 
                 if (showTag) {
                     layout.text_tag.visiable()

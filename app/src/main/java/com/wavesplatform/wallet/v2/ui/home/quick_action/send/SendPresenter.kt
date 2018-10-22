@@ -32,7 +32,8 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var selectedAsset: AssetBalance? = null
     var recipient: String? = ""
     var amount: String? = ""
-    var useAlias: Boolean = false
+    var attachment: String? = ""
+    private var useAlias: Boolean = false
 
     fun sendClicked() {
         val res = validateTransfer(getTxRequest())
