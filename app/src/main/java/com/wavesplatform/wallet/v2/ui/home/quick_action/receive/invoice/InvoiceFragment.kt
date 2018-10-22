@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_invoice.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import pers.victor.ext.visiableIf
 import javax.inject.Inject
 
 class InvoiceFragment : BaseFragment(), InvoiceView {
@@ -110,8 +109,10 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             View.GONE
         }
 
-        image_is_favourite.visiableIf {
-            assetBalance.isFavorite
+        image_is_favourite.visibility = if (assetBalance.isFavorite) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
 
         edit_asset.gone()

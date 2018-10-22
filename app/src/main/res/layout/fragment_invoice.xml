@@ -82,6 +82,7 @@
                                 android:id="@+id/image_asset_icon"
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
+                                android:padding="4dp"
                                 android:layout_centerVertical="true"
                                 android:src="@drawable/logo_bitcoin_48"
                                 app:text_number="1"
