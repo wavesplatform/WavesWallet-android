@@ -1149,6 +1149,7 @@
 
     <!--Your assets-->
     <string name="your_assets_toolbar_title">Your assets</string>
+    <string name="your_assets_empty_state">Nothing Here…\nYou do not have assets with funds</string>
 
     <!--Receive-->
     <string name="receive_toolbar">Receive</string>

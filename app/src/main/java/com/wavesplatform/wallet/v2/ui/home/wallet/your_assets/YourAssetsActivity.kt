@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -21,6 +22,8 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_your_assets.*
+import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import pers.victor.ext.inflate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -112,6 +115,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         }
 
         adapter.setHeaderView(searchView)
+        adapter.emptyView = getEmptyView()
 
         recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -150,12 +154,18 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         return super.onOptionsItemSelected(item)
     }
 
-    fun enableElevation(enable: Boolean) {
+    private fun enableElevation(enable: Boolean) {
         if (enable) {
             ViewCompat.setElevation(appbar_layout, 0F)
         } else {
             ViewCompat.setElevation(appbar_layout, 8F)
         }
+    }
+
+    private fun getEmptyView(): View {
+        val view = inflate(R.layout.layout_empty_data)
+        view.text_empty.text = getString(R.string.your_assets_empty_state)
+        return view
     }
 
     companion object {
