@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
@@ -245,6 +246,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                                 it.status = LeasingStatus.CANCELED.status
                                 setupView(it)
                             }
+                            rxEventBus.post(Events.UpdateListOfActiveTransaction(selectedItemPosition))
                         }
                     }
 

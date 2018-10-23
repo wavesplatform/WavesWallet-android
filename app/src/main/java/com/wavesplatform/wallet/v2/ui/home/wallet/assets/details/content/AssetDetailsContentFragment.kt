@@ -40,7 +40,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     @ProvidePresenter
     fun providePresenter(): AssetDetailsContentPresenter = presenter
 
-    @Inject
     lateinit var historyAdapter: HistoryTransactionPagerAdapter
     var formatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm")
 
@@ -53,6 +52,8 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.assetBalance = arguments?.getParcelable<AssetBalance>(BUNDLE_ASSET)
+
+        historyAdapter = HistoryTransactionPagerAdapter(app, fragmentManager)
 
         view_pager_transaction_history.adapter = historyAdapter
         view_pager_transaction_history.offscreenPageLimit = 3
@@ -138,8 +139,14 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     }
 
     private fun fillInformation(assetBalance: AssetBalance?) {
-        text_available_balance.text = assetBalance?.getDisplayBalance()
-        text_total.text = assetBalance?.getDisplayBalance()
+        text_available_balance.text = assetBalance?.getDisplayAvailableBalance()
+        text_in_order.text = assetBalance?.getDisplayInOrderBalance()
+        text_leased.text = assetBalance?.getDisplayLeasedBalance()
+        text_total.text = assetBalance?.getDisplayTotalBalance()
+
+        frame_in_order.goneIf { assetBalance?.inOrderBalance == 0L }
+        frame_leased.goneIf { assetBalance?.leasedBalance == 0L }
+        frame_total.goneIf { text_total.text.toString().trim() == text_available_balance.text.toString().trim() }
 
         text_available_balance.makeTextHalfBold()
 
@@ -147,31 +154,50 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         text_reusable_value.text =
                 if (assetBalance?.reissuable == true) getString(R.string.asset_details_reissuable)
                 else getString(R.string.asset_details_not_reissuable)
-        text_description.text =
+
+        text_description_value.text =
                 if (assetBalance?.issueTransaction?.description.isNullOrEmpty()) getString(R.string.common_dash)
                 else assetBalance?.issueTransaction?.description
+
         text_view_issuer_value.text =
                 if (assetBalance?.issueTransaction?.sender.isNullOrEmpty()) getString(R.string.common_dash)
                 else assetBalance?.issueTransaction?.sender
+
         text_view_id_value.text =
                 if (assetBalance?.issueTransaction?.assetId.isNullOrEmpty()) getString(R.string.common_dash)
                 else assetBalance?.issueTransaction?.assetId
+
         text_issue_date_value.text = getString(R.string.common_dash)
         assetBalance?.issueTransaction?.timestamp.notNull {
             text_issue_date_value.text = formatter.format(Date(it))
         }
 
-        // hide token burn if WAVES
-        card_burn.goneIf { assetBalance?.isWaves() == true }
+        text_view_asset_decimals_value.text =
+                if (assetBalance?.issueTransaction?.decimals == null) getString(R.string.common_dash)
+                else assetBalance.issueTransaction?.decimals.toString()
 
-        // configure view if SPAM
-        linear_last_transactions.goneIf { assetBalance?.isSpam == true }
-        linear_blocked_transfer_buttons.visiableIf { assetBalance?.isSpam == true }
-        linear_transfer_buttons.goneIf { assetBalance?.isSpam == true }
+        text_view_total_amount_value.text = getString(R.string.common_dash)
+        assetBalance?.issueTransaction?.quantity.notNull {
+            text_view_total_amount_value.text = String.format(Locale.US, "%,d", it)
+        }
 
-        // TODO: configure view when will be balance
-        frame_total.goneIf { text_total.text.toString().trim() == text_available_balance.text.toString().trim() }
-        frame_leased.gone()
-        frame_in_order.gone()
+
+        when {
+            assetBalance?.isWaves() == true -> {
+                card_burn.gone()
+                relative_issuer.gone()
+                text_view_issuer.gone()
+                text_description.gone()
+                text_description_value.gone()
+            }
+            assetBalance?.isSpam == true -> {
+                linear_last_transactions.gone()
+                linear_transfer_buttons.gone()
+                linear_blocked_transfer_buttons.visiable()
+            }
+            else -> {
+
+            }
+        }
     }
 }

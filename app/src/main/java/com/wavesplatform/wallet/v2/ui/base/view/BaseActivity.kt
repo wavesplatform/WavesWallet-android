@@ -103,7 +103,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     public override fun onResume() {
         super.onResume()
-        App.getAccessManager().addActivity()
         askPassCodeIfNeed()
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -116,7 +115,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     public override fun onPause() {
         mCompositeDisposable.clear()
         super.onPause()
-        App.getAccessManager().removeActivity()
     }
 
     override fun onDestroy() {

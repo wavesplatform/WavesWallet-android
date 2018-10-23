@@ -18,7 +18,7 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
 
     override fun convert(helper: BaseViewHolder, item: AssetBalance) {
         helper.setText(R.id.text_asset_name, item.getName())
-                .setText(R.id.text_asset_value, item.getDisplayBalance())
+                .setText(R.id.text_asset_value, item.getDisplayTotalBalance())
                 .setVisible(R.id.image_favourite, item.isFavorite)
                 .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
         helper.itemView.text_asset_value.visibility =

@@ -30,10 +30,11 @@
         <item name="autoCompleteTextViewStyle">@style/CursorColor</item>
     </style>
 
-    <style name="AppThemeV2" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppThemeV2" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/submit400</item>
         <item name="colorPrimaryDark">@color/submit700</item>
         <item name="colorAccent">@color/submit400</item>
+        <item name="coordinatorLayoutStyle">@style/Widget.Support.CoordinatorLayout</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="drawerArrowStyle">@style/DrawerIconWhite</item>

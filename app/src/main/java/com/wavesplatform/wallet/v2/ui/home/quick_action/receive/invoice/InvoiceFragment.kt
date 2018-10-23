@@ -102,7 +102,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         image_asset_icon.isOval = true
         image_asset_icon.setAsset(assetBalance)
         text_asset_name.text = assetBalance.getName()
-        text_asset_value.text = assetBalance.getDisplayBalance()
+        text_asset_value.text = assetBalance.getDisplayTotalBalance()
         image_down_arrow.visibility = if (assetBalance.isGateway) {
             View.VISIBLE
         } else {

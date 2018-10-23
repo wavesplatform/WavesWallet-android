@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home.history
 import android.os.Bundle
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import kotlinx.android.synthetic.main.activity_leasing_history.*
 
 
@@ -18,6 +19,14 @@ class HistoryActivity : BaseActivity() {
         val fragment = HistoryFragment.newInstance().apply {
             arguments = intent.extras
         }
+
+        val elevationListener = object : MainActivity.OnElevationAppBarChangeListener {
+            override fun onChange(elevateEnable: Boolean) {
+                appbar_layout.isSelected = !elevateEnable
+            }
+        }
+
+        fragment.setOnElevationChangeListener(elevationListener)
 
         openFragment(R.id.frame_fragment_container, fragment)
     }

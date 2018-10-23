@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
 import android.content.Context
+import android.support.v4.app.FragmentManager
 import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
@@ -12,25 +13,41 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
+import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.assets_detailed_history_item.view.*
+import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
-class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var mContext: Context) : PagerAdapter() {
+class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var mContext: Context, var fragmentManager: FragmentManager?) : PagerAdapter() {
     var items: MutableList<HistoryItem> = arrayListOf()
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
         val layout = LayoutInflater.from(mContext).inflate(R.layout.assets_detailed_history_item, collection, false)
         val item = items[position]
 
+        layout.card_transaction.click {
+            val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
+
+            val allItems = items.asSequence()
+                    .filter {
+                        it.header.isEmpty()
+                    }
+                    .map { it.data }
+                    .toList()
+
+            bottomSheetFragment.configureData(item.data, position, allItems)
+            bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
+        }
+
         layout.image_transaction.setImageDrawable(item.data.transactionType()?.icon())
 
-        var showTag = Constants.defaultAssets.any({
+        var showTag = Constants.defaultAssets.any {
             it.assetId == item.data.assetId || item.data.assetId.isNullOrEmpty()
-        })
+        }
 
         item.data.transactionType().notNull {
             try {
@@ -82,9 +99,9 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
                         layout.text_transaction_value.text = "-${MoneyUtil.getScaledText(item.data.amount?.times(item.data.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                     }
 
-                    showTag = Constants.defaultAssets.any({
+                    showTag = Constants.defaultAssets.any {
                         it.assetId == pairOrder?.assetPair?.priceAssetObject?.id || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
-                    })
+                    }
 
                     if (showTag) {
                         layout.text_tag.visiable()
