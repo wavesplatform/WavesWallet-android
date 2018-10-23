@@ -15,6 +15,14 @@ class DexPresenter @Inject constructor() :BasePresenter<DexView>(){
                 Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
                 Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
                 Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
+                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
+                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
+                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
+                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
+                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
+                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
+                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
+                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
                 Market(amountAssetName = "please search me", priceAssetName = "yeah", amountAsset = "great", priceAsset = "search")
         )
         viewState.afterSuccessLoadMarkets(list)

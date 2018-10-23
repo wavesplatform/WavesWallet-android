@@ -1,15 +1,18 @@
 package com.wavesplatform.wallet.v2.ui.home.dex
 
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.remote.response.Market
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -17,10 +20,10 @@ import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import kotlinx.android.synthetic.main.empty_dex_layout.view.*
 import kotlinx.android.synthetic.main.fragment_dex_new.*
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
+import pers.victor.ext.click
+import pers.victor.ext.inflate
 import javax.inject.Inject
 
 class DexFragment : BaseFragment(), DexView {
@@ -56,19 +59,25 @@ class DexFragment : BaseFragment(), DexView {
         recycle_dex.adapter = adapter
         recycle_dex.isNestedScrollingEnabled = false
 
+
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.ScrollToTopEvent::class.java)
+                .subscribe {
+                    if (it.position == MainActivity.DEX_SCREEN) {
+                        recycle_dex.scrollToPosition(0)
+                    }
+                })
+
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             launchActivity<TradeActivity> {
                 putExtra(TradeActivity.BUNDLE_MARKET, this@DexFragment.adapter.getItem(position))
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            root_scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-                onElevationAppBarChangeListener.notNull {
-                    onElevationAppBarChangeListener?.onChange(scrollY == 0)
-                }
+        recycle_dex.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                onElevationAppBarChangeListener?.onChange(!recycle_dex.canScrollVertically(-1))
             }
-        }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -92,16 +101,27 @@ class DexFragment : BaseFragment(), DexView {
     }
 
     override fun afterSuccessLoadMarkets(list: ArrayList<Market>) {
+        adapter.setNewData(list)
+        adapter.emptyView = getEmptyView()
         if (list.isEmpty()) {
-            linear_content.gone()
-            linear_empty.visiable()
             menu?.findItem(R.id.action_sorting)?.isVisible = false
+            adapter.removeAllHeaderView()
         } else {
-            linear_empty.gone()
-            linear_content.visiable()
             menu?.findItem(R.id.action_sorting)?.isVisible = true
-            adapter.setNewData(list)
+            adapter.addHeaderView(getHeaderView())
         }
+    }
+
+    private fun getHeaderView(): View? {
+        return inflate(R.layout.header_dex_layout)
+    }
+
+    private fun getEmptyView(): View {
+        val view = inflate(R.layout.empty_dex_layout)
+        view.button_add_markets.click {
+            launchActivity<DexMarketsActivity> { }
+        }
+        return view
     }
 
     fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
