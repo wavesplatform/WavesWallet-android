@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.your_assets
 
+import android.support.v7.widget.AppCompatCheckBox
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -12,6 +13,8 @@ import javax.inject.Inject
 class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, BaseViewHolder>(R.layout.your_assets_item, null) {
 
     var allData: MutableList<AssetBalance> = arrayListOf()
+    var currentAssetId: String? = null
+    private var currentAssetIdCheckbox: AppCompatCheckBox? = null
 
     override fun convert(helper: BaseViewHolder, item: AssetBalance) {
         helper.setText(R.id.text_asset_name, item.getName())
@@ -27,6 +30,16 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
                 }
         helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)
+
+        if (item.assetId != null && item.assetId.equals(currentAssetId)) {
+            currentAssetIdCheckbox = helper.itemView.checkbox_choose
+            currentAssetIdCheckbox!!.isChecked = true
+        }
+    }
+
+    fun resetCurrentAssetId() {
+        currentAssetId = null
+        currentAssetIdCheckbox.notNull { it.isChecked = false }
     }
 
 
@@ -45,6 +58,4 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
         }
         notifyDataSetChanged()
     }
-
-
 }

@@ -40,15 +40,23 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.white)
 
-        setupToolbar(toolbar_view,  true, getString(R.string.your_assets_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.your_assets_toolbar_title), R.drawable.ic_toolbar_back_black)
+
+        if (intent.hasExtra(BUNDLE_ASSET_ID)) {
+            val assetId = intent.getStringExtra(BUNDLE_ASSET_ID)
+            adapter.currentAssetId = assetId
+        }
 
         eventSubscriptions.add(RxTextView.textChanges(edit_search)
                 .skipInitialValue()
                 .map {
                     if (it.isNotEmpty()) {
-                        edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, R.drawable.ic_clear_24_basic_500, 0)
+                        edit_search.setCompoundDrawablesWithIntrinsicBounds(
+                                R.drawable.ic_search_24_basic_500, 0,
+                                R.drawable.ic_clear_24_basic_500, 0)
                     } else {
-                        edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, 0, 0)
+                        edit_search.setCompoundDrawablesWithIntrinsicBounds(
+                                R.drawable.ic_search_24_basic_500, 0, 0, 0)
                     }
                     return@map it.toString()
                 }
@@ -84,10 +92,12 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             val item = adapter.getItem(position) as AssetBalance
             val viewItem = (recycle_assets.layoutManager as LinearLayoutManager).findViewByPosition(position)
             val checkBox = viewItem?.findViewById<AppCompatCheckBox>(R.id.checkbox_choose)
+            this.adapter.resetCurrentAssetId()
             checkBox?.isChecked = true
 
-            // disable click for next items, which user click before activity will finish
-            adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position -> }
+            adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, _ ->
+                // disable click for next items, which user click before activity will finish
+            }
 
             setResult(Activity.RESULT_OK, Intent().apply {
                 putExtra(BUNDLE_ASSET_ITEM, item)
@@ -128,5 +138,6 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         const val BUNDLE_ASSET_ITEM = "asset"
         const val BUNDLE_ADDRESS = "address"
         const val CRYPTO_CURRENCY = "crypto_currency"
+        const val BUNDLE_ASSET_ID = "asset_id"
     }
 }

@@ -324,9 +324,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun assetChangeEnable(enable: Boolean) {
         if (enable) {
-            card_asset.click {
-                launchActivity<YourAssetsActivity>(requestCode = REQUEST_YOUR_ASSETS)
-            }
+            card_asset.click { _ -> launchAssets() }
             image_change.visibility = View.VISIBLE
             ViewCompat.setElevation(card_asset, ViewUtils.convertDpToPixel(4f, this))
             asset_layout.background = null
@@ -342,6 +340,14 @@ class SendActivity : BaseActivity(), SendView {
                     this, R.drawable.shape_rect_bordered_accent50)
             card_asset.setCardBackgroundColor(ContextCompat.getColor(
                     this, R.color.basic50))
+        }
+    }
+
+    private fun launchAssets() {
+        launchActivity<YourAssetsActivity>(requestCode = REQUEST_YOUR_ASSETS) {
+            presenter.selectedAsset.notNull {
+                putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
+            }
         }
     }
 }
