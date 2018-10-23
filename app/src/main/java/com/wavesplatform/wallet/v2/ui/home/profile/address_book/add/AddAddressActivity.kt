@@ -109,7 +109,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
         } else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE) {
 
             edit_address.addTextChangedListener {
-                on({ s, start, before, count ->
+                on { s, start, before, count ->
                     presenter.addressFieldValid = edit_address.text.isNotEmpty()
                     isFieldsValid()
                     if (presenter.addressFieldValid) {
@@ -119,12 +119,12 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
                         edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_qrcode_24_basic_500, 0)
                         edit_address.tag = R.drawable.ic_qrcode_24_basic_500
                     }
-                })
+                }
             }
         }
     }
 
-    fun isFieldsValid() {
+    private fun isFieldsValid() {
         button_save.isEnabled = presenter.isAllFieldsValid()
     }
 

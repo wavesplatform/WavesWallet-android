@@ -37,12 +37,12 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 
 import com.wavesplatform.wallet.R;
-import com.wavesplatform.wallet.v1.api.NodeManager;
-import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityStatus;
-import com.wavesplatform.wallet.v1.data.datamanagers.AddressBookManager;
 import com.wavesplatform.wallet.databinding.FragmentSendBinding;
 import com.wavesplatform.wallet.databinding.FragmentSendConfirmBinding;
 import com.wavesplatform.wallet.databinding.FragmentSendSuccessBinding;
+import com.wavesplatform.wallet.v1.api.NodeManager;
+import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityStatus;
+import com.wavesplatform.wallet.v1.data.datamanagers.AddressBookManager;
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest;
 import com.wavesplatform.wallet.v1.ui.assets.ItemAccount;
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails;

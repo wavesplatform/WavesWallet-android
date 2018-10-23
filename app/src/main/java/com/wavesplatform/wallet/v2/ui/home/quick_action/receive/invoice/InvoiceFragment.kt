@@ -63,21 +63,6 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             assetChangeEnable(false)
         }
 
-        text_use_total_balance.click {
-            presenter.assetBalance.notNull {
-                edit_amount.setText(it.getDisplayTotalBalance())
-            }
-        }
-        text_leasing_0_100.click {
-            edit_amount.setText("0.100")
-        }
-        text_leasing_0_100000.click {
-            edit_amount.setText("0.00100000")
-        }
-        text_leasing_0_500000.click {
-            edit_amount.setText("0.00500000")
-        }
-
         button_continue.click {
             val amount = edit_amount.text.toString()
             if (!TextUtils.isEmpty(amount) && amount.toDouble() > 0) {

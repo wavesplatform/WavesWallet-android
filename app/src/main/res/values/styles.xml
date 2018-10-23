@@ -109,6 +109,7 @@
 
     <style name="AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" parent="AppThemeV2.NoActionBar.Translucent">
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 
     <style name="AppThemeV2.NoActionBar.Translucent.Fullscreen" parent="AppThemeV2.NoActionBar.Translucent.WhiteStatusBar">
@@ -389,6 +390,18 @@
 
     <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/blockchain_grey</item>
+    </style>
+
+    <style name="TextTag">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:background">@drawable/basic100_rounded</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:text">@string/send_choose_from_address_book</item>
+        <item name="android:textColor">@color/basic500</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

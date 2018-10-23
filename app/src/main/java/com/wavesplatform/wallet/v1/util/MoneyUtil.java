@@ -120,7 +120,11 @@ public class MoneyUtil {
     }
 
     public static long getUnscaledValue(String amount, AssetBalance ab) {
+        return getUnscaledValue(amount, ab.getDecimals());
+    }
 
+    public static long getUnscaledValue(
+            String amount, com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance ab) {
         return getUnscaledValue(amount, ab.getDecimals());
     }
 

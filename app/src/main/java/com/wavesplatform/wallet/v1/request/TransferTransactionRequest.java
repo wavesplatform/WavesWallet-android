@@ -5,7 +5,6 @@ import android.util.Log;
 import com.google.common.base.Charsets;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
-import com.google.common.primitives.Shorts;
 import com.wavesplatform.wallet.v1.crypto.Base58;
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider;
 import com.wavesplatform.wallet.v1.crypto.Hash;
@@ -34,8 +33,13 @@ public class TransferTransactionRequest {
     public TransferTransactionRequest() {
     }
 
-    public TransferTransactionRequest(String assetId, String senderPublicKey, String recipient, long amount,
-                                      long timestamp, long fee, String attachment) {
+    public TransferTransactionRequest(String assetId,
+                                      String senderPublicKey,
+                                      String recipient,
+                                      long amount,
+                                      long timestamp,
+                                      long fee,
+                                      String attachment) {
         this.assetId = assetId;
         this.senderPublicKey = senderPublicKey;
         this.recipient = recipient;

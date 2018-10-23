@@ -14,6 +14,7 @@ import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.ReceiveActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.copyToClipboard
@@ -80,6 +81,12 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
         receive.click {
             launchActivity<ReceiveActivity> {
+                putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
+            }
+        }
+
+        send.click{
+            launchActivity<SendActivity> {
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
             }
         }

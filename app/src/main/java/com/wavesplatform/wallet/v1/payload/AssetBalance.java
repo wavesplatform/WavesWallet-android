@@ -4,8 +4,6 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.Objects;
-
 public class AssetBalance {
     public String assetId;
     public long balance;
