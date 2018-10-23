@@ -22,7 +22,7 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
                 .setVisible(R.id.image_favourite, item.isFavorite)
                 .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
         helper.itemView.text_asset_value.visibility =
-                if ((item.getDisplayBalance().replace(",", "")
+                if ((item.getDisplayTotalBalance().replace(",", "")
                                 .toDouble()) == 0.toDouble()) {
                     View.GONE
                 } else {
