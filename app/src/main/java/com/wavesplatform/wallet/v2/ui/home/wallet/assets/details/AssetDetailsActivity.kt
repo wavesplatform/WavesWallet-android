@@ -2,8 +2,10 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.Menu
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -41,14 +43,32 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     override fun configLayoutRes() = R.layout.activity_asset_details
 
     companion object {
-        var BUNDLE_ASSET_BALANCE_ITEM = "assetBalance"
         var BUNDLE_ASSET_POSITION = "position"
+        var BUNDLE_ASSET_TYPE = "type"
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view, true, icon = R.drawable.ic_toolbar_back_black)
+
+        app_bar_layout.addOnOffsetChangedListener(
+                AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                    if (presenter.scrollRange == -1f) {
+                        presenter.scrollRange = app_bar_layout.totalScrollRange.toFloat()
+                    }
+                    linear_top_content.alpha = (presenter.scrollRange + verticalOffset) / presenter.scrollRange
+
+                    if (presenter.scrollRange + verticalOffset == 0f) {
+                        view_pager.setPagingEnabled(false)
+                        toolbar_view.title = text_asset_name.text.toString()
+                        presenter.isShow = true
+                    } else if(presenter.isShow) {
+                        view_pager.setPagingEnabled(true)
+                        toolbar_view.title = " "
+                        presenter.isShow = false
+                    }
+                })
 
         view_pager.adapter = adapterAvatar
         view_pager.offscreenPageLimit = 10
@@ -78,9 +98,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
             changeFavorite()
         }
 
-        runAsync({
-            presenter.loadAssets()
-        })
+        presenter.loadAssets(intent.getIntExtra(BUNDLE_ASSET_TYPE, 0))
     }
 
     private fun configureTitleForAssets(position: Int) {
@@ -92,13 +110,13 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
         when {
             item.isWaves() -> text_asset_description.setText(R.string.asset_details_waves_token)
-            item.isGateway -> text_asset_description.setText(R.string.asset_details_cryptocurrency)
             item.isFiatMoney -> text_asset_description.setText(R.string.asset_details_flat_money)
+            item.isGateway -> text_asset_description.setText(R.string.asset_details_cryptocurrency)
             item.isSpam -> {
                 text_asset_description.gone()
                 spam_tag.visiable()
             }
-            else -> text_asset_description.text = ""
+            else -> text_asset_description.setText(R.string.asset_details_waves_token)
         }
     }
 
@@ -143,22 +161,17 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     private fun unmarkAsFavorite() {
-        adapterAvatar.items[view_pager.currentItem].isFavorite = false
-        runAsync {
-            val assetBalance = queryFirst<AssetBalance>({ equalTo("assetId", adapterAvatar.items[view_pager.currentItem].assetId) })
-            assetBalance?.isFavorite = false
-            assetBalance?.save()
-        }
+        val item = adapterAvatar.items[view_pager.currentItem]
+        item.isFavorite = false
+        item.save()
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_off))
     }
 
     private fun markAsFavorite() {
-        adapterAvatar.items[view_pager.currentItem].isFavorite = true
-        runAsync {
-            var assetBalance = queryFirst<AssetBalance>({ equalTo("assetId", adapterAvatar.items[view_pager.currentItem].assetId) })
-            assetBalance?.isFavorite = true
-            assetBalance?.save()
-        }
+        val item = adapterAvatar.items[view_pager.currentItem]
+        item.isFavorite = true
+        item.isHidden = false
+        item.save()
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_on))
     }
 

@@ -25,6 +25,8 @@ open class AssetBalance(
         @PrimaryKey
         @SerializedName("assetId") var assetId: String? = "",
         @SerializedName("balance") var balance: Long? = 0,
+        @SerializedName("leasedBalance") var leasedBalance: Long? = 0,
+        @SerializedName("inOrderBalance") var inOrderBalance: Long? = 0,
         @SerializedName("reissuable") var reissuable: Boolean? = false,
         @SerializedName("minSponsoredAssetFee") var minSponsoredAssetFee: Long? = 0,
         @SerializedName("sponsorBalance") var sponsorBalance: Long? = 0,
@@ -52,8 +54,29 @@ open class AssetBalance(
         return if (issueTransaction != null) issueTransaction?.decimals else 8
     }
 
-    fun getDisplayBalance(): String {
-        return MoneyUtil.getScaledText(balance!!, this)
+    fun getDisplayTotalBalance(): String {
+        return MoneyUtil.getScaledText(balance, this)
+    }
+
+    fun getDisplayInOrderBalance(): String {
+        return MoneyUtil.getScaledText(inOrderBalance, this)
+    }
+
+    fun getDisplayLeasedBalance(): String {
+        return MoneyUtil.getScaledText(leasedBalance, this)
+    }
+
+    fun getDisplayAvailableBalance(): String {
+        return MoneyUtil.getScaledText(balance
+                ?.minus(inOrderBalance ?: 0)
+                ?.minus(leasedBalance ?: 0),
+                this)
+    }
+
+    fun getAvailableBalance(): Long? {
+        return balance
+                ?.minus(inOrderBalance ?: 0)
+                ?.minus(leasedBalance ?: 0)
     }
 
     fun isAssetId(assetId: String): Boolean {
@@ -65,13 +88,12 @@ open class AssetBalance(
     }
 
     fun getDisplayBalanceWithUnit(): String {
-        return getDisplayBalance() + " " + getName()
+        return getDisplayTotalBalance() + " " + getName()
     }
 
     fun isWaves(): Boolean {
         return assetId.isNullOrEmpty()
     }
-
 
 
     companion object {

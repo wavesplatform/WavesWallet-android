@@ -152,25 +152,9 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     }
 
     override fun afterSuccessLoadTransaction(data: ArrayList<HistoryItem>, type: String?) {
-        configureTabLayout(type, data)
-        configureEmptyView(data)
         adapter.setNewData(data)
+        adapter.setEmptyView(R.layout.layout_empty_data)
         skeletonScreen.notNull { it.hide() }
-    }
-
-    private fun configureEmptyView(data: ArrayList<HistoryItem>) {
-        if (data.isEmpty()) {
-            adapter.setEmptyView(R.layout.layout_empty_data)
-        }
-    }
-
-    private fun configureTabLayout(type: String?, data: ArrayList<HistoryItem>) {
-        // hide tab bar layout if not data available and show empty view
-        if ((type == all || type == leasing_all) && data.isEmpty()) {
-            changeTabBarVisibilityListener?.changeTabBarVisibility(false)
-        } else if ((type == all || type == leasing_all) && data.isNotEmpty()) {
-            changeTabBarVisibilityListener?.changeTabBarVisibility(true)
-        }
     }
 
     interface ChangeTabBarVisibilityListener {

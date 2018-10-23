@@ -36,6 +36,7 @@ import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
+import pers.victor.ext.telephonyManager
 import javax.inject.Inject
 
 
@@ -160,7 +161,18 @@ class ProfileFragment : BaseFragment(), ProfileView {
     private fun sendFeedbackToSupport() {
         val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto", Constants.SUPPORT_EMAIL, null))
+        emailIntent.putExtra(Intent.EXTRA_TEXT, formatDeviceInfo())
         startActivity(Intent.createChooser(emailIntent, getString(R.string.common_feedback_title)))
+    }
+
+    private fun formatDeviceInfo(): String? {
+        return  "\n\n" +
+                "${getString(R.string.profile_general_feedback_body_extra_title)}\n" +
+                "${getString(R.string.profile_general_feedback_body_extra_os_version, Build.VERSION.RELEASE)}\n" +
+                "${getString(R.string.profile_general_feedback_body_extra_app_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toString())}\n" +
+                "${getString(R.string.profile_general_feedback_body_extra_device_model, getDeviceName())}\n" +
+                "${getString(R.string.profile_general_feedback_body_extra_language, getString(Language.getLanguageByCode(presenter.preferenceHelper.getLanguage()).code))}\n" +
+                "${getString(R.string.profile_general_feedback_body_extra_carrier, telephonyManager.networkOperatorName)}\n"
     }
 
     private fun openAppInPlayMarket() {

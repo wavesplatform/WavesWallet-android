@@ -6,6 +6,7 @@ import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
+import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.manager.SpamDataManager
 import com.wavesplatform.wallet.v2.util.RxEventBus
@@ -23,6 +24,7 @@ open class BasePresenter<T : MvpView> @Inject constructor(): MvpPresenter<T>(){
     @Inject lateinit var preferenceHelper: PreferencesHelper
     @Inject lateinit var nodeDataManager: NodeDataManager
     @Inject lateinit var apiDataManager: ApiDataManager
+    @Inject lateinit var matcherDataManager: MatcherDataManager
     @Inject lateinit var spamDataManager: SpamDataManager
     @Inject lateinit var prefsUtil: PrefsUtil
     @Inject lateinit var rxEventBus: RxEventBus

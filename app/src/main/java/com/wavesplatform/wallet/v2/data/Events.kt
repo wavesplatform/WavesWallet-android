@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.data
 
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import io.reactivex.subjects.PublishSubject
 
 /**
@@ -14,6 +13,7 @@ class Events {
 
     class RetryEvent
     class NeedUpdateHistoryScreen
+    class UpdateListOfActiveTransaction(var position: Int)
     class ScrollToTopEvent(var position: Int)
 
     class SpamFilterStateChanged

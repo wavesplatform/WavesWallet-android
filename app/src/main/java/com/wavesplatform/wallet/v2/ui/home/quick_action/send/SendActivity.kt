@@ -102,7 +102,7 @@ class SendActivity : BaseActivity(), SendView {
 
         text_use_total_balance.click {
             presenter.selectedAsset.notNull {
-                edit_amount.setText(it.getDisplayBalance())
+                edit_amount.setText(it.getDisplayTotalBalance())
             }
         }
         text_leasing_0_100.click { edit_amount.setText("0.100") }
@@ -286,7 +286,7 @@ class SendActivity : BaseActivity(), SendView {
 
             text_asset_name.text = it.getName()
 
-            text_asset_value.text = it.getDisplayBalance()
+            text_asset_value.text = it.getDisplayTotalBalance()
             if (it.isFavorite) {
                 image_asset_is_favourite.visiable()
             } else {
