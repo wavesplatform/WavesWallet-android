@@ -3,8 +3,10 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.your_assets
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatCheckBox
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -12,6 +14,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
+import com.mindorks.editdrawabletext.EditDrawableText
 import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -47,15 +50,19 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             adapter.currentAssetId = assetId
         }
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_search)
+        val searchView = layoutInflater
+                .inflate(R.layout.search_view, null, false)
+        val search = searchView.findViewById<EditDrawableText>(R.id.editText_search)
+
+        eventSubscriptions.add(RxTextView.textChanges(search)
                 .skipInitialValue()
                 .map {
                     if (it.isNotEmpty()) {
-                        edit_search.setCompoundDrawablesWithIntrinsicBounds(
+                        search.setCompoundDrawablesWithIntrinsicBounds(
                                 R.drawable.ic_search_24_basic_500, 0,
                                 R.drawable.ic_clear_24_basic_500, 0)
                     } else {
-                        edit_search.setCompoundDrawablesWithIntrinsicBounds(
+                        search.setCompoundDrawablesWithIntrinsicBounds(
                                 R.drawable.ic_search_24_basic_500, 0, 0, 0)
                     }
                     return@map it.toString()
@@ -67,12 +74,11 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
                     adapter.filter(it)
                 })
 
-
-        edit_search.setDrawableClickListener(object : onDrawableClickListener {
+        search.setDrawableClickListener(object : onDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
                     DrawablePosition.RIGHT -> {
-                        edit_search.text = null
+                        search.text = null
                     }
                 }
             }
@@ -104,6 +110,16 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             })
             finish()
         }
+
+        adapter.setHeaderView(searchView)
+
+        recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                enableElevation(recyclerView.computeVerticalScrollOffset() == 0)
+            }
+        })
     }
 
     override fun showAssets(assets: ArrayList<AssetBalance>) {
@@ -132,6 +148,14 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun enableElevation(enable: Boolean) {
+        if (enable) {
+            ViewCompat.setElevation(appbar_layout, 0F)
+        } else {
+            ViewCompat.setElevation(appbar_layout, 8F)
+        }
     }
 
     companion object {
