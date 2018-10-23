@@ -59,7 +59,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_general)
 
-        showFirstOpenAlert(prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, false))
+        showFirstOpenAlert(prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true))
 
         setupBottomNavigation()
 
@@ -80,11 +80,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     override fun onResume() {
         super.onResume()
-        showBackUpSeedWarningIfNeed()
+        showBackUpSeedWarning()
     }
 
     private fun showFirstOpenAlert(firstOpen: Boolean) {
-        if (!firstOpen) {
+        if (firstOpen) {
             val alertDialogBuilder = AlertDialog.Builder(this)
             accountFirstOpenDialog = alertDialogBuilder
                     .setCancelable(false)
@@ -132,8 +132,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 arrayOf(siteClick))
 
         view.button_confirm.click {
-            prefsUtil.setValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true)
+            prefsUtil.setValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, false)
             accountFirstOpenDialog?.cancel()
+            showBackUpSeedWarning()
         }
 
         return view
@@ -332,8 +333,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         return customTab
     }
 
-    private fun showBackUpSeedWarningIfNeed() {
-        if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
+    private fun showBackUpSeedWarning() {
+        if (!prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true)
+                && App.getAccessManager().isCurrentAccountBackupSkipped()) {
             val currentGuid = App.getAccessManager().getLastLoggedInGuid()
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
             val now = System.currentTimeMillis()
@@ -360,7 +362,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         private const val TAG_NOT_CENTRAL_TAB = "not_central_tab"
         private const val TAG_CENTRAL_TAB = "central_tab"
 
-        private const val MIN_15 = 54_000_000
+        private const val MIN_15 = 54_000_000L
     }
 
     interface OnElevationAppBarChangeListener {
