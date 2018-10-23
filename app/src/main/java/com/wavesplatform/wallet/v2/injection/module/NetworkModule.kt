@@ -11,10 +11,7 @@ import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
-import com.wavesplatform.wallet.v2.data.remote.ApiService
-import com.wavesplatform.wallet.v2.data.remote.CoinomatService
-import com.wavesplatform.wallet.v2.data.remote.NodeService
-import com.wavesplatform.wallet.v2.data.remote.SpamService
+import com.wavesplatform.wallet.v2.data.remote.*
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import dagger.Module
 import dagger.Provides
@@ -91,6 +88,21 @@ class NetworkModule {
         return retrofit
     }
 
+    @Singleton
+    @Named("MatcherRetrofit")
+    @Provides
+    internal fun provideMatcherRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(BuildConfig.MATCHER_URL)
+                .client(httpClient)
+                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+        RetrofitCache.getInstance().addRetrofit(retrofit)
+        return retrofit
+    }
+
 
     @Singleton
     @Named("SpamRetrofit")
@@ -144,6 +156,12 @@ class NetworkModule {
     @Provides
     internal fun provideNodeService(@Named("NodeRetrofit") retrofit: Retrofit): NodeService {
         return retrofit.create(NodeService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    internal fun provideMatcherService(@Named("MatcherRetrofit") retrofit: Retrofit): MatcherService {
+        return retrofit.create(MatcherService::class.java)
     }
 
     @Singleton

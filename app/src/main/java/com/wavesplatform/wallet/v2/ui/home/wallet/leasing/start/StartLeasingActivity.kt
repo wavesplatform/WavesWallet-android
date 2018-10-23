@@ -46,7 +46,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         var REQUEST_LEASEING_CONFIRMATION = 59
         var REQUEST_SCAN_QR_CODE = 52
         var BUNDLE_WAVES = "waves"
-        var BUNDLE_AVAILABLE = "available_balance"
         var TOTAL_BALANCE = "100"
     }
 
@@ -59,7 +58,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
 
         presenter.wavesAsset = intent.getParcelableExtra(BUNDLE_WAVES)
-        presenter.availableBalance = intent.getLongExtra(BUNDLE_AVAILABLE, 0L)
 
         text_choose_from_address.click {
             launchActivity<AddressBookActivity>(requestCode = REQUEST_CHOOSE_ADDRESS) {
@@ -185,7 +183,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 .map {
                     val feeValue = MoneyUtil.getScaledText(Constants.WAVES_FEE, presenter.wavesAsset).toBigDecimal()
                     val currentValueWithFee = it.toBigDecimal() + feeValue
-                    val isValid = currentValueWithFee <= MoneyUtil.getScaledText(presenter.availableBalance, presenter.wavesAsset).toBigDecimal() && currentValueWithFee > feeValue
+                    val isValid = currentValueWithFee <= presenter.wavesAsset?.getDisplayAvailableBalance()?.toBigDecimal() && currentValueWithFee > feeValue
                     presenter.amountValidation = isValid
 
                     if (isValid) {
@@ -206,7 +204,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }))
 
         presenter.wavesAsset.notNull {
-            afterSuccessLoadWavesBalance(it, presenter.availableBalance)
+            afterSuccessLoadWavesBalance(it)
         }
     }
 
@@ -246,20 +244,20 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         }
     }
 
-    override fun afterSuccessLoadWavesBalance(waves: AssetBalance, availableBalance: Long) {
-        text_asset_value.text = MoneyUtil.getScaledText(availableBalance, waves)
+    override fun afterSuccessLoadWavesBalance(waves: AssetBalance) {
+        text_asset_value.text = waves.getDisplayAvailableBalance()
 
         linear_quick_balance.children.forEach { children ->
             val quickBalanceView = children as AppCompatTextView
             when (quickBalanceView.tag) {
                 TOTAL_BALANCE -> {
                     quickBalanceView.click {
-                        edit_amount.setText((MoneyUtil.getScaledText(availableBalance, waves).toBigDecimal() - MoneyUtil.getScaledText(Constants.WAVES_FEE, presenter.wavesAsset).toBigDecimal()).toString())
+                        edit_amount.setText((waves.getDisplayAvailableBalance().toBigDecimal() - MoneyUtil.getScaledText(Constants.WAVES_FEE, presenter.wavesAsset).toBigDecimal()).toString())
                         edit_amount.setSelection(edit_amount.text.length)
                     }
                 }
                 else -> {
-                    val percentBalance = (availableBalance * (quickBalanceView.tag.toString().toDouble().div(100))).toLong()
+                    val percentBalance = (waves.getAvailableBalance()?.times((quickBalanceView.tag.toString().toDouble().div(100))))?.toLong()
                     quickBalanceView.text = MoneyUtil.getScaledText(percentBalance, waves)
                     quickBalanceView.click {
                         edit_amount.setText(MoneyUtil.getScaledText(percentBalance, waves))

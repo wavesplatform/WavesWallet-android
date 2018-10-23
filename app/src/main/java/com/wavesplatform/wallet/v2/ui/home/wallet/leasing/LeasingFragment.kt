@@ -27,9 +27,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_leasing.*
-import pers.victor.ext.click
-import pers.victor.ext.goneIf
-import pers.victor.ext.screenHeight
+import pers.victor.ext.*
 import javax.inject.Inject
 
 class LeasingFragment : BaseFragment(), LeasingView {
@@ -160,15 +158,16 @@ class LeasingFragment : BaseFragment(), LeasingView {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun showBalances(wavesAsset: AssetBalance, leasedValue: Long, availableValue: Long?) {
+    override fun showBalances(wavesAsset: AssetBalance) {
         swipe_container.isRefreshing = false
-        text_available_balance.text = MoneyUtil.getScaledText(availableValue, wavesAsset)
+        text_available_balance.text = wavesAsset.getDisplayAvailableBalance()
         text_available_balance.makeTextHalfBold()
-        text_leased.text = MoneyUtil.getScaledText(leasedValue, wavesAsset)
-        text_total.text = wavesAsset.getDisplayBalance()
+        text_leased.text = wavesAsset.getDisplayLeasedBalance()
+        text_total.text = wavesAsset.getDisplayTotalBalance()
         wavesAsset.balance.notNull { wavesBalance ->
             if (wavesBalance != 0L) {
-                progress_of_leasing.progress = ((leasedValue * 100) / wavesBalance).toInt()
+                progress_of_leasing.progress = ((wavesAsset.leasedBalance ?: 0
+                * 100) / wavesBalance).toInt()
             } else {
                 progress_of_leasing.progress = 0
             }
@@ -178,14 +177,17 @@ class LeasingFragment : BaseFragment(), LeasingView {
         button_start_lease.click {
             launchActivity<StartLeasingActivity> {
                 putExtra(StartLeasingActivity.BUNDLE_WAVES, wavesAsset)
-                putExtra(StartLeasingActivity.BUNDLE_AVAILABLE, availableValue)
             }
         }
     }
 
     override fun showActiveLeasingTransaction(transactions: List<Transaction>) {
         swipe_container.isRefreshing = false
-        linear_active_leasing.goneIf { transactions.isEmpty() }
+        if (transactions.isEmpty()) {
+            linear_active_leasing.gone()
+        } else {
+            linear_active_leasing.visiable()
+        }
         adapterActiveAdapter.setNewData(transactions)
         text_active_leasing.text = getString(R.string.wallet_leasing_active_now, transactions.size.toString())
     }

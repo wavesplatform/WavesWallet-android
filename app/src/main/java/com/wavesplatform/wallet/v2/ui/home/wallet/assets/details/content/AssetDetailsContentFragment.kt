@@ -6,7 +6,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.string.no
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -25,7 +24,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_asset_details_content.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runAsync
-import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -133,8 +131,14 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     }
 
     private fun fillInformation(assetBalance: AssetBalance?) {
-        text_available_balance.text = assetBalance?.getDisplayBalance()
-        text_total.text = assetBalance?.getDisplayBalance()
+        text_available_balance.text = assetBalance?.getDisplayAvailableBalance()
+        text_in_order.text = assetBalance?.getDisplayInOrderBalance()
+        text_leased.text = assetBalance?.getDisplayLeasedBalance()
+        text_total.text = assetBalance?.getDisplayTotalBalance()
+
+        frame_in_order.goneIf { assetBalance?.inOrderBalance == 0L }
+        frame_leased.goneIf { assetBalance?.leasedBalance == 0L }
+        frame_total.goneIf { text_total.text.toString().trim() == text_available_balance.text.toString().trim() }
 
         text_available_balance.makeTextHalfBold()
 
@@ -182,14 +186,9 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 linear_last_transactions.gone()
                 linear_transfer_buttons.gone()
                 linear_blocked_transfer_buttons.visiable()
-                frame_leased.gone()
-                frame_in_order.gone()
-                frame_total.goneIf { text_total.text.toString().trim() == text_available_balance.text.toString().trim() }
             }
             else -> {
-                frame_leased.gone()
-                frame_in_order.gone()
-                frame_total.goneIf { text_total.text.toString().trim() == text_available_balance.text.toString().trim() }
+
             }
         }
     }

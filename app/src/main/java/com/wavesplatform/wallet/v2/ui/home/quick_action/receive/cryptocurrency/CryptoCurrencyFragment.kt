@@ -122,7 +122,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         image_asset_icon.isOval = true
         image_asset_icon.setAsset(assetBalance)
         text_asset_name.text = assetBalance?.getName()
-        text_asset_value.text = assetBalance?.getDisplayBalance()
+        text_asset_value.text = assetBalance?.getDisplayTotalBalance()
 
         image_is_favourite.visiableIf {
             assetBalance?.isFavorite!!

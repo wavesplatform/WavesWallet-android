@@ -1,10 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
-import com.vicpin.krealmextensions.queryAsync
-import com.wavesplatform.wallet.R.layout.test
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
@@ -34,12 +31,12 @@ class LeasingPresenter @Inject constructor() : BasePresenter<LeasingView>() {
                         return@BiFunction Pair(t1, t2)
                     })
                     .compose(RxUtil.applySchedulersToObservable())
-                    .subscribe {
-                        val leasedSum = it.second.sumByLong { it.amount }
-                        viewState.showBalances(it.first,
-                                leasedSum, it.first.balance?.minus(leasedSum))
+                    .subscribe({
+                        viewState.showBalances(it.first)
                         viewState.showActiveLeasingTransaction(it.second)
-                    })
+                    },{
+                        it.printStackTrace()
+                    }))
         }
     }
 
