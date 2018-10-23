@@ -10,13 +10,12 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
+import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.util.RxEventBus
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.TransactionUtil
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
+import com.wavesplatform.wallet.v2.util.*
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -192,6 +191,19 @@ class UpdateApiDataService : Service() {
                             }
                             trans.transactionTypeId = transactionUtil.getTransactionType(trans)
                         }
+
+                        // check old started leasing transaction correct status
+                        val canceledLeasingTransactions = transactions.filter { it.transactionType() == TransactionType.CANCELED_LEASING_TYPE }
+                        if (canceledLeasingTransactions.isNotEmpty()) {
+                            canceledLeasingTransactions.forEach {
+                                val first = queryFirst<Transaction> { equalTo("id", it.leaseId) }
+                                if (first?.status != LeasingStatus.CANCELED.status) {
+                                    first?.status = LeasingStatus.CANCELED.status
+                                    first?.save()
+                                }
+                            }
+                        }
+
                         transactions.saveAll()
                         rxEventBus.post(Events.NeedUpdateHistoryScreen())
                     }

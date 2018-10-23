@@ -7,6 +7,7 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.CreateLeasingRequest
@@ -164,6 +165,12 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
             cancelLeasingRequest.sign(it)
         }
         return nodeService.cancelLeasing(cancelLeasingRequest)
+                .map {
+                    val first = queryFirst<Transaction> { equalTo("id", cancelLeasingRequest.txId) }
+                    first?.status = LeasingStatus.CANCELED.status
+                    first?.save()
+                    return@map it
+                }
     }
 
     fun startLeasing(createLeasingRequest: CreateLeasingRequest, recipientIsAlias: Boolean): Observable<Transaction> {
