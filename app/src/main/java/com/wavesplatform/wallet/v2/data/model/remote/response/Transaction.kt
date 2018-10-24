@@ -4,11 +4,13 @@ import com.google.common.base.Optional
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.api.NodeManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.util.stripZeros
 import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import org.apache.commons.lang3.ArrayUtils
+import pers.victor.ext.date
 
 @RealmClass
 open class Lease(
@@ -140,6 +142,45 @@ open class Transaction(
 
     fun toBytes(): ByteArray {
         return ArrayUtils.EMPTY_BYTE_ARRAY
+    }
+
+    companion object {
+
+        private fun getNameBy(type: Int) : String {
+            return when (type) {
+                3 -> "Issue"
+                4 -> "Transfer"
+                5 -> "Reissue"
+                6 -> "Burn"
+                7 -> "Exchange"
+                8 -> "Lease"
+                9 -> "Lease Cancel"
+                10 -> "Create Alias"
+                11 -> "Mass Transfer"
+                12 -> "Data"
+                13 -> "Set Script"
+                14 -> "Set Sponsorship"
+                else -> ""
+            }
+        }
+
+        fun getInfo(transaction: Transaction): String {
+            val feeAssetId = if (transaction.feeAssetId == null) {
+                ""
+            } else {
+                " (${transaction.feeAssetId})"
+            }
+            return "Transaction ID: ${transaction.id}\n" +
+                    "Type: ${transaction.type} (${getNameBy(transaction.type)})\n" +
+                    "Date: ${transaction.timestamp
+                            .date("MM/dd/yyyy HH:mm")}\n" +
+                    "Sender: ${transaction.sender}\n" +
+                    "Recipient: ${transaction.recipient}\n" +
+                    "Amount: ${MoneyUtil.getScaledText(transaction.amount, transaction.asset)
+                            .stripZeros()} ${transaction.asset?.name} (${transaction.asset?.id})\n" +
+                    "Fee: ${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject)
+                            .stripZeros()} ${transaction.feeAssetObject?.name}" + feeAssetId
+        }
     }
 
 }

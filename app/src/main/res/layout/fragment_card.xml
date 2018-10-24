@@ -107,6 +107,7 @@
                             android:layout_centerVertical="true"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="8dp"
+                            android:layout_toEndOf="@+id/container_asset_icon"
                             android:text="Bitcoin"
                             android:textColor="@color/black"
                             android:textSize="16sp" />
@@ -116,8 +117,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="6dp"
-                            android:layout_toRightOf="@+id/text_asset_name"
+                            android:layout_marginStart="6dp"
+                            android:layout_toEndOf="@+id/text_asset_name"
                             android:visibility="gone"
                             app:srcCompat="@drawable/ic_favorite_mini" />
 
