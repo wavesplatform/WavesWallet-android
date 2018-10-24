@@ -33,13 +33,8 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
 
         if (item.assetId != null && item.assetId.equals(currentAssetId)) {
             currentAssetIdCheckbox = helper.itemView.checkbox_choose
-            currentAssetIdCheckbox!!.isChecked = true
+            helper.itemView.checkbox_choose.isChecked = true
         }
-    }
-
-    fun resetCurrentAssetId() {
-        currentAssetId = null
-        currentAssetIdCheckbox.notNull { it.isChecked = false }
     }
 
 

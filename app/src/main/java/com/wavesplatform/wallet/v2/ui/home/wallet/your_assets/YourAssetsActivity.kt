@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
-import android.support.v7.widget.AppCompatCheckBox
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -99,10 +98,8 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as AssetBalance
-            val viewItem = (recycle_assets.layoutManager as LinearLayoutManager).findViewByPosition(position)
-            val checkBox = viewItem?.findViewById<AppCompatCheckBox>(R.id.checkbox_choose)
-            this.adapter.resetCurrentAssetId()
-            checkBox?.isChecked = true
+            this.adapter.currentAssetId = item.assetId
+            this.adapter.notifyDataSetChanged()
 
             adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, _ ->
                 // disable click for next items, which user click before activity will finish
