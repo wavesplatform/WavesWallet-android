@@ -22,7 +22,7 @@ android {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 402
+        versionCode 403
         versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -139,8 +139,8 @@ android {
 }
 
 def getAppName() {
-    def stringsFile = android.sourceSets.main.res.sourceFiles.find { it.name.equals 'strings.xml' }
-    String s = new XmlParser().parse(stringsFile).string.find { it.@name.equals 'app_name' }.text();
+    def stringsFile = file("./src/main/res/values/strings.xml")
+    String s = new XmlParser().parse(stringsFile).string.find { it.@name.equals 'app_name' }.text()
     def all = s.replaceAll(" ", "_")
     return all.replaceAll("\"", "")
 }
@@ -225,9 +225,9 @@ dependencies {
 
     implementation 'com.github.vihtarb:tooltip:0.1.9'
     implementation 'com.madgag.spongycastle:core:1.54.0.0'
-    implementation 'com.google.guava:guava:23.0'
+    implementation 'com.google.guava:guava:24.1-jre'
 
-    annotationProcessor 'com.google.guava:guava:23.0'
+    annotationProcessor 'com.google.guava:guava:24.1-jre'
 
     // Fingerprint authentication
     implementation 'com.mtramin:rxfingerprint:2.2.1'

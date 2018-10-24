@@ -23,6 +23,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatImageView
+import android.support.v7.widget.AppCompatTextView
 import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
@@ -318,6 +319,26 @@ fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: In
         image.setImageDrawable(ContextCompat.getDrawable(this.context, R.drawable.ic_check_18_success_400))
         runDelayed(1500) {
             this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, copyIcon)) }
+        }
+    }
+}
+
+fun View.copyToClipboard(text: String, textView: AppCompatTextView,
+                         copyIcon: Int = R.drawable.ic_copy_18_black, copyColor: Int = R.color.black) {
+    clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), text)
+    showSnackbar(R.string.common_copied_to_clipboard, R.color.success500_0_94, Snackbar.LENGTH_SHORT)
+
+    textView.notNull { view ->
+        view.setCompoundDrawablesWithIntrinsicBounds(
+                ContextCompat.getDrawable(this.context, R.drawable.ic_check_18_success_400),
+                null, null, null)
+        textView.setTextColor(ContextCompat.getColor(this.context, R.color.success500_0_94))
+        runDelayed(1500) {
+            this.context.notNull {
+                view.setCompoundDrawablesWithIntrinsicBounds(
+                    ContextCompat.getDrawable(it, copyIcon), null, null, null)
+                textView.setTextColor(ContextCompat.getColor(it, copyColor))
+            }
         }
     }
 }
