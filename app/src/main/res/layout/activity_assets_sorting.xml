@@ -5,12 +5,22 @@
     android:layout_height="match_parent"
     android:background="@color/basic50">
 
+    <View
+        android:id="@+id/view_drag_bg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/shape_rect_outline_checked"
+        android:visibility="gone" />
+
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar_layout"
-        android:stateListAnimator="@animator/toolbar_elevation"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/basic50"
-        android:layout_height="wrap_content">
+        android:stateListAnimator="@animator/toolbar_elevation">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_view"
@@ -22,15 +32,6 @@
             android:fontFamily="@font/roboto"
             app:titleTextAppearance="@style/Toolbar.Title" />
     </android.support.design.widget.AppBarLayout>
-
-    <View
-        android:id="@+id/view_drag_bg"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/shape_rect_outline_checked"
-        android:visibility="gone" />
 
 
     <android.support.v4.widget.NestedScrollView

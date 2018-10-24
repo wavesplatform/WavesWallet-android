@@ -44,7 +44,12 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
         recycle_markets.layoutManager = LinearLayoutManager(this)
         recycle_markets.adapter = adapter
         recycle_markets.isNestedScrollingEnabled = false
-        recycle_markets.itemAnimator = FadeInWithoutDelayAnimator()
+
+        recycle_markets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                appbar_layout.isSelected = recycle_markets.canScrollVertically(-1)
+            }
+        })
 
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             when (view.id) {

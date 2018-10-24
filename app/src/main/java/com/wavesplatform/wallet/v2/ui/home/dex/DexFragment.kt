@@ -108,7 +108,7 @@ class DexFragment : BaseFragment(), DexView {
             adapter.removeAllHeaderView()
         } else {
             menu?.findItem(R.id.action_sorting)?.isVisible = true
-            adapter.addHeaderView(getHeaderView())
+            adapter.setHeaderView(getHeaderView())
         }
     }
 
