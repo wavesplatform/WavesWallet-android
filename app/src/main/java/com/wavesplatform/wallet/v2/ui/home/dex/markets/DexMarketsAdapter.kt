@@ -11,8 +11,8 @@ class DexMarketsAdapter @Inject constructor() : BaseQuickAdapter<Market, BaseVie
     var allData: MutableList<Market> = arrayListOf()
 
     override fun convert(helper: BaseViewHolder, item: Market) {
-        helper.setText(R.id.text_name, "${item.amountAssetName} / ${item.priceAssetName}")
-                .setText(R.id.text_full_name, "${item.amountAssetName} / ${item.priceAssetName}")
+        helper.setText(R.id.text_name, "${item.amountAssetShortName} / ${item.priceAssetShortName}")
+                .setText(R.id.text_full_name, "${item.amountAssetLongName} / ${item.priceAssetLongName}")
                 .setChecked(R.id.checkbox_choose, item.checked)
                 .addOnClickListener(R.id.image_info)
     }
@@ -24,7 +24,7 @@ class DexMarketsAdapter @Inject constructor() : BaseQuickAdapter<Market, BaseVie
             setNewData(ArrayList<Market>(allData))
         } else {
             for (item in allData) {
-                val name = "${item.amountAssetName} / ${item.priceAssetName}"
+                val name = "${item.amountAssetName}/${item.priceAssetName}"
                 if (name.toLowerCase().contains(text.toLowerCase())) {
                     data.add(item)
                 }

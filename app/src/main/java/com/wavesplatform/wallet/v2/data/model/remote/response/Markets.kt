@@ -1,8 +1,8 @@
 package com.wavesplatform.wallet.v2.data.model.remote.response
 
-import java.util.*
+import com.google.gson.annotations.SerializedName
 
 data class Markets(
-        var matcherPublicKey: String? = null,
-        var markets: ArrayList<Market> = ArrayList<Market>()
+        @SerializedName("matcherPublicKey") var matcherPublicKey: String = "",
+        @SerializedName("markets") var markets: List<Market> = listOf()
 )

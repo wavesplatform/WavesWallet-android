@@ -19,14 +19,6 @@ import javax.inject.Inject
 
 
 class DexMarketsActivity : BaseActivity(), DexMarketsView {
-    override fun afterSuccessGetMarkets(markets: ArrayList<Market>) {
-        if (markets.isEmpty()) {
-            edit_search.gone()
-        }
-        adapter.allData = ArrayList(markets)
-        adapter.setNewData(markets)
-        adapter.setEmptyView(R.layout.address_book_empty_state)
-    }
 
     @Inject
     @InjectPresenter
@@ -48,20 +40,20 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
 
         eventSubscriptions.add(RxTextView.textChanges(edit_search)
                 .skipInitialValue()
-                .map({
+                .map {
                     if (it.isNotEmpty()) {
                         edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, R.drawable.ic_clear_24_basic_500, 0)
                     } else {
                         edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, 0, 0)
                     }
                     return@map it.toString()
-                })
+                }
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
+                .subscribe {
                     adapter.filter(it)
-                }))
+                })
 
 
 
@@ -84,7 +76,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position) as Market
 
-            when(view.id){
+            when (view.id) {
                 R.id.image_info -> {
                     val infoDialog = DexMarketInformationBottomSheetFragment()
                     infoDialog.withMarketInformation(item)
@@ -100,5 +92,15 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
             this.adapter.setData(position, item)
             this.adapter.allData[position] = item
         }
+    }
+
+    override fun afterSuccessGetMarkets(markets: MutableList<Market>) {
+        progress_bar.hide()
+        if (markets.isEmpty()) {
+            edit_search.gone()
+        }
+        adapter.allData = ArrayList(markets)
+        adapter.setNewData(markets)
+        adapter.setEmptyView(R.layout.address_book_empty_state)
     }
 }

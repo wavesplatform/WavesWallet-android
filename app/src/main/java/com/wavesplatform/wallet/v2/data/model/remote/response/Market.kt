@@ -1,26 +1,33 @@
 package com.wavesplatform.wallet.v2.data.model.remote.response
 
 import android.os.Parcelable
-import com.wavesplatform.wallet.v1.payload.AmountAssetInfo
-import com.wavesplatform.wallet.v1.payload.PriceAssetInfo
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Market(
         var id: String? = null,
 
-        var amountAsset: String? = null,
-        var amountAssetName: String,
-        var priceAsset: String? = null,
-        var priceAssetName: String,
+        @SerializedName("amountAsset") var amountAsset: String = "",
+        @SerializedName("amountAssetName") var amountAssetName: String = "",
+        @SerializedName("amountAssetShortName") var amountAssetShortName: String? = "",
+        @SerializedName("amountAssetLongName") var amountAssetLongName: String? = "",
+        @SerializedName("amountAssetInfo") var amountAssetInfo: AmountAssetInfo = AmountAssetInfo(),
+        @SerializedName("priceAsset") var priceAsset: String = "",
+        @SerializedName("priceAssetName") var priceAssetName: String = "",
+        @SerializedName("priceAssetShortName") var priceAssetShortName: String? = "",
+        @SerializedName("priceAssetLongName") var priceAssetLongName: String? = "",
+        @SerializedName("priceAssetInfo") var priceAssetInfo: PriceAssetInfo = PriceAssetInfo(),
+        @SerializedName("created") var created: Long = 0,
+        var checked: Boolean = false
+) : Parcelable
 
-        var checked: Boolean = false,
-        var verified: Boolean? = false,
-        var amountAssetInfo: AmountAssetInfo? = null,
-        var priceAssetInfo: PriceAssetInfo? = null,
-        var currentTimeFrame: Int? = null
-) : Parcelable {
-    init {
-        this.id = amountAsset + priceAsset
-    }
-}
+@Parcelize
+data class AmountAssetInfo(
+        @SerializedName("decimals") var decimals: Int = 0
+) : Parcelable
+
+@Parcelize
+data class PriceAssetInfo(
+        @SerializedName("decimals") var decimals: Int = 0
+) : Parcelable

@@ -8,6 +8,8 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
+
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
@@ -48,5 +50,12 @@
         android:fitsSystemWindows="true"
         android:overScrollMode="never"
         android:paddingTop="18dp" />
+
+    <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:progress_image="@drawable/ic_loader_24_submit_400" />
 
 </RelativeLayout>
