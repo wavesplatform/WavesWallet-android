@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex.markets
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -55,6 +56,11 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
                     adapter.filter(it)
                 })
 
+        recycle_markets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                appbar_layout.isSelected = recycle_markets.canScrollVertically(-1)
+            }
+        })
 
 
         edit_search.setDrawableClickListener(object : onDrawableClickListener {
