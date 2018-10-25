@@ -33,7 +33,7 @@ class СryptocurrencyPresenter @Inject constructor() : BasePresenter<Сryptocurr
                         val currencyFrom = it[0].ticker
                         val currencyTo = "W$currencyFrom"
 
-                        coinomatManager.createTunnel(currencyFrom, currencyTo, address)
+                        coinomatManager.createTunnel(currencyFrom, currencyTo, address, null)
                     }
                             .flatMap { createTunnel ->
                                 coinomatManager.getTunnel(
