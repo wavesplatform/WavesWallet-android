@@ -57,7 +57,6 @@ class DexFragment : BaseFragment(), DexView {
 
         recycle_dex.layoutManager = LinearLayoutManager(baseActivity)
         recycle_dex.adapter = adapter
-        recycle_dex.isNestedScrollingEnabled = false
 
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.ScrollToTopEvent::class.java)

@@ -19,7 +19,8 @@ data class Market(
         @SerializedName("priceAssetLongName") var priceAssetLongName: String? = "",
         @SerializedName("priceAssetInfo") var priceAssetInfo: PriceAssetInfo = PriceAssetInfo(),
         @SerializedName("created") var created: Long = 0,
-        var checked: Boolean = false
+        @SerializedName("checked") var checked: Boolean = false,
+        @SerializedName("popular") var popular: Boolean = false
 ) : Parcelable
 
 @Parcelize

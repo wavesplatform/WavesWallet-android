@@ -42,9 +42,25 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
                 market.amountAssetShortName = it.first[market.amountAsset] ?: market.amountAssetName
                 market.priceAssetShortName = it.first[market.priceAsset] ?: market.priceAssetName
+
+                market.popular = isPopularAmountAsset(market) && isPopularPriceAsset(market)
             }
             return@map markets.toMutableList()
         }
     }
 
+    private fun isPopularPriceAsset(market: Market): Boolean {
+        if (market.priceAsset.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()) {
+            return true
+        }
+        return Constants.defaultAssets.any { it.assetId == market.priceAsset }
+    }
+
+
+    private fun isPopularAmountAsset(market: Market): Boolean {
+        if (market.amountAsset.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()) {
+            return true
+        }
+        return Constants.defaultAssets.any { it.assetId == market.amountAsset }
+    }
 }

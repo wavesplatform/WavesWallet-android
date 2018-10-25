@@ -10,8 +10,10 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Market
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.choose_language_24dp_item.*
 import kotlinx.android.synthetic.main.dex_markets_info_bottom_sheet_dialog_layout.view.*
 import pers.victor.ext.click
+import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
 
 
@@ -22,12 +24,14 @@ class DexMarketInformationBottomSheetFragment : BaseBottomSheetDialogFragment() 
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.dex_markets_info_bottom_sheet_dialog_layout, container, false)
 
-        rootView.text_name.text = "${market?.amountAssetName} / ${market?.priceAssetName}"
+        rootView.text_name.text = "${market?.amountAssetShortName} / ${market?.priceAssetShortName}"
 
-        rootView.text_amount_asset.text = String.format(getString(R.string.dex_markets_info_dialog_amount_asset), market?.amountAssetName)
-        rootView.text_price_asset.text = String.format(getString(R.string.dex_markets_info_dialog_price_asset), market?.priceAssetName)
+        rootView.text_amount_asset.text = String.format(getString(R.string.dex_markets_info_dialog_amount_asset), market?.amountAssetLongName)
+        rootView.text_price_asset.text = String.format(getString(R.string.dex_markets_info_dialog_price_asset), market?.priceAssetLongName)
         rootView.text_amount_asset_value.text = market?.amountAsset
         rootView.text_price_asset_value.text = market?.priceAsset
+
+        if (market?.popular == true) rootView.text_popular.visiable()
 
         eventSubscriptions.add(RxView.clicks(rootView.image_copy_amount_asset)
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
@@ -46,7 +50,7 @@ class DexMarketInformationBottomSheetFragment : BaseBottomSheetDialogFragment() 
         return rootView
     }
 
-    fun withMarketInformation(market: Market){
+    fun withMarketInformation(market: Market) {
         this.market = market
     }
 }
