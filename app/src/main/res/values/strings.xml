@@ -1220,7 +1220,9 @@
     <string name="send_errpr_you_don_t_have_enough_funds_to_pay_the_required_fees">You don\'t have enough funds to pay the required fees.</string>
     <string name="send_continue">Continue</string>
     <string name="send_transaction_fee_0_001_waves">Transaction Fee 0.001 WAVES</string>
-    <string name="send_transaction_error_check_fields">Check fields</string>
+    <string name="send_transaction_error_check_asset">Check asset</string>
+    <string name="send_monero_payment_id">Monero Payment ID</string>
+    <string name="send_monero_payment_id_hint">Paste or type your Payment ID</string>
 
     <!--About redirection-->
     <string name="about_redirection_title">You were redirected to the «IDNow» \nfor verification</string>
