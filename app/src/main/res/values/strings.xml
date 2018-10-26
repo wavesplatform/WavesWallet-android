@@ -870,6 +870,7 @@
 
     <!-- DEX Sorting -->
     <string name="dex_sorting_toolbar_title">Sorting</string>
+    <string name="dex_sorting_empty">Nothing here…</string>
 
     <!-- Markets -->
     <string name="dex_market_toolbar_title">Markets</string>

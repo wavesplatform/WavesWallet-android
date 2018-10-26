@@ -1,9 +1,11 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.sorting
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -19,6 +21,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
 import io.realm.kotlin.deleteFromRealm
 import kotlinx.android.synthetic.main.activity_active_markets_sorting.*
 import kotlinx.android.synthetic.main.dex_active_markets_sorting_item.view.*
+import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.*
 import javax.inject.Inject
 
@@ -40,7 +43,8 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
-        setupToolbar(toolbar_view, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.dex_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
 
         recycle_markets.layoutManager = LinearLayoutManager(this)
         recycle_markets.itemAnimator = FadeInWithoutDelayAnimator()
@@ -105,6 +109,13 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
 
     override fun afterSuccessLoadMarkets(list: List<MarketResponse>) {
         adapter.setNewData(list)
+        adapter.emptyView = getEmptyView()
+    }
+
+    private fun getEmptyView(): View {
+        val view = inflate(R.layout.layout_empty_data)
+        view.text_empty.text = getString(R.string.dex_sorting_empty)
+        return view
     }
 
 }
