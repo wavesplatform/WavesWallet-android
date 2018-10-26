@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.markets
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -11,12 +12,11 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.Market
+import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dex_markets.*
 import kotlinx.android.synthetic.main.header_dex_markets_layout.view.*
-import pers.victor.ext.gone
 import pers.victor.ext.inflate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -53,7 +53,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
         presenter.getMarkets()
 
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
-            val item = this.adapter.getItem(position) as Market
+            val item = this.adapter.getItem(position) as MarketResponse
 
             when (view.id) {
                 R.id.image_info -> {
@@ -65,7 +65,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
         }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = this.adapter.getItem(position) as Market
+            val item = this.adapter.getItem(position) as MarketResponse
 
             item.checked = !item.checked
             this.adapter.setData(position, item)
@@ -73,7 +73,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
         }
     }
 
-    override fun afterSuccessGetMarkets(markets: MutableList<Market>) {
+    override fun afterSuccessGetMarkets(markets: MutableList<MarketResponse>) {
         progress_bar.hide()
 
         if (markets.isEmpty()) {
@@ -117,5 +117,12 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
                 })
 
         return view
+    }
+
+    override fun onBackPressed() {
+        presenter.saveSelectedMarkets(adapter.data)
+
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 }

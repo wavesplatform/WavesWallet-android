@@ -4,13 +4,13 @@ import android.support.v4.content.ContextCompat
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.Market
+import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import java.util.*
 import javax.inject.Inject
 
-class DexAdapter @Inject constructor() : BaseQuickAdapter<Market, BaseViewHolder>(R.layout.dex_layout_item, null) {
+class DexAdapter @Inject constructor() : BaseQuickAdapter<MarketResponse, BaseViewHolder>(R.layout.dex_layout_item, null) {
 
-    override fun convert(helper: BaseViewHolder, item: Market) {
+    override fun convert(helper: BaseViewHolder, item: MarketResponse) {
         val trade = Random().nextInt(3)
         var tradeIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_chartarrow_success_400)
 

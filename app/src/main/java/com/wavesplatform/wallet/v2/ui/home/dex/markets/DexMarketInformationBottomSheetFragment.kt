@@ -6,19 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.Market
+import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.choose_language_24dp_item.*
 import kotlinx.android.synthetic.main.dex_markets_info_bottom_sheet_dialog_layout.view.*
-import pers.victor.ext.click
 import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
 
 
 class DexMarketInformationBottomSheetFragment : BaseBottomSheetDialogFragment() {
-    private var market: Market? = null
+    private var market: MarketResponse? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -50,7 +48,7 @@ class DexMarketInformationBottomSheetFragment : BaseBottomSheetDialogFragment() 
         return rootView
     }
 
-    fun withMarketInformation(market: Market) {
+    fun withMarketInformation(market: MarketResponse) {
         this.market = market
     }
 }

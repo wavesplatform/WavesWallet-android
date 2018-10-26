@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.home.dex
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -13,7 +12,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.model.remote.response.Market
+import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
@@ -99,7 +98,7 @@ class DexFragment : BaseFragment(), DexView {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun afterSuccessLoadMarkets(list: ArrayList<Market>) {
+    override fun afterSuccessLoadMarkets(list: ArrayList<MarketResponse>) {
         adapter.setNewData(list)
         adapter.emptyView = getEmptyView()
         if (list.isEmpty()) {

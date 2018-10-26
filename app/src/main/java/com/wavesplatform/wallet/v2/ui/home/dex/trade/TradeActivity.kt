@@ -6,7 +6,7 @@ import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.Market
+import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketInformationBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.notNull
@@ -45,7 +45,7 @@ class TradeActivity : BaseActivity(), TradeView {
     }
 
     private fun getToolbarTitle(): String {
-        val market = intent.getParcelableExtra<Market>(BUNDLE_MARKET)
+        val market = intent.getParcelableExtra<MarketResponse>(BUNDLE_MARKET)
         presenter.market = market
         return "${market.amountAssetName} / ${market.priceAssetName}"
     }
