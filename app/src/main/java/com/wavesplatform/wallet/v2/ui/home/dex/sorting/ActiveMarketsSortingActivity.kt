@@ -9,10 +9,14 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
+import com.vicpin.krealmextensions.delete
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.payload.Market
+import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
+import io.realm.kotlin.deleteFromRealm
 import kotlinx.android.synthetic.main.activity_active_markets_sorting.*
 import kotlinx.android.synthetic.main.dex_active_markets_sorting_item.view.*
 import pers.victor.ext.*
@@ -20,9 +24,6 @@ import javax.inject.Inject
 
 
 class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
-    override fun afterSuccessLoadMarkets(list: ArrayList<TestObject>) {
-        adapter.setNewData(list)
-    }
 
     @Inject
     @InjectPresenter
@@ -42,8 +43,9 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
         setupToolbar(toolbar_view, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         recycle_markets.layoutManager = LinearLayoutManager(this)
-        recycle_markets.adapter = adapter
-        recycle_markets.isNestedScrollingEnabled = false
+        recycle_markets.itemAnimator = FadeInWithoutDelayAnimator()
+        adapter.bindToRecyclerView(recycle_markets)
+
 
         recycle_markets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -54,10 +56,12 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             when (view.id) {
                 R.id.image_delete -> {
-                    // manage UI
-                    val item = this.adapter.getItem(position) as TestObject
+                    val item = this.adapter.getItem(position) as MarketResponse
+                    item.delete { equalTo("id", item.id) }
 
-                    adapter.remove(position)
+                    // remove from current list
+                    this.adapter.data.removeAt(position)
+                    this.adapter.notifyItemRemoved(position)
                 }
             }
         }
@@ -97,7 +101,10 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
         })
 
         presenter.loadMarkets()
+    }
 
+    override fun afterSuccessLoadMarkets(list: List<MarketResponse>) {
+        adapter.setNewData(list)
     }
 
 }
