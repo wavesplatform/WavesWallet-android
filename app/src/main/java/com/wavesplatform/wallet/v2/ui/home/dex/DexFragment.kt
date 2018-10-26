@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.dex
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -11,6 +12,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -18,6 +20,7 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.REQUEST_ASSET_DETAILS
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.empty_dex_layout.view.*
 import kotlinx.android.synthetic.main.fragment_dex_new.*
@@ -43,10 +46,9 @@ class DexFragment : BaseFragment(), DexView {
     override fun configLayoutRes(): Int = R.layout.fragment_dex_new
 
     companion object {
+        const val RESULT_NEED_UPDATE = "need_update"
+        const val REQUEST_SORTING = 121
 
-        /**
-         * @return DexFragment instance
-         * */
         fun newInstance(): DexFragment {
             return DexFragment()
         }
@@ -88,7 +90,7 @@ class DexFragment : BaseFragment(), DexView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_sorting -> {
-                launchActivity<ActiveMarketsSortingActivity> { }
+                launchActivity<ActiveMarketsSortingActivity>(REQUEST_SORTING)
             }
             R.id.action_add_market -> {
                 launchActivity<DexMarketsActivity> { }
@@ -127,5 +129,19 @@ class DexFragment : BaseFragment(), DexView {
     }
 
     override fun afterFailedLoadMarkets() {
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_SORTING -> {
+                if (resultCode == Constants.RESULT_OK) {
+                    val needToUpdate = data?.getBooleanExtra(RESULT_NEED_UPDATE, false)
+                    if (needToUpdate == true) {
+
+                    }
+                }
+            }
+        }
     }
 }

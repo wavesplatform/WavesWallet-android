@@ -28,7 +28,8 @@ open class MarketResponse(
         @SerializedName("priceAssetDecimals") var priceAssetDecimals: Int = 0,
         @SerializedName("created") var created: Long = 0,
         @SerializedName("checked") var checked: Boolean = false,
-        @SerializedName("popular") var popular: Boolean = false
+        @SerializedName("popular") var popular: Boolean = false,
+        @SerializedName("position") var position: Int = -1
 ) : Parcelable, RealmModel
 
 @Parcelize

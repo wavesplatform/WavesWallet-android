@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex.sorting
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
+import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v1.payload.Market
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -11,15 +12,27 @@ import javax.inject.Inject
 
 @InjectViewState
 class ActiveMarketsSortingPresenter @Inject constructor() : BasePresenter<ActiveMarketsSortingView>() {
+    var needToUpdate: Boolean = false
+
     fun loadMarkets() {
         runAsync {
             addSubscription(queryAllAsSingle<MarketResponse>().toObservable()
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
-                        viewState.afterSuccessLoadMarkets(it)
+                        val markets = it.sortedBy { it.position }
+                        viewState.afterSuccessLoadMarkets(markets)
                     }, {
                         it.printStackTrace()
                     }))
+        }
+    }
+
+    fun saveSortedPositions(data: List<MarketResponse>) {
+        runAsync {
+            data.forEachIndexed { index, market ->
+                market.position = index
+            }
+            data.saveAll()
         }
     }
 }

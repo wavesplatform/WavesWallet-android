@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.sorting
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -14,9 +15,11 @@ import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.vicpin.krealmextensions.delete
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.payload.Market
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
 import io.realm.kotlin.deleteFromRealm
 import kotlinx.android.synthetic.main.activity_active_markets_sorting.*
@@ -93,6 +96,8 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
             }
 
             override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int, target: RecyclerView.ViewHolder, to: Int) {
+                presenter.needToUpdate = true
+                
                 val originalPos = IntArray(2)
                 target.itemView.card_market.getLocationOnScreen(originalPos)
                 view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
@@ -105,6 +110,15 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
         })
 
         presenter.loadMarkets()
+    }
+
+    override fun onBackPressed() {
+        presenter.saveSortedPositions(adapter.data)
+
+        setResult(Constants.RESULT_OK, Intent().apply {
+            putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
+        })
+        finish()
     }
 
     override fun afterSuccessLoadMarkets(list: List<MarketResponse>) {
