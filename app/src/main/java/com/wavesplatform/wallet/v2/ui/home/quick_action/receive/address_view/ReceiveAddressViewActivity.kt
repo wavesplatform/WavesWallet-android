@@ -7,8 +7,8 @@ import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.wallet.App
 import com.jakewharton.rxbinding2.view.RxView
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -78,8 +78,9 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    text_copy_image.copyToClipboard(text_address.text.toString(),
-                            copyIcon = R.drawable.ic_copy_18_submit_400)
+                    frame_copy.copyToClipboard(text_address.text.toString(), text_copy,
+                            copyIcon = R.drawable.ic_copy_18_submit_400,
+                            copyColor = R.color.submit400)
                 })
 
         eventSubscriptions.add(RxView.clicks(image_copy)

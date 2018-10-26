@@ -94,9 +94,10 @@ class CardFragment : BaseFragment(), CardView {
     }
 
     override fun showLimits(min: String?, max: String?, fiat: String?) {
+        val currency = getCurrency(fiat)
         skeletonScreen!!.hide()
         if (min != null && max != null) {
-            limits.text = getString(R.string.receive_limit, min, fiat, max, fiat)
+            limits.text = getString(R.string.receive_limit, min, currency, max, currency)
         }
     }
 
@@ -128,6 +129,7 @@ class CardFragment : BaseFragment(), CardView {
                 .inflate(R.layout.receive_fiat_choose_dialog, null)
         val usdButton = view.findViewById<RadioButton>(R.id.radioButton_usd)
         val euroButton = view.findViewById<RadioButton>(R.id.radioButton_eur)
+        var currency = presenter.fiat
 
         if (presenter.fiat == USD) {
             usdButton.isChecked = true
@@ -135,28 +137,39 @@ class CardFragment : BaseFragment(), CardView {
             euroButton.isChecked = true
         }
 
-        usdButton.click {
-            alertDialog.dismiss()
-            setFiat(USD)
-        }
-        euroButton.click {
-            alertDialog.dismiss()
-            setFiat(EURO)
-        }
+        usdButton.click { currency = USD }
+        euroButton.click { currency = EURO }
 
         alertDialog.setView(view)
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
                 getString(R.string.receive_fiat_choose_dialog_cancel)) { dialog, _ ->
             dialog.dismiss()
         }
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
+                getString(R.string.receive_fiat_choose_dialog_ok)) { dialog, _ ->
+            dialog.dismiss()
+            setFiat(currency)
+        }
         alertDialog.show()
         alertDialog.makeStyled()
     }
 
     private fun setFiat(value: String) {
-        amount_title.text = getString(R.string.receive_amount_title, value)
+        amount_title.text = getString(R.string.receive_amount_title, getCurrency(value))
         presenter.fiatChanged(value)
         skeletonScreen!!.show()
+    }
+
+    private fun getCurrency(value: String?): String {
+        if (value.isNullOrEmpty()) {
+            return ""
+        }
+
+        return when (value) {
+            USD -> getString(R.string.receive_fiat_choose_dialog_usd)
+            EURO -> getString(R.string.receive_fiat_choose_dialog_euro)
+            else -> value!!
+        }
     }
 
     companion object {

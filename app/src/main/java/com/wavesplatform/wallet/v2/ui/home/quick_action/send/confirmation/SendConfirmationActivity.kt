@@ -75,6 +75,10 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 .subscribe {
                     presenter.attachment = it.toString()
                 })
+
+        if (intent.hasExtra(KEY_INTENT_ATTACHMENT)) {
+            edit_optional_message.setText(intent!!.extras!!.getString(KEY_INTENT_ATTACHMENT))
+        }
     }
 
     override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {
@@ -174,5 +178,6 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         const val KEY_INTENT_SELECTED_ASSET = "intent_selected_asset"
         const val KEY_INTENT_SELECTED_RECIPIENT = "intent_selected_recipient"
         const val KEY_INTENT_SELECTED_AMOUNT = "intent_selected_amount"
+        const val KEY_INTENT_ATTACHMENT = "intent_attachment"
     }
 }

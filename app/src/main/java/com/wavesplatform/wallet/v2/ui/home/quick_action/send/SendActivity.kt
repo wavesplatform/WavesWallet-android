@@ -28,6 +28,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_AMOUNT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ASSET
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_RECIPIENT
@@ -60,6 +61,12 @@ class SendActivity : BaseActivity(), SendView {
 
     companion object {
         var REQUEST_YOUR_ASSETS = 43
+        const val KEY_INTENT_ASSET_DETAILS = "asset_details"
+        const val KEY_INTENT_REPEAT_TRANSACTION = "repeat_transaction"
+        const val KEY_INTENT_TRANSACTION_ASSET_BALANCE = "transaction_asset_balance"
+        const val KEY_INTENT_TRANSACTION_AMOUNT = "transaction_amount"
+        const val KEY_INTENT_TRANSACTION_ATTACHMENT = "transaction_attachment"
+        const val KEY_INTENT_TRANSACTION_RECIPIENT = "transaction_recipient"
     }
 
 
@@ -69,11 +76,28 @@ class SendActivity : BaseActivity(), SendView {
         setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title), R.drawable.ic_toolbar_back_black)
         checkAddressFieldAndSetAction(edit_address.text.toString())
 
-        if (intent.hasExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM)) {
-            setAsset(intent.getParcelableExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM))
-            assetChangeEnable(false)
-        } else {
-            assetChangeEnable(true)
+        when {
+            intent.hasExtra(KEY_INTENT_ASSET_DETAILS) -> {
+                setAsset(intent.getParcelableExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM))
+                assetChangeEnable(false)
+            }
+            intent.hasExtra(KEY_INTENT_REPEAT_TRANSACTION) -> {
+                val assetBalance = intent.getParcelableExtra<AssetBalance>(
+                        SendActivity.KEY_INTENT_TRANSACTION_ASSET_BALANCE)
+                val amount = intent
+                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT)
+                val recipientAddress = intent
+                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_RECIPIENT)
+                val attachment = intent
+                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT)
+                setAsset(assetBalance)
+                assetChangeEnable(false)
+                edit_address.setText(recipientAddress)
+                edit_amount.setText(amount)
+                presenter.attachment = attachment
+                presenter.amount = amount
+            }
+            else -> assetChangeEnable(true)
         }
 
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
@@ -155,6 +179,9 @@ class SendActivity : BaseActivity(), SendView {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
             putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)
             putExtra(KEY_INTENT_SELECTED_AMOUNT, presenter.amount)
+            if (!presenter.attachment.isNullOrEmpty()) {
+                putExtra(KEY_INTENT_ATTACHMENT, presenter.attachment)
+            }
         }
     }
 
@@ -297,9 +324,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun assetChangeEnable(enable: Boolean) {
         if (enable) {
-            card_asset.click {
-                launchActivity<YourAssetsActivity>(requestCode = REQUEST_YOUR_ASSETS)
-            }
+            card_asset.click { _ -> launchAssets() }
             image_change.visibility = View.VISIBLE
             ViewCompat.setElevation(card_asset, ViewUtils.convertDpToPixel(4f, this))
             asset_layout.background = null
@@ -315,6 +340,14 @@ class SendActivity : BaseActivity(), SendView {
                     this, R.drawable.shape_rect_bordered_accent50)
             card_asset.setCardBackgroundColor(ContextCompat.getColor(
                     this, R.color.basic50))
+        }
+    }
+
+    private fun launchAssets() {
+        launchActivity<YourAssetsActivity>(requestCode = REQUEST_YOUR_ASSETS) {
+            presenter.selectedAsset.notNull {
+                putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
+            }
         }
     }
 }

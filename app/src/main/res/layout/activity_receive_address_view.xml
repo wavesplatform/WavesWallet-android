@@ -25,9 +25,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_marginRight="16dp"
+            android:padding="16dp"
             android:visibility="gone"
-            app:srcCompat="@drawable/ic_close_white" />
+            app:srcCompat="@drawable/ic_close_white"
+            tools:visibility="visible" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.CardView
@@ -160,13 +161,6 @@
                             android:background="?attr/selectableItemBackground"
                             android:clickable="true">
 
-                            <android.support.v7.widget.AppCompatImageView
-                                android:id="@+id/text_copy_image"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="10dp"
-                                app:srcCompat="@drawable/ic_copy_18_submit_400" />
-
                             <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/text_copy"
                                 android:layout_width="wrap_content"
@@ -174,6 +168,8 @@
                                 android:layout_gravity="center"
                                 android:drawablePadding="10dp"
                                 android:gravity="center"
+                                android:drawableStart="@drawable/ic_copy_18_submit_400"
+                                android:duplicateParentState="true"
                                 android:paddingBottom="10dp"
                                 android:paddingTop="10dp"
                                 android:text="@string/receive_address_copy"

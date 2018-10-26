@@ -27,7 +27,7 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
@@ -107,7 +107,6 @@
                             android:layout_centerVertical="true"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="8dp"
-                            android:layout_toEndOf="@+id/container_asset_icon"
                             android:text="Bitcoin"
                             android:textColor="@color/black"
                             android:textSize="16sp" />
@@ -191,7 +190,7 @@
             android:clipToPadding="true"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="2dp"
-            app:cardElevation="2dp">
+            app:cardElevation="4dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"

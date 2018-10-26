@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_invoice.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import pers.victor.ext.visiableIf
 import javax.inject.Inject
 
 class InvoiceFragment : BaseFragment(), InvoiceView {
@@ -110,8 +109,10 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             View.GONE
         }
 
-        image_is_favourite.visiableIf {
-            assetBalance.isFavorite
+        image_is_favourite.visibility = if (assetBalance.isFavorite) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
 
         edit_asset.gone()
@@ -129,10 +130,10 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
     private fun assetChangeEnable(enable: Boolean) {
         if (enable) {
             edit_asset.click {
-                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+                launchAssets()
             }
             container_asset.click {
-                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+                launchAssets()
             }
             image_change.visibility = View.VISIBLE
             ViewCompat.setElevation(edit_asset_card, ViewUtils.convertDpToPixel(4f, activity!!))
@@ -152,6 +153,14 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
                     activity!!, R.drawable.shape_rect_bordered_accent50)
             edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
                     activity!!, R.color.basic50))
+        }
+    }
+
+    private fun launchAssets() {
+        launchActivity<YourAssetsActivity>(requestCode = REQUEST_SELECT_ASSET) {
+            presenter.assetBalance.notNull {
+                putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
+            }
         }
     }
 }
