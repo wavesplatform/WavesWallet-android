@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.Markets
+import com.wavesplatform.wallet.v2.util.isWaves
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -54,12 +55,12 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
                 market.checked = it.third.any { it.id == market.id }
             }
-            return@map markets.toMutableList()
+            return@map markets.asSequence().sortedByDescending { it.popular }.sortedByDescending { it.popular && (it.amountAsset.isWaves() || it.priceAsset.isWaves()) }.toMutableList()
         }
     }
 
     private fun isPopularPriceAsset(market: MarketResponse): Boolean {
-        if (market.priceAsset.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()) {
+        if (market.priceAsset.isWaves()) {
             return true
         }
         return Constants.defaultAssets.any { it.assetId == market.priceAsset }
@@ -67,7 +68,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
 
     private fun isPopularAmountAsset(market: MarketResponse): Boolean {
-        if (market.amountAsset.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()) {
+        if (market.amountAsset.isWaves()) {
             return true
         }
         return Constants.defaultAssets.any { it.assetId == market.amountAsset }

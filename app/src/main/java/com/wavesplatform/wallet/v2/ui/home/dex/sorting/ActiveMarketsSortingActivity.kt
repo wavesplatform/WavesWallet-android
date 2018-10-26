@@ -63,6 +63,8 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             when (view.id) {
                 R.id.image_delete -> {
+                    presenter.needToUpdate = true
+
                     val item = this.adapter.getItem(position) as MarketResponse
                     item.delete { equalTo("id", item.id) }
 
@@ -97,7 +99,7 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
 
             override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int, target: RecyclerView.ViewHolder, to: Int) {
                 presenter.needToUpdate = true
-                
+
                 val originalPos = IntArray(2)
                 target.itemView.card_market.getLocationOnScreen(originalPos)
                 view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()

@@ -19,7 +19,7 @@ class ActiveMarketsSortingPresenter @Inject constructor() : BasePresenter<Active
             addSubscription(queryAllAsSingle<MarketResponse>().toObservable()
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
-                        val markets = it.sortedBy { it.position }
+                        val markets = it.sortedBy { it.position }.toMutableList()
                         viewState.afterSuccessLoadMarkets(markets)
                     }, {
                         it.printStackTrace()

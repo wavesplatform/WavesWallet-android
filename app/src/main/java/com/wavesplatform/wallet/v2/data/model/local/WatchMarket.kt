@@ -1,0 +1,14 @@
+package com.wavesplatform.wallet.v2.data.model.local
+
+import android.os.Parcelable
+import com.wavesplatform.wallet.v1.payload.TickerMarket
+import com.wavesplatform.wallet.v1.payload.TradesMarket
+import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
+import kotlinx.android.parcel.Parcelize
+
+/**
+ * Created by anonymous on 27.06.17.
+ */
+
+@Parcelize
+class WatchMarket(var market: MarketResponse, var tickerMarket: TickerMarket? = null, var tradesMarket: TradesMarket? = null) : Parcelable

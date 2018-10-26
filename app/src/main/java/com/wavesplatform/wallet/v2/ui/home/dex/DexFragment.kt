@@ -14,6 +14,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -100,7 +101,7 @@ class DexFragment : BaseFragment(), DexView {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun afterSuccessLoadMarkets(list: ArrayList<MarketResponse>) {
+    override fun afterSuccessLoadMarkets(list: ArrayList<WatchMarket>) {
         adapter.setNewData(list)
         adapter.emptyView = getEmptyView()
         if (list.isEmpty()) {
@@ -138,7 +139,7 @@ class DexFragment : BaseFragment(), DexView {
                 if (resultCode == Constants.RESULT_OK) {
                     val needToUpdate = data?.getBooleanExtra(RESULT_NEED_UPDATE, false)
                     if (needToUpdate == true) {
-
+                        presenter.loadActiveMarkets()
                     }
                 }
             }

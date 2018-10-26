@@ -46,6 +46,7 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import pers.victor.ext.activityManager
@@ -75,6 +76,10 @@ fun Context.isMyServiceRunning(serviceClass: Class<*>): Boolean {
         }
     }
     return false
+}
+
+fun String.isWaves(): Boolean {
+    return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
 }
 
 fun getActionBarHeight(): Int {
