@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relative_root"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
@@ -25,7 +25,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="28dp"
-        android:visibility="gone"
         app:cardCornerRadius="2dp"
         app:cardElevation="3dp">
 
@@ -86,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/text_id"
-                    android:text="GtjyCia86HmfkJEbHsErh57kp4DTGkScNzmkjY7CKLze"
+                    tools:text="GtjyCia86HmfkJEbHsErh57kp4DTGkScNzmkjY7CKLze"
                     android:textColor="@color/disabled900"
                     android:textSize="14sp" />
 
@@ -118,7 +117,7 @@
                     android:id="@+id/text_type_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Not Reissuable"
+                    tools:text="Not Reissuable"
                     android:textColor="@color/disabled900"
                     android:textSize="14sp" />
 
@@ -255,7 +254,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="24dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="2dp"
         app:cardElevation="0dp">

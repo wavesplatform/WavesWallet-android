@@ -146,20 +146,37 @@ open class Transaction(
 
     companion object {
 
-        private fun getNameBy(type: Int) : String {
+        const val GENESIS = 1
+        const val PAYMENT = 2
+        const val ISSUE = 3
+        const val TRANSFER = 4
+        const val REISSUE = 5
+        const val BURN = 6
+        const val EXCHANGE = 7
+        const val LEASE = 8
+        const val LEASE_CANCEL = 9
+        const val CREATE_ALIAS = 10
+        const val MASS_TRANSFER = 11
+        const val DATA = 12
+        const val SET_SCRIPT = 13
+        const val SPONSOR_FEE = 14
+
+        private fun getNameBy(type: Int): String {
             return when (type) {
-                3 -> "Issue"
-                4 -> "Transfer"
-                5 -> "Reissue"
-                6 -> "Burn"
-                7 -> "Exchange"
-                8 -> "Lease"
-                9 -> "Lease Cancel"
-                10 -> "Create Alias"
-                11 -> "Mass Transfer"
-                12 -> "Data"
-                13 -> "Set Script"
-                14 -> "Set Sponsorship"
+                GENESIS -> "Genesis"
+                PAYMENT -> "Payment"
+                ISSUE -> "Issue"
+                TRANSFER -> "Transfer"
+                REISSUE -> "Reissue"
+                BURN -> "Burn"
+                EXCHANGE -> "Exchange"
+                LEASE -> "Lease"
+                LEASE_CANCEL -> "Lease Cancel"
+                CREATE_ALIAS -> "Create Alias"
+                MASS_TRANSFER -> "Mass Transfer"
+                DATA -> "Data"
+                SET_SCRIPT -> "Set Script"
+                SPONSOR_FEE -> "Sponsor Fee"
                 else -> ""
             }
         }

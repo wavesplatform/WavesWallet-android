@@ -76,7 +76,9 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 })
 
         card_burn.click {
-            launchActivity<TokenBurnActivity> { }
+            launchActivity<TokenBurnActivity> {
+                putExtra(TokenBurnActivity.KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
+            }
         }
 
         receive.click {

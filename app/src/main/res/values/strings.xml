@@ -1313,6 +1313,9 @@
     <string name="token_burn_confirmation_you_have_burned">You have burned Sviblovo</string>
     <string name="token_burn_confirmation_okay">Okay</string>
     <string name="token_burn_confirmation_burning">Burning…</string>
+    <string name="token_burn_confirmationt_">Burning…</string>
+    <string name="token_burn_confirmationt_reissuable">Reissuable</string>
+    <string name="token_burn_confirmationt_not_reissuable">Not Reissuable</string>
 
     <!--Orderbook-->
     <string name="chart_empty">No chart data available</string>

@@ -29,7 +29,6 @@ object Constants {
     const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
     const val VERSION = 2
     const val ADDRESS_SCHEME = 'W'
-    const val ALIAS_VERSION = 2
 
     const val SELL_ORDER_TYPE = "sell"
     const val BUY_ORDER_TYPE = "buy"
