@@ -6,7 +6,7 @@ import android.support.annotation.StringRes;
 
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.api.NodeManager;
-import com.wavesplatform.wallet.api.mather.MatherManager;
+import com.wavesplatform.wallet.api.matcher.MatcherManager;
 import com.wavesplatform.wallet.data.access.AccessState;
 import com.wavesplatform.wallet.data.rxjava.RxUtil;
 import com.wavesplatform.wallet.injection.Injector;
@@ -82,7 +82,7 @@ public class MyOrdersViewModel extends BaseViewModel {
 
     public void getMyOrders() {
         dataListener.showProgressDialog(R.string.please_wait,"...");
-        compositeDisposable.add(MatherManager.get().getMyOrders(myOrderModel.getPairModel().market.amountAsset,
+        compositeDisposable.add(MatcherManager.get().getMyOrders(myOrderModel.getPairModel().market.amountAsset,
                 myOrderModel.getPairModel().market.priceAsset, prefsUtil.getValue(PrefsUtil.KEY_PUB_KEY, ""), myOrdersRequest.getSignature(), myOrdersRequest.getTimestamp())
                 .compose(RxUtil.applySchedulersToObservable())
                 .subscribe(myOrders -> {
@@ -113,7 +113,7 @@ public class MyOrdersViewModel extends BaseViewModel {
 
     public void cancelOrder() {
         dataListener.showProgressDialog(R.string.please_wait,"...");
-        compositeDisposable.add(MatherManager.get().cancelOrder(myOrderModel.getPairModel().market.amountAsset,
+        compositeDisposable.add(MatcherManager.get().cancelOrder(myOrderModel.getPairModel().market.amountAsset,
                 myOrderModel.getPairModel().market.priceAsset, mCancelOrderRequest)
                 .compose(RxUtil.applySchedulersToObservable())
                 .subscribe(o -> {
@@ -131,7 +131,7 @@ public class MyOrdersViewModel extends BaseViewModel {
 
     public void deleteOrder(int position) {
         dataListener.showProgressDialog(R.string.please_wait,"...");
-        compositeDisposable.add(MatherManager.get().deleteOrder(myOrderModel.getPairModel().market.amountAsset,
+        compositeDisposable.add(MatcherManager.get().deleteOrder(myOrderModel.getPairModel().market.amountAsset,
                 myOrderModel.getPairModel().market.priceAsset, mCancelOrderRequest)
                 .compose(RxUtil.applySchedulersToObservable())
                 .subscribe(o -> {

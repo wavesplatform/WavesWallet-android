@@ -6,7 +6,7 @@ import android.support.annotation.StringRes;
 import android.support.v4.util.Pair;
 
 import com.wavesplatform.wallet.R;
-import com.wavesplatform.wallet.api.mather.MatherManager;
+import com.wavesplatform.wallet.api.matcher.MatcherManager;
 import com.wavesplatform.wallet.data.rxjava.RxUtil;
 import com.wavesplatform.wallet.data.services.VerifiedAssetsService;
 import com.wavesplatform.wallet.db.DBHelper;
@@ -79,7 +79,7 @@ public class MarketsViewModel extends BaseViewModel {
     public void getAllMarkets() {
         dataListener.showProgressDialog(R.string.dex_fetching_markets, null);
 
-        compositeDisposable.add(MatherManager.get().getAllMarkets()
+        compositeDisposable.add(MatcherManager.get().getAllMarkets()
                 .compose(RxUtil.applySchedulersToObservable())
                 .flatMap(markets -> Observable.fromIterable(markets.markets))
                 .flatMap(market -> {

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'me.tatarka.retrolambda'
 apply from: 'environment.gradle'
 apply plugin: 'realm-android'
 
@@ -187,19 +186,15 @@ dependencies {
 
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
-
-//    dependencies {
-//        classpath 'me.tatarka:gradle-retrolambda:3.4.0'
-//    }
 }
 
 // Required for RetroLambda && CountryPicker
 repositories {
-    jcenter()
     google()
+    jcenter()
     maven { url "https://jitpack.io" }
     maven {
         url 'https://maven.google.com'

@@ -6,7 +6,7 @@ import android.support.annotation.StringRes;
 import com.google.gson.internal.LinkedTreeMap;
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.api.NodeManager;
-import com.wavesplatform.wallet.api.mather.MatherManager;
+import com.wavesplatform.wallet.api.matcher.MatcherManager;
 import com.wavesplatform.wallet.data.Events;
 import com.wavesplatform.wallet.data.access.AccessState;
 import com.wavesplatform.wallet.data.exception.RetrofitException;
@@ -82,7 +82,7 @@ public class PlaceOrderViewModel extends BaseViewModel {
     }
 
     public void getMatcherKey() {
-        compositeDisposable.add(MatherManager.get().getMatcherKey()
+        compositeDisposable.add(MatcherManager.get().getMatcherKey()
                 .compose(RxUtil.applySchedulersToObservable())
                 .subscribe(key -> {
                     mOrderRequest.matcherPublicKey = key;
@@ -92,7 +92,7 @@ public class PlaceOrderViewModel extends BaseViewModel {
     }
 
     private void getBalanceFromAssetPair() {
-        compositeDisposable.add(MatherManager.get().getBalanceFromAssetPair(placeOrderModel.getWatchMarket().market.amountAsset, placeOrderModel.getWatchMarket().market.priceAsset, NodeManager.get().getAddress())
+        compositeDisposable.add(MatcherManager.get().getBalanceFromAssetPair(placeOrderModel.getWatchMarket().market.amountAsset, placeOrderModel.getWatchMarket().market.priceAsset, NodeManager.get().getAddress())
                 .compose(RxUtil.applySchedulersToObservable())
                 .subscribe(stringIntegerHashMap -> {
                     dataListener.showBalanceFromPair(stringIntegerHashMap);
@@ -103,7 +103,7 @@ public class PlaceOrderViewModel extends BaseViewModel {
 
     public void placeOrder() {
         dataListener.showProgressDialog(R.string.please_wait, "...");
-        compositeDisposable.add(MatherManager.get().placeOrder(mOrderRequest)
+        compositeDisposable.add(MatcherManager.get().placeOrder(mOrderRequest)
                 .compose(RxUtil.applySchedulersToObservable())
                 .subscribe(o -> {
                     if (dataListener != null){

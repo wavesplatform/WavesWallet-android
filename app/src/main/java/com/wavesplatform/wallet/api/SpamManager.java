@@ -1,23 +1,15 @@
 package com.wavesplatform.wallet.api;
 
-import com.wavesplatform.wallet.api.mather.MatherManager;
 import com.wavesplatform.wallet.data.factory.RxErrorHandlingCallAdapterFactory;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
 import io.reactivex.Observable;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.GET;
 

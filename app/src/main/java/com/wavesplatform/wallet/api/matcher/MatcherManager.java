@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.api.mather;
+package com.wavesplatform.wallet.api.matcher;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.ihsanbal.logging.Level;
@@ -8,7 +8,6 @@ import com.wavesplatform.wallet.data.factory.RxErrorHandlingCallAdapterFactory;
 import com.wavesplatform.wallet.payload.Markets;
 import com.wavesplatform.wallet.payload.MyOrder;
 import com.wavesplatform.wallet.payload.OrderBook;
-import com.wavesplatform.wallet.payload.TransactionsInfo;
 import com.wavesplatform.wallet.request.CancelOrderRequest;
 import com.wavesplatform.wallet.request.OrderRequest;
 import com.wavesplatform.wallet.ui.auth.EnvironmentManager;
@@ -23,18 +22,18 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MatherManager {
-    private static MatherManager instance;
-    private final MatherApi service;
+public class MatcherManager {
+    private static MatcherManager instance;
+    private final MatcherApi service;
     private OkHttpClient okHttpClient;
 
-    public static MatherManager get() {
+    public static MatcherManager get() {
         return instance;
     }
 
-    public static MatherManager createInstance(String pubKey) {
+    public static MatcherManager createInstance(String pubKey) {
         try {
-            instance = new MatherManager(pubKey);
+            instance = new MatcherManager(pubKey);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,7 +46,7 @@ public class MatherManager {
 
     private final PublicKeyAccount publicKeyAccount;
 
-    private MatherManager(String pubKey) throws PublicKeyAccount.InvalidPublicKey {
+    private MatcherManager(String pubKey) throws PublicKeyAccount.InvalidPublicKey {
         okHttpClient = new OkHttpClient.Builder()
                 //.addInterceptor(OkLogInterceptor.builder().withAllLogData().build())
                 .addInterceptor(new LoggingInterceptor.Builder()
@@ -66,7 +65,7 @@ public class MatherManager {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .build();
-        service = retrofit.create(MatherApi.class);
+        service = retrofit.create(MatcherApi.class);
 
         this.publicKeyAccount = new PublicKeyAccount(pubKey);
     }

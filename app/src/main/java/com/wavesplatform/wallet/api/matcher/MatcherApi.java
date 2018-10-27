@@ -1,10 +1,9 @@
-package com.wavesplatform.wallet.api.mather;
+package com.wavesplatform.wallet.api.matcher;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.wavesplatform.wallet.payload.Markets;
 import com.wavesplatform.wallet.payload.MyOrder;
 import com.wavesplatform.wallet.payload.OrderBook;
-import com.wavesplatform.wallet.payload.TransactionsInfo;
 import com.wavesplatform.wallet.request.CancelOrderRequest;
 import com.wavesplatform.wallet.request.OrderRequest;
 
@@ -17,7 +16,7 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-public interface MatherApi {
+public interface MatcherApi {
     @GET("matcher/orderbook")
     Observable<Markets> getAllMarkets();
 

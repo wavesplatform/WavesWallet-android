@@ -6,7 +6,7 @@ import android.support.v4.util.Pair;
 
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.api.NodeManager;
-import com.wavesplatform.wallet.api.mather.MatherManager;
+import com.wavesplatform.wallet.api.matcher.MatcherManager;
 import com.wavesplatform.wallet.data.exception.RetrofitException;
 import com.wavesplatform.wallet.data.rxjava.RxUtil;
 import com.wavesplatform.wallet.db.DBHelper;
@@ -86,7 +86,7 @@ public class AddMarketViewModel extends BaseViewModel {
 
     public void getOrderBook(String amountAsset, String priceAsset) {
         dataListener.showProgressDialog(R.string.please_wait, "...");
-        compositeDisposable.add(MatherManager.get().getOrderBook(amountAsset, priceAsset)
+        compositeDisposable.add(MatcherManager.get().getOrderBook(amountAsset, priceAsset)
                 .flatMap(orderBook -> {
                     if (orderBook.pair.amountAsset.trim().equals(WAVES)) {
                         return Observable.zip(Observable.just(new TransactionsInfo(WAVES, WAVES, 8)),

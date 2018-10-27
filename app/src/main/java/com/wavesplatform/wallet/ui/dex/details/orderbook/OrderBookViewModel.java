@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 
 import com.wavesplatform.wallet.R;
-import com.wavesplatform.wallet.api.mather.MatherManager;
+import com.wavesplatform.wallet.api.matcher.MatcherManager;
 import com.wavesplatform.wallet.data.rxjava.RxUtil;
 import com.wavesplatform.wallet.injection.Injector;
 import com.wavesplatform.wallet.payload.OrderBook;
@@ -62,7 +62,7 @@ public class OrderBookViewModel extends BaseViewModel {
 
     public void getOrderBook(WatchMarket watchMarket) {
         dataListener.showProgressDialog(R.string.dex_fetching_markets, null);
-        compositeDisposable.add(MatherManager.get().getOrderBookInterval(watchMarket.market.amountAsset, watchMarket.market.priceAsset)
+        compositeDisposable.add(MatcherManager.get().getOrderBookInterval(watchMarket.market.amountAsset, watchMarket.market.priceAsset)
                 .compose(RxUtil.applySchedulersToObservable())
                 .subscribe(orderBook -> {
                     if (dataListener != null){

@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import com.wavesplatform.wallet.api.NodeManager;
 import com.wavesplatform.wallet.api.datafeed.DataFeedManager;
-import com.wavesplatform.wallet.api.mather.MatherManager;
+import com.wavesplatform.wallet.api.matcher.MatcherManager;
 import com.wavesplatform.wallet.db.DBHelper;
 import com.wavesplatform.wallet.ui.home.MainActivity;
 import com.wavesplatform.wallet.util.PrefsUtil;
@@ -16,7 +16,7 @@ public class AuthUtil {
     public static boolean startMainActivity(Activity parent, String publicKey) {
         if (NodeManager.createInstance(publicKey) != null) {
             DataFeedManager.createInstance();
-            MatherManager.createInstance(publicKey);
+            MatcherManager.createInstance(publicKey);
 
             NodeManager.get().setPrefsUtil(new PrefsUtil(parent));
 
