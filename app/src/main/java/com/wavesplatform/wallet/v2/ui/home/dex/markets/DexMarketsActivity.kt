@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.markets
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -12,8 +13,10 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.RESULT_NEED_UPDATE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dex_markets.*
 import kotlinx.android.synthetic.main.header_dex_markets_layout.view.*
@@ -65,6 +68,8 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
         }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            presenter.needToUpdate = true
+
             val item = this.adapter.getItem(position) as MarketResponse
 
             item.checked = !item.checked
@@ -122,7 +127,9 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     override fun onBackPressed() {
         presenter.saveSelectedMarkets(adapter.data)
 
-        setResult(Activity.RESULT_OK)
+        setResult(Constants.RESULT_OK, Intent().apply {
+            putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
+        })
         finish()
     }
 }

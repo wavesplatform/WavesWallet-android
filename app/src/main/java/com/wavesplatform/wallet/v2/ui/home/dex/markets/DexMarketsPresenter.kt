@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.markets
 
 import com.arellomobile.mvp.InjectViewState
+import com.vicpin.krealmextensions.deleteAll
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -10,6 +11,8 @@ import javax.inject.Inject
 
 @InjectViewState
 class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>() {
+    var needToUpdate: Boolean = false
+
     fun getMarkets() {
         runAsync {
             addSubscription(matcherDataManager.getAllMarkets()
@@ -23,9 +26,8 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
     }
 
     fun saveSelectedMarkets(data: List<MarketResponse>) {
-        runAsync {
-            val selectedMarkets = data.filter { it.checked }
-            selectedMarkets.saveAll()
-        }
+        deleteAll<MarketResponse>()
+        val selectedMarkets = data.filter { it.checked }
+        selectedMarkets.saveAll()
     }
 }

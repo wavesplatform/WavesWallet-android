@@ -10,7 +10,9 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ApiDataManager @Inject constructor() : BaseDataManager() {
 
     fun loadAliases(): Observable<List<Alias>> {

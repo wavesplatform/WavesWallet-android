@@ -10,7 +10,6 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.Markets
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.util.isWaves
 import com.wavesplatform.wallet.v2.util.notNull
@@ -19,8 +18,11 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import pers.victor.ext.currentTimeMillis
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class MatcherDataManager @Inject constructor() : BaseDataManager() {
+    var allMarketsList = mutableListOf<MarketResponse>()
 
     fun loadReservedBalances(): Observable<Map<String, Long>> {
         val timestamp = currentTimeMillis
@@ -34,39 +36,62 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
-        return Observable.zip(apiService.loadGlobalConfigurate(),
-                Observable.zip(matcherService.getAllMarkets(), queryAllAsSingle<SpamAsset>().toObservable(), BiFunction { apiMarkets: Markets, spamAssets: List<SpamAsset> ->
-                    val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-                        apiMarkets.markets
-                    } else {
-                        apiMarkets.markets.filter { market -> !spamAssets.any { it.assetId == market.priceAsset || it.assetId == market.amountAsset } }
+        if (allMarketsList.isEmpty()) {
+            return Observable.zip(apiService.loadGlobalConfigurate(),
+                    matcherService.getAllMarkets()
+                            .map { it.markets },
+                    BiFunction { configure: GlobalConfiguration, apiMarkets: List<MarketResponse> ->
+                        return@BiFunction Pair(configure, apiMarkets)
+                    })
+                    .flatMap {
+                        it.second.forEach { market ->
+                            market.id = market.amountAsset + market.priceAsset
+
+                            market.amountAssetLongName = it.first.generalAssetIds.firstOrNull { it.assetId == market.amountAsset }?.displayName ?: market.amountAssetName
+                            market.priceAssetLongName = it.first.generalAssetIds.firstOrNull { it.assetId == market.priceAsset }?.displayName ?: market.priceAssetName
+
+                            market.amountAssetShortName = it.first.generalAssetIds.firstOrNull { it.assetId == market.amountAsset }?.gatewayId ?: market.amountAssetName
+                            market.priceAssetShortName = it.first.generalAssetIds.firstOrNull { it.assetId == market.priceAsset }?.gatewayId ?: market.priceAssetName
+
+                            market.popular = isPopularAsset(market.amountAsset, it.first.generalAssetIds) && isPopularAsset(market.priceAsset, it.first.generalAssetIds)
+
+                            market.amountAssetDecimals = market.amountAssetInfo.decimals
+                            market.priceAssetDecimals = market.priceAssetInfo.decimals
+                        }
+
+                        allMarketsList = sortByGatewayAssets(it.first.generalAssetIds, it.first.generalAssetIds.lastIndex, it.second).toMutableList()
+
+                        return@flatMap filterMarketsBySpamAndSelect(allMarketsList)
                     }
-                    return@BiFunction filteredSpamList
-                }),
-                queryAllAsSingle<MarketResponse>().toObservable(),
-                Function3 { configure: GlobalConfiguration, apiMarkets: List<MarketResponse>, dbMarkets: List<MarketResponse> ->
-                    return@Function3 Triple(configure, apiMarkets, dbMarkets)
-                })
+        } else {
+            return filterMarketsBySpamAndSelect(allMarketsList)
+        }
+    }
+
+    private fun filterMarketsBySpamAndSelect(markets: List<MarketResponse>): Observable<MutableList<MarketResponse>> {
+        return Observable.zip(Observable.just(markets), queryAllAsSingle<SpamAsset>().toObservable()
                 .map {
-                    it.second.forEach { market ->
-                        market.id = market.amountAsset + market.priceAsset
+                    val map = it.associateBy { it.assetId }
+                    return@map map
+                },
+                queryAllAsSingle<MarketResponse>().toObservable()
+                        .map {
+                            val map = it.associateBy { it.id }
+                            return@map map
+                        }
+                , Function3 { apiMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAsset>, dbMarkets: Map<String?, MarketResponse> ->
+            val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+                apiMarkets.toMutableList()
+            } else {
+                apiMarkets.filter { market -> spamAssets[market.amountAsset] == null && spamAssets[market.priceAsset] == null }
+            }.toMutableList()
 
-                        market.amountAssetLongName = it.first.generalAssetIds.firstOrNull { it.assetId == market.amountAsset }?.displayName ?: market.amountAssetName
-                        market.priceAssetLongName = it.first.generalAssetIds.firstOrNull { it.assetId == market.priceAsset }?.displayName ?: market.priceAssetName
+            filteredSpamList.forEach { market ->
+                market.checked = dbMarkets[market.id] != null
+            }
 
-                        market.amountAssetShortName = it.first.generalAssetIds.firstOrNull { it.assetId == market.amountAsset }?.gatewayId ?: market.amountAssetName
-                        market.priceAssetShortName = it.first.generalAssetIds.firstOrNull { it.assetId == market.priceAsset }?.gatewayId ?: market.priceAssetName
-
-                        market.popular = isPopularAsset(market.amountAsset, it.first.generalAssetIds) && isPopularAsset(market.priceAsset, it.first.generalAssetIds)
-
-                        market.amountAssetDecimals = market.amountAssetInfo.decimals
-                        market.priceAssetDecimals = market.priceAssetInfo.decimals
-
-                        market.checked = it.third.any { it.id == market.id }
-                    }
-                    val list = sortByGatewayAssets(it.first.generalAssetIds, it.first.generalAssetIds.lastIndex, it.second).toMutableList()
-                    return@map list
-                }
+            return@Function3 filteredSpamList
+        })
     }
 
     private fun sortByGatewayAssets(generalAssets: List<GlobalConfiguration.GeneralAssetId>, position: Int, markets: List<MarketResponse>): List<MarketResponse> {

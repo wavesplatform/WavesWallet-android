@@ -49,6 +49,7 @@ class DexFragment : BaseFragment(), DexView {
     companion object {
         const val RESULT_NEED_UPDATE = "need_update"
         const val REQUEST_SORTING = 121
+        const val REQUEST_SELECT_MARKETS = 122
 
         fun newInstance(): DexFragment {
             return DexFragment()
@@ -94,7 +95,7 @@ class DexFragment : BaseFragment(), DexView {
                 launchActivity<ActiveMarketsSortingActivity>(REQUEST_SORTING)
             }
             R.id.action_add_market -> {
-                launchActivity<DexMarketsActivity> { }
+                launchActivity<DexMarketsActivity>(REQUEST_SELECT_MARKETS)
             }
         }
 
@@ -120,7 +121,7 @@ class DexFragment : BaseFragment(), DexView {
     private fun getEmptyView(): View {
         val view = inflate(R.layout.empty_dex_layout)
         view.button_add_markets.click {
-            launchActivity<DexMarketsActivity> { }
+            launchActivity<DexMarketsActivity>(REQUEST_SELECT_MARKETS)
         }
         return view
     }
@@ -135,7 +136,7 @@ class DexFragment : BaseFragment(), DexView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            REQUEST_SORTING -> {
+            REQUEST_SORTING, REQUEST_SELECT_MARKETS -> {
                 if (resultCode == Constants.RESULT_OK) {
                     val needToUpdate = data?.getBooleanExtra(RESULT_NEED_UPDATE, false)
                     if (needToUpdate == true) {
