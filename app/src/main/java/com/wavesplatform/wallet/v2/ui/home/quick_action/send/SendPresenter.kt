@@ -167,7 +167,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return false
         }
 
-        if (selectedAsset == null  || recipientAssetId.isNullOrEmpty()) {
+        if (selectedAsset == null || recipientAssetId == null) {
             return null
         }
 

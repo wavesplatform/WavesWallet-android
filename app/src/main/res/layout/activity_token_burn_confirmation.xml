@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        android:layout_marginTop="24dp"
         android:fitsSystemWindows="true"
         app:titleTextAppearance="@style/Toolbar.Title"
         app:titleTextColor="@color/white" />
@@ -54,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="14dp"
-                    android:text="-00000000.00000000 Sviblovo"
+                    tools:text="-00000000.00000000 Sviblovo"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -90,6 +91,7 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/text_description"
                     android:paddingTop="10dp"
                     android:background="@drawable/shape_rect_outline_basic300"
                     android:paddingBottom="10dp"
@@ -99,8 +101,7 @@
                     android:textColor="@color/basic500"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/token_burn_confirmationt_description"
-                    />
+                    tools:text="@string/token_burn_confirmationt_description" />
 
 
                 <android.support.v7.widget.AppCompatTextView

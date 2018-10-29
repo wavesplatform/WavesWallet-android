@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
@@ -88,7 +89,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         completeTransactionProcessing()
         text_leasing_result_value.text = getString(
                 R.string.send_success_you_have_sent_sum,
-                (signed.amount / 100000000F).toString(),
+                MoneyUtil.getScaledText(signed.amount, presenter.selectedAsset),
                 presenter.getTicker())
         button_okay.click {
             launchActivity<MainActivity>(clear = true)

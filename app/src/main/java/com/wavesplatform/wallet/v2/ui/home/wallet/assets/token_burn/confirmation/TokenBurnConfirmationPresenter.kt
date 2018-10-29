@@ -18,12 +18,19 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
             App.getAccessManager().getWallet()!!.publicKeyStr)
 
     var assetBalance: AssetBalance? = null
-    var amount: Long? = 0L
+    var amount: Double = 0.0
 
     fun burn() {
+        val decimals = assetBalance!!.getDecimals() ?: 0
+        val quantity = if (amount == 0.0) {
+            0
+        } else {
+            (amount * Math.pow(10.0, decimals.toDouble())).toLong()
+        }
+
         val request = BurnRequest(
                 assetId = assetBalance!!.assetId!!,
-                quantity = amount ?: 0L,
+                quantity = quantity,
                 senderPublicKey = App.getAccessManager().getWallet()!!.publicKeyStr,
                 timestamp = currentTimeMillis)
         request.sign(App.getAccessManager().getWallet()!!.privateKey)

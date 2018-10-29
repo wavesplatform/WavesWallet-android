@@ -1310,10 +1310,9 @@
     <string name="token_burn_confirmation_fee">Fee</string>
     <string name="token_burn_confirmation_burn">Burn</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">Your transaction is on the way</string>
-    <string name="token_burn_confirmation_you_have_burned">You have burned Sviblovo</string>
+    <string name="token_burn_confirmation_you_have_burned">You have burned %1$s %2$s</string>
     <string name="token_burn_confirmation_okay">Okay</string>
     <string name="token_burn_confirmation_burning">Burning…</string>
-    <string name="token_burn_confirmationt_">Burning…</string>
     <string name="token_burn_confirmationt_reissuable">Reissuable</string>
     <string name="token_burn_confirmationt_not_reissuable">Not Reissuable</string>
 

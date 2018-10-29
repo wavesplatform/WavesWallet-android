@@ -231,10 +231,12 @@ class SendActivity : BaseActivity(), SendView {
 
             when {
                 recipient.length in 4..30 -> {
+                    presenter.recipientAssetId = ""
                     presenter.checkAlias(recipient)
                     relative_gateway_fee.gone()
                 }
                 SendPresenter.isWavesAddress(recipient) -> {
+                    presenter.recipientAssetId = ""
                     presenter.type = SendPresenter.Type.WAVES
                     setRecipientValid(true)
                     relative_gateway_fee.gone()
