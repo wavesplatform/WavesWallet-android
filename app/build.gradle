@@ -93,7 +93,7 @@ ext {
     rxAndroidVersion = '2.0.1'
     daggerVersion = '2.8'
     retrofitVersion = '2.4.0'
-    okHttpVersion = '3.5.0'
+    okHttpVersion = '3.11.0'
 }
 
 dependencies {
@@ -136,7 +136,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
-    implementation 'org.whispersystems:curve25519-java:0.3.0'
+    implementation 'org.whispersystems:curve25519-java:0.5.0'
     implementation 'com.bignerdranch.android:recyclerview-multiselect:0.2'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
 

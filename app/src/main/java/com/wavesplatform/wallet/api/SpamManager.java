@@ -1,5 +1,7 @@
 package com.wavesplatform.wallet.api;
 
+import android.support.annotation.VisibleForTesting;
+
 import com.wavesplatform.wallet.data.factory.RxErrorHandlingCallAdapterFactory;
 
 import java.util.HashSet;
@@ -38,6 +40,17 @@ public class SpamManager {
         }
         return instance;
     }
+
+    @VisibleForTesting
+    public static SpamManager createTestInstance(SpamApi service) {
+        try {
+            instance = new SpamManager(service);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return instance;
+    }
+
     private SpamManager() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();;
         Retrofit retrofit = new Retrofit.Builder()
@@ -48,7 +61,11 @@ public class SpamManager {
                 .client(okHttpClient)
                 .build();
         service = retrofit.create(SpamApi.class);
+    }
 
+    // Added for testing purposes only
+    private SpamManager(SpamApi service) {
+        this.service = service;
     }
 
     public Observable<Set<String>> getSpamAssets() {
@@ -62,5 +79,4 @@ public class SpamManager {
             return spam;
         });
     }
-
 }

@@ -1,0 +1,18 @@
+{
+  "type" : 3,
+  "id" : "4Xj4FSC7yFfum9eraKQSdFhveggcQRZ9Shn9cDEqe4NR",
+  "sender" : "3MtHNCZA7EdzsLjH8V9FWUmPbV42RGXvNk3",
+  "senderPublicKey" : "26bxJSmBtFLrpKPidRmUV6vMdaDeKAmaARLfEgsiLCWf",
+  "fee" : 100000000,
+  "timestamp" : 1492094852338,
+  "signature" : "AAaGaK52PWUfGTaVE5wCPQ5gGM76HLbEr1fccBHJMqGxp69sCQ3rVqYAEPCtztoXoMR527stzMkQ3r1stdCpoNC",
+  "proofs" : [ "AAaGaK52PWUfGTaVE5wCPQ5gGM76HLbEr1fccBHJMqGxp69sCQ3rVqYAEPCtztoXoMR527stzMkQ3r1stdCpoNC" ],
+  "version" : 1,
+  "assetId" : "4Xj4FSC7yFfum9eraKQSdFhveggcQRZ9Shn9cDEqe4NR",
+  "name" : "WCT-test",
+  "quantity" : 1000000000,
+  "reissuable" : false,
+  "decimals" : 2,
+  "description" : "Token Decimals - 2",
+  "height" : 43155
+}

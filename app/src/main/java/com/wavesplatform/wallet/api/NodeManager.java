@@ -1,5 +1,7 @@
 package com.wavesplatform.wallet.api;
 
+import android.support.annotation.VisibleForTesting;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wavesplatform.wallet.crypto.PublicKeyAccount;
@@ -35,9 +37,16 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NodeManager {
+
     private static NodeManager instance;
     private final NodeApi service;
     private PrefsUtil prefsUtil;
+    public AssetBalances assetBalances = new AssetBalances();
+    public AssetBalances deletedAssetBalances = new AssetBalances();
+    public List<Transaction> transactions = new ArrayList<>();
+    public List<Transaction> pendingTransactions = new ArrayList<>();
+    public List<AssetBalance> pendingAssets = new ArrayList<>();
+    private final PublicKeyAccount publicKeyAccount;
 
     public static NodeManager get() {
         return instance;
@@ -52,19 +61,28 @@ public class NodeManager {
         return instance;
     }
 
-    public AssetBalances assetBalances = new AssetBalances();
-    public AssetBalances deletedAssetBalances = new AssetBalances();
-    public List<Transaction> transactions = new ArrayList<>();
-    public List<Transaction> pendingTransactions = new ArrayList<>();
-    public List<AssetBalance> pendingAssets = new ArrayList<>();
-
-    public String getAddress() {
-        return publicKeyAccount.getAddress();
+    @VisibleForTesting
+    public static NodeManager createTestInstance(NodeApi service, String pubKey) {
+        try {
+            instance = new NodeManager(service, pubKey);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return instance;
     }
-    private final Gson gson;
-    private final PublicKeyAccount publicKeyAccount;
 
     private NodeManager(String pubKey) throws PublicKeyAccount.InvalidPublicKey {
+        service = getService();
+        this.publicKeyAccount = new PublicKeyAccount(pubKey);
+    }
+
+    // Added for testing purposes only
+    private NodeManager(NodeApi service, String pubKey) throws PublicKeyAccount.InvalidPublicKey {
+        this.service = service;
+        this.publicKeyAccount = new PublicKeyAccount(pubKey);
+    }
+
+    private NodeApi getService() {
         final RuntimeTypeAdapterFactory<Transaction> typeFactory = RuntimeTypeAdapterFactory
                 .of(Transaction.class, "type")
                 .registerSubtype(PaymentTransaction.class, "2")
@@ -75,15 +93,13 @@ public class NodeManager {
                 .registerSubtype(MassTransferTransaction.class, "11")
                 .registerDefaultSubtype(Transaction.class, "0");
 
-        gson = new GsonBuilder().registerTypeAdapterFactory(typeFactory).create();
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(typeFactory).create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(EnvironmentManager.get().current().getNodeUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
-        service = retrofit.create(NodeApi.class);
-
-        this.publicKeyAccount = new PublicKeyAccount(pubKey);
+        return retrofit.create(NodeApi.class);
     }
 
     public AssetBalance wavesAsset = new AssetBalance() {{
@@ -129,13 +145,13 @@ public class NodeManager {
                 SpamManager.get().getSpamAssets(),
                 (bal, abs, txs, pending, spam) -> {
                     wavesAsset.balance = bal.balance;
-                    List<AssetBalance> filteredBalances = new ArrayList<AssetBalance>();
+                    List<AssetBalance> filteredBalances = new ArrayList<>();
                     if (!prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)){
                         for (AssetBalance ab : abs.balances) {
                             if (!spam.contains(ab.assetId))
                                 filteredBalances.add(ab);
                         }
-                    }else {
+                    } else {
                         filteredBalances = abs.balances;
                     }
                     abs.balances = filteredBalances;
@@ -278,5 +294,9 @@ public class NodeManager {
 
     public void setPrefsUtil(PrefsUtil prefsUtil) {
         this.prefsUtil = prefsUtil;
+    }
+
+    public String getAddress() {
+        return publicKeyAccount.getAddress();
     }
 }
