@@ -109,7 +109,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
                     }
                     return@map it.toString()
                 }
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .debounce(500, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

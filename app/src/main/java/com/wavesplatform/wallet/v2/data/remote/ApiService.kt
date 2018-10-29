@@ -1,9 +1,7 @@
 package com.wavesplatform.wallet.v2.data.remote
 
-import com.wavesplatform.wallet.v2.data.model.remote.response.AliasData
-import com.wavesplatform.wallet.v2.data.model.remote.response.AliasesResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetsInfoResponse
+import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -22,5 +20,5 @@ interface ApiService {
     fun assetsInfoByIds(@Query("ids") ids: List<String?>): Observable<AssetsInfoResponse>
 
     @GET
-    fun loadVerifiedAssetsWithShortName(@Url url: String = "https://waves-wallet.firebaseio.com/verified-assets.json"): Observable<Map<String, String>>
+    fun loadGlobalConfigurate(@Url url: String = Constants.URL_GLOBAL_CONFIGURATION): Observable<GlobalConfiguration>
 }

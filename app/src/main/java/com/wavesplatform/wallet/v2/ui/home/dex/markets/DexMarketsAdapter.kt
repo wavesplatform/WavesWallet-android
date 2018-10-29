@@ -24,7 +24,9 @@ class DexMarketsAdapter @Inject constructor() : BaseQuickAdapter<MarketResponse,
             setNewData(ArrayList<MarketResponse>(allData))
         } else {
             for (item in allData) {
-                val name = "${item.amountAssetName}/${item.priceAssetName}"
+                val name = "${item.amountAssetShortName}/${item.priceAssetShortName} " +
+                        "${item.amountAssetLongName}/${item.priceAssetLongName} " +
+                        "${item.amountAsset}/${item.priceAsset}"
                 if (name.toLowerCase().contains(text.toLowerCase())) {
                     data.add(item)
                 }

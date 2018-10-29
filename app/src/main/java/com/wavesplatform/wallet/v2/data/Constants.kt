@@ -18,6 +18,8 @@ object Constants {
     const val URL_FACEBOOK = "https://www.facebook.com/wavesplatform"
     const val URL_DISCORD = "https://discordapp.com/invite/cnFmDyA"
 
+    const val URL_GLOBAL_CONFIGURATION = "https://raw.githubusercontent.com/wavesplatform/waves-client-config/master/environment_mainnet.json"
+
     const val ACC_TWITTER = "wavesplatform"
     const val ACC_TELEGRAM = "wavesnews"
 

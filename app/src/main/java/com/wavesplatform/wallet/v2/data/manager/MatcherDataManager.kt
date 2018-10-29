@@ -6,10 +6,12 @@ import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.Markets
+import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.util.isWaves
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
@@ -32,45 +34,53 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
-        return Observable.zip(apiService.loadVerifiedAssetsWithShortName(),
-                matcherService.getAllMarkets(),
+        return Observable.zip(apiService.loadGlobalConfigurate(),
+                Observable.zip(matcherService.getAllMarkets(), queryAllAsSingle<SpamAsset>().toObservable(), BiFunction { apiMarkets: Markets, spamAssets: List<SpamAsset> ->
+                    val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+                        apiMarkets.markets
+                    } else {
+                        apiMarkets.markets.filter { market -> !spamAssets.any { it.assetId == market.priceAsset || it.assetId == market.amountAsset } }
+                    }
+                    return@BiFunction filteredSpamList
+                }),
                 queryAllAsSingle<MarketResponse>().toObservable(),
-                Function3 { t1: Map<String, String>, t2: Markets, t3: List<MarketResponse> ->
-                    return@Function3 Triple(t1, t2, t3)
-                }).map {
-            val markets = it.second.markets
-            markets.forEach { market ->
-                market.id = market.amountAsset + market.priceAsset
+                Function3 { configure: GlobalConfiguration, apiMarkets: List<MarketResponse>, dbMarkets: List<MarketResponse> ->
+                    return@Function3 Triple(configure, apiMarkets, dbMarkets)
+                })
+                .map {
+                    it.second.forEach { market ->
+                        market.id = market.amountAsset + market.priceAsset
 
-                market.amountAssetLongName = Constants.defaultAssets.firstOrNull { it.assetId == market.amountAsset }?.getName() ?: market.amountAssetName
-                market.priceAssetLongName = Constants.defaultAssets.firstOrNull { it.assetId == market.priceAsset }?.getName() ?: market.priceAssetName
+                        market.amountAssetLongName = it.first.generalAssetIds.firstOrNull { it.assetId == market.amountAsset }?.displayName ?: market.amountAssetName
+                        market.priceAssetLongName = it.first.generalAssetIds.firstOrNull { it.assetId == market.priceAsset }?.displayName ?: market.priceAssetName
 
-                market.amountAssetShortName = it.first[market.amountAsset] ?: market.amountAssetName
-                market.priceAssetShortName = it.first[market.priceAsset] ?: market.priceAssetName
+                        market.amountAssetShortName = it.first.generalAssetIds.firstOrNull { it.assetId == market.amountAsset }?.gatewayId ?: market.amountAssetName
+                        market.priceAssetShortName = it.first.generalAssetIds.firstOrNull { it.assetId == market.priceAsset }?.gatewayId ?: market.priceAssetName
 
-                market.popular = isPopularAmountAsset(market) && isPopularPriceAsset(market)
+                        market.popular = isPopularAsset(market.amountAsset, it.first.generalAssetIds) && isPopularAsset(market.priceAsset, it.first.generalAssetIds)
 
-                market.amountAssetDecimals = market.amountAssetInfo.decimals
-                market.priceAssetDecimals = market.priceAssetInfo.decimals
+                        market.amountAssetDecimals = market.amountAssetInfo.decimals
+                        market.priceAssetDecimals = market.priceAssetInfo.decimals
 
-                market.checked = it.third.any { it.id == market.id }
-            }
-            return@map markets.asSequence().sortedByDescending { it.popular }.sortedByDescending { it.popular && (it.amountAsset.isWaves() || it.priceAsset.isWaves()) }.toMutableList()
-        }
+                        market.checked = it.third.any { it.id == market.id }
+                    }
+                    val list = sortByGatewayAssets(it.first.generalAssetIds, it.first.generalAssetIds.lastIndex, it.second).toMutableList()
+                    return@map list
+                }
     }
 
-    private fun isPopularPriceAsset(market: MarketResponse): Boolean {
-        if (market.priceAsset.isWaves()) {
-            return true
+    private fun sortByGatewayAssets(generalAssets: List<GlobalConfiguration.GeneralAssetId>, position: Int, markets: List<MarketResponse>): List<MarketResponse> {
+        if (position < 0) {
+            return markets
         }
-        return Constants.defaultAssets.any { it.assetId == market.priceAsset }
+        val sortedList = markets.sortedByDescending { it.popular && it.amountAsset == generalAssets[position].assetId }
+        return sortByGatewayAssets(generalAssets, position - 1, sortedList)
     }
 
-
-    private fun isPopularAmountAsset(market: MarketResponse): Boolean {
-        if (market.amountAsset.isWaves()) {
+    private fun isPopularAsset(asset: String, generalAssetIds: List<GlobalConfiguration.GeneralAssetId>): Boolean {
+        if (asset.isWaves()) {
             return true
         }
-        return Constants.defaultAssets.any { it.assetId == market.amountAsset }
+        return generalAssetIds.any { it.assetId == asset }
     }
 }
