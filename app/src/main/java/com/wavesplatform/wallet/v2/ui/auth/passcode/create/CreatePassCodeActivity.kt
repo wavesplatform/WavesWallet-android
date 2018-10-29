@@ -105,10 +105,10 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                         }
                     })
         } else if (intent.hasExtra(KEY_INTENT_GUID)) {
+            setResult(RESULT_OK)
             finish()
         } else {
             launchActivity<MainActivity>(clear = true)
-
         }
     }
 

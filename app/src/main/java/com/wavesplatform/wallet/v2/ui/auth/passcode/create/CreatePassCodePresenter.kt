@@ -37,6 +37,7 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
         App.getAccessManager()
                 .writePassCodeObservable(guid, password, passCode)
                 .subscribe({
+                    App.getAccessManager().resetPassCodeInputFails()
                     viewState.onSuccessCreatePassCode(guid, passCode)
                 }, { throwable ->
                     Log.e("CreatePassCodeActivity", throwable.message)

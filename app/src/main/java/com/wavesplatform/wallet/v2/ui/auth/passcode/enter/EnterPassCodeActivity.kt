@@ -17,7 +17,6 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.U
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
-import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.showError
@@ -97,6 +96,14 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val fails = App.getAccessManager().getPassCodeInputFails()
+        if (fails > 4) {
+            startUsePasswordScreen()
+        }
+    }
+
     private fun clearAndLogout() {
         App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
@@ -130,7 +137,6 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     }
 
     override fun onSuccessValidatePassCode(password: String, passCode: String) {
-        App.getAccessManager().resetPassCodeInputFails()
         showProgressBar(false)
 
         val data = Intent()
