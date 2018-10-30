@@ -4,6 +4,8 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R.id.result
+import com.wavesplatform.wallet.R.string.asset
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -24,6 +26,10 @@ import javax.inject.Singleton
 class MatcherDataManager @Inject constructor() : BaseDataManager() {
     var allMarketsList = mutableListOf<MarketResponse>()
 
+    companion object {
+        var OTHER_GROUP = "other"
+    }
+
     fun loadReservedBalances(): Observable<Map<String, Long>> {
         val timestamp = currentTimeMillis
         var signature = ""
@@ -37,29 +43,50 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
         if (allMarketsList.isEmpty()) {
-            return Observable.zip(apiService.loadGlobalConfigurate(),
+            return Observable.zip(apiService.loadGlobalConfiguration()
+                    .map {
+                        return@map it.generalAssetIds.associateBy { it.assetId }
+                    },
                     matcherService.getAllMarkets()
                             .map { it.markets },
-                    BiFunction { configure: GlobalConfiguration, apiMarkets: List<MarketResponse> ->
+                    BiFunction { configure: Map<String, GlobalConfiguration.GeneralAssetId>, apiMarkets: List<MarketResponse> ->
                         return@BiFunction Pair(configure, apiMarkets)
                     })
                     .flatMap {
+                        // configure hash groups
+                        val hashGroup = linkedMapOf<String, MutableList<MarketResponse>>()
+
+                        it.first.keys.forEach {
+                            hashGroup[it] = mutableListOf()
+                        }
+                        hashGroup[OTHER_GROUP] = mutableListOf()
+
+                        // fill information and sort by group
                         it.second.forEach { market ->
                             market.id = market.amountAsset + market.priceAsset
 
-                            market.amountAssetLongName = it.first.generalAssetIds.firstOrNull { it.assetId == market.amountAsset }?.displayName ?: market.amountAssetName
-                            market.priceAssetLongName = it.first.generalAssetIds.firstOrNull { it.assetId == market.priceAsset }?.displayName ?: market.priceAssetName
+                            market.amountAssetLongName = it.first[market.amountAsset]?.displayName ?: market.amountAssetName
+                            market.priceAssetLongName = it.first[market.priceAsset]?.displayName ?: market.priceAssetName
 
-                            market.amountAssetShortName = it.first.generalAssetIds.firstOrNull { it.assetId == market.amountAsset }?.gatewayId ?: market.amountAssetName
-                            market.priceAssetShortName = it.first.generalAssetIds.firstOrNull { it.assetId == market.priceAsset }?.gatewayId ?: market.priceAssetName
+                            market.amountAssetShortName = it.first[market.amountAsset]?.gatewayId ?: market.amountAssetName
+                            market.priceAssetShortName = it.first[market.priceAsset]?.gatewayId ?: market.priceAssetName
 
-                            market.popular = isPopularAsset(market.amountAsset, it.first.generalAssetIds) && isPopularAsset(market.priceAsset, it.first.generalAssetIds)
+                            market.popular = it.first[market.amountAsset] != null && it.first[market.priceAsset] != null
 
                             market.amountAssetDecimals = market.amountAssetInfo.decimals
                             market.priceAssetDecimals = market.priceAssetInfo.decimals
+
+                            val group = hashGroup[market.amountAsset]
+                            if (group != null) {
+                                group.add(market)
+                            } else {
+                                hashGroup[OTHER_GROUP]?.add(market)
+                            }
                         }
 
-                        allMarketsList = sortByGatewayAssets(it.first.generalAssetIds, it.first.generalAssetIds.lastIndex, it.second).toMutableList()
+                        hashGroup.values.forEach {
+                            allMarketsList.addAll(it)
+                        }
 
                         return@flatMap filterMarketsBySpamAndSelect(allMarketsList)
                     }
@@ -92,20 +119,5 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
             return@Function3 filteredSpamList
         })
-    }
-
-    private fun sortByGatewayAssets(generalAssets: List<GlobalConfiguration.GeneralAssetId>, position: Int, markets: List<MarketResponse>): List<MarketResponse> {
-        if (position < 0) {
-            return markets
-        }
-        val sortedList = markets.sortedByDescending { it.popular && it.amountAsset == generalAssets[position].assetId }
-        return sortByGatewayAssets(generalAssets, position - 1, sortedList)
-    }
-
-    private fun isPopularAsset(asset: String, generalAssetIds: List<GlobalConfiguration.GeneralAssetId>): Boolean {
-        if (asset.isWaves()) {
-            return true
-        }
-        return generalAssetIds.any { it.assetId == asset }
     }
 }

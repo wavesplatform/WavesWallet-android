@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                app:srcCompat="@drawable/ic_chartarrow_success_400" />
+                app:srcCompat="@drawable/ic_chartarrow_accent_100" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -68,13 +68,14 @@
                         app:srcCompat="@drawable/ic_verified_multy" />
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
                         app:fontFamily="@font/roboto_bold"
-                        android:text="0.000769330"
+                        android:text="0.0"
                         android:textColor="@color/disabled500"
                         android:textSize="12sp" />
                 </RelativeLayout>
@@ -86,12 +87,12 @@
                     android:orientation="horizontal">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_asset_value"
+                        android:id="@+id/text_percent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/roboto"
-                        android:text="+ 24.14%"
+                        android:text="0%"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
 

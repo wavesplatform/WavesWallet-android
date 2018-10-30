@@ -6,6 +6,7 @@ import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketInformationBottomSheetFragment
@@ -36,7 +37,7 @@ class TradeActivity : BaseActivity(), TradeView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view,  true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
+        setupToolbar(toolbar_view, true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
 
         viewpageer_trade.adapter = TradeFragmentPageAdapter(supportFragmentManager, arrayOf(getString(R.string.dex_trade_tab_orderbook), getString(R.string.dex_trade_tab_chart),
                 getString(R.string.dex_trade_tab_last_trades), getString(R.string.dex_trade_tab_my_orders)))
@@ -45,9 +46,9 @@ class TradeActivity : BaseActivity(), TradeView {
     }
 
     private fun getToolbarTitle(): String {
-        val market = intent.getParcelableExtra<MarketResponse>(BUNDLE_MARKET)
+        val market = intent.getParcelableExtra<WatchMarket>(BUNDLE_MARKET)
         presenter.market = market
-        return "${market.amountAssetName} / ${market.priceAssetName}"
+        return "${market.market.amountAssetName} / ${market.market.priceAssetName}"
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -55,7 +56,7 @@ class TradeActivity : BaseActivity(), TradeView {
             R.id.action_info -> {
                 presenter.market.notNull {
                     val infoDialog = DexMarketInformationBottomSheetFragment()
-                    infoDialog.withMarketInformation(it)
+                    infoDialog.withMarketInformation(it.market)
                     infoDialog.show(supportFragmentManager, infoDialog::class.java.simpleName)
                 }
                 return true

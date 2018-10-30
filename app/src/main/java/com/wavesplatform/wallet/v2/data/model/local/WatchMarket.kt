@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.wavesplatform.wallet.v1.payload.TickerMarket
 import com.wavesplatform.wallet.v1.payload.TradesMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
+import com.wavesplatform.wallet.v2.data.model.remote.response.PairResponse
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -11,4 +12,4 @@ import kotlinx.android.parcel.Parcelize
  */
 
 @Parcelize
-class WatchMarket(var market: MarketResponse, var tickerMarket: TickerMarket? = null, var tradesMarket: TradesMarket? = null) : Parcelable
+class WatchMarket(var market: MarketResponse, var pairResponse: PairResponse? = null) : Parcelable

@@ -6,11 +6,14 @@ import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
+import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 @InjectViewState
 class DexPresenter @Inject constructor() : BasePresenter<DexView>() {
+
+    var pairSubscriptions = CompositeDisposable()
 
     fun loadActiveMarkets() {
         runAsync {
@@ -26,6 +29,20 @@ class DexPresenter @Inject constructor() : BasePresenter<DexView>() {
                     }))
         }
 
+    }
+
+    fun loadDexPairInfo(watchMarket: WatchMarket, index: Int) {
+        pairSubscriptions.add(apiDataManager.loadDexPairInfo(watchMarket)
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({
+                    viewState.afterSuccessLoadPairInfo(it, index)
+                }, {
+                    it.printStackTrace()
+                }))
+    }
+
+    fun clearOldPairsSubsciptions(){
+        pairSubscriptions.clear()
     }
 
 }

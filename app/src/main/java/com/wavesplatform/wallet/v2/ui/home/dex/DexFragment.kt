@@ -15,13 +15,11 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.REQUEST_ASSET_DETAILS
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.empty_dex_layout.view.*
 import kotlinx.android.synthetic.main.fragment_dex_new.*
@@ -29,8 +27,8 @@ import pers.victor.ext.click
 import pers.victor.ext.inflate
 import javax.inject.Inject
 
-class DexFragment : BaseFragment(), DexView {
 
+class DexFragment : BaseFragment(), DexView {
     @Inject
     @InjectPresenter
     lateinit var presenter: DexPresenter
@@ -103,6 +101,8 @@ class DexFragment : BaseFragment(), DexView {
     }
 
     override fun afterSuccessLoadMarkets(list: ArrayList<WatchMarket>) {
+        presenter.clearOldPairsSubsciptions()
+
         adapter.setNewData(list)
         adapter.emptyView = getEmptyView()
         if (list.isEmpty()) {
@@ -111,7 +111,15 @@ class DexFragment : BaseFragment(), DexView {
         } else {
             menu?.findItem(R.id.action_sorting)?.isVisible = true
             adapter.setHeaderView(getHeaderView())
+
+            list.forEachIndexed { index, watchMarket ->
+                presenter.loadDexPairInfo(watchMarket, index)
+            }
         }
+    }
+
+    override fun afterSuccessLoadPairInfo(watchMarket: WatchMarket, index: Int) {
+        adapter.setData(index, watchMarket)
     }
 
     private fun getHeaderView(): View? {

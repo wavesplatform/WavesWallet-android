@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.markets
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager

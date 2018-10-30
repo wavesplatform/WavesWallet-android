@@ -6,6 +6,8 @@ import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
+import pers.victor.ext.currentTimeMillis
+import pers.victor.ext.toast
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
@@ -14,10 +16,13 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
     var needToUpdate: Boolean = false
 
     fun getMarkets() {
+        var before = currentTimeMillis
+
         runAsync {
             addSubscription(matcherDataManager.getAllMarkets()
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
+                        toast("${((currentTimeMillis-before)/1000)} секунд")
                         viewState.afterSuccessGetMarkets(it)
                     }, {
                         it.printStackTrace()

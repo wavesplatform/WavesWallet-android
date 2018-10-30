@@ -5,10 +5,12 @@ import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,6 +27,19 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                     aliases.saveAll()
                     return@map aliases
                 }
+    }
+
+    fun loadDexPairInfo(watchMarket: WatchMarket): Observable<WatchMarket> {
+        return Observable.interval(0, 5, TimeUnit.SECONDS)
+                .retry(3)
+                .flatMap {
+                    apiService.loadDexPairInfo(watchMarket.market.amountAsset, watchMarket.market.priceAsset)
+                            .map {
+                                watchMarket.pairResponse = it
+                                return@map watchMarket
+                            }
+                }
+                .onErrorResumeNext(Observable.empty())
     }
 
     fun loadAlias(alias: String): Observable<Alias> {
