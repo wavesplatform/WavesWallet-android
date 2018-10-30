@@ -4,8 +4,6 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R.id.result
-import com.wavesplatform.wallet.R.string.asset
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -13,7 +11,6 @@ import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
-import com.wavesplatform.wallet.v2.util.isWaves
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction

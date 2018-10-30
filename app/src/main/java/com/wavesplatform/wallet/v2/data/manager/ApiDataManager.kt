@@ -30,7 +30,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadDexPairInfo(watchMarket: WatchMarket): Observable<WatchMarket> {
-        return Observable.interval(0, 5, TimeUnit.SECONDS)
+        return Observable.interval(0, 30, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap {
                     apiService.loadDexPairInfo(watchMarket.market.amountAsset, watchMarket.market.priceAsset)

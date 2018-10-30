@@ -41,7 +41,7 @@ class DexPresenter @Inject constructor() : BasePresenter<DexView>() {
                 }))
     }
 
-    fun clearOldPairsSubsciptions(){
+    fun clearOldPairsSubscriptions(){
         pairSubscriptions.clear()
     }
 

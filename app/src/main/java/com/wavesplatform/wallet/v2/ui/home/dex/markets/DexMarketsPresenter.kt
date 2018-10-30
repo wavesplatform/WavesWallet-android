@@ -16,13 +16,10 @@ class DexMarketsPresenter @Inject constructor() : BasePresenter<DexMarketsView>(
     var needToUpdate: Boolean = false
 
     fun getMarkets() {
-        var before = currentTimeMillis
-
         runAsync {
             addSubscription(matcherDataManager.getAllMarkets()
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
-                        toast("${((currentTimeMillis-before)/1000)} секунд")
                         viewState.afterSuccessGetMarkets(it)
                     }, {
                         it.printStackTrace()

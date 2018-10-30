@@ -55,10 +55,36 @@ class DexFragment : BaseFragment(), DexView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        swipe_container.setColorSchemeResources(R.color.submit400)
 
-        recycle_dex.layoutManager = LinearLayoutManager(baseActivity)
+        val linearLayoutManager = LinearLayoutManager(baseActivity)
+
+        recycle_dex.layoutManager = linearLayoutManager
         recycle_dex.adapter = adapter
 
+        swipe_container.setOnRefreshListener {
+            presenter.clearOldPairsSubscriptions()
+
+            adapter.data.forEachIndexed { index, watchMarket ->
+                presenter.loadDexPairInfo(watchMarket, index)
+            }
+        }
+
+//        recycle_dex.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
+//                    val visibleItems = adapter.data.subList(firstVisibleItemPosition, linearLayoutManager.findLastVisibleItemPosition())
+//                    visibleItems.forEachIndexed { index, watchMarket ->
+//                        presenter.loadDexPairInfo(watchMarket, index + firstVisibleItemPosition)
+//                    }
+//                } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+//                    presenter.clearOldPairsSubscriptions()
+//                }
+//                super.onScrollStateChanged(recyclerView, newState)
+//
+//            }
+//        })
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.ScrollToTopEvent::class.java)
                 .subscribe {
@@ -78,12 +104,14 @@ class DexFragment : BaseFragment(), DexView {
                 onElevationAppBarChangeListener?.onChange(!recycle_dex.canScrollVertically(-1))
             }
         })
+
+        presenter.loadActiveMarkets()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_dex, menu)
         this.menu = menu
-        presenter.loadActiveMarkets()
+        menu.findItem(R.id.action_sorting)?.isVisible = !adapter.data.isEmpty()
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -101,7 +129,8 @@ class DexFragment : BaseFragment(), DexView {
     }
 
     override fun afterSuccessLoadMarkets(list: ArrayList<WatchMarket>) {
-        presenter.clearOldPairsSubsciptions()
+        swipe_container.isRefreshing = false
+        presenter.clearOldPairsSubscriptions()
 
         adapter.setNewData(list)
         adapter.emptyView = getEmptyView()
@@ -118,7 +147,10 @@ class DexFragment : BaseFragment(), DexView {
         }
     }
 
+
     override fun afterSuccessLoadPairInfo(watchMarket: WatchMarket, index: Int) {
+        swipe_container.isRefreshing = false
+
         adapter.setData(index, watchMarket)
     }
 
@@ -153,5 +185,10 @@ class DexFragment : BaseFragment(), DexView {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 }
