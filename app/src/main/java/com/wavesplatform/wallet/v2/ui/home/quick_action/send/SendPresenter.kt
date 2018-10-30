@@ -100,9 +100,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     > TransferTransactionRequest.MaxAttachmentSize) {
                 return R.string.attachment_too_long
             } else
-                if (tx.amount <= 0) {
-                    return R.string.invalid_amount
-                } else if (tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
+                if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
                     return R.string.invalid_amount
                 } else if (tx.fee <= 0 || tx.fee < TransferTransactionRequest.MinFee) {
                     return R.string.insufficient_fee
@@ -110,6 +108,10 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     return R.string.send_to_same_address_warning
                 } else if (!isFundSufficient(tx)) {
                     return R.string.insufficient_funds
+                } else if (Constants.MONERO_ASSET_ID == recipientAssetId &&
+                        moneroPaymentId != null &&
+                        moneroPaymentId!!.length < MONERO_PAYMENT_ID_LENGTH) {
+                    return R.string.invalid_monero_payment_id
                 }
         }
         return 0
@@ -188,6 +190,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     companion object {
         const val LANG: String = "ru_RU"
+        const val MONERO_PAYMENT_ID_LENGTH = 64
         private val feeAsset: AssetBalance = AssetBalance(
                 quantity = 100000000L * 100000000L,
                 issueTransaction = IssueTransaction(
@@ -196,12 +199,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         fun getAssetId(recipient: String?): String? {
             return when {
                 recipient!!.matches("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
-                    Constants.WAVES_ASSET_ID
+                    Constants.BITCOIN_ASSET_ID
                 recipient.matches("^0x[0-9a-f]{40}$".toRegex()) ->
                     Constants.ETHEREUM_ASSET_ID
                 recipient.matches("^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$".toRegex()) ->
                     Constants.LIGHTCOIN_ASSET_ID
-                recipient.matches("^t[0-9a-z]{34}$".toRegex()) ->
+                recipient.matches("^t1[a-zA-Z0-9]{33}$".toRegex()) ->
                     Constants.ZEC_ASSET_ID
                 recipient.matches("^([13][a-km-zA-HJ-NP-Z1-9]{25,34}|[qp][a-zA-Z0-9]{41})$".toRegex()) ->
                     Constants.BITCOINCASH_ASSET_ID

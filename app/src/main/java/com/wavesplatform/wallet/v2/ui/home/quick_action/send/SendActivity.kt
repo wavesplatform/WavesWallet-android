@@ -247,6 +247,7 @@ class SendActivity : BaseActivity(), SendView {
                         presenter.type = SendPresenter.Type.UNKNOWN
                         setRecipientValid(null)
                         relative_gateway_fee.gone()
+                        monero_layout.gone()
                     } else {
                         checkMonero(presenter.recipientAssetId)
                         loadGatewayXRate(presenter.recipientAssetId!!)
@@ -262,6 +263,7 @@ class SendActivity : BaseActivity(), SendView {
             image_view_recipient_action.tag = R.drawable.ic_qrcode_24_basic_500
             horizontal_recipient_suggestion.visiable()
             relative_gateway_fee.gone()
+            monero_layout.gone()
         }
     }
 

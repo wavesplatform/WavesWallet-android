@@ -130,6 +130,7 @@
     <string name="invalid_address">Invalid address</string>
     <string name="invalid_amount">Invalid amount</string>
     <string name="insufficient_funds">Insufficient funds</string>
+    <string name="invalid_monero_payment_id">Invalid Payment ID</string>
     <string name="attachment_too_long">Attachment is too long</string>
 
     <string name="enter_double_encryption_pw">Please enter double encryption password</string>
