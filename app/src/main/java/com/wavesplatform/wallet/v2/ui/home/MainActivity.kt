@@ -29,6 +29,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
+import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeLinks
 import com.wavesplatform.wallet.v2.util.notNull
@@ -80,7 +81,16 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     override fun onResume() {
         super.onResume()
+        checkAuth()
         showBackUpSeedWarning()
+    }
+
+    private fun checkAuth() {
+        if (App.getAccessManager().getWallet() == null) {
+            launchActivity<SplashActivity>(clear = true) {
+                putExtra(SplashActivity.EXIT, true)
+            }
+        }
     }
 
     private fun showFirstOpenAlert(firstOpen: Boolean) {

@@ -18,24 +18,25 @@ class EnterPassCodePresenter @Inject constructor() : BasePresenter<EnterPasscode
         App.getAccessManager()
                 .validatePassCodeObservable(guid, passCode)
                 .subscribe({ password ->
-                    App.getAccessManager().resetPassCodeInputFails()
+                    App.getAccessManager().resetPassCodeInputFails(guid)
                     viewState.onSuccessValidatePassCode(password, passCode)
                 }, { error ->
                     if (error !is IncorrectPinException) {
                         Log.e(javaClass.simpleName, "Failed to validate pin", error)
                     } else {
-                        App.getAccessManager().incrementPassCodeInputFails()
+                        App.getAccessManager().incrementPassCodeInputFails(guid)
                     }
-                    viewState.onFailValidatePassCode(overMaxWrongPassCodes(), error.message)
+                    viewState.onFailValidatePassCode(overMaxWrongPassCodes(guid), error.message)
                 })
     }
 
-    private fun overMaxWrongPassCodes(): Boolean {
-        return App.getAccessManager()
-                .getPassCodeInputFails() >= MAX_AVAILABLE_TIMES
-    }
+
 
     companion object {
-        const val MAX_AVAILABLE_TIMES = 5
+        private const val MAX_AVAILABLE_TIMES = 5
+
+        fun overMaxWrongPassCodes(guid: String): Boolean {
+            return App.getAccessManager().getPassCodeInputFails(guid) >= MAX_AVAILABLE_TIMES
+        }
     }
 }

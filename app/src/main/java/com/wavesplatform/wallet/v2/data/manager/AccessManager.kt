@@ -5,10 +5,7 @@ import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
 import com.vicpin.krealmextensions.RealmConfigStore
-import com.vicpin.krealmextensions.deleteAll
-import com.vicpin.krealmextensions.executeTransaction
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R.color.e
 import com.wavesplatform.wallet.v1.crypto.AESUtil
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
@@ -18,7 +15,6 @@ import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
@@ -26,7 +22,6 @@ import com.wavesplatform.wallet.v2.util.deleteRecursive
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.exceptions.Exceptions
-import io.realm.Realm
 import org.apache.commons.io.Charsets
 import org.spongycastle.util.encoders.Hex
 import pers.victor.ext.app
@@ -40,11 +35,10 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
     private val pinStore = PinStoreService()
     private var loggedInGuid: String = ""
     private var wallet: WavesWallet? = null
-    private var activityCounter = 0
 
     fun validatePassCodeObservable(guid: String, passCode: String): Observable<String> {
         return readPassCodeObservable(
-                guid, passCode, App.getAccessManager().getPassCodeInputFails())
+                guid, passCode, App.getAccessManager().getPassCodeInputFails(guid))
                 .flatMap { password ->
                     writePassCodeObservable(guid, password, passCode)
                             .andThen(Observable.just<String>(password))
@@ -320,17 +314,23 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, encryptedPassword)
     }
 
-    fun incrementPassCodeInputFails() {
-        var fails = prefs.getValue(PrefsUtil.KEY_PIN_FAILS, 0)
-        prefs.setValue(PrefsUtil.KEY_PIN_FAILS, ++fails)
+    fun incrementPassCodeInputFails(guid: String) {
+        if (!TextUtils.isEmpty(guid)) {
+            prefs.setValue(guid, PrefsUtil.KEY_PIN_FAILS, getPassCodeInputFails(guid) + 1)
+        }
     }
 
-    fun getPassCodeInputFails(): Int {
-        return prefs.getValue(PrefsUtil.KEY_PIN_FAILS, 0)
+    fun getPassCodeInputFails(guid: String): Int {
+        if (!TextUtils.isEmpty(guid)) {
+            return prefs.getValue(guid, PrefsUtil.KEY_PIN_FAILS, 0)
+        }
+        return 0
     }
 
-    fun resetPassCodeInputFails() {
-        prefs.removeValue(PrefsUtil.KEY_PIN_FAILS)
+    fun resetPassCodeInputFails(guid: String) {
+        if (!TextUtils.isEmpty(guid)) {
+            prefs.removeValue(guid, PrefsUtil.KEY_PIN_FAILS)
+        }
     }
 
     fun setCurrentAccountBackupDone() {
