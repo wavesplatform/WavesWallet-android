@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.v1.crypto.CryptoProvider
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
+import com.wavesplatform.wallet.v2.data.model.remote.request.CancelOrderRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
@@ -49,6 +50,24 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
             signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
         }
         return matcherService.getMyOrders(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getPublicKeyStr(), signature, timestamp)
+    }
+
+    fun cancelOrder(orderId: String?, watchMarket: WatchMarket?, cancelOrderRequest: CancelOrderRequest): Observable<Any> {
+        cancelOrderRequest.sender = getPublicKeyStr()
+        cancelOrderRequest.orderId = orderId
+        App.getAccessManager().getWallet()?.privateKey.notNull {
+            cancelOrderRequest.sign(it)
+        }
+        return matcherService.cancelOrder(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, cancelOrderRequest)
+    }
+
+    fun deleteOrder(orderId: String?, watchMarket: WatchMarket?, cancelOrderRequest: CancelOrderRequest): Observable<Any> {
+        cancelOrderRequest.sender = getPublicKeyStr()
+        cancelOrderRequest.orderId = orderId
+        App.getAccessManager().getWallet()?.privateKey.notNull {
+            cancelOrderRequest.sign(it)
+        }
+        return matcherService.deleteOrder(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, cancelOrderRequest)
     }
 
 

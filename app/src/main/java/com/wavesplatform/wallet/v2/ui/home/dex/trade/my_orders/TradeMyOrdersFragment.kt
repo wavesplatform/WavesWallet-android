@@ -2,20 +2,28 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderItem
+import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_trade_my_orders.*
 import kotlinx.android.synthetic.main.layout_empty_data.*
+import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import pers.victor.ext.gone
+import pers.victor.ext.inflate
+import pers.victor.ext.visiable
 import javax.inject.Inject
 
 
 class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
+
     @Inject
     @InjectPresenter
     lateinit var presenter: TradeMyOrdersPresenter
@@ -43,22 +51,53 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
 
-        text_empty.text = getString(R.string.my_orders_empty)
-
         recycle_my_orders.layoutManager = LinearLayoutManager(baseActivity)
         presenter.watchMarket?.market.notNull {
             adapter.market = it
         }
+
         adapter.bindToRecyclerView(recycle_my_orders)
+        adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+            val item = this.adapter.getItem(position)
+            when (view.id) {
+                R.id.image_delete -> {
+                    if (item?.t?.getStatus() == OrderStatus.Accepted || item?.t?.getStatus() == OrderStatus.PartiallyFilled) presenter.cancelOrder(item.t.id)
+                    else presenter.deleteOrder(item?.t?.id, position)
+                }
+            }
+        }
 
         presenter.loadMyOrders()
     }
 
     override fun afterSuccessMyOrders(data: ArrayList<MyOrderItem>) {
         adapter.setNewData(data)
+        adapter.emptyView = getEmptyView()
+    }
+
+    private fun getEmptyView(): View {
+        val view = inflate(R.layout.layout_empty_data)
+        view.text_empty.text = getString(R.string.my_orders_empty)
+        return view
     }
 
     override fun afterFailedMyOrders() {
+
+    }
+
+    override fun afterSuccessCancelOrder() {
+        presenter.loadMyOrders()
+    }
+
+    override fun afterSuccessDeleteOrder(position: Int) {
+        val item = adapter.getItem(position)
+        val count = adapter.data.filter { !it.isHeader }.count { it.t.sectionTimestamp == item?.t?.sectionTimestamp }
+        if (count == 1) {
+            adapter.remove(position) // remove item
+            adapter.remove(position - 1) // remove header for last item
+        } else {
+            adapter.remove(position) // remove item
+        }
 
     }
 

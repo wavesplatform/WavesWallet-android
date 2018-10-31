@@ -13,8 +13,9 @@ import javax.inject.Inject
 class TradeMyOrdersAdapter @Inject constructor() : BaseSectionQuickAdapter<MyOrderItem, BaseViewHolder>(R.layout.recycle_item_my_orders, R.layout.header_my_orders, null) {
     var market: MarketResponse = MarketResponse()
 
-    override fun convertHead(helper: BaseViewHolder?, item: MyOrderItem?) {
-        helper?.setText(R.id.text_header_text, item?.header)
+    override fun convertHead(helper: BaseViewHolder, item: MyOrderItem) {
+        helper.setText(R.id.text_header_text, item.header)
+                .setGone(R.id.view_top_divider, helper.adapterPosition != 0)
     }
 
     override fun convert(helper: BaseViewHolder, item: MyOrderItem) {

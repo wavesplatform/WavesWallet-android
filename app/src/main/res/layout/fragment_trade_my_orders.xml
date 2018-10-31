@@ -33,12 +33,6 @@
 
         </RelativeLayout>
 
-
-        <include
-            android:visibility="gone"
-            android:id="@+id/layout_empty"
-            layout="@layout/layout_empty_data"/>
-
     </android.support.v7.widget.CardView>
 
 

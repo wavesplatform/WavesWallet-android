@@ -21,6 +21,8 @@ class OrderResponse {
     private val status: String = ""
     @SerializedName("assetPair")
     var assetPair: AssetPair? = null
+    @SerializedName("sectionTimestamp")
+    var sectionTimestamp: Long = 0
 
     class AssetPair {
         @SerializedName("amountAsset")

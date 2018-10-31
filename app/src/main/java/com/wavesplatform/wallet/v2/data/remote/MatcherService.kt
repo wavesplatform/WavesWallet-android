@@ -3,8 +3,8 @@ package com.wavesplatform.wallet.v2.data.remote
 import com.google.gson.internal.LinkedTreeMap
 import com.wavesplatform.wallet.v1.payload.MyOrder
 import com.wavesplatform.wallet.v1.payload.OrderBook
-import com.wavesplatform.wallet.v1.request.CancelOrderRequest
 import com.wavesplatform.wallet.v1.request.OrderRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.CancelOrderRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.Markets
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
 import io.reactivex.Observable
@@ -38,20 +38,19 @@ interface MatcherService {
                              @Header("signature") signature: String?,
                              @Header("timestamp") timestamp: Long): Observable<List<OrderResponse>>
 
+    @POST("matcher/orderbook/{amountAsset}/{priceAsset}/cancel")
+    fun cancelOrder(@Path("amountAsset") amountAsset: String?,
+                    @Path("priceAsset") priceAsset: String?,
+                    @Body cancelOrderRequest: CancelOrderRequest?): Observable<Any>
+
+    @POST("matcher/orderbook/{amountAsset}/{priceAsset}/delete")
+    fun deleteOrder(@Path("amountAsset") amountAsset: String?,
+                    @Path("priceAsset") priceAsset: String?,
+                    @Body cancelOrderRequest: CancelOrderRequest): Observable<Any>
+
     @GET("matcher")
     fun getMatcherKey(): Observable<String>
 
     @POST("matcher/orderbook")
     fun placeOrder(@Body orderRequest: OrderRequest): Observable<Any>
-
-    @POST("matcher/orderbook/{amountAsset}/{priceAsset}/cancel")
-    fun cancelOrder(@Path("amountAsset") amountAsset: String,
-                             @Path("priceAsset") priceAsset: String,
-                             @Body cancelOrderRequest: CancelOrderRequest): Observable<Any>
-
-
-    @POST("matcher/orderbook/{amountAsset}/{priceAsset}/delete")
-    fun deleteOrder(@Path("amountAsset") amountAsset: String,
-                             @Path("priceAsset") priceAsset: String,
-                             @Body cancelOrderRequest: CancelOrderRequest): Observable<Any>
 }

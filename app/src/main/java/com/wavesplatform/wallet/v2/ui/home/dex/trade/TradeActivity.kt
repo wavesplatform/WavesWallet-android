@@ -42,6 +42,7 @@ class TradeActivity : BaseActivity(), TradeView {
 
         viewpageer_trade.adapter = TradeFragmentPageAdapter(supportFragmentManager, arrayOf(getString(R.string.dex_trade_tab_orderbook), getString(R.string.dex_trade_tab_chart),
                 getString(R.string.dex_trade_tab_last_trades), getString(R.string.dex_trade_tab_my_orders)), presenter.watchMarket)
+        viewpageer_trade.offscreenPageLimit = 4
         stl_trade.setViewPager(viewpageer_trade)
         stl_trade.currentTab = 0
     }
