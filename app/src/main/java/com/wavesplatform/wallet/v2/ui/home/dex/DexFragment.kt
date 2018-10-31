@@ -12,6 +12,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
@@ -20,15 +21,19 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
+import com.wavesplatform.wallet.v2.util.currentDateAsTimeSpanString
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.empty_dex_layout.view.*
 import kotlinx.android.synthetic.main.fragment_dex_new.*
+import kotlinx.android.synthetic.main.header_dex_layout.view.*
 import pers.victor.ext.click
 import pers.victor.ext.inflate
+import java.util.*
 import javax.inject.Inject
 
 
 class DexFragment : BaseFragment(), DexView {
+
     @Inject
     @InjectPresenter
     lateinit var presenter: DexPresenter
@@ -65,11 +70,16 @@ class DexFragment : BaseFragment(), DexView {
         swipe_container.setOnRefreshListener {
             presenter.clearOldPairsSubscriptions()
 
-            adapter.data.forEachIndexed { index, watchMarket ->
-                presenter.loadDexPairInfo(watchMarket, index)
+            if (adapter.data.isNotEmpty()) {
+                adapter.data.forEachIndexed { index, watchMarket ->
+                    presenter.loadDexPairInfo(watchMarket, index)
+                }
+            } else {
+                swipe_container.isRefreshing = false
             }
         }
 
+        // TODO: rewrite logic for request only for visible items
 //        recycle_dex.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 //            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
 //                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
@@ -141,6 +151,7 @@ class DexFragment : BaseFragment(), DexView {
             menu?.findItem(R.id.action_sorting)?.isVisible = true
             adapter.setHeaderView(getHeaderView())
 
+            // TODO: rewrite logic for request only for visible items
             list.forEachIndexed { index, watchMarket ->
                 presenter.loadDexPairInfo(watchMarket, index)
             }
@@ -149,13 +160,17 @@ class DexFragment : BaseFragment(), DexView {
 
 
     override fun afterSuccessLoadPairInfo(watchMarket: WatchMarket, index: Int) {
+        adapter.headerLayout?.text_last_update?.text = presenter.prefsUtil.getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L).currentDateAsTimeSpanString()
+
         swipe_container.isRefreshing = false
 
         adapter.setData(index, watchMarket)
     }
 
     private fun getHeaderView(): View? {
-        return inflate(R.layout.header_dex_layout)
+        val view = inflate(R.layout.header_dex_layout)
+        view.text_last_update.text = presenter.prefsUtil.getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L).currentDateAsTimeSpanString()
+        return view
     }
 
     private fun getEmptyView(): View {
@@ -187,8 +202,17 @@ class DexFragment : BaseFragment(), DexView {
         }
     }
 
+    override fun afterFailedLoadPairInfo() {
+        swipe_container.isRefreshing = false
+    }
+
     override fun onResume() {
         super.onResume()
+
+    }
+
+    override fun onPause() {
+        super.onPause()
 
     }
 }

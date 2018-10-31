@@ -24,6 +24,7 @@ import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatImageView
 import android.text.*
+import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
@@ -49,10 +50,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import pers.victor.ext.activityManager
-import pers.victor.ext.app
-import pers.victor.ext.clipboardManager
-import pers.victor.ext.findColor
+import pers.victor.ext.*
+import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
@@ -76,6 +75,22 @@ fun Context.isMyServiceRunning(serviceClass: Class<*>): Boolean {
         }
     }
     return false
+}
+
+fun Long.currentDateAsTimeSpanString(): String {
+    val currentTime = this
+
+    if (currentTime == 0L) {
+        return app.getString(R.string.dex_last_update_value, app.getString(R.string.dex_last_update_not_known))
+    }
+
+    // get current date as string
+    val timeDayRelative = DateUtils.getRelativeTimeSpanString(currentTime, currentTime, DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_ABBREV_RELATIVE)
+
+    // get hour in 24 hour time
+    val timeHour = currentTime.asDateString("HH:mm")
+
+    return app.getString(R.string.dex_last_update_value, "$timeDayRelative, $timeHour")
 }
 
 fun String.isWaves(): Boolean {

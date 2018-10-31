@@ -37,6 +37,7 @@ class DexPresenter @Inject constructor() : BasePresenter<DexView>() {
                 .subscribe({
                     viewState.afterSuccessLoadPairInfo(it, index)
                 }, {
+                    viewState.afterFailedLoadPairInfo()
                     it.printStackTrace()
                 }))
     }

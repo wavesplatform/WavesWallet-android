@@ -332,7 +332,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
             val now = System.currentTimeMillis()
             if (now > lastTime + MIN_15) {
-                val snackBar = Snackbar.make(root!!.findViewById(R.id.root_scrollView), "",
+                val snackBar = Snackbar.make(root, "",
                         Snackbar.LENGTH_INDEFINITE)
                 val layout = snackBar.view as Snackbar.SnackbarLayout
                 layout.removeAllViews()

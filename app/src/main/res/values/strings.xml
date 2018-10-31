@@ -855,6 +855,8 @@
 
     <!-- DEX -->
     <string name="dex_toolbar_title">DEX</string>
+    <string name="dex_last_update_value">Last update: %s</string>
+    <string name="dex_last_update_not_known">not known</string>
     <string name="dex_empty_title">Decentralised Exchange</string>
     <string name="dex_empty_subtitle">Trade quickly and securely. You retain complete control over your funds when trading them on our decentralised exchange.</string>
     <string name="dex_empty_button_text">Add Markets</string>

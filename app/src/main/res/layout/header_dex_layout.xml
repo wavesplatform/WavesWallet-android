@@ -13,7 +13,7 @@
         android:layout_marginRight="16dp"
         android:background="@drawable/shape_basic100"
         android:padding="8dp"
-        android:text="Last update: today, 00:00"
+        android:text="@string/dex_last_update_value"
         android:textColor="@color/basic500" />
 
 </FrameLayout>
