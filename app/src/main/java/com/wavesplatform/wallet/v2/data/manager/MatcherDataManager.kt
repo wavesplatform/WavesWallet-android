@@ -8,8 +8,10 @@ import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
+import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
@@ -37,6 +39,18 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         }
         return matcherService.loadReservedBalances(getPublicKeyStr(), timestamp, signature)
     }
+
+    fun loadMyOrders(watchMarket: WatchMarket?): Observable<List<OrderResponse>> {
+        val timestamp = currentTimeMillis
+        var signature = ""
+        App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
+            val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()),
+                    Longs.toByteArray(timestamp))
+            signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
+        }
+        return matcherService.getMyOrders(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getPublicKeyStr(), signature, timestamp)
+    }
+
 
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
         if (allMarketsList.isEmpty()) {

@@ -9,14 +9,13 @@ import com.wavesplatform.wallet.v2.data.model.local.MyOrderItem
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
-import com.wavesplatform.wallet.v2.ui.home.dex.trade.chart.TradeChartFragment
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_trade_my_orders.*
 import kotlinx.android.synthetic.main.layout_empty_data.*
 import javax.inject.Inject
 
 
 class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
-
     @Inject
     @InjectPresenter
     lateinit var presenter: TradeMyOrdersPresenter
@@ -47,14 +46,20 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
         text_empty.text = getString(R.string.my_orders_empty)
 
         recycle_my_orders.layoutManager = LinearLayoutManager(baseActivity)
-        recycle_my_orders.adapter = adapter
-        recycle_my_orders.isNestedScrollingEnabled = false
+        presenter.watchMarket?.market.notNull {
+            adapter.market = it
+        }
+        adapter.bindToRecyclerView(recycle_my_orders)
 
         presenter.loadMyOrders()
     }
 
     override fun afterSuccessMyOrders(data: ArrayList<MyOrderItem>) {
         adapter.setNewData(data)
+    }
+
+    override fun afterFailedMyOrders() {
+
     }
 
 }

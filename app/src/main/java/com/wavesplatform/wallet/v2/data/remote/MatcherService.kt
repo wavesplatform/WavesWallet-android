@@ -6,6 +6,7 @@ import com.wavesplatform.wallet.v1.payload.OrderBook
 import com.wavesplatform.wallet.v1.request.CancelOrderRequest
 import com.wavesplatform.wallet.v1.request.OrderRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.Markets
+import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -31,11 +32,11 @@ interface MatcherService {
 
 
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}/publicKey/{publicKey}")
-    fun getMyOrders(@Path("amountAsset") amountAsset: String,
-                             @Path("priceAsset") priceAsset: String,
-                             @Path("publicKey") publicKey: String,
-                             @Header("signature") signature: String,
-                             @Header("timestamp") timestamp: Long): Observable<List<MyOrder>>
+    fun getMyOrders(@Path("amountAsset") amountAsset: String?,
+                             @Path("priceAsset") priceAsset: String?,
+                             @Path("publicKey") publicKey: String?,
+                             @Header("signature") signature: String?,
+                             @Header("timestamp") timestamp: Long): Observable<List<OrderResponse>>
 
     @GET("matcher")
     fun getMatcherKey(): Observable<String>

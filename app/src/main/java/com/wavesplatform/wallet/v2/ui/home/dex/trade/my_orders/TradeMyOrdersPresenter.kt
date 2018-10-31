@@ -4,26 +4,39 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderItem
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.ui.home.history.TestObject
-import java.util.*
+import com.wavesplatform.wallet.v2.util.RxUtil
+import pyxis.uzuki.live.richutilskt.utils.asDateString
 import javax.inject.Inject
 
 @InjectViewState
 class TradeMyOrdersPresenter @Inject constructor() : BasePresenter<TradeMyOrdersView>() {
     var watchMarket: WatchMarket? = null
+    private var hashOfTimestamp = hashMapOf<Long, Long>()
 
     fun loadMyOrders() {
-        var data = ArrayList<MyOrderItem>()
-        data.add(MyOrderItem(true, "10.12.2017"))
-        data.add(MyOrderItem(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), 523.061350, Random().nextDouble())))
-        data.add(MyOrderItem(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), 3.061350, Random().nextDouble())))
-        data.add(MyOrderItem(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), 0.061350, Random().nextDouble())))
-        data.add(MyOrderItem(true, "06.01.2018"))
-        data.add(MyOrderItem(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), 363.5061350, Random().nextDouble())))
-        data.add(MyOrderItem(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble())))
-        data.add(MyOrderItem(true, "15.06.2018"))
-        data.add(MyOrderItem(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble())))
+        addSubscription(matcherDataManager.loadMyOrders(watchMarket)
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({
+                    val sortedByTimestamp = it
+                            .sortedByDescending { it.timestamp }
+                            .mapTo(mutableListOf()) {
+                                MyOrderItem(it)
+                            }
 
-        viewState.afterSuccessMyOrders(data)
+                    val result = arrayListOf<MyOrderItem>()
+
+                    sortedByTimestamp.forEach {
+                        val date = (it.t.timestamp) / (1000 * 60 * 60 * 24)
+                        if (hashOfTimestamp[date] == null) {
+                            hashOfTimestamp[date] = date
+                            result.add(MyOrderItem(true, it.t.timestamp.asDateString("dd.MM.yyyy")))
+                        }
+                        result.add(it)
+                    }
+
+                    viewState.afterSuccessMyOrders(result)
+                }, {
+                    viewState.afterFailedMyOrders()
+                }))
     }
 }
