@@ -1,9 +1,0 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:auto="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_transfer_funds"
-        android:icon="@drawable/ic_warning_white_24dp"
-        auto:showAsAction="always"
-        android:visible="false"
-        android:title="@string/transfer_funds" />
-</menu>

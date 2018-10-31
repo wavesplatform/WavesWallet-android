@@ -3,32 +3,15 @@
 
     <color name="blockchain_blue">#4b7190</color>
     <color name="blockchain_dark_blue">#37556e</color>
-    <color name="blockchain_send_red">#e27e82</color>
-    <color name="blockchain_receive_green">#85b45b</color>
-    <color name="blockchain_transfer_blue">#5bacd0</color>
     <color name="blockchain_pearl_white">#fafafa</color>
     <color name="blockchain_grey">#808080</color>
     <color name="blockchain_light_grey">#FFf0f0f0</color>
-    <color name="blockchain_accent">#F0DABE</color>
-    <color name="tooltip_background">#eee1b47d</color>
-    <color name="blockchain_navigation_bar">#FF000000</color>
     <color name="textColorPrimary">@color/primary_text_default_material_light</color>
-    <color name="favorite_yellow">#ffdd2d</color>
-    <color name="blockchain_transparent">#00000000</color>
-
-    <color name="blockchain_red_50">#80e27e82</color>
-    <color name="blockchain_green_50">#8085b45b</color>
-    <color name="blockchain_transfer_blue_50">#805bacd0</color>
 
     <color name="white">#FFffff</color>
-    <color name="white_50">#80ffffff</color>
     <color name="white_60">#a0ffffff</color>
 
     <color name="black">#000000</color>
-    <color name="backup_card_blue">#07537d</color>
-    <color name="backup_card_text">#676767</color>
-    <color name="dropshadow_grey">#CCCCCC</color>
-    <color name="light_grey_text">#b1b1b1</color>
 
     <color name="toast_error_background">#EFD5D6</color>
     <color name="toast_error_text">#963033</color>
@@ -37,51 +20,17 @@
     <color name="toast_info_background">#D8F296</color>
     <color name="toast_info_text">#4F772F</color>
 
-    <color name="blockchain_upgrade_wallet_bg">#22AFEC</color>
-
-    <color name="barcode_viewfinder_laser">#ffcc0000</color>
-    <color name="barcode_viewfinder_mask">#60000000</color>
-    <color name="barcode_possible_result_points">#FF1B8AC7</color>
-    <color name="barcode_result_view">#b0000000</color>
-
-    <color name="alert_green">#00C853</color>
-    <color name="alert_red">#af4f4e</color>
-
     <color name="warning_color">#f4511e</color>
 
-    <color name="dex_bg">#fafafa</color>
-    <color name="dex_bg_toolbar">@color/blockchain_blue</color>
 
-    <color name="dex_card_item_bg">@color/white</color>
-    <color name="dex_card_item_text">@color/blockchain_grey</color>
-    <color name="dex_markets_checkbox">#80CBC4</color>
-    <color name="dex_watchlist_markets_up">#58a763</color>
-    <color name="dex_watchlist_markets_down">#e66a67</color>
-
-
-    <color name="dex_details_bg_lighter">#f0f0f0</color>
-    <color name="dex_details_bg">#e0e0e0</color>
-
-    <color name="dex_orderbook_left_block_bg">#fafafa</color>
     <color name="dex_orderbook_left_bg">#58a763</color>
-    <color name="dex_orderbook_left_bg_lighter">#77bf82</color>
 
-    <color name="dex_orderbook_right_block_bg">#fafafa</color>
-    <color name="dex_orderbook_right_bg_lighter">#e97c79</color>
     <color name="dex_orderbook_right_bg">#e66a67</color>
-
-    <color name="dex_place_order_dialog_bg">#424242</color>
 
     <!-- V2 -->
 
-    <color name="av_default_border">@android:color/white</color>
-    <color name="av_bitmap_background_color">#424242</color>
-
-    <color name="disabled50">#FAFAFA</color>
-    <color name="disabled100">#F0F0F0</color>
     <color name="disabled400">#BCBCBC</color>
     <color name="disabled500">#999999</color>
-    <color name="disabled700">#777777</color>
     <color name="disabled900">#2D2D2D</color>
     <color name="basic50">#F8F9FB</color>
     <color name="basic100">#EDF0F4</color>
@@ -89,31 +38,18 @@
     <color name="basic300">#C5D0DE</color>
     <color name="basic500">#9BA6B2</color>
     <color name="basic700">#4E5C6E</color>
-    <color name="basic900">#263241</color>
     <color name="accent50">#E9E9EB</color>
     <color name="accent100">#CED0DA</color>
     <color name="info50">#DFEAF8</color>
-    <color name="info200">#C5D9E8</color>
-    <color name="info300">#A8C6DF</color>
-    <color name="info400">#8DABC4</color>
     <color name="info500">#7995B9</color>
-    <color name="submit50">#EEF5FE</color>
-    <color name="submit100">#C4D0EF</color>
     <color name="submit200">#BACAF4</color>
     <color name="submit300">#5A81EA</color>
     <color name="submit400">#1F5AF6</color>
-    <color name="submit500">#1751EC</color>
     <color name="submit700">#1A4AC8</color>
-    <color name="success50">#DBF5D3</color>
-    <color name="success100">#A4EC9B</color>
-    <color name="success300">#4ECE3D</color>
     <color name="success400">#4AAD02</color>
     <color name="success400_01">#194aad02</color>
     <color name="success500">#39A12C</color>
     <color name="success500_0_94">#f039a12c</color>
-    <color name="successLime">#81C926</color>
-    <color name="warning50">#FFF5DF</color>
-    <color name="warning100">#FFEBC0</color>
     <color name="warning400">#F8B700</color>
     <color name="warning400_01">#19f8b700</color>
     <color name="warning600">#F89300</color>
@@ -122,9 +58,6 @@
     <color name="error400">#E5494D</color>
     <color name="error500">#EF4829</color>
     <color name="error700">#B72125</color>
-    <color name="mixElton">#00AEF9</color>
-    <color name="mixOcean">#26C1C9</color>
-    <color name="mixUnicorn">#AB7DF6</color>
 
     <color name="home_tab_inactive">#CED0DA</color>
     <color name="home_tab_active">#000000</color>

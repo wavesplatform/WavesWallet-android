@@ -5,25 +5,9 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
-    <style name="AppTheme.MainActivity">
-        <!-- This style allows the navigation drawer to be visible under the status bar -->
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>
-    </style>
-
-    <style name="StackedAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:colorAccent">@color/blockchain_blue</item>
-        <item name="buttonBarButtonStyle">@style/StackedButtonBarButtonStyle</item>
-    </style>
-
-    <style name="StackedButtonBarButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:layout_gravity">left</item>
     </style>
 
 </resources>
