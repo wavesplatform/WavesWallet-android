@@ -11,6 +11,7 @@ import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.dex.details.chart.CandleTouchListener
 import com.wavesplatform.wallet.v1.ui.dex.details.chart.OnCandleGestureListener
+import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import kotlinx.android.synthetic.main.activity_trade.*
@@ -24,6 +25,17 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     @Inject
     @InjectPresenter
     lateinit var presenter: TradeChartPresenter
+
+    companion object {
+        fun newInstance(watchMarket: WatchMarket?): TradeChartFragment {
+            val args = Bundle()
+            args.classLoader = WatchMarket::class.java.classLoader
+            args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
+            val fragment = TradeChartFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     @ProvidePresenter
     fun providePresenter(): TradeChartPresenter = presenter
@@ -39,6 +51,8 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
+
         text_empty.text = getString(R.string.chart_empty)
 
         setUpChart()

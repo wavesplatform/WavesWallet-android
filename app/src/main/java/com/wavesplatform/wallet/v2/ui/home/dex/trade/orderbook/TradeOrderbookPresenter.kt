@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.data.model.local.OrderbookItem
+import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.history.TestObject
 import java.util.*
@@ -9,6 +10,8 @@ import javax.inject.Inject
 
 @InjectViewState
 class TradeOrderbookPresenter @Inject constructor() : BasePresenter<TradeOrderbookView>() {
+    var watchMarket: WatchMarket? = null
+
     fun loadOrderbook() {
         var data = ArrayList<OrderbookItem>()
         data.add(OrderbookItem(OrderbookItem.PRICE_TYPE, TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), 523.061350, Random().nextDouble())))

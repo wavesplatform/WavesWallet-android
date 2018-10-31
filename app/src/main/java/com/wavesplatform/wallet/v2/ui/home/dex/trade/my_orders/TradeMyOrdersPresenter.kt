@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderItem
+import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.history.TestObject
 import java.util.*
@@ -9,6 +10,8 @@ import javax.inject.Inject
 
 @InjectViewState
 class TradeMyOrdersPresenter @Inject constructor() : BasePresenter<TradeMyOrdersView>() {
+    var watchMarket: WatchMarket? = null
+
     fun loadMyOrders() {
         var data = ArrayList<MyOrderItem>()
         data.add(MyOrderItem(true, "10.12.2017"))

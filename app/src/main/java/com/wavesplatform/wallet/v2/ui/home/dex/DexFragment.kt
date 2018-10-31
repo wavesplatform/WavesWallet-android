@@ -96,9 +96,12 @@ class DexFragment : BaseFragment(), DexView {
                 })
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            launchActivity<TradeActivity> {
-                putExtra(TradeActivity.BUNDLE_MARKET, this@DexFragment.adapter.getItem(position))
-            }
+            val args = Bundle()
+            args.classLoader = WatchMarket::class.java.classLoader
+            args.putParcelable(TradeActivity.BUNDLE_MARKET, this@DexFragment.adapter.getItem(position))
+
+
+            launchActivity<TradeActivity>(options = args)
         }
 
         recycle_dex.addOnScrollListener(object : RecyclerView.OnScrollListener() {

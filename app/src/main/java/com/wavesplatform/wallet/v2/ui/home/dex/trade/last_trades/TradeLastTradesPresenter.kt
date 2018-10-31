@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades
 
 import com.arellomobile.mvp.InjectViewState
+import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.history.TestObject
 import java.util.*
@@ -8,6 +9,8 @@ import javax.inject.Inject
 
 @InjectViewState
 class TradeLastTradesPresenter @Inject constructor() : BasePresenter<TradeLastTradesView>() {
+    var watchMarket: WatchMarket? = null
+
     fun loadLastTrades() {
         var data = ArrayList<TestObject>()
         data.add(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), 523.061350, Random().nextDouble()))
