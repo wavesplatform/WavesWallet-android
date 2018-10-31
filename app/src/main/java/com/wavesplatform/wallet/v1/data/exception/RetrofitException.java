@@ -1,10 +1,7 @@
 package com.wavesplatform.wallet.v1.data.exception;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 
-import okhttp3.ResponseBody;
-import retrofit2.Converter;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
@@ -68,27 +65,5 @@ public class RetrofitException extends RuntimeException {
     public Retrofit getRetrofit() {
         return retrofit;
     }
-
-    /**
-     * HTTP response body converted to specified {@code type}. {@code null} if there is no
-     * response.
-     *
-     * @throws IOException if unable to convert the body to the specified {@code type}.
-     *
-     * public void onError(Throwable throwable) {
-        RetrofitException error = (RetrofitException) throwable;
-        LoginErrorResponse response = error.getBodyAs(LoginErrorResponse.class);
-        //...
-    }
-     *
-     */
-    public <T> T getErrorBodyAs(Class<T> type) throws Exception {
-        if (response == null || response.errorBody() == null) {
-            return null;
-        }
-        Converter<ResponseBody, T> converter = retrofit.responseBodyConverter(type, new Annotation[0]);
-        return converter.convert(response.errorBody());
-    }
-
 
 }

@@ -31,7 +31,8 @@ class ScanSeedFragment : BaseFragment(), ScanSeedView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         button_scan.click {
-            IntentIntegrator(baseActivity).setRequestCode(REQUEST_SCAN_QR_CODE)
+            IntentIntegrator(baseActivity)
+                    .setRequestCode(REQUEST_SCAN_QR_CODE)
                     .setOrientationLocked(true)
                     .setBeepEnabled(false)
                     .setCaptureActivity(QrCodeScannerActivity::class.java)

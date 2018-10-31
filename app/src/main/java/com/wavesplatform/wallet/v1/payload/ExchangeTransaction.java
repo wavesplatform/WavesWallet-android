@@ -10,8 +10,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.math.BigInteger;
-
 public class ExchangeTransaction extends Transaction {
 
 
@@ -22,21 +20,6 @@ public class ExchangeTransaction extends Transaction {
     public long buyMatcherFee;
     public long price;
 
-    public ExchangeTransaction() {
-    }
-
-    public ExchangeTransaction(int type, String id, String sender, long timestamp, OrderRequest order1, OrderRequest order2,
-                               long sellMatcherFee, long buyMatcherFee, long price) {
-        this.type = type;
-        this.id = id;
-        this.sender = sender;
-        this.timestamp = timestamp;
-        this.order1 = order1;
-        this.order2 = order2;
-        this.sellMatcherFee = sellMatcherFee;
-        this.buyMatcherFee = buyMatcherFee;
-        this.price = price;
-    }
 
     public OrderRequest getMyOrder() {
         return order1.senderPublicKey.equals(NodeManager.get().getPublicKeyStr()) ? order1 : order2;
@@ -68,38 +51,12 @@ public class ExchangeTransaction extends Transaction {
         return NodeManager.get().getAssetBalance(getAmountAssetId());
     }
 
-    public long getTransactionFee(){
-        if (getMyOrder().orderType.equals(OrderType.buy)){
-            return buyMatcherFee;
-        } else
-            return sellMatcherFee;
-    }
-
-    public String getDisplayPrice() {
-        return MoneyUtil.getScaledPrice(price, getDecimals(), getPriceDecimals());
-    }
-
-    public String getDisplayPriceAmount(){
-        return MoneyUtil.getTextStripZeros(MoneyUtil.getTextStripZeros(
-                BigInteger.valueOf(amount)
-                        .multiply(BigInteger.valueOf(price))
-                        .divide(BigInteger.valueOf(100000000)).longValue(),
-                getPriceDecimals()));
-    }
-
     @Override
     public String getDisplayAmount() {
         if (getMyOrder().assetPair.priceAsset == null) {
             return MoneyUtil.getScaledText(amount, getAssetBallance());
         }
         return MoneyUtil.getDisplayWaves(amount);
-    }
-
-    public int getPriceDecimals() {
-        if (getMyOrder().assetPair.priceAsset == null) {
-            return 8;
-        }
-        return getAssetBallance().issueTransaction.decimals;
     }
 
     @Override

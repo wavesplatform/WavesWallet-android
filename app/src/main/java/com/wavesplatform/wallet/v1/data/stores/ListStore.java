@@ -1,11 +1,11 @@
 package com.wavesplatform.wallet.v1.data.stores;
 
+import com.wavesplatform.wallet.v1.util.ListUtil;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import com.wavesplatform.wallet.v1.util.ListUtil;
 
 public abstract class ListStore<T> {
 
@@ -17,14 +17,6 @@ public abstract class ListStore<T> {
 
     public List<T> getList() {
         return data;
-    }
-
-    public void storeList(List<T> data) {
-        this.data = data;
-    }
-
-    public void clearList() {
-        data.clear();
     }
 
     public void insertObjectIntoList(T object) {
