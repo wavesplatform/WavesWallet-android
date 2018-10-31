@@ -68,15 +68,7 @@ class DexFragment : BaseFragment(), DexView {
         recycle_dex.adapter = adapter
 
         swipe_container.setOnRefreshListener {
-            presenter.clearOldPairsSubscriptions()
-
-            if (adapter.data.isNotEmpty()) {
-                adapter.data.forEachIndexed { index, watchMarket ->
-                    presenter.loadDexPairInfo(watchMarket, index)
-                }
-            } else {
-                swipe_container.isRefreshing = false
-            }
+            loadInfoForPairs()
         }
 
         // TODO: rewrite logic for request only for visible items
@@ -116,6 +108,18 @@ class DexFragment : BaseFragment(), DexView {
         })
 
         presenter.loadActiveMarkets()
+    }
+
+    private fun loadInfoForPairs() {
+        presenter.clearOldPairsSubscriptions()
+
+        if (adapter.data.isNotEmpty()) {
+            adapter.data.forEachIndexed { index, watchMarket ->
+                presenter.loadDexPairInfo(watchMarket, index)
+            }
+        } else {
+            swipe_container.isRefreshing = false
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -206,13 +210,12 @@ class DexFragment : BaseFragment(), DexView {
         swipe_container.isRefreshing = false
     }
 
-    override fun onResume() {
-        super.onResume()
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            presenter.clearOldPairsSubscriptions()
+        } else {
+            loadInfoForPairs()
+        }
     }
 }
