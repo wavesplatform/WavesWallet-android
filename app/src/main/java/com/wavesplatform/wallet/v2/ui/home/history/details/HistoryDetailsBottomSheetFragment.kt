@@ -162,7 +162,8 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    copyToClipboard(transaction.id, bottomBtns.text_copy_all_data, R.string.history_details_copy_all_data)
+                    copyToClipboard(Transaction.getInfo(transaction), bottomBtns.text_copy_all_data,
+                            R.string.history_details_copy_all_data)
                 })
 
         historyContainer?.removeAllViews()

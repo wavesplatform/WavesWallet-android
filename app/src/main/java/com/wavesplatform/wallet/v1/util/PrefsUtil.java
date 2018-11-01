@@ -70,6 +70,10 @@ public class PrefsUtil {
         return getValueInternal(guid + name, value);
     }
 
+    public int getValue(String guid, String name, int value) {
+        return getValueInternal(guid + name, value);
+    }
+
     public String getGlobalValue(String name, String value) {
         return getValueInternal(name, value);
     }
@@ -90,6 +94,10 @@ public class PrefsUtil {
         setValueInternal(guid + name, value);
     }
 
+    public void setValue(String guid, String name, int value) {
+        setValueInternal(guid + name, value);
+    }
+
     private void setValueInternal(String name, String value) {
         Editor editor = preferenceManager.edit();
         editor.putString(name, (value == null || value.isEmpty()) ? "" : value);
@@ -101,7 +109,7 @@ public class PrefsUtil {
     }
 
     private int getValueInternal(String name, int value) {
-        return preferenceManager.getInt(name, 0);
+        return preferenceManager.getInt(name, value);
     }
 
     public void setValue(String name, int value) {

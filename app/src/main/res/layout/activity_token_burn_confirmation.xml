@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relative_root"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
@@ -12,285 +12,297 @@
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
         app:titleTextAppearance="@style/Toolbar.Title"
         app:titleTextColor="@color/white" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_content"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="-2dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="28dp"
-        android:visibility="gone"
-        app:cardCornerRadius="2dp"
-        app:cardElevation="3dp">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/relative_content"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="16dp">
+            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="-2dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="3dp">
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_burn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
-                    app:srcCompat="@drawable/ic_t_tokenburn_48" />
-
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_sum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="14dp"
-                    android:text="-00000000.00000000 Sviblovo"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_line_1"
+                <RelativeLayout
+                    android:id="@+id/relative_content"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_below="@+id/text_sum"
-                    android:layout_marginBottom="14dp"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/shape_dashed_line"
-                    android:layerType="software" />
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/image_burn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="8dp"
+                            app:srcCompat="@drawable/ic_t_tokenburn_48" />
 
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/image_line_1"
-                    android:layout_marginBottom="6dp"
-                    android:text="@string/token_burn_confirmation_id"
-                    android:textColor="@color/basic500"
-                    android:textSize="14sp" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_id_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_id"
-                    android:text="GtjyCia86HmfkJEbHsErh57kp4DTGkScNzmkjY7CKLze"
-                    android:textColor="@color/disabled900"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:paddingTop="10dp"
-                    android:background="@drawable/shape_rect_outline_basic300"
-                    android:paddingBottom="10dp"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:layout_marginTop="14dp"
-                    android:textColor="@color/basic500"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/token_burn_confirmationt_description"
-                    />
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_sum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="14dp"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            tools:text="-00000000.00000000 Sviblovo" />
 
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_type_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginTop="14dp"
-                    android:text="@string/token_burn_confirmation_type"
-                    android:textColor="@color/basic500"
-                    android:textSize="14sp" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_type_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Not Reissuable"
-                    android:textColor="@color/disabled900"
-                    android:textSize="14sp" />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_line_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginBottom="14dp"
-                    android:layout_marginTop="14dp"
-                    android:background="@drawable/shape_dashed_line"
-                    android:layerType="software" />
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/image_line_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_below="@+id/text_sum"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginBottom="14dp"
+                            android:background="@drawable/shape_dashed_line"
+                            android:layerType="software" />
 
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_fee_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="@string/token_burn_confirmation_fee"
-                    android:textColor="@color/basic500"
-                    android:textSize="14sp" />
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_id"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/image_line_1"
+                            android:layout_marginBottom="6dp"
+                            android:text="@string/token_burn_confirmation_id"
+                            android:textColor="@color/basic500"
+                            android:textSize="14sp" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_fee_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0.001 Waves"
-                    android:textColor="@color/disabled900"
-                    android:textSize="14sp" />
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_id_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/text_id"
+                            android:textColor="@color/disabled900"
+                            android:textSize="14sp"
+                            tools:text="GtjyCia86HmfkJEbHsErh57kp4DTGkScNzmkjY7CKLze" />
+
+                        <TextView
+                            android:id="@+id/text_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:background="@drawable/shape_rect_outline_basic300"
+                            android:paddingStart="12dp"
+                            android:paddingTop="10dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="10dp"
+                            android:textColor="@color/basic500"
+                            tools:text="@string/token_burn_confirmationt_description" />
 
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_line_4"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginBottom="14dp"
-                    android:layout_marginTop="14dp"
-                    android:background="@drawable/shape_dashed_line"
-                    android:layerType="software" />
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_type_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:layout_marginBottom="6dp"
+                            android:text="@string/token_burn_confirmation_type"
+                            android:textColor="@color/basic500"
+                            android:textSize="14sp" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_type_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/disabled900"
+                            android:textSize="14sp"
+                            tools:text="Not Reissuable" />
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/image_line_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="14dp"
+                            android:layout_marginBottom="14dp"
+                            android:background="@drawable/shape_dashed_line"
+                            android:layerType="software" />
 
 
-            </LinearLayout>
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_fee_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            android:text="@string/token_burn_confirmation_fee"
+                            android:textColor="@color/basic500"
+                            android:textSize="14sp" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_fee_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0.001 Waves"
+                            android:textColor="@color/disabled900"
+                            android:textSize="14sp" />
 
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/button_confirm"
-                style="@style/WavesButton"
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/image_line_4"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="14dp"
+                            android:layout_marginBottom="14dp"
+                            android:background="@drawable/shape_dashed_line"
+                            android:layerType="software" />
+
+
+                    </LinearLayout>
+
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/button_confirm"
+                        style="@style/WavesButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/token_burn_confirmation_burn" />
+
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <RelativeLayout
+                android:id="@+id/relative_success"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                android:text="@string/token_burn_confirmation_burn" />
-
-
-        </RelativeLayout>
-
-    </android.support.v7.widget.CardView>
-
-    <RelativeLayout
-        android:id="@+id/relative_success"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="24dp"
-        android:visibility="gone">
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_success"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="4dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="2dp"
-            app:cardElevation="0dp">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="44dp"
-                    app:srcCompat="@drawable/ic_userimg_done_80_success_400" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/token_burn_confirmation_your_transaction_is_on_the_way"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    app:fontFamily="@font/roboto_medium" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_leasing_result_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/token_burn_confirmation_you_have_burned"
-                    android:textColor="@color/disabled500"
-                    android:textSize="12sp" />
-
-                <Button
-                    android:id="@+id/button_okay"
-                    style="@style/WavesButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="24dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="44dp"
-                    android:clickable="true"
-                    android:text="@string/token_burn_confirmation_okay"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-    </RelativeLayout>
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_progress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="24dp"
-        android:visibility="visible"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="2dp"
-        app:cardElevation="0dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:orientation="vertical">
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_loader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:padding="28dp"
-                app:srcCompat="@drawable/ic_loader_24_submit_400" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/image_loader"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="20dp"
+                android:layout_height="match_parent"
                 android:layout_marginTop="24dp"
-                android:text="@string/token_burn_confirmation_burning"
-                android:textColor="@color/basic500"
-                android:textSize="16sp" />
+                android:visibility="gone">
 
-        </RelativeLayout>
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_success"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="16dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="0dp">
 
-    </android.support.v7.widget.CardView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="44dp"
+                            app:srcCompat="@drawable/ic_userimg_done_80_success_400" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="24dp"
+                            android:text="@string/token_burn_confirmation_your_transaction_is_on_the_way"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            app:fontFamily="@font/roboto_medium" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_leasing_result_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/token_burn_confirmation_you_have_burned"
+                            android:textColor="@color/disabled500"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/button_okay"
+                            style="@style/WavesButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="44dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginBottom="24dp"
+                            android:clickable="true"
+                            android:text="@string/token_burn_confirmation_okay"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="16dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="0dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="24dp"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/image_loader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:padding="28dp"
+                        app:srcCompat="@drawable/ic_loader_24_submit_400" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/image_loader"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="20dp"
+                        android:text="@string/token_burn_confirmation_burning"
+                        android:textColor="@color/basic500"
+                        android:textSize="16sp" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </FrameLayout>
+
+    </ScrollView>
 
 </LinearLayout>

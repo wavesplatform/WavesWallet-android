@@ -1,27 +1,25 @@
 package com.wavesplatform.wallet.v2.data.manager
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.ProcessLifecycleOwner
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R.color.i
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.BurnRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.CreateLeasingRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil
-import com.wavesplatform.wallet.v2.util.isAppOnForeground
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.sumByLong
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
-import pers.victor.ext.app
 import pers.victor.ext.currentTimeMillis
-import retrofit2.http.Body
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -188,7 +186,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         return Observable.interval(0, 15, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap {
-                    if (app.isAppOnForeground()) {
+                    if (ProcessLifecycleOwner.get().lifecycle.currentState == Lifecycle.State.RESUMED) {
                         return@flatMap nodeService.transactionList(getAddress(), currentLoadTransactionLimitPerRequest)
                                 .map { r -> r[0] }
                     } else {
@@ -236,6 +234,10 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 }
                             }.toList().toObservable()
                 }
+    }
+
+    fun burn(burn: BurnRequest): Observable<BurnRequest> {
+        return nodeService.burn(burn)
     }
 
 }

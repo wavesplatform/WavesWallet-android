@@ -130,6 +130,7 @@
     <string name="invalid_address">Invalid address</string>
     <string name="invalid_amount">Invalid amount</string>
     <string name="insufficient_funds">Insufficient funds</string>
+    <string name="invalid_monero_payment_id">Invalid Payment ID</string>
     <string name="attachment_too_long">Attachment is too long</string>
 
     <string name="enter_double_encryption_pw">Please enter double encryption password</string>
@@ -1220,7 +1221,9 @@
     <string name="send_errpr_you_don_t_have_enough_funds_to_pay_the_required_fees">You don\'t have enough funds to pay the required fees.</string>
     <string name="send_continue">Continue</string>
     <string name="send_transaction_fee_0_001_waves">Transaction Fee 0.001 WAVES</string>
-    <string name="send_transaction_error_check_fields">Check fields</string>
+    <string name="send_transaction_error_check_asset">Check asset</string>
+    <string name="send_monero_payment_id">Monero Payment ID</string>
+    <string name="send_monero_payment_id_hint">Paste or type your Payment ID</string>
 
     <!--About redirection-->
     <string name="about_redirection_title">You were redirected to the «IDNow» \nfor verification</string>
@@ -1308,9 +1311,11 @@
     <string name="token_burn_confirmation_fee">Fee</string>
     <string name="token_burn_confirmation_burn">Burn</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">Your transaction is on the way</string>
-    <string name="token_burn_confirmation_you_have_burned">You have burned Sviblovo</string>
+    <string name="token_burn_confirmation_you_have_burned">You have burned %1$s %2$s</string>
     <string name="token_burn_confirmation_okay">Okay</string>
     <string name="token_burn_confirmation_burning">Burning…</string>
+    <string name="token_burn_confirmationt_reissuable">Reissuable</string>
+    <string name="token_burn_confirmationt_not_reissuable">Not Reissuable</string>
 
     <!--Orderbook-->
     <string name="chart_empty">No chart data available</string>

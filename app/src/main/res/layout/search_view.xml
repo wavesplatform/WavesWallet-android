@@ -14,7 +14,6 @@
         android:background="@drawable/shape_search_address"
         android:drawableStart="@drawable/ic_search_24_basic_500"
         android:drawablePadding="8dp"
-        android:fitsSystemWindows="true"
         android:hint="@string/address_book_search"
         android:longClickable="false"
         android:padding="8dp"

@@ -255,7 +255,6 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
@@ -292,7 +291,7 @@
             android:name=".v2.ui.home.wallet.your_assets.YourAssetsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".v2.ui.home.quick_action.receive.ReceiveActivity"
             android:screenOrientation="portrait"

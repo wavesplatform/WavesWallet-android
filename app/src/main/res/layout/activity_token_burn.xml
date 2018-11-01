@@ -2,6 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/basic50"
     android:descendantFocusability="beforeDescendants"
     android:focusable="true"
@@ -45,8 +46,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
                 android:background="@drawable/basic50_rounded_border"
                 android:padding="14dp">
 
@@ -67,17 +68,17 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="4dp"
                     android:layout_toRightOf="@+id/image_asset_icon"
-                    android:text="Sviblovo"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="Sviblovo" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_asset_is_favourite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/text_asset_name"
+                    android:visibility="gone"
                     app:srcCompat="@drawable/ic_favorite_mini" />
 
 
@@ -87,9 +88,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="00000000.00000000"
                     android:textColor="@color/basic500"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    tools:text="00000000.00000000" />
             </RelativeLayout>
 
 
@@ -97,8 +98,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginRight="16dp"
                 android:lineSpacingExtra="4sp"
                 android:text="Quantity of tokens to be burned"
                 android:textColor="@color/basic500"
@@ -108,9 +109,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginBottom="6dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="6dp"
                 android:clipToPadding="true"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="2dp"
@@ -139,10 +140,9 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
                         android:layout_marginTop="24dp"
+                        android:layout_marginRight="16dp"
                         android:lineSpacingExtra="4sp"
-                        android:text="Sviblovo"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
                 </RelativeLayout>
@@ -152,8 +152,8 @@
                 android:id="@+id/horizontal_amount_suggestion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
                 android:layout_marginTop="2dp"
+                android:layout_marginBottom="24dp"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -168,10 +168,10 @@
                         android:layout_marginLeft="16dp"
                         android:background="@drawable/basic100_rounded"
                         android:lineSpacingExtra="4sp"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/start_leasing_use_total_balance"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />

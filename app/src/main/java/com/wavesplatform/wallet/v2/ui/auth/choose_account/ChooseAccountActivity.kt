@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -72,6 +71,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         launchActivity<EnterPassCodeActivity>(
                 requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
             putExtra(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
+            putExtra(EnterPassCodeActivity.KEY_INTENT_USE_BACK_FOR_EXIT, true)
         }
     }
 
