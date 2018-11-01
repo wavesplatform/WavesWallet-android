@@ -18,6 +18,7 @@ class TradeLastTradesPresenter @Inject constructor() : BasePresenter<TradeLastTr
                     viewState.afterSuccessLoadLastTrades(sortedByTimestamp)
                 }, {
                     it.printStackTrace()
+                    viewState.afterFailedLoadLastTrades()
                 }))
     }
 

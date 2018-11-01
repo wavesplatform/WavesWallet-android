@@ -54,6 +54,10 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
             adapter.market = it
         }
 
+        swipe_container.setOnRefreshListener {
+            presenter.loadLastTrades()
+        }
+
         recycle_last_trades.layoutManager = LinearLayoutManager(baseActivity)
         adapter.bindToRecyclerView(recycle_last_trades)
 
@@ -84,8 +88,12 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
 
 
     override fun afterSuccessLoadLastTrades(data: List<LastTrade>) {
+        swipe_container.isRefreshing = false
         adapter.setNewData(data)
         adapter.emptyView = getEmptyView()
     }
 
+    override fun afterFailedLoadLastTrades() {
+        swipe_container.isRefreshing = false
+    }
 }

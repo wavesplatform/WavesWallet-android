@@ -5,4 +5,5 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface TradeLastTradesView : BaseMvpView {
     fun afterSuccessLoadLastTrades(data: List<LastTrade>)
+    fun afterFailedLoadLastTrades()
 }
