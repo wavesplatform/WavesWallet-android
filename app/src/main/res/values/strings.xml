@@ -1285,11 +1285,11 @@
     <string name="dex_trade_sell">SELL</string>
 
     <!--My orders-->
-    <string name="my_orders_time">Time</string>
-    <string name="my_orders_status">Status</string>
-    <string name="my_orders_price">Price</string>
-    <string name="my_orders_amount">Amount</string>
     <string name="my_orders_empty">Nothing Here…\nYou do not have any orders</string>
+    <string name="my_orders_date_time">Date</string>
+    <string name="my_orders_side_price">Side/Price</string>
+    <string name="my_orders_amount_sum">Amount/Sum</string>
+    <string name="my_orders_status">Status</string>
 
     <!--Last trades-->
     <string name="last_trades_time">Time</string>
@@ -1313,7 +1313,7 @@
     <string name="token_burn_confirmation_okay">Okay</string>
     <string name="token_burn_confirmation_burning">Burning…</string>
 
-    <!--Orderbook-->
+    <!--Chart-->
     <string name="chart_empty">No chart data available</string>
 
 
@@ -1377,5 +1377,7 @@
     <string name="your_asset_activity_greater_zero">Non empty</string>
     <string name="coinomat_success_title">You have been redirected to «Indacoin»</string>
     <string name="coinomat_success_subtitle">After payment has been made your balance will be updated</string>
+    <string name="my_orders_type_buy">Buy</string>
+    <string name="my_orders_type_sell">Sell</string>
 
 </resources>

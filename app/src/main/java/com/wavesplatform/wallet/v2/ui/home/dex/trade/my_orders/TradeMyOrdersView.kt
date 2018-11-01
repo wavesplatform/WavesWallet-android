@@ -7,8 +7,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 @StateStrategyType(SkipStrategy::class)
 interface TradeMyOrdersView : BaseMvpView {
-    fun afterSuccessMyOrders(data: ArrayList<MyOrderItem>)
+    fun afterSuccessMyOrders(data: kotlin.collections.List<com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse>)
     fun afterFailedMyOrders()
     fun afterSuccessCancelOrder()
-    fun afterSuccessDeleteOrder(position: Int)
 }

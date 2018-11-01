@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data.model.remote.response
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.wallet.v2.data.model.local.LastTradeType
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
 
 
 data class LastTrade(
@@ -15,11 +15,16 @@ data class LastTrade(
         @SerializedName("seller") var seller: String = "",
         @SerializedName("matcher") var matcher: String = ""
 ) {
-    fun getType(): LastTradeType {
+    companion object {
+        var API_BUY_TYPE = "buy"
+        var API_SELL_TYPE = "sell"
+    }
+
+    fun getType(): OrderType {
         return when (type) {
-            LastTradeType.BUY.type -> LastTradeType.BUY
-            LastTradeType.SELL.type -> LastTradeType.SELL
-            else -> LastTradeType.BUY
+            API_BUY_TYPE -> OrderType.BUY
+            API_SELL_TYPE -> OrderType.SELL
+            else -> OrderType.BUY
         }
     }
 }

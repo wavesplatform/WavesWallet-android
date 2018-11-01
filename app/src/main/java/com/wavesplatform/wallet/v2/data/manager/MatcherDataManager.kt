@@ -61,16 +61,6 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return matcherService.cancelOrder(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, cancelOrderRequest)
     }
 
-    fun deleteOrder(orderId: String?, watchMarket: WatchMarket?, cancelOrderRequest: CancelOrderRequest): Observable<Any> {
-        cancelOrderRequest.sender = getPublicKeyStr()
-        cancelOrderRequest.orderId = orderId
-        App.getAccessManager().getWallet()?.privateKey.notNull {
-            cancelOrderRequest.sign(it)
-        }
-        return matcherService.deleteOrder(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, cancelOrderRequest)
-    }
-
-
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
         if (allMarketsList.isEmpty()) {
             return Observable.zip(apiService.loadGlobalConfiguration()

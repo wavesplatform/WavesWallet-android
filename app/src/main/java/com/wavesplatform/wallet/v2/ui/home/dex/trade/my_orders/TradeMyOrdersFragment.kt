@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderItem
 import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
+import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.notNull
@@ -61,8 +62,7 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
             val item = this.adapter.getItem(position)
             when (view.id) {
                 R.id.image_delete -> {
-                    if (item?.t?.getStatus() == OrderStatus.Accepted || item?.t?.getStatus() == OrderStatus.PartiallyFilled) presenter.cancelOrder(item.t.id)
-                    else presenter.deleteOrder(item?.t?.id, position)
+                    presenter.cancelOrder(item?.id)
                 }
             }
         }
@@ -70,7 +70,7 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
         presenter.loadMyOrders()
     }
 
-    override fun afterSuccessMyOrders(data: ArrayList<MyOrderItem>) {
+    override fun afterSuccessMyOrders(data: List<OrderResponse>) {
         adapter.setNewData(data)
         adapter.emptyView = getEmptyView()
     }
@@ -87,18 +87,6 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
 
     override fun afterSuccessCancelOrder() {
         presenter.loadMyOrders()
-    }
-
-    override fun afterSuccessDeleteOrder(position: Int) {
-        val item = adapter.getItem(position)
-        val count = adapter.data.filter { !it.isHeader }.count { it.t.sectionTimestamp == item?.t?.sectionTimestamp }
-        if (count == 1) {
-            adapter.remove(position) // remove item
-            adapter.remove(position - 1) // remove header for last item
-        } else {
-            adapter.remove(position) // remove item
-        }
-
     }
 
 }

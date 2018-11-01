@@ -43,11 +43,6 @@ interface MatcherService {
                     @Path("priceAsset") priceAsset: String?,
                     @Body cancelOrderRequest: CancelOrderRequest?): Observable<Any>
 
-    @POST("matcher/orderbook/{amountAsset}/{priceAsset}/delete")
-    fun deleteOrder(@Path("amountAsset") amountAsset: String?,
-                    @Path("priceAsset") priceAsset: String?,
-                    @Body cancelOrderRequest: CancelOrderRequest): Observable<Any>
-
     @GET("matcher")
     fun getMatcherKey(): Observable<String>
 

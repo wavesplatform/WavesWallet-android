@@ -19,6 +19,6 @@ class TradeLastTradesAdapter @Inject constructor() : BaseQuickAdapter<LastTrade,
                 .setText(R.id.text_price_value, item.price)
                 .setText(R.id.text_amount_value, item.amount)
                 .setText(R.id.text_sum_value, MoneyUtil.getFormattedTotal(sum, market.priceAssetDecimals))
-                .setTextColor(R.id.text_price_value, findColor(item.getType().color))
+                .setTextColor(R.id.text_price_value, item.getType().color)
     }
 }
