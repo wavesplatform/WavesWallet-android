@@ -6,6 +6,7 @@ import com.wavesplatform.wallet.v1.request.IssueTransactionRequest
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.BurnRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.CreateLeasingRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
@@ -58,5 +59,8 @@ interface NodeService {
 
     @POST("leasing/broadcast/cancel")
     fun cancelLeasing(@Body cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction>
+
+    @POST("/transactions/broadcast")
+    fun burn(@Body burnRequest: BurnRequest): Observable<BurnRequest>
 
 }
