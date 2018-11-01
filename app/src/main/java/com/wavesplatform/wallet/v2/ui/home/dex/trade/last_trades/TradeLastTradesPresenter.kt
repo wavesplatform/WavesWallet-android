@@ -3,8 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.ui.home.history.TestObject
-import java.util.*
+import com.wavesplatform.wallet.v2.util.RxUtil
 import javax.inject.Inject
 
 @InjectViewState
@@ -12,15 +11,14 @@ class TradeLastTradesPresenter @Inject constructor() : BasePresenter<TradeLastTr
     var watchMarket: WatchMarket? = null
 
     fun loadLastTrades() {
-        var data = ArrayList<TestObject>()
-        data.add(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), 523.061350, Random().nextDouble()))
-        data.add(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), 3.061350, Random().nextDouble()))
-        data.add(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), 0.061350, Random().nextDouble()))
-        data.add(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), 363.5061350, Random().nextDouble()))
-        data.add(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()))
-        data.add(TestObject("Waves", Random().nextBoolean(), Random().nextBoolean(), Random().nextDouble(), Random().nextDouble()))
-
-        viewState.afterSuccessLoadLastTrades(data)
+        addSubscription(dataFeedManager.getTradesByPair(watchMarket)
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({
+                    val sortedByTimestamp = it.sortedByDescending { it.timestamp }
+                    viewState.afterSuccessLoadLastTrades(sortedByTimestamp)
+                }, {
+                    it.printStackTrace()
+                }))
     }
 
 }

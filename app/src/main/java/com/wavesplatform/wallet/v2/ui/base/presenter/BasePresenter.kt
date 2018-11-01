@@ -5,10 +5,7 @@ import com.arellomobile.mvp.MvpView
 import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
-import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager
-import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
-import com.wavesplatform.wallet.v2.data.manager.SpamDataManager
+import com.wavesplatform.wallet.v2.data.manager.*
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -26,6 +23,7 @@ open class BasePresenter<T : MvpView> @Inject constructor(): MvpPresenter<T>(){
     @Inject lateinit var apiDataManager: ApiDataManager
     @Inject lateinit var matcherDataManager: MatcherDataManager
     @Inject lateinit var spamDataManager: SpamDataManager
+    @Inject lateinit var dataFeedManager: DataFeedManager
     @Inject lateinit var prefsUtil: PrefsUtil
     @Inject lateinit var rxEventBus: RxEventBus
     @Inject lateinit var appUtil: AppUtil
