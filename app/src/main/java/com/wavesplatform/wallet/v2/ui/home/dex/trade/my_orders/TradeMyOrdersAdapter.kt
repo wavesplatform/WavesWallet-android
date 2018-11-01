@@ -29,6 +29,7 @@ class TradeMyOrdersAdapter @Inject constructor() : BaseQuickAdapter<OrderRespons
                 .setVisible(R.id.text_failed_value, Arrays.asList(OrderStatus.Filled, OrderStatus.Cancelled, OrderStatus.PartiallyFilled).contains(item.getStatus()))
                 .setTextColor(R.id.text_side, item.getType().color)
                 .addOnClickListener(R.id.image_delete)
+                .setVisible(R.id.relative_cancel_block, !Arrays.asList(OrderStatus.Filled, OrderStatus.Cancelled).contains(item.getStatus()))
                 .setTextColor(R.id.text_price, item.getType().color)
     }
 }

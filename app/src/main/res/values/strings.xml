@@ -1290,6 +1290,10 @@
     <string name="my_orders_side_price">Side/Price</string>
     <string name="my_orders_amount_sum">Amount/Sum</string>
     <string name="my_orders_status">Status</string>
+    <string name="my_orders_status_open">Open</string>
+    <string name="my_orders_status_partial_filled">Partial</string>
+    <string name="my_orders_status_filled">Filled</string>
+    <string name="my_orders_status_canceled">Cancelled</string>
 
     <!--Last trades-->
     <string name="last_trades_time">Time</string>

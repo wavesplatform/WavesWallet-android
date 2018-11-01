@@ -20,9 +20,9 @@ class TradeMyOrdersPresenter @Inject constructor() : BasePresenter<TradeMyOrders
                             .sortedByDescending { it.timestamp }
                             .toMutableList()
 
-                    viewState.afterSuccessMyOrders(sortedByTimestamp)
+                    viewState.afterSuccessLoadMyOrders(sortedByTimestamp)
                 }, {
-                    viewState.afterFailedMyOrders()
+                    viewState.afterFailedLoadMyOrders()
                 }))
     }
 

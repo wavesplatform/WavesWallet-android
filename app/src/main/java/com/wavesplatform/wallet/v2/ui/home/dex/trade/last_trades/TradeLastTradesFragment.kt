@@ -50,6 +50,8 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
 
+        swipe_container.setColorSchemeResources(R.color.submit400)
+
         presenter.watchMarket?.market.notNull {
             adapter.market = it
         }

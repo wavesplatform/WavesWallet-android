@@ -52,6 +52,12 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
 
+        swipe_container.setColorSchemeResources(R.color.submit400)
+
+        swipe_container.setOnRefreshListener {
+            presenter.loadMyOrders()
+        }
+
         recycle_my_orders.layoutManager = LinearLayoutManager(baseActivity)
         presenter.watchMarket?.market.notNull {
             adapter.market = it
@@ -70,7 +76,8 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
         presenter.loadMyOrders()
     }
 
-    override fun afterSuccessMyOrders(data: List<OrderResponse>) {
+    override fun afterSuccessLoadMyOrders(data: List<OrderResponse>) {
+        swipe_container.isRefreshing = false
         adapter.setNewData(data)
         adapter.emptyView = getEmptyView()
     }
@@ -81,8 +88,8 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
         return view
     }
 
-    override fun afterFailedMyOrders() {
-
+    override fun afterFailedLoadMyOrders() {
+        swipe_container.isRefreshing = false
     }
 
     override fun afterSuccessCancelOrder() {
