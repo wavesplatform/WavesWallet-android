@@ -80,17 +80,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     override fun onResume() {
         super.onResume()
-        checkAuth()
         showBackUpSeedWarning()
-    }
-
-    private fun checkAuth() {
-        /* todo fix
-        if (App.getAccessManager().getWallet() == null) {
-            launchActivity<SplashActivity>(clear = true) {
-                putExtra(SplashActivity.EXIT, true)
-            }
-        }*/
     }
 
     private fun showFirstOpenAlert(firstOpen: Boolean) {
