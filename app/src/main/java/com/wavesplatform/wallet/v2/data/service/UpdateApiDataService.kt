@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.data.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -17,10 +16,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
 import dagger.android.AndroidInjection
-import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Function3
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
@@ -61,7 +57,6 @@ class UpdateApiDataService : Service() {
                 .subscribe({
                     if (it.isNotEmpty()) {
                         val sortedList = it.sortedByDescending { it.timestamp }
-
                         runAsync {
                             // check if exist last transaction
                             queryAsync<Transaction>({ equalTo("id", sortedList[sortedList.size - 1].id) }, {
@@ -77,6 +72,7 @@ class UpdateApiDataService : Service() {
                                             saveToDb(sortedList.subList(prevLimit - 1, sortedList.size - 1))
                                         } catch (e: Exception) {
                                             currentLimit = 50
+                                            rxEventBus.post(Events.StopUpdateHistoryScreen())
                                         }
                                     }
 
@@ -93,6 +89,8 @@ class UpdateApiDataService : Service() {
                                         if (it.isEmpty()) {
                                             // only few new transaction
                                             saveToDb(sortedList)
+                                        } else {
+                                            rxEventBus.post(Events.StopUpdateHistoryScreen())
                                         }
                                     })
                                 }
@@ -100,7 +98,9 @@ class UpdateApiDataService : Service() {
                         }
                     }
                 }, {
+                    rxEventBus.post(Events.StopUpdateHistoryScreen())
                     it.printStackTrace()
+
                 }))
         subscriptions.add(nodeDataManager.currentBlocksHeight()
                 .subscribe {
