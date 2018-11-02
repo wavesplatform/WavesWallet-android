@@ -1,11 +1,10 @@
 package com.wavesplatform.wallet.v2.data.remote
 
 import com.google.gson.internal.LinkedTreeMap
-import com.wavesplatform.wallet.v1.payload.MyOrder
-import com.wavesplatform.wallet.v1.payload.OrderBook
 import com.wavesplatform.wallet.v1.request.OrderRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.CancelOrderRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.Markets
+import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
 import io.reactivex.Observable
 import retrofit2.http.*
@@ -27,8 +26,8 @@ interface MatcherService {
                                          @Path("address") address: String): Observable<LinkedTreeMap<String, Long>>
 
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}")
-    fun getOrderBook(@Path("amountAsset") amountAsset: String,
-                              @Path("priceAsset") priceAsset: String): Observable<OrderBook>
+    fun getOrderBook(@Path("amountAsset") amountAsset: String?,
+                              @Path("priceAsset") priceAsset: String?): Observable<OrderBook>
 
 
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}/publicKey/{publicKey}")

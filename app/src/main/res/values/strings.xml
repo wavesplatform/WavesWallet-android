@@ -1323,10 +1323,12 @@
 
     <!--Orderbook-->
     <string name="orderbook_last_price">LAST PRICE</string>
-    <string name="orderbook_amount_title">Amount WAVES</string>
-    <string name="orderbook_price_title">Price BTC</string>
-    <string name="orderbook_sum_title">Sum BTC</string>
+    <string name="orderbook_amount_title">Amount %s</string>
+    <string name="orderbook_price_title">Price %s</string>
+    <string name="orderbook_sum_title">Sum %s</string>
     <string name="orderbook_empty">Nothing Here…\nThe order book is empty</string>
+    <string name="orderbook_spread_percent">SPREAD %s%%</string>
+
 
     <!--Buy And Sell Dialog-->
     <string name="buy_and_sell_dialog_buy_tab">Buy</string>

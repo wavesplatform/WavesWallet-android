@@ -35,6 +35,7 @@
                 android:paddingTop="10dp">
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_amount_title"
                     android:layout_width="match_parent"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -44,6 +45,7 @@
                     android:textSize="11sp" />
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_price_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -54,6 +56,7 @@
 
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_sum_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -82,9 +85,7 @@
                 android:background="@color/white"
                 android:layout_alignBottom="@+id/view_divider"
                 android:layout_below="@+id/view_top_divider"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                android:paddingBottom="8dp" />
+                android:overScrollMode="never" />
 
             <View
                 android:id="@+id/view_divider"
@@ -178,12 +179,6 @@
 
 
         </RelativeLayout>
-
-        <include
-            android:visibility="gone"
-            android:id="@+id/layout_empty"
-            layout="@layout/layout_empty_data"/>
-
     </android.support.v7.widget.CardView>
 
 
