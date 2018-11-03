@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/relative_root"
     android:layout_height="wrap_content"
     android:background="@color/white">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/view_bg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:background="@color/error100"
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp"
+        android:textSize="11sp" />
 
     <LinearLayout
         android:id="@+id/linear_fields_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:orientation="horizontal">
 
 
@@ -20,15 +28,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/view_bg"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:background="@color/error100"
-                android:paddingBottom="14dp"
-                android:paddingTop="14dp"
-                android:textSize="11sp" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_amount_value"

@@ -15,7 +15,9 @@ import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_trade_orderbook.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.click
+import pers.victor.ext.gone
 import pers.victor.ext.inflate
+import pers.victor.ext.visiable
 import javax.inject.Inject
 
 
@@ -27,6 +29,8 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
 
     @Inject
     lateinit var adapter: TradeOrderBookAdapter
+
+    lateinit var orderBookLinearLayoutManager: LinearLayoutManager
 
     @ProvidePresenter
     fun providePresenter(): TradeOrderBookPresenter = presenter
@@ -56,7 +60,8 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         }
 
 
-        recycle_orderbook.layoutManager = LinearLayoutManager(baseActivity)
+        orderBookLinearLayoutManager = LinearLayoutManager(baseActivity)
+        recycle_orderbook.layoutManager = orderBookLinearLayoutManager
 
         adapter.bindToRecyclerView(recycle_orderbook)
 
@@ -79,11 +84,29 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         presenter.loadOrderBook()
     }
 
-    override fun afterSuccessOrderbook(data: MutableList<MultiItemEntity>) {
+    override fun afterSuccessOrderbook(data: MutableList<MultiItemEntity>, lastPricePosition: Int) {
         adapter.setNewData(data)
         adapter.emptyView = getEmptyView()
+        if (data.isNotEmpty()) {
+            linear_fields_name.visiable()
+            if (presenter.needFirstScrollToLastPrice) {
+                presenter.needFirstScrollToLastPrice = false
+                recycle_orderbook.post {
+                    val lastPosition = orderBookLinearLayoutManager.findLastVisibleItemPosition()
+                    recycle_orderbook.scrollToPosition(lastPricePosition + lastPosition / 2)
+                }
+            }
+        } else {
+            linear_fields_name.gone()
+        }
     }
 
+    override fun afterFailedOrderbook() {
+        if (adapter.data.isEmpty()) {
+            adapter.emptyView = getEmptyView()
+            linear_fields_name.gone()
+        }
+    }
 
     private fun getEmptyView(): View {
         val view = inflate(R.layout.layout_empty_data)

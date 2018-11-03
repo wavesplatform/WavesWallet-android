@@ -80,6 +80,11 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
         swipe_container.isRefreshing = false
         adapter.setNewData(data)
         adapter.emptyView = getEmptyView()
+        if (data.isNotEmpty()) {
+            linear_fields_name.visiable()
+        } else {
+            linear_fields_name.gone()
+        }
     }
 
     private fun getEmptyView(): View {

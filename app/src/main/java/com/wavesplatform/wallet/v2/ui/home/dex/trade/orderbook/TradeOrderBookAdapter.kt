@@ -11,8 +11,13 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.util.stripZeros
+import kotlinx.android.synthetic.main.recycle_item_orderbook.view.*
 import pers.victor.ext.findColor
+import pers.victor.ext.setWidth
 import javax.inject.Inject
+import android.widget.RelativeLayout
+
+
 
 class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder>(null) {
     var market: MarketResponse = MarketResponse()
@@ -42,6 +47,18 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
             }
             ASK_TYPE -> {
                 val item = item as OrderBook.Ask
+//                helper.itemView.relative_root.post {
+//                    val lp = helper.itemView.view_bg.layoutParams as RelativeLayout.LayoutParams
+//                    val maxWidth = helper.itemView.relative_root.width
+//                    if (item.width < 0 || item.width == 0f) {
+//                        lp.width = 0
+//                    } else if (item.width > 0 && item.width < 100) {
+//                        lp.width = (maxWidth * item.width).toInt()
+//                    } else if (item.width > 100) {
+//                        lp.width = maxWidth
+//                    }
+//                    helper.itemView.view_bg.layoutParams = lp
+//                }
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
                 val priceUIValue = MoneyUtil.getScaledText(item.price, market.priceAssetDecimals).stripZeros()
                 val sum = amountUIValue.replace(",", "").toDouble() * priceUIValue.replace(",", "").toDouble()
@@ -54,6 +71,18 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
             }
             BID_TYPE -> {
                 val item = item as OrderBook.Bid
+//                helper.itemView.relative_root.post {
+//                    val lp = helper.itemView.view_bg.layoutParams as RelativeLayout.LayoutParams
+//                    val maxWidth = helper.itemView.relative_root.width
+//                    if (item.width < 0 || item.width == 0f) {
+//                        lp.width = 0
+//                    } else if (item.width > 0 && item.width < 100) {
+//                        lp.width = (maxWidth * item.width).toInt()
+//                    } else if (item.width > 100) {
+//                        lp.width = maxWidth
+//                    }
+//                    helper.itemView.view_bg.layoutParams = lp
+//                }
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
                 val priceUIValue = MoneyUtil.getScaledText(item.price, market.priceAssetDecimals).stripZeros()
                 val sum = amountUIValue.replace(",", "").toDouble() * priceUIValue.replace(",", "").toDouble()
