@@ -5,6 +5,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.db.TransactionSaver
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
@@ -28,7 +29,26 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     var hashOfTimestamp = hashMapOf<Long, Long>()
     var assetBalance: AssetBalance? = null
 
+    @Inject
+    lateinit var transactionSaver: TransactionSaver
+
     fun loadTransactions() {
+        addSubscription(loadFromDb()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({list ->
+                    if (list.isEmpty()) {
+                        loadLastTransactions()
+                    } else {
+                        viewState.afterSuccessLoadTransaction(list, type)
+                    }
+                }, {
+                    viewState.onShowError(R.string.history_error_receive_data)
+                    it.printStackTrace()
+                }))
+    }
+
+    private fun loadFromDb(): Single<ArrayList<HistoryItem>> {
         Log.d("historydev", "on presenter")
         val singleData: Single<List<Transaction>> = when (type) {
             HistoryTabFragment.all -> {
@@ -83,38 +103,32 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
             }
         }
 
-        addSubscription(singleData
-                .map {
-                    // all history
-                    allItemsFromDb = it.sortedByDescending { it.timestamp }
+        return singleData.map {
+            // all history
+            allItemsFromDb = it.sortedByDescending { it.timestamp }
 
-                    // history only for detailed asset
-                    assetBalance.notNull {
-                        allItemsFromDb = allItemsFromDb.filter {
-                            if (assetBalance?.isWaves() == true) it.assetId.isNullOrEmpty()
-                            else it.assetId == assetBalance?.assetId
-                        }
-                    }
-
-                    val items = sortAndConfigToUi(allItemsFromDb)
-                    if (items.size == 0) {
-                        // todo
-                    } else {
-                        return@map sortAndConfigToUi(allItemsFromDb)
-                    }
+            // history only for detailed asset
+            assetBalance.notNull {
+                allItemsFromDb = allItemsFromDb.filter {
+                    if (assetBalance?.isWaves() == true) it.assetId.isNullOrEmpty()
+                    else it.assetId == assetBalance?.assetId
                 }
+            }
+
+            return@map sortAndConfigToUi(allItemsFromDb)
+        }
+    }
+
+    fun loadLastTransactions() {
+        addSubscription(nodeDataManager.loadLightTransactions()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    viewState.afterSuccessLoadTransaction(it, type)
+                .subscribe({list ->
+                    transactionSaver.saveTransactions(list)
                 }, {
                     viewState.onShowError(R.string.history_error_receive_data)
                     it.printStackTrace()
                 }))
-    }
-
-    private fun loadFromNet(): ArrayList<HistoryItem> {
-
     }
 
     private fun sortAndConfigToUi(it: List<Transaction>): ArrayList<HistoryItem> {

@@ -1,22 +1,22 @@
 package com.wavesplatform.wallet.v2.ui.home.history.tab
 
+import android.support.v7.widget.RecyclerView
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.recycle_item_history.view.*
+import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
-import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
-import android.support.v7.widget.RecyclerView
-import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import pers.victor.ext.dp2px
 
 
 class HistoryTabItemAdapter @Inject constructor() :
@@ -56,7 +56,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                     e.printStackTrace()
                 }
 
-                helper?.itemView.notNull { view ->
+                helper.itemView.notNull { view ->
                     view.image_transaction.setImageDrawable(item.data.transactionType()?.icon())
 
                     var showTag = Constants.defaultAssets.any {
@@ -136,17 +136,26 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 }
                             }
                             TransactionType.TOKEN_GENERATION_TYPE -> {
-                                val quantity = MoneyUtil.getScaledText(item.data.quantity
-                                        ?: 0, item.data.asset).substringBefore(".")
+                                val quantity = MoneyUtil.getScaledText(
+                                        item.data.quantity, item.data.asset)
+                                        .substringBefore(".")
                                 view.text_transaction_value.text = quantity
                             }
                             TransactionType.TOKEN_BURN_TYPE -> {
                                 item.data.amount.notNull {
-                                    val afterDot = MoneyUtil.getScaledText(it, item.data.asset).substringAfter(".").toInt()
-                                    var amount = ""
+                                    val scaledText = MoneyUtil.getScaledText(it, item.data.asset)
+                                    val afterDot = if (scaledText.matches(".".toRegex())) {
+                                        scaledText.substringAfter(".").toInt()
+                                    } else {
+                                        0
+                                    }
 
-                                    if (afterDot == 0) amount = MoneyUtil.getScaledText(it, item.data.asset).substringBefore(".")
-                                    else amount = MoneyUtil.getScaledText(it, item.data.asset)
+                                    val amount = if (afterDot == 0) {
+                                        MoneyUtil.getScaledText(it, item.data.asset)
+                                                .substringBefore(".")
+                                    } else {
+                                        MoneyUtil.getScaledText(it, item.data.asset)
+                                    }
 
                                     view.text_transaction_value.text = "-$amount"
                                 }

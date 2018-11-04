@@ -80,6 +80,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
 
         swipe_refresh.setColorSchemeResources(R.color.submit400)
+        swipe_refresh.setOnRefreshListener { presenter.loadLastTransactions() }
         layoutManager = SpeedyLinearLayoutManager(baseActivity)
         recycle_history.layoutManager = layoutManager
         recycle_history.adapter = adapter
@@ -119,11 +120,9 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.StopUpdateHistoryScreen::class.java)
                 .subscribe {
-                    // todo The History process must be refactor
                     swipe_refresh.isRefreshing = false
                 })
 
-        swipe_refresh.isRefreshing = true
         runAsync {
             presenter.loadTransactions()
         }
