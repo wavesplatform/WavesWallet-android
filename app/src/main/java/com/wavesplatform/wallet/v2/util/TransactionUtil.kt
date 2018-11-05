@@ -27,5 +27,7 @@ class TransactionUtil @Inject constructor() {
             else if (transaction.type == 11 && transaction.sender == App.getAccessManager().getWallet()?.address) Constants.ID_MASS_SEND_TYPE
             else if (transaction.type == 11 && transaction.sender != App.getAccessManager().getWallet()?.address) Constants.ID_MASS_RECEIVE_TYPE
             else if (transaction.type == 12) Constants.ID_DATA_TYPE
+            else if (transaction.type == 13) Constants.ID_SET_SCRIPT_TYPE
+            else if (transaction.type == 14) Constants.ID_SET_SPONSORSHIP_TYPE
             else Constants.ID_UNRECOGNISED_TYPE
 }

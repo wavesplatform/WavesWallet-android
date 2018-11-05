@@ -820,6 +820,10 @@
     <string name="history_type_spam_receive">Received %s</string>
     <string name="history_type_mass_spam_receive">Received %s</string>
     <string name="history_type_data">Data transaction</string>
+    <string name="history_type_set_script">Set script transaction</string>
+    <string name="history_type_cancel_script">Cancel script transaction</string>
+    <string name="history_type_set_sponsorship">Set sponsorship transaction</string>
+    <string name="history_type_cancel_sponsorship">Cancel sponsorship transaction</string>
     <string name="history_error_receive_data">Error receive data. Please try later</string>
 
     <!--History Details-->

@@ -283,10 +283,8 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 historyContainer?.addView(baseInfoLayout)
             }
             TransactionType.SELF_TRANSFER_TYPE -> {
-//                val selfTransfer = inflater?.inflate(R.layout.fragment_bottom_sheet_self_trans_layout, historyContainer, false)
                 viewCommentLine?.gone()
 
-//                historyContainer?.addView(selfTransfer)
                 if (showCommentBlock) {
                     historyContainer?.addView(commentBlock)
                 } else {
@@ -486,9 +484,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         historyDetailsAdapter.mData = allItems!!
         viewPager?.adapter = historyDetailsAdapter
         viewPager?.currentItem = selectedItemPosition
-
-        val enumList = HistoryTypeEnum.values()
-
         viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }

@@ -163,6 +163,14 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.TOKEN_REISSUE_TYPE -> {
                                 view.text_transaction_value.text = "+${item.data.amount}"
                             }
+                            TransactionType.SET_SCRIPT_TYPE -> {
+                                view.text_transaction_name.text = mContext.getString(
+                                        item.data.transactionType().title)
+                            }
+                            TransactionType.CANCEL_SCRIPT_TYPE -> {
+                                view.text_transaction_name.text = mContext.getString(
+                                        item.data.transactionType().title)
+                            }
                             else -> {
                                 item.data.amount.notNull {
                                     view.text_transaction_value.text = MoneyUtil.getScaledText(it, item.data.asset)
@@ -171,8 +179,10 @@ class HistoryTabItemAdapter @Inject constructor() :
                         }
                     }
 
-                    if (item.data.transactionType() != TransactionType.CREATE_ALIAS_TYPE && item.data.transactionType() != TransactionType.DATA_TYPE
-                            && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
+                    if (item.data.transactionType() != TransactionType.CREATE_ALIAS_TYPE
+                            && item.data.transactionType() != TransactionType.DATA_TYPE
+                            && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
+                            && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
                             && item.data.transactionType() != TransactionType.EXCHANGE_TYPE) {
                         if (showTag) {
                             view.text_tag.visiable()
@@ -181,10 +191,11 @@ class HistoryTabItemAdapter @Inject constructor() :
                             view.text_tag.gone()
                             view.text_transaction_value.text = "${view.text_transaction_value.text} ${item.data.asset?.name}"
                         }
-                    } else if (item.data.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || item.data.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
+                    } else if (item.data.transactionType() == TransactionType.SPAM_RECEIVE_TYPE ||
+                            item.data.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
                         view.text_tag.gone()
                         view.text_tag_spam.visiable()
-                        view.text_transaction_value.text = "${view.text_transaction_value.text} ${item.data.asset?.name}"
+                        view.text_transaction_value.text = "${view.text_transaction_value.text}"
                     }
 
                     view.text_transaction_value.makeTextHalfBold()

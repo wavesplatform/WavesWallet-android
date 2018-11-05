@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="24dp">
 
@@ -41,10 +42,11 @@
             android:paddingEnd="4dp"
             android:paddingStart="4dp"
             android:paddingTop="2dp"
-            android:text="WAVES"
+            tools:text="WAVES"
             android:textColor="@color/info500"
             android:textSize="12sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
         <com.wavesplatform.wallet.v2.ui.custom.SpamTag
             android:id="@+id/text_tag_spam"
@@ -52,7 +54,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="4dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible"/>
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatTextView
@@ -61,8 +64,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
-        android:text="≈ 00 000.00 US Dollar"
+        tools:text="≈ 00 000.00 US Dollar"
         android:textColor="@color/disabled500"
         android:textSize="12sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="visible"/>
 </LinearLayout>

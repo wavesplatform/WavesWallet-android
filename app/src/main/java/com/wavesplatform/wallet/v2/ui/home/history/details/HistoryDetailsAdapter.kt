@@ -96,17 +96,19 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 }
             }
             TransactionType.TOKEN_GENERATION_TYPE -> {
-                val quantity = MoneyUtil.getScaledText(transaction.quantity
-                        ?: 0, transaction.asset).substringBefore(".")
+                val quantity = MoneyUtil.getScaledText(transaction.quantity, transaction.asset)
+                        .substringBefore(".")
                 layout.text_amount_or_title.text = quantity
             }
             TransactionType.TOKEN_BURN_TYPE -> {
                 transaction.amount.notNull {
-                    val afterDot = MoneyUtil.getScaledText(it, transaction.asset).substringAfter(".").toInt()
-                    var amount = ""
-
-                    if (afterDot == 0) amount = MoneyUtil.getScaledText(it, transaction.asset).substringBefore(".")
-                    else amount = MoneyUtil.getScaledText(it, transaction.asset)
+                    val afterDot = MoneyUtil.getScaledText(it, transaction.asset)
+                            .substringAfter(".").toInt()
+                    val amount = if (afterDot == 0) {
+                        MoneyUtil.getScaledText(it, transaction.asset).substringBefore(".")
+                    } else {
+                        MoneyUtil.getScaledText(it, transaction.asset)
+                    }
 
                     layout.text_amount_or_title.text = "-$amount"
                 }
@@ -121,8 +123,11 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
             }
         }
 
-        if (transaction.transactionType() != TransactionType.CREATE_ALIAS_TYPE && transaction.transactionType() != TransactionType.DATA_TYPE
-                && transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE && transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE) {
+        if (transaction.transactionType() != TransactionType.CREATE_ALIAS_TYPE
+                && transaction.transactionType() != TransactionType.DATA_TYPE
+                && transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
+                && transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
+                && transaction.transactionType() != TransactionType.EXCHANGE_TYPE) {
             if (showTag) {
                 layout.text_tag.visiable()
                 layout.text_tag.text = transaction.asset?.name
