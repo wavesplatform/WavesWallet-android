@@ -35,6 +35,11 @@ class TransactionSaver @Inject constructor() {
     fun saveTransactions(sortedList: List<Transaction>, limit: Int = DEFAULT_LIMIT,
                          changeListener: OnTransactionLimitChangeListener? = null) {
         currentLimit = limit
+        if (sortedList.isEmpty() || limit < 1) {
+            rxEventBus.post(Events.NeedUpdateHistoryScreen())
+            return
+        }
+
         runAsync {
             // check if exist last transaction
             queryAsync<Transaction>({ equalTo("id", sortedList[sortedList.size - 1].id) },

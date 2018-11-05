@@ -124,7 +124,11 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({list ->
-                    transactionSaver.saveTransactions(list)
+                    if (list.isEmpty()) {
+                        viewState.afterSuccessLoadTransaction(arrayListOf(), type)
+                    } else {
+                        transactionSaver.saveTransactions(list)
+                    }
                 }, {
                     viewState.onShowError(R.string.history_error_receive_data)
                     it.printStackTrace()

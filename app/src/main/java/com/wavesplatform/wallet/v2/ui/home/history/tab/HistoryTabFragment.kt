@@ -164,6 +164,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         adapter.setNewData(data)
         adapter.setEmptyView(R.layout.layout_empty_data)
         skeletonScreen.notNull { it.hide() }
+        swipe_refresh.isRefreshing = false
     }
 
     override fun onShowError(res: Int) {
