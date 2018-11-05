@@ -161,7 +161,10 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 }
                             }
                             TransactionType.TOKEN_REISSUE_TYPE -> {
-                                view.text_transaction_value.text = "+${item.data.amount}"
+                                val quantity = MoneyUtil.getScaledText(
+                                        item.data.quantity, item.data.asset)
+                                        .substringBefore(".")
+                                view.text_transaction_value.text = "+${quantity}"
                             }
                             TransactionType.SET_SCRIPT_TYPE -> {
                                 view.text_transaction_name.text = mContext.getString(

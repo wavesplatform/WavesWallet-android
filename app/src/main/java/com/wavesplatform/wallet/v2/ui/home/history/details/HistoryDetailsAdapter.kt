@@ -114,7 +114,9 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 }
             }
             TransactionType.TOKEN_REISSUE_TYPE -> {
-                layout.text_amount_or_title.text = "+${transaction.amount}"
+                val quantity = MoneyUtil.getScaledText(transaction.quantity, transaction.asset)
+                        .substringBefore(".")
+                layout.text_amount_or_title.text = "+${quantity}"
             }
             else -> {
                 transaction.amount.notNull {
