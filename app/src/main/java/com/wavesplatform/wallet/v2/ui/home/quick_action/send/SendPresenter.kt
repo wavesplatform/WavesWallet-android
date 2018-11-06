@@ -60,7 +60,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                                 }, {
                                     type = Type.UNKNOWN
                                     runOnUiThread {
-                                        viewState.setRecipientValid(null)
+                                        viewState.setRecipientValid(false)
                                     }
                                 }))
             }
