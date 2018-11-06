@@ -8,7 +8,7 @@ interface SendView : BaseMvpView {
 
     fun onShowError(res: Int)
     fun onShowPaymentDetails(details: PaymentConfirmationDetails)
-    fun showXRate(xRate: XRate?, ticker: String)
+    fun showXRate(xRate: XRate, ticker: String)
     fun showXRateError()
     fun setRecipientValid(valid: Boolean?)
 

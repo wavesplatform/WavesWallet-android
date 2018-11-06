@@ -167,20 +167,17 @@
                             android:background="@drawable/shape_dashed_line"
                             android:layerType="software" />
 
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/button_confirm"
+                            style="@style/WavesButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="10dp"
+                            android:text="@string/token_burn_confirmation_burn" />
 
                     </LinearLayout>
-
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/button_confirm"
-                        style="@style/WavesButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_gravity="bottom"
-                        android:layout_marginBottom="10dp"
-                        android:text="@string/token_burn_confirmation_burn" />
-
 
                 </RelativeLayout>
 

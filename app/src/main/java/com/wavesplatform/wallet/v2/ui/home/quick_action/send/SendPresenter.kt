@@ -60,7 +60,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                                 }, {
                                     type = Type.UNKNOWN
                                     runOnUiThread {
-                                        viewState.setRecipientValid(null)
+                                        viewState.setRecipientValid(false)
                                     }
                                 }))
             }
@@ -108,9 +108,10 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     return R.string.send_to_same_address_warning
                 } else if (!isFundSufficient(tx)) {
                     return R.string.insufficient_funds
-                } else if (Constants.MONERO_ASSET_ID == recipientAssetId &&
-                        moneroPaymentId != null &&
-                        moneroPaymentId!!.length < MONERO_PAYMENT_ID_LENGTH) {
+                } else if (Constants.MONERO_ASSET_ID == recipientAssetId
+                        && moneroPaymentId != null
+                        && (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH
+                                || !moneroPaymentId!!.matches(" ".toRegex()))) {
                     return R.string.invalid_monero_payment_id
                 }
         }
@@ -153,7 +154,11 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                             .subscribe({ xRate ->
                                 type = SendPresenter.Type.GATEWAY
                                 runOnUiThread {
-                                    viewState.showXRate(xRate, currencyTo)
+                                    if (xRate == null) {
+                                        viewState.showXRateError()
+                                    } else {
+                                        viewState.showXRate(xRate, currencyTo)
+                                    }
                                 }
                             }, {
                                 type = SendPresenter.Type.UNKNOWN
@@ -210,7 +215,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     Constants.BITCOINCASH_ASSET_ID
                 recipient.matches("^X[a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
                     Constants.DASH_ASSET_ID
-                recipient.matches("([a-km-zA-HJ-NP-Z1-9]{95}|[a-km-zA-HJ-NP-Z1-9]{106})$".toRegex()) ->
+                recipient.matches("^4([0-9]|[A-B])(.){93}".toRegex()) ->
                     Constants.MONERO_ASSET_ID
                 else -> null
             }

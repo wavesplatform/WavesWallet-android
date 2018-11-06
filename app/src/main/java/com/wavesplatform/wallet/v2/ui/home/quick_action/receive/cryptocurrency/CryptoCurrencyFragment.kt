@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -97,8 +98,11 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
 
     override fun showTunnel(tunnel: GetTunnel?) {
         skeletonView!!.hide()
-        if (tunnel?.tunnel == null) {
+        if (tunnel?.tunnel == null
+                || tunnel.tunnel?.inMin.isNullOrEmpty()
+                || tunnel.tunnel?.currencyFrom.isNullOrEmpty()) {
             button_continue.isEnabled = false
+            showError(App.getAppContext().getString(R.string.receive_error_network))
             return
         }
 

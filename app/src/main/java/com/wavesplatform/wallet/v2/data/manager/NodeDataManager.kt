@@ -33,8 +33,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     @Inject
     lateinit var matcherDataManager: MatcherDataManager
     var transactions: List<Transaction> = ArrayList()
-    var pendingTransactions: List<Transaction> = ArrayList()
-    var currentLoadTransactionLimitPerRequest = 100
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
         return spamService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM))
@@ -182,7 +180,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         return nodeService.createLeasing(createLeasingRequest)
     }
 
-    fun loadTransactions(): Observable<List<Transaction>> {
+    fun loadTransactions(currentLoadTransactionLimitPerRequest: Int): Observable<List<Transaction>> {
         return Observable.interval(0, 15, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap {
@@ -194,6 +192,11 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     }
                 }
                 .onErrorResumeNext(Observable.empty())
+    }
+
+    fun loadLightTransactions(): Observable<List<Transaction>> {
+        return nodeService.transactionList(getAddress(), 100)
+                .map { r -> r[0] }
     }
 
     fun currentBlocksHeight(): Observable<Height> {

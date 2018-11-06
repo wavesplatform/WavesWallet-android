@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_history_tab.*
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.util.*
@@ -78,12 +79,14 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                 })
 
 
+        swipe_refresh.setColorSchemeResources(R.color.submit400)
+        swipe_refresh.setOnRefreshListener { presenter.loadLastTransactions() }
         layoutManager = SpeedyLinearLayoutManager(baseActivity)
         recycle_history.layoutManager = layoutManager
         recycle_history.adapter = adapter
 
         presenter.type = arguments?.getString("type")
-        presenter.assetBalance = arguments?.getParcelable<AssetBalance>(HistoryFragment.BUNDLE_ASSET)
+        presenter.assetBalance = arguments?.getParcelable(HistoryFragment.BUNDLE_ASSET)
 
         adapter.bindToRecyclerView(recycle_history)
 
@@ -112,6 +115,12 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                     runAsync {
                         presenter.loadTransactions()
                     }
+                    swipe_refresh.isRefreshing = false
+                })
+
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.StopUpdateHistoryScreen::class.java)
+                .subscribe {
+                    swipe_refresh.isRefreshing = false
                 })
 
         runAsync {
@@ -155,6 +164,12 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         adapter.setNewData(data)
         adapter.setEmptyView(R.layout.layout_empty_data)
         skeletonScreen.notNull { it.hide() }
+        swipe_refresh.isRefreshing = false
+    }
+
+    override fun onShowError(res: Int) {
+        swipe_refresh.isRefreshing = false
+        showError(res, R.id.nested_scroll_view)
     }
 
     interface ChangeTabBarVisibilityListener {
