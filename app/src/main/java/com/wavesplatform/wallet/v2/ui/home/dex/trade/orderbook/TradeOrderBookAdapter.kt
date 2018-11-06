@@ -16,7 +16,7 @@ import pers.victor.ext.findColor
 import pers.victor.ext.setWidth
 import javax.inject.Inject
 import android.widget.RelativeLayout
-
+import com.wavesplatform.wallet.v2.util.clearBalance
 
 
 class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder>(null) {
@@ -61,7 +61,7 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
 //                }
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
                 val priceUIValue = MoneyUtil.getScaledText(item.price, market.priceAssetDecimals).stripZeros()
-                val sum = amountUIValue.replace(",", "").toDouble() * priceUIValue.replace(",", "").toDouble()
+                val sum = amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
                 helper.setTextColor(R.id.text_price_value, findColor(R.color.error400))
                         .setBackgroundColor(R.id.view_bg, findColor(R.color.error100))
                         .setText(R.id.text_amount_value, amountUIValue)

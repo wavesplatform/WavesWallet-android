@@ -21,9 +21,9 @@ interface MatcherService {
 
 
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}/tradableBalance/{address}")
-    fun getBalanceFromAssetPair(@Path("amountAsset") amountAsset: String,
-                                         @Path("priceAsset") priceAsset: String,
-                                         @Path("address") address: String): Observable<LinkedTreeMap<String, Long>>
+    fun getBalanceFromAssetPair(@Path("amountAsset") amountAsset: String?,
+                                         @Path("priceAsset") priceAsset: String?,
+                                         @Path("address") address: String?): Observable<LinkedTreeMap<String, Long>>
 
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}")
     fun getOrderBook(@Path("amountAsset") amountAsset: String?,

@@ -52,6 +52,7 @@
 
 
             <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/edit_amount"
                 android:theme="@style/SubmitEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,6 +104,7 @@
             android:scrollbars="none">
 
             <LinearLayout
+                android:id="@+id/linear_percent_values"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -111,6 +113,7 @@
                     android:id="@+id/text_use_total_balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:tag="100"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="4dp"
                     android:background="@drawable/basic100_rounded"
@@ -128,6 +131,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
+                    android:tag="50"
                     android:layout_marginRight="4dp"
                     android:background="@drawable/basic100_rounded"
                     android:lineSpacingExtra="4sp"
@@ -148,6 +152,7 @@
                     android:background="@drawable/basic100_rounded"
                     android:lineSpacingExtra="4sp"
                     android:paddingBottom="8dp"
+                    android:tag="10"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="8dp"
@@ -165,6 +170,7 @@
                     android:lineSpacingExtra="4sp"
                     android:paddingBottom="8dp"
                     android:paddingLeft="10dp"
+                    android:tag="5"
                     android:paddingRight="10dp"
                     android:paddingTop="8dp"
                     android:text="@string/buy_and_sell_5"
@@ -423,16 +429,15 @@
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button_sell"
+            android:id="@+id/button_confirm"
             style="@style/WavesButton"
-            android:background="@drawable/selector_btn_red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="54dp"
-            android:text="@string/sell_btn_txt" />
+            android:text="@string/buy_btn_txt" />
 
     </LinearLayout>
 

@@ -1,8 +1,12 @@
 package com.wavesplatform.wallet.v2.data.model.remote.response
 
+import android.util.Log
 import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.google.common.primitives.Bytes
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.wallet.v1.util.SignUtil
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook.TradeOrderBookAdapter
+import com.wavesplatform.wallet.v2.util.arrayOption
 
 
 data class OrderBook(
@@ -15,7 +19,18 @@ data class OrderBook(
     data class Pair(
             @SerializedName("amountAsset") var amountAsset: String = "",
             @SerializedName("priceAsset") var priceAsset: String = ""
-    )
+    ) {
+        fun toBytes(): ByteArray {
+            return try {
+                Bytes.concat(amountAsset.arrayOption(),
+                        priceAsset.arrayOption())
+            } catch (e: Exception) {
+                Log.e("Wallet", "Couldn't create bytes for AssetPair: ", e)
+                ByteArray(0)
+            }
+
+        }
+    }
 
 
     data class Ask(

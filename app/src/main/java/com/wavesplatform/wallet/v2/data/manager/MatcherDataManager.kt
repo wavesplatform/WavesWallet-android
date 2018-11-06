@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.data.manager
 
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
+import com.google.gson.internal.LinkedTreeMap
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.crypto.Base58
@@ -61,6 +62,10 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
             cancelOrderRequest.sign(it)
         }
         return matcherService.cancelOrder(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, cancelOrderRequest)
+    }
+
+    fun getBalanceFromAssetPair(watchMarket: WatchMarket?): Observable<LinkedTreeMap<String, Long>> {
+        return matcherService.getBalanceFromAssetPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getAddress())
     }
 
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {

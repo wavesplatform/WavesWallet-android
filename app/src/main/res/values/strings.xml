@@ -1333,17 +1333,17 @@
     <!--Buy And Sell Dialog-->
     <string name="buy_and_sell_dialog_buy_tab">Buy</string>
     <string name="buy_and_sell_dialog_sell_tab">Sell</string>
-    <string name="buy_and_sell_amount_in">Amount in WAVES</string>
-    <string name="buy_and_sell_not_enough">Not enough WAVES</string>
-    <string name="buy_and_sell_user_total_balance">User total balance</string>
+    <string name="buy_and_sell_amount_in">Amount in %1$s</string>
+    <string name="buy_and_sell_not_enough">Not enough %1$s</string>
+    <string name="buy_and_sell_user_total_balance">Use total balance</string>
     <string name="buy_and_sell_50">50%</string>
     <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_5">5%</string>
-    <string name="buy_and_sell_limit_price_in">Limit Price in BTC</string>
+    <string name="buy_and_sell_limit_price_in">Limit Price in %1$s</string>
     <string name="buy_and_sell_bid">Bid</string>
     <string name="buy_and_sell_ask">Ask</string>
     <string name="buy_and_sell_last">Last</string>
-    <string name="buy_and_sell_total_in">Total in BTC</string>
+    <string name="buy_and_sell_total_in">Total in %1$s</string>
     <string name="buy_and_sell_fee">Fee</string>
     <string name="buy_and_sell_0_001_waves">0.001 Waves</string>
     <string name="buy_and_sell_expiration">Expiration</string>
@@ -1358,10 +1358,10 @@
     <string name="buy_and_sell_expiration_dialog_title">Choose expiration</string>
 
     <!--Buy-->
-    <string name="buy_btn_txt">Buy WAVES</string>
+    <string name="buy_btn_txt">Buy %s</string>
 
     <!--Sell-->
-    <string name="sell_btn_txt">Sell WAVES</string>
+    <string name="sell_btn_txt">Sell %s</string>
 
     <!--Buy and Sell Success-->
     <string name="buy_and_sell_success_the_order_is_created">The order is created</string>

@@ -5,9 +5,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
+import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
@@ -65,19 +67,33 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
 
         adapter.bindToRecyclerView(recycle_orderbook)
 
-        linear_buy.click {
-            val dialog = TradeBuyAndSellBottomSheetFragment()
-            dialog.arguments = Bundle().apply {
-                putInt(TradeBuyAndSellBottomSheetFragment.BUNDLE_OPEN, TradeBuyAndSellBottomSheetFragment.OPEN_BUY)
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            val item = adapter.getItem(position) as MultiItemEntity
+            when (item.itemType) {
+                TradeOrderBookAdapter.ASK_TYPE -> {
+                    item as OrderBook.Ask
+                    val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(presenter.watchMarket,
+                            TradeBuyAndSellBottomSheetFragment.BUY_TYPE,
+                            item.price, item.amount)
+                    dialog.show(fragmentManager, dialog::class.java.simpleName)
+                }
+                TradeOrderBookAdapter.BID_TYPE -> {
+                    item as OrderBook.Bid
+                    val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(presenter.watchMarket,
+                            TradeBuyAndSellBottomSheetFragment.BUY_TYPE,
+                            item.price, item.amount)
+                    dialog.show(fragmentManager, dialog::class.java.simpleName)
+                }
             }
+        }
+
+        linear_buy.click {
+            val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(presenter.watchMarket, TradeBuyAndSellBottomSheetFragment.BUY_TYPE)
             dialog.show(fragmentManager, dialog::class.java.simpleName)
         }
 
         linear_sell.click {
-            val dialog = TradeBuyAndSellBottomSheetFragment()
-            dialog.arguments = Bundle().apply {
-                putInt(TradeBuyAndSellBottomSheetFragment.BUNDLE_OPEN, TradeBuyAndSellBottomSheetFragment.OPEN_SELL)
-            }
+            val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(presenter.watchMarket, TradeBuyAndSellBottomSheetFragment.SELL_TYPE)
             dialog.show(fragmentManager, dialog::class.java.simpleName)
         }
 

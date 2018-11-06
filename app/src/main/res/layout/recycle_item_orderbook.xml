@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:id="@+id/relative_root"
     android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
     android:background="@color/white">
 
     <android.support.v7.widget.AppCompatTextView

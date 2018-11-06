@@ -47,6 +47,7 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
@@ -118,6 +119,15 @@ fun Context.notAvailable() {
 
 fun ByteArray.arrayWithSize(): ByteArray {
     return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
+}
+
+fun String.arrayOption(): ByteArray {
+    return if (this.isEmpty()) byteArrayOf(0)
+    else Bytes.concat(byteArrayOf(1), Base58.decode(this))
+}
+
+fun String.clearBalance(): String {
+    return this.stripZeros().replace(",", "")
 }
 
 fun getDeviceName(): String {
