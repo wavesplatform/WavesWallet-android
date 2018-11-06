@@ -190,22 +190,22 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
-    override fun showXRate(xRate: XRate?, ticker: String) {
+    override fun showXRate(xRate: XRate, ticker: String) {
         skeletonView!!.hide()
 
-        val fee = if (xRate?.fee == null) {
+        val fee = if (xRate.fee == null) {
             "-"
         } else {
             BigDecimal(xRate.fee).toString()
         }
 
-        val inMin = if (xRate?.inMin == null) {
+        val inMin = if (xRate.inMin == null) {
             "-"
         } else {
             BigDecimal(xRate.inMin).toString()
         }
 
-        val inMax = if (xRate?.inMax == null) {
+        val inMax = if (xRate.inMax == null) {
             "-"
         } else {
             BigDecimal(xRate.inMax).toString()
@@ -249,6 +249,7 @@ class SendActivity : BaseActivity(), SendView {
                         relative_gateway_fee.gone()
                         monero_layout.gone()
                     } else {
+                        setRecipientValid(true)
                         checkMonero(presenter.recipientAssetId)
                         loadGatewayXRate(presenter.recipientAssetId!!)
                     }
