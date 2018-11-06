@@ -11,6 +11,7 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
@@ -221,7 +222,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             REQUEST_SCAN_QR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                    val address = result.contents
+                    val address = result.contents.replace(AddressUtil.WAVES_PREFIX, "")
                     if (!address.isEmpty()) {
                         edit_address.setText(address)
                     } else {

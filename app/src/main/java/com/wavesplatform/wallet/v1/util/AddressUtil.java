@@ -18,6 +18,7 @@ public class AddressUtil {
     public static int ChecksumLength = 4;
     public static int HashLength = 20;
     public static int AddressLength = 1 + 1 + ChecksumLength + HashLength;
+    public static String WAVES_PREFIX = "waves://";
 
     public static byte getAddressScheme() {
         return (byte) EnvironmentManager.get().current().getAddressScheme();
@@ -64,7 +65,7 @@ public class AddressUtil {
     }
 
     public static boolean isWavesUri(String uri) {
-        return uri.startsWith("waves://");
+        return uri.startsWith(WAVES_PREFIX);
     }
 
     public static String generateReceiveUri(long amount, AssetBalance ab, String attachment) {
@@ -74,7 +75,7 @@ public class AddressUtil {
         if (attachment != null && !attachment.isEmpty()) params.add("attachment=" + attachment);
 
         String paramsText = TextUtils.join("&", params);
-        return "waves://" + NodeManager.get().getAddress() + (paramsText.isEmpty() ? "" : "?" + paramsText);
+        return WAVES_PREFIX + NodeManager.get().getAddress() + (paramsText.isEmpty() ? "" : "?" + paramsText);
     }
 
 }

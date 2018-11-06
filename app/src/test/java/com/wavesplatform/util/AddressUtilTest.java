@@ -1,15 +1,14 @@
 package com.wavesplatform.util;
 
-import android.net.Uri;
-
-import com.wavesplatform.wallet.util.AddressUtil;
+import com.wavesplatform.wallet.v1.util.AddressUtil;
 
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.net.URI;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class AddressUtilTest {
     @Test
@@ -21,9 +20,8 @@ public class AddressUtilTest {
 
     @Test
     public void parseUri() {
-        String str = "waves://3NCwEeAeVKdPySfsTeAoroPHDUg54mSDY5w?asset=123&amount=5000";
+        String str = AddressUtil.WAVES_PREFIX + "3NCwEeAeVKdPySfsTeAoroPHDUg54mSDY5w?asset=123&amount=5000";
         URI uri = URI.create(str);
         uri.getHost();
     }
-
 }

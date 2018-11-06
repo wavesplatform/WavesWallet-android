@@ -18,6 +18,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
+import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
@@ -295,7 +296,7 @@ class SendActivity : BaseActivity(), SendView {
             ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                    val address = result.contents
+                    val address = result.contents.replace(AddressUtil.WAVES_PREFIX, "")
                     if (!TextUtils.isEmpty(address)) {
                         edit_address.setText(address)
                     } else {
