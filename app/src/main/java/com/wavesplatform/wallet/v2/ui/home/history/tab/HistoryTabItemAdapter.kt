@@ -1,14 +1,19 @@
 package com.wavesplatform.wallet.v2.ui.home.history.tab
 
+import android.annotation.SuppressLint
+import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.RecyclerView
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
+import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
+import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.recycle_item_history.view.*
@@ -39,6 +44,7 @@ class HistoryTabItemAdapter @Inject constructor() :
         FullSpanUtil.onViewAttachedToWindow(holder, this, HistoryItem.TYPE_HEADER)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun convert(helper: BaseViewHolder, item: HistoryItem) {
         when (item.itemType) {
             HistoryItem.TYPE_HEADER -> {
@@ -84,15 +90,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 }
                             }
                             TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE, TransactionType.MASS_RECEIVE_TYPE -> {
-                                if (item.data.transfers != null && item.data.transfers!!.isNotEmpty()) {
-                                    val sum = item.data.transfers.sumByLong { it.amount }
-                                    if (it == TransactionType.MASS_SPAM_RECEIVE_TYPE || it == TransactionType.MASS_RECEIVE_TYPE) {
-                                        view.text_transaction_value.text = "+${MoneyUtil.getScaledText(sum.toLong(), item.data.asset)}"
-                                    } else {
-                                        view.text_transaction_value.text = "-${MoneyUtil.getScaledText(sum.toLong(), item.data.asset)}"
-                                    }
-                                }
-
+                                setSpamTitle(item.data, it, view.text_transaction_value)
                             }
                             TransactionType.CREATE_ALIAS_TYPE -> {
                                 view.text_transaction_value.text = item.data.alias
@@ -194,11 +192,13 @@ class HistoryTabItemAdapter @Inject constructor() :
                             view.text_tag.gone()
                             view.text_transaction_value.text = "${view.text_transaction_value.text} ${item.data.asset?.name}"
                         }
-                    } else if (item.data.transactionType() == TransactionType.SPAM_RECEIVE_TYPE ||
-                            item.data.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
+                    }
+
+                    if (queryFirst<SpamAsset> { equalTo("assetId", item.data.assetId) }
+                            != null) {
                         view.text_tag.gone()
                         view.text_tag_spam.visiable()
-                        view.text_transaction_value.text = "${view.text_transaction_value.text}"
+                        setSpamTitle(item.data, item.data.transactionType(), view.text_transaction_value)
                     }
 
                     view.text_transaction_value.makeTextHalfBold()
@@ -206,5 +206,18 @@ class HistoryTabItemAdapter @Inject constructor() :
             }
         }
 
+    }
+
+    private fun setSpamTitle(transaction: Transaction, it: TransactionType, view: AppCompatTextView) {
+        if (transaction.transfers.isNotEmpty()) {
+            val sum = transaction.transfers.sumByLong { it.amount }
+            if (it == TransactionType.MASS_SPAM_RECEIVE_TYPE || it == TransactionType.MASS_RECEIVE_TYPE) {
+                view.text = "+${MoneyUtil.getScaledText(sum, transaction.asset)}"
+            } else {
+                view.text = "-${MoneyUtil.getScaledText(sum, transaction.asset)}"
+            }
+        } else {
+            view.text = "${MoneyUtil.getScaledText(transaction.amount, transaction.asset)}"
+        }
     }
 }
