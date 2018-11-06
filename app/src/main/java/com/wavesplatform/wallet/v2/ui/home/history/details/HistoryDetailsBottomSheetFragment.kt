@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.history.details
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.Intent
 import android.os.Bundle
@@ -35,6 +36,8 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.github.kbiakov.codeview.CodeView
 import io.github.kbiakov.codeview.highlight.ColorThemeData
@@ -240,14 +243,15 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 if (transaction.status == LeasingStatus.ACTIVE.status) {
                     status?.text = getString(R.string.history_details_active_now)
                     cancelLeasingBtn?.findViewById<FrameLayout>(R.id.frame_cancel_button)?.click {
-                        showProgressBar(true)
-                        presenter.cancelLeasing(transaction.id) {
-                            showProgressBar(false)
-                            selectedItem?.let {
-                                it.status = LeasingStatus.CANCELED.status
-                                setupView(it)
-                            }
-                            rxEventBus.post(Events.UpdateListOfActiveTransaction(selectedItemPosition))
+                        launchActivity<ConfirmationLeasingActivity>(
+                                StartLeasingActivity.REQUEST_CANCEL_LEASING_CONFIRMATION) {
+                            putExtra(ConfirmationLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING,
+                                    true)
+                            putExtra(ConfirmationLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING_TX,
+                                    transaction.id)
+                            putExtra(ConfirmationLeasingActivity.BUNDLE_ADDRESS, transaction.recipient)
+                            putExtra(ConfirmationLeasingActivity.BUNDLE_AMOUNT,
+                                    MoneyUtil.getScaledText(transaction.amount, transaction.asset))
                         }
                     }
 
@@ -532,6 +536,13 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 selectedItem?.let {
                     setupView(it)
                 }
+            }
+        }
+
+        if (requestCode == StartLeasingActivity.REQUEST_CANCEL_LEASING_CONFIRMATION) {
+            if (resultCode == Activity.RESULT_OK) {
+                rxEventBus.post(Events.UpdateListOfActiveTransaction(selectedItemPosition))
+                dismiss()
             }
         }
     }

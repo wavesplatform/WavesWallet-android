@@ -5,4 +5,6 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 interface ConfirmationLeasingView : BaseMvpView{
     fun successStartLeasing()
     fun failedStartLeasing()
+    fun successCancelLeasing()
+    fun failedCancelLeasing()
 }
