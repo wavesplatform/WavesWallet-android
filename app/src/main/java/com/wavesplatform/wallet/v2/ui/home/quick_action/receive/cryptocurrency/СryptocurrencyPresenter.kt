@@ -50,6 +50,7 @@ class СryptocurrencyPresenter @Inject constructor() : BasePresenter<Сryptocurr
                             }, {
                                 viewState.showError(App.getAppContext()
                                         .getString(R.string.receive_error_network))
+                                it.printStackTrace()
                             }))
         }
     }
