@@ -24,7 +24,6 @@ import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
-import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -47,6 +46,7 @@ import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import java.math.BigDecimal
+import java.net.URI
 import javax.inject.Inject
 
 
@@ -64,7 +64,8 @@ class SendActivity : BaseActivity(), SendView {
     override fun configLayoutRes() = R.layout.activity_send
 
     companion object {
-        var REQUEST_YOUR_ASSETS = 43
+        const val REQUEST_YOUR_ASSETS = 43
+        const val REQUEST_SCAN_RECEIVE = 44
         const val KEY_INTENT_ASSET_DETAILS = "asset_details"
         const val KEY_INTENT_REPEAT_TRANSACTION = "repeat_transaction"
         const val KEY_INTENT_TRANSACTION_ASSET_BALANCE = "transaction_asset_balance"
@@ -122,7 +123,11 @@ class SendActivity : BaseActivity(), SendView {
                 edit_address.text = null
                 text_recipient_error.gone()
             } else if (it.tag == R.drawable.ic_qrcode_24_basic_500) {
-                launchActivity<QrCodeScannerActivity> { }
+                IntentIntegrator(this).setRequestCode(REQUEST_SCAN_RECEIVE)
+                        .setOrientationLocked(true)
+                        .setBeepEnabled(false)
+                        .setCaptureActivity(QrCodeScannerActivity::class.java)
+                        .initiateScan()
             }
         }
 
@@ -246,7 +251,7 @@ class SendActivity : BaseActivity(), SendView {
                     presenter.recipientAssetId = SendPresenter.getAssetId(recipient)
                     if (presenter.recipientAssetId.isNullOrEmpty()) {
                         presenter.type = SendPresenter.Type.UNKNOWN
-                        setRecipientValid(null)
+                        setRecipientValid(false)
                         relative_gateway_fee.gone()
                         monero_layout.gone()
                     } else {
@@ -293,15 +298,12 @@ class SendActivity : BaseActivity(), SendView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
+            REQUEST_SCAN_RECEIVE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                    val address = result.contents.replace(AddressUtil.WAVES_PREFIX, "")
-                    if (!TextUtils.isEmpty(address)) {
-                        edit_address.setText(address)
-                    } else {
-                        showError(R.string.enter_seed_manually_validation_seed_is_invalid_error, R.id.root_view)
-                    }
+                            .contents
+                            .replace(AddressUtil.WAVES_PREFIX, "")
+                    parseDataFromQr(result)
                 }
             }
 
@@ -320,12 +322,52 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
+    private fun parseDataFromQr(result: String) {
+        if (result.isNullOrEmpty()) {
+            showError(R.string.send_error_get_data_from_qr, R.id.root_view)
+            return
+        }
+
+        if (result.contains("https://client.wavesplatform.com/#send/".toRegex())) {
+            val uri = URI.create(result.replace("/#send/", "/send/"))
+            try {
+
+                val params = uri.query.split("&")
+                var recipient: String
+                var amount: String
+                for (parameter in params) {
+                    if (parameter.contains("recipient=")) {
+                        recipient = parameter.replace("recipient=", "")
+                        edit_address.setText(recipient)
+                    }
+                    if (parameter.contains("amount=")) {
+                        amount = parameter.replace("amount=", "")
+                        edit_amount.setText(amount)
+                    }
+                }
+                val assetId = uri.path.split("/")[2]
+                val assetBalance = queryFirst<AssetBalance> {
+                    equalTo("assetId", assetId)
+                }
+                setAsset(assetBalance)
+            } catch (error: Exception) {
+                showError(R.string.send_error_get_data_from_qr, R.id.root_view)
+                error.printStackTrace()
+            }
+        } else {
+            edit_address.setText(result)
+
+            if (!TextUtils.isEmpty(result)) {
+                edit_address.setText(result)
+            } else {
+            }
+        }
+    }
+
     private fun setAsset(asset: AssetBalance?) {
         asset.notNull {
-
             presenter.selectedAsset = asset
 
-            checkRecipient(edit_address.text.toString())
             relative_chosen_coin.visiable()
             text_asset_hint.gone()
 
@@ -340,6 +382,7 @@ class SendActivity : BaseActivity(), SendView {
             } else {
                 image_asset_is_favourite.gone()
             }
+            checkRecipient(edit_address.text.toString())
         }
     }
 

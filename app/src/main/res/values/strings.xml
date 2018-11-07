@@ -1230,6 +1230,7 @@
     <string name="send_transaction_error_check_asset">Check asset</string>
     <string name="send_monero_payment_id">Monero Payment ID</string>
     <string name="send_monero_payment_id_hint">Paste or type your Payment ID</string>
+    <string name="send_error_get_data_from_qr">Error get data from QR</string>
 
     <!--About redirection-->
     <string name="about_redirection_title">You were redirected to the «IDNow» \nfor verification</string>
