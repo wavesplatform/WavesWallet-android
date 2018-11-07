@@ -18,7 +18,7 @@ class TradeMyOrdersAdapter @Inject constructor() : BaseQuickAdapter<OrderRespons
 
     override fun convert(helper: BaseViewHolder, item: OrderResponse) {
         helper
-                .setText(R.id.text_side, item.getType().type)
+                .setText(R.id.text_side, item.getType().typeUI)
                 .setText(R.id.text_price, MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals).stripZeros())
                 .setText(R.id.text_date, item.timestamp.asDateString("dd.MM.yy"))
                 .setText(R.id.text_time, item.timestamp.asDateString("HH:mm:ss"))

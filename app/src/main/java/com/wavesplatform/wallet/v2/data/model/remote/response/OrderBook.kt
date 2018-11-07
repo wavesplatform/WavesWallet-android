@@ -22,8 +22,8 @@ data class OrderBook(
     ) {
         fun toBytes(): ByteArray {
             return try {
-                Bytes.concat(amountAsset.arrayOption(),
-                        priceAsset.arrayOption())
+                Bytes.concat(SignUtil.arrayOption(amountAsset),
+                        SignUtil.arrayOption(priceAsset))
             } catch (e: Exception) {
                 Log.e("Wallet", "Couldn't create bytes for AssetPair: ", e)
                 ByteArray(0)

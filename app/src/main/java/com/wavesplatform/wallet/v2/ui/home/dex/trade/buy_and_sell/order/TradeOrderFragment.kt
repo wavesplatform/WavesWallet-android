@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
-import android.icu.util.UniversalTimeScale.toBigDecimal
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatTextView
@@ -11,13 +10,15 @@ import com.google.gson.internal.LinkedTreeMap
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity.Companion.TOTAL_BALANCE
-import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.clearBalance
+import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeStyled
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_trade_order.*
 import pers.victor.ext.children
 import pers.victor.ext.click
@@ -64,6 +65,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
         }
 
+        presenter.getMatcherKey()
         presenter.getBalanceFromAssetPair()
 
         text_amount_hint.text = getString(R.string.buy_and_sell_amount_in, presenter.watchMarket?.market?.amountAssetShortName)
@@ -125,9 +127,10 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         }
 
         button_confirm.click {
-            launchActivity<TradeBuyAndSendSuccessActivity> {
-                putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_OPERATION_TYPE, presenter.orderType)
-            }
+            presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
+//            launchActivity<TradeBuyAndSendSuccessActivity> {
+//                putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_OPERATION_TYPE, presenter.orderType)
+//            }
         }
     }
 
@@ -152,5 +155,9 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 }
             }
         }
+    }
+
+    override fun successPlaceOrder() {
+
     }
 }

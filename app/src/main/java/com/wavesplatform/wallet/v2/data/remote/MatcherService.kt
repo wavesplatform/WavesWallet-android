@@ -1,8 +1,8 @@
 package com.wavesplatform.wallet.v2.data.remote
 
 import com.google.gson.internal.LinkedTreeMap
-import com.wavesplatform.wallet.v1.request.OrderRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.CancelOrderRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.OrderRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.Markets
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse

@@ -11,6 +11,7 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.request.CancelOrderRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.OrderRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
@@ -67,6 +68,19 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     fun getBalanceFromAssetPair(watchMarket: WatchMarket?): Observable<LinkedTreeMap<String, Long>> {
         return matcherService.getBalanceFromAssetPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getAddress())
     }
+
+    fun getMatcherKey(): Observable<String> {
+        return matcherService.getMatcherKey()
+    }
+
+    fun placeOrder(orderRequest: OrderRequest): Observable<Any> {
+        orderRequest.senderPublicKey = getPublicKeyStr()
+        App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
+            orderRequest.sign(privateKey)
+        }
+        return matcherService.placeOrder(orderRequest)
+    }
+
 
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
         if (allMarketsList.isEmpty()) {
