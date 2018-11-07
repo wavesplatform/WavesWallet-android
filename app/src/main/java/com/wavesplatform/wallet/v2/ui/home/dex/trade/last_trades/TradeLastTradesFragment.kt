@@ -18,6 +18,7 @@ import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
+import java.util.*
 import javax.inject.Inject
 
 
@@ -85,6 +86,7 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
 
 
     override fun afterSuccessLoadLastTrades(data: List<LastTrade>) {
+        progress_bar.hide()
         swipe_container.isRefreshing = false
         adapter.setNewData(data)
         adapter.emptyView = getEmptyView()
@@ -96,10 +98,16 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
     }
 
     override fun afterFailedLoadLastTrades() {
+        progress_bar.hide()
         swipe_container.isRefreshing = false
         if (adapter.data.isEmpty()) {
             adapter.emptyView = getEmptyView()
             linear_fields_name.gone()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        progress_bar.hide()
     }
 }

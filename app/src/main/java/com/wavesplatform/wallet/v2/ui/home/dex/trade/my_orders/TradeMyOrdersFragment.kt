@@ -77,6 +77,7 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
     }
 
     override fun afterSuccessLoadMyOrders(data: List<OrderResponse>) {
+        progress_bar.hide()
         swipe_container.isRefreshing = false
         adapter.setNewData(data)
         adapter.emptyView = getEmptyView()
@@ -94,6 +95,7 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
     }
 
     override fun afterFailedLoadMyOrders() {
+        progress_bar.hide()
         swipe_container.isRefreshing = false
     }
 
@@ -101,4 +103,8 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
         presenter.loadMyOrders()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        progress_bar.hide()
+    }
 }

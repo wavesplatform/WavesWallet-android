@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatTextView
 import android.widget.Button
+import android.widget.EditText
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.gson.internal.LinkedTreeMap
@@ -11,18 +12,18 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.custom.CounterHandler
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
-import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity.Companion.TOTAL_BALANCE
 import com.wavesplatform.wallet.v2.util.clearBalance
-import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_trade_order.*
 import pers.victor.ext.children
 import pers.victor.ext.click
 import pers.victor.ext.findColor
+import java.math.BigDecimal
 import javax.inject.Inject
 
 
@@ -68,9 +69,54 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         presenter.getMatcherKey()
         presenter.getBalanceFromAssetPair()
 
+        CounterHandler.Builder()
+                .valueView(edit_amount)
+                .incrementalView(image_amount_plus)
+                .decrementalView(image_amount_minus)
+                .listener(object : CounterHandler.CounterListener {
+                    override fun onIncrement(view: EditText?, number: BigDecimal) {
+                        view?.setText(number.toString())
+                    }
+
+                    override fun onDecrement(view: EditText?, number: BigDecimal) {
+                        view?.setText(number.toString())
+                    }
+                })
+                .build()
+
+        CounterHandler.Builder()
+                .valueView(edit_limit_price)
+                .incrementalView(image_limit_price_plus)
+                .decrementalView(image_limit_price_minus)
+                .listener(object : CounterHandler.CounterListener {
+                    override fun onIncrement(view: EditText?, number: BigDecimal) {
+                        view?.setText(number.toString())
+                    }
+
+                    override fun onDecrement(view: EditText?, number: BigDecimal) {
+                        view?.setText(number.toString())
+                    }
+                })
+                .build()
+
+        CounterHandler.Builder()
+                .valueView(edit_total_price)
+                .incrementalView(image_total_price_plus)
+                .decrementalView(image_total_price_minus)
+                .listener(object : CounterHandler.CounterListener {
+                    override fun onIncrement(view: EditText?, number: BigDecimal) {
+                        view?.setText(number.toString())
+                    }
+
+                    override fun onDecrement(view: EditText?, number: BigDecimal) {
+                        view?.setText(number.toString())
+                    }
+                })
+                .build()
+
         text_amount_hint.text = getString(R.string.buy_and_sell_amount_in, presenter.watchMarket?.market?.amountAssetShortName)
         text_amount_error.text = getString(R.string.buy_and_sell_not_enough, presenter.watchMarket?.market?.amountAssetShortName)
-        text_limit_price_hint.text = getString(R.string.buy_and_sell_limit_price_in, presenter.watchMarket?.market?.priceAssetShortName)
+        text_limit_price_hint.text = getString(R.string.buy_and_sell_limit_price_in, presenter.watchMarket.market.priceAssetShortName)
         text_total_price_hint.text = getString(R.string.buy_and_sell_total_in, presenter.watchMarket?.market?.priceAssetShortName)
 
         if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {

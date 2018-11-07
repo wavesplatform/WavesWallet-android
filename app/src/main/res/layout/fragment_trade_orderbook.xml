@@ -37,8 +37,8 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_amount_title"
                     android:layout_width="match_parent"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="end"
                     android:text="@string/orderbook_amount_title"
                     android:textColor="@color/basic500"
@@ -82,10 +82,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@id/button_confirm"
-                android:background="@color/white"
                 android:layout_alignBottom="@+id/view_divider"
                 android:layout_below="@+id/view_top_divider"
+                android:background="@color/white"
                 android:overScrollMode="never" />
+
+            <View
+                android:layout_above="@id/button_confirm"
+                android:layout_centerInParent="true"
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+
+
+            <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:progress_image="@drawable/ic_loader_24_submit_400"
+                app:progress_text="@string/orderbook_loading" />
 
             <View
                 android:id="@+id/view_divider"

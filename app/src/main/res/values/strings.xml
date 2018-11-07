@@ -1328,6 +1328,7 @@
     <string name="orderbook_sum_title">Sum %s</string>
     <string name="orderbook_empty">Nothing Here…\nThe order book is empty</string>
     <string name="orderbook_spread_percent">SPREAD %s%%</string>
+    <string name="orderbook_loading">Loading orderbook…</string>
 
 
     <!--Buy And Sell Dialog-->

@@ -57,10 +57,10 @@ class ImageProgressBar : LinearLayout {
 
         // load attributes
         try {
-            progressImageResource = typedArray.getDrawable(R.styleable.ImageProgressBar_progress_image)
+            progressImageResource = typedArray.getDrawable(R.styleable.ImageProgressBar_progress_image) ?: findDrawable(R.drawable.ic_loader_24_submit_400)
             progressDurationResource = typedArray.getInt(R.styleable.ImageProgressBar_progress_duration, DEFAULT_DURATION)
-            progressTextResource = typedArray.getString(R.styleable.ImageProgressBar_progress_text)
-            progressTextColorResource = typedArray.getColorStateList(R.styleable.ImageProgressBar_progress_text_color)
+            progressTextResource = typedArray.getString(R.styleable.ImageProgressBar_progress_text) ?: app.getString(R.string.common_load_more_status)
+            progressTextColorResource = typedArray.getColorStateList(R.styleable.ImageProgressBar_progress_text_color) ?: findColorStateList(R.color.disabled500)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -72,8 +72,8 @@ class ImageProgressBar : LinearLayout {
 
     private fun configureProgressAndStart() {
         // configure gravity
-        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT)
-        params.gravity = Gravity.CENTER_HORIZONTAL
+        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        params.gravity = Gravity.CENTER
 
         textProgress.layoutParams = params
         imageProgress.layoutParams = params

@@ -101,6 +101,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     }
 
     override fun afterSuccessOrderbook(data: MutableList<MultiItemEntity>, lastPricePosition: Int) {
+        progress_bar.hide()
         adapter.setNewData(data)
         adapter.emptyView = getEmptyView()
         if (data.isNotEmpty()) {
@@ -128,5 +129,10 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         val view = inflate(R.layout.layout_empty_data)
         view.text_empty.text = getString(R.string.orderbook_empty)
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        progress_bar.hide()
     }
 }
