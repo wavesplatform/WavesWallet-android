@@ -91,7 +91,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     private fun validateTransfer(): Int {
         if (selectedAsset == null) {
-            R.string.send_transaction_error_check_asset
+            return R.string.send_transaction_error_check_asset
         } else if (isRecipientValid() != true) {
             return R.string.invalid_address
         } else {
