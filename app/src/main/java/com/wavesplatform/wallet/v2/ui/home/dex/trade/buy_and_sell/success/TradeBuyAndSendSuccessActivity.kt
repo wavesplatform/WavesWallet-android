@@ -25,15 +25,26 @@ class TradeBuyAndSendSuccessActivity : BaseActivity(), TradeBuyAndSendSucessView
 
     companion object {
         var BUNDLE_OPERATION_TYPE = "operation_type"
+        var BUNDLE_AMOUNT = "amount"
+        var BUNDLE_PRICE = "price"
+        var BUNDLE_TIME = "time"
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        translucentStatusBar = true
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        if (intent.getIntExtra(BUNDLE_OPERATION_TYPE, 0) == TradeBuyAndSellBottomSheetFragment.BUY_TYPE){
+        if (intent.getIntExtra(BUNDLE_OPERATION_TYPE, 0) == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
             text_status_value.setTextColor(findColor(R.color.submit400))
-        }else if (intent.getIntExtra(BUNDLE_OPERATION_TYPE, 0) == TradeBuyAndSellBottomSheetFragment.SELL_TYPE){
+        } else if (intent.getIntExtra(BUNDLE_OPERATION_TYPE, 0) == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
             text_status_value.setTextColor(findColor(R.color.error400))
         }
+
+        text_time_value.text = intent.getStringExtra(BUNDLE_TIME)
+        text_price_value.text = intent.getStringExtra(BUNDLE_PRICE)
+        text_amount_value.text = intent.getStringExtra(BUNDLE_AMOUNT)
 
         button_okay.click {
             finish()

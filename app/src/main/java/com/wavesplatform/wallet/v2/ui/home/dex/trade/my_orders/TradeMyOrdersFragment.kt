@@ -7,6 +7,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderItem
 import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
@@ -52,17 +53,21 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
 
-        swipe_container.setColorSchemeResources(R.color.submit400)
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateMyOrdersScreen::class.java)
+                .subscribe {
+                    loadOrders()
+                })
 
+        swipe_container.setColorSchemeResources(R.color.submit400)
         swipe_container.setOnRefreshListener {
             loadOrders()
         }
 
-        recycle_my_orders.layoutManager = LinearLayoutManager(baseActivity)
         presenter.watchMarket?.market.notNull {
             adapter.market = it
         }
 
+        recycle_my_orders.layoutManager = LinearLayoutManager(baseActivity)
         adapter.bindToRecyclerView(recycle_my_orders)
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position)

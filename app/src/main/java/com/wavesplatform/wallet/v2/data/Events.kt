@@ -19,4 +19,5 @@ class Events {
     class SpamFilterStateChanged
     class SpamFilterUrlChanged(var updateTransaction: Boolean = false)
     class DexOrderButtonClickEvent(var buy: Boolean)
+    class NeedUpdateMyOrdersScreen
 }

@@ -10,6 +10,7 @@ import android.support.design.widget.BottomSheetDialogFragment
 import android.widget.FrameLayout
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.getToolBarHeight
 import com.wavesplatform.wallet.v2.util.notNull
 import dagger.android.support.AndroidSupportInjection
@@ -30,7 +31,6 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpV
 
     @Inject
     lateinit var preferencesHelper: PreferencesHelper
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
