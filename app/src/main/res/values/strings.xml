@@ -1231,6 +1231,9 @@
     <string name="send_monero_payment_id">Monero Payment ID</string>
     <string name="send_monero_payment_id_hint">Paste or type your Payment ID</string>
     <string name="send_error_get_data_from_qr">Error get data from QR</string>
+    <string name="send_five_percents">5%</string>
+    <string name="send_ten_percents">10%</string>
+    <string name="send_fifty_percents">50%</string>
 
     <!--About redirection-->
     <string name="about_redirection_title">You were redirected to the «IDNow» \nfor verification</string>

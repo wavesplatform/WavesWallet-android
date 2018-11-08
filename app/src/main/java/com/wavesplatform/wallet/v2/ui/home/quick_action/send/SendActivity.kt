@@ -19,6 +19,7 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v1.util.AddressUtil
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
@@ -138,9 +139,9 @@ class SendActivity : BaseActivity(), SendView {
                 edit_amount.setText(it.getDisplayTotalBalance())
             }
         }
-        text_leasing_0_100.click { edit_amount.setText("0.100") }
-        text_leasing_0_100000.click { edit_amount.setText("0.00100000") }
-        text_leasing_0_500000.click { edit_amount.setText("0.00500000") }
+        text_leasing_0_100.click { setPercent(0.05) }
+        text_leasing_0_100000.click { setPercent(0.10) }
+        text_leasing_0_500000.click { setPercent(0.50) }
 
         setRecipientSuggestions()
     }
@@ -193,6 +194,15 @@ class SendActivity : BaseActivity(), SendView {
             }
             putExtra(KEY_INTENT_MONERO_PAYMENT_ID, presenter.moneroPaymentId)
             putExtra(KEY_INTENT_TYPE, presenter.type)
+        }
+    }
+
+    private fun setPercent(percent: Double) {
+        presenter.selectedAsset.notNull { assetBalance->
+            assetBalance.balance.notNull { balance ->
+                val amount = (balance * percent).toLong()
+                edit_amount.setText(MoneyUtil.getScaledText(amount, assetBalance))
+            }
         }
     }
 
