@@ -223,4 +223,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         }
         successListener?.onSuccessPlaceOrder()
     }
+
+    override fun afterFailedPlaceOrder(message: String?) {
+        message.notNull { showError(it, R.id.root) }
+    }
 }

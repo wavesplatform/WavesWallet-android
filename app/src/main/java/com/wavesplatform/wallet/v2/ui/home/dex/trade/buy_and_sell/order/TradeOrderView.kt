@@ -7,4 +7,5 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 interface TradeOrderView : BaseMvpView {
     fun successLoadPairBalance(pairBalance: LinkedTreeMap<String, Long>)
     fun successPlaceOrder()
+    fun afterFailedPlaceOrder(message: String?)
 }

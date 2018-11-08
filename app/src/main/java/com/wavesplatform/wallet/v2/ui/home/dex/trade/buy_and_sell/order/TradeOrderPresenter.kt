@@ -1,11 +1,14 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
 import com.arellomobile.mvp.InjectViewState
+import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
+import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.request.OrderRequest
+import com.wavesplatform.wallet.v2.data.model.remote.response.ErrorResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
@@ -66,6 +69,10 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                 }, {
                     viewState.showProgressBar(false)
                     it.printStackTrace()
+                    if (it is RetrofitException) {
+                        val response = it.getErrorBodyAs(ErrorResponse::class.java)
+                        viewState.afterFailedPlaceOrder(response?.message)
+                    }
                 }))
     }
 
