@@ -10,10 +10,9 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.gson.internal.LinkedTreeMap
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
+import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CounterHandler
-import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity.Companion.TOTAL_BALANCE
 import com.wavesplatform.wallet.v2.util.clearBalance
@@ -40,19 +39,10 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     override fun configLayoutRes() = R.layout.fragment_trade_order
 
     companion object {
-        var BUNDLE_ORDER_TYPE = "order_type"
-
-        fun newInstance(watchMarket: WatchMarket?, orderType: Int, initPrice: Long? = null, initAmount: Long? = null): TradeOrderFragment {
+        fun newInstance(data: BuySellData?): TradeOrderFragment {
             val args = Bundle()
-            args.classLoader = WatchMarket::class.java.classLoader
-            args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
-            args.putInt(BUNDLE_ORDER_TYPE, orderType)
-            initPrice.notNull {
-                args.putLong(TradeBuyAndSellBottomSheetFragment.BUNDLE_PRICE, it)
-            }
-            initAmount.notNull {
-                args.putLong(TradeBuyAndSellBottomSheetFragment.BUNDLE_AMOUNT, it)
-            }
+            args.classLoader = BuySellData::class.java.classLoader
+            args.putParcelable(TradeBuyAndSellBottomSheetFragment.BUNDLE_DATA, data)
             val fragment = TradeOrderFragment()
             fragment.arguments = args
             return fragment
@@ -61,9 +51,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         arguments.notNull {
-            presenter.watchMarket = it.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
-            presenter.orderType = it.getInt(BUNDLE_ORDER_TYPE)
-
+            presenter.data = it.getParcelable<BuySellData>(TradeBuyAndSellBottomSheetFragment.BUNDLE_DATA)
         }
 
         presenter.getMatcherKey()
@@ -114,27 +102,24 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 })
                 .build()
 
-        text_amount_hint.text = getString(R.string.buy_and_sell_amount_in, presenter.watchMarket?.market?.amountAssetShortName)
-        text_amount_error.text = getString(R.string.buy_and_sell_not_enough, presenter.watchMarket?.market?.amountAssetShortName)
-        text_limit_price_hint.text = getString(R.string.buy_and_sell_limit_price_in, presenter.watchMarket.market.priceAssetShortName)
-        text_total_price_hint.text = getString(R.string.buy_and_sell_total_in, presenter.watchMarket?.market?.priceAssetShortName)
+        text_amount_hint.text = getString(R.string.buy_and_sell_amount_in, presenter.data?.watchMarket?.market?.amountAssetShortName)
+        text_amount_error.text = getString(R.string.buy_and_sell_not_enough, presenter.data?.watchMarket?.market?.amountAssetShortName)
+        text_limit_price_hint.text = getString(R.string.buy_and_sell_limit_price_in, presenter.data?.watchMarket?.market?.priceAssetShortName)
+        text_total_price_hint.text = getString(R.string.buy_and_sell_total_in, presenter.data?.watchMarket?.market?.priceAssetShortName)
 
         if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
             button_confirm.setBackgroundResource(R.drawable.selector_btn_red)
-            button_confirm.text = getString(R.string.sell_btn_txt, presenter.watchMarket?.market?.amountAssetShortName)
+            button_confirm.text = getString(R.string.sell_btn_txt, presenter.data?.watchMarket?.market?.amountAssetShortName)
         } else {
-            button_confirm.text = getString(R.string.buy_btn_txt, presenter.watchMarket?.market?.amountAssetShortName)
+            button_confirm.text = getString(R.string.buy_btn_txt, presenter.data?.watchMarket?.market?.amountAssetShortName)
         }
 
 
 
-        presenter.watchMarket.notNull { watchMarket ->
-            val amountFromOrderbook = arguments?.getLong(TradeBuyAndSellBottomSheetFragment.BUNDLE_AMOUNT)
-            val priceFromOrderbook = arguments?.getLong(TradeBuyAndSellBottomSheetFragment.BUNDLE_PRICE)
-
-            if (amountFromOrderbook != null && priceFromOrderbook != null) {
-                val amountUIValue = MoneyUtil.getScaledText(amountFromOrderbook, watchMarket.market.amountAssetDecimals).clearBalance()
-                val priceUIValue = MoneyUtil.getScaledText(priceFromOrderbook, watchMarket.market.priceAssetDecimals).clearBalance()
+        presenter.data?.watchMarket.notNull { watchMarket ->
+            if (presenter.data?.initAmount != null && presenter.data?.initPrice != null) {
+                val amountUIValue = MoneyUtil.getScaledText(presenter.data?.initAmount!!, watchMarket.market.amountAssetDecimals).clearBalance()
+                val priceUIValue = MoneyUtil.getScaledText(presenter.data?.initPrice!!, watchMarket.market.priceAssetDecimals).clearBalance()
                 val sum = amountUIValue.toDouble() * priceUIValue.toDouble()
 
                 edit_amount.setText(amountUIValue)
@@ -181,20 +166,22 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     }
 
     override fun successLoadPairBalance(pairBalance: LinkedTreeMap<String, Long>) {
-        pairBalance[presenter.watchMarket.market.amountAsset].notNull { balance ->
+        pairBalance[presenter.data?.watchMarket?.market?.amountAsset].notNull { balance ->
             linear_percent_values.children.forEach { children ->
                 val quickBalanceView = children as AppCompatTextView
                 when (quickBalanceView.tag) {
                     TOTAL_BALANCE -> {
                         quickBalanceView.click {
-                            edit_amount.setText((MoneyUtil.getScaledText(balance, presenter.watchMarket.market.amountAssetDecimals)).clearBalance())
+                            edit_amount.setText((MoneyUtil.getScaledText(balance, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                                    ?: 0)).clearBalance())
                             edit_amount.setSelection(edit_amount.text?.length ?: 0)
                         }
                     }
                     else -> {
                         val percentBalance = (balance.times((quickBalanceView.tag.toString().toDouble().div(100)))).toLong()
                         quickBalanceView.click {
-                            edit_amount.setText(MoneyUtil.getScaledText(percentBalance, presenter.watchMarket.market.amountAssetDecimals))
+                            edit_amount.setText(MoneyUtil.getScaledText(percentBalance, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                                    ?: 0))
                             edit_amount.setSelection(edit_amount.text?.length ?: 0)
                         }
                     }

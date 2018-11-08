@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
 import com.arellomobile.mvp.InjectViewState
+import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 @InjectViewState
 class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>() {
-    lateinit var watchMarket: WatchMarket
+    var data: BuySellData? = BuySellData()
     var orderRequest: OrderRequest = OrderRequest()
 
     var selectedExpiration = 5
@@ -35,7 +36,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     }
 
     fun getBalanceFromAssetPair() {
-        addSubscription(matcherDataManager.getBalanceFromAssetPair(watchMarket)
+        addSubscription(matcherDataManager.getBalanceFromAssetPair(data?.watchMarket)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     viewState.successLoadPairBalance(it)
@@ -45,8 +46,12 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     }
 
     fun createOrder(amount: String, price: String) {
-        orderRequest.amount = amount.toBigDecimal().setScale(watchMarket.market.amountAssetDecimals, RoundingMode.HALF_UP).unscaledValue().toLong()
-        orderRequest.price = price.toBigDecimal().setScale(watchMarket.market.priceAssetDecimals, RoundingMode.HALF_UP).unscaledValue().toLong()
+        viewState.showProgressBar(true)
+
+        orderRequest.amount = amount.toBigDecimal().setScale(data?.watchMarket?.market?.amountAssetDecimals
+                ?: 0, RoundingMode.HALF_UP).unscaledValue().toLong()
+        orderRequest.price = price.toBigDecimal().setScale(data?.watchMarket?.market?.priceAssetDecimals
+                ?: 0, RoundingMode.HALF_UP).unscaledValue().toLong()
 
         orderRequest.orderType = if (orderType == 0) OrderType.BUY else OrderType.SELL
         orderRequest.assetPair = createPair()
@@ -56,19 +61,21 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
         addSubscription(matcherDataManager.placeOrder(orderRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
+                    viewState.showProgressBar(false)
                     viewState.successPlaceOrder()
                 }, {
+                    viewState.showProgressBar(false)
                     it.printStackTrace()
                 }))
     }
 
     private fun createPair(): OrderBook.Pair {
         val amountAsset =
-                if (watchMarket.market.amountAsset.isWaves()) ""
-                else watchMarket.market.amountAsset
+                if (data?.watchMarket?.market?.amountAsset?.isWaves() == true) ""
+                else data?.watchMarket?.market?.amountAsset
         val priceAsset =
-                if (watchMarket.market.priceAsset.isWaves()) ""
-                else watchMarket.market.priceAsset
+                if (data?.watchMarket?.market?.priceAsset?.isWaves() == true) ""
+                else data?.watchMarket?.market?.priceAsset
 
         return OrderBook.Pair(amountAsset, priceAsset)
     }

@@ -17,8 +17,8 @@ data class OrderBook(
 ) {
 
     data class Pair(
-            @SerializedName("amountAsset") var amountAsset: String = "",
-            @SerializedName("priceAsset") var priceAsset: String = ""
+            @SerializedName("amountAsset") var amountAsset: String? = "",
+            @SerializedName("priceAsset") var priceAsset: String? = ""
     ) {
         fun toBytes(): ByteArray {
             return try {

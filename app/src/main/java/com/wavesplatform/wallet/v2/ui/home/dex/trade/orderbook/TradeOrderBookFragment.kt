@@ -8,6 +8,9 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.model.local.BuySellData
+import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -20,6 +23,7 @@ import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
+import java.math.RoundingMode
 import javax.inject.Inject
 
 
@@ -53,6 +57,11 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
 
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.DexOrderButtonClickEvent::class.java)
+                .subscribe {
+                    openOrderDialogWithoutInitValues(it.buy)
+                })
+
         presenter.watchMarket?.market.notNull {
             adapter.market = it
 
@@ -72,32 +81,71 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
             when (item.itemType) {
                 TradeOrderBookAdapter.ASK_TYPE -> {
                     item as OrderBook.Ask
-                    val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(presenter.watchMarket,
-                            TradeBuyAndSellBottomSheetFragment.BUY_TYPE,
-                            item.price, item.amount)
+                    val data = BuySellData(watchMarket = presenter.watchMarket, orderType = TradeBuyAndSellBottomSheetFragment.BUY_TYPE,
+                            bidPrice = getBidPrice(), askPrice = getAskPrice(), initAmount = item.amount, initPrice = item.price)
+
+                    val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(data)
                     dialog.show(fragmentManager, dialog::class.java.simpleName)
                 }
                 TradeOrderBookAdapter.BID_TYPE -> {
                     item as OrderBook.Bid
-                    val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(presenter.watchMarket,
-                            TradeBuyAndSellBottomSheetFragment.BUY_TYPE,
-                            item.price, item.amount)
+                    val data = BuySellData(watchMarket = presenter.watchMarket, orderType = TradeBuyAndSellBottomSheetFragment.BUY_TYPE,
+                            bidPrice = getBidPrice(), askPrice = getAskPrice(), initAmount = item.amount, initPrice = item.price, lastPrice = getLastPrice())
+
+                    val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(data)
                     dialog.show(fragmentManager, dialog::class.java.simpleName)
                 }
             }
         }
 
         linear_buy.click {
-            val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(presenter.watchMarket, TradeBuyAndSellBottomSheetFragment.BUY_TYPE)
-            dialog.show(fragmentManager, dialog::class.java.simpleName)
+            openOrderDialogWithoutInitValues(true)
         }
 
         linear_sell.click {
-            val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(presenter.watchMarket, TradeBuyAndSellBottomSheetFragment.SELL_TYPE)
-            dialog.show(fragmentManager, dialog::class.java.simpleName)
+            openOrderDialogWithoutInitValues(false)
         }
 
         presenter.loadOrderBook()
+    }
+
+    private fun getLastPrice(): Long? {
+        val itemEntity = adapter.data.firstOrNull { it.itemType == TradeOrderBookAdapter.LAST_PRICE_TYPE }
+        return if (itemEntity != null) {
+            (itemEntity as LastPriceItem).lastTrade?.price?.toBigDecimal()?.setScale(presenter.watchMarket?.market?.priceAssetDecimals
+                    ?: 0, RoundingMode.HALF_UP)?.unscaledValue()?.toLong()
+        } else {
+            null
+        }
+    }
+
+    private fun openOrderDialogWithoutInitValues(buy: Boolean) {
+        val data = BuySellData(watchMarket = presenter.watchMarket, bidPrice = getBidPrice(), askPrice = getAskPrice())
+        data.orderType =
+                if (buy) TradeBuyAndSellBottomSheetFragment.BUY_TYPE
+                else TradeBuyAndSellBottomSheetFragment.SELL_TYPE
+
+
+        val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(data)
+        dialog.show(fragmentManager, dialog::class.java.simpleName)
+    }
+
+    private fun getBidPrice(): Long? {
+        val itemEntity = adapter.data.filter { it.itemType == TradeOrderBookAdapter.BID_TYPE }.firstOrNull()
+        return if (itemEntity != null) {
+            (itemEntity as OrderBook.Bid).price
+        } else {
+            null
+        }
+    }
+
+    private fun getAskPrice(): Long? {
+        val itemEntity = adapter.data.filter { it.itemType == TradeOrderBookAdapter.ASK_TYPE }.lastOrNull()
+        return if (itemEntity != null) {
+            (itemEntity as OrderBook.Ask).price
+        } else {
+            null
+        }
     }
 
     override fun afterSuccessOrderbook(data: MutableList<MultiItemEntity>, lastPricePosition: Int) {

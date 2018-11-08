@@ -55,7 +55,7 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
         swipe_container.setColorSchemeResources(R.color.submit400)
 
         swipe_container.setOnRefreshListener {
-            presenter.loadMyOrders()
+            loadOrders()
         }
 
         recycle_my_orders.layoutManager = LinearLayoutManager(baseActivity)
@@ -73,11 +73,10 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
             }
         }
 
-        presenter.loadMyOrders()
+        loadOrders()
     }
 
     override fun afterSuccessLoadMyOrders(data: List<OrderResponse>) {
-        progress_bar.hide()
         swipe_container.isRefreshing = false
         adapter.setNewData(data)
         adapter.emptyView = getEmptyView()
@@ -95,16 +94,15 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
     }
 
     override fun afterFailedLoadMyOrders() {
-        progress_bar.hide()
         swipe_container.isRefreshing = false
     }
 
     override fun afterSuccessCancelOrder() {
-        presenter.loadMyOrders()
+        loadOrders()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        progress_bar.hide()
+    private fun loadOrders() {
+        swipe_container.isRefreshing = true
+        presenter.loadMyOrders()
     }
 }

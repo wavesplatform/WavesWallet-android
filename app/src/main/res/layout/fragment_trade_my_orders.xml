@@ -108,17 +108,6 @@
                     android:overScrollMode="never" />
             </android.support.v4.widget.SwipeRefreshLayout>
 
-
-
-            <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@color/white"
-                app:progress_image="@drawable/ic_loader_24_submit_400"
-                app:progress_text="@string/orderbook_loading" />
-
         </RelativeLayout>
 
 

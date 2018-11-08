@@ -13,10 +13,12 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.flyco.tablayout.listener.OnTabSelectListener
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order.TradeOrderFragment
+import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity.Companion.BUNDLE_AMOUNT
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.buy_and_sell_bottom_sheet_dialog_layout.*
 import kotlinx.android.synthetic.main.buy_and_sell_bottom_sheet_dialog_layout.view.*
@@ -35,23 +37,14 @@ class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), Trad
     fun providePresenter(): TradeBuyAndSellPresenter = presenter
 
     companion object {
-        var BUNDLE_OPEN = "init_open"
-        var BUNDLE_PRICE = "init_price"
-        var BUNDLE_AMOUNT = "init_amount"
+        var BUNDLE_DATA = "data"
         var BUY_TYPE = 0
         var SELL_TYPE = 1
 
-        fun newInstance(watchMarket: WatchMarket?, initOpen: Int, initPrice: Long? = null, initAmount: Long? = null): TradeBuyAndSellBottomSheetFragment {
+        fun newInstance(data: BuySellData): TradeBuyAndSellBottomSheetFragment {
             val args = Bundle()
-            args.classLoader = WatchMarket::class.java.classLoader
-            args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
-            args.putInt(BUNDLE_OPEN, initOpen)
-            initPrice.notNull {
-                args.putLong(BUNDLE_PRICE, it)
-            }
-            initAmount.notNull {
-                args.putLong(BUNDLE_AMOUNT, it)
-            }
+            args.classLoader = BuySellData::class.java.classLoader
+            args.putParcelable(BUNDLE_DATA, data)
             val fragment = TradeBuyAndSellBottomSheetFragment()
             fragment.arguments = args
             return fragment
@@ -62,20 +55,20 @@ class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), Trad
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.buy_and_sell_bottom_sheet_dialog_layout, container, false)
 
-        presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
+        presenter.data = arguments?.getParcelable<BuySellData>(BUNDLE_DATA)
 
         val fragments = arrayListOf<Fragment>(
-                TradeOrderFragment.newInstance(presenter.watchMarket, BUY_TYPE, arguments?.getLong(BUNDLE_PRICE), arguments?.getLong(BUNDLE_AMOUNT)),
-                TradeOrderFragment.newInstance(presenter.watchMarket, SELL_TYPE, arguments?.getLong(BUNDLE_PRICE), arguments?.getLong(BUNDLE_AMOUNT))
+                TradeOrderFragment.newInstance(presenter.data),
+                TradeOrderFragment.newInstance(presenter.data)
         )
 
         val adapter = TradeBuyAndSellPageAdapter(childFragmentManager, fragments,
                 arrayOf(getString(R.string.buy_and_sell_dialog_buy_tab), getString(R.string.buy_and_sell_dialog_sell_tab)))
         rootView.viewpager_buy_sell.adapter = adapter
         rootView.stl_buy_sell.setViewPager(rootView.viewpager_buy_sell)
-        if (arguments?.getInt(BUNDLE_OPEN, 0) == BUY_TYPE) {
+        if (presenter.data?.orderType == BUY_TYPE) {
             rootView.stl_buy_sell.currentTab = 0
-        } else if (arguments?.getInt(BUNDLE_OPEN, 0) == SELL_TYPE) {
+        } else if (presenter.data?.orderType == SELL_TYPE) {
             rootView.stl_buy_sell.currentTab = 1
         }
         rootView.stl_buy_sell.setOnTabSelectListener(object : OnTabSelectListener {

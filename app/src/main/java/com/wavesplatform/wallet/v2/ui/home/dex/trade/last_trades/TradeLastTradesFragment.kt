@@ -6,6 +6,7 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -59,22 +60,25 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
         }
 
         swipe_container.setOnRefreshListener {
-            presenter.loadLastTrades()
+            loadLastTrades()
         }
 
         recycle_last_trades.layoutManager = LinearLayoutManager(baseActivity)
         adapter.bindToRecyclerView(recycle_last_trades)
 
         linear_buy.click {
-            val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(presenter.watchMarket, TradeBuyAndSellBottomSheetFragment.BUY_TYPE)
-            dialog.show(fragmentManager, dialog::class.java.simpleName)
+            rxEventBus.post(Events.DexOrderButtonClickEvent(true))
         }
 
         linear_sell.click {
-            val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(presenter.watchMarket, TradeBuyAndSellBottomSheetFragment.SELL_TYPE)
-            dialog.show(fragmentManager, dialog::class.java.simpleName)
+            rxEventBus.post(Events.DexOrderButtonClickEvent(false))
         }
 
+        loadLastTrades()
+    }
+
+    private fun loadLastTrades() {
+        swipe_container.isRefreshing = true
         presenter.loadLastTrades()
     }
 
@@ -86,7 +90,6 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
 
 
     override fun afterSuccessLoadLastTrades(data: List<LastTrade>) {
-        progress_bar.hide()
         swipe_container.isRefreshing = false
         adapter.setNewData(data)
         adapter.emptyView = getEmptyView()
@@ -98,16 +101,10 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
     }
 
     override fun afterFailedLoadLastTrades() {
-        progress_bar.hide()
         swipe_container.isRefreshing = false
         if (adapter.data.isEmpty()) {
             adapter.emptyView = getEmptyView()
             linear_fields_name.gone()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        progress_bar.hide()
     }
 }
