@@ -148,7 +148,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
-                        android:text="0.00075077"
+                        android:text="0.000"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         app:fontFamily="@font/roboto_medium" />
@@ -183,7 +183,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
-                        android:text="0.00075056"
+                        android:text="0.000"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         app:fontFamily="@font/roboto_medium" />

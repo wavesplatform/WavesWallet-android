@@ -6,6 +6,7 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
@@ -13,6 +14,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.fragment_trade_last_trades.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.click
@@ -49,9 +51,21 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
 
     override fun configLayoutRes() = R.layout.fragment_trade_last_trades
 
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
+
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.UpdateButtonsPrice::class.java)
+                .subscribe {
+                    it.askPrice.notNull {
+                        text_sell_value.text = MoneyUtil.getScaledText(it, presenter.watchMarket?.market?.priceAssetDecimals
+                                ?: 0).stripZeros()
+                    }
+
+                    it.bidPrice.notNull {
+                        text_buy_value.text = MoneyUtil.getScaledText(it, presenter.watchMarket?.market?.priceAssetDecimals
+                                ?: 0).stripZeros()
+                    }
+                })
 
         swipe_container.setColorSchemeResources(R.color.submit400)
 

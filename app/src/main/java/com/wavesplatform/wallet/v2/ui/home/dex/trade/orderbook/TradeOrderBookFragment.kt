@@ -8,6 +8,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
@@ -17,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.fragment_trade_orderbook.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.click
@@ -163,6 +165,23 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
             }
         } else {
             linear_fields_name.gone()
+        }
+
+        fillButtonsPrice()
+    }
+
+    private fun fillButtonsPrice() {
+        rxEventBus.post(Events.UpdateButtonsPrice(getAskPrice(), getBidPrice()))
+        recycle_orderbook.post {
+            getAskPrice().notNull {
+                text_sell_value.text = MoneyUtil.getScaledText(it, presenter.watchMarket?.market?.priceAssetDecimals
+                        ?: 0).stripZeros()
+            }
+
+            getBidPrice().notNull {
+                text_buy_value.text = MoneyUtil.getScaledText(it, presenter.watchMarket?.market?.priceAssetDecimals
+                        ?: 0).stripZeros()
+            }
         }
     }
 
