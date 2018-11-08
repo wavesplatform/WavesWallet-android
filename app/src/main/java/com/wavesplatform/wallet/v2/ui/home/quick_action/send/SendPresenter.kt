@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
 import com.arellomobile.mvp.InjectViewState
-import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -14,11 +13,9 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.isValidAddress
-import io.reactivex.Single
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
@@ -142,30 +139,33 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     fun loadXRate(assetId: String) {
-        var currencyTo = "-"
+        val currencyTo = Constants.coinomatCryptoCurrencies[assetId]
+        if (currencyTo.isNullOrEmpty()) {
+            type = SendPresenter.Type.UNKNOWN
+            runOnUiThread {
+                viewState.showXRateError()
+            }
+            return
+        }
+
+        val currencyFrom = "W$currencyTo"
         runAsync {
-            val findAsset: Single<List<AssetInfo>> = queryAsSingle { equalTo("id", assetId) }
-            addSubscription(
-                    findAsset.toObservable().flatMap {
-                        currencyTo = it[0].ticker ?: "-"
-                        val currencyFrom = "W$currencyTo"
-                        coinomatManager.getXRate(currencyFrom, currencyTo, LANG)
-                    }
-                            .subscribe({ xRate ->
-                                type = SendPresenter.Type.GATEWAY
-                                runOnUiThread {
-                                    if (xRate == null) {
-                                        viewState.showXRateError()
-                                    } else {
-                                        viewState.showXRate(xRate, currencyTo)
-                                    }
-                                }
-                            }, {
-                                type = SendPresenter.Type.UNKNOWN
-                                runOnUiThread {
-                                    viewState.showXRateError()
-                                }
-                            }))
+            addSubscription(coinomatManager.getXRate(currencyFrom, currencyTo, LANG)
+                    .subscribe({ xRate ->
+                        type = SendPresenter.Type.GATEWAY
+                        runOnUiThread {
+                            if (xRate == null) {
+                                viewState.showXRateError()
+                            } else {
+                                viewState.showXRate(xRate, currencyTo!!)
+                            }
+                        }
+                    }, {
+                        type = SendPresenter.Type.UNKNOWN
+                        runOnUiThread {
+                            viewState.showXRateError()
+                        }
+                    }))
         }
     }
 

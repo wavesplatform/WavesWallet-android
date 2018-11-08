@@ -134,11 +134,7 @@ class SendActivity : BaseActivity(), SendView {
 
         button_continue.click { presenter.sendClicked() }
 
-        text_use_total_balance.click {
-            presenter.selectedAsset.notNull {
-                edit_amount.setText(it.getDisplayTotalBalance())
-            }
-        }
+        text_use_total_balance.click { setPercent(1.0) }
         text_leasing_0_100.click { setPercent(0.05) }
         text_leasing_0_100000.click { setPercent(0.10) }
         text_leasing_0_500000.click { setPercent(0.50) }
