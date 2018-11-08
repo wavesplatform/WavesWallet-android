@@ -1346,7 +1346,7 @@
     <string name="buy_and_sell_last">Last</string>
     <string name="buy_and_sell_total_in">Total in %1$s</string>
     <string name="buy_and_sell_fee">Fee</string>
-    <string name="buy_and_sell_0_001_waves">0.001 Waves</string>
+    <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
     <string name="buy_and_sell_expiration">Expiration</string>
     <string name="buy_and_sell_5_min">5 min</string>
     <string name="buy_and_sell_30_min">30 min</string>

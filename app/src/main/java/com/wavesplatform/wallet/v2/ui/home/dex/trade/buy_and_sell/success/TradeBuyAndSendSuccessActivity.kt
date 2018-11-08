@@ -6,8 +6,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
-import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment.Companion.SELL_TYPE
-import kotlinx.android.synthetic.main.activity_trade_send_and_buy_sucess.*
+import kotlinx.android.synthetic.main.activity_trade_send_and_buy_success.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
 import javax.inject.Inject
@@ -22,7 +21,7 @@ class TradeBuyAndSendSuccessActivity : BaseActivity(), TradeBuyAndSendSucessView
     @ProvidePresenter
     fun providePresenter(): TradeBuyAndSendSucessPresenter = presenterAndSend
 
-    override fun configLayoutRes() = R.layout.activity_trade_send_and_buy_sucess
+    override fun configLayoutRes() = R.layout.activity_trade_send_and_buy_success
 
     companion object {
         var BUNDLE_OPERATION_TYPE = "operation_type"

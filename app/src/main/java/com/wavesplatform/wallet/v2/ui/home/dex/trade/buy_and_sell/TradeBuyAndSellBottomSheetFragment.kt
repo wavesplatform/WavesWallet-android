@@ -27,8 +27,7 @@ import pers.victor.ext.findColor
 import javax.inject.Inject
 
 
-class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), TradeBuyAndSellView {
-
+class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), TradeBuyAndSellView, SuccessOrderListener {
     @Inject
     @InjectPresenter
     lateinit var presenter: TradeBuyAndSellPresenter
@@ -58,8 +57,8 @@ class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), Trad
         presenter.data = arguments?.getParcelable<BuySellData>(BUNDLE_DATA)
 
         val fragments = arrayListOf<Fragment>(
-                TradeOrderFragment.newInstance(presenter.data),
-                TradeOrderFragment.newInstance(presenter.data)
+                TradeOrderFragment.newInstance(presenter.data, this),
+                TradeOrderFragment.newInstance(presenter.data, this)
         )
 
         val adapter = TradeBuyAndSellPageAdapter(childFragmentManager, fragments,
@@ -137,4 +136,13 @@ class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), Trad
 
         return rootView
     }
+
+    override fun onSuccessPlaceOrder() {
+        dismiss()
+    }
+
+}
+
+interface SuccessOrderListener {
+    fun onSuccessPlaceOrder()
 }

@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:fillViewport="true"
-    android:overScrollMode="never">
+    android:overScrollMode="never"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:descendantFocusability="beforeDescendants"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -40,12 +40,12 @@
                     android:id="@+id/text_amount_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
                     android:layout_alignParentRight="true"
+                    android:layout_marginEnd="4dp"
                     android:text="@string/buy_and_sell_not_enough"
-                    android:visibility="gone"
                     android:textColor="@color/error500"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:visibility="gone" />
 
 
             </RelativeLayout>
@@ -53,7 +53,6 @@
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/edit_amount"
-                android:theme="@style/SubmitEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relative_hint"
@@ -62,7 +61,8 @@
                 android:inputType="numberDecimal"
                 android:paddingBottom="20dp"
                 android:singleLine="true"
-                android:textColorHint="@color/basic500" />
+                android:textColorHint="@color/basic500"
+                android:theme="@style/SubmitEditText" />
 
 
             <LinearLayout
@@ -113,7 +113,6 @@
                     android:id="@+id/text_use_total_balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tag="100"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="4dp"
                     android:background="@drawable/basic100_rounded"
@@ -122,6 +121,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="8dp"
+                    android:tag="100"
                     android:text="@string/buy_and_sell_user_total_balance"
                     android:textColor="@color/basic500"
                     android:textSize="12sp" />
@@ -131,7 +131,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
-                    android:tag="50"
                     android:layout_marginRight="4dp"
                     android:background="@drawable/basic100_rounded"
                     android:lineSpacingExtra="4sp"
@@ -139,6 +138,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="8dp"
+                    android:tag="50"
                     android:text="@string/buy_and_sell_50"
                     android:textColor="@color/basic500"
                     android:textSize="12sp" />
@@ -152,10 +152,10 @@
                     android:background="@drawable/basic100_rounded"
                     android:lineSpacingExtra="4sp"
                     android:paddingBottom="8dp"
-                    android:tag="10"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="8dp"
+                    android:tag="10"
                     android:text="@string/buy_and_sell_10"
                     android:textColor="@color/basic500"
                     android:textSize="12sp" />
@@ -170,9 +170,9 @@
                     android:lineSpacingExtra="4sp"
                     android:paddingBottom="8dp"
                     android:paddingLeft="10dp"
-                    android:tag="5"
                     android:paddingRight="10dp"
                     android:paddingTop="8dp"
+                    android:tag="5"
                     android:text="@string/buy_and_sell_5"
                     android:textColor="@color/basic500"
                     android:textSize="12sp" />
@@ -196,7 +196,6 @@
                 android:textSize="12sp" />
 
             <android.support.v7.widget.AppCompatEditText
-                android:theme="@style/SubmitEditText"
                 android:id="@+id/edit_limit_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -206,7 +205,8 @@
                 android:inputType="numberDecimal"
                 android:paddingBottom="20dp"
                 android:singleLine="true"
-                android:textColorHint="@color/basic500" />
+                android:textColorHint="@color/basic500"
+                android:theme="@style/SubmitEditText" />
 
 
             <LinearLayout
@@ -250,14 +250,15 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_bid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/basic100_rounded"
                     android:lineSpacingExtra="4sp"
                     android:paddingBottom="8dp"
@@ -273,8 +274,7 @@
                     android:id="@+id/text_ask"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/basic100_rounded"
                     android:lineSpacingExtra="4sp"
                     android:paddingBottom="8dp"
@@ -289,8 +289,7 @@
                     android:id="@+id/text_last"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/basic100_rounded"
                     android:lineSpacingExtra="4sp"
                     android:paddingBottom="8dp"
@@ -322,7 +321,6 @@
 
 
             <android.support.v7.widget.AppCompatEditText
-                android:theme="@style/SubmitEditText"
                 android:id="@+id/edit_total_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -332,7 +330,8 @@
                 android:inputType="numberDecimal"
                 android:paddingBottom="20dp"
                 android:singleLine="true"
-                android:textColorHint="@color/basic500" />
+                android:textColorHint="@color/basic500"
+                android:theme="@style/SubmitEditText" />
 
 
             <LinearLayout

@@ -82,7 +82,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
                 TradeOrderBookAdapter.ASK_TYPE -> {
                     item as OrderBook.Ask
                     val data = BuySellData(watchMarket = presenter.watchMarket, orderType = TradeBuyAndSellBottomSheetFragment.BUY_TYPE,
-                            bidPrice = getBidPrice(), askPrice = getAskPrice(), initAmount = item.amount, initPrice = item.price)
+                            bidPrice = getBidPrice(), askPrice = getAskPrice(), initAmount = item.amount, initPrice = item.price, lastPrice = getLastPrice())
 
                     val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(data)
                     dialog.show(fragmentManager, dialog::class.java.simpleName)
@@ -120,7 +120,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     }
 
     private fun openOrderDialogWithoutInitValues(buy: Boolean) {
-        val data = BuySellData(watchMarket = presenter.watchMarket, bidPrice = getBidPrice(), askPrice = getAskPrice())
+        val data = BuySellData(watchMarket = presenter.watchMarket, bidPrice = getBidPrice(), askPrice = getAskPrice(), lastPrice = getLastPrice())
         data.orderType =
                 if (buy) TradeBuyAndSellBottomSheetFragment.BUY_TYPE
                 else TradeBuyAndSellBottomSheetFragment.SELL_TYPE

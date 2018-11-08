@@ -13,15 +13,14 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CounterHandler
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.SuccessOrderListener
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity.Companion.TOTAL_BALANCE
-import com.wavesplatform.wallet.v2.util.clearBalance
-import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.fragment_trade_order.*
-import pers.victor.ext.children
-import pers.victor.ext.click
-import pers.victor.ext.findColor
+import kotlinx.android.synthetic.main.spinner_item.*
+import pers.victor.ext.*
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -36,14 +35,17 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     @ProvidePresenter
     fun providePresenter(): TradeOrderPresenter = presenter
 
+    var successListener: SuccessOrderListener? = null
+
     override fun configLayoutRes() = R.layout.fragment_trade_order
 
     companion object {
-        fun newInstance(data: BuySellData?): TradeOrderFragment {
+        fun newInstance(data: BuySellData?, listener: SuccessOrderListener): TradeOrderFragment {
             val args = Bundle()
             args.classLoader = BuySellData::class.java.classLoader
             args.putParcelable(TradeBuyAndSellBottomSheetFragment.BUNDLE_DATA, data)
             val fragment = TradeOrderFragment()
+            fragment.successListener = listener
             fragment.arguments = args
             return fragment
         }
@@ -102,6 +104,32 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 })
                 .build()
 
+        horizontal_limit_price_suggestion.goneIf { presenter.data?.lastPrice == null && presenter.data?.askPrice == null && presenter.data?.bidPrice == null }
+        text_bid.goneIf { presenter.data?.bidPrice == null }
+        text_ask.goneIf { presenter.data?.askPrice == null }
+        text_last.goneIf { presenter.data?.lastPrice == null }
+
+        text_bid.click {
+            presenter.data?.bidPrice.notNull { price ->
+                edit_limit_price.setText(MoneyUtil.getScaledText(price, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                        ?: 0).stripZeros())
+            }
+        }
+
+        text_ask.click {
+            presenter.data?.askPrice.notNull { price ->
+                edit_limit_price.setText(MoneyUtil.getScaledText(price, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                        ?: 0).stripZeros())
+            }
+        }
+
+        text_last.click {
+            presenter.data?.lastPrice.notNull { price ->
+                edit_limit_price.setText(MoneyUtil.getScaledText(price, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                        ?: 0).stripZeros())
+            }
+        }
+
         text_amount_hint.text = getString(R.string.buy_and_sell_amount_in, presenter.data?.watchMarket?.market?.amountAssetShortName)
         text_amount_error.text = getString(R.string.buy_and_sell_not_enough, presenter.data?.watchMarket?.market?.amountAssetShortName)
         text_limit_price_hint.text = getString(R.string.buy_and_sell_limit_price_in, presenter.data?.watchMarket?.market?.priceAssetShortName)
@@ -113,8 +141,6 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         } else {
             button_confirm.text = getString(R.string.buy_btn_txt, presenter.data?.watchMarket?.market?.amountAssetShortName)
         }
-
-
 
         presenter.data?.watchMarket.notNull { watchMarket ->
             if (presenter.data?.initAmount != null && presenter.data?.initPrice != null) {
@@ -159,9 +185,6 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
         button_confirm.click {
             presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
-//            launchActivity<TradeBuyAndSendSuccessActivity> {
-//                putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_OPERATION_TYPE, presenter.orderType)
-//            }
         }
     }
 
@@ -191,6 +214,9 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     }
 
     override fun successPlaceOrder() {
-
+        launchActivity<TradeBuyAndSendSuccessActivity> {
+            putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_OPERATION_TYPE, presenter.orderType)
+        }
+        successListener?.onSuccessPlaceOrder()
     }
 }
