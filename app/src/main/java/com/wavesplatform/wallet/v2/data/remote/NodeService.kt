@@ -60,7 +60,7 @@ interface NodeService {
     @POST("leasing/broadcast/cancel")
     fun cancelLeasing(@Body cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction>
 
-    @POST("/transactions/broadcast")
+    @POST("transactions/broadcast")
     fun burn(@Body burnRequest: BurnRequest): Observable<BurnRequest>
 
 }

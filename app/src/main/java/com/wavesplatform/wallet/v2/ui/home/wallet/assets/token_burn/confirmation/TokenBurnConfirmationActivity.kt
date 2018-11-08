@@ -46,7 +46,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         presenter.amount = intent.getDoubleExtra(KEY_INTENT_AMOUNT, 0.0)
 
         text_id_value.text = presenter.assetBalance!!.assetId
-        text_sum.text = "-${presenter.amount} ${presenter.assetBalance!!.getName()}"
+        text_sum.text = "-${presenter.amount.toBigDecimal()} ${presenter.assetBalance!!.getName()}"
         text_type_value.text = if (presenter.assetBalance!!.reissuable == true) {
             getString(R.string.token_burn_confirmationt_reissuable)
         } else {
@@ -70,7 +70,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         relative_success.visiable()
         text_leasing_result_value.text = getString(
                 R.string.token_burn_confirmation_you_have_burned,
-                presenter.amount.toString(), presenter.assetBalance!!.getName()
+                presenter.amount.toBigDecimal().toString(), presenter.assetBalance!!.getName()
         )
 
         button_okay.click {
@@ -89,5 +89,4 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         image_loader.clearAnimation()
         card_progress.gone()
     }
-
 }

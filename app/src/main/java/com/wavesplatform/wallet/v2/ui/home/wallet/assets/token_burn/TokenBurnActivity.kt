@@ -43,7 +43,8 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         text_asset_value.text = assetBalance.getDisplayAvailableBalance()
 
         text_use_total_balance.click {
-            edit_amount.setText(assetBalance.getDisplayAvailableBalance())
+            edit_amount.setText(assetBalance.getDisplayAvailableBalance()
+                    .replace(",", ""))
         }
 
         button_continue.isEnabled = true
