@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomS
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_history_tab.*
+import pers.victor.ext.inflate
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.util.*
 import javax.inject.Inject
@@ -89,6 +90,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         presenter.assetBalance = arguments?.getParcelable(HistoryFragment.BUNDLE_ASSET)
 
         adapter.bindToRecyclerView(recycle_history)
+        adapter.emptyView = inflate(R.layout.layout_empty_data)
 
 
         skeletonScreen = Skeleton.bind(recycle_history)
@@ -121,6 +123,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.StopUpdateHistoryScreen::class.java)
                 .subscribe {
                     swipe_refresh.isRefreshing = false
+                    skeletonScreen.notNull { it.hide() }
                 })
 
         runAsync {
