@@ -43,6 +43,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActi
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
+import com.wavesplatform.wallet.v2.ui.no_internet.NoInternetActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.success.SuccessActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
@@ -247,4 +248,8 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun successActivity(): SuccessActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun noInternetActivity(): NoInternetActivity
 }
