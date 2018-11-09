@@ -72,8 +72,8 @@ public class ChooseWalletActivity extends BaseAuthActivity implements WalletAdap
     }
 
     private void setupWalletsList() {
-        String env = EnvironmentManager.get().current().getName();
-        String[] guids = prefsUtil.getGlobalValueList(env + PrefsUtil.LIST_WALLET_GUIDS);
+        String[] guids = prefsUtil.getGlobalValueList(
+                EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS);
         wallets = new ArrayList<>();
 
         for (int i = 0; i < guids.length; ++i) {
@@ -121,8 +121,7 @@ public class ChooseWalletActivity extends BaseAuthActivity implements WalletAdap
 
     private void doRemoveWallet(int position) {
         WalletItem item = wallets.get(position);
-        String env = prefsUtil.getEnvironment();
-        prefsUtil.removeGlobalListValue(env + PrefsUtil.LIST_WALLET_GUIDS, position);
+        prefsUtil.removeGlobalListValue(EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS, position);
         prefsUtil.removeAllGuid(item.guid);
 
         if (position < wallets.size()) {

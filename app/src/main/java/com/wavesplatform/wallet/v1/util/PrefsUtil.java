@@ -18,7 +18,7 @@ public class PrefsUtil {
     public static final String GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment";
     @Deprecated
     public static final String GLOBAL_LOGGED_IN_GUID = "global_logged_in_wallet_guid";
-    public static final String GLOBAL_LAST_LOGGED_IN_GUID = "global_last_logged_in_wallet_guid"; // ex "global_logged_in_wallet_guid"
+    public static final String GLOBAL_LAST_LOGGED_IN_GUID = "global_last_logged_in_wallet_guid";
     public static final String GLOBAL_SCHEME_URL = "scheme_url";
     public static final String LIST_WALLET_GUIDS = "list_wallet_guid";
 

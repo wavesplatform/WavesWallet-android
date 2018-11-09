@@ -80,7 +80,6 @@ android {
             buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
         }
         dev {
-            applicationIdSuffix ".dev"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'

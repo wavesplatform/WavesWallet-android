@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.auth.choose_account
 
 import com.arellomobile.mvp.InjectViewState
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.ui.auth.WalletItem
 import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -13,7 +14,8 @@ import javax.inject.Inject
 class ChooseAccountPresenter @Inject constructor() : BasePresenter<ChooseAccountView>() {
     fun getAddresses() {
         val list = arrayListOf<AddressBookUser>()
-        val guids = prefsUtil.getGlobalValueList(PrefsUtil.LIST_WALLET_GUIDS)
+        val guids = prefsUtil.getGlobalValueList(
+                EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS)
         val wallets = ArrayList<WalletItem>()
         for (i in guids.indices) {
             val pubKey = prefsUtil.getGlobalValue(guids[i] + PrefsUtil.KEY_PUB_KEY, "")
