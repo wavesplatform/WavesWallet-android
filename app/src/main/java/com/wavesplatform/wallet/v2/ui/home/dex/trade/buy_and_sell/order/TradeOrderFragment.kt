@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
+import android.icu.util.UniversalTimeScale.toBigDecimal
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatTextView
@@ -8,8 +9,10 @@ import android.widget.EditText
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.gson.internal.LinkedTreeMap
+import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CounterHandler
@@ -18,11 +21,13 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSel
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity.Companion.TOTAL_BALANCE
 import com.wavesplatform.wallet.v2.util.*
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_trade_order.*
 import kotlinx.android.synthetic.main.spinner_item.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import java.math.BigDecimal
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -96,14 +101,141 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 .decrementalView(image_total_price_minus)
                 .listener(object : CounterHandler.CounterListener {
                     override fun onIncrement(view: EditText?, number: BigDecimal) {
+                        presenter.humanTotalTyping = true
                         view?.setText(number.toString())
                     }
 
                     override fun onDecrement(view: EditText?, number: BigDecimal) {
+                        presenter.humanTotalTyping = true
                         view?.setText(number.toString())
                     }
                 })
                 .build()
+
+        eventSubscriptions.add(RxTextView.textChanges(edit_amount)
+                .skipInitialValue()
+                .map(CharSequence::toString)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .map {
+                    presenter.amountValidation = it.isNotEmpty()
+                    if (it.isNotEmpty()) {
+                        text_amount_error.text = ""
+                        text_amount_error.invisiable()
+                    } else {
+                        text_amount_error.text = getString(R.string.buy_and_sell_required)
+                        text_amount_error.visiable()
+                    }
+                    makeButtonEnableIfValid()
+                    return@map it
+                }
+                .filter {
+                    it.isNotEmpty()
+                }
+                .map {
+                    val isValid = it.toBigDecimal() <= MoneyUtil.getScaledText(presenter.currentAmountBalance
+                            ?: 0, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                            ?: 0).clearBalance().toBigDecimal()
+                    presenter.amountValidation = isValid
+
+                    if (isValid) {
+                        text_amount_error.text = ""
+                        text_amount_error.invisiable()
+                    } else {
+                        text_amount_error.text = getString(R.string.buy_and_sell_not_enough, presenter.data?.watchMarket?.market?.amountAssetShortName)
+                        text_amount_error.visiable()
+                    }
+                    makeButtonEnableIfValid()
+                    return@map Pair(isValid, it)
+                }
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({ isValid ->
+                    if (!presenter.humanTotalTyping) {
+                        if (!edit_amount.text.isNullOrEmpty() && !edit_limit_price.text.isNullOrEmpty()) {
+                            edit_total_price.setText(
+                                    (edit_amount.text.toString().toDouble() * edit_limit_price.text.toString().toDouble())
+                                            .roundToDecimals(presenter.data?.watchMarket?.market?.priceAssetDecimals)
+                                            .toString()
+                                            .stripZeros())
+                        }
+                    }
+                    presenter.humanTotalTyping = false
+                    makeButtonEnableIfValid()
+                }, {
+                    it.printStackTrace()
+                }))
+
+        eventSubscriptions.add(RxTextView.textChanges(edit_limit_price)
+                .skipInitialValue()
+                .map(CharSequence::toString)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .map {
+                    presenter.priceValidation = it.isNotEmpty()
+                    if (presenter.priceValidation) {
+                        text_limit_price_error.text = ""
+                        text_limit_price_error.invisiable()
+                    } else {
+                        text_limit_price_error.text = getString(R.string.buy_and_sell_required)
+                        text_limit_price_error.visiable()
+                    }
+                    makeButtonEnableIfValid()
+                    return@map it
+                }
+                .filter {
+                    it.isNotEmpty()
+                }
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({ isValid ->
+                    if (!edit_amount.text.isNullOrEmpty() && !edit_limit_price.text.isNullOrEmpty()) {
+                        edit_total_price.setText(
+                                (edit_amount.text.toString().toDouble() * edit_limit_price.text.toString().toDouble())
+                                        .roundToDecimals(presenter.data?.watchMarket?.market?.priceAssetDecimals)
+                                        .toString()
+                                        .stripZeros())
+                    }
+                    makeButtonEnableIfValid()
+                }, {
+                    it.printStackTrace()
+                }))
+
+        eventSubscriptions.add(RxTextView.textChanges(edit_total_price)
+                .skipInitialValue()
+                .map(CharSequence::toString)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter {
+                    it.isNotEmpty()
+                }
+                .map {
+                    if (!presenter.humanTotalTyping) {
+                        presenter.humanTotalTyping = edit_total_price.isFocused
+                    }
+                }
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({ isValid ->
+                    if (edit_amount.text.isNullOrEmpty()) {
+                        text_amount_error.text = getString(R.string.buy_and_sell_required)
+                        text_amount_error.visiable()
+                    }
+                    if (edit_limit_price.text.isNullOrEmpty()) {
+                        text_limit_price_error.text = getString(R.string.buy_and_sell_required)
+                        text_limit_price_error.visiable()
+                    }
+                    if (presenter.humanTotalTyping) {
+                        if (!edit_total_price.text.isNullOrEmpty() && !edit_limit_price.text.isNullOrEmpty()) {
+                            edit_amount.setText(
+                                    (edit_total_price.text.toString().toDouble() / edit_limit_price.text.toString().toDouble())
+                                            .roundToDecimals(presenter.data?.watchMarket?.market?.amountAssetDecimals)
+                                            .toString()
+                                            .stripZeros())
+                        }
+                    }
+                    makeButtonEnableIfValid()
+                }, {
+                    it.printStackTrace()
+                }))
+
 
         horizontal_limit_price_suggestion.goneIf { presenter.data?.lastPrice == null && presenter.data?.askPrice == null && presenter.data?.bidPrice == null }
         text_bid.goneIf { presenter.data?.bidPrice == null }
@@ -187,6 +319,10 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         button_confirm.click {
             presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
         }
+    }
+
+    private fun makeButtonEnableIfValid() {
+        button_confirm.isEnabled = presenter.isAllFieldsValid()
     }
 
     override fun successLoadPairBalance(pairBalance: LinkedTreeMap<String, Long>) {

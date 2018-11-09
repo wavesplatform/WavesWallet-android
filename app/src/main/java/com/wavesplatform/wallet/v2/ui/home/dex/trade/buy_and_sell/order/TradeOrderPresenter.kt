@@ -23,12 +23,26 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     var data: BuySellData? = BuySellData()
     var orderRequest: OrderRequest = OrderRequest()
 
+    var humanTotalTyping = false
+
+    var currentAmountBalance: Long? = 0L
+    var currentPriceBalance: Long? = 0L
+
     var selectedExpiration = 5
     var newSelectedExpiration = 5
     val expirationList = arrayOf(OrderExpiration.FIVE_MINUTES, OrderExpiration.THIRTY_MINUTES,
             OrderExpiration.ONE_HOUR, OrderExpiration.ONE_DAY, OrderExpiration.ONE_WEEK, OrderExpiration.ONE_MONTH)
 
     var orderType: Int = TradeBuyAndSellBottomSheetFragment.BUY_TYPE
+
+    var priceValidation = false
+    var amountValidation = false
+
+
+    fun isAllFieldsValid(): Boolean {
+        return priceValidation && amountValidation
+    }
+
 
     fun getMatcherKey() {
         addSubscription(matcherDataManager.getMatcherKey()
@@ -42,6 +56,8 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
         addSubscription(matcherDataManager.getBalanceFromAssetPair(data?.watchMarket)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
+                    currentAmountBalance = it[data?.watchMarket?.market?.amountAsset]
+                    currentPriceBalance = it[data?.watchMarket?.market?.priceAsset]
                     viewState.successLoadPairBalance(it)
                 }, {
                     it.printStackTrace()

@@ -1,9 +1,9 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root"
     android:fillViewport="true"
     android:overScrollMode="never"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -188,19 +188,40 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_limit_price_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/buy_and_sell_limit_price_in"
-                android:textColor="@color/basic500"
-                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:id="@+id/relative_price_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_limit_price_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/buy_and_sell_limit_price_in"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_limit_price_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buy_and_sell_required"
+                    android:textColor="@color/error500"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+
+            </RelativeLayout>
+
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/edit_limit_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_limit_price_hint"
+                android:layout_below="@+id/relative_price_hint"
                 android:layout_marginLeft="-5dp"
                 android:hint="0"
                 android:inputType="numberDecimal"
@@ -312,20 +333,41 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_total_price_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/buy_and_sell_total_in"
-                android:textColor="@color/basic500"
-                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:id="@+id/relative_total_price_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_total_price_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/buy_and_sell_total_in"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_total_price_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buy_and_sell_required"
+                    android:textColor="@color/error500"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+
+            </RelativeLayout>
 
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/edit_total_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_total_price_hint"
+                android:layout_below="@+id/relative_total_price_hint"
                 android:layout_marginLeft="-5dp"
                 android:hint="0"
                 android:inputType="numberDecimal"
@@ -419,7 +461,7 @@
                     android:layout_marginTop="6dp"
                     android:drawablePadding="4dp"
                     android:drawableRight="@drawable/ic_changearrows_14_basic_500"
-                    android:text="@string/buy_and_sell_30_days"
+                    android:text="@string/buy_and_sell_29_days"
                     android:textColor="@color/disabled900" />
 
 
@@ -437,6 +479,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="54dp"
+            android:enabled="false"
             android:text="@string/buy_btn_txt" />
 
     </LinearLayout>

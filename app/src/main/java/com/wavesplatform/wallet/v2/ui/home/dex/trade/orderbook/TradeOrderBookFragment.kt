@@ -186,6 +186,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     }
 
     override fun afterFailedOrderbook() {
+        progress_bar.hide()
         if (adapter.data.isEmpty()) {
             adapter.emptyView = getEmptyView()
             linear_fields_name.gone()
@@ -199,7 +200,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         progress_bar.hide()
+        super.onDestroyView()
     }
 }

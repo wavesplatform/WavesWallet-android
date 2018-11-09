@@ -227,6 +227,18 @@ fun Context.getToolBarHeight(): Int {
     return mActionBarSize
 }
 
+fun Number.roundTo(numFractionDigits: Int?)
+        = String.format("%.${numFractionDigits}f", toDouble()).toDouble()
+
+fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
+    return if (numDecimalPlaces != null){
+        val factor = Math.pow(10.0, numDecimalPlaces.toDouble())
+        Math.round(this * factor) / factor
+    }else{
+        this
+    }
+}
+
 fun ClosedRange<Int>.random() =
         Random().nextInt((endInclusive + 1) - start) + start
 
