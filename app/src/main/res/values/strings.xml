@@ -877,6 +877,7 @@
 
     <!-- Markets -->
     <string name="dex_market_toolbar_title">Markets</string>
+    <string name="dex_market_empty">Nothing here…</string>
 
     <!-- Asset Details -->
     <string name="asset_details_favorite_action">Mark as favorite</string>

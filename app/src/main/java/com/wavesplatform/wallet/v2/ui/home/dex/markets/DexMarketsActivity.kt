@@ -19,7 +19,10 @@ import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.RESULT_NEED
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dex_markets.*
 import kotlinx.android.synthetic.main.header_dex_markets_layout.view.*
+import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import pers.victor.ext.gone
 import pers.victor.ext.inflate
+import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -43,16 +46,37 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.dex_markets_list_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        recycle_markets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                appbar_layout.isSelected = recycle_markets.canScrollVertically(-1)
-            }
-        })
-
         recycle_markets.layoutManager = LinearLayoutManager(this)
         adapter.bindToRecyclerView(recycle_markets)
 
         presenter.getMarkets()
+
+        edit_search.setDrawableClickListener(object : onDrawableClickListener {
+            override fun onClick(target: DrawablePosition) {
+                when (target) {
+                    DrawablePosition.RIGHT -> {
+                        edit_search.text = null
+                    }
+                }
+            }
+        })
+
+        eventSubscriptions.add(RxTextView.textChanges(edit_search)
+                .skipInitialValue()
+                .map {
+                    if (it.isNotEmpty()) {
+                        edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, R.drawable.ic_clear_24_basic_500, 0)
+                    } else {
+                        edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, 0, 0)
+                    }
+                    return@map it.toString()
+                }
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    adapter.filter(it)
+                })
 
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position) as MarketResponse
@@ -80,46 +104,21 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     override fun afterSuccessGetMarkets(markets: MutableList<MarketResponse>) {
         progress_bar.hide()
 
-        if (markets.isEmpty()) {
-            adapter.removeAllHeaderView()
-        } else {
-            adapter.setHeaderView(getHeaderView())
-        }
-
         adapter.allData = ArrayList(markets)
         adapter.setNewData(markets)
-        adapter.setEmptyView(R.layout.address_book_empty_state)
+
+        if (markets.isEmpty()) {
+            edit_search.gone()
+        } else {
+            edit_search.visiable()
+        }
+
+        adapter.emptyView = getEmptyView()
     }
 
-    private fun getHeaderView(): View? {
-        val view = inflate(R.layout.header_dex_markets_layout)
-        view.edit_search.setDrawableClickListener(object : onDrawableClickListener {
-            override fun onClick(target: DrawablePosition) {
-                when (target) {
-                    DrawablePosition.RIGHT -> {
-                        view.edit_search.text = null
-                    }
-                }
-            }
-        })
-
-        eventSubscriptions.add(RxTextView.textChanges(view.edit_search)
-                .skipInitialValue()
-                .map {
-                    if (it.isNotEmpty()) {
-                        view.edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, R.drawable.ic_clear_24_basic_500, 0)
-                    } else {
-                        view.edit_search.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_24_basic_500, 0, 0, 0)
-                    }
-                    return@map it.toString()
-                }
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    adapter.filter(it)
-                })
-
+    private fun getEmptyView(): View {
+        val view = inflate(R.layout.address_book_empty_state)
+        view.text_empty.text = getString(R.string.dex_market_empty)
         return view
     }
 
