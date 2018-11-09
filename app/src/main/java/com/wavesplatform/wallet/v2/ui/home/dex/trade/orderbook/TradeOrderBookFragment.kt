@@ -160,7 +160,9 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
                 presenter.needFirstScrollToLastPrice = false
                 recycle_orderbook.post {
                     val lastPosition = orderBookLinearLayoutManager.findLastVisibleItemPosition()
-                    recycle_orderbook.scrollToPosition(lastPricePosition + lastPosition / 2)
+                    var scrollPosition = lastPricePosition + lastPosition / 2
+                    if (scrollPosition >= adapter.data.size) scrollPosition = adapter.data.size - 1
+                    recycle_orderbook.scrollToPosition(scrollPosition)
                 }
             }
         } else {
