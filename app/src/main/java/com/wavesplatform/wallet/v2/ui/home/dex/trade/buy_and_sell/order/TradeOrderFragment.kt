@@ -278,7 +278,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         presenter.data?.watchMarket.notNull { watchMarket ->
             if (presenter.data?.initAmount != null && presenter.data?.initPrice != null) {
                 val amountUIValue = MoneyUtil.getScaledText(presenter.data?.initAmount!!, watchMarket.market.amountAssetDecimals).clearBalance()
-                val priceUIValue = MoneyUtil.getScaledText(presenter.data?.initPrice!!, watchMarket.market.priceAssetDecimals).clearBalance()
+                val priceUIValue = MoneyUtil.getScaledPrice(presenter.data?.initPrice!!, watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
                 val sum = amountUIValue.toDouble() * priceUIValue.toDouble()
 
                 edit_amount.setText(amountUIValue)
