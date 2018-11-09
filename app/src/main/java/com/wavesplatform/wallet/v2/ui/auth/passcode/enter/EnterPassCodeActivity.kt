@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.U
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
+import com.wavesplatform.wallet.v2.util.isNetworkConnection
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.showError
@@ -132,8 +133,12 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     }
 
     private fun validate(passCode: String) {
-        showProgressBar(true)
-        presenter.validate(getGuid(), passCode)
+        if (isNetworkConnection()) {
+            showProgressBar(true)
+            presenter.validate(getGuid(), passCode)
+        } else {
+            checkInternet()
+        }
     }
 
     override fun onSuccessValidatePassCode(password: String, passCode: String) {

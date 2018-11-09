@@ -1,7 +1,9 @@
 package com.wavesplatform.wallet.v2.ui.base.view
 
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
@@ -16,8 +18,10 @@ import android.support.v7.app.ActionBar
 import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
+import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.WindowManager
+import android.widget.Button
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.App
@@ -28,7 +32,6 @@ import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
-import com.wavesplatform.wallet.v2.ui.no_internet.NoInternetActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.util.*
 import dagger.android.AndroidInjection
@@ -39,6 +42,7 @@ import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import org.fingerlinks.mobile.android.navigator.Navigator
+import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import timber.log.Timber
 import javax.inject.Inject
@@ -100,15 +104,40 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         onViewReady(savedInstanceState)
     }
 
+    protected fun checkInternet() {
+        if (!isNetworkConnection()) {
+            val dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+            dialog.setContentView(R.layout.dialog_no_internet)
+            dialog.setCancelable(false)
+            dialog.findViewById<Button>(R.id.button_retry).click {
+                if (isNetworkConnection()) {
+                    launchActivity<SplashActivity>(clear = true)
+                } else {
+                    showMessage(getString(R.string.no_internet_title), dialog.findViewById<Button>(R.id.root))
+                }
+            }
+            dialog.setOnKeyListener(DialogInterface.OnKeyListener { _, keyCode, _ ->
+                if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+                    launchActivity<SplashActivity>(clear = true) {
+                        putExtra(SplashActivity.EXIT, true)
+                    }
+                    return@OnKeyListener true
+                }
+                false
+            })
+            dialog.show()
+        }
+    }
+
     public override fun onResume() {
         super.onResume()
 
-        if (this is NoInternetActivity || this is SplashActivity) {
+        if (this is SplashActivity) {
             return
         }
 
         if (!isNetworkConnection()) {
-            launchActivity<NoInternetActivity>(clear = true)
+            checkInternet()
             return
         }
 

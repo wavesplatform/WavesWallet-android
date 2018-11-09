@@ -44,15 +44,13 @@
         <Button
             android:id="@+id/button_retry"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:background="@drawable/selector_waves_secondary_button"
             android:fontFamily="sans-serif"
             android:text="@string/no_internet_retry"
             android:textAllCaps="false"
             android:textColor="@color/basic500"
-            android:textSize="14sp"
-
-            />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
