@@ -47,50 +47,24 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
             }
             ASK_TYPE -> {
                 val item = item as OrderBook.Ask
-//                helper.itemView.relative_root.post {
-//                    val lp = helper.itemView.view_bg.layoutParams as RelativeLayout.LayoutParams
-//                    val maxWidth = helper.itemView.relative_root.width
-//                    if (item.width < 0 || item.width == 0f) {
-//                        lp.width = 0
-//                    } else if (item.width > 0 && item.width < 100) {
-//                        lp.width = (maxWidth * item.width).toInt()
-//                    } else if (item.width > 100) {
-//                        lp.width = maxWidth
-//                    }
-//                    helper.itemView.view_bg.layoutParams = lp
-//                }
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
                 val priceUIValue = MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals).stripZeros()
-                val sum = amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
                 helper.setTextColor(R.id.text_price_value, findColor(R.color.error400))
                         .setBackgroundColor(R.id.view_bg, findColor(R.color.error100))
                         .setText(R.id.text_amount_value, amountUIValue)
                         .setText(R.id.text_price_value, priceUIValue)
-                        .setText(R.id.text_sum_value, MoneyUtil.getFormattedTotal(sum, market.priceAssetDecimals))
+                        .setText(R.id.text_sum_value, MoneyUtil.getFormattedTotal(item.sum, market.priceAssetDecimals))
 
             }
             BID_TYPE -> {
                 val item = item as OrderBook.Bid
-//                helper.itemView.relative_root.post {
-//                    val lp = helper.itemView.view_bg.layoutParams as RelativeLayout.LayoutParams
-//                    val maxWidth = helper.itemView.relative_root.width
-//                    if (item.width < 0 || item.width == 0f) {
-//                        lp.width = 0
-//                    } else if (item.width > 0 && item.width < 100) {
-//                        lp.width = (maxWidth * item.width).toInt()
-//                    } else if (item.width > 100) {
-//                        lp.width = maxWidth
-//                    }
-//                    helper.itemView.view_bg.layoutParams = lp
-//                }
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
                 val priceUIValue = MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals).stripZeros()
-                val sum = amountUIValue.replace(",", "").toDouble() * priceUIValue.replace(",", "").toDouble()
                 helper.setTextColor(R.id.text_price_value, findColor(R.color.submit400))
                         .setBackgroundColor(R.id.view_bg, findColor(R.color.submit50))
                         .setText(R.id.text_amount_value, amountUIValue)
                         .setText(R.id.text_price_value, priceUIValue)
-                        .setText(R.id.text_sum_value, MoneyUtil.getFormattedTotal(sum, market.priceAssetDecimals))
+                        .setText(R.id.text_sum_value, MoneyUtil.getFormattedTotal(item.sum, market.priceAssetDecimals))
             }
         }
 

@@ -2,13 +2,17 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 
 import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.wavesplatform.wallet.R.color.s
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.clearBalance
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.stripZeros
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
@@ -38,33 +42,8 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                         .onErrorResumeNext(Observable.empty())
                         .compose(RxUtil.applyObservableDefaultSchedulers())
                         .subscribe({ pair ->
-                            //                            val spreadPrice = pair.first.asks[0].price.plus(pair.first.bids[0].price).div(2)
-//                            val delta = spreadPrice.times(1.5).div(2)
-//                            val max = spreadPrice.plus(delta)
-//                            val min = Math.max(0.0, spreadPrice.minus(delta))
-//
-//                            val croppedBids = pair.first.bids.filter { it.price > min && it.price < max }
-//                            val croppedAsks = pair.first.asks.filter { it.price > min && it.price < max }
-//
-//                            val amountList = croppedAsks.asSequence()
-//                                    .map { it.amount }
-//                                    .plus(croppedBids
-//                                            .map { it.amount })
-//                                    .sorted()
-//                                    .toList()
-//
-//                            val maxAmount = amountList[Math.floor(amountList.size * 0.9).toInt()] //percentile = 0.9;
-//
-//                            croppedAsks.forEach {
-//                                it.width = it.amount.div(maxAmount.toFloat()).times(100)
-//                            }
-//
-//                            croppedBids.forEach {
-//                                it.width = it.amount.div(maxAmount.toFloat()).times(100)
-//                            }
-
                             val result = mutableListOf<MultiItemEntity>()
-                            result.addAll(pair.first.asks.asReversed())
+                            result.addAll(getCalculatedAsks(pair.first.asks).asReversed())
                             pair.second.notNull {
                                 val firstAsk = pair.first.asks.firstOrNull()?.price?.toDouble()
                                 val firstBid = pair.first.bids.firstOrNull()?.price?.toDouble()
@@ -73,19 +52,46 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                                 } else if (firstAsk == null || firstBid == null) {
                                     result.add(LastPriceItem(0.0, it))
                                 } else {
-                                    val percent = ((firstAsk.minus(firstBid))
+                                    var percent = ((firstAsk.minus(firstBid))
                                             .times(100).div(firstBid))
+                                    if (percent >= 100) percent = 99.99
                                     result.add(LastPriceItem(percent, it))
                                 }
                             }
                             val lastPricePosition = result.size - 1
-                            result.addAll(pair.first.bids)
+                            result.addAll(getCalculatedBids(pair.first.bids))
                             viewState.afterSuccessOrderbook(result, lastPricePosition)
                         }, {
                             it.printStackTrace()
                             viewState.afterFailedOrderbook()
                         }))
 
+    }
+
+    private fun getCalculatedBids(list: List<OrderBook.Bid>): Collection<MultiItemEntity> {
+        var sum = 0.0
+        list.forEach {
+            val amountUIValue = MoneyUtil.getScaledText(it.amount, watchMarket?.market?.amountAssetDecimals
+                    ?: 0).stripZeros()
+            val priceUIValue = MoneyUtil.getScaledPrice(it.price, watchMarket?.market?.amountAssetDecimals
+                    ?: 0, watchMarket?.market?.priceAssetDecimals ?: 0).stripZeros()
+            sum += amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
+            it.sum = sum
+        }
+        return list
+    }
+
+    private fun getCalculatedAsks(list: List<OrderBook.Ask>): List<OrderBook.Ask> {
+        var sum = 0.0
+        list.forEach {
+            val amountUIValue = MoneyUtil.getScaledText(it.amount, watchMarket?.market?.amountAssetDecimals
+                    ?: 0).stripZeros()
+            val priceUIValue = MoneyUtil.getScaledPrice(it.price, watchMarket?.market?.amountAssetDecimals
+                    ?: 0, watchMarket?.market?.priceAssetDecimals ?: 0).stripZeros()
+            sum += amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
+            it.sum = sum
+        }
+        return list
     }
 
 }

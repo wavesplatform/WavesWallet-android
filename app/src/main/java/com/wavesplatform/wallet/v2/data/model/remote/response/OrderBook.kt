@@ -36,7 +36,7 @@ data class OrderBook(
     data class Ask(
             @SerializedName("amount") var amount: Long = 0,
             @SerializedName("price") var price: Long = 0,
-            @SerializedName("width") var width: Float = 0f
+            @SerializedName("sum") var sum: Double = 0.0
     ) : MultiItemEntity {
         override fun getItemType(): Int {
             return TradeOrderBookAdapter.ASK_TYPE
@@ -47,7 +47,7 @@ data class OrderBook(
     data class Bid(
             @SerializedName("amount") var amount: Long = 0,
             @SerializedName("price") var price: Long = 0,
-            @SerializedName("width") var width: Float = 0f
+            @SerializedName("sum") var sum: Double = 0.0
     ) : MultiItemEntity {
         override fun getItemType(): Int {
             return TradeOrderBookAdapter.BID_TYPE
