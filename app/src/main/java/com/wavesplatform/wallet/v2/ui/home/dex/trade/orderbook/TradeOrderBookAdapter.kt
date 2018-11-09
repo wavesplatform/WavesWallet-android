@@ -60,7 +60,7 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
 //                    helper.itemView.view_bg.layoutParams = lp
 //                }
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
-                val priceUIValue = MoneyUtil.getScaledText(item.price, market.priceAssetDecimals).stripZeros()
+                val priceUIValue = MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals).stripZeros()
                 val sum = amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
                 helper.setTextColor(R.id.text_price_value, findColor(R.color.error400))
                         .setBackgroundColor(R.id.view_bg, findColor(R.color.error100))
@@ -84,7 +84,7 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
 //                    helper.itemView.view_bg.layoutParams = lp
 //                }
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
-                val priceUIValue = MoneyUtil.getScaledText(item.price, market.priceAssetDecimals).stripZeros()
+                val priceUIValue = MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals).stripZeros()
                 val sum = amountUIValue.replace(",", "").toDouble() * priceUIValue.replace(",", "").toDouble()
                 helper.setTextColor(R.id.text_price_value, findColor(R.color.submit400))
                         .setBackgroundColor(R.id.view_bg, findColor(R.color.submit50))
