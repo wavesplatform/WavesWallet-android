@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
@@ -40,7 +39,6 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
 import org.fingerlinks.mobile.android.navigator.Navigator
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
@@ -97,6 +95,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         super.onCreate(savedInstanceState)
         if (!translucentStatusBar) {
             setStatusBarColor(R.color.white)
+            setNavigationBarColor(R.color.white)
         }
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(configLayoutRes())
@@ -226,12 +225,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         showSnackbar(R.string.check_connectivity_exit)
     }
 
-    fun showNetworkErrorWithRetry(retrySubject: PublishSubject<Events.RetryEvent>) {
-        Snackbar.make(findViewById(android.R.id.content), getString(R.string.check_connectivity_exit), Snackbar.LENGTH_INDEFINITE)
-//                .setAction(getString(R.string.error_network_retry_text), { retrySubject.onNext(Events.RetryEvent()) })
-                .show()
-    }
-
     override fun showProgressBar(isShowProgress: Boolean) {
         pyxis.uzuki.live.richutilskt.utils.runOnUiThread {
             if (isShowProgress) {
@@ -269,15 +262,21 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     protected fun setStatusBarColor(@ColorRes intColorRes: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             window.statusBarColor = ContextCompat.getColor(this, intColorRes)
+        } else {
+            window.statusBarColor = ContextCompat.getColor(this, R.color.black)
         }
     }
 
     protected fun setNavigationBarColor(@ColorRes intColorRes: Int) {
-        window.navigationBarColor = ContextCompat.getColor(this, intColorRes)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            window.navigationBarColor = ContextCompat.getColor(this, intColorRes)
+        } else {
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
+        }
     }
 
     protected fun restartApp() {

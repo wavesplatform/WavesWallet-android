@@ -41,6 +41,9 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     override fun configLayoutRes() = R.layout.activity_enter_passcode
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.white)
+        setNavigationBarColor(R.color.white)
+
         text_use_acc_password.click {
             startUsePasswordScreen()
         }

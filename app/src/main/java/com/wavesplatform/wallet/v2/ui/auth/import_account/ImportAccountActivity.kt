@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.auth.import_account
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -35,7 +34,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
+        setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, title = getString(R.string.import_account_toolbar_title), icon = R.drawable.ic_toolbar_back_black)
 
         viewpager_import.adapter = ImportAccountFragmentPageAdapter(supportFragmentManager, arrayOf(getString(R.string.import_account_tab_scan),

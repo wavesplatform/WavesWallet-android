@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn
 
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -31,7 +30,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
+        setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.token_burn_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         val assetBalance = intent.getParcelableExtra<AssetBalance>(
