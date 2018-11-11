@@ -1,23 +1,49 @@
 package com.wavesplatform.wallet.v2.ui.home.dex
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v2.data.model.remote.response.Market
+import com.vicpin.krealmextensions.queryAllAsSingle
+import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
+import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.RxUtil
+import io.reactivex.disposables.CompositeDisposable
+import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 @InjectViewState
-class DexPresenter @Inject constructor() :BasePresenter<DexView>(){
+class DexPresenter @Inject constructor() : BasePresenter<DexView>() {
+
+    var pairSubscriptions = CompositeDisposable()
 
     fun loadActiveMarkets() {
-        val list = arrayListOf<Market>( Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
-                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
-                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
-                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
-                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
-                Market(amountAssetName = "Waves", priceAssetName = "BTC", amountAsset = "WAVES", priceAsset = "96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"),
-                Market(amountAssetName = "please search me", priceAssetName = "yeah", amountAsset = "great", priceAsset = "search")
-        )
-        viewState.afterSuccessLoadMarkets(list)
+        runAsync {
+            addSubscription(queryAllAsSingle<MarketResponse>().toObservable()
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe({
+                        val markets = it.sortedBy { it.position }.mapTo(ArrayList()) {
+                            return@mapTo WatchMarket(it)
+                        }
+                        viewState.afterSuccessLoadMarkets(markets)
+                    }, {
+                        it.printStackTrace()
+                    }))
+        }
+
+    }
+
+    fun loadDexPairInfo(watchMarket: WatchMarket, index: Int) {
+        pairSubscriptions.add(apiDataManager.loadDexPairInfo(watchMarket)
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({
+                    viewState.afterSuccessLoadPairInfo(it, index)
+                }, {
+                    viewState.afterFailedLoadPairInfo()
+                    it.printStackTrace()
+                }))
+    }
+
+    fun clearOldPairsSubscriptions(){
+        pairSubscriptions.clear()
     }
 
 }

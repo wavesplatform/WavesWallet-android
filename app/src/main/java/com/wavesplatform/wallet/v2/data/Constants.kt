@@ -18,6 +18,8 @@ object Constants {
     const val URL_FACEBOOK = "https://www.facebook.com/wavesplatform"
     const val URL_DISCORD = "https://discordapp.com/invite/cnFmDyA"
 
+    const val URL_GLOBAL_CONFIGURATION = "https://raw.githubusercontent.com/wavesplatform/waves-client-config/master/environment_mainnet.json"
+
     const val ACC_TWITTER = "wavesplatform"
     const val ACC_TELEGRAM = "wavesnews"
 
@@ -26,6 +28,7 @@ object Constants {
     const val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
 
     const val WAVES_FEE = 100000L
+    const val WAVES_DEX_FEE = 300000L
     const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
     const val VERSION = 2
     const val ADDRESS_SCHEME = 'W'

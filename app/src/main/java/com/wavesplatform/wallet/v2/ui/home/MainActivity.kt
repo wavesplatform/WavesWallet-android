@@ -17,6 +17,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.id.tab_navigation
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
@@ -64,7 +65,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
         setupBottomNavigation()
 
-        onTabSelected(tab_navigation.getTabAt(WALLET_SCREEN))
+
+        if (savedInstanceState == null) {
+            onTabSelected(tab_navigation.getTabAt(WALLET_SCREEN))
+        }
 
         eventSubscriptions.add(mRxEventBus.filteredObservable(Events.SpamFilterStateChanged::class.java)
                 .subscribe {
@@ -207,14 +211,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         fragments.add(historyFragment)
         fragments.add(profileFragment)
 
-        val transaction = supportFragmentManager.beginTransaction()
-        fragments.forEach { fragment ->
-            if (fragment !is QuickActionBottomSheetFragment) {
-                transaction.add(R.id.frame_fragment_container, fragment, fragment::class.java.simpleName).hide(fragment)
-            }
-        }
-        transaction.commitAllowingStateLoss()
-
         activeFragment = fragments[WALLET_SCREEN]
     }
 
@@ -268,7 +264,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     private fun showNewTabFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().hide(activeFragment).show(fragment).commitAllowingStateLoss()
+        if (!supportFragmentManager.fragments.contains(fragment)) {
+            supportFragmentManager.beginTransaction().hide(activeFragment).add(R.id.frame_fragment_container, fragment, fragment::class.java.simpleName).show(fragment).commitAllowingStateLoss()
+        } else {
+            supportFragmentManager.beginTransaction().hide(activeFragment).show(fragment).commitAllowingStateLoss()
+        }
         activeFragment = fragment
     }
 

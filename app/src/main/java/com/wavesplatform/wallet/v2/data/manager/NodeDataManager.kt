@@ -23,8 +23,9 @@ import pers.victor.ext.currentTimeMillis
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.collections.ArrayList
-
+@Singleton
 class NodeDataManager @Inject constructor() : BaseDataManager() {
     @Inject
     lateinit var transactionUtil: TransactionUtil

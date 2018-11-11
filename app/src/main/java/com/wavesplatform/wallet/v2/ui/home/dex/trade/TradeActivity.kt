@@ -6,7 +6,7 @@ import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.Market
+import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketInformationBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.notNull
@@ -24,7 +24,7 @@ class TradeActivity : BaseActivity(), TradeView {
     fun providePresenter(): TradePresenter = presenter
 
     companion object {
-        var BUNDLE_MARKET = "market"
+        var BUNDLE_MARKET = "watchMarket"
     }
 
     override fun configLayoutRes() = R.layout.activity_trade
@@ -36,26 +36,27 @@ class TradeActivity : BaseActivity(), TradeView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view,  true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
+        presenter.watchMarket = intent.getParcelableExtra<WatchMarket>(BUNDLE_MARKET)
+
+        setupToolbar(toolbar_view, true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
 
         viewpageer_trade.adapter = TradeFragmentPageAdapter(supportFragmentManager, arrayOf(getString(R.string.dex_trade_tab_orderbook), getString(R.string.dex_trade_tab_chart),
-                getString(R.string.dex_trade_tab_last_trades), getString(R.string.dex_trade_tab_my_orders)))
+                getString(R.string.dex_trade_tab_last_trades), getString(R.string.dex_trade_tab_my_orders)), presenter.watchMarket)
+        viewpageer_trade.offscreenPageLimit = 4
         stl_trade.setViewPager(viewpageer_trade)
         stl_trade.currentTab = 0
     }
 
     private fun getToolbarTitle(): String {
-        val market = intent.getParcelableExtra<Market>(BUNDLE_MARKET)
-        presenter.market = market
-        return "${market.amountAssetName} / ${market.priceAssetName}"
+        return "${presenter.watchMarket?.market?.amountAssetShortName} / ${presenter.watchMarket?.market?.priceAssetShortName}"
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_info -> {
-                presenter.market.notNull {
+                presenter.watchMarket.notNull {
                     val infoDialog = DexMarketInformationBottomSheetFragment()
-                    infoDialog.withMarketInformation(it)
+                    infoDialog.withMarketInformation(it.market)
                     infoDialog.show(supportFragmentManager, infoDialog::class.java.simpleName)
                 }
                 return true

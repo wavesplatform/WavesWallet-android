@@ -100,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="4dp"
-                        android:text="@string/buy_and_sell_success_opened"
+                        android:text="@string/my_orders_status_open"
                         android:textColor="@color/submit400"
                         android:textSize="11sp" />
 

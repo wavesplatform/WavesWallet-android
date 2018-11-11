@@ -184,11 +184,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val item = menu.findItem(R.id.action_sorting)
-        item.isVisible = true
-    }
-
     override fun afterFailedUpdateAssets() {
         swipe_container?.isRefreshing = false
     }
@@ -239,6 +234,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         inflater.inflate(R.menu.menu_assets, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }

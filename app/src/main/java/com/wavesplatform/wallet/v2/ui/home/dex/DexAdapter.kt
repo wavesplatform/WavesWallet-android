@@ -1,36 +1,54 @@
 package com.wavesplatform.wallet.v2.ui.home.dex
 
-import android.support.v4.content.ContextCompat
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.Market
-import java.util.*
+import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
+import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.roundTo
+import pers.victor.ext.findDrawable
+import java.math.BigDecimal
 import javax.inject.Inject
 
-class DexAdapter @Inject constructor() : BaseQuickAdapter<Market, BaseViewHolder>(R.layout.dex_layout_item, null) {
+class DexAdapter @Inject constructor() : BaseQuickAdapter<WatchMarket, BaseViewHolder>(R.layout.dex_layout_item, null) {
 
-    override fun convert(helper: BaseViewHolder, item: Market) {
-        val trade = Random().nextInt(3)
-        var tradeIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_chartarrow_success_400)
+    override fun convert(helper: BaseViewHolder, item: WatchMarket) {
+        if (item.pairResponse?.data != null) {
+            item.pairResponse?.data.notNull { data ->
+                val deltaPercent = (data.lastPrice.minus(data.firstPrice)).times(BigDecimal(100))
 
-        var verifyIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_verified_multy)
-//                if (item.isFavourite) {
-//                    ContextCompat.getDrawable(mContext, R.drawable.ic_verified_multy)
-//                } else {
-//                    ContextCompat.getDrawable(mContext, R.drawable.ic_unverified_multy)
-//                }
+                val percent = if (deltaPercent != BigDecimal.ZERO) {
+                    deltaPercent / data.lastPrice
+                } else {
+                    BigDecimal.ZERO
+                }
 
-        when (trade) {
-            1 -> {
-                tradeIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_chartarrow_error_500)
+                val tradeIcon = when {
+                    percent > BigDecimal.ZERO -> {
+                        findDrawable(R.drawable.ic_chartarrow_success_400)
+                    }
+                    percent < BigDecimal.ZERO -> {
+                        findDrawable(R.drawable.ic_chartarrow_error_500)
+                    }
+                    percent == BigDecimal.ZERO -> {
+                        findDrawable(R.drawable.ic_chartarrow_accent_100)
+                    }
+                    else -> findDrawable(R.drawable.ic_chartarrow_accent_100)
+                }
+
+                helper.setImageDrawable(R.id.image_dex_trade, tradeIcon)
+                        .setText(R.id.text_price, data.lastPrice.stripTrailingZeros().toPlainString())
+                        .setText(R.id.text_percent, "${"%.2f".format(percent)}%")
             }
-            2 -> {
-                tradeIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_chartarrow_accent_100)
-            }
+        } else {
+            helper.setImageDrawable(R.id.image_dex_trade, findDrawable(R.drawable.ic_chartarrow_accent_100))
+                    .setText(R.id.text_price, "0.0")
+                    .setText(R.id.text_percent, "0.0%")
         }
-        helper.setImageDrawable(R.id.image_dex_trade, tradeIcon)
-        helper.setImageDrawable(R.id.image_verified, verifyIcon)
-                .setGone(R.id.image_verified, false)
+
+        helper.setText(R.id.text_asset_name, "${item.market.amountAssetShortName} / ${item.market.priceAssetShortName}")
+                .setText(R.id.text_price_asset, mContext.getString(R.string.dex_last_price_value, item.market.priceAssetLongName))
     }
+
+
 }
