@@ -277,8 +277,6 @@
     <!-- My Address QR -->
     <string name="my_address_qr_copy">Copy</string>
     <string name="my_address_qr_share">Share</string>
-    <string name="my_address_qr_send_only_waves_and_waves_tokens_to_this_address">Send only WAVES and Waves tokens to this address</string>
-    <string name="my_address_qr_sending_any_other_digital_asset_to_this_address_will_result_in_the_permanent_loss_of_your_funds">Sending any other digital asset to this address will result in the permanent loss of your funds</string>
 
     <!-- Address Book  -->
     <string name="address_book_toolbar_title">Address book</string>
@@ -745,7 +743,6 @@
     <string name="buy_and_sell_success_the_order_is_created">The order is created</string>
     <string name="buy_and_sell_success_time">Time</string>
     <string name="buy_and_sell_success_status">Status</string>
-    <string name="buy_and_sell_success_opened">Opened</string>
     <string name="buy_and_sell_success_price">Price</string>
     <string name="buy_and_sell_success_amount">Amount</string>
     <string name="buy_and_sell_success_okay">Okay</string>
