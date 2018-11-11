@@ -12,6 +12,7 @@ import kotlinx.android.parcel.Parcelize
 @RealmClass
 open class MarketResponse(
         @PrimaryKey
+        @SerializedName("id")
         var id: String? = "",
 
         @SerializedName("amountAsset") var amountAsset: String = "",
@@ -29,7 +30,8 @@ open class MarketResponse(
         @SerializedName("created") var created: Long = 0,
         @SerializedName("checked") var checked: Boolean = false,
         @SerializedName("popular") var popular: Boolean = false,
-        @SerializedName("position") var position: Int = -1
+        @SerializedName("position") var position: Int = -1,
+        @SerializedName("currentTimeFrame") var currentTimeFrame: Int? = null
 ) : Parcelable, RealmModel
 
 @Parcelize
