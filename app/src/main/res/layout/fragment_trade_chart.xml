@@ -1,22 +1,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@android:color/transparent">
 
 
     <android.support.v7.widget.CardView
+        android:id="@+id/card_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="-2dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="18dp"
         app:cardBackgroundColor="@color/white"
-        android:layout_marginLeft="8dp"
-        android:id="@+id/card_content"
-        android:layout_marginRight="8dp"
-        android:layout_width="match_parent"
         app:cardCornerRadius="2dp"
-        app:cardElevation="3dp"
-        android:layout_marginBottom="-2dp"
-        android:layout_height="match_parent">
+        app:cardElevation="3dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,56 +24,73 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/relative_timeframe"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:background="@color/basic50"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/basic50">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_change_time"
-                    android:textColor="@color/basic500"
                     android:layout_width="wrap_content"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:text="@string/chart_time_frame_5_min"
-                    android:textSize="11sp"
-                    android:drawablePadding="8dp"
+                    android:clickable="true"
                     android:drawableEnd="@drawable/ic_changearrows_14_basic_500"
-                    />
+                    android:drawablePadding="8dp"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="12dp"
+                    android:paddingStart="12dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/chart_time_frame_5_min"
+                    android:textColor="@color/basic500"
+                    android:textSize="11sp" />
 
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/accent50"/>
+                android:background="@color/accent50" />
 
-            <com.wavesplatform.wallet.v1.ui.dex.details.chart.CustomCandleChart
-                android:id="@+id/candle_chart"
+            <LinearLayout
+                android:id="@+id/linear_charts"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <com.wavesplatform.wallet.v1.ui.dex.details.chart.CustomBarChart
-                android:id="@+id/bar_chart"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginTop="-5dp" />
+                <com.wavesplatform.wallet.v1.ui.dex.details.chart.CustomCandleChart
+                    android:id="@+id/candle_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <com.wavesplatform.wallet.v1.ui.dex.details.chart.CustomBarChart
+                    android:id="@+id/bar_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="-5dp" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
+        <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:progress_image="@drawable/ic_loader_24_submit_400"
+            app:progress_text="@string/chart_loading" />
 
         <include
-            android:visibility="gone"
             android:id="@+id/layout_empty"
-            layout="@layout/layout_empty_data"/>
+            layout="@layout/layout_empty_data"
+            android:visibility="gone" />
 
     </android.support.v7.widget.CardView>
-
 
 
 </RelativeLayout>

@@ -34,6 +34,8 @@ import kotlinx.android.synthetic.main.fragment_trade_chart.*
 import kotlinx.android.synthetic.main.layout_empty_data.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
@@ -334,49 +336,56 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     }
 
     override fun onShowCandlesSuccess(candles: ArrayList<CandleEntry>, barEntries: ArrayList<BarEntry>, firstRequest: Boolean) {
-
         if (firstRequest) {
-            val barData = BarData()
-            val set1 = BarDataSet(barEntries, "Bar 1")
-            set1.setDrawValues(false)
-            set1.isHighlightEnabled = false
-            set1.color = Color.parseColor("#cccccc")
-            set1.axisDependency = YAxis.AxisDependency.RIGHT
-            barData.addDataSet(set1)
+            progress_bar.hide()
+            if (candles.isEmpty() && barEntries.isEmpty()) {
+                relative_timeframe.gone()
+                linear_charts.gone()
+                layout_empty.visiable()
+            } else {
+                relative_timeframe.visiable()
+                linear_charts.visiable()
+                val barData = BarData()
+                val set1 = BarDataSet(barEntries, "Bar 1")
+                set1.setDrawValues(false)
+                set1.isHighlightEnabled = false
+                set1.color = Color.parseColor("#cccccc")
+                set1.axisDependency = YAxis.AxisDependency.RIGHT
+                barData.addDataSet(set1)
 
-            val candleData = CandleData()
-            val set = CandleDataSet(candles, "Candle DataSet")
-            set.decreasingColor = findColor(R.color.error400)
-            set.increasingColor = findColor(R.color.submit300)
-            set.neutralColor = Color.parseColor("#4b7190")
-            set.shadowColorSameAsCandle = true
-            set.increasingPaintStyle = Paint.Style.FILL
-            set.shadowColor = Color.DKGRAY
-            set.isHighlightEnabled = false
-            set.setDrawValues(false)
-            set.axisDependency = YAxis.AxisDependency.RIGHT
-            candleData.addDataSet(set)
+                val candleData = CandleData()
+                val set = CandleDataSet(candles, "Candle DataSet")
+                set.decreasingColor = findColor(R.color.error400)
+                set.increasingColor = findColor(R.color.submit300)
+                set.neutralColor = Color.parseColor("#4b7190")
+                set.shadowColorSameAsCandle = true
+                set.increasingPaintStyle = Paint.Style.FILL
+                set.shadowColor = Color.DKGRAY
+                set.isHighlightEnabled = false
+                set.setDrawValues(false)
+                set.axisDependency = YAxis.AxisDependency.RIGHT
+                candleData.addDataSet(set)
 
-            val last = candles[candles.size - 1]
-            candle_chart.data = candleData
+                val last = candles[candles.size - 1]
+                candle_chart.data = candleData
 
-            bar_chart.data = barData
+                bar_chart.data = barData
 
-            bar_chart.setVisibleXRangeMinimum(5f)
-            bar_chart.setVisibleXRangeMaximum(100f)
+                bar_chart.setVisibleXRangeMinimum(5f)
+                bar_chart.setVisibleXRangeMaximum(100f)
 
-            candle_chart.setVisibleXRangeMinimum(5f)
-            candle_chart.setVisibleXRangeMaximum(100f)
+                candle_chart.setVisibleXRangeMinimum(5f)
+                candle_chart.setVisibleXRangeMaximum(100f)
 
-            candle_chart.moveViewToX(set.getEntryForIndex(set.entryCount - 1).x)
-            bar_chart.moveViewToX(set.getEntryForIndex(set.entryCount - 1).x)
+                candle_chart.moveViewToX(set.getEntryForIndex(set.entryCount - 1).x)
+                bar_chart.moveViewToX(set.getEntryForIndex(set.entryCount - 1).x)
 
-            bar_chart.zoom(4f / bar_chart.scaleX, 1f, last.x, last.y, YAxis.AxisDependency.RIGHT)
-            candle_chart.zoom(4f / candle_chart.scaleX, 1f, last.x, last.y, YAxis.AxisDependency.RIGHT)
+                bar_chart.zoom(4f / bar_chart.scaleX, 1f, last.x, last.y, YAxis.AxisDependency.RIGHT)
+                candle_chart.zoom(4f / candle_chart.scaleX, 1f, last.x, last.y, YAxis.AxisDependency.RIGHT)
 
-            bar_chart.invalidate()
-            candle_chart.invalidate()
-
+                bar_chart.invalidate()
+                candle_chart.invalidate()
+            }
         } else {
             Handler().postDelayed({ updateCandles(candles, barEntries) }, 100)
         }
