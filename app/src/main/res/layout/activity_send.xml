@@ -246,7 +246,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="24dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_info"
@@ -391,6 +392,52 @@
                     android:layerType="software" />
 
             </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/monero_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginRight="16dp"
+                    android:lineSpacingExtra="4sp"
+                    android:text="@string/send_monero_payment_id"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="24dp"
+                    android:clipToPadding="true"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="2dp">
+
+                    <EditText
+                        android:id="@+id/edit_monero_payment_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="@string/send_monero_payment_id_hint"
+                        android:padding="14dp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/accent100"
+                        android:textSize="14sp"/>
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"

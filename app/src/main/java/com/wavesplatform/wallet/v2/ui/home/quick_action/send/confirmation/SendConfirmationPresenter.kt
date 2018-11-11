@@ -38,6 +38,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var attachment: String = ""
     var selectedAsset: AssetBalance? = null
     var assetInfo: AssetInfo? = null
+    var moneroPaymentId: String? = null
+    var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
 
 
     fun confirmSend() {
@@ -72,7 +74,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     }
 
     private fun submitPayment(signedTransaction: TransactionsBroadcastRequest) {
-        if (AssetBalance.isGateway(signedTransaction.assetId)) {
+        if (type == SendPresenter.Type.GATEWAY) {
             createGateAndPayment()
         } else {
             signedTransaction.attachment = Base58.encode(
@@ -80,14 +82,14 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             if (signedTransaction.recipient.length <= 30) {
                 signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()
             }
-            nodeManager.transactionsBroadcast(signedTransaction)
+            addSubscription(nodeManager.transactionsBroadcast(signedTransaction)
                     .compose(RxUtil.applySchedulersToObservable()).subscribe({ tx ->
                         tx.recipient = tx.recipient.clearAlias()
                         saveLastSentAddress(tx.recipient)
                         viewState.onShowTransactionSuccess(tx)
                     }, { _ ->
                         viewState.onShowError(R.string.transaction_failed)
-                    })
+                    }))
         }
     }
 
@@ -125,6 +127,14 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             val findAsset: Single<List<AssetInfo>> = queryAsSingle {
                 equalTo("id", assetId)
             }
+
+            val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY
+                    && this.moneroPaymentId != null && this.moneroPaymentId!!.isNotEmpty()) {
+                this.moneroPaymentId
+            } else {
+                null
+            }
+
             addSubscription(
                     findAsset.toObservable()
                             .flatMap {
@@ -133,7 +143,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                                 coinomatManager.createTunnel(
                                         currencyFrom,
                                         currencyTo,
-                                        recipient)
+                                        recipient,
+                                        moneroPaymentId)
                             }
                             .flatMap { createTunnel ->
                                 coinomatManager.getTunnel(

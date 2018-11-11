@@ -4,7 +4,6 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
-import android.text.InputFilter
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
@@ -26,7 +25,6 @@ import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
 import io.github.anderscheow.validator.rules.common.EqualRule
 import io.github.anderscheow.validator.rules.common.MaxRule
-import io.github.anderscheow.validator.rules.common.MinRule
 import kotlinx.android.synthetic.main.activity_new_account.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.children
@@ -154,11 +152,13 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
 
     private fun goNext() {
         if (presenter.isAllFieldsValid()) {
-            launchActivity<SecretPhraseActivity>(options = createDataBundle())
-        } else if (!presenter.avatarValid) {
-            val animation = AnimationUtils.loadAnimation(this, R.anim.shake_error)
-            linear_images?.startAnimation(animation)
-            showError(R.string.new_account_avatar_error, R.id.relative_root)
+            if (presenter.avatarValid) {
+                launchActivity<SecretPhraseActivity>(options = createDataBundle())
+            } else {
+                showError(R.string.new_account_avatar_error, R.id.relative_root)
+                val animation = AnimationUtils.loadAnimation(this, R.anim.shake_error)
+                linear_images?.startAnimation(animation)
+            }
         }
     }
 

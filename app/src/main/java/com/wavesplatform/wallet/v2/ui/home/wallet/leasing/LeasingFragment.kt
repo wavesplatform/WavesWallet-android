@@ -69,6 +69,11 @@ class LeasingFragment : BaseFragment(), LeasingView {
                     presenter.getActiveLeasing()
                 })
 
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.UpdateListOfActiveTransaction::class.java)
+                .subscribe {
+                    adapterActiveAdapter.remove(it.position)
+                })
+
         swipe_container.setColorSchemeResources(R.color.submit400)
         swipe_container.setOnRefreshListener {
             presenter.getActiveLeasing()
@@ -138,7 +143,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
 
             val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
 
-            bottomSheetFragment.configureData(historyItem, position, adapter.data as ArrayList<Transaction>)
+            bottomSheetFragment.configureData(historyItem, position, ArrayList(adapter.data) as ArrayList<Transaction>)
             bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
         }
     }

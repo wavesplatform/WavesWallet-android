@@ -17,7 +17,6 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.U
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
-import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.showError
@@ -33,6 +32,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     @InjectPresenter
     lateinit var presenter: EnterPassCodePresenter
     private lateinit var fingerprintDialog: FingerprintAuthDialogFragment
+    private lateinit var guid: String
 
     @ProvidePresenter
     fun providePresenter(): EnterPassCodePresenter = presenter
@@ -46,7 +46,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
 
         val isProcessSetFingerprint = intent.hasExtra(KEY_INTENT_PROCESS_SET_FINGERPRINT)
         val isAvailable = FingerprintAuthDialogFragment.isAvailable(this)
-        val guid = getGuid()
+        guid = getGuid()
 
         val isLoggedIn = !TextUtils.isEmpty(guid)
         val useFingerprint = (isAvailable && !isProcessSetFingerprint
@@ -97,6 +97,13 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (EnterPassCodePresenter.overMaxWrongPassCodes(guid)) {
+            startUsePasswordScreen()
+        }
+    }
+
     private fun clearAndLogout() {
         App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
@@ -130,7 +137,6 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     }
 
     override fun onSuccessValidatePassCode(password: String, passCode: String) {
-        App.getAccessManager().resetPassCodeInputFails()
         showProgressBar(false)
 
         val data = Intent()
@@ -163,7 +169,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     }
 
     override fun onBackPressed() {
-        if (intent.hasExtra(KEY_INTENT_GUID)) {
+        if (intent.hasExtra(KEY_INTENT_GUID) && !intent.hasExtra(KEY_INTENT_USE_BACK_FOR_EXIT)) {
             launchActivity<SplashActivity>(clear = true) {
                 putExtra(SplashActivity.EXIT, true)
             }
@@ -201,6 +207,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         const val KEY_INTENT_PASS_CODE = "intent_pass_code"
         const val KEY_INTENT_GUID = "intent_guid"
         const val KEY_INTENT_PROCESS_SET_FINGERPRINT = "intent_process_set_fingerprint"
+        const val KEY_INTENT_USE_BACK_FOR_EXIT = "intent_use_back_for_exit"
         const val REQUEST_ENTER_PASS_CODE = 555
     }
 }

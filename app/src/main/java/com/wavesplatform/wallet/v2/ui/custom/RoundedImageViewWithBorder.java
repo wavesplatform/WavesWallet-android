@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v7.content.res.AppCompatResources;
 import android.util.AttributeSet;
 
@@ -201,10 +200,7 @@ public class RoundedImageViewWithBorder extends TintableImageView {
     @Override
     public void setBackgroundDrawable(Drawable background) {
         mBackgroundDrawable = RoundedDrawable.fromDrawable(background);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-            super.setBackground(mBackgroundDrawable);
-        else
-            super.setBackgroundDrawable(mBackgroundDrawable);
+        super.setBackground(mBackgroundDrawable);
     }
 
     public int getCornerRadius() {

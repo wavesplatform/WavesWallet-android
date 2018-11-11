@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v1.util.ViewUtils
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
@@ -28,9 +29,12 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_MONERO_PAYMENT_ID
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_AMOUNT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ASSET
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_RECIPIENT
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_TYPE
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -60,6 +64,12 @@ class SendActivity : BaseActivity(), SendView {
 
     companion object {
         var REQUEST_YOUR_ASSETS = 43
+        const val KEY_INTENT_ASSET_DETAILS = "asset_details"
+        const val KEY_INTENT_REPEAT_TRANSACTION = "repeat_transaction"
+        const val KEY_INTENT_TRANSACTION_ASSET_BALANCE = "transaction_asset_balance"
+        const val KEY_INTENT_TRANSACTION_AMOUNT = "transaction_amount"
+        const val KEY_INTENT_TRANSACTION_ATTACHMENT = "transaction_attachment"
+        const val KEY_INTENT_TRANSACTION_RECIPIENT = "transaction_recipient"
     }
 
 
@@ -67,18 +77,35 @@ class SendActivity : BaseActivity(), SendView {
         setStatusBarColor(R.color.basic50)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title), R.drawable.ic_toolbar_back_black)
-        checkAddressFieldAndSetAction(edit_address.text.toString())
+        checkRecipient(edit_address.text.toString())
 
-        if (intent.hasExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM)) {
-            setAsset(intent.getParcelableExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM))
-            assetChangeEnable(false)
-        } else {
-            assetChangeEnable(true)
+        when {
+            intent.hasExtra(KEY_INTENT_ASSET_DETAILS) -> {
+                setAsset(intent.getParcelableExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM))
+                assetChangeEnable(false)
+            }
+            intent.hasExtra(KEY_INTENT_REPEAT_TRANSACTION) -> {
+                val assetBalance = intent.getParcelableExtra<AssetBalance>(
+                        SendActivity.KEY_INTENT_TRANSACTION_ASSET_BALANCE)
+                val amount = intent
+                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT)
+                val recipientAddress = intent
+                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_RECIPIENT)
+                val attachment = intent
+                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT)
+                setAsset(assetBalance)
+                assetChangeEnable(false)
+                edit_address.setText(recipientAddress)
+                edit_amount.setText(amount)
+                presenter.attachment = attachment
+                presenter.amount = amount
+            }
+            else -> assetChangeEnable(true)
         }
 
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
                 .subscribe {
-                    checkAddressFieldAndSetAction(it.toString())
+                    checkRecipient(it.toString())
                 })
 
         edit_amount.addTextChangedListener {
@@ -155,23 +182,41 @@ class SendActivity : BaseActivity(), SendView {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
             putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)
             putExtra(KEY_INTENT_SELECTED_AMOUNT, presenter.amount)
+            if (!presenter.attachment.isNullOrEmpty()) {
+                putExtra(KEY_INTENT_ATTACHMENT, presenter.attachment)
+            }
+            putExtra(KEY_INTENT_MONERO_PAYMENT_ID, presenter.moneroPaymentId)
+            putExtra(KEY_INTENT_TYPE, presenter.type)
         }
     }
 
-    override fun showXRate(xRate: XRate?) {
+    override fun showXRate(xRate: XRate, ticker: String) {
         skeletonView!!.hide()
 
-        gateway_fee.text = getString(
-                R.string.send_gateway_info_gateway_fee,
-                BigDecimal(xRate?.fee).toString(),
-                xRate?.toTxt)
-        gateway_limits.text = getString(
-                R.string.send_gateway_info_gateway_limits,
-                xRate!!.toTxt,
-                BigDecimal(xRate.inMin!!).toString(),
-                BigDecimal(xRate.inMax!!).toString())
+        val fee = if (xRate.fee == null) {
+            "-"
+        } else {
+            BigDecimal(xRate.fee).toString()
+        }
+
+        val inMin = if (xRate.inMin == null) {
+            "-"
+        } else {
+            BigDecimal(xRate.inMin).toString()
+        }
+
+        val inMax = if (xRate.inMax == null) {
+            "-"
+        } else {
+            BigDecimal(xRate.inMax).toString()
+        }
+
+        gateway_fee.text = getString(R.string.send_gateway_info_gateway_fee,
+                fee, ticker)
+        gateway_limits.text = getString(R.string.send_gateway_info_gateway_limits,
+                ticker, inMax, inMin)
         gateway_warning.text = getString(R.string.send_gateway_info_gateway_warning,
-                xRate.toTxt)
+                ticker)
     }
 
     override fun showXRateError() {
@@ -180,51 +225,66 @@ class SendActivity : BaseActivity(), SendView {
         onShowError(R.string.receive_error_network)
     }
 
-    private fun checkAddressFieldAndSetAction(recipient: String) {
+    private fun checkRecipient(recipient: String) {
         if (recipient.isNotEmpty()) {
             presenter.recipient = recipient
 
             when {
-                recipient.length <= 30 -> presenter.checkAlias(recipient)
-                presenter.isRecipientValid() == null -> {
-                    text_recipient_error.gone()
-                    edit_address.setTextColor(ContextCompat.getColor(this, R.color.black))
+                recipient.length in 4..30 -> {
+                    presenter.recipientAssetId = ""
+                    presenter.checkAlias(recipient)
+                    relative_gateway_fee.gone()
                 }
-                else -> setRecipientValid(presenter.isRecipientValid()!!)
+                SendPresenter.isWavesAddress(recipient) -> {
+                    presenter.recipientAssetId = ""
+                    presenter.type = SendPresenter.Type.WAVES
+                    setRecipientValid(true)
+                    relative_gateway_fee.gone()
+                }
+                else -> {
+                    presenter.recipientAssetId = SendPresenter.getAssetId(recipient)
+                    if (presenter.recipientAssetId.isNullOrEmpty()) {
+                        presenter.type = SendPresenter.Type.UNKNOWN
+                        setRecipientValid(null)
+                        relative_gateway_fee.gone()
+                        monero_layout.gone()
+                    } else {
+                        setRecipientValid(true)
+                        checkMonero(presenter.recipientAssetId)
+                        loadGatewayXRate(presenter.recipientAssetId!!)
+                    }
+                }
             }
 
             image_view_recipient_action.setImageResource(R.drawable.ic_deladdress_24_error_400)
             image_view_recipient_action.tag = R.drawable.ic_deladdress_24_error_400
             horizontal_recipient_suggestion.gone()
-            presenter.selectedAsset.notNull {
-                when {
-                    it.isWaves() -> {
-                        relative_gateway_fee.gone()
-                    }
-                    it.isGateway -> {
-                        relative_gateway_fee.visiable()
-                    }
-                    it.isFiatMoney -> {
-                        relative_gateway_fee.gone()
-                    }
-                    else -> {
-                        relative_gateway_fee.gone()
-                    }
-                }
-            }
         } else {
             image_view_recipient_action.setImageResource(R.drawable.ic_qrcode_24_basic_500)
             image_view_recipient_action.tag = R.drawable.ic_qrcode_24_basic_500
             horizontal_recipient_suggestion.visiable()
+            relative_gateway_fee.gone()
+            monero_layout.gone()
         }
     }
 
-    override fun setRecipientValid(valid: Boolean) {
-        if (valid) {
-            edit_address.setTextColor(ContextCompat.getColor(this, R.color.success500))
+    private fun checkMonero(assetId: String?) {
+        if (assetId == Constants.MONERO_ASSET_ID) {
+            monero_layout.visiable()
+            eventSubscriptions.add(RxTextView.textChanges(edit_monero_payment_id)
+                    .subscribe { paymentId ->
+                        presenter.moneroPaymentId = paymentId.toString()
+                    })
+        } else {
+            monero_layout.gone()
+            presenter.moneroPaymentId = null
+        }
+    }
+
+    override fun setRecipientValid(valid: Boolean?) {
+        if (valid == null || valid) {
             text_recipient_error.gone()
         } else {
-            edit_address.setTextColor(ContextCompat.getColor(this, R.color.error400))
             text_recipient_error.visiable()
         }
     }
@@ -261,23 +321,10 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun setAsset(asset: AssetBalance?) {
         asset.notNull {
-            presenter.selectedAsset = asset
-            if (AssetBalance.isGateway(it.assetId!!)) {
-                relative_gateway_fee.visiable()
-                if (skeletonView == null) {
-                    skeletonView = Skeleton.bind(relative_gateway_fee)
-                            .color(R.color.basic50)
-                            .load(R.layout.item_skeleton_gateway_warning)
-                            .show()
-                } else {
-                    skeletonView!!.show()
-                }
-                presenter.loadXRate(it)
-            } else {
-                relative_gateway_fee.gone()
-            }
 
-            checkAddressFieldAndSetAction(edit_address.text.toString())
+            presenter.selectedAsset = asset
+
+            checkRecipient(edit_address.text.toString())
             relative_chosen_coin.visiable()
             text_asset_hint.gone()
 
@@ -295,11 +342,27 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
+    private fun loadGatewayXRate(assetId: String) {
+        if (AssetBalance.isGateway(assetId)) {
+            relative_gateway_fee.visiable()
+            if (skeletonView == null) {
+                skeletonView = Skeleton.bind(relative_gateway_fee)
+                        .color(R.color.basic50)
+                        .load(R.layout.item_skeleton_gateway_warning)
+                        .show()
+            } else {
+                skeletonView!!.show()
+            }
+            presenter.loadXRate(assetId)
+            setRecipientValid(presenter.isRecipientValid())
+        } else {
+            relative_gateway_fee.gone()
+        }
+    }
+
     private fun assetChangeEnable(enable: Boolean) {
         if (enable) {
-            card_asset.click {
-                launchActivity<YourAssetsActivity>(requestCode = REQUEST_YOUR_ASSETS)
-            }
+            card_asset.click { _ -> launchAssets() }
             image_change.visibility = View.VISIBLE
             ViewCompat.setElevation(card_asset, ViewUtils.convertDpToPixel(4f, this))
             asset_layout.background = null
@@ -315,6 +378,14 @@ class SendActivity : BaseActivity(), SendView {
                     this, R.drawable.shape_rect_bordered_accent50)
             card_asset.setCardBackgroundColor(ContextCompat.getColor(
                     this, R.color.basic50))
+        }
+    }
+
+    private fun launchAssets() {
+        launchActivity<YourAssetsActivity>(requestCode = REQUEST_YOUR_ASSETS) {
+            presenter.selectedAsset.notNull {
+                putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
+            }
         }
     }
 }

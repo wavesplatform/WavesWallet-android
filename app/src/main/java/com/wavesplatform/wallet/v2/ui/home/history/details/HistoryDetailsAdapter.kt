@@ -3,10 +3,12 @@ package com.wavesplatform.wallet.v2.ui.home.history.details
 import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
+import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
@@ -44,7 +46,7 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 }
             }
             TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE, TransactionType.MASS_RECEIVE_TYPE -> {
-                if (transaction.transfers != null && transaction.transfers!!.isNotEmpty()) {
+                if (transaction.transfers.isNotEmpty()) {
                     val sum = transaction.transfers.sumByLong { it.amount }
                     if (transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE || transaction.transactionType() == TransactionType.MASS_RECEIVE_TYPE) {
                         layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(sum.toLong(), transaction.asset)}"
@@ -58,11 +60,11 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 layout.text_amount_or_title.text = transaction.alias
             }
             TransactionType.EXCHANGE_TYPE -> {
-                var myOrder =
+                val myOrder =
                         if (transaction.order1?.sender == App.getAccessManager().getWallet()?.address) transaction.order1
                         else transaction.order2
 
-                var pairOrder =
+                val pairOrder =
                         if (transaction.order1?.sender != App.getAccessManager().getWallet()?.address) transaction.order1
                         else transaction.order2
 
@@ -75,9 +77,9 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                     layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
                 }
 
-                showTag = Constants.defaultAssets.any({
+                showTag = Constants.defaultAssets.any {
                     it.assetId == pairOrder?.assetPair?.priceAssetObject?.id || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
-                })
+                }
 
                 if (showTag) {
                     layout.text_tag.visiable()
@@ -96,23 +98,27 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 }
             }
             TransactionType.TOKEN_GENERATION_TYPE -> {
-                val quantity = MoneyUtil.getScaledText(transaction.quantity
-                        ?: 0, transaction.asset).substringBefore(".")
+                val quantity = MoneyUtil.getScaledText(transaction.quantity, transaction.asset)
+                        .substringBefore(".")
                 layout.text_amount_or_title.text = quantity
             }
             TransactionType.TOKEN_BURN_TYPE -> {
                 transaction.amount.notNull {
-                    val afterDot = MoneyUtil.getScaledText(it, transaction.asset).substringAfter(".").toInt()
-                    var amount = ""
-
-                    if (afterDot == 0) amount = MoneyUtil.getScaledText(it, transaction.asset).substringBefore(".")
-                    else amount = MoneyUtil.getScaledText(it, transaction.asset)
+                    val afterDot = MoneyUtil.getScaledText(it, transaction.asset)
+                            .substringAfter(".").toInt()
+                    val amount = if (afterDot == 0) {
+                        MoneyUtil.getScaledText(it, transaction.asset).substringBefore(".")
+                    } else {
+                        MoneyUtil.getScaledText(it, transaction.asset)
+                    }
 
                     layout.text_amount_or_title.text = "-$amount"
                 }
             }
             TransactionType.TOKEN_REISSUE_TYPE -> {
-                layout.text_amount_or_title.text = "+${transaction.amount}"
+                val quantity = MoneyUtil.getScaledText(transaction.quantity, transaction.asset)
+                        .substringBefore(".")
+                layout.text_amount_or_title.text = "+${quantity}"
             }
             else -> {
                 transaction.amount.notNull {
@@ -121,8 +127,11 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
             }
         }
 
-        if (transaction.transactionType() != TransactionType.CREATE_ALIAS_TYPE && transaction.transactionType() != TransactionType.DATA_TYPE
-                && transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE && transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE) {
+        if (transaction.transactionType() != TransactionType.CREATE_ALIAS_TYPE
+                && transaction.transactionType() != TransactionType.DATA_TYPE
+                && transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
+                && transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
+                && transaction.transactionType() != TransactionType.EXCHANGE_TYPE) {
             if (showTag) {
                 layout.text_tag.visiable()
                 layout.text_tag.text = transaction.asset?.name
@@ -130,10 +139,12 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 layout.text_tag.gone()
                 layout.text_amount_or_title.text = "${layout.text_amount_or_title.text} ${transaction.asset?.name}"
             }
-        } else if (transaction.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
+        }
+
+        if (queryFirst<SpamAsset> { equalTo("assetId", transaction.assetId) } != null) {
             layout.text_tag.gone()
             layout.text_tag_spam.visiable()
-            layout.text_amount_or_title.text = "${layout.text_amount_or_title.text} ${transaction.asset?.name}"
+            layout.text_amount_or_title.text = "${layout.text_amount_or_title.text}"
         }
 
 

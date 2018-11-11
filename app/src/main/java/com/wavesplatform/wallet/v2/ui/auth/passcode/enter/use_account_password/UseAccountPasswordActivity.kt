@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.inputmethod.EditorInfo
@@ -11,19 +12,18 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.rules.EqualsAccountPasswordRule
-import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.applySpaceFilter
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
-import io.github.anderscheow.validator.rules.common.MinRule
 import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.activity_use_account_password.*
 import pers.victor.ext.addTextChangedListener
@@ -97,8 +97,8 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
             try {
                 WavesWallet(App.getAccessManager().getWalletData(guid),
                         edit_account_password.text.toString().trim())
-                launchActivity<CreatePassCodeActivity>(options = createDataBundle())
-                App.getAccessManager().resetPassCodeInputFails()
+                launchActivity<CreatePassCodeActivity>(options = createDataBundle(),
+                        requestCode = REQUEST_CREATE_PASS_CODE)
             } catch (e: Exception) {
                 showError(R.string.enter_passcode_error_wrong_password, R.id.content)
             }
@@ -111,7 +111,8 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         val options = Bundle()
         options.putBoolean(CreatePassCodeActivity.KEY_INTENT_PROCESS_CHANGE_PASS_CODE, true)
         options.putString(EnterPassCodeActivity.KEY_INTENT_GUID, guid)
-        options.putString(NewAccountActivity.KEY_INTENT_PASSWORD, edit_account_password.text.toString().trim())
+        options.putString(NewAccountActivity.KEY_INTENT_PASSWORD,
+                edit_account_password.text.toString().trim())
         return options
     }
 
@@ -123,5 +124,18 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
                 .load(Identicon().create(address))
                 .apply(RequestOptions().circleCrop())
                 .into(image_asset)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CREATE_PASS_CODE) {
+            if (resultCode == RESULT_OK) {
+                launchActivity<MainActivity>(clear = true)
+            }
+        }
+    }
+
+    companion object {
+        const val REQUEST_CREATE_PASS_CODE = 1000
     }
 }

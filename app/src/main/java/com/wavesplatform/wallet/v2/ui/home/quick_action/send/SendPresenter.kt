@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
-import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.queryFirst
@@ -18,6 +17,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.isValidAddress
 import io.reactivex.Single
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
@@ -32,10 +32,13 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var selectedAsset: AssetBalance? = null
     var recipient: String? = ""
     var amount: String? = ""
-    var useAlias: Boolean = false
+    var attachment: String? = ""
+    var moneroPaymentId: String? = null
+    var recipientAssetId: String? = null
+    var type: Type? = null
 
     fun sendClicked() {
-        val res = validateTransfer(getTxRequest())
+        val res = validateTransfer()
         if (res == 0) {
             confirmPayment()
         } else {
@@ -50,20 +53,22 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                         apiDataManager.loadAlias(alias)
 
                                 .subscribe({ _ ->
-                                    useAlias = true
+                                    type = Type.ALIAS
                                     runOnUiThread {
                                         viewState.setRecipientValid(true)
                                     }
                                 }, {
-                                    useAlias = false
+                                    type = Type.UNKNOWN
                                     runOnUiThread {
                                         viewState.setRecipientValid(false)
                                     }
                                 }))
             }
         } else {
-            useAlias = false
-            viewState.setRecipientValid(false)
+            type = Type.UNKNOWN
+            runOnUiThread {
+                viewState.setRecipientValid(null)
+            }
         }
     }
 
@@ -84,24 +89,31 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         viewState.onShowPaymentDetails(details)
     }
 
-    private fun validateTransfer(tx: TransactionsBroadcastRequest): Int {
-        if (selectedAsset == null || TextUtils.isEmpty(recipient)) {
-            R.string.send_transaction_error_check_fields
+    private fun validateTransfer(): Int {
+        if (selectedAsset == null) {
+            R.string.send_transaction_error_check_asset
         } else if (isRecipientValid() != true) {
             return R.string.invalid_address
-        } else if (TransactionsBroadcastRequest.getAttachmentSize(tx.attachment)
-                > TransferTransactionRequest.MaxAttachmentSize) {
-            return R.string.attachment_too_long
-        } else if (tx.amount <= 0) {
-            return R.string.invalid_amount
-        } else if (tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
-            return R.string.invalid_amount
-        } else if (tx.fee <= 0 || tx.fee < TransferTransactionRequest.MinFee) {
-            return R.string.insufficient_fee
-        } else if (App.getAccessManager().getWallet()!!.address == tx.recipient) {
-            return R.string.send_to_same_address_warning
-        } else if (!isFundSufficient(tx)) {
-            return R.string.insufficient_funds
+        } else {
+            val tx = getTxRequest()
+            if (TransactionsBroadcastRequest.getAttachmentSize(tx.attachment)
+                    > TransferTransactionRequest.MaxAttachmentSize) {
+                return R.string.attachment_too_long
+            } else
+                if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
+                    return R.string.invalid_amount
+                } else if (tx.fee <= 0 || tx.fee < TransferTransactionRequest.MinFee) {
+                    return R.string.insufficient_fee
+                } else if (App.getAccessManager().getWallet()!!.address == tx.recipient) {
+                    return R.string.send_to_same_address_warning
+                } else if (!isFundSufficient(tx)) {
+                    return R.string.insufficient_funds
+                } else if (Constants.MONERO_ASSET_ID == recipientAssetId
+                        && moneroPaymentId != null
+                        && (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH
+                                || !moneroPaymentId!!.matches(" ".toRegex()))) {
+                    return R.string.invalid_monero_payment_id
+                }
         }
         return 0
     }
@@ -129,20 +141,27 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return false
     }
 
-    fun loadXRate(asset: AssetBalance) {
+    fun loadXRate(assetId: String) {
+        var currencyTo = "-"
         runAsync {
-            val findAsset: Single<List<AssetInfo>> = queryAsSingle { equalTo("id", asset.assetId) }
+            val findAsset: Single<List<AssetInfo>> = queryAsSingle { equalTo("id", assetId) }
             addSubscription(
                     findAsset.toObservable().flatMap {
-                        val currencyTo = it[0].ticker
+                        currencyTo = it[0].ticker ?: "-"
                         val currencyFrom = "W$currencyTo"
                         coinomatManager.getXRate(currencyFrom, currencyTo, LANG)
                     }
                             .subscribe({ xRate ->
+                                type = SendPresenter.Type.GATEWAY
                                 runOnUiThread {
-                                    viewState.showXRate(xRate)
+                                    if (xRate == null) {
+                                        viewState.showXRateError()
+                                    } else {
+                                        viewState.showXRate(xRate, currencyTo)
+                                    }
                                 }
                             }, {
+                                type = SendPresenter.Type.UNKNOWN
                                 runOnUiThread {
                                     viewState.showXRateError()
                                 }
@@ -151,53 +170,59 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     fun isRecipientValid(): Boolean? {
-        if (selectedAsset == null) {
+        if (recipient.isNullOrEmpty()) {
+            return false
+        }
+
+        if (selectedAsset == null || recipientAssetId == null) {
             return null
         }
 
-        return when {
-            AssetBalance.isGateway(selectedAsset!!.assetId!!) -> {
-                isValid(queryFirst<AssetInfo> {
-                    equalTo("id", selectedAsset!!.assetId)
-                }!!.ticker, recipient)
-            }
-            useAlias -> true
-            else -> {
-                isWavesAddress(recipient)
-            }
+        if (type == Type.GATEWAY && selectedAsset!!.assetId.equals(recipientAssetId)) {
+            return true
         }
+
+        if (type == Type.WAVES && isWavesAddress(recipient)) {
+            return true
+        }
+
+        if (type == Type.ALIAS) {
+            return true
+        }
+
+        return false
     }
 
     companion object {
         const val LANG: String = "ru_RU"
+        const val MONERO_PAYMENT_ID_LENGTH = 64
         private val feeAsset: AssetBalance = AssetBalance(
                 quantity = 100000000L * 100000000L,
                 issueTransaction = IssueTransaction(
                         name = Constants.CUSTOM_FEE_ASSET_NAME, quantity = 0, decimals = 8))
 
-        private fun isValid(ticker: String?, address: String?): Boolean? {
-            if (ticker == null) {
-                return null
-            } else if (ticker == "WAVES" || ticker == "") {
-                return address!!.matches("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex())
-            } else if (ticker == "ETH") {
-                return address!!.matches("^0x[0-9a-f]{40}$".toRegex())
-            } else if (ticker == "LTC") {
-                return address!!.matches("^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$".toRegex())
-            } else if (ticker == "ZEC") {
-                return address!!.matches("^t[0-9a-z]{34}$".toRegex())
-            } else if (ticker == "BCH") {
-                return address!!.matches("^([13][a-km-zA-HJ-NP-Z1-9]{25,34}|[qp][a-zA-Z0-9]{41})$".toRegex())
-            } else if (ticker == "DASH") {
-                return address!!.matches("^X[a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex())
-            } else if (ticker == "XMR") {
-                return address!!.matches("([a-km-zA-HJ-NP-Z1-9]{95}|[a-km-zA-HJ-NP-Z1-9]{106})$".toRegex())
+        fun getAssetId(recipient: String?): String? {
+            return when {
+                recipient!!.matches("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
+                    Constants.BITCOIN_ASSET_ID
+                recipient.matches("^0x[0-9a-f]{40}$".toRegex()) ->
+                    Constants.ETHEREUM_ASSET_ID
+                recipient.matches("^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$".toRegex()) ->
+                    Constants.LIGHTCOIN_ASSET_ID
+                recipient.matches("^t1[a-zA-Z0-9]{33}$".toRegex()) ->
+                    Constants.ZEC_ASSET_ID
+                recipient.matches("^([13][a-km-zA-HJ-NP-Z1-9]{25,34}|[qp][a-zA-Z0-9]{41})$".toRegex()) ->
+                    Constants.BITCOINCASH_ASSET_ID
+                recipient.matches("^X[a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
+                    Constants.DASH_ASSET_ID
+                recipient.matches("^4([0-9]|[A-B])(.){93}".toRegex()) ->
+                    Constants.MONERO_ASSET_ID
+                else -> null
             }
-            return null
         }
 
         fun isWavesAddress(address: String?): Boolean {
-            if (address == null) {
+            if (address == null || !address.isValidAddress()) {
                 return false
             }
 
@@ -221,5 +246,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             }
             return true
         }
+    }
+
+    enum class Type {
+        ALIAS,
+        WAVES,
+        GATEWAY,
+        UNKNOWN
     }
 }

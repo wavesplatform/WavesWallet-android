@@ -24,7 +24,11 @@ enum class TransactionType(var id: Int,
     MASS_RECEIVE_TYPE(Constants.ID_MASS_RECEIVE_TYPE, R.drawable.ic_t_massreceived_48, R.string.history_type_mass_receive),
     SPAM_RECEIVE_TYPE(Constants.ID_SPAM_RECEIVE_TYPE, R.drawable.ic_t_spam_receive_48, R.string.history_type_spam_receive),
     MASS_SPAM_RECEIVE_TYPE(Constants.ID_MASS_SPAM_RECEIVE_TYPE, R.drawable.ic_t_spam_massreceived_48, R.string.history_type_mass_spam_receive),
-    DATA_TYPE(Constants.ID_DATA_TYPE, R.drawable.ic_t_data_48, R.string.history_type_data);
+    DATA_TYPE(Constants.ID_DATA_TYPE, R.drawable.ic_t_data_48, R.string.history_type_data),
+    SET_SPONSORSHIP_TYPE(Constants.ID_SET_SCRIPT_TYPE, R.drawable.ic_t_undefined_48, R.string.history_type_set_script),
+    CANCEL_SPONSORSHIP_TYPE(Constants.ID_CANCEL_SCRIPT_TYPE, R.drawable.ic_t_undefined_48, R.string.history_type_cancel_script),
+    SET_SCRIPT_TYPE(Constants.ID_SET_SPONSORSHIP_TYPE, R.drawable.ic_t_undefined_48, R.string.history_type_set_sponsorship),
+    CANCEL_SCRIPT_TYPE(Constants.ID_CANCEL_SPONSORSHIP_TYPE, R.drawable.ic_t_undefined_48, R.string.history_type_cancel_sponsorship);
 
     companion object {
         fun getTypeById(id: Int): TransactionType {

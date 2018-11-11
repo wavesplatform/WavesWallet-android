@@ -13,6 +13,8 @@ class Events {
 
     class RetryEvent
     class NeedUpdateHistoryScreen
+    class StopUpdateHistoryScreen
+    class UpdateListOfActiveTransaction(var position: Int)
     class ScrollToTopEvent(var position: Int)
 
     class SpamFilterStateChanged

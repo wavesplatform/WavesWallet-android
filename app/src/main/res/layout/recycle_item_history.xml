@@ -71,7 +71,8 @@
             android:text="WAVES"
             android:textColor="@color/info500"
             android:textSize="12sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
 
         <com.wavesplatform.wallet.v2.ui.custom.SpamTag
@@ -82,7 +83,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="4dp"
             android:layout_toEndOf="@+id/text_tag"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="wrap_content"

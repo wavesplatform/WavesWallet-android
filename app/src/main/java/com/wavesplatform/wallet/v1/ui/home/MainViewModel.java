@@ -55,7 +55,6 @@ public class MainViewModel extends BaseViewModel {
     }
 
     public String getIcomingUri() {
-        //return "waves://3NCwEeAeVKdPySfsTeAoroPHDUg54mSDY5w?asset=Do4TJ2kXdgoaoHLr5XAXGQNK5eThVm3r1UARQNrVyb5H&amount=5002";
         return prefs.getGlobalValue(PrefsUtil.GLOBAL_SCHEME_URL, "");
     }
 

@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -44,7 +45,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         var REQUEST_SELECT_ASSET = 10001
 
         fun newInstance(assetBalance: AssetBalance?): CryptoCurrencyFragment {
-            val fragment =  CryptoCurrencyFragment()
+            val fragment = CryptoCurrencyFragment()
             if (assetBalance == null) {
                 return fragment
             }
@@ -97,8 +98,11 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
 
     override fun showTunnel(tunnel: GetTunnel?) {
         skeletonView!!.hide()
-        if (tunnel?.tunnel == null) {
+        if (tunnel?.tunnel == null
+                || tunnel.tunnel?.inMin.isNullOrEmpty()
+                || tunnel.tunnel?.currencyFrom.isNullOrEmpty()) {
             button_continue.isEnabled = false
+            showError(App.getAppContext().getString(R.string.receive_error_network))
             return
         }
 
@@ -145,16 +149,8 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
 
     private fun assetChangeEnable(enable: Boolean) {
         if (enable) {
-            edit_asset.click {
-                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) {
-                    putExtra(YourAssetsActivity.CRYPTO_CURRENCY, true)
-                }
-            }
-            container_asset.click {
-                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) {
-                    putExtra(YourAssetsActivity.CRYPTO_CURRENCY, true)
-                }
-            }
+            edit_asset.click { launchAssets() }
+            container_asset.click { launchAssets() }
             image_change.visibility = View.VISIBLE
             ViewCompat.setElevation(edit_asset_card, ViewUtils.convertDpToPixel(4f, activity!!))
             edit_asset_layout.background = null
@@ -162,10 +158,10 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
                     activity!!, R.color.white))
         } else {
             edit_asset.click {
-
+                // disable clicks
             }
             container_asset.click {
-
+                // disable clicks
             }
             image_change.visibility = View.GONE
             ViewCompat.setElevation(edit_asset_card, 0F)
@@ -173,6 +169,15 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
                     activity!!, R.drawable.shape_rect_bordered_accent50)
             edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
                     activity!!, R.color.basic50))
+        }
+    }
+
+    private fun launchAssets() {
+        launchActivity<YourAssetsActivity>(requestCode = REQUEST_SELECT_ASSET) {
+            putExtra(YourAssetsActivity.CRYPTO_CURRENCY, true)
+            presenter.assetBalance.notNull {
+                putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
+            }
         }
     }
 }

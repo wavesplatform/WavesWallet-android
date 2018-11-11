@@ -4,11 +4,13 @@ import com.google.common.base.Optional
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.api.NodeManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.util.stripZeros
 import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import org.apache.commons.lang3.ArrayUtils
+import pers.victor.ext.date
 
 @RealmClass
 open class Lease(
@@ -140,6 +142,62 @@ open class Transaction(
 
     fun toBytes(): ByteArray {
         return ArrayUtils.EMPTY_BYTE_ARRAY
+    }
+
+    companion object {
+
+        const val GENESIS = 1
+        const val PAYMENT = 2
+        const val ISSUE = 3
+        const val TRANSFER = 4
+        const val REISSUE = 5
+        const val BURN = 6
+        const val EXCHANGE = 7
+        const val LEASE = 8
+        const val LEASE_CANCEL = 9
+        const val CREATE_ALIAS = 10
+        const val MASS_TRANSFER = 11
+        const val DATA = 12
+        const val SET_SCRIPT = 13
+        const val SPONSOR_FEE = 14
+
+        private fun getNameBy(type: Int): String {
+            return when (type) {
+                GENESIS -> "Genesis"
+                PAYMENT -> "Payment"
+                ISSUE -> "Issue"
+                TRANSFER -> "Transfer"
+                REISSUE -> "Reissue"
+                BURN -> "Burn"
+                EXCHANGE -> "Exchange"
+                LEASE -> "Lease"
+                LEASE_CANCEL -> "Lease Cancel"
+                CREATE_ALIAS -> "Create Alias"
+                MASS_TRANSFER -> "Mass Transfer"
+                DATA -> "Data"
+                SET_SCRIPT -> "Set Script"
+                SPONSOR_FEE -> "Sponsor Fee"
+                else -> ""
+            }
+        }
+
+        fun getInfo(transaction: Transaction): String {
+            val feeAssetId = if (transaction.feeAssetId == null) {
+                ""
+            } else {
+                " (${transaction.feeAssetId})"
+            }
+            return "Transaction ID: ${transaction.id}\n" +
+                    "Type: ${transaction.type} (${getNameBy(transaction.type)})\n" +
+                    "Date: ${transaction.timestamp
+                            .date("MM/dd/yyyy HH:mm")}\n" +
+                    "Sender: ${transaction.sender}\n" +
+                    "Recipient: ${transaction.recipient}\n" +
+                    "Amount: ${MoneyUtil.getScaledText(transaction.amount, transaction.asset)
+                            .stripZeros()} ${transaction.asset?.name} (${transaction.asset?.id})\n" +
+                    "Fee: ${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject)
+                            .stripZeros()} ${transaction.feeAssetObject?.name}" + feeAssetId
+        }
     }
 
 }

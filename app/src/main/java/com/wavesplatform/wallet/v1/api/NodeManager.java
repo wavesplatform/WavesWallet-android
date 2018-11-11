@@ -180,13 +180,6 @@ public class NodeManager {
         return service.broadcastReissue(tx);
     }
 
-    public void updateBalance(TransferTransactionRequest tx) {
-        for (AssetBalance ab : assetBalances.balances) {
-            if (ab.isAssetId(tx.assetId)) ab.balance -= tx.amount;
-            if (ab.assetId == null) ab.balance -= tx.fee;
-        }
-    }
-
     public AssetBalance getAssetBalance(String assetId) {
         for (AssetBalance ab : assetBalances.balances) {
             if (ab.isAssetId(assetId)) return ab;

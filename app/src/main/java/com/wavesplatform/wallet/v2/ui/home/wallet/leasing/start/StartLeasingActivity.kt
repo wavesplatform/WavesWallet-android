@@ -3,12 +3,10 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatTextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import android.support.v4.content.ContextCompat
-import android.util.Log
-import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.App
@@ -28,7 +26,10 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_start_leasing.*
-import pers.victor.ext.*
+import pers.victor.ext.children
+import pers.victor.ext.click
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -43,7 +44,8 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
     companion object {
         var REQUEST_CHOOSE_ADDRESS = 57
-        var REQUEST_LEASEING_CONFIRMATION = 59
+        var REQUEST_LEASING_CONFIRMATION = 59
+        var REQUEST_CANCEL_LEASING_CONFIRMATION = 60
         var REQUEST_SCAN_QR_CODE = 52
         var BUNDLE_WAVES = "waves"
         var TOTAL_BALANCE = "100"
@@ -74,7 +76,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         }
 
         button_continue.click {
-            launchActivity<ConfirmationLeasingActivity>(REQUEST_LEASEING_CONFIRMATION) {
+            launchActivity<ConfirmationLeasingActivity>(REQUEST_LEASING_CONFIRMATION) {
                 putExtra(ConfirmationLeasingActivity.BUNDLE_ADDRESS, edit_address.text.toString())
                 putExtra(ConfirmationLeasingActivity.BUNDLE_AMOUNT, edit_amount.text.toString())
                 putExtra(ConfirmationLeasingActivity.BUNDLE_RECIPIENT_IS_ALIAS, presenter.recipientIsAlias)
@@ -236,7 +238,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     }
                 }
             }
-            REQUEST_LEASEING_CONFIRMATION -> {
+            REQUEST_LEASING_CONFIRMATION -> {
                 if (resultCode == Activity.RESULT_OK) {
                     finish()
                 }

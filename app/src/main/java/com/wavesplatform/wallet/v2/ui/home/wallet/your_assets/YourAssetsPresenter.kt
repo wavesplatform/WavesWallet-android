@@ -17,7 +17,7 @@ import javax.inject.Inject
 @InjectViewState
 class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>() {
 
-    var greaterZeroBalance: Boolean = true
+    var greaterZeroBalance: Boolean = false
 
     fun loadAssets(greaterZeroBalance: Boolean) {
         this.greaterZeroBalance = greaterZeroBalance

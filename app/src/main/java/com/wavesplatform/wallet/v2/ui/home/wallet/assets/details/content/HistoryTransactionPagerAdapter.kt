@@ -6,13 +6,15 @@ import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
+import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
-import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.assets_detailed_history_item.view.*
@@ -146,8 +148,10 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
             }
         }
 
-        if (item.data.transactionType() != TransactionType.CREATE_ALIAS_TYPE && item.data.transactionType() != TransactionType.DATA_TYPE
-                && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
+        if (item.data.transactionType() != TransactionType.CREATE_ALIAS_TYPE
+                && item.data.transactionType() != TransactionType.DATA_TYPE
+                && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
+                && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
                 && item.data.transactionType() != TransactionType.EXCHANGE_TYPE) {
             if (showTag) {
                 layout.text_tag.visiable()
@@ -156,10 +160,12 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
                 layout.text_tag.gone()
                 layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${item.data.asset?.name}"
             }
-        } else if (item.data.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || item.data.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE) {
+        }
+
+        if (queryFirst<SpamAsset> { equalTo("assetId", item.data.assetId) } != null) {
             layout.text_tag.gone()
             layout.text_tag_spam.visiable()
-            layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${item.data.asset?.name}"
+            layout.text_transaction_value.text = "${item.data.asset?.name}"
         }
 
 

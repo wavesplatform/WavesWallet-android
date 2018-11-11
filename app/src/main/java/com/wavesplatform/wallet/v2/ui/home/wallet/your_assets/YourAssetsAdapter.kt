@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.your_assets
 
+import android.support.v7.widget.AppCompatCheckBox
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -12,22 +13,28 @@ import javax.inject.Inject
 class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, BaseViewHolder>(R.layout.your_assets_item, null) {
 
     var allData: MutableList<AssetBalance> = arrayListOf()
+    var currentAssetId: String? = null
+    private var currentAssetIdCheckbox: AppCompatCheckBox? = null
 
     override fun convert(helper: BaseViewHolder, item: AssetBalance) {
         helper.setText(R.id.text_asset_name, item.getName())
                 .setText(R.id.text_asset_value, item.getDisplayTotalBalance())
-                // .setGone(R.id.text_asset_value, (item.balance == null || item.balance == 0L))
                 .setVisible(R.id.image_favourite, item.isFavorite)
-//                .setVisible(R.id.text_tag_spam, item.isSpam)
-        helper.itemView.image_down_arrow.visibility =
-                if (item.isWaves() || AssetBalance.isGateway(item.assetId!!)) {
-                    View.VISIBLE
-                } else {
+                .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
+        helper.itemView.text_asset_value.visibility =
+                if ((item.getDisplayTotalBalance().replace(",", "")
+                                .toDouble()) == 0.toDouble()) {
                     View.GONE
+                } else {
+                    View.VISIBLE
                 }
-
         helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)
+
+        if (item.assetId != null && item.assetId.equals(currentAssetId)) {
+            currentAssetIdCheckbox = helper.itemView.checkbox_choose
+            helper.itemView.checkbox_choose.isChecked = true
+        }
     }
 
 
@@ -46,6 +53,4 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
         }
         notifyDataSetChanged()
     }
-
-
 }

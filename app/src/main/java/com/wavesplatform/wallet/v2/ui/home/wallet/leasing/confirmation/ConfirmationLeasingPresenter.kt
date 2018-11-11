@@ -1,8 +1,8 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation
 
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.CreateLeasingRequest
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
@@ -16,6 +16,8 @@ class ConfirmationLeasingPresenter @Inject constructor() : BasePresenter<Confirm
     var recipientIsAlias = false
     var address: String = ""
     var amount: String = ""
+    var startLeasing = true
+    var cancelLeasingRequest: CancelLeasingRequest = CancelLeasingRequest()
 
 
     fun startLeasing() {
@@ -38,5 +40,17 @@ class ConfirmationLeasingPresenter @Inject constructor() : BasePresenter<Confirm
                 }))
     }
 
-
+    fun cancelLeasing(txId: String) {
+        cancelLeasingRequest.txId = txId
+        addSubscription(nodeDataManager.cancelLeasing(cancelLeasingRequest)
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({
+                    viewState.successCancelLeasing()
+                    viewState.showProgressBar(false)
+                }, {
+                    viewState.failedCancelLeasing()
+                    viewState.showProgressBar(false)
+                    it.printStackTrace()
+                }))
+    }
 }

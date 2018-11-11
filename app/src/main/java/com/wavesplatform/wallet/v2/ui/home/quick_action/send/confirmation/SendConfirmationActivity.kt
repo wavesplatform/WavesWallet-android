@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
@@ -18,6 +19,7 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -60,7 +62,9 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.selectedAsset = intent!!.extras!!.getParcelable(KEY_INTENT_SELECTED_ASSET)
         presenter.recipient = intent!!.extras!!.getString(KEY_INTENT_SELECTED_RECIPIENT)
         presenter.amount = intent!!.extras!!.getString(KEY_INTENT_SELECTED_AMOUNT)
+        presenter.moneroPaymentId = intent!!.extras!!.getString(KEY_INTENT_MONERO_PAYMENT_ID)
         presenter.assetInfo = queryFirst { equalTo("id", presenter.selectedAsset!!.assetId) }
+        presenter.type = intent!!.extras!!.getSerializable(KEY_INTENT_TYPE) as SendPresenter.Type
 
         text_sum.text = "- ${presenter.amount}"
         text_tag.text = presenter.getTicker()
@@ -75,13 +79,17 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                 .subscribe {
                     presenter.attachment = it.toString()
                 })
+
+        if (intent.hasExtra(KEY_INTENT_ATTACHMENT)) {
+            edit_optional_message.setText(intent!!.extras!!.getString(KEY_INTENT_ATTACHMENT))
+        }
     }
 
     override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {
         completeTransactionProcessing()
         text_leasing_result_value.text = getString(
                 R.string.send_success_you_have_sent_sum,
-                (signed.amount / 100000000F).toString(),
+                MoneyUtil.getScaledText(signed.amount, presenter.selectedAsset),
                 presenter.getTicker())
         button_okay.click {
             launchActivity<MainActivity>(clear = true)
@@ -174,5 +182,8 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         const val KEY_INTENT_SELECTED_ASSET = "intent_selected_asset"
         const val KEY_INTENT_SELECTED_RECIPIENT = "intent_selected_recipient"
         const val KEY_INTENT_SELECTED_AMOUNT = "intent_selected_amount"
+        const val KEY_INTENT_ATTACHMENT = "intent_attachment"
+        const val KEY_INTENT_MONERO_PAYMENT_ID = "intent_monero_payment_id"
+        const val KEY_INTENT_TYPE = "intent_type"
     }
 }

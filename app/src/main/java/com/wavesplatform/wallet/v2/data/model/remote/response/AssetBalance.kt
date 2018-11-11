@@ -54,6 +54,14 @@ open class AssetBalance(
         return if (issueTransaction != null) issueTransaction?.decimals else 8
     }
 
+    fun getDescription(): String {
+        return if (issueTransaction == null) {
+            ""
+        } else {
+            issueTransaction!!.description ?: ""
+        }
+    }
+
     fun getDisplayTotalBalance(): String {
         return MoneyUtil.getScaledText(balance, this)
     }

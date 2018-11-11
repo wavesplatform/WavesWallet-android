@@ -3,5 +3,5 @@
     <item
         android:id="@+id/action_sorting"
         auto:showAsAction="always"
-        android:title="@string/your_asset_activity_all" />
+        android:title="@string/your_asset_activity_greater_zero" />
 </menu>

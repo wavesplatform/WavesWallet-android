@@ -6,7 +6,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -35,16 +34,27 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.token_burn_toolbar_title), R.drawable.ic_toolbar_back_black)
 
+        val assetBalance = intent.getParcelableExtra<AssetBalance>(
+                KEY_INTENT_ASSET_BALANCE)
+
         image_asset_icon.isOval = true
-        image_asset_icon.setAsset(AssetBalance(assetId = "Soblevo", issueTransaction = IssueTransaction(id = "Soblevo",name = "Soblevo")))
+        image_asset_icon.setAsset(assetBalance)
+        text_asset_name.text = assetBalance.getName()
+        text_asset_value.text = assetBalance.getDisplayAvailableBalance()
+
+        text_use_total_balance.click {
+            edit_amount.setText(assetBalance.getDisplayAvailableBalance())
+        }
+
+        button_continue.isEnabled = true
 
 
         edit_amount.addTextChangedListener {
             on { s, start, before, count ->
-                if (edit_amount.text.isNotEmpty()){
+                if (edit_amount.text.isNotEmpty()) {
                     horizontal_amount_suggestion.gone()
                     button_continue.isEnabled = true
-                }else{
+                } else {
                     horizontal_amount_suggestion.visiable()
                     button_continue.isEnabled = false
                 }
@@ -52,8 +62,16 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         }
 
         button_continue.click {
-            launchActivity<TokenBurnConfirmationActivity> {  }
+            launchActivity<TokenBurnConfirmationActivity> {
+                putExtra(KEY_INTENT_ASSET_BALANCE, assetBalance)
+                putExtra(KEY_INTENT_AMOUNT, edit_amount.text.toString().toDouble())
+            }
         }
     }
 
+    companion object {
+        const val KEY_INTENT_ASSET_BALANCE = "asset_balance"
+        const val KEY_INTENT_AMOUNT = "amount"
+
+    }
 }

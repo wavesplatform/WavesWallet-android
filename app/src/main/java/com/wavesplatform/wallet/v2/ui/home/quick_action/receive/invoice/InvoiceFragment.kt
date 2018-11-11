@@ -18,12 +18,10 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.Rec
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_invoice.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import pers.victor.ext.visiableIf
 import javax.inject.Inject
 
 class InvoiceFragment : BaseFragment(), InvoiceView {
@@ -64,16 +62,11 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         }
 
         button_continue.click {
-            val amount = edit_amount.text.toString()
-            if (!TextUtils.isEmpty(amount) && amount.toDouble() > 0) {
-                launchActivity<ReceiveAddressViewActivity> {
-                    putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
-                    putExtra(YourAssetsActivity.BUNDLE_ADDRESS, App.getAccessManager().getWallet()?.address ?: "")
-                    putExtra(INVOICE_SCREEN, true)
-                    putExtra(ReceiveAddressViewActivity.KEY_INTENT_QR_DATA, createLink())
-                }
-            } else {
-                showError(getString(R.string.receive_error_amount), R.id.content)
+            launchActivity<ReceiveAddressViewActivity> {
+                putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
+                putExtra(YourAssetsActivity.BUNDLE_ADDRESS, App.getAccessManager().getWallet()?.address ?: "")
+                putExtra(INVOICE_SCREEN, true)
+                putExtra(ReceiveAddressViewActivity.KEY_INTENT_QR_DATA, createLink())
             }
         }
     }
@@ -110,8 +103,10 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             View.GONE
         }
 
-        image_is_favourite.visiableIf {
-            assetBalance.isFavorite
+        image_is_favourite.visibility = if (assetBalance.isFavorite) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
 
         edit_asset.gone()
@@ -121,18 +116,23 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
     }
 
     private fun createLink(): String {
+        val amount = if (TextUtils.isEmpty(edit_amount.text)) {
+            "0"
+        } else {
+            edit_amount.text.toString()
+        }
         return "https//client.wavesplatform.com/#send/${presenter.assetBalance!!.assetId}?" +
                 "recipient=${presenter.address}&" +
-                "amount=${edit_amount.text}"
+                "amount=$amount"
     }
 
     private fun assetChangeEnable(enable: Boolean) {
         if (enable) {
             edit_asset.click {
-                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+                launchAssets()
             }
             container_asset.click {
-                launchActivity<YourAssetsActivity>(REQUEST_SELECT_ASSET) { }
+                launchAssets()
             }
             image_change.visibility = View.VISIBLE
             ViewCompat.setElevation(edit_asset_card, ViewUtils.convertDpToPixel(4f, activity!!))
@@ -152,6 +152,14 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
                     activity!!, R.drawable.shape_rect_bordered_accent50)
             edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
                     activity!!, R.color.basic50))
+        }
+    }
+
+    private fun launchAssets() {
+        launchActivity<YourAssetsActivity>(requestCode = REQUEST_SELECT_ASSET) {
+            presenter.assetBalance.notNull {
+                putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
+            }
         }
     }
 }
