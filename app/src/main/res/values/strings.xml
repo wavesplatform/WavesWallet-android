@@ -1321,6 +1321,15 @@
 
     <!--Chart-->
     <string name="chart_empty">No chart data available</string>
+    <string name="chart_change_interval_dialog_title">Change Interval</string>
+    <string name="chart_change_interval_dialog_cancel">CANCEL</string>
+    <string name="chart_change_interval_dialog_ok">OK</string>
+    <string name="chart_time_frame_5_min">5 minutes</string>
+    <string name="chart_time_frame_15_min">15 minutes</string>
+    <string name="chart_time_frame_30_min">30 minutes</string>
+    <string name="chart_time_frame_1_hour">1 hour</string>
+    <string name="chart_time_frame_4_hours">4 hours</string>
+    <string name="chart_time_frame_24_hours">24 hours</string>
 
 
     <!--Orderbook-->

@@ -6,6 +6,8 @@ import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.v2.data.model.local.ChartModel
+import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
+import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
@@ -18,11 +20,15 @@ import kotlin.collections.ArrayList
 @InjectViewState
 class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>() {
     var watchMarket: WatchMarket? = null
+    var selectedTimeFrame = 0
+    var newSelectedTimeFrame = 0
+    val timeFrameList = arrayOf(ChartTimeFrame.FIVE_MINUTES,ChartTimeFrame.FIFTEEN_MINUTES,ChartTimeFrame.THIRTY_MINUTES,
+            ChartTimeFrame.ONE_HOUR,ChartTimeFrame.FOUR_HOURS,ChartTimeFrame.TWENTY_FOUR_HOURS)
 
     var chartModel: ChartModel = ChartModel()
     private var entries: ArrayList<CandleEntry> = ArrayList()
     private var barEntries: ArrayList<BarEntry> = ArrayList()
-    var currentTimeFrame = 30
+    var currentTimeFrame: Int = 30
         set(value) {
             watchMarket?.market?.currentTimeFrame = value
             watchMarket?.market?.save()

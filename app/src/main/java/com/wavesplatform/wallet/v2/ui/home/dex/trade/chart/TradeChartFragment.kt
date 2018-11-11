@@ -4,7 +4,9 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
 import android.os.Handler
+import android.support.v7.app.AlertDialog
 import android.view.MotionEvent
+import android.widget.Button
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.github.mikephil.charting.components.LimitLine
@@ -18,169 +20,29 @@ import com.github.mikephil.charting.utils.EntryXComparator
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.dex.details.chart.CandleTouchListener
 import com.wavesplatform.wallet.v1.ui.dex.details.chart.OnCandleGestureListener
+import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
+import com.wavesplatform.wallet.v2.util.makeStyled
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_trade.*
 import kotlinx.android.synthetic.main.fragment_trade_chart.*
 import kotlinx.android.synthetic.main.layout_empty_data.*
+import pers.victor.ext.click
+import pers.victor.ext.findColor
 import java.util.*
 import javax.inject.Inject
 
 
 class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListener {
-    override fun successGetTrades(tradesMarket: List<LastTrade>) {
-        if (tradesMarket.size < 1) return
-
-        val limitLine = LimitLine(java.lang.Float.valueOf(tradesMarket[0].price)!!, "")
-        limitLine.lineColor = Color.parseColor("#F6AD12")
-        limitLine.lineWidth = 1f
-        limitLine.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
-        candle_chart.getAxisRight().removeAllLimitLines()
-        candle_chart.getAxisRight().addLimitLine(limitLine)
-        candle_chart.getAxisRight().setDrawLimitLinesBehindData(false)
-        candle_chart.invalidate()
-    }
-
-    override fun onShowCandlesSuccess(candles: ArrayList<CandleEntry>, barEntries: ArrayList<BarEntry>, firstRequest: Boolean) {
-
-        if (firstRequest) {
-            val barData = BarData()
-            val set1 = BarDataSet(barEntries, "Bar 1")
-            set1.setDrawValues(false)
-            set1.isHighlightEnabled = false
-            set1.color = Color.parseColor("#cccccc")//
-            set1.axisDependency = YAxis.AxisDependency.RIGHT
-            barData.addDataSet(set1)
-
-            val candleData = CandleData()
-            val set = CandleDataSet(candles, "Candle DataSet")
-            set.decreasingColor = Color.parseColor("#E66C69")
-            set.increasingColor = Color.parseColor("#5EAC69")
-            set.neutralColor = Color.parseColor("#4b7190")
-            set.shadowColorSameAsCandle = true
-            set.increasingPaintStyle = Paint.Style.FILL
-            set.shadowColor = Color.DKGRAY
-            set.isHighlightEnabled = false
-            set.setDrawValues(false)
-            set.axisDependency = YAxis.AxisDependency.RIGHT
-            candleData.addDataSet(set)
-
-            val last = candles.get(candles.size - 1)
-            candle_chart.setData(candleData)
-
-            bar_chart.setData(barData)
-
-            bar_chart.setVisibleXRangeMinimum(5f)
-            bar_chart.setVisibleXRangeMaximum(100f)
-
-            candle_chart.setVisibleXRangeMinimum(5f)
-            candle_chart.setVisibleXRangeMaximum(100f)
-
-            candle_chart.moveViewToX(set.getEntryForIndex(set.entryCount - 1).x)
-            bar_chart.moveViewToX(set.getEntryForIndex(set.entryCount - 1).x)
-
-            bar_chart.zoom(4f / bar_chart.getScaleX(), 1f, last.getX(), last.getY(), YAxis.AxisDependency.RIGHT)
-            candle_chart.zoom(4f / candle_chart.getScaleX(), 1f, last.getX(), last.getY(), YAxis.AxisDependency.RIGHT)
-
-            bar_chart.invalidate()
-            candle_chart.invalidate()
-
-        } else {
-            Handler().postDelayed({ updateCandles(candles, barEntries) }, 100)
-        }
-
-    }
-
-    private fun updateCandles(candles: List<CandleEntry>, barEntries: List<BarEntry>) {
-        val barData = BarData()
-        val baseDataSet = bar_chart.getBarData().getDataSetByIndex(0) as BarDataSet
-
-        for (barEntry in barEntries) {
-            baseDataSet.addEntry(barEntry)
-        }
-        Collections.sort(baseDataSet.values, EntryXComparator())
-        barData.addDataSet(baseDataSet)
-
-        val candleDataSet = candle_chart.getCandleData().getDataSetByIndex(0) as CandleDataSet
-        val prevCnt = candleDataSet.entryCount
-        val lastPoint = candleDataSet.getEntryForIndex(0)
-        for (candleEntry in candles) {
-            candleDataSet.addEntry(candleEntry)
-        }
-        Collections.sort(candleDataSet.values, EntryXComparator())
-        val candleData = CandleData()
-        candleData.addDataSet(candleDataSet)
-
-        candle_chart.setData(candleData)
-        bar_chart.setData(barData)
-
-        candle_chart.moveViewToX(lastPoint.x)
-        bar_chart.moveViewToX(lastPoint.x)
-
-        val zoom = if (prevCnt > 0) candleDataSet.entryCount.toFloat() / prevCnt else 0.0f
-
-        candle_chart.zoomToCenter(zoom, 0.0f)
-        candle_chart.setVisibleXRangeMinimum(5f)
-        candle_chart.setVisibleXRangeMaximum(100f)
-        candle_chart.notifyDataSetChanged()
-
-        bar_chart.zoomToCenter(zoom, 0.0f)
-        bar_chart.setVisibleXRangeMinimum(5f)
-        bar_chart.setVisibleXRangeMaximum(100f)
-        bar_chart.notifyDataSetChanged()
-
-        isLoading = false
-    }
-
-
-    override fun onRefreshCandles(candles: ArrayList<CandleEntry>, barEntries: ArrayList<BarEntry>) {
-        if (candles.isEmpty() || barEntries.isEmpty())
-            return
-
-        val baseDataSet = bar_chart.getBarData().getDataSetByIndex(0) as BarDataSet
-
-        for (barEntry in barEntries) {
-            val entries = baseDataSet.getEntriesForXValue(barEntry.getX())
-            if (entries.isEmpty()) {
-                baseDataSet.addEntry(barEntry)
-            } else {
-                val bar = entries[0]
-                bar.y = barEntry.getY()
-            }
-        }
-        baseDataSet.notifyDataSetChanged()
-        val barData = BarData()
-        barData.addDataSet(baseDataSet)
-        bar_chart.setData(barData)
-        //barChart.moveViewToX(baseDataSet.getEntryForIndex(baseDataSet.getEntryCount() - 1).getX());
-        bar_chart.notifyDataSetChanged()
-
-        val candleDataSet = candle_chart.getCandleData().getDataSetByIndex(0) as CandleDataSet
-        for (candleEntry in candles) {
-            val entries = candleDataSet.getEntriesForXValue(candleEntry.getX())
-            if (entries.isEmpty()) {
-                candleDataSet.addEntry(candleEntry)
-            } else {
-                val c = entries[0]
-                c.high = candleEntry.getHigh()
-                c.open = candleEntry.getOpen()
-                c.low = candleEntry.getLow()
-                c.close = candleEntry.getClose()
-            }
-        }
-        val candleData = CandleData()
-        candleData.addDataSet(candleDataSet)
-        candle_chart.setData(candleData)
-        //candleChart.moveViewToX(candleDataSet.getEntryForIndex(candleDataSet.getEntryCount() - 1).getX());
-        candle_chart.notifyDataSetChanged()
-    }
 
     @Inject
     @InjectPresenter
     lateinit var presenter: TradeChartPresenter
-
+    var buttonPositive: Button? = null
     private var isLoading = false
 
     companion object {
@@ -203,11 +65,61 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
 
+        val timeFrame = ChartTimeFrame.findByServerTime(presenter.watchMarket?.market?.currentTimeFrame)
+        val position = ChartTimeFrame.findPositionByServerTime(presenter.watchMarket?.market?.currentTimeFrame)
+
+        timeFrame.notNull {
+            presenter.selectedTimeFrame = position
+            presenter.newSelectedTimeFrame = position
+
+            text_change_time.text = it.timeUI
+            presenter.currentTimeFrame = it.timeServer
+        }
+
         text_empty.text = getString(R.string.chart_empty)
+
+        text_change_time.click {
+            showTimeFrameDialog()
+        }
 
         setUpChart()
         presenter.chartModel.pairModel = presenter.watchMarket
         presenter.startLoad()
+    }
+
+    private fun showTimeFrameDialog() {
+        val alt_bld = AlertDialog.Builder(baseActivity)
+        alt_bld.setTitle(getString(R.string.chart_change_interval_dialog_title))
+        alt_bld.setSingleChoiceItems(presenter.timeFrameList.map { it.timeUI }.toTypedArray(), presenter.selectedTimeFrame) { dialog, item ->
+            if (presenter.selectedTimeFrame == item) {
+                buttonPositive?.setTextColor(findColor(R.color.basic300))
+                buttonPositive?.isClickable = false
+            } else {
+                buttonPositive?.setTextColor(findColor(R.color.submit400))
+                buttonPositive?.isClickable = true
+            }
+            presenter.newSelectedTimeFrame = item
+        }
+        alt_bld.setPositiveButton(getString(R.string.chart_change_interval_dialog_ok)) { dialog, which ->
+            dialog.dismiss()
+            presenter.selectedTimeFrame = presenter.newSelectedTimeFrame
+
+            text_change_time.text = presenter.timeFrameList[presenter.selectedTimeFrame].timeUI
+            presenter.currentTimeFrame = presenter.timeFrameList[presenter.selectedTimeFrame].timeServer
+
+            presenter.loadCandles(Date().time, true)
+            presenter.getTradesByPair()
+
+            rxEventBus.post(Events.UpdateMarketAfterChangeChartTimeFrame(presenter.watchMarket?.market?.id, presenter.timeFrameList[presenter.selectedTimeFrame].timeServer))
+        }
+        alt_bld.setNegativeButton(getString(R.string.chart_change_interval_dialog_cancel)) { dialog, which -> dialog.dismiss() }
+        val alert = alt_bld.create()
+        alert.show()
+        alert.makeStyled()
+
+        buttonPositive = alert?.findViewById<Button>(android.R.id.button1)
+        buttonPositive?.setTextColor(findColor(R.color.basic300))
+        buttonPositive?.isClickable = false
     }
 
     private fun setUpChart() {
@@ -418,5 +330,152 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     override fun onChartTranslate(me: MotionEvent, dX: Float, dY: Float) {
 //        checkInterval()
         bar_chart.moveViewToX(candle_chart.getLowestVisibleX())
+    }
+
+    override fun successGetTrades(tradesMarket: List<LastTrade>) {
+        if (tradesMarket.size < 1) return
+
+        val limitLine = LimitLine(java.lang.Float.valueOf(tradesMarket[0].price)!!, "")
+        limitLine.lineColor = Color.parseColor("#F6AD12")
+        limitLine.lineWidth = 1f
+        limitLine.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
+        candle_chart.getAxisRight().removeAllLimitLines()
+        candle_chart.getAxisRight().addLimitLine(limitLine)
+        candle_chart.getAxisRight().setDrawLimitLinesBehindData(false)
+        candle_chart.invalidate()
+    }
+
+    override fun onShowCandlesSuccess(candles: ArrayList<CandleEntry>, barEntries: ArrayList<BarEntry>, firstRequest: Boolean) {
+
+        if (firstRequest) {
+            val barData = BarData()
+            val set1 = BarDataSet(barEntries, "Bar 1")
+            set1.setDrawValues(false)
+            set1.isHighlightEnabled = false
+            set1.color = Color.parseColor("#cccccc")//
+            set1.axisDependency = YAxis.AxisDependency.RIGHT
+            barData.addDataSet(set1)
+
+            val candleData = CandleData()
+            val set = CandleDataSet(candles, "Candle DataSet")
+            set.decreasingColor = Color.parseColor("#E66C69")
+            set.increasingColor = Color.parseColor("#5EAC69")
+            set.neutralColor = Color.parseColor("#4b7190")
+            set.shadowColorSameAsCandle = true
+            set.increasingPaintStyle = Paint.Style.FILL
+            set.shadowColor = Color.DKGRAY
+            set.isHighlightEnabled = false
+            set.setDrawValues(false)
+            set.axisDependency = YAxis.AxisDependency.RIGHT
+            candleData.addDataSet(set)
+
+            val last = candles.get(candles.size - 1)
+            candle_chart.setData(candleData)
+
+            bar_chart.setData(barData)
+
+            bar_chart.setVisibleXRangeMinimum(5f)
+            bar_chart.setVisibleXRangeMaximum(100f)
+
+            candle_chart.setVisibleXRangeMinimum(5f)
+            candle_chart.setVisibleXRangeMaximum(100f)
+
+            candle_chart.moveViewToX(set.getEntryForIndex(set.entryCount - 1).x)
+            bar_chart.moveViewToX(set.getEntryForIndex(set.entryCount - 1).x)
+
+            bar_chart.zoom(4f / bar_chart.getScaleX(), 1f, last.getX(), last.getY(), YAxis.AxisDependency.RIGHT)
+            candle_chart.zoom(4f / candle_chart.getScaleX(), 1f, last.getX(), last.getY(), YAxis.AxisDependency.RIGHT)
+
+            bar_chart.invalidate()
+            candle_chart.invalidate()
+
+        } else {
+            Handler().postDelayed({ updateCandles(candles, barEntries) }, 100)
+        }
+
+    }
+
+    private fun updateCandles(candles: List<CandleEntry>, barEntries: List<BarEntry>) {
+        val barData = BarData()
+        val baseDataSet = bar_chart.getBarData().getDataSetByIndex(0) as BarDataSet
+
+        for (barEntry in barEntries) {
+            baseDataSet.addEntry(barEntry)
+        }
+        Collections.sort(baseDataSet.values, EntryXComparator())
+        barData.addDataSet(baseDataSet)
+
+        val candleDataSet = candle_chart.getCandleData().getDataSetByIndex(0) as CandleDataSet
+        val prevCnt = candleDataSet.entryCount
+        val lastPoint = candleDataSet.getEntryForIndex(0)
+        for (candleEntry in candles) {
+            candleDataSet.addEntry(candleEntry)
+        }
+        Collections.sort(candleDataSet.values, EntryXComparator())
+        val candleData = CandleData()
+        candleData.addDataSet(candleDataSet)
+
+        candle_chart.setData(candleData)
+        bar_chart.setData(barData)
+
+        candle_chart.moveViewToX(lastPoint.x)
+        bar_chart.moveViewToX(lastPoint.x)
+
+        val zoom = if (prevCnt > 0) candleDataSet.entryCount.toFloat() / prevCnt else 0.0f
+
+        candle_chart.zoomToCenter(zoom, 0.0f)
+        candle_chart.setVisibleXRangeMinimum(5f)
+        candle_chart.setVisibleXRangeMaximum(100f)
+        candle_chart.notifyDataSetChanged()
+
+        bar_chart.zoomToCenter(zoom, 0.0f)
+        bar_chart.setVisibleXRangeMinimum(5f)
+        bar_chart.setVisibleXRangeMaximum(100f)
+        bar_chart.notifyDataSetChanged()
+
+        isLoading = false
+    }
+
+
+    override fun onRefreshCandles(candles: ArrayList<CandleEntry>, barEntries: ArrayList<BarEntry>) {
+        if (candles.isEmpty() || barEntries.isEmpty())
+            return
+
+        val baseDataSet = bar_chart.getBarData().getDataSetByIndex(0) as BarDataSet
+
+        for (barEntry in barEntries) {
+            val entries = baseDataSet.getEntriesForXValue(barEntry.getX())
+            if (entries.isEmpty()) {
+                baseDataSet.addEntry(barEntry)
+            } else {
+                val bar = entries[0]
+                bar.y = barEntry.getY()
+            }
+        }
+        baseDataSet.notifyDataSetChanged()
+        val barData = BarData()
+        barData.addDataSet(baseDataSet)
+        bar_chart.setData(barData)
+        //barChart.moveViewToX(baseDataSet.getEntryForIndex(baseDataSet.getEntryCount() - 1).getX());
+        bar_chart.notifyDataSetChanged()
+
+        val candleDataSet = candle_chart.getCandleData().getDataSetByIndex(0) as CandleDataSet
+        for (candleEntry in candles) {
+            val entries = candleDataSet.getEntriesForXValue(candleEntry.getX())
+            if (entries.isEmpty()) {
+                candleDataSet.addEntry(candleEntry)
+            } else {
+                val c = entries[0]
+                c.high = candleEntry.getHigh()
+                c.open = candleEntry.getOpen()
+                c.low = candleEntry.getLow()
+                c.close = candleEntry.getClose()
+            }
+        }
+        val candleData = CandleData()
+        candleData.addDataSet(candleDataSet)
+        candle_chart.setData(candleData)
+        //candleChart.moveViewToX(candleDataSet.getEntryForIndex(candleDataSet.getEntryCount() - 1).getX());
+        candle_chart.notifyDataSetChanged()
     }
 }

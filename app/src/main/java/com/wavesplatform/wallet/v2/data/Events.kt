@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.data
 
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import io.reactivex.subjects.PublishSubject
 
 /**
@@ -20,5 +19,6 @@ class Events {
     class SpamFilterUrlChanged(var updateTransaction: Boolean = false)
     class DexOrderButtonClickEvent(var buy: Boolean)
     class NeedUpdateMyOrdersScreen
+    class UpdateMarketAfterChangeChartTimeFrame(var id: String?, var timeServer: Int)
     class UpdateButtonsPrice(var askPrice: Long?, var bidPrice: Long?)
 }

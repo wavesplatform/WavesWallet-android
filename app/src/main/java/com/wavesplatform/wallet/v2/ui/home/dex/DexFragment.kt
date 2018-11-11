@@ -71,28 +71,17 @@ class DexFragment : BaseFragment(), DexView {
             loadInfoForPairs()
         }
 
-        // TODO: rewrite logic for request only for visible items
-//        recycle_dex.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
-//                    val visibleItems = adapter.data.subList(firstVisibleItemPosition, linearLayoutManager.findLastVisibleItemPosition())
-//                    visibleItems.forEachIndexed { index, watchMarket ->
-//                        presenter.loadDexPairInfo(watchMarket, index + firstVisibleItemPosition)
-//                    }
-//                } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-//                    presenter.clearOldPairsSubscriptions()
-//                }
-//                super.onScrollStateChanged(recyclerView, newState)
-//
-//            }
-//        })
-
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.ScrollToTopEvent::class.java)
                 .subscribe {
                     if (it.position == MainActivity.DEX_SCREEN) {
                         recycle_dex.scrollToPosition(0)
                     }
+                })
+
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.UpdateMarketAfterChangeChartTimeFrame::class.java)
+                .subscribe { event ->
+                    val market = adapter.data.firstOrNull { it.market.id == event.id }
+                    market?.market?.currentTimeFrame = event.timeServer
                 })
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
