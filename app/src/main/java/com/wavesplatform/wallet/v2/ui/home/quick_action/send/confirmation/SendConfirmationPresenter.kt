@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
-import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -20,7 +19,6 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.clearAlias
 import com.wavesplatform.wallet.v2.util.makeAsAlias
-import io.reactivex.Single
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
@@ -122,66 +120,66 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     }
 
     private fun createGateAndPayment() {
-        runAsync {
-            val assetId = selectedAsset!!.assetId
-            val findAsset: Single<List<AssetInfo>> = queryAsSingle {
-                equalTo("id", assetId)
-            }
+        val assetId = selectedAsset!!.assetId
+        val currencyTo = Constants.coinomatCryptoCurrencies[assetId]
 
+
+        if (currencyTo.isNullOrEmpty()) {
+            viewState.onShowError(R.string.receive_error_network)
+            return
+        }
+
+        val currencyFrom = "W$currencyTo"
+
+        runAsync {
             val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY
-                    && this.moneroPaymentId != null && this.moneroPaymentId!!.isNotEmpty()) {
+                    && !this.moneroPaymentId.isNullOrEmpty()) {
                 this.moneroPaymentId
             } else {
                 null
             }
 
-            addSubscription(
-                    findAsset.toObservable()
-                            .flatMap {
-                                val currencyTo = it[0].ticker
-                                val currencyFrom = "W$currencyTo"
-                                coinomatManager.createTunnel(
-                                        currencyFrom,
-                                        currencyTo,
-                                        recipient,
-                                        moneroPaymentId)
+            addSubscription(coinomatManager.createTunnel(
+                    currencyFrom,
+                    currencyTo,
+                    recipient,
+                    moneroPaymentId)
+                    .flatMap { createTunnel ->
+                        coinomatManager.getTunnel(
+                                createTunnel.tunnelId,
+                                createTunnel.k1,
+                                createTunnel.k2,
+                                SendPresenter.LANG)
+                    }
+                    .flatMap {
+                        recipient = it.tunnel!!.walletFrom
+                        val signedTransaction = signTransaction()
+                        if (signedTransaction == null) {
+                            null
+                        } else {
+                            signedTransaction.attachment = Base58.encode(
+                                    (signedTransaction.attachment ?: "").toByteArray())
+                            if (signedTransaction.recipient.length <= 30) {
+                                signedTransaction.recipient = signedTransaction
+                                        .recipient.makeAsAlias()
                             }
-                            .flatMap { createTunnel ->
-                                coinomatManager.getTunnel(
-                                        createTunnel.tunnelId,
-                                        createTunnel.k1,
-                                        createTunnel.k2,
-                                        SendPresenter.LANG)
-                            }
-                            .flatMap {
-                                recipient = it.tunnel!!.walletFrom
-                                val signedTransaction = signTransaction()
-                                if (signedTransaction == null) {
-                                    null
-                                } else {
-                                    signedTransaction.attachment = Base58.encode(
-                                            (signedTransaction.attachment ?: "").toByteArray())
-                                    if (signedTransaction.recipient.length <= 30) {
-                                        signedTransaction.recipient = signedTransaction
-                                                .recipient.makeAsAlias()
-                                    }
-                                    nodeManager.transactionsBroadcast(signedTransaction)
+                            nodeManager.transactionsBroadcast(signedTransaction)
+                        }
+                    }
+                    .subscribe(
+                            { tx
+                                ->
+                                tx.recipient = tx.recipient.clearAlias()
+                                saveLastSentAddress(tx.recipient)
+                                runOnUiThread {
+                                    viewState.onShowTransactionSuccess(tx)
                                 }
-                            }
-                            .subscribe(
-                                    { tx
-                                        ->
-                                        tx.recipient = tx.recipient.clearAlias()
-                                        saveLastSentAddress(tx.recipient)
-                                        runOnUiThread {
-                                            viewState.onShowTransactionSuccess(tx)
-                                        }
-                                    },
-                                    {
-                                        runOnUiThread {
-                                            viewState.onShowError(R.string.receive_error_network)
-                                        }
-                                    }))
+                            },
+                            {
+                                runOnUiThread {
+                                    viewState.onShowError(R.string.receive_error_network)
+                                }
+                            }))
         }
     }
 

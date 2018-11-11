@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.whats_new
 
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.view.Menu
 import android.view.MenuItem
@@ -31,7 +30,7 @@ class WhatsNewActivity : BaseActivity(), WhatsNewView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
+        setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view)
 
         adapter.items = populateList()
@@ -73,12 +72,12 @@ class WhatsNewActivity : BaseActivity(), WhatsNewView {
     }
 
     private fun populateList(): ArrayList<WhatsNewItem> {
-        return arrayListOf(WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name),WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name),
-                WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name),
-                WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name),
-                WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name),
-                WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name),
-                WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name))
+        return arrayListOf(WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
+                WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
+                WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
+                WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
+                WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
+                WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name))
     }
 
 

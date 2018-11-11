@@ -15,7 +15,6 @@ import javax.inject.Inject
 
 class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUser, BaseViewHolder>(R.layout.choose_address_layout, null) {
 
-    var allData: MutableList<AddressBookUser> = arrayListOf()
     var chooseAccountOnClickListener: ChooseAccountOnClickListener? = null
     private val identicon = Identicon()
 

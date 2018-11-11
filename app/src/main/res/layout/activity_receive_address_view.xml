@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@drawable/img_brand"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="56dp">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"

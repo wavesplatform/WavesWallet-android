@@ -50,8 +50,12 @@ open class AssetBalance(
         }
     }
 
-    fun getDecimals(): Int? {
-        return if (issueTransaction != null) issueTransaction?.decimals else 8
+    fun getDecimals(): Int {
+        return if (issueTransaction != null) {
+            issueTransaction!!.decimals ?: 8
+        } else {
+            8
+        }
     }
 
     fun getDescription(): String {

@@ -919,7 +919,6 @@
     <string name="my_address_qr_share">Share</string>
     <string name="my_address_qr_send_only_waves_and_waves_tokens_to_this_address">Send only WAVES and Waves tokens to this address</string>
     <string name="my_address_qr_sending_any_other_digital_asset_to_this_address_will_result_in_the_permanent_loss_of_your_funds">Sending any other digital asset to this address will result in the permanent loss of your funds</string>
-    rt
 
     <!-- Address Book  -->
     <string name="address_book_toolbar_title">Address book</string>
@@ -1235,6 +1234,10 @@
     <string name="send_transaction_error_check_asset">Check asset</string>
     <string name="send_monero_payment_id">Monero Payment ID</string>
     <string name="send_monero_payment_id_hint">Paste or type your Payment ID</string>
+    <string name="send_error_get_data_from_qr">Error get data from QR</string>
+    <string name="send_five_percents">5%</string>
+    <string name="send_ten_percents">10%</string>
+    <string name="send_fifty_percents">50%</string>
 
     <!--About redirection-->
     <string name="about_redirection_title">You were redirected to the «IDNow» \nfor verification</string>
@@ -1413,5 +1416,10 @@
     <string name="coinomat_success_subtitle">After payment has been made your balance will be updated</string>
     <string name="my_orders_type_buy">Buy</string>
     <string name="my_orders_type_sell">Sell</string>
+
+    <!--No internet-->
+    <string name="no_internet_title">No connection to the Internet</string>
+    <string name="no_internet_subtitle">Check your connection to the mobile Internet or Wi-Fi network</string>
+    <string name="no_internet_retry">Retry</string>
 
 </resources>

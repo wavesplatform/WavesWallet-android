@@ -63,6 +63,10 @@ class HistoryTabItemAdapter @Inject constructor() :
                 }
 
                 helper.itemView.notNull { view ->
+                    val spam = null != queryFirst<SpamAsset> {
+                        equalTo("assetId", item.data.assetId)
+                    }
+
                     view.image_transaction.setImageDrawable(item.data.transactionType()?.icon())
 
                     var showTag = Constants.defaultAssets.any {
@@ -73,7 +77,12 @@ class HistoryTabItemAdapter @Inject constructor() :
 
                     item.data.transactionType().notNull {
                         try {
-                            view.text_transaction_name.text = String.format(it.title(), item.data.asset?.name)
+                            val name = if (spam) {
+                                ""
+                            } else {
+                                item.data.asset?.name
+                            }
+                            view.text_transaction_name.text = String.format(it.title(), name)
                         } catch (e: MissingFormatArgumentException) {
                             view.text_transaction_name.text = it.title()
                         }
@@ -114,7 +123,9 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 }
 
                                 showTag = Constants.defaultAssets.any {
-                                    it.assetId == pairOrder?.assetPair?.priceAssetObject?.id || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
+                                    it.assetId == pairOrder?.assetPair?.priceAssetObject?.id
+                                            || pairOrder?.assetPair?.priceAssetObject?.id
+                                            .isNullOrEmpty()
                                 }
 
                                 if (showTag) {
@@ -122,15 +133,19 @@ class HistoryTabItemAdapter @Inject constructor() :
                                     view.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.name
                                 } else {
                                     view.text_tag.gone()
-                                    view.text_transaction_value.text = "${view.text_transaction_value.text} ${pairOrder?.assetPair?.priceAssetObject?.name}"
+                                    view.text_transaction_value.text =
+                                            "${view.text_transaction_value.text} " +
+                                            "${pairOrder?.assetPair?.priceAssetObject?.name}"
                                 }
                             }
                             TransactionType.DATA_TYPE -> {
-                                view.text_transaction_value.text = mContext.getString(R.string.history_data_type_title)
+                                view.text_transaction_value.text = mContext
+                                        .getString(R.string.history_data_type_title)
                             }
                             TransactionType.CANCELED_LEASING_TYPE -> {
                                 item.data.lease?.amount.notNull {
-                                    view.text_transaction_value.text = MoneyUtil.getScaledText(it.toLong(), item.data.asset)
+                                    view.text_transaction_value.text =
+                                            MoneyUtil.getScaledText(it.toLong(), item.data.asset)
                                 }
                             }
                             TransactionType.TOKEN_GENERATION_TYPE -> {
@@ -141,28 +156,15 @@ class HistoryTabItemAdapter @Inject constructor() :
                             }
                             TransactionType.TOKEN_BURN_TYPE -> {
                                 item.data.amount.notNull {
-                                    val scaledText = MoneyUtil.getScaledText(it, item.data.asset)
-                                    val afterDot = if (scaledText.matches(".".toRegex())) {
-                                        scaledText.substringAfter(".").toInt()
-                                    } else {
-                                        0
-                                    }
-
-                                    val amount = if (afterDot == 0) {
-                                        MoneyUtil.getScaledText(it, item.data.asset)
-                                                .substringBefore(".")
-                                    } else {
-                                        MoneyUtil.getScaledText(it, item.data.asset)
-                                    }
-
-                                    view.text_transaction_value.text = "-$amount"
+                                    view.text_transaction_value.text =
+                                            "-${MoneyUtil.getScaledText(it, item.data.asset)}"
                                 }
                             }
                             TransactionType.TOKEN_REISSUE_TYPE -> {
                                 val quantity = MoneyUtil.getScaledText(
                                         item.data.quantity, item.data.asset)
                                         .substringBefore(".")
-                                view.text_transaction_value.text = "+${quantity}"
+                                view.text_transaction_value.text = "+$quantity"
                             }
                             TransactionType.SET_SCRIPT_TYPE -> {
                                 view.text_transaction_name.text = mContext.getString(
@@ -194,8 +196,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                         }
                     }
 
-                    if (queryFirst<SpamAsset> { equalTo("assetId", item.data.assetId) }
-                            != null) {
+                    if (spam) {
                         view.text_tag.gone()
                         view.text_tag_spam.visiable()
                         setSpamTitle(item.data, item.data.transactionType(), view.text_transaction_value)

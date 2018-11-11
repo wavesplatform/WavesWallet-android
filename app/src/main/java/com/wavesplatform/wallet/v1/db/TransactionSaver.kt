@@ -13,6 +13,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 @Deprecated("Temp class for saving transactions, should refactor")
@@ -56,7 +57,9 @@ class TransactionSaver @Inject constructor() {
                                     saveToDb(sortedList.subList(prevLimit - 1, sortedList.size - 1))
                                 } catch (e: Exception) {
                                     currentLimit = 50
-                                    rxEventBus.post(Events.StopUpdateHistoryScreen())
+                                    runOnUiThread {
+                                        rxEventBus.post(Events.StopUpdateHistoryScreen())
+                                    }
                                 }
                             }
 
@@ -78,7 +81,9 @@ class TransactionSaver @Inject constructor() {
                                             // only few new transaction
                                             saveToDb(sortedList)
                                         } else {
-                                            rxEventBus.post(Events.StopUpdateHistoryScreen())
+                                            runOnUiThread {
+                                                rxEventBus.post(Events.StopUpdateHistoryScreen())
+                                            }
                                         }
                                     })
                         }
@@ -185,7 +190,9 @@ class TransactionSaver @Inject constructor() {
                         }
 
                         transactions.saveAll()
-                        rxEventBus.post(Events.NeedUpdateHistoryScreen())
+                        runOnUiThread {
+                            rxEventBus.post(Events.NeedUpdateHistoryScreen())
+                        }
                     }
                 })
 

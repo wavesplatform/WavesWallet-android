@@ -339,6 +339,11 @@ fun Activity.showMessage(msg: String, @IdRes viewId: Int, @ColorRes color: Int? 
             .show()
 }
 
+fun showMessage(msg: String, view: View, @ColorRes color: Int? = null) {
+    Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
+            .withColor(color)
+            .show()
+}
 
 fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_18_black) {
     clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), text)

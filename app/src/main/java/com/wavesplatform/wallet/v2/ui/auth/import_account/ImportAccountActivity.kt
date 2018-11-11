@@ -3,13 +3,13 @@ package com.wavesplatform.wallet.v2.ui.auth.import_account
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -34,7 +34,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
+        setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, title = getString(R.string.import_account_toolbar_title), icon = R.drawable.ic_toolbar_back_black)
 
         viewpager_import.adapter = ImportAccountFragmentPageAdapter(supportFragmentManager, arrayOf(getString(R.string.import_account_tab_scan),
@@ -56,7 +56,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
             ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                    val seed = result.contents
+                    val seed = result.contents.replace(AddressUtil.WAVES_PREFIX, "")
                     if (!TextUtils.isEmpty(seed)) {
                         when {
                             App.getAccessManager().isAccountWithSeedExist(seed) -> {
@@ -68,6 +68,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
                             else -> {
                                 launchActivity<ProtectAccountActivity> {
                                     putExtra(NewAccountActivity.KEY_INTENT_SEED, seed)
+                                    putExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT, true)
                                 }
                             }
                         }

@@ -183,18 +183,18 @@
                     android:layout_height="wrap_content"
                     android:padding="14dp">
 
-
                     <android.support.v7.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/profile_general_backup_phrase"
+                        android:layout_centerVertical="true"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/skip_backup_indicator_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="14dp"
                         android:layout_toLeftOf="@+id/image_arrow_1"

@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.address
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -61,7 +60,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
+        setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, icon = R.drawable.ic_toolbar_back_black)
 
         val address = App.getAccessManager().getWallet()?.address

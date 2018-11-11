@@ -58,6 +58,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
+        setNavigationBarColor(R.color.white)
         setupToolbar(toolbar_general)
 
         showFirstOpenAlert(prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true))

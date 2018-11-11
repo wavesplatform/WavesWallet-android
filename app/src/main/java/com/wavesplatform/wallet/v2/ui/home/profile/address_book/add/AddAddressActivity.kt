@@ -12,6 +12,7 @@ import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.vicpin.krealmextensions.queryAsFlowable
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
@@ -134,11 +135,10 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
             ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                    result.contents.notNull {
+                    result.contents.replace(AddressUtil.WAVES_PREFIX, "").notNull {
                         edit_address.setText(it.trim())
                     }
                 }
-
             }
         }
     }
