@@ -191,7 +191,6 @@ dependencies {
         transitive = true
     }
     implementation 'com.github.mukeshsolanki:country-picker-android:1.1.6'
-    implementation 'com.aurelhubert:ahbottomnavigation:2.0.2'
 
     // RxJava
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"

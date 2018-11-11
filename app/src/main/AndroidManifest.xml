@@ -55,75 +55,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".v1.ui.dex.markets.add.AddMarketActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name=".v1.ui.auth.PinEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name=".v1.ui.dex.markets.MarketsActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name=".v1.ui.auth.LandingActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name=".v1.ui.pairing.ImportOrCreateWalletActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".v1.ui.auth.PasswordWalletActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".v1.ui.auth.SeedWalletActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".v1.ui.auth.ChooseWalletActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".v1.ui.assets.AssetsActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name=".v1.ui.backup.BackupWalletActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name=".v1.ui.auth.LogoutActivity"
-            android:excludeFromRecents="true"
-            android:noHistory="true"
-            android:theme="@android:style/Theme.NoDisplay" />
-        <activity
-            android:name=".v1.ui.zxing.CaptureActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name=".v1.ui.transactions.TransactionDetailActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".v1.ui.assets.IssueAssetsActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".v1.ui.transactions.IssueDetailActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".v1.ui.transactions.ReissueDetailActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".v1.ui.transactions.UnknownDetailActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".v1.ui.dex.details.DexDetailsActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".v1.ui.dex.details.order.PlaceOrderActivity"
-            android:windowSoftInputMode="stateHidden" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -142,7 +73,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".v1.ui.transactions.ExchangeTransactionActivity" />
+
         <activity
             android:name=".v2.ui.language.choose.ChooseLanguageActivity"
             android:configChanges="orientation|locale"

@@ -15,17 +15,11 @@ import com.crashlytics.android.Crashlytics;
 import com.franmontiel.localechanger.LocaleChanger;
 import com.github.moduth.blockcanary.BlockCanary;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
-import com.wavesplatform.wallet.v1.data.access.AccessState;
-import com.wavesplatform.wallet.v1.data.access.DexAccessState;
 import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
-import com.wavesplatform.wallet.v1.data.services.PinStoreService;
-import com.wavesplatform.wallet.v1.injection.Injector;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v1.util.AppUtil;
 import com.wavesplatform.wallet.v1.util.ApplicationLifeCycle;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
-import com.wavesplatform.wallet.v1.util.annotations.Thunk;
-import com.wavesplatform.wallet.v1.util.exceptions.LoggingExceptionHandler;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
@@ -47,8 +41,6 @@ import pers.victor.ext.Ext;
 
 public class App extends DaggerApplication {
 
-    @Thunk
-    static final String TAG = App.class.getSimpleName();
     private static final String RX_ERROR_TAG = "RxJava Error";
     @Inject
     PrefsUtil mPrefsUtil;
@@ -87,16 +79,10 @@ public class App extends DaggerApplication {
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
         LocaleChanger.initialize(getApplicationContext(), SUPPORTED_LOCALES);
 
-        // Init objects first
-        Injector.getInstance().init(this);
         CodeProcessor.init(this);
-        // Inject into Application
-//        Injector.getInstance().getAppComponent().inject(this);
 
         Realm.init(this);
         Ext.INSTANCE.setCtx(this);
-
-        new LoggingExceptionHandler();
 
         RxJavaPlugins.setErrorHandler(throwable -> Log.e(RX_ERROR_TAG, throwable.getMessage(), throwable));
 
@@ -110,16 +96,6 @@ public class App extends DaggerApplication {
         BroadcastReceiver mReceiver = new ScreenReceiver();
         registerReceiver(mReceiver, filter);
 
-        AccessState.getInstance().initAccessState(
-                new PrefsUtil(this),
-                new PinStoreService(),
-                appUtil);
-
-        DexAccessState.getInstance().initAccessState(this,
-                new PrefsUtil(this),
-                new PinStoreService(),
-                appUtil);
-
         EnvironmentManager.init(new PrefsUtil(this), appUtil);
 
         // Apply PRNG fixes on app start if needed
@@ -131,6 +107,7 @@ public class App extends DaggerApplication {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         SimpleChromeCustomTabs.initialize(this);
 
+        // todo сомнительная штука
         ApplicationLifeCycle.getInstance().addListener(new ApplicationLifeCycle.LifeCycleListener() {
             @Override
             public void onBecameForeground() {
@@ -141,7 +118,6 @@ public class App extends DaggerApplication {
             @Override
             public void onBecameBackground() {
                 // No-op
-                AccessState.getInstance().removeWavesWallet();
             }
         });
     }
@@ -157,16 +133,6 @@ public class App extends DaggerApplication {
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
         return DaggerApplicationV2Component.builder().create(this);
-    }
-
-    /**
-     * This is reached if the provider cannot be updated for some reason. App should consider all
-     * HTTP communication to be vulnerable, and take appropriate action.
-     */
-    @Thunk
-    void onProviderInstallerNotAvailable() {
-        // TODO: 05/08/2016 Decide if we should take action here or not
-        Log.wtf(TAG, "Security Provider Installer not available");
     }
 
 

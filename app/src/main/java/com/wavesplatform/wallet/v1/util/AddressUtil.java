@@ -17,29 +17,10 @@ public class AddressUtil {
     public static byte AddressVersion = 1;
     public static int ChecksumLength = 4;
     public static int HashLength = 20;
-    public static int AddressLength = 1 + 1 + ChecksumLength + HashLength;
     public static String WAVES_PREFIX = "waves://";
 
     public static byte getAddressScheme() {
         return (byte) EnvironmentManager.get().current().getAddressScheme();
-    }
-
-    public static boolean isValidAddress(String address) {
-        if (address == null) return false;
-        try {
-            byte[] bytes = Base58.decode(address);
-            if (bytes.length == AddressLength
-                    && bytes[0] == AddressVersion
-                    && bytes[1] == getAddressScheme()) {
-                byte[] checkSum = Arrays.copyOfRange(bytes, bytes.length - ChecksumLength, bytes.length);
-                byte[] checkSumGenerated = calcCheckSum(Arrays.copyOf(bytes, bytes.length - ChecksumLength));
-                return Arrays.equals(checkSum, checkSumGenerated);
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     public static byte[] calcCheckSum(byte[] bytes) {

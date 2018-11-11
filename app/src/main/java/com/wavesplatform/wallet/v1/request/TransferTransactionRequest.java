@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v1.request;
 
 import android.util.Log;
 
-import com.google.common.base.Charsets;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
 import com.wavesplatform.wallet.v1.crypto.Base58;
@@ -29,25 +28,6 @@ public class TransferTransactionRequest {
     public String signature;
 
     public transient final int txType = 4;
-
-    public TransferTransactionRequest() {
-    }
-
-    public TransferTransactionRequest(String assetId,
-                                      String senderPublicKey,
-                                      String recipient,
-                                      long amount,
-                                      long timestamp,
-                                      long fee,
-                                      String attachment) {
-        this.assetId = assetId;
-        this.senderPublicKey = senderPublicKey;
-        this.recipient = recipient;
-        this.amount = amount;
-        this.timestamp = timestamp;
-        this.fee = fee;
-        this.attachment = attachment != null ? Base58.encode(attachment.getBytes(Charsets.UTF_8)) : null;
-    }
 
     public byte[] toSignBytes() {
         try {

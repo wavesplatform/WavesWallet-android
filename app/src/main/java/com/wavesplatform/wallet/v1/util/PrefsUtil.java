@@ -9,8 +9,6 @@ import android.text.TextUtils;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import javax.inject.Inject;
 
 public class PrefsUtil {
@@ -39,6 +37,7 @@ public class PrefsUtil {
     public static final String KEY_SPAM_URL = "spam_url";
     public static final String KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS = "key_need_update_transaction_after_change_spam_settings";
 
+    // todo merge check consts above
     public static final String KEY_LAST_UPDATE_DEX_INFO = "last_update_dex_info";
 
     public static final String KEY_AB_NAMES = "address_book_names";
@@ -114,10 +113,6 @@ public class PrefsUtil {
         return preferenceManager.getInt(name, value);
     }
 
-    public void setValue(String name, int value) {
-        setValueInternal(getGuid() + name, value);
-    }
-
     private void setValueInternal(String name, int value) {
         Editor editor = preferenceManager.edit();
         editor.putInt(name, (value < 0) ? 0 : value);
@@ -132,26 +127,12 @@ public class PrefsUtil {
         return preferenceManager.getLong(name, 0L);
     }
 
-    public void setValue(String name, long value) {
-        setValueInternal(getGuid() + name, value);
-    }
-
-    private void setValueInternal(String name, long value) {
-        Editor editor = preferenceManager.edit();
-        editor.putLong(name, (value < 0L) ? 0L : value);
-        editor.apply();
-    }
-
     public boolean getValue(String name, boolean value) {
         return getGuidValue(getGuid(), name, value);
     }
 
     public boolean getGuidValue(String guid, String name, boolean value) {
         return preferenceManager.getBoolean(guid + name, value);
-    }
-
-    private boolean getValueInternal(String name, boolean value) {
-        return preferenceManager.getBoolean(name, value);
     }
 
     public void setValue(String name, boolean value) {
@@ -166,10 +147,6 @@ public class PrefsUtil {
 
     public boolean has(String name) {
         return preferenceManager.contains(name);
-    }
-
-    public void removeValue(String name) {
-        removeValueInternal(getGuid() + name);
     }
 
     public void removeValue(String guid, String name) {
@@ -199,22 +176,6 @@ public class PrefsUtil {
         removeGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID);
     }
 
-    /**
-     * Reset value once user logged in
-     */
-    public void logIn() {
-        setValue(PrefsUtil.LOGGED_OUT, false);
-    }
-
-    public void addListValue(String name, String value) {
-        String prev = getValue(name, "");
-        if (prev.isEmpty()) {
-            setValue(name, value);
-        } else {
-            setValue(name, prev + "|" + value.trim());
-        }
-    }
-
     public void addGlobalListValue(String name, String value) {
         String prev = getGlobalValue(name, "");
         if (prev.isEmpty()) {
@@ -232,18 +193,6 @@ public class PrefsUtil {
         }
     }
 
-    public String[] getValueList(String name) {
-        if (getValue(name, "").isEmpty()) {
-            return new String[]{};
-        } else {
-            return getValue(name, "").split("\\|");
-        }
-    }
-
-    public void setValue(String name, String[] value) {
-        setValue(name, org.apache.commons.lang3.StringUtils.join(value, "|"));
-    }
-
     public void setGlobalValue(String name, String[] value) {
         setGlobalValue(name, org.apache.commons.lang3.StringUtils.join(value, "|"));
     }
@@ -254,25 +203,5 @@ public class PrefsUtil {
 
     public String getEnvironment() {
         return getGlobalValue(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, EnvironmentManager.KEY_ENV_PROD);
-    }
-
-
-    public void removeAllGuid(String guid) {
-        removeValue(guid + PrefsUtil.KEY_AB_ADDRESSES);
-        removeValue(guid + PrefsUtil.KEY_AB_NAMES);
-
-        removeValue(guid + PrefsUtil.KEY_PIN_FAILS);
-        removeValue(guid + PrefsUtil.KEY_WALLET_NAME);
-        removeValue(guid + PrefsUtil.KEY_PUB_KEY);
-        removeValue(guid + PrefsUtil.KEY_ENCRYPTED_WALLET);
-        removeValue(guid + PrefsUtil.KEY_ENCRYPTED_PASSWORD);
-    }
-
-    public void removeListValue(String name, int index) {
-        setValue(name, ArrayUtils.remove(getValueList(name), index));
-    }
-
-    public void removeGlobalListValue(String name, int index) {
-        setGlobalValue(name, ArrayUtils.remove(getGlobalValueList(name), index));
     }
 }

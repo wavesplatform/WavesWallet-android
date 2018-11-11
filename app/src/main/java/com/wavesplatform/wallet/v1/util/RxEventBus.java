@@ -34,13 +34,4 @@ public class RxEventBus {
         return mBusSubject;
     }
 
-    /**
-     * Observable that only emits events of a specific class.
-     * Use this if you only want to subscribe to one type of events.
-     */
-    public <T> Observable<T> filteredObservable(final Class<T> eventClass) {
-        return mBusSubject
-                .filter(eventClass::isInstance)
-                .map(event -> (T) event);
-    }
 }

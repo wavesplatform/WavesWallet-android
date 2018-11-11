@@ -1,7 +1,5 @@
 package com.wavesplatform.wallet.v1.ui.auth;
 
-import android.util.Log;
-
 import com.wavesplatform.wallet.v1.util.AppUtil;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 
@@ -13,7 +11,7 @@ public class EnvironmentManager {
 
     private static EnvironmentManager instance;
 
-    private Environment current = Environment.PRODUCTION;
+    private Environment current;
 
     private PrefsUtil prefsUtil;
     private AppUtil appUtil;
@@ -42,7 +40,6 @@ public class EnvironmentManager {
     }
 
     public void setCurrent(Environment current) {
-        Log.d(TAG, "setEnvironment: " + current.getName());
         prefsUtil.setGlobalValue(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.getName());
         this.current = current;
         appUtil.restartApp();

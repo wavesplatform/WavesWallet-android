@@ -10,10 +10,10 @@ import android.net.NetworkRequest;
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.wavesplatform.wallet.v1.data.rxjava.IgnorableDefaultObserver;
+
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import com.wavesplatform.wallet.v1.data.rxjava.IgnorableDefaultObserver;
-import com.wavesplatform.wallet.v1.ui.balance.TransactionsFragment;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 class ConnectionStateMonitor extends ConnectivityManager.NetworkCallback {
@@ -43,7 +43,7 @@ class ConnectionStateMonitor extends ConnectivityManager.NetworkCallback {
     private Completable broadcastOnMainThread() {
         return Completable.fromAction(() ->
                 LocalBroadcastManager.getInstance(context)
-                        .sendBroadcastSync(new Intent(TransactionsFragment.ACTION_INTENT)))
+                        .sendBroadcastSync(new Intent(NetworkStateReceiver.ACTION_INTENT)))
                 .subscribeOn(AndroidSchedulers.mainThread());
     }
 
