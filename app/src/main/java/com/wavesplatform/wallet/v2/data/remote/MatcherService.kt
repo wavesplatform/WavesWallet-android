@@ -7,9 +7,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Markets
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
 import io.reactivex.Observable
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface MatcherService {
 
