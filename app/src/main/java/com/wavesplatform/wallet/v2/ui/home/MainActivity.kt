@@ -64,7 +64,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
         setupBottomNavigation()
 
-        onTabSelected(tab_navigation.getTabAt(WALLET_SCREEN))
+
+        if (savedInstanceState == null) {
+            onTabSelected(tab_navigation.getTabAt(WALLET_SCREEN))
+        }
 
         eventSubscriptions.add(mRxEventBus.filteredObservable(Events.SpamFilterStateChanged::class.java)
                 .subscribe {
