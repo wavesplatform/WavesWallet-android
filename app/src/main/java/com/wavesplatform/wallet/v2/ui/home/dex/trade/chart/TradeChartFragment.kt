@@ -22,6 +22,7 @@ import com.wavesplatform.wallet.v1.ui.dex.details.chart.CandleTouchListener
 import com.wavesplatform.wallet.v1.ui.dex.details.chart.OnCandleGestureListener
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -123,110 +124,103 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     }
 
     private fun setUpChart() {
-        candle_chart.onTouchListener = CandleTouchListener(candle_chart, candle_chart.getViewPortHandler().getMatrixTouch(), 3f)
+        candle_chart.onTouchListener = CandleTouchListener(candle_chart, candle_chart.viewPortHandler.matrixTouch, 3f)
 
-        val rightAxis = candle_chart.getAxisRight()
+        val rightAxis = candle_chart.axisRight
         rightAxis.setDrawGridLines(true)
-        rightAxis.setTextColor(Color.parseColor("#808080"))
-        rightAxis.setTextSize(8f)
+        rightAxis.textColor = Color.parseColor("#808080")
+        rightAxis.textSize = 8f
         rightAxis.setDrawAxisLine(false)
         rightAxis.setLabelCount(10, true)
-        rightAxis.setMaxWidth(50f)
-        rightAxis.setMinWidth(50f)
+        rightAxis.maxWidth = 50f
+        rightAxis.minWidth = 50f
 
-        val leftAxis = candle_chart.getAxisLeft()
-        leftAxis.setEnabled(false)
+        val leftAxis = candle_chart.axisLeft
+        leftAxis.isEnabled = false
 
-        val xAxis = candle_chart.getXAxis()
-        xAxis.setTextSize(11f)
-        xAxis.setGranularityEnabled(true)
-        xAxis.setLabelCount(3)
+        val xAxis = candle_chart.xAxis
+        xAxis.textSize = 11f
+        xAxis.isGranularityEnabled = true
+        xAxis.labelCount = 3
 
-        xAxis.setTextColor(Color.parseColor("#808080"))
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM)
-        xAxis.setGranularityEnabled(true)
-        xAxis.setValueFormatter(presenter.valueFormatter)
+        xAxis.textColor = Color.parseColor("#808080")
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.isGranularityEnabled = true
+        xAxis.valueFormatter = presenter.valueFormatter
 
         candle_chart.setView((activity as TradeActivity).viewpageer_trade)
-        candle_chart.setScaleXEnabled(true)
-        candle_chart.setScaleYEnabled(false)
-        candle_chart.setAutoScaleMinMaxEnabled(true)
+        candle_chart.isScaleXEnabled = true
+        candle_chart.isScaleYEnabled = false
+        candle_chart.isAutoScaleMinMaxEnabled = true
         candle_chart.setVisibleXRange(10.0f, 100.0f)
-        candle_chart.setDoubleTapToZoomEnabled(false)
+        candle_chart.isDoubleTapToZoomEnabled = false
         candle_chart.setPinchZoom(false)
 
         presenter.chartModel.data.setData(CandleData())
-//
-        candle_chart.getXAxis().setValueFormatter(presenter.valueFormatter)
-        candle_chart.setOnChartGestureListener(this)
-        candle_chart.getDescription().setEnabled(false)
+        candle_chart.xAxis.valueFormatter = presenter.valueFormatter
+        candle_chart.onChartGestureListener = this
+        candle_chart.description.isEnabled = false
         candle_chart.setDrawGridBackground(false)
-        candle_chart.getLegend().setEnabled(false)
-        candle_chart.setBackgroundColor(Color.parseColor("#fafafa"))
-        candle_chart.setExtraBottomOffset(25f)
-        candle_chart.setExtraLeftOffset(15f)
+        candle_chart.legend.isEnabled = false
+        candle_chart.extraBottomOffset = 25f
+        candle_chart.extraLeftOffset = 15f
 
         bar_chart.setView((activity as TradeActivity).viewpageer_trade)
         bar_chart.onChartGestureListener = BarChartListener()
         bar_chart.setPinchZoom(false)
-        bar_chart.setScaleXEnabled(false)
-        bar_chart.setScaleYEnabled(false)
+        bar_chart.isScaleXEnabled = false
+        bar_chart.isScaleYEnabled = false
         bar_chart.setScaleEnabled(false)
-        bar_chart.setDragEnabled(false)
+        bar_chart.isDragEnabled = false
         bar_chart.setVisibleXRange(10.0f, 100.0f)
-        bar_chart.setAutoScaleMinMaxEnabled(true)
-        //bar_chart.setMinOffset(0.f);
-        bar_chart.getDescription().setEnabled(false)
-        bar_chart.getLegend().setEnabled(false)
-        bar_chart.setExtraLeftOffset(15f)
-        bar_chart.setDoubleTapToZoomEnabled(false)
+        bar_chart.isAutoScaleMinMaxEnabled = true
+        bar_chart.description.isEnabled = false
+        bar_chart.legend.isEnabled = false
+        bar_chart.extraLeftOffset = 15f
+        bar_chart.isDoubleTapToZoomEnabled = false
 
-        bar_chart.getAxisLeft().setEnabled(false)
+        bar_chart.axisLeft.isEnabled = false
 
-        bar_chart.getAxisRight().setMaxWidth(50f)
-        bar_chart.getAxisRight().setMinWidth(50f)
-        bar_chart.getAxisRight().setLabelCount(4)
-        bar_chart.getAxisRight().setDrawGridLines(true)
-        bar_chart.getAxisRight().setTextColor(Color.parseColor("#808080"))
-        bar_chart.getAxisRight().setTextSize(8f)
-        bar_chart.getAxisRight().setDrawAxisLine(false)
-        bar_chart.getAxisRight().setAxisMinimum(0f)
-        bar_chart.getAxisRight().setLabelCount(4)
-
-        //bar_chart.getXAxis().setEnabled(false);
-        //bar_chart.getXAxis().setDrawGridLines(true);
-        //bar_chart.getXAxis().setDrawAxisLine(true);
-        bar_chart.getXAxis().setDrawLabels(false)
-        bar_chart.getXAxis().setDrawAxisLine(false)
-        bar_chart.getXAxis().setGranularityEnabled(true)
-        bar_chart.getXAxis().setLabelCount(3)
+        bar_chart.axisRight.maxWidth = 50f
+        bar_chart.axisRight.minWidth = 50f
+        bar_chart.axisRight.labelCount = 4
+        bar_chart.axisRight.setDrawGridLines(true)
+        bar_chart.axisRight.textColor = Color.parseColor("#808080")
+        bar_chart.axisRight.textSize = 8f
+        bar_chart.axisRight.setDrawAxisLine(false)
+        bar_chart.axisRight.axisMinimum = 0f
+        bar_chart.axisRight.labelCount = 4
+        bar_chart.xAxis.setDrawLabels(false)
+        bar_chart.xAxis.setDrawAxisLine(false)
+        bar_chart.xAxis.isGranularityEnabled = true
+        bar_chart.xAxis.labelCount = 3
 
     }
 
 
     private fun checkInterval() {
-        val dataSetByIndex = candle_chart.getCandleData().getDataSetByIndex(0)
-        val start = Math.round(dataSetByIndex.getEntryForIndex(0).getX()).toFloat()
-        val lastOffsetX = Math.round(candle_chart.getLowestVisibleX()).toFloat()
+        val dataSetByIndex = candle_chart.candleData.getDataSetByIndex(0)
+        val start = Math.round(dataSetByIndex.getEntryForIndex(0).x).toFloat()
+        val lastOffsetX = Math.round(candle_chart.lowestVisibleX).toFloat()
         if (start == lastOffsetX && !isLoading) {
             isLoading = true
 
             candle_chart.cancelPendingInputEvents()
-            (candle_chart.getOnTouchListener() as BarLineChartTouchListener).stopDeceleration()
+            (candle_chart.onTouchListener as BarLineChartTouchListener).stopDeceleration()
             candle_chart.disableScroll()
-            candle_chart.setScaleXEnabled(false)
-            candle_chart.setScaleYEnabled(false)
-            candle_chart.setDragEnabled(false)
+            candle_chart.isScaleXEnabled = false
+            candle_chart.isScaleYEnabled = false
+            candle_chart.isDragEnabled = false
 
             bar_chart.cancelPendingInputEvents()
-            (bar_chart.getOnTouchListener() as BarLineChartTouchListener).stopDeceleration()
+            (bar_chart.onTouchListener as BarLineChartTouchListener).stopDeceleration()
             bar_chart.disableScroll()
-            bar_chart.setScaleXEnabled(false)
-            bar_chart.setScaleYEnabled(false)
-            bar_chart.setDragEnabled(false)
+            bar_chart.isScaleXEnabled = false
+            bar_chart.isScaleYEnabled = false
+            bar_chart.isDragEnabled = false
 
             val lastDate = Date(lastOffsetX.toLong() * 1000 * 60 * presenter.currentTimeFrame.toLong())
-            presenter.loadCandles(lastDate.getTime(), false)
+            presenter.loadCandles(lastDate.time, false)
             presenter.getTradesByPair()
         }
     }
@@ -279,8 +273,6 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         }
 
         override fun onChartTranslate(me: MotionEvent, dX: Float, dY: Float) {
-            //binding.candleChart.moveViewToX(binding.barChart.getLowestVisibleX());
-            //checkInterval();
         }
     }
 
@@ -292,9 +284,9 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     }
 
     override fun onChartUp(me: MotionEvent) {
-        if (!isLoading && !candle_chart.isDragEnabled()) {
-            candle_chart.setScaleXEnabled(true)
-            candle_chart.setDragEnabled(true)
+        if (!isLoading && !candle_chart.isDragEnabled) {
+            candle_chart.isScaleXEnabled = true
+            candle_chart.isDragEnabled = true
         }
     }
 
@@ -320,29 +312,25 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         val z1 = if (prevScaleX > 0) scaleX / prevScaleX else scaleX
         bar_chart.zoom(z1, 1f, xPos, yPos)
         prevScaleX = scaleX
-
-        //barChart.zoom(scaleX, scaleY, xPos, yPos, YAxis.AxisDependency.RIGHT);
-        //barChart.moveViewToX(candleChart.getLowestVisibleX());
-        //System.out.println("p.x" +p.x + " X: "+ scaleX + "z1: " + z1 + " C: " + candleChart.getScaleX() + " B: " + barChart.getScaleX());
     }
 
 
     override fun onChartTranslate(me: MotionEvent, dX: Float, dY: Float) {
-//        checkInterval()
-        bar_chart.moveViewToX(candle_chart.getLowestVisibleX())
+        bar_chart.moveViewToX(candle_chart.lowestVisibleX)
     }
 
-    override fun successGetTrades(tradesMarket: List<LastTrade>) {
-        if (tradesMarket.size < 1) return
+    override fun successGetTrades(tradesMarket: LastTrade?) {
+        tradesMarket.notNull {
+            val limitLine = LimitLine(java.lang.Float.valueOf(it.price), "")
+            limitLine.lineColor = if (it.getType() == OrderType.BUY) findColor(R.color.submit300) else findColor(R.color.error400)
+            limitLine.lineWidth = 1f
+            limitLine.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
+            candle_chart.axisRight.removeAllLimitLines()
+            candle_chart.axisRight.addLimitLine(limitLine)
+            candle_chart.axisRight.setDrawLimitLinesBehindData(false)
+            candle_chart.invalidate()
 
-        val limitLine = LimitLine(java.lang.Float.valueOf(tradesMarket[0].price)!!, "")
-        limitLine.lineColor = Color.parseColor("#F6AD12")
-        limitLine.lineWidth = 1f
-        limitLine.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
-        candle_chart.getAxisRight().removeAllLimitLines()
-        candle_chart.getAxisRight().addLimitLine(limitLine)
-        candle_chart.getAxisRight().setDrawLimitLinesBehindData(false)
-        candle_chart.invalidate()
+        }
     }
 
     override fun onShowCandlesSuccess(candles: ArrayList<CandleEntry>, barEntries: ArrayList<BarEntry>, firstRequest: Boolean) {
@@ -352,14 +340,14 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             val set1 = BarDataSet(barEntries, "Bar 1")
             set1.setDrawValues(false)
             set1.isHighlightEnabled = false
-            set1.color = Color.parseColor("#cccccc")//
+            set1.color = Color.parseColor("#cccccc")
             set1.axisDependency = YAxis.AxisDependency.RIGHT
             barData.addDataSet(set1)
 
             val candleData = CandleData()
             val set = CandleDataSet(candles, "Candle DataSet")
-            set.decreasingColor = Color.parseColor("#E66C69")
-            set.increasingColor = Color.parseColor("#5EAC69")
+            set.decreasingColor = findColor(R.color.error400)
+            set.increasingColor = findColor(R.color.submit300)
             set.neutralColor = Color.parseColor("#4b7190")
             set.shadowColorSameAsCandle = true
             set.increasingPaintStyle = Paint.Style.FILL
@@ -369,10 +357,10 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             set.axisDependency = YAxis.AxisDependency.RIGHT
             candleData.addDataSet(set)
 
-            val last = candles.get(candles.size - 1)
-            candle_chart.setData(candleData)
+            val last = candles[candles.size - 1]
+            candle_chart.data = candleData
 
-            bar_chart.setData(barData)
+            bar_chart.data = barData
 
             bar_chart.setVisibleXRangeMinimum(5f)
             bar_chart.setVisibleXRangeMaximum(100f)
@@ -383,8 +371,8 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             candle_chart.moveViewToX(set.getEntryForIndex(set.entryCount - 1).x)
             bar_chart.moveViewToX(set.getEntryForIndex(set.entryCount - 1).x)
 
-            bar_chart.zoom(4f / bar_chart.getScaleX(), 1f, last.getX(), last.getY(), YAxis.AxisDependency.RIGHT)
-            candle_chart.zoom(4f / candle_chart.getScaleX(), 1f, last.getX(), last.getY(), YAxis.AxisDependency.RIGHT)
+            bar_chart.zoom(4f / bar_chart.scaleX, 1f, last.x, last.y, YAxis.AxisDependency.RIGHT)
+            candle_chart.zoom(4f / candle_chart.scaleX, 1f, last.x, last.y, YAxis.AxisDependency.RIGHT)
 
             bar_chart.invalidate()
             candle_chart.invalidate()
@@ -397,7 +385,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
 
     private fun updateCandles(candles: List<CandleEntry>, barEntries: List<BarEntry>) {
         val barData = BarData()
-        val baseDataSet = bar_chart.getBarData().getDataSetByIndex(0) as BarDataSet
+        val baseDataSet = bar_chart.barData.getDataSetByIndex(0) as BarDataSet
 
         for (barEntry in barEntries) {
             baseDataSet.addEntry(barEntry)
@@ -405,7 +393,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         Collections.sort(baseDataSet.values, EntryXComparator())
         barData.addDataSet(baseDataSet)
 
-        val candleDataSet = candle_chart.getCandleData().getDataSetByIndex(0) as CandleDataSet
+        val candleDataSet = candle_chart.candleData.getDataSetByIndex(0) as CandleDataSet
         val prevCnt = candleDataSet.entryCount
         val lastPoint = candleDataSet.getEntryForIndex(0)
         for (candleEntry in candles) {
@@ -415,8 +403,8 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         val candleData = CandleData()
         candleData.addDataSet(candleDataSet)
 
-        candle_chart.setData(candleData)
-        bar_chart.setData(barData)
+        candle_chart.data = candleData
+        bar_chart.data = barData
 
         candle_chart.moveViewToX(lastPoint.x)
         bar_chart.moveViewToX(lastPoint.x)
@@ -441,41 +429,39 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         if (candles.isEmpty() || barEntries.isEmpty())
             return
 
-        val baseDataSet = bar_chart.getBarData().getDataSetByIndex(0) as BarDataSet
+        val baseDataSet = bar_chart.barData.getDataSetByIndex(0) as BarDataSet
 
         for (barEntry in barEntries) {
-            val entries = baseDataSet.getEntriesForXValue(barEntry.getX())
+            val entries = baseDataSet.getEntriesForXValue(barEntry.x)
             if (entries.isEmpty()) {
                 baseDataSet.addEntry(barEntry)
             } else {
                 val bar = entries[0]
-                bar.y = barEntry.getY()
+                bar.y = barEntry.y
             }
         }
         baseDataSet.notifyDataSetChanged()
         val barData = BarData()
         barData.addDataSet(baseDataSet)
-        bar_chart.setData(barData)
-        //barChart.moveViewToX(baseDataSet.getEntryForIndex(baseDataSet.getEntryCount() - 1).getX());
+        bar_chart.data = barData
         bar_chart.notifyDataSetChanged()
 
-        val candleDataSet = candle_chart.getCandleData().getDataSetByIndex(0) as CandleDataSet
+        val candleDataSet = candle_chart.candleData.getDataSetByIndex(0) as CandleDataSet
         for (candleEntry in candles) {
-            val entries = candleDataSet.getEntriesForXValue(candleEntry.getX())
+            val entries = candleDataSet.getEntriesForXValue(candleEntry.x)
             if (entries.isEmpty()) {
                 candleDataSet.addEntry(candleEntry)
             } else {
                 val c = entries[0]
-                c.high = candleEntry.getHigh()
-                c.open = candleEntry.getOpen()
-                c.low = candleEntry.getLow()
-                c.close = candleEntry.getClose()
+                c.high = candleEntry.high
+                c.open = candleEntry.open
+                c.low = candleEntry.low
+                c.close = candleEntry.close
             }
         }
         val candleData = CandleData()
         candleData.addDataSet(candleDataSet)
-        candle_chart.setData(candleData)
-        //candleChart.moveViewToX(candleDataSet.getEntryForIndex(candleDataSet.getEntryCount() - 1).getX());
+        candle_chart.data = candleData
         candle_chart.notifyDataSetChanged()
     }
 }
