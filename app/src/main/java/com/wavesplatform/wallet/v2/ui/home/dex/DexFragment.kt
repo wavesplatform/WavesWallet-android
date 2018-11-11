@@ -89,7 +89,6 @@ class DexFragment : BaseFragment(), DexView {
             args.classLoader = WatchMarket::class.java.classLoader
             args.putParcelable(TradeActivity.BUNDLE_MARKET, this@DexFragment.adapter.getItem(position))
 
-
             launchActivity<TradeActivity>(options = args)
         }
 

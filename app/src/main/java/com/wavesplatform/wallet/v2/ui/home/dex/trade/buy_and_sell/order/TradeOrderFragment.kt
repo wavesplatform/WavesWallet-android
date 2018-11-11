@@ -224,11 +224,13 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     }
                     if (presenter.humanTotalTyping) {
                         if (!edit_total_price.text.isNullOrEmpty() && !edit_limit_price.text.isNullOrEmpty()) {
-                            edit_amount.setText(
-                                    (edit_total_price.text.toString().toDouble() / edit_limit_price.text.toString().toDouble())
-                                            .roundToDecimals(presenter.data?.watchMarket?.market?.amountAssetDecimals)
-                                            .toString()
-                                            .stripZeros())
+                            if (edit_limit_price.text.toString().toDouble() != 0.0) {
+                                edit_amount.setText(
+                                        (edit_total_price.text.toString().toDouble() / edit_limit_price.text.toString().toDouble())
+                                                .roundToDecimals(presenter.data?.watchMarket?.market?.amountAssetDecimals)
+                                                .toString()
+                                                .stripZeros())
+                            }
                         }
                     }
                     makeButtonEnableIfValid()
