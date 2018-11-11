@@ -133,7 +133,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     it.isNotEmpty()
                 }
                 .map {
-                    val isValid = it.toBigDecimal() <= MoneyUtil.getScaledText(presenter.currentAmountBalance
+                    val isValid = it.toBigDecimal() < MoneyUtil.getScaledText(presenter.currentAmountBalance
                             ?: 0, presenter.data?.watchMarket?.market?.amountAssetDecimals
                             ?: 0).clearBalance().toBigDecimal()
                     presenter.amountValidation = isValid
