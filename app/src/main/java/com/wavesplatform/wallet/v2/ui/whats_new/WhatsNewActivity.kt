@@ -73,12 +73,12 @@ class WhatsNewActivity : BaseActivity(), WhatsNewView {
     }
 
     private fun populateList(): ArrayList<WhatsNewItem> {
-        return arrayListOf(WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name),WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name),
-                WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name),
-                WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name),
-                WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name),
-                WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name),
-                WhatsNewItem(R.drawable.ic_logo, R.string.app_name, R.string.app_name))
+        return arrayListOf(WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
+                WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
+                WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
+                WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
+                WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
+                WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name))
     }
 
 

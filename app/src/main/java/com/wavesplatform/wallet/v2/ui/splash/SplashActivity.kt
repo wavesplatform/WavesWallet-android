@@ -53,15 +53,16 @@ class SplashActivity : BaseActivity(), SplashView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStatusNavBarColor(Color.WHITE)
-        if (intent.getBooleanExtra(EXIT, false)) {
-            finish()
-        }
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setSystemBarTheme(false)
-        presenter.storeIncomingURI(intent)
-        presenter.resolveNextAction()
+        if (intent.getBooleanExtra(EXIT, false)) {
+            finish()
+        } else {
+            presenter.storeIncomingURI(intent)
+            presenter.resolveNextAction()
+        }
     }
 
     companion object {

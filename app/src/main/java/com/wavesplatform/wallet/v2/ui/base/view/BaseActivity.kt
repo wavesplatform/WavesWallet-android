@@ -106,7 +106,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     protected fun checkInternet() {
         if (!isNetworkConnection()) {
-            val dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+            val dialog = Dialog(this, R.style.AppThemeV2_NoActionBar_Translucent_DarkStatusBar)
             dialog.setContentView(R.layout.dialog_no_internet)
             dialog.setCancelable(false)
             dialog.findViewById<Button>(R.id.button_retry).click {
