@@ -16,7 +16,7 @@
         android:paddingEnd="48dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
-        app:srcCompat="@drawable/ic_logo" />
+        app:srcCompat="@drawable/text_logo" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text_description"

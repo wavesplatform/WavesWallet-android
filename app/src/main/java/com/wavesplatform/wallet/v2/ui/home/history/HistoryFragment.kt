@@ -2,6 +2,8 @@ package com.wavesplatform.wallet.v2.ui.home.history
 
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -72,16 +74,21 @@ class HistoryFragment : BaseFragment(), HistoryView {
 
         stl_history.setViewPager(viewpager_history)
         stl_history.currentTab = 0
-        appbar_layout.addOnOffsetChangedListener (
+        appbar_layout.addOnOffsetChangedListener(
                 AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
-            onElevationAppBarChangeListener.notNull {
-                onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
-                viewpager_history.setPagingEnabled(verticalOffset == 0)
-            }
-        })
+                    onElevationAppBarChangeListener.notNull {
+                        onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
+                        viewpager_history.setPagingEnabled(verticalOffset == 0)
+                    }
+                })
     }
 
     fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
         this.onElevationAppBarChangeListener = listener
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        super.onCreateOptionsMenu(menu, inflater)
     }
 }

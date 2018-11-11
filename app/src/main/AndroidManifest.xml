@@ -39,7 +39,6 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
@@ -204,7 +203,7 @@
         <activity
             android:name=".v2.ui.auth.qr_scanner.QrCodeScannerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.Fullscreen" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.auth.import_account.protect_account.ProtectAccountActivity"
             android:screenOrientation="portrait"
@@ -230,7 +229,7 @@
         <activity
             android:name=".v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity"
             android:screenOrientation="portrait"
@@ -257,7 +256,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
-            android:name=".v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSucessActivity"
+            android:name=".v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity

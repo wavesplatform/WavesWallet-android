@@ -22,7 +22,7 @@ android {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 403
+        versionCode 405
         versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -46,7 +46,7 @@ android {
             zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            multiDexEnabled false
+            multiDexEnabled true
             buildConfigField "boolean", "DOGFOOD", "false"
         }
         debug {
@@ -78,15 +78,16 @@ android {
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
             buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/"'
             buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
+            buildConfigField 'String', 'DATA_FEED_URL', '"https://marketdata.wavesplatform.com/api/"'
         }
         dev {
-            applicationIdSuffix ".dev"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
             buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/"'
             buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
+            buildConfigField 'String', 'DATA_FEED_URL', '"https://marketdata.wavesplatform.com/api/"'
         }
         devTest {
             applicationIdSuffix ".test"
@@ -96,6 +97,7 @@ android {
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
             buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/"'
             buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
+            buildConfigField 'String', 'DATA_FEED_URL', '"https://marketdata.wavesplatform.com/api/"'
         }
     }
     compileOptions {
@@ -103,6 +105,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     lintOptions {
+        ignoreWarnings true
         checkReleaseBuilds true
         abortOnError false
         fatal 'StopShip'

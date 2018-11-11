@@ -1,14 +1,15 @@
 package com.wavesplatform.wallet.v2.ui.base.view
 
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
@@ -16,8 +17,10 @@ import android.support.v7.app.ActionBar
 import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
+import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.WindowManager
+import android.widget.Button
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.App
@@ -28,18 +31,16 @@ import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
-import com.wavesplatform.wallet.v2.util.RxEventBus
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.showSnackbar
+import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
+import com.wavesplatform.wallet.v2.util.*
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
 import org.fingerlinks.mobile.android.navigator.Navigator
+import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import timber.log.Timber
 import javax.inject.Inject
@@ -94,6 +95,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         super.onCreate(savedInstanceState)
         if (!translucentStatusBar) {
             setStatusBarColor(R.color.white)
+            setNavigationBarColor(R.color.white)
         }
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(configLayoutRes())
@@ -101,8 +103,43 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         onViewReady(savedInstanceState)
     }
 
+    protected fun checkInternet() {
+        if (!isNetworkConnection()) {
+            val dialog = Dialog(this, R.style.AppThemeV2_NoActionBar_Translucent_DarkStatusBar)
+            dialog.setContentView(R.layout.dialog_no_internet)
+            dialog.setCancelable(false)
+            dialog.findViewById<Button>(R.id.button_retry).click {
+                if (isNetworkConnection()) {
+                    launchActivity<SplashActivity>(clear = true)
+                } else {
+                    showMessage(getString(R.string.no_internet_title), dialog.findViewById<Button>(R.id.root))
+                }
+            }
+            dialog.setOnKeyListener(DialogInterface.OnKeyListener { _, keyCode, _ ->
+                if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+                    launchActivity<SplashActivity>(clear = true) {
+                        putExtra(SplashActivity.EXIT, true)
+                    }
+                    return@OnKeyListener true
+                }
+                false
+            })
+            dialog.show()
+        }
+    }
+
     public override fun onResume() {
         super.onResume()
+
+        if (this is SplashActivity) {
+            return
+        }
+
+        if (!isNetworkConnection()) {
+            checkInternet()
+            return
+        }
+
         askPassCodeIfNeed()
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -188,12 +225,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         showSnackbar(R.string.check_connectivity_exit)
     }
 
-    fun showNetworkErrorWithRetry(retrySubject: PublishSubject<Events.RetryEvent>) {
-        Snackbar.make(findViewById(android.R.id.content), getString(R.string.check_connectivity_exit), Snackbar.LENGTH_INDEFINITE)
-//                .setAction(getString(R.string.error_network_retry_text), { retrySubject.onNext(Events.RetryEvent()) })
-                .show()
-    }
-
     override fun showProgressBar(isShowProgress: Boolean) {
         pyxis.uzuki.live.richutilskt.utils.runOnUiThread {
             if (isShowProgress) {
@@ -231,15 +262,21 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     protected fun setStatusBarColor(@ColorRes intColorRes: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             window.statusBarColor = ContextCompat.getColor(this, intColorRes)
+        } else {
+            window.statusBarColor = ContextCompat.getColor(this, R.color.black)
         }
     }
 
     protected fun setNavigationBarColor(@ColorRes intColorRes: Int) {
-        window.navigationBarColor = ContextCompat.getColor(this, intColorRes)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            window.navigationBarColor = ContextCompat.getColor(this, intColorRes)
+        } else {
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
+        }
     }
 
     protected fun restartApp() {

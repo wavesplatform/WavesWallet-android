@@ -67,7 +67,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.type = intent!!.extras!!.getSerializable(KEY_INTENT_TYPE) as SendPresenter.Type
 
         text_sum.text = "- ${presenter.amount}"
-        text_tag.text = presenter.getTicker()
+        text_tag.text = presenter.selectedAsset!!.getName()
         text_sent_to_address.text = presenter.recipient
         presenter.getAddressName(presenter.recipient!!)
         text_fee_value.text = "${Constants.WAVES_FEE / 100_000_000F} ${Constants.CUSTOM_FEE_ASSET_NAME}"

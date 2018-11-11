@@ -558,7 +558,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="8dp"
-                        android:text="@string/start_leasing_0_100"
+                        android:text="@string/send_five_percents"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 
@@ -574,7 +574,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="8dp"
-                        android:text="@string/start_leasing_0_100000"
+                        android:text="@string/send_ten_percents"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 
@@ -590,7 +590,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="8dp"
-                        android:text="@string/start_leasing_0_500000"
+                        android:text="@string/send_fifty_percents"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 

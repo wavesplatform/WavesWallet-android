@@ -22,7 +22,6 @@ import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
 import io.github.anderscheow.validator.rules.common.MaxRule
-import io.github.anderscheow.validator.rules.common.MinRule
 import kotlinx.android.synthetic.main.activity_protect_account.*
 import org.apache.commons.io.Charsets
 import pers.victor.ext.addTextChangedListener
@@ -164,6 +163,9 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
                 edit_account_name.text.toString().trim())
         options.putString(NewAccountActivity.KEY_INTENT_PASSWORD,
                 edit_confirm_password.text.toString().trim())
+        if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT)) {
+            options.putBoolean(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT, true)
+        }
         return options
     }
 

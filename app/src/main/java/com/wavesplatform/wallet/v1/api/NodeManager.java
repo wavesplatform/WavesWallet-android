@@ -17,7 +17,6 @@ import com.wavesplatform.wallet.v1.request.IssueTransactionRequest;
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest;
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
-import com.wavesplatform.wallet.v2.data.model.remote.request.BurnRequest;
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -173,23 +172,12 @@ public class NodeManager {
         return service.transactionsBroadcast(tx);
     }
 
-    public Observable<BurnRequest> transactionsBroadcast(BurnRequest tx) {
-        return service.transactionsBroadcast(tx);
-    }
-
     public Observable<IssueTransactionRequest> broadcastIssue(IssueTransactionRequest tx) {
         return service.broadcastIssue(tx);
     }
 
     public Observable<ReissueTransactionRequest> broadcastReissue(ReissueTransactionRequest tx) {
         return service.broadcastReissue(tx);
-    }
-
-    public void updateBalance(TransferTransactionRequest tx) {
-        for (AssetBalance ab : assetBalances.balances) {
-            if (ab.isAssetId(tx.assetId)) ab.balance -= tx.amount;
-            if (ab.assetId == null) ab.balance -= tx.fee;
-        }
     }
 
     public AssetBalance getAssetBalance(String assetId) {

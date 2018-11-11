@@ -9,7 +9,9 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SpamDataManager @Inject constructor() : BaseDataManager() {
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {

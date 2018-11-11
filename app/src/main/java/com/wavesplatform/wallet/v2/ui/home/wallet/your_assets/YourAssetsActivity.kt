@@ -98,8 +98,6 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as AssetBalance
-            this.adapter.currentAssetId = item.assetId
-            this.adapter.notifyDataSetChanged()
 
             adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, _ ->
                 // disable click for next items, which user click before activity will finish

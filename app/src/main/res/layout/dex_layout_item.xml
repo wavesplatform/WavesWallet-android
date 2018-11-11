@@ -8,7 +8,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="6dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="2dp"
@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                app:srcCompat="@drawable/ic_chartarrow_success_400" />
+                app:srcCompat="@drawable/ic_chartarrow_accent_100" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,17 +63,19 @@
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="4dp"
+                        android:visibility="gone"
                         android:layout_toRightOf="@+id/text_asset_name"
                         app:srcCompat="@drawable/ic_verified_multy" />
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
                         app:fontFamily="@font/roboto_bold"
-                        android:text="0.000769330"
+                        android:text="0.0"
                         android:textColor="@color/disabled500"
                         android:textSize="12sp" />
                 </RelativeLayout>
@@ -85,23 +87,24 @@
                     android:orientation="horizontal">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_asset_value"
+                        android:id="@+id/text_percent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/roboto"
-                        android:text="+ 24.14%"
+                        android:text="0%"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
 
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_price_asset"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/roboto"
-                        android:text="Price WAVES"
+                        android:text="@string/dex_last_price_value"
                         android:textColor="@color/disabled500"
                         android:textSize="12sp" />
 

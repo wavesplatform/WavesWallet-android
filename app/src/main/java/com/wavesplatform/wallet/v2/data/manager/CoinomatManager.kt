@@ -7,7 +7,9 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.Limit
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
 import io.reactivex.Observable
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class CoinomatManager @Inject constructor() : BaseDataManager() {
 
     fun loadRate(crypto: String?, address: String?, fiat: String?, amount: String?): Observable<String> {

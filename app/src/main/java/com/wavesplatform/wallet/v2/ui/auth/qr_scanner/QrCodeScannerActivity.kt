@@ -30,6 +30,15 @@ class QrCodeScannerActivity : BaseActivity(), QrCodeScannerView,
 
     override fun configLayoutRes() = R.layout.activity_qr_code_scanner
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        window.decorView.apply {
+            systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+        setStatusBarColor(R.color.black)
+        setNavigationBarColor(R.color.black)
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         zxing_barcode_scanner.setTorchListener(this)

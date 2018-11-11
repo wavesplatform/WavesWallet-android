@@ -1,46 +1,117 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@android:color/transparent">
 
 
     <android.support.v7.widget.CardView
+        android:id="@+id/card_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="-2dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="18dp"
         app:cardBackgroundColor="@color/white"
-        android:layout_marginLeft="8dp"
-        android:id="@+id/card_content"
-        android:layout_marginRight="8dp"
-        android:layout_width="match_parent"
         app:cardCornerRadius="2dp"
-        app:cardElevation="3dp"
-        android:layout_marginBottom="-2dp"
-        android:layout_height="match_parent">
+        app:cardElevation="3dp">
+
 
         <RelativeLayout
             android:id="@+id/relative_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_my_orders"
-                android:overScrollMode="never"
-                android:clipToPadding="false"
+            <LinearLayout
+                android:id="@+id/linear_fields_name"
                 android:layout_width="match_parent"
-                android:layout_above="@id/button_confirm"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:background="@color/basic50"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="@string/my_orders_date_time"
+                    android:textColor="@color/basic500"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:gravity="start"
+                    android:text="@string/my_orders_side_price"
+                    android:textColor="@color/basic500"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:gravity="start"
+                    android:text="@string/my_orders_amount_sum"
+                    android:textColor="@color/basic500"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/my_orders_status"
+                    android:textColor="@color/basic500"
+                    android:textSize="11sp" />
+
+                <LinearLayout
+                    android:id="@+id/relative_cancel_block"
+                    android:layout_width="33dp"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/view_top_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/linear_fields_name"
+                android:background="@color/accent50" />
+
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/view_top_divider"
+                android:background="@color/white">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycle_my_orders"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never" />
+            </android.support.v4.widget.SwipeRefreshLayout>
 
         </RelativeLayout>
 
 
-        <include
-            android:visibility="gone"
-            android:id="@+id/layout_empty"
-            layout="@layout/layout_empty_data"/>
-
     </android.support.v7.widget.CardView>
-
 
 
 </RelativeLayout>

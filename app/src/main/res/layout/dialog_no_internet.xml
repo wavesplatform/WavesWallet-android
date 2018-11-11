@@ -1,0 +1,58 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/root"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="24dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="24dp"
+            app:srcCompat="@drawable/ic_userimg_disconnect_80_multy" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_import_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="@string/no_internet_title"
+            android:textColor="@color/basic500"
+            android:textSize="20sp" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_import_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="@string/no_internet_subtitle"
+            android:textColor="@color/basic500"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/button_retry"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_waves_secondary_button"
+            android:fontFamily="sans-serif"
+            android:text="@string/no_internet_retry"
+            android:textAllCaps="false"
+            android:textColor="@color/basic500"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+</FrameLayout>

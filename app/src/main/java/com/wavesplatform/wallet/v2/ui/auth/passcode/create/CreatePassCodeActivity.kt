@@ -83,8 +83,8 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     override fun onSuccessCreatePassCode(guid: String, passCode: String) {
         showProgressBar(false)
-        App.getAccessManager().setUseFingerPrint(false)
-        if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)
+        if ((intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)
+                        || intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT))
                 && FingerprintAuthDialogFragment.isAvailable(this)) {
             launchActivity<UseFingerprintActivity>(intent.extras) {
                 putExtra(CreatePassCodeActivity.KEY_INTENT_GUID, guid)

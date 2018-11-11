@@ -7,7 +7,6 @@ import com.wavesplatform.wallet.v1.payload.WavesBalance;
 import com.wavesplatform.wallet.v1.request.IssueTransactionRequest;
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest;
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest;
-import com.wavesplatform.wallet.v2.data.model.remote.request.BurnRequest;
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest;
 
 import java.util.List;
@@ -36,9 +35,6 @@ public interface NodeApi {
 
     @POST("/transactions/broadcast")
     Observable<TransactionsBroadcastRequest> transactionsBroadcast(@Body TransactionsBroadcastRequest tx);
-
-    @POST("/transactions/broadcast")
-    Observable<BurnRequest> transactionsBroadcast(@Body BurnRequest tx);
 
     @POST("/assets/broadcast/issue")
     Observable<IssueTransactionRequest> broadcastIssue(@Body IssueTransactionRequest tx);

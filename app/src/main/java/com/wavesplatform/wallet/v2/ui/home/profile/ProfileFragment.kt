@@ -189,10 +189,12 @@ class ProfileFragment : BaseFragment(), ProfileView {
         if (FingerprintAuthDialogFragment.isAvailable(context!!)) {
             fingerprint_switch.setOnCheckedChangeListener(null)
             fingerprint_switch.isChecked = App.getAccessManager().isUseFingerPrint()
-            fingerprint_switch.setOnCheckedChangeListener { _, _ ->
+            fingerprint_switch.setOnCheckedChangeListener { _, enable ->
                 launchActivity<EnterPassCodeActivity>(
                         requestCode = REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT) {
-                    putExtra(EnterPassCodeActivity.KEY_INTENT_PROCESS_SET_FINGERPRINT, true)
+                    if (enable) {
+                        putExtra(EnterPassCodeActivity.KEY_INTENT_PROCESS_SET_FINGERPRINT, true)
+                    }
                 }
             }
         } else {
@@ -217,6 +219,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         inflater.inflate(R.menu.menu_profile, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }

@@ -6,13 +6,11 @@ import android.os.Bundle
 import android.support.v7.widget.AppCompatTextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import android.support.v4.content.ContextCompat
-import android.util.Log
-import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
@@ -28,7 +26,10 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_start_leasing.*
-import pers.victor.ext.*
+import pers.victor.ext.children
+import pers.victor.ext.click
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -43,7 +44,8 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
     companion object {
         var REQUEST_CHOOSE_ADDRESS = 57
-        var REQUEST_LEASEING_CONFIRMATION = 59
+        var REQUEST_LEASING_CONFIRMATION = 59
+        var REQUEST_CANCEL_LEASING_CONFIRMATION = 60
         var REQUEST_SCAN_QR_CODE = 52
         var BUNDLE_WAVES = "waves"
         var TOTAL_BALANCE = "100"
@@ -53,7 +55,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
+        setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.start_leasing_toolbar), R.drawable.ic_toolbar_back_black)
 
 
@@ -74,7 +76,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         }
 
         button_continue.click {
-            launchActivity<ConfirmationLeasingActivity>(REQUEST_LEASEING_CONFIRMATION) {
+            launchActivity<ConfirmationLeasingActivity>(REQUEST_LEASING_CONFIRMATION) {
                 putExtra(ConfirmationLeasingActivity.BUNDLE_ADDRESS, edit_address.text.toString())
                 putExtra(ConfirmationLeasingActivity.BUNDLE_AMOUNT, edit_amount.text.toString())
                 putExtra(ConfirmationLeasingActivity.BUNDLE_RECIPIENT_IS_ALIAS, presenter.recipientIsAlias)
@@ -219,7 +221,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             REQUEST_SCAN_QR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                    val address = result.contents
+                    val address = result.contents.replace(AddressUtil.WAVES_PREFIX, "")
                     if (!address.isEmpty()) {
                         edit_address.setText(address)
                     } else {
@@ -236,7 +238,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     }
                 }
             }
-            REQUEST_LEASEING_CONFIRMATION -> {
+            REQUEST_LEASING_CONFIRMATION -> {
                 if (resultCode == Activity.RESULT_OK) {
                     finish()
                 }

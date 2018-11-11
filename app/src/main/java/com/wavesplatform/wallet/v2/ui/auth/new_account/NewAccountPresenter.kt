@@ -22,7 +22,7 @@ class NewAccountPresenter @Inject constructor() : BasePresenter<NewAccountView>(
     private val identicon = Identicon()
 
     fun isAllFieldsValid(): Boolean {
-        return accountNameFieldValid && createPasswordFieldValid && confirmPasswordFieldValid && avatarValid
+        return accountNameFieldValid && createPasswordFieldValid && confirmPasswordFieldValid
     }
 
     @SuppressLint("CheckResult")

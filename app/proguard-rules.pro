@@ -291,6 +291,9 @@
 -keep class com.wavesplatform.wallet.v2.data.remote.SpamService { *; }
 -keep class com.wavesplatform.wallet.v2.data.remote.NodeService { *; }
 -keep class com.wavesplatform.wallet.v2.data.remote.ApiService { *; }
+-keep class com.wavesplatform.wallet.v2.data.remote.MatcherService { *; }
+-keep class com.wavesplatform.wallet.v2.data.remote.CoinomatService { *; }
+-keep class com.wavesplatform.wallet.v2.data.remote.DataFeedService { *; }
 
 -keep class com.wavesplatform.wallet.v2.data.model.** { *; }
 -keepclassmembernames interface * {
@@ -360,3 +363,7 @@
 -dontwarn java.lang.ClassValue
 -dontwarn com.google.j2objc.annotations.Weak
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
+-dontwarn com.samsung.android.sdk.**
+-dontwarn afu.org.checkerframework.checker.**
+-dontnote com.samsung.android.sdk.**

@@ -18,7 +18,6 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.Rec
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_invoice.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -63,16 +62,11 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         }
 
         button_continue.click {
-            val amount = edit_amount.text.toString()
-            if (!TextUtils.isEmpty(amount) && amount.toDouble() > 0) {
-                launchActivity<ReceiveAddressViewActivity> {
-                    putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
-                    putExtra(YourAssetsActivity.BUNDLE_ADDRESS, App.getAccessManager().getWallet()?.address ?: "")
-                    putExtra(INVOICE_SCREEN, true)
-                    putExtra(ReceiveAddressViewActivity.KEY_INTENT_QR_DATA, createLink())
-                }
-            } else {
-                showError(getString(R.string.receive_error_amount), R.id.content)
+            launchActivity<ReceiveAddressViewActivity> {
+                putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
+                putExtra(YourAssetsActivity.BUNDLE_ADDRESS, App.getAccessManager().getWallet()?.address ?: "")
+                putExtra(INVOICE_SCREEN, true)
+                putExtra(ReceiveAddressViewActivity.KEY_INTENT_QR_DATA, createLink())
             }
         }
     }
@@ -122,9 +116,14 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
     }
 
     private fun createLink(): String {
+        val amount = if (TextUtils.isEmpty(edit_amount.text)) {
+            "0"
+        } else {
+            edit_amount.text.toString()
+        }
         return "https//client.wavesplatform.com/#send/${presenter.assetBalance!!.assetId}?" +
                 "recipient=${presenter.address}&" +
-                "amount=${edit_amount.text}"
+                "amount=$amount"
     }
 
     private fun assetChangeEnable(enable: Boolean) {

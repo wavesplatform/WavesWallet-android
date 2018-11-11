@@ -5,7 +5,7 @@
     android:id="@+id/card_market"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
+    android:layout_marginBottom="6dp"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:layout_marginTop="2dp"
@@ -47,22 +47,6 @@
             android:textSize="14sp"
             app:fontFamily="@font/roboto_bold"
             android:text="WAVES / BTC" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/text_my_asset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="4dp"
-            android:layout_toEndOf="@+id/text_asset_name"
-            android:layout_toStartOf="@id/image_drag"
-            android:text="@string/wallet_assets_my_asset"
-            android:textColor="@color/info500"
-            android:textSize="12sp"
-            android:visibility="gone" />
-
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_drag"

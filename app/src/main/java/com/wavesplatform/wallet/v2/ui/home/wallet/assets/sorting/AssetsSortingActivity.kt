@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.NestedScrollView
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -24,7 +23,6 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companio
 import kotlinx.android.synthetic.main.activity_assets_sorting.*
 import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.*
-import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 
@@ -49,7 +47,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.basic50)
+        setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
 
         nested_scroll_view.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->

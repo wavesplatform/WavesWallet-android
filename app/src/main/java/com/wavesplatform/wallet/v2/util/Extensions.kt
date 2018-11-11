@@ -25,6 +25,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.text.*
+import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
@@ -47,12 +48,12 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.crypto.Base58
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import pers.victor.ext.activityManager
-import pers.victor.ext.app
-import pers.victor.ext.clipboardManager
-import pers.victor.ext.findColor
+import pers.victor.ext.*
+import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
@@ -78,6 +79,26 @@ fun Context.isMyServiceRunning(serviceClass: Class<*>): Boolean {
     return false
 }
 
+fun Long.currentDateAsTimeSpanString(): String {
+    val currentTime = this
+
+    if (currentTime == 0L) {
+        return app.getString(R.string.dex_last_update_value, app.getString(R.string.dex_last_update_not_known))
+    }
+
+    // get current date as string
+    val timeDayRelative = DateUtils.getRelativeTimeSpanString(currentTime, currentTime, DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_ABBREV_RELATIVE)
+
+    // get hour in 24 hour time
+    val timeHour = currentTime.asDateString("HH:mm")
+
+    return app.getString(R.string.dex_last_update_value, "$timeDayRelative, $timeHour")
+}
+
+fun String.isWaves(): Boolean {
+    return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
+}
+
 fun getActionBarHeight(): Int {
     val tv = TypedValue()
     return if (app.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
@@ -99,6 +120,15 @@ fun Context.notAvailable() {
 
 fun ByteArray.arrayWithSize(): ByteArray {
     return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
+}
+
+fun String.arrayOption(): ByteArray {
+    return if (this.isEmpty()) byteArrayOf(0)
+    else Bytes.concat(byteArrayOf(1), Base58.decode(this))
+}
+
+fun String.clearBalance(): String {
+    return this.stripZeros().replace(",", "")
 }
 
 fun getDeviceName(): String {
@@ -196,6 +226,18 @@ fun Context.getToolBarHeight(): Int {
     val mActionBarSize = styledAttributes.getDimension(0, 0f).toInt()
     styledAttributes.recycle()
     return mActionBarSize
+}
+
+fun Number.roundTo(numFractionDigits: Int?)
+        = String.format("%.${numFractionDigits}f", toDouble()).toDouble()
+
+fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
+    return if (numDecimalPlaces != null){
+        val factor = Math.pow(10.0, numDecimalPlaces.toDouble())
+        Math.round(this * factor) / factor
+    }else{
+        this
+    }
 }
 
 fun ClosedRange<Int>.random() =
@@ -297,6 +339,11 @@ fun Activity.showMessage(msg: String, @IdRes viewId: Int, @ColorRes color: Int? 
             .show()
 }
 
+fun showMessage(msg: String, view: View, @ColorRes color: Int? = null) {
+    Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
+            .withColor(color)
+            .show()
+}
 
 fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_18_black) {
     clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), text)

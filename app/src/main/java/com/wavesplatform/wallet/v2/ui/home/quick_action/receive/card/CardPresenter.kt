@@ -37,7 +37,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
     }
 
     fun isValid(): Boolean {
-        return !TextUtils.isEmpty(amount) && amount.toFloat() > min && amount.toFloat() < max
+        return !TextUtils.isEmpty(amount) && amount.toFloat() >= min && amount.toFloat() <= max
     }
 
     fun loadWaves() {

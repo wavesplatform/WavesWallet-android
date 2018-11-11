@@ -149,6 +149,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         inflater.inflate(R.menu.menu_leasing, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }

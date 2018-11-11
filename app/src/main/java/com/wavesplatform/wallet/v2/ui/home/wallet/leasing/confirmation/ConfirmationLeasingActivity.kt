@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -31,9 +32,13 @@ class ConfirmationLeasingActivity : BaseActivity(), ConfirmationLeasingView {
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
         super.onCreate(savedInstanceState)
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     companion object {
+        var BUNDLE_CANCEL_CONFIRMATION_LEASING = "cancel_confirmation_leasing"
+        var BUNDLE_CANCEL_CONFIRMATION_LEASING_TX = "cancel_confirmation_leasing_tx"
         var BUNDLE_ADDRESS = "address"
         var BUNDLE_AMOUNT = "amount"
         var BUNDLE_RECIPIENT_IS_ALIAS = "recipient_is_alias"
@@ -51,7 +56,15 @@ class ConfirmationLeasingActivity : BaseActivity(), ConfirmationLeasingView {
         text_free_value.text = "${MoneyUtil.getScaledText(Constants.WAVES_FEE, 8).stripZeros()} ${Constants.wavesAssetInfo.name}"
         text_node_address.text = presenter.address
 
-        text_leasing_result_value.text = getString(R.string.confirm_leasing_result_value, presenter.amount, Constants.wavesAssetInfo.name)
+
+        presenter.startLeasing = !intent.hasExtra(
+                ConfirmationLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING)
+
+        if (presenter.startLeasing) {
+            text_leasing_result_value.text = getString(R.string.confirm_leasing_result_value, presenter.amount, Constants.wavesAssetInfo.name)
+        } else {
+            text_leasing_result_value.text = getString(R.string.confirm_cancel_leasing_result_value)
+        }
 
         button_confirm.click {
             supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -65,7 +78,13 @@ class ConfirmationLeasingActivity : BaseActivity(), ConfirmationLeasingView {
             rotation.fillAfter = true
             image_loader.startAnimation(rotation)
 
-            presenter.startLeasing()
+            if (presenter.startLeasing) {
+                presenter.startLeasing()
+            } else {
+                val transactionId = intent.getStringExtra(
+                        ConfirmationLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING_TX)
+                presenter.cancelLeasing(transactionId)
+            }
         }
 
         button_okay.click {
@@ -81,6 +100,18 @@ class ConfirmationLeasingActivity : BaseActivity(), ConfirmationLeasingView {
     }
 
     override fun failedStartLeasing() {
+        image_loader.clearAnimation()
+        card_progress.gone()
+        card_leasing_preview_info.visiable()
+    }
+
+    override fun successCancelLeasing() {
+        image_loader.clearAnimation()
+        card_progress.gone()
+        card_success.visiable()
+    }
+
+    override fun failedCancelLeasing() {
         image_loader.clearAnimation()
         card_progress.gone()
         card_leasing_preview_info.visiable()
