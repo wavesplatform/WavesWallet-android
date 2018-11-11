@@ -861,6 +861,9 @@
 
     <!-- DEX -->
     <string name="dex_toolbar_title">DEX</string>
+    <string name="dex_last_update_value">Last update: %s</string>
+    <string name="dex_last_price_value">Price %s</string>
+    <string name="dex_last_update_not_known">not known</string>
     <string name="dex_empty_title">Decentralised Exchange</string>
     <string name="dex_empty_subtitle">Trade quickly and securely. You retain complete control over your funds when trading them on our decentralised exchange.</string>
     <string name="dex_empty_button_text">Add Markets</string>
@@ -876,9 +879,11 @@
 
     <!-- DEX Sorting -->
     <string name="dex_sorting_toolbar_title">Sorting</string>
+    <string name="dex_sorting_empty">Nothing here…</string>
 
     <!-- Markets -->
     <string name="dex_market_toolbar_title">Markets</string>
+    <string name="dex_market_empty">Nothing here…</string>
 
     <!-- Asset Details -->
     <string name="asset_details_favorite_action">Mark as favorite</string>
@@ -1293,11 +1298,15 @@
     <string name="dex_trade_sell">SELL</string>
 
     <!--My orders-->
-    <string name="my_orders_time">Time</string>
-    <string name="my_orders_status">Status</string>
-    <string name="my_orders_price">Price</string>
-    <string name="my_orders_amount">Amount</string>
     <string name="my_orders_empty">Nothing Here…\nYou do not have any orders</string>
+    <string name="my_orders_date_time">Date</string>
+    <string name="my_orders_side_price">Side/Price</string>
+    <string name="my_orders_amount_sum">Amount/Sum</string>
+    <string name="my_orders_status">Status</string>
+    <string name="my_orders_status_open">Open</string>
+    <string name="my_orders_status_partial_filled">Partial</string>
+    <string name="my_orders_status_filled">Filled</string>
+    <string name="my_orders_status_canceled">Cancelled</string>
 
     <!--Last trades-->
     <string name="last_trades_time">Time</string>
@@ -1323,49 +1332,64 @@
     <string name="token_burn_confirmationt_reissuable">Reissuable</string>
     <string name="token_burn_confirmationt_not_reissuable">Not Reissuable</string>
 
-    <!--Orderbook-->
+    <!--Chart-->
     <string name="chart_empty">No chart data available</string>
+    <string name="chart_change_interval_dialog_title">Change Interval</string>
+    <string name="chart_change_interval_dialog_cancel">CANCEL</string>
+    <string name="chart_change_interval_dialog_ok">OK</string>
+    <string name="chart_time_frame_5_min">5 minutes</string>
+    <string name="chart_time_frame_15_min">15 minutes</string>
+    <string name="chart_time_frame_30_min">30 minutes</string>
+    <string name="chart_time_frame_1_hour">1 hour</string>
+    <string name="chart_time_frame_4_hours">4 hours</string>
+    <string name="chart_time_frame_24_hours">24 hours</string>
+    <string name="chart_loading">Loading chart…</string>
+
 
 
     <!--Orderbook-->
     <string name="orderbook_last_price">LAST PRICE</string>
-    <string name="orderbook_amount_title">Amount WAVES</string>
-    <string name="orderbook_price_title">Price BTC</string>
-    <string name="orderbook_sum_title">Sum BTC</string>
+    <string name="orderbook_amount_title">Amount %s</string>
+    <string name="orderbook_price_title">Price %s</string>
+    <string name="orderbook_sum_title">Sum %s</string>
     <string name="orderbook_empty">Nothing Here…\nThe order book is empty</string>
+    <string name="orderbook_spread_percent">SPREAD %s%%</string>
+    <string name="orderbook_loading">Loading orderbook…</string>
+
 
     <!--Buy And Sell Dialog-->
     <string name="buy_and_sell_dialog_buy_tab">Buy</string>
     <string name="buy_and_sell_dialog_sell_tab">Sell</string>
-    <string name="buy_and_sell_amount_in">Amount in WAVES</string>
-    <string name="buy_and_sell_not_enough">Not enough WAVES</string>
-    <string name="buy_and_sell_user_total_balance">User total balance</string>
+    <string name="buy_and_sell_amount_in">Amount in %1$s</string>
+    <string name="buy_and_sell_not_enough">Not enough %1$s</string>
+    <string name="buy_and_sell_required">This field is required</string>
+    <string name="buy_and_sell_user_total_balance">Use total balance</string>
     <string name="buy_and_sell_50">50%</string>
     <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_5">5%</string>
-    <string name="buy_and_sell_limit_price_in">Limit Price in BTC</string>
+    <string name="buy_and_sell_limit_price_in">Limit Price in %1$s</string>
     <string name="buy_and_sell_bid">Bid</string>
     <string name="buy_and_sell_ask">Ask</string>
     <string name="buy_and_sell_last">Last</string>
-    <string name="buy_and_sell_total_in">Total in BTC</string>
+    <string name="buy_and_sell_total_in">Total in %1$s</string>
     <string name="buy_and_sell_fee">Fee</string>
-    <string name="buy_and_sell_0_001_waves">0.001 Waves</string>
+    <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
     <string name="buy_and_sell_expiration">Expiration</string>
     <string name="buy_and_sell_5_min">5 min</string>
     <string name="buy_and_sell_30_min">30 min</string>
     <string name="buy_and_sell_1_hour">1 hour</string>
     <string name="buy_and_sell_1_day">1 day</string>
     <string name="buy_and_sell_1_week">1 week</string>
-    <string name="buy_and_sell_30_days">30 days</string>
+    <string name="buy_and_sell_29_days">29 days</string>
     <string name="buy_and_sell_expiration_dialog_positive_btn">OK</string>
     <string name="buy_and_sell_expiration_dialog_negative_btn">CANCEL</string>
     <string name="buy_and_sell_expiration_dialog_title">Choose expiration</string>
 
     <!--Buy-->
-    <string name="buy_btn_txt">Buy WAVES</string>
+    <string name="buy_btn_txt">Buy %s</string>
 
     <!--Sell-->
-    <string name="sell_btn_txt">Sell WAVES</string>
+    <string name="sell_btn_txt">Sell %s</string>
 
     <!--Buy and Sell Success-->
     <string name="buy_and_sell_success_the_order_is_created">The order is created</string>
@@ -1387,5 +1411,7 @@
     <string name="your_asset_activity_greater_zero">Non empty</string>
     <string name="coinomat_success_title">You have been redirected to «Indacoin»</string>
     <string name="coinomat_success_subtitle">After payment has been made your balance will be updated</string>
+    <string name="my_orders_type_buy">Buy</string>
+    <string name="my_orders_type_sell">Sell</string>
 
 </resources>

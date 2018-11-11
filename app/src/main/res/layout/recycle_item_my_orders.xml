@@ -1,148 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_order_container"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="10dp"
     android:paddingEnd="8dp"
     android:paddingStart="8dp"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp"
-    android:layout_height="wrap_content">
+    android:paddingTop="10dp">
 
     <LinearLayout
-        android:id="@+id/linear_fields"
-        android:layout_toStartOf="@+id/view_divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
             android:orientation="vertical"
+            android:layout_width="0dp"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:textSize="11sp"
-                android:textColor="@color/basic500"
-                android:text="@string/my_orders_time"
-                android:layout_gravity="end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_time_value"
-                android:layout_marginTop="4dp"
-                android:textSize="11sp"
+            <TextView
+                android:id="@+id/text_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="26.09.16"
                 android:textColor="@color/black"
-                android:text="00:00:00"
-                android:layout_gravity="end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textSize="11sp" />
 
+            <TextView
+                android:id="@+id/text_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="11:09:44"
+                android:textColor="@color/black"
+                android:textSize="11sp" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_marginStart="12dp"
             android:orientation="vertical"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:textSize="11sp"
-                android:textColor="@color/basic500"
-                android:text="@string/my_orders_status"
-                android:layout_gravity="end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_status_value"
-                android:layout_marginTop="4dp"
-                android:textSize="11sp"
+            <TextView
+                android:id="@+id/text_side"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="Buy"
                 android:textColor="@color/submit400"
-                android:text="100%"
-                android:layout_gravity="end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textSize="11sp" />
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:textSize="11sp"
-                android:textColor="@color/basic500"
-                android:text="@string/my_orders_price"
-                android:layout_gravity="end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_price_value"
-                android:layout_marginTop="4dp"
-                android:textSize="11sp"
-                android:textColor="@color/black"
-                android:text="0000.00000000"
-                android:layout_gravity="end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
+            <TextView
+                android:id="@+id/text_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="0.00193456"
+                android:textColor="@color/submit400"
+                android:textSize="11sp" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_width="0dp"
             android:orientation="vertical"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:textSize="11sp"
-                android:textColor="@color/basic500"
-                android:text="@string/my_orders_amount"
-                android:layout_gravity="end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_amount_value"
-                android:layout_marginTop="4dp"
-                android:textSize="11sp"
+            <TextView
+                android:id="@+id/text_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="124.04"
                 android:textColor="@color/black"
-                android:text="0000.00000000"
-                android:layout_gravity="end"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/text_sum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="23213423423"
+                android:textColor="@color/black"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/text_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="Success"
+                android:textColor="@color/basic700"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/text_failed_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:visibility="gone"
+                android:textColor="@color/basic700"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/relative_cancel_block"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content">
+
+
+            <View
+                android:id="@+id/view_divider"
+                android:background="@color/accent50"
+                android:layout_width="1dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"/>
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_delete"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/ic_toolbar_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/view_divider"
-        android:background="@color/accent50"
-        android:layout_width="1dp"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/image_delete"
-        android:layout_height="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"/>
-
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/image_delete"
-        android:layout_centerVertical="true"
-        android:clickable="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:layout_alignParentEnd="true"
-        app:srcCompat="@drawable/ic_deladdress_24_error_400"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</RelativeLayout>
+</LinearLayout>

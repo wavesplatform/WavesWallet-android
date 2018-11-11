@@ -78,6 +78,7 @@ android {
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
             buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/"'
             buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
+            buildConfigField 'String', 'DATA_FEED_URL', '"https://marketdata.wavesplatform.com/api/"'
         }
         dev {
             applicationIdSuffix ".dev"
@@ -87,6 +88,7 @@ android {
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
             buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/"'
             buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
+            buildConfigField 'String', 'DATA_FEED_URL', '"https://marketdata.wavesplatform.com/api/"'
         }
         devTest {
             applicationIdSuffix ".test"
@@ -96,6 +98,7 @@ android {
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
             buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/"'
             buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
+            buildConfigField 'String', 'DATA_FEED_URL', '"https://marketdata.wavesplatform.com/api/"'
         }
     }
     compileOptions {

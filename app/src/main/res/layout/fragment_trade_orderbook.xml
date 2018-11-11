@@ -35,15 +35,17 @@
                 android:paddingTop="10dp">
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_amount_title"
                     android:layout_width="match_parent"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="end"
                     android:text="@string/orderbook_amount_title"
                     android:textColor="@color/basic500"
                     android:textSize="11sp" />
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_price_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -54,6 +56,7 @@
 
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_sum_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -79,12 +82,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@id/button_confirm"
-                android:background="@color/white"
                 android:layout_alignBottom="@+id/view_divider"
                 android:layout_below="@+id/view_top_divider"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                android:paddingBottom="8dp" />
+                android:background="@color/white"
+                android:overScrollMode="never" />
+
+            <View
+                android:layout_above="@id/button_confirm"
+                android:layout_centerInParent="true"
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+
+
+            <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:progress_image="@drawable/ic_loader_24_submit_400"
+                app:progress_text="@string/orderbook_loading" />
 
             <View
                 android:id="@+id/view_divider"
@@ -132,7 +148,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
-                        android:text="0.00075077"
+                        android:text="0.000"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         app:fontFamily="@font/roboto_medium" />
@@ -167,7 +183,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
-                        android:text="0.00075056"
+                        android:text="0.000"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         app:fontFamily="@font/roboto_medium" />
@@ -178,12 +194,6 @@
 
 
         </RelativeLayout>
-
-        <include
-            android:visibility="gone"
-            android:id="@+id/layout_empty"
-            layout="@layout/layout_empty_data"/>
-
     </android.support.v7.widget.CardView>
 
 

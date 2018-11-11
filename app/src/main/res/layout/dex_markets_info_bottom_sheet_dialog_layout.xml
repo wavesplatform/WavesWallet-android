@@ -30,6 +30,7 @@
         android:id="@+id/text_popular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:text="@string/dex_markets_info_dialog_popular"

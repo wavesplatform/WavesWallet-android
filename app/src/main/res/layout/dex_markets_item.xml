@@ -26,7 +26,6 @@
         android:layout_width="wrap_content"
         android:textSize="12sp"
         app:fontFamily="@font/roboto_bold"
-        android:textAllCaps="true"
         android:textColor="@color/black"
         android:layout_height="wrap_content"
         android:text="NAME1 / NAME2" />
@@ -38,7 +37,6 @@
         android:layout_marginStart="8dp"
         android:textColor="@color/basic500"
         android:layout_below="@+id/text_name"
-        android:textAllCaps="true"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/image_info"

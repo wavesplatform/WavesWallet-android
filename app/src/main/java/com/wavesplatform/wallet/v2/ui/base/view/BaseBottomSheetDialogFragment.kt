@@ -34,7 +34,6 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpV
     @Inject
     lateinit var rxEventBus: RxEventBus
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)

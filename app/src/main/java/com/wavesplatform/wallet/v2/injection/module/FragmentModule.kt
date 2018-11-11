@@ -6,12 +6,11 @@ import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketInformationBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
-import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.buy.TradeBuyFragment
-import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.sell.TradeSellFragment
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order.TradeOrderFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.chart.TradeChartFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades.TradeLastTradesFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.TradeMyOrdersFragment
-import com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook.TradeOrderbookFragment
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook.TradeOrderBookFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.history.filter.HistoryFilterBottomSheetFragment
@@ -92,15 +91,11 @@ abstract class FragmentModule {
 
     @PerFragment
     @ContributesAndroidInjector
-    internal abstract fun tradeOrderbookFragment(): TradeOrderbookFragment
+    internal abstract fun tradeOrderbookFragment(): TradeOrderBookFragment
 
     @PerFragment
     @ContributesAndroidInjector
-    internal abstract fun tradeBuyFragment(): TradeBuyFragment
-
-    @PerFragment
-    @ContributesAndroidInjector
-    internal abstract fun tradeSellFragment(): TradeSellFragment
+    internal abstract fun tradeBuyFragment(): TradeOrderFragment
 
     @PerFragment
     @ContributesAndroidInjector

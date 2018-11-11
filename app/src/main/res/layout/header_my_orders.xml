@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/text_header_text"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textSize="11sp"
-    android:background="@color/basic50"
-    android:paddingBottom="10dp"
-    android:textAllCaps="true"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp"
-    android:paddingTop="10dp"
-    android:textColor="@color/basic500">
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
 
-</android.support.v7.widget.AppCompatTextView>
+    <View
+        android:id="@+id/view_top_divider"
+        android:layout_width="match_parent"
+        android:background="@color/accent50"
+        android:layout_height="1dp"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_header_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/basic50"
+        android:paddingBottom="10dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="10dp"
+        android:textAllCaps="true"
+        android:textColor="@color/basic500"
+        android:textSize="11sp"/>
+
+    <View
+        android:id="@+id/view_bottom_divider"
+        android:layout_width="match_parent"
+        android:background="@color/accent50"
+        android:layout_height="1dp"/>
+
+</LinearLayout>
