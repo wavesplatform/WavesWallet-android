@@ -298,7 +298,7 @@
         <activity
             android:name=".v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity"
             android:screenOrientation="portrait"
