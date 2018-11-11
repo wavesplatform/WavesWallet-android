@@ -79,7 +79,8 @@ class SendActivity : BaseActivity(), SendView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
-        setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title),
+                R.drawable.ic_toolbar_back_black)
         checkRecipient(edit_address.text.toString())
 
         when {

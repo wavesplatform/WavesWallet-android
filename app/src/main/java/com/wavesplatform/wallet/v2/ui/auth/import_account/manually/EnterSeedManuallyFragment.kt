@@ -98,6 +98,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
             if (actionId == EditorInfo.IME_ACTION_DONE && button_continue.isEnabled) {
                 launchActivity<ProtectAccountActivity> {
                     putExtra(NewAccountActivity.KEY_INTENT_SEED, edit_seed.text.toString().trim())
+                    putExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT, true)
                 }
                 true
             } else {
@@ -107,6 +108,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
 
         button_continue.click {
             launchActivity<ProtectAccountActivity> {
+                putExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT, true)
                 putExtra(NewAccountActivity.KEY_INTENT_SEED, edit_seed.text.toString().trim())
             }
         }

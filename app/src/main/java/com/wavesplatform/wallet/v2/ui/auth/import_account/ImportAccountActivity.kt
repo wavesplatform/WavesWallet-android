@@ -68,6 +68,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
                             else -> {
                                 launchActivity<ProtectAccountActivity> {
                                     putExtra(NewAccountActivity.KEY_INTENT_SEED, seed)
+                                    putExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT, true)
                                 }
                             }
                         }

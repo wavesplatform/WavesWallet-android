@@ -214,6 +214,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
 
     companion object {
         const val KEY_INTENT_PROCESS_ACCOUNT_CREATION = "intent_process_account_creation"
+        const val KEY_INTENT_PROCESS_ACCOUNT_IMPORT = "intent_process_account_import"
         const val KEY_INTENT_ACCOUNT_NAME = "intent_account_name"
         const val KEY_INTENT_PASSWORD = "intent_password"
         const val KEY_INTENT_SEED = "intent_seed"

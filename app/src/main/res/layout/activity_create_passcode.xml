@@ -39,7 +39,8 @@
         android:id="@+id/pass_keypad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pdl_dots"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="82dp"
         app:is_fingerprint_available="false" />
 
 </RelativeLayout>

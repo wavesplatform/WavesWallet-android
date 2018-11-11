@@ -54,7 +54,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
 
         val isLoggedIn = !TextUtils.isEmpty(guid)
         val useFingerprint = (isAvailable && !isProcessSetFingerprint
-                && ((isLoggedIn && App.getAccessManager().isGuidUseFingerPrint(guid))))
+                && (isLoggedIn && App.getAccessManager().isGuidUseFingerPrint(guid)))
 
         pass_keypad.isFingerprintAvailable(useFingerprint)
 
