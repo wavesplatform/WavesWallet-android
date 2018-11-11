@@ -33,8 +33,6 @@ class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), Trad
     @Inject
     @InjectPresenter
     lateinit var presenter: TradeBuyAndSellPresenter
-    @Inject
-    lateinit var rxEventBus: RxEventBus
 
     @ProvidePresenter
     fun providePresenter(): TradeBuyAndSellPresenter = presenter

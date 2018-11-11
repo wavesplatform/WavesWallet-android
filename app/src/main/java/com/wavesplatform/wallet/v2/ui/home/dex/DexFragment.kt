@@ -114,6 +114,7 @@ class DexFragment : BaseFragment(), DexView {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         inflater.inflate(R.menu.menu_dex, menu)
         this.menu = menu
         menu.findItem(R.id.action_sorting)?.isVisible = !adapter.data.isEmpty()
