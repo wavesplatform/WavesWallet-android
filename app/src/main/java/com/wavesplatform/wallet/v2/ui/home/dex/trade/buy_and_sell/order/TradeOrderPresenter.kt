@@ -33,8 +33,6 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     val expirationList = arrayOf(OrderExpiration.FIVE_MINUTES, OrderExpiration.THIRTY_MINUTES,
             OrderExpiration.ONE_HOUR, OrderExpiration.ONE_DAY, OrderExpiration.ONE_WEEK, OrderExpiration.ONE_MONTH)
 
-    var orderType: Int = TradeBuyAndSellBottomSheetFragment.BUY_TYPE
-
     var priceValidation = false
     var amountValidation = false
 
@@ -72,7 +70,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
         orderRequest.price = price.toBigDecimal().setScale(data?.watchMarket?.market?.priceAssetDecimals
                 ?: 0, RoundingMode.HALF_UP).unscaledValue().toLong()
 
-        orderRequest.orderType = if (orderType == 0) OrderType.BUY else OrderType.SELL
+        orderRequest.orderType = if (data?.orderType == 0) OrderType.BUY else OrderType.SELL
         orderRequest.assetPair = createPair()
         orderRequest.timestamp = currentTimeMillis
         orderRequest.expiration = orderRequest.timestamp + expirationList[selectedExpiration].timeServer

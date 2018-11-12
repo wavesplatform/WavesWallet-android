@@ -270,7 +270,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         text_limit_price_hint.text = getString(R.string.buy_and_sell_limit_price_in, presenter.data?.watchMarket?.market?.priceAssetShortName)
         text_total_price_hint.text = getString(R.string.buy_and_sell_total_in, presenter.data?.watchMarket?.market?.priceAssetShortName)
 
-        if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
+        if (presenter.data?.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
             button_confirm.setBackgroundResource(R.drawable.selector_btn_red)
             button_confirm.text = getString(R.string.sell_btn_txt, presenter.data?.watchMarket?.market?.amountAssetShortName)
         } else {
@@ -354,7 +354,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
     override fun successPlaceOrder() {
         launchActivity<TradeBuyAndSendSuccessActivity> {
-            putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_OPERATION_TYPE, presenter.orderType)
+            putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_OPERATION_TYPE, presenter.data?.orderType)
             putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_AMOUNT, edit_amount.text.toString())
             putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_PRICE, edit_limit_price.text.toString())
             putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_TIME, presenter.orderRequest.timestamp.asDateString("HH:mm:ss"))
