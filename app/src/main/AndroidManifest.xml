@@ -72,8 +72,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
-
         <activity
             android:name=".v2.ui.language.choose.ChooseLanguageActivity"
             android:configChanges="orientation|locale"
@@ -90,6 +88,7 @@
             android:name=".v2.ui.welcome.WelcomeActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
+            android:configChanges="orientation|locale"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.home.profile.addresses.AddressesAndKeysActivity"
@@ -150,6 +149,7 @@
         <activity
             android:name=".v2.ui.language.change_welcome.ChangeLanguageActivity"
             android:screenOrientation="portrait"
+            android:configChanges="orientation|locale"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.home.profile.change_password.ChangePasswordActivity"

@@ -185,7 +185,7 @@
     <string name="confirm_free">Комиссия</string>
     <string name="confirm_leasing">Подтверждение</string>
     <string name="confirm_leasing_okay">Хорошо</string>
-    <string name="confirm_leasing_progress">Загрузка...</string>
+    <string name="confirm_leasing_progress">Загрузка…</string>
     <string name="confirm_leasing_result_value">You have leased %1$s %2$s</string>
     <string name="confirm_leasing_success">Ваша транзакция уже в пути!</string>
     <string name="confirm_node_address">Адрес ноды</string>
