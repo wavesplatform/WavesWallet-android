@@ -34,10 +34,10 @@
                 android:paddingTop="10dp">
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:gravity="end"
+                    android:layout_weight="1"
+                    android:gravity="start"
                     android:text="@string/last_trades_time"
                     android:textColor="@color/basic500"
                     android:textSize="11sp" />
@@ -46,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="end"
+                    android:gravity="start"
                     android:text="@string/last_trades_price"
                     android:textColor="@color/basic500"
                     android:textSize="11sp" />
@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="end"
+                    android:gravity="start"
                     android:text="@string/last_trades_amount"
                     android:textColor="@color/basic500"
                     android:textSize="11sp" />
@@ -66,7 +66,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="end"
+                    android:gravity="start"
                     android:text="@string/last_trades_sum"
                     android:textColor="@color/basic500"
                     android:textSize="11sp" />
