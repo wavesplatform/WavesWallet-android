@@ -97,7 +97,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
 
             item.checked = !item.checked
             this.adapter.setData(position, item)
-            this.adapter.allData[position] = item
+            this.adapter.allData[this.adapter.allData.indexOf(item)] = item
         }
     }
 
