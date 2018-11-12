@@ -25,10 +25,10 @@
 
             <RelativeLayout
                 android:id="@+id/relative_timeframe"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/basic50">
+                android:background="@color/basic50"
+                android:visibility="gone">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_change_time"
@@ -60,13 +60,13 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <com.wavesplatform.wallet.v1.ui.dex.details.chart.CustomCandleChart
+                <com.wavesplatform.wallet.v2.ui.custom.CustomCandleChart
                     android:id="@+id/candle_chart"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
-                <com.wavesplatform.wallet.v1.ui.dex.details.chart.CustomBarChart
+                <com.wavesplatform.wallet.v2.ui.custom.CustomBarChart
                     android:id="@+id/bar_chart"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"

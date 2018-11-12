@@ -18,14 +18,14 @@ import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.utils.EntryXComparator
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.dex.details.chart.CandleTouchListener
-import com.wavesplatform.wallet.v1.ui.dex.details.chart.OnCandleGestureListener
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.custom.CandleTouchListener
+import com.wavesplatform.wallet.v2.ui.custom.OnCandleGestureListener
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
