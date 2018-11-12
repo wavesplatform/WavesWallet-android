@@ -36,11 +36,12 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     var orderType: Int = TradeBuyAndSellBottomSheetFragment.BUY_TYPE
 
     var priceValidation = false
+    var totalPriceValidation = false
     var amountValidation = false
 
 
     fun isAllFieldsValid(): Boolean {
-        return priceValidation && amountValidation
+        return priceValidation && amountValidation && totalPriceValidation
     }
 
 

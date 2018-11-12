@@ -114,6 +114,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 })
                 .build()
 
+
         eventSubscriptions.add(RxTextView.textChanges(edit_amount)
                 .skipInitialValue()
                 .map(CharSequence::toString)
@@ -135,20 +136,24 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     it.isNotEmpty()
                 }
                 .map {
-                    val isValid = it.toBigDecimal() < MoneyUtil.getScaledText(presenter.currentAmountBalance
-                            ?: 0, presenter.data?.watchMarket?.market?.amountAssetDecimals
-                            ?: 0).clearBalance().toBigDecimal()
-                    presenter.amountValidation = isValid
+                    if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
+                        val isValid = it.toBigDecimal() < MoneyUtil.getScaledText(presenter.currentAmountBalance
+                                ?: 0, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                                ?: 0).clearBalance().toBigDecimal()
+                        presenter.amountValidation = isValid
 
-                    if (isValid) {
-                        text_amount_error.text = ""
-                        text_amount_error.invisiable()
+                        if (isValid) {
+                            text_amount_error.text = ""
+                            text_amount_error.invisiable()
+                        } else {
+                            text_amount_error.text = getString(R.string.buy_and_sell_not_enough, presenter.data?.watchMarket?.market?.amountAssetShortName)
+                            text_amount_error.visiable()
+                        }
+                        makeButtonEnableIfValid()
+                        return@map Pair(isValid, it)
                     } else {
-                        text_amount_error.text = getString(R.string.buy_and_sell_not_enough, presenter.data?.watchMarket?.market?.amountAssetShortName)
-                        text_amount_error.visiable()
+                        return@map Pair(true, it)
                     }
-                    makeButtonEnableIfValid()
-                    return@map Pair(isValid, it)
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ isValid ->
@@ -213,9 +218,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     if (!presenter.humanTotalTyping) {
                         presenter.humanTotalTyping = edit_total_price.isFocused
                     }
-                }
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({ isValid ->
+                    presenter.totalPriceValidation = it.isNotEmpty()
                     if (edit_amount.text.isNullOrEmpty()) {
                         text_amount_error.text = getString(R.string.buy_and_sell_required)
                         text_amount_error.visiable()
@@ -235,6 +238,32 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                             }
                         }
                     }
+                    makeButtonEnableIfValid()
+                    return@map it
+                }
+                .map {
+                    if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
+                        val isValid = it.toBigDecimal() < MoneyUtil.getScaledPrice(presenter.currentPriceBalance
+                                ?: 0, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                                ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                                ?: 0).clearBalance().toBigDecimal()
+                        presenter.totalPriceValidation = isValid
+
+                        if (isValid) {
+                            text_total_price_error.text = ""
+                            text_total_price_error.invisiable()
+                        } else {
+                            text_total_price_error.text = getString(R.string.buy_and_sell_not_enough, presenter.data?.watchMarket?.market?.priceAssetShortName)
+                            text_total_price_error.visiable()
+                        }
+                        makeButtonEnableIfValid()
+                        return@map Pair(isValid, it)
+                    } else {
+                        return@map Pair(true, it)
+                    }
+                }
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({ isValid ->
                     makeButtonEnableIfValid()
                 }, {
                     it.printStackTrace()
