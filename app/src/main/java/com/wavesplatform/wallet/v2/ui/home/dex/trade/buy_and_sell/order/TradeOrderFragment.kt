@@ -309,14 +309,16 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         }
 
         presenter.data?.watchMarket.notNull { watchMarket ->
-            if (presenter.data?.initAmount != null && presenter.data?.initPrice != null) {
+            if (presenter.data?.initAmount != null) {
                 val amountUIValue = MoneyUtil.getScaledText(presenter.data?.initAmount!!, watchMarket.market.amountAssetDecimals).clearBalance()
-                val priceUIValue = MoneyUtil.getScaledPrice(presenter.data?.initPrice!!, watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
-                val sum = amountUIValue.toDouble() * priceUIValue.toDouble()
-
                 edit_amount.setText(amountUIValue)
+            }
+            if (presenter.data?.initPrice != null) {
+                val priceUIValue = MoneyUtil.getScaledPrice(presenter.data?.initPrice!!, watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
                 edit_limit_price.setText(priceUIValue)
-
+            }
+            if (presenter.data?.initAmount != null && presenter.data?.initPrice != null) {
+                val sum = edit_limit_price.text.toString().toDouble() * edit_limit_price.text.toString().toDouble()
                 edit_total_price.setText(MoneyUtil.getFormattedTotal(sum, watchMarket.market.priceAssetDecimals))
             }
         }
