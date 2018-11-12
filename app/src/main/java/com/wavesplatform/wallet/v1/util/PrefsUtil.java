@@ -91,6 +91,10 @@ public class PrefsUtil {
         setValueInternal(getGuid() + name, value);
     }
 
+    public void setValue(String name, Long value) {
+        setValueInternal(getGuid() + name, value);
+    }
+
     public void setValue(String guid, String name, String value) {
         setValueInternal(guid + name, value);
     }
@@ -124,7 +128,7 @@ public class PrefsUtil {
     }
 
     private long getValueInternal(String name, long value) {
-        return preferenceManager.getLong(name, 0L);
+        return preferenceManager.getLong(name, value);
     }
 
     public boolean getValue(String name, boolean value) {
@@ -142,6 +146,12 @@ public class PrefsUtil {
     private void setValueInternal(String name, boolean value) {
         Editor editor = preferenceManager.edit();
         editor.putBoolean(name, value);
+        editor.apply();
+    }
+
+    private void setValueInternal(String name, long value) {
+        Editor editor = preferenceManager.edit();
+        editor.putLong(name, value);
         editor.apply();
     }
 
