@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.Rec
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -96,13 +97,13 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         }
     }
 
-    override fun showTunnel(tunnel: GetTunnel?) {
+    override fun onShowTunnel(tunnel: GetTunnel?) {
         skeletonView!!.hide()
         if (tunnel?.tunnel == null
                 || tunnel.tunnel?.inMin.isNullOrEmpty()
                 || tunnel.tunnel?.currencyFrom.isNullOrEmpty()) {
             button_continue.isEnabled = false
-            showError(App.getAppContext().getString(R.string.receive_error_network))
+            onShowError(App.getAppContext().getString(R.string.receive_error_network))
             return
         }
 
@@ -114,10 +115,13 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
                 tunnel.tunnel?.currencyFrom)
         warning_crypto.text = getString(R.string.receive_warning_crypto, tunnel.tunnel?.currencyFrom)
         button_continue.isEnabled = true
+        container_info.visiable()
     }
 
-    override fun showError(message: String?) {
+    override fun onShowError(message: String) {
         skeletonView!!.hide()
+        container_info.gone()
+        showError(message, R.id.root)
     }
 
     private fun setAssetBalance(assetBalance: AssetBalance?) {

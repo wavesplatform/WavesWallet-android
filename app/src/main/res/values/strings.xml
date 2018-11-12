@@ -171,7 +171,7 @@
     <string name="history_type_started_leasing">Started Leasing</string>
     <string name="history_type_exchange">%s %s</string>
     <string name="history_type_canceled_leasing">Canceled Leasing</string>
-    <string name="history_type_token_generation">%s - Token Generation</string>
+    <string name="history_type_token_generation">%s Token Generation</string>
     <string name="history_type_token_burn">%s Token Burn</string>
     <string name="history_type_token_reissue">%s Token Reissue</string>
     <string name="history_type_self_transfer">Self-transfer %s</string>
