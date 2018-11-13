@@ -205,7 +205,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return when {
                 recipient!!.matches("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
                     Constants.BITCOIN_ASSET_ID
-                recipient.matches("^0x[0-9a-f]{40}$".toRegex()) ->
+                recipient.matches("^0x[0-9a-fA-F]{40}$".toRegex()) ->
                     Constants.ETHEREUM_ASSET_ID
                 recipient.matches("^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$".toRegex()) ->
                     Constants.LIGHTCOIN_ASSET_ID
