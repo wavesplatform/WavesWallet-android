@@ -162,7 +162,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                             edit_total_price.setText(
                                     (edit_amount.text.toString().toDouble() * edit_limit_price.text.toString().toDouble())
                                             .roundToDecimals(presenter.data?.watchMarket?.market?.priceAssetDecimals)
-                                            .toString()
+                                            .toBigDecimal()
+                                            .toPlainString()
                                             .stripZeros())
                         }
                     }
@@ -198,7 +199,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                         edit_total_price.setText(
                                 (edit_amount.text.toString().toDouble() * edit_limit_price.text.toString().toDouble())
                                         .roundToDecimals(presenter.data?.watchMarket?.market?.priceAssetDecimals)
-                                        .toString()
+                                        .toBigDecimal()
+                                        .toPlainString()
                                         .stripZeros())
                     }
                     makeButtonEnableIfValid()
@@ -243,8 +245,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 }
                 .map {
                     if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
-                        val isValid = it.toBigDecimal() < MoneyUtil.getScaledPrice(presenter.currentPriceBalance
-                                ?: 0, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                        val isValid = it.toBigDecimal() < MoneyUtil.getScaledText(presenter.currentPriceBalance
                                 ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                                 ?: 0).clearBalance().toBigDecimal()
                         presenter.totalPriceValidation = isValid
