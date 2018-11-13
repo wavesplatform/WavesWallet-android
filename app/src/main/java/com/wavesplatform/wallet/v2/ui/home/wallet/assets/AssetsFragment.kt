@@ -16,6 +16,7 @@ import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
 import com.ethanhua.skeleton.Skeleton
 import com.oushangfeng.pinnedsectionitemdecoration.PinnedHeaderItemDecoration
 import com.oushangfeng.pinnedsectionitemdecoration.callback.OnHeaderClickAdapter
+import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
@@ -30,7 +31,6 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingAc
 import com.wavesplatform.wallet.v2.util.isMyServiceRunning
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
-import io.supercharge.shimmerlayout.ShimmerLayout
 import kotlinx.android.synthetic.main.fragment_assets.*
 import kotlinx.android.synthetic.main.wallet_header_item.view.*
 import pers.victor.ext.dp2px
@@ -165,8 +165,16 @@ class AssetsFragment : BaseFragment(), AssetsView {
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position) as AssetBalance
             val positionWithoutSection = when {
-                item.isHidden -> position - 1 - adapter.data.count { (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET } // minus hidden section header and all clear assets
-                item.isSpam -> position - 2 - adapter.data.count { (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET } - adapter.data.count { (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HIDDEN_ASSET } // minus hidden and spam sections header and all clear and hidden assets
+                // minus hidden section header and all clear assets
+                item.isHidden -> position - 1 - adapter.data.count {
+                    (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
+                }
+                // minus hidden and spam sections header and all clear and hidden assets
+                item.isSpam -> position - getCorrectionIndex() - adapter.data.count {
+                    (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET } -
+                        adapter.data.count {
+                            (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HIDDEN_ASSET
+                        }
                 else -> position // no changes
             }
             launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
@@ -181,6 +189,17 @@ class AssetsFragment : BaseFragment(), AssetsView {
                     recycle_assets.smoothScrollBy(0, itemView.y.toInt() - dp2px(1))
                 }
             }
+        }
+    }
+
+    private fun getCorrectionIndex(): Int {
+        val someFirstHidden = queryFirst<AssetBalance> {
+            equalTo("isHidden", true)
+        }
+        return if (someFirstHidden == null) {
+            1
+        } else {
+            2
         }
     }
 

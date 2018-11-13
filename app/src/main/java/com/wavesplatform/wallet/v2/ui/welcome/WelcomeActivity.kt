@@ -111,7 +111,10 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
                 val dialog = ChangeLanguageBottomSheetFragment()
                 dialog.languageChooseListener = object : ChangeLanguageBottomSheetFragment.LanguageSelectListener {
                     override fun onLanguageSelected() {
-                        menu.notNull { updateMenuTitle() }
+                        menu.notNull {
+                            updateMenuTitle()
+                            recreate()
+                        }
                     }
                 }
                 dialog.show(supportFragmentManager, dialog::class.java.simpleName)
