@@ -32,10 +32,6 @@ class QrCodeScannerActivity : BaseActivity(), QrCodeScannerView,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        window.decorView.apply {
-            systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
-        }
         setStatusBarColor(R.color.black)
         setNavigationBarColor(R.color.black)
     }
