@@ -142,8 +142,7 @@
     <string name="choose_account_yes">Verwijder</string>
     <string name="choose_language_china">中文(简体)</string>
     <string name="choose_language_china_code">Zh</string>
-    <string name="choose_language_confirm">Bevestig</string>
-    <string name="choose_language_continue">Ga door</string>
+    <string name="choose_language_continue">OK</string>
     <string name="choose_language_dansk">Dansk</string>
     <string name="choose_language_dansk_code">Dn</string>
     <string name="choose_language_english">English</string>
