@@ -42,10 +42,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_send.*
-import pers.victor.ext.addTextChangedListener
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import java.math.BigDecimal
 import java.net.URI
 import javax.inject.Inject
@@ -124,6 +121,9 @@ class SendActivity : BaseActivity(), SendView {
             if (it.tag == R.drawable.ic_deladdress_24_error_400) {
                 edit_address.text = null
                 text_recipient_error.gone()
+                edit_address.isEnabled = true
+                edit_amount.isEnabled = true
+                card_asset.click { launchAssets() }
             } else if (it.tag == R.drawable.ic_qrcode_24_basic_500) {
                 IntentIntegrator(this).setRequestCode(REQUEST_SCAN_RECEIVE)
                         .setOrientationLocked(true)
@@ -336,8 +336,11 @@ class SendActivity : BaseActivity(), SendView {
             return
         }
 
-        if (result.contains("https://client.wavesplatform.com/#send/".toRegex())) {
-            val uri = URI.create(result.replace("/#send/", "/send/"))
+        if (result.contains("https://client.wavesplatform.com/#send/".toRegex()) ||
+                result.contains("https://client.wavesplatform.com/%23send/".toRegex())) {
+            val uri = URI.create(result
+                    .replace("/#send/", "/send/")
+                    .replace("/%23send/", "/send/"))
             try {
 
                 val params = uri.query.split("&")
@@ -353,7 +356,10 @@ class SendActivity : BaseActivity(), SendView {
                         edit_amount.setText(amount)
                     }
                 }
-                val assetId = uri.path.split("/")[2]
+                var assetId = uri.path.split("/")[2]
+                if ("waves".equalsIgnoreCase(assetId)) {
+                    assetId = ""
+                }
                 val assetBalance = queryFirst<AssetBalance> {
                     equalTo("assetId", assetId)
                 }
@@ -362,6 +368,9 @@ class SendActivity : BaseActivity(), SendView {
                 showError(R.string.send_error_get_data_from_qr, R.id.root_view)
                 error.printStackTrace()
             }
+            edit_address.isEnabled = false
+            edit_amount.isEnabled = false
+            card_asset.click {  }
         } else {
             edit_address.setText(result)
 
