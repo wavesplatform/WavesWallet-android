@@ -19,7 +19,6 @@ class TutorialActivity : BaseActivity(), TutorialView {
     @Inject
     @InjectPresenter
     lateinit var presenter: TutorialPresenter
-    @Inject
     lateinit var adapter: TutorialAdapter
 
     @ProvidePresenter
@@ -30,6 +29,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
+        adapter = TutorialAdapter(this)
         adapter.items = arrayListOf(1, 2, 3, 4, 5)
         adapter.listener = object : TutorialAdapter.EndOfScrollListener {
             override fun onEndOfScroll(position: Int) {

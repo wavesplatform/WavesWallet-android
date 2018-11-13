@@ -90,10 +90,19 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     }
 
     private fun populateList(): ArrayList<WelcomeItem> {
-        return arrayListOf(WelcomeItem(R.drawable.ic_userimg_blockchain_80, R.string.welcome_blockchain_title, R.string.welcome_blockchain_description),
-                WelcomeItem(R.drawable.ic_userimg_wallet_80, R.string.welcome_wallet_title, R.string.welcome_wallet_description),
-                WelcomeItem(R.drawable.ic_userimg_dex_80, R.string.welcome_dex_title, R.string.welcome_dex_description),
-                WelcomeItem(R.drawable.ic_userimg_token_80, R.string.welcome_token_title, R.string.welcome_token_description))
+        return arrayListOf(
+                WelcomeItem(R.drawable.ic_userimg_blockchain_80,
+                        getString(R.string.welcome_blockchain_title),
+                        getString(R.string.welcome_blockchain_description)),
+                WelcomeItem(R.drawable.ic_userimg_wallet_80,
+                        getString(R.string.welcome_wallet_title),
+                        getString(R.string.welcome_wallet_description)),
+                WelcomeItem(R.drawable.ic_userimg_dex_80,
+                        getString(R.string.welcome_dex_title),
+                        getString(R.string.welcome_dex_description)),
+                WelcomeItem(R.drawable.ic_userimg_token_80,
+                        getString(R.string.welcome_token_title),
+                        getString(R.string.welcome_token_description)))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

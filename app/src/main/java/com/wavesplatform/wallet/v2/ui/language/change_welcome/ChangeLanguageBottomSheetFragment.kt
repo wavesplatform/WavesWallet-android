@@ -8,13 +8,14 @@ import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_change_language_layout.view.*
-import pers.victor.ext.*
+import pers.victor.ext.click
+import pers.victor.ext.invisiable
+import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
@@ -90,11 +91,11 @@ class ChangeLanguageBottomSheetFragment @Inject constructor() : BaseBottomSheetD
         adapter.setData(position, languageItem)
     }
 
-    fun getLanguages(): MutableList<LanguageItem>? {
+    private fun getLanguages(): MutableList<LanguageItem>? {
         return Language.getLanguagesItems()
     }
 
-    fun saveLanguage(lang: Int) {
+    private fun saveLanguage(lang: Int) {
         preferencesHelper.setLanguage(lang)
     }
 

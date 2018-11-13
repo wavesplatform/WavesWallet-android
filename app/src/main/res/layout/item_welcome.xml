@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:id="@+id/linear_root"
     android:layout_height="wrap_content"
@@ -25,7 +26,7 @@
         app:fontFamily="@font/roboto_bold"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="8sp"
-        android:text="Get Started with Blockchain"
+        tools:text="Get Started with Blockchain"
         android:textColor="@color/black"
         android:textSize="20sp" />
 
@@ -38,7 +39,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="4sp"
-        android:text="Become part of a fast-growing area of the crypto world. You are the only person who can access your crypto assets."
+        tools:text="Become part of a fast-growing area of the crypto world. You are the only person who can access your crypto assets."
         android:textColor="@color/basic500"
         android:textSize="14sp"
         android:textStyle="normal" />

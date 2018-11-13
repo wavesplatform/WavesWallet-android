@@ -84,7 +84,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         return frameworkFragmentInjector
     }
 
-    override fun attachBaseContext(newBase: Context?) {
+    override fun attachBaseContext(newBase: Context) {
         val baseContext = LocaleChanger.configureBaseContext(newBase)
         super.attachBaseContext(baseContext)
     }

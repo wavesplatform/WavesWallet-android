@@ -22,12 +22,9 @@ import com.wavesplatform.wallet.v1.util.ApplicationLifeCycle;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
+import com.wavesplatform.wallet.v2.data.model.local.Language;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -64,20 +61,9 @@ public class App extends DaggerApplication {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
         sContext = this;
-        List<Locale> SUPPORTED_LOCALES =
-                Arrays.asList(
-                        new Locale(getString(R.string.choose_language_russia_code).toLowerCase()),
-                        new Locale(getString(R.string.choose_language_china_code).toLowerCase()),
-                        new Locale(getString(R.string.choose_language_korea_code).toLowerCase()),
-                        new Locale(getString(R.string.choose_language_turkey_code).toLowerCase()),
-                        new Locale(getString(R.string.choose_language_english_code).toLowerCase()),
-                        new Locale(getString(R.string.choose_language_hindi_code).toLowerCase()),
-                        new Locale(getString(R.string.choose_language_dansk_code).toLowerCase()),
-                        new Locale(getString(R.string.choose_language_nederlands_code).toLowerCase())
-                );
-
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
-        LocaleChanger.initialize(getApplicationContext(), SUPPORTED_LOCALES);
+        LocaleChanger.initialize(getApplicationContext(),
+                Language.Companion.getSupportedLanguage(this));
 
         CodeProcessor.init(this);
 
