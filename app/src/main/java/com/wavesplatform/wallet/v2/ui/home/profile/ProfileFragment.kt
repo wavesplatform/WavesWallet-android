@@ -276,7 +276,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
             REQUEST_CHANGE_LANG -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    activity!!.recreate()
+                    launchActivity<MainActivity>(clear = true)
                 }
             }
         }
