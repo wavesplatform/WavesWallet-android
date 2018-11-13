@@ -81,7 +81,7 @@ android {
             buildConfigField 'String', 'DATA_FEED_URL', '"https://marketdata.wavesplatform.com/api/"'
         }
         dev {
-            applicationIdSuffix ".dev"
+            applicationIdSuffix ""
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'

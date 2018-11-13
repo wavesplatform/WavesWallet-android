@@ -30,7 +30,7 @@
     <string name="alias_dialog_you_dont_have">귀하는 Alias가 없습니다</string>
     <string name="alias_dialog_you_have">%s 를 가지고 있습니다</string>
     <string name="alias_dialog_your_aliases">귀하의 Alias</string>
-    <string name="app_name">Waves 지갑</string>
+    <string name="app_name">Waves</string>
     <string name="asset_details_asset_info">자산 정보</string>
     <string name="asset_details_available_balance">사용 가능 잔액</string>
     <string name="asset_details_coming_soon">커밍순</string>

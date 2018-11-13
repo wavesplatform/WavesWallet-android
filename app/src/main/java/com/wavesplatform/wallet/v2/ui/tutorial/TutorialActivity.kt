@@ -26,6 +26,8 @@ class TutorialActivity : BaseActivity(), TutorialView {
 
     override fun configLayoutRes() = R.layout.activity_tutorial
 
+    override fun askPassCode() = false
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)

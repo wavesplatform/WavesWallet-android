@@ -372,4 +372,3 @@
 -printmapping mapping.txt
 -keep class com.crashlytics.** { *; }
 -dontwarn com.crashlytics.**
--keepresourcexmlelements manifest/application/meta-data@name=io.fabric.ApiKey

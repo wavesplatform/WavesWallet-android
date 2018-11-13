@@ -30,7 +30,7 @@
     <string name="alias_dialog_you_dont_have">У вас нет алиасов</string>
     <string name="alias_dialog_you_have">У вас есть %s</string>
     <string name="alias_dialog_your_aliases">Ваши алиасы</string>
-    <string name="app_name">Waves Wallet</string>
+    <string name="app_name">Waves</string>
     <string name="asset_details_asset_info">Информация об ассетах</string>
     <string name="asset_details_available_balance">Доступный баланс</string>
     <string name="asset_details_coming_soon">Скоро</string>
