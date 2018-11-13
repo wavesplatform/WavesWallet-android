@@ -62,9 +62,9 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.DexOrderButtonClickEvent::class.java)
                 .subscribe {
                     if (it.buy) {
-                        openOrderDialog(true, getBidPrice())
+                        openOrderDialog(true, getAskPrice())
                     } else {
-                        openOrderDialog(false, getAskPrice())
+                        openOrderDialog(false, getBidPrice())
                     }
                 })
 
@@ -97,11 +97,11 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         }
 
         linear_buy.click {
-            openOrderDialog(true, getBidPrice())
+            openOrderDialog(true, getAskPrice())
         }
 
         linear_sell.click {
-            openOrderDialog(false, getAskPrice())
+            openOrderDialog(false, getBidPrice())
         }
 
         presenter.loadOrderBook()
@@ -174,13 +174,13 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     private fun fillButtonsPrice() {
         rxEventBus.post(Events.UpdateButtonsPrice(getAskPrice(), getBidPrice()))
         recycle_orderbook.post {
-            getAskPrice().notNull {
+            getBidPrice().notNull {
                 text_sell_value.text = MoneyUtil.getScaledPrice(it, presenter.watchMarket?.market?.amountAssetDecimals
                         ?: 0, presenter.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros()
             }
 
-            getBidPrice().notNull {
+            getAskPrice().notNull {
                 text_buy_value.text = MoneyUtil.getScaledPrice(it, presenter.watchMarket?.market?.amountAssetDecimals
                         ?: 0, presenter.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros()

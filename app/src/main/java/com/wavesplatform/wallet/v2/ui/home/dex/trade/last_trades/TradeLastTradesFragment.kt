@@ -56,13 +56,13 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.UpdateButtonsPrice::class.java)
                 .subscribe {
-                    it.askPrice.notNull {
+                    it.bidPrice.notNull {
                         text_sell_value.text = MoneyUtil.getScaledPrice(it, presenter.watchMarket?.market?.amountAssetDecimals
                                 ?: 0, presenter.watchMarket?.market?.priceAssetDecimals
                                 ?: 0).stripZeros()
                     }
 
-                    it.bidPrice.notNull {
+                    it.askPrice.notNull {
                         text_buy_value.text = MoneyUtil.getScaledPrice(it, presenter.watchMarket?.market?.amountAssetDecimals
                                 ?: 0, presenter.watchMarket?.market?.priceAssetDecimals
                                 ?: 0).stripZeros()
