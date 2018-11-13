@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
-    <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>.\nIf you don’t we can’t credit your account.]]></string>
+    <string name="about_fill_payment_details">Вы ДОЛЖНЫ заполнить данные платежа следующей информацией:</string>
+    <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>. \nIf you don’t we can’t credit your account.]]></string>
     <string name="about_redirection_message">После того, как вы пройдете проверку, вы получите электронное письмо с дальнейшими инструкциями</string>
     <string name="about_redirection_okay">Хорошо</string>
-    <string name="about_redirection_title">Вы были перенаправлены на «IDNow»\nдля верификации</string>
+    <string name="about_redirection_title">Вы были перенаправлены на «IDNow» \nдля верификации</string>
     <string name="add_address_address">Адрес</string>
     <string name="add_address_btn_txt">Сохранить</string>
     <string name="add_address_name">Имя</string>
     <string name="add_address_toolbar_title">Добавить</string>
     <string name="address_book_add">Добавить</string>
-    <string name="address_book_empty_state">Пока ничего нет…\nВы сохранить адрес</string>
+    <string name="address_book_empty_state">Пока ничего нет… \nВы сохранить адрес</string>
     <string name="address_book_search">Поиск</string>
     <string name="address_book_success_deleted">Адрес удален</string>
     <string name="address_book_toolbar_title">Адресная книга</string>
@@ -56,12 +56,12 @@
     <string name="asset_details_type">Тип</string>
     <string name="asset_details_view_history">Смотреть историю</string>
     <string name="asset_details_waves_token">Waves токен</string>
-    <string name="attachment_too_long">Описание слишком длинное</string>
-    <string name="backup_hint">Посколько только вы контролируете ваши деньги, вам необходимо сохранить секретную фразу или вернитесь назад</string>
-    <string name="backup_hint_2">Пожалуйста, внимательно запишите эти 15 слов или скопируйте их</string>
+    <string name="attachment_too_long">Слишком длинное описание</string>
+    <string name="backup_hint">Посколько только вы контролируете ваши деньги, вам необходимо сохранить секретную фразу</string>
+    <string name="backup_hint_2">Введите 15 слов, которые вы сохранили при создании аккаунта</string>
     <string name="backup_hint_3">Вам нужно будет восстановить эту фразу на следующем шаге</string>
     <string name="backup_info_button">Я понимаю</string>
-    <string name="backup_info_subtitle">Платформа Waves предупреждает вас об участившихся случаях мошенничества и фишинга за последний месяц. Мошенники скрывают своё вредоносное ПО в своих версиях клиента Waves и предлагают многообещающие бонусы и скидки для привлечения пользователей.\n\nБудьте осторожны и никогда не вводите свой СИД в таких «клиентах», потому что ваша учетная запись будет скомпрометирована, и вы потеряете все свои деньги.\n\nПользуйтесь ТОЛЬКО официальным клиентом Waves.</string>
+    <string name="backup_info_subtitle">Платформа Waves предупреждает вас об участившихся случаях мошенничества и фишинга за последний месяц. Мошенники скрывают своё вредоносное ПО в своих версиях клиента Waves и предлагают многообещающие бонусы и скидки для привлечения пользователей. \n\nБудьте осторожны и никогда не вводите свой СИД в таких «клиентах», потому что ваша учетная запись будет скомпрометирована, и вы потеряете все свои деньги. \n\nПользуйтесь ТОЛЬКО официальным клиентом Waves.</string>
     <string name="backup_info_title">Осторожно используйте секретную фразу!</string>
     <string name="backup_pharse">Секретная фраза</string>
     <string name="backup_wrriten_down">Я всё записал</string>
@@ -125,7 +125,7 @@
     <string name="chart_change_interval_dialog_ok">ХОРОШО</string>
     <string name="chart_change_interval_dialog_title">Изменить интервал</string>
     <string name="chart_empty">Нет данных графика</string>
-    <string name="chart_loading">Загрузка графика…</string>
+    <string name="chart_loading">Загрузка графика …</string>
     <string name="chart_time_frame_15_min">15 минут</string>
     <string name="chart_time_frame_1_hour">1 час</string>
     <string name="chart_time_frame_24_hours">24 часа</string>
@@ -138,7 +138,7 @@
     <string name="choose_account_delete_msg">Вы действительно хотите удалить этот аккаунт?</string>
     <string name="choose_account_delete_title">Удалить аккаунт?</string>
     <string name="choose_account_deleted">Удален</string>
-    <string name="choose_account_empty_state">Пока ничего нет…\nВы не сохраняли аккаунты</string>
+    <string name="choose_account_empty_state">Пока ничего нет… \nВы не сохраняли аккаунты</string>
     <string name="choose_account_yes">Удалить</string>
     <string name="choose_language_china">中文(简体)</string>
     <string name="choose_language_china_code">Zh</string>
@@ -218,10 +218,10 @@
     <string name="dex_trade_tab_orderbook">Ордербук</string>
     <string name="dialog_account_first_open_about_backup">Я понимаю, что если это приложение установлено на другом устройстве или удалено, то я получу доступ к своим средствам только с помощью секретной фразы</string>
     <string name="dialog_account_first_open_about_fund_on_device">Я понимаю, что мои средства хранятся на этом устройстве, а не у компании</string>
-    <string name="dialog_account_first_open_about_terms">Я прочитал, понял и согласился с\nУсловиями использования</string>
+    <string name="dialog_account_first_open_about_terms">Я прочитал, понял и согласился с \nУсловиями использования</string>
     <string name="dialog_account_first_open_about_terms_key">Условиями использования</string>
     <string name="dialog_account_first_open_confirm_and_begin">Подтвердить и начать</string>
-    <string name="dialog_account_first_open_subtitle">Waves is different — it cannot be held safely by a bank or web service</string>
+    <string name="dialog_account_first_open_subtitle">Кошелёк Waves хранится только на вашем устройстве</string>
     <string name="dialog_account_first_open_title">Готово! Давайте начнём</string>
     <string name="dialog_processing">Подождите…</string>
     <string name="edit_account_name">Изменить имя</string>
@@ -255,7 +255,7 @@
     <string name="fingerprint_dialog_not_recognized">Не опознано</string>
     <string name="fingerprint_dialog_recognized">Отпечаток распознан</string>
     <string name="fingerprint_dialog_title">Вход</string>
-    <string name="fingerprint_dialog_too_many_attempts">Слишком много попыток.\nПопробуйте позже.</string>
+    <string name="fingerprint_dialog_too_many_attempts">Слишком много попыток. \nПопробуйте позже.</string>
     <string name="fingerprint_fatal_error_key_invalidate">The keys you wanted to use are invalidated because secure lock screen has turned off or changed the fingerprints stored on the device. You have to re-encrypt the data to access it</string>
     <string name="fingerprint_fatal_error_root">Rooted device, Fingerprint auth canceled!</string>
     <string name="history_active_now">Активен</string>
@@ -283,7 +283,7 @@
     <string name="history_details_show_all">Показать всё (%1$s)</string>
     <string name="history_details_timestamp">Дата</string>
     <string name="history_details_unconfirmed">НЕПОДТВЕРЖДЕННО</string>
-    <string name="history_empty">Пока ничего нет…\nУ вас нет транзакций</string>
+    <string name="history_empty">Пока ничего нет… \nУ вас нет транзакций</string>
     <string name="history_error_receive_data">Ошибка получения данных. Пожалуйста, попробуйте позднее</string>
     <string name="history_exchanged">Exchanged</string>
     <string name="history_issued">Выпущен</string>
@@ -320,7 +320,7 @@
     <string name="history_type_token_reissue">%s - Перевыпуск токена</string>
     <string name="history_type_unrecognised">Неопознанная транзакция</string>
     <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
-    <string name="import_account_login_at_site">Log in to your Waves Client via web or Mac/PC</string>
+    <string name="import_account_login_at_site">Войдите в Waves клиент через свой PC, Mac</string>
     <string name="import_account_scan_pairing_code">Scan pairing code</string>
     <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Settings > Security > Pairing code]]></string>
     <string name="import_account_tab_manually">Вручную</string>
@@ -332,12 +332,12 @@
     <string name="invalid_amount">Недопустимая сумма</string>
     <string name="invalid_monero_payment_id">Неверный ID платежа</string>
     <string name="last_trades_amount">Количество</string>
-    <string name="last_trades_empty">Пока ничего нет…\nИстория торговли пуста</string>
+    <string name="last_trades_empty">Пока ничего нет… \nИстория торговли пуста</string>
     <string name="last_trades_price">Цена</string>
     <string name="last_trades_sum">Сумма</string>
     <string name="last_trades_time">Время</string>
     <string name="leasing_history_toolbar_title">История</string>
-    <string name="left_drawer_description">Следите за последними новостями и статьями и узнавайте о событиях, происходящих на платформе Waves.</string>
+    <string name="left_drawer_description">Следите за последними новостями и статьями и узнавайте о событиях, происходящих на платформе Waves</string>
     <string name="left_drawer_join_the_waves_community">Присоединиться к сообществу Waves</string>
     <string name="left_drawer_site">wavescommunity.com</string>
     <string name="left_drawer_support">Поддержка Wavesplatform</string>
@@ -348,7 +348,7 @@
     <string name="my_orders_amount">Количество</string>
     <string name="my_orders_amount_sum">Amount/Sum</string>
     <string name="my_orders_date_time">Date</string>
-    <string name="my_orders_empty">Пока ничего нет…\nУ вас нет ордеров</string>
+    <string name="my_orders_empty">Пока ничего нет… \nУ вас нет ордеров</string>
     <string name="my_orders_price">Цена</string>
     <string name="my_orders_side_price">Side/Price</string>
     <string name="my_orders_status">Статус</string>
@@ -394,9 +394,9 @@
     <string name="no_internet_title">Нет подключения к Интернету</string>
     <string name="ok_cap">Хорошо</string>
     <string name="orderbook_amount_title">Количество %s</string>
-    <string name="orderbook_empty">Пока ничего нет…\nСписок сделок пуст</string>
+    <string name="orderbook_empty">Пока ничего нет… \nСписок сделок пуст</string>
     <string name="orderbook_last_price">ПОСЛЕДНЯЯ ЦЕНА</string>
-    <string name="orderbook_loading">Загрузка ордербука…</string>
+    <string name="orderbook_loading">Загрузка ордербука …</string>
     <string name="orderbook_price_title">Цена %s</string>
     <string name="orderbook_spread_percent">SPREAD %s%%</string>
     <string name="orderbook_sum_title">Сумма %s</string>
@@ -439,7 +439,7 @@
     <string name="qr_scanner_flash_on">Вспышка включена</string>
     <string name="qr_scanner_toolbar_title">Сканировать QR-код</string>
     <string name="quick_action_coming_soon">Скоро</string>
-    <string name="quick_action_exchange">Exchange</string>
+    <string name="quick_action_exchange">Обменять</string>
     <string name="quick_action_receive">Получить</string>
     <string name="quick_action_send">Отправить</string>
     <string name="receive_address_close">Закрыть</string>
@@ -475,10 +475,10 @@
     <string name="receive_not_verified">Ваш аккаунт не подтвержден</string>
     <string name="receive_payment_method">Способ оплаты</string>
     <string name="receive_sellect_asset">Выберите свой ассет из списка</string>
-    <string name="receive_step_1">Step 1</string>
-    <string name="receive_step_1_msg">In order to deposit Euro directly from your bank account through SEPA transfer you must get verified by our partner\nIDNow.eu</string>
+    <string name="receive_step_1">Шаг 1</string>
+    <string name="receive_step_1_msg">In order to deposit Euro directly from your bank account through SEPA transfer you must get verified by our partner IDNow.eu</string>
     <string name="receive_step_1_msg_link">IDNow.eu</string>
-    <string name="receive_step_2">Step 2</string>
+    <string name="receive_step_2">Шаг 2</string>
     <string name="receive_step_2_msg">После того, как вы пройдете проверку, вы получите электронное письмо с дальнейшими инструкциями</string>
     <string name="receive_step_url_link">https://www.idnow.eu/</string>
     <string name="receive_toolbar">Получить</string>
@@ -559,7 +559,7 @@
     <string name="token_burn_toolbar_title">Сожжение токена</string>
     <string name="transaction_failed">Не удалось выполнить транзакцию</string>
     <string name="transfer">Transfer</string>
-    <string name="tutorial_card_1_description">Пожалуйста, уделите немного времени для того, чтобы ознакомиться с важной информацией.\n\nМы не можем вернуть ваши средства или заморозить ваш аккаунт, если вы вошли в него на фишинговом сайте или потеряли секретную фразу (SEED).\n\nПродолжая использовать нашу платформу, вы соглашаетесь с тем, что в случае утраты вами секретной фразы (SEED), платформа Waves не сможет восстановить доступ к вашему аккаунту или вернуть вам ваши средства. Только вы контролируете свой аккаунт и ответственны за сохранность секретной фразы.</string>
+    <string name="tutorial_card_1_description">Пожалуйста, уделите немного времени для того, чтобы ознакомиться с важной информацией. \n\nМы не можем вернуть ваши средства или заморозить ваш аккаунт, если вы вошли в него на фишинговом сайте или потеряли секретную фразу (SEED). \n\nПродолжая использовать нашу платформу, вы соглашаетесь с тем, что в случае утраты вами секретной фразы (SEED), платформа Waves не сможет восстановить доступ к вашему аккаунту или вернуть вам ваши средства. Только вы контролируете свой аккаунт и ответственны за сохранность секретной фразы.</string>
     <string name="tutorial_card_1_title">Добро пожаловать на платформу Waves!</string>
     <string name="tutorial_card_2_description">При регистрации аккаунта вам предлагается сохранить секретную фразу (Seed) и защитить аккаунт паролем. В обычных централизованных сервисах особое внимание уделяется именно паролю, который, в случае чего, можно изменить или восстановить через почту. У децентрализованной платформы Waves всё устроено иначе:</string>
     <string name="tutorial_card_2_title">Что вам нужно знать о секретной фразе</string>

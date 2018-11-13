@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_fill_payment_details">Usted DEBE completar las especificaciones de pago con la siguiente información:</string>
-    <string name="about_fill_payment_info"><![CDATA[CNM - <su dirección de WAVES>.\nSi no lo hace, no podemos acreditar su cuenta.]]></string>
+    <string name="about_fill_payment_info"><![CDATA[CNM - <su dirección de WAVES>. \nSi no lo hace, no podemos acreditar su cuenta.]]></string>
     <string name="about_redirection_message">Después de realizar la verificación, recibirá un correo electrónico con más instrucciones.</string>
     <string name="about_redirection_okay">Ok</string>
-    <string name="about_redirection_title">Fuiste redirigido a la «IDNow»\npara la verificación</string>
+    <string name="about_redirection_title">Fuiste redirigido a la «IDNow» \npara la verificación</string>
     <string name="add_address_address">Dirección</string>
     <string name="add_address_btn_txt">Guardar</string>
     <string name="add_address_name">Nombre</string>
     <string name="add_address_toolbar_title">Añadir</string>
     <string name="address_book_add">Añadir</string>
-    <string name="address_book_empty_state">Nada por aquí…\nPuedes crear una nueva dirección</string>
+    <string name="address_book_empty_state">Nada por aquí… \nPuedes crear una nueva dirección</string>
     <string name="address_book_search">Buscar</string>
     <string name="address_book_success_deleted">Dirección borrada</string>
     <string name="address_book_toolbar_title">Directorio</string>
@@ -57,11 +57,11 @@
     <string name="asset_details_view_history">Ver historial</string>
     <string name="asset_details_waves_token">Token de Waves</string>
     <string name="attachment_too_long">El archivo adjunto es demasiado largo</string>
-    <string name="backup_hint">Ya que solo usted controla su dinero, deberá guardar su frase de respaldo en caso de que esta aplicación se elimine o regrese</string>
+    <string name="backup_hint">Ya que solo usted controla su dinero, deberá guardar su frase de respaldo en caso de que esta aplicación se elimine</string>
     <string name="backup_hint_2">Por favor escriba cuidadosamente estas 15 palabras o cópielas</string>
     <string name="backup_hint_3">Confirmarás esta frase en la siguiente pantalla.</string>
     <string name="backup_info_button">Entiendo</string>
-    <string name="backup_info_subtitle">Waves Platform quiere advertirte sobre el incremento de ataques de estafa y suplantación de identidad durante el último mes. Los estafadores ocultan su malware en sus propias versiones del cliente Waves y prometen bonificaciones y descuentos para atraer a los usuarios.\n\nPor favor, ten cuidado y nunca introduzcas tu frase de respaldo (SEED) en estos \'clientes\', porque tu cuenta puede ser comprometida y perder todos tus fondos.\n\nDeberías confiar SOLO en el cliente oficial de Waves.</string>
+    <string name="backup_info_subtitle">Waves Platform quiere advertirte sobre el incremento de ataques de estafa y suplantación de identidad durante el último mes. Los estafadores ocultan su malware en sus propias versiones del cliente Waves y prometen bonificaciones y descuentos para atraer a los usuarios. \n\nPor favor, ten cuidado y nunca introduzcas tu frase de respaldo (SEED) en estos \'clientes\', porque tu cuenta puede ser comprometida y perder todos tus fondos. \n\nDeberías confiar SOLO en el cliente oficial de Waves.</string>
     <string name="backup_info_title">¡Trata tu frase de recuperación con cuidado!</string>
     <string name="backup_pharse">Farse de respaldo</string>
     <string name="backup_wrriten_down">Lo he escrito</string>
@@ -125,7 +125,7 @@
     <string name="chart_change_interval_dialog_ok">OK</string>
     <string name="chart_change_interval_dialog_title">Cambiar intervalo</string>
     <string name="chart_empty">No hay datos de gráficos disponibles</string>
-    <string name="chart_loading">Cargando gráfico…</string>
+    <string name="chart_loading">Cargando gráfico …</string>
     <string name="chart_time_frame_15_min">15 minutos</string>
     <string name="chart_time_frame_1_hour">1 hora</string>
     <string name="chart_time_frame_24_hours">24 horas</string>
@@ -138,12 +138,12 @@
     <string name="choose_account_delete_msg">¿Estás seguro de que quieres eliminar esta cuenta?</string>
     <string name="choose_account_delete_title">¿Borrar cuenta?</string>
     <string name="choose_account_deleted">Eliminada</string>
-    <string name="choose_account_empty_state">Nada por aquí…\nNo tienes cuentas guardadas</string>
+    <string name="choose_account_empty_state">Nada por aquí… \n\nNo tienes cuentas guardadas</string>
     <string name="choose_account_yes">Borrar</string>
     <string name="choose_language_china">中文(简体)</string>
     <string name="choose_language_china_code">Zh</string>
-    <string name="choose_language_confirm">Confirmar</string>
-    <string name="choose_language_continue">Continuar</string>
+    <string name="choose_language_confirm">승인</string>
+    <string name="choose_language_continue">계속</string>
     <string name="choose_language_dansk">Dansk</string>
     <string name="choose_language_dansk_code">Dn</string>
     <string name="choose_language_english">English</string>
@@ -155,7 +155,7 @@
     <string name="choose_language_korea">한국어</string>
     <string name="choose_language_korea_code">Ko</string>
     <string name="choose_language_nederlands">Nederlands</string>
-    <string name="choose_language_nederlands_code">NI</string>
+    <string name="choose_language_nederlands_code">Nl</string>
     <string name="choose_language_russia">Русский</string>
     <string name="choose_language_russia_code">Ru</string>
     <string name="choose_language_turkey">Türkçe</string>
@@ -218,7 +218,7 @@
     <string name="dex_trade_tab_orderbook">Libro de órdenes</string>
     <string name="dialog_account_first_open_about_backup">Entiendo que si esta aplicación se mueve a otro dispositivo o se elimina, mis Waves solo se pueden recuperar con la frase de respaldo</string>
     <string name="dialog_account_first_open_about_fund_on_device">Entiendo que mis fondos se mantienen de forma segura en este dispositivo, no por una empresa</string>
-    <string name="dialog_account_first_open_about_terms">He leído, entiendo y acepto los Términos de uso</string>
+    <string name="dialog_account_first_open_about_terms">He leído, entiendo y acepto los \nTérminos de uso</string>
     <string name="dialog_account_first_open_about_terms_key">Términos de Uso</string>
     <string name="dialog_account_first_open_confirm_and_begin">Confirmar y comenzar</string>
     <string name="dialog_account_first_open_subtitle">Waves es diferente — no puede ser guardado de manera segura por un banco o servicio web</string>
@@ -255,7 +255,7 @@
     <string name="fingerprint_dialog_not_recognized">No reconocido</string>
     <string name="fingerprint_dialog_recognized">Huella dactilar reconocida</string>
     <string name="fingerprint_dialog_title">Registrarse</string>
-    <string name="fingerprint_dialog_too_many_attempts">Demasiados intentos.\nInténtalo de nuevo más tarde.</string>
+    <string name="fingerprint_dialog_too_many_attempts">Demasiados intentos. \nInténtalo de nuevo más tarde.</string>
     <string name="fingerprint_fatal_error_key_invalidate">Las llaves que desea utilizar están invalidadas porque la pantalla de bloqueo las ha desactivado o ha cambiado las huellas digitales almacenadas en el dispositivo. Tienes que volver a cifrar los datos para acceder a ellos.</string>
     <string name="fingerprint_fatal_error_root">Dispositivo re-iniciado, ¡La autenticación de huellas dactilares fue cancelada!</string>
     <string name="history_active_now">Activo ahora</string>
@@ -283,7 +283,7 @@
     <string name="history_details_show_all">Mostrar todo (%1$s)</string>
     <string name="history_details_timestamp">Marca de tiempo</string>
     <string name="history_details_unconfirmed">NO CONFIRMADO</string>
-    <string name="history_empty">Nada por aquí…\nNo tienes ninguna transacción</string>
+    <string name="history_empty">Nada por aquí… \nNo tienes ninguna transacción</string>
     <string name="history_error_receive_data">Error al recibir datos. Por favor intente mas tarde</string>
     <string name="history_exchanged">Intercambiado</string>
     <string name="history_issued">Emitido</string>
@@ -332,7 +332,7 @@
     <string name="invalid_amount">Monto inválido</string>
     <string name="invalid_monero_payment_id">ID de pago no válido</string>
     <string name="last_trades_amount">Cantidad</string>
-    <string name="last_trades_empty">Nada por aquí…\nEl historial de trading está vacío</string>
+    <string name="last_trades_empty">Nada por aquí… \nEl historial de trading está vacío</string>
     <string name="last_trades_price">Precio</string>
     <string name="last_trades_sum">Suma</string>
     <string name="last_trades_time">Tiempo</string>
@@ -348,7 +348,7 @@
     <string name="my_orders_amount">Cantidad</string>
     <string name="my_orders_amount_sum">Cantidad/Suma</string>
     <string name="my_orders_date_time">Fecha</string>
-    <string name="my_orders_empty">Nada por aquí…\nNo tienes pedidos</string>
+    <string name="my_orders_empty">Nada por aquí… \nNo tienes pedidos</string>
     <string name="my_orders_price">Precio</string>
     <string name="my_orders_side_price">Lado/Precio</string>
     <string name="my_orders_status">Estado</string>
@@ -394,7 +394,7 @@
     <string name="no_internet_title">No hay conexión a internet</string>
     <string name="ok_cap">OK</string>
     <string name="orderbook_amount_title">Cantidad de %s</string>
-    <string name="orderbook_empty">Nada aquí…\nEl libro de pedidos está vacío</string>
+    <string name="orderbook_empty">Nada aquí… \nEl libro de pedidos está vacío</string>
     <string name="orderbook_last_price">ÚLTIMO PRECIO</string>
     <string name="orderbook_loading">Cargando libro de órdenes…</string>
     <string name="orderbook_price_title">Precio %s</string>
@@ -444,7 +444,7 @@
     <string name="quick_action_send">Enviar</string>
     <string name="receive_address_close">Cerrar</string>
     <string name="receive_address_copy">Copiar</string>
-    <string name="receive_address_generate">Generar...</string>
+    <string name="receive_address_generate">Generar…</string>
     <string name="receive_address_link_to_invoice">Enlace a una factura</string>
     <string name="receive_address_share">Compartir</string>
     <string name="receive_address_view_toolbar">Tu dirección de Bitcoin</string>
@@ -454,7 +454,7 @@
     <string name="receive_amount_title">Cantidad en %1$s</string>
     <string name="receive_asset">Activo</string>
     <string name="receive_card">Tarjeta</string>
-    <string name="receive_contact_msg">En caso de problemas con la verificación o el procesamiento de pagos, comuníquese con el equipo de soporte de Coinomat  —\nsupport@coinomat.com</string>
+    <string name="receive_contact_msg">En caso de problemas con la verificación o el procesamiento de pagos, comuníquese con el equipo de soporte de Coinomat  —support@coinomat.com</string>
     <string name="receive_contact_msg_key">support@coinomat.com</string>
     <string name="receive_continue">Continuar</string>
     <string name="receive_cryptocurrency">Criptomoneda</string>
@@ -559,7 +559,7 @@
     <string name="token_burn_toolbar_title">Quemar Token</string>
     <string name="transaction_failed">Transacción fallida</string>
     <string name="transfer">Transferir</string>
-    <string name="tutorial_card_1_description">Tómese un tiempo para comprender algunas cosas importantes para su propia seguridad.\n\nNo podemos recuperar sus fondos ni congelar su cuenta si visita un sitio de suplantación de identidad o si pierdes tu frase de respaldo (SEED).\n\nAl continuar usando nuestra plataforma, usted acepta todos los riesgos asociados con la pérdida de su SEED, incluyendo, entre otros, la imposibilidad de obtener sus fondos y disponer de ellos. En caso de que pierda su SEED, acepta y reconoce que la Plataforma Waves no será responsable de las consecuencias negativas de esto.</string>
+    <string name="tutorial_card_1_description">Tómese un tiempo para comprender algunas cosas importantes para su propia seguridad. \n\nNo podemos recuperar sus fondos ni congelar su cuenta si visita un sitio de suplantación de identidad o si pierdes tu frase de respaldo (SEED). \n\nAl continuar usando nuestra plataforma, usted acepta todos los riesgos asociados con la pérdida de su SEED, incluyendo, entre otros, la imposibilidad de obtener sus fondos y disponer de ellos. En caso de que pierda su SEED, acepta y reconoce que la Plataforma Waves no será responsable de las consecuencias negativas de esto.</string>
     <string name="tutorial_card_1_title">¡Bienvenido a la plataforma Waves!</string>
     <string name="tutorial_card_2_description">Al registrar su cuenta, se le pedirá que guarde su frase secreta (SEED) y que proteja su cuenta con una contraseña. En los servidores centralizados, se presta especial atención a la contraseña, que se puede cambiar y restablecer por correo electrónico, si es necesario. Sin embargo, en plataformas descentralizadas como Waves, todo está organizado de manera diferente:</string>
     <string name="tutorial_card_2_title">Lo que necesitas saber sobre tu semilla (SEED)</string>
@@ -609,6 +609,6 @@
     <string name="your_address_your_qr_code">Su código QR</string>
     <string name="your_asset_activity_all">Todos</string>
     <string name="your_asset_activity_greater_zero">No vacio</string>
-    <string name="your_assets_empty_state">Nada por aquí…\nNo tienes activos con fondos</string>
+    <string name="your_assets_empty_state">Nada por aquí… \nNo tienes activos con fondos</string>
     <string name="your_assets_toolbar_title">Sus activos</string>
 </resources>

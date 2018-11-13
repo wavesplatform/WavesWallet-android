@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_fill_payment_details">U moet de volgende informatie bij de betalingsdetails invoeren:</string>
-    <string name="about_fill_payment_info"><![CDATA[CNM — <Uw WAVES adres>.\nAls u dit niet invoert kunnen we uw account niet crediteren.]]></string>
+    <string name="about_fill_payment_info"><![CDATA[CNM — <Uw WAVES adres>.\n Als u dit niet invoert kunnen we uw account niet crediteren.]]></string>
     <string name="about_redirection_message">Na de verificatie ontvangt u een email met verdere instructies.</string>
     <string name="about_redirection_okay">Oké</string>
-    <string name="about_redirection_title">U wordt doorgestuurd naar «IDNow»\nvoor verificatie</string>
+    <string name="about_redirection_title">U wordt doorgestuurd naar «IDNow»  \n voor verificatie</string>
     <string name="add_address_address">Adres</string>
     <string name="add_address_btn_txt">Opslaan</string>
     <string name="add_address_name">Naam</string>
     <string name="add_address_toolbar_title">Voeg toe</string>
     <string name="address_book_add">Voeg toe</string>
-    <string name="address_book_empty_state">Niks hier…\nU kunt een nieuw adres aanmaken</string>
+    <string name="address_book_empty_state">Niks hier… \nU kunt een nieuw adres aanmaken</string>
     <string name="address_book_search">Zoeken</string>
     <string name="address_book_success_deleted">Adres verwijderd</string>
     <string name="address_book_toolbar_title">Adresboek</string>
@@ -57,11 +57,11 @@
     <string name="asset_details_view_history">Bekijk geschiedenis</string>
     <string name="asset_details_waves_token">Waves token</string>
     <string name="attachment_too_long">Bijlage is te lang</string>
-    <string name="backup_hint">Omdat alleen u uw geld beheert moet u uw backup regel (SEED) opslaan voor het geval deze app verwijderd wordt. Of ga terug.</string>
+    <string name="backup_hint">Omdat alleen u uw geld beheert moet u uw backup regel (SEED) opslaan voor het geval deze app verwijderd wordt.</string>
     <string name="backup_hint_2">Schrijf alstublieft zorgvuldig de 15 woorden op of kopieer ze</string>
     <string name="backup_hint_3">U moet deze regel bevestigen op het volgende scherm</string>
     <string name="backup_info_button">Ik begrijp het</string>
-    <string name="backup_info_subtitle">Waves Platform wilt u graag waarschuwen voor de verhoogde frequentie van oplichtings- en phishing-aanvallen van de afgelopen maand. Fraudeurs verbergen hun malware in hun eigen versies van de Waves-client en beloven bonussen en kortingen om gebruikers te lokken.\n\nWees voorzichtig en voer nooit uw SEED in deze \'clients\' in, omdat uw account in gevaar komt en u al uw geld verliest.\n\nGebruik ALLEEN de officiële Waves-client.</string>
+    <string name="backup_info_subtitle">Waves Platform wilt u graag waarschuwen voor de verhoogde frequentie van oplichtings- en phishing-aanvallen van de afgelopen maand. Fraudeurs verbergen hun malware in hun eigen versies van de Waves-client en beloven bonussen en kortingen om gebruikers te lokken. \n\nWees voorzichtig en voer nooit uw SEED in deze \'clients\' in, omdat uw account in gevaar komt en u al uw geld verliest. \n\nGebruik ALLEEN de officiële Waves-client.</string>
     <string name="backup_info_title">Behandel uw backup regel zorgvuldig!</string>
     <string name="backup_pharse">Backup regel</string>
     <string name="backup_wrriten_down">Ik heb het opgeschreven</string>
@@ -138,16 +138,16 @@
     <string name="choose_account_delete_msg">Weet u zeker dat u dit account wilt verwijderen?</string>
     <string name="choose_account_delete_title">Account verwijderen?</string>
     <string name="choose_account_deleted">Verwijderd</string>
-    <string name="choose_account_empty_state">Niks hier…\nU heeft geen opgeslagen accounts</string>
+    <string name="choose_account_empty_state">Niks hier… \nU heeft geen opgeslagen accounts</string>
     <string name="choose_account_yes">Verwijder</string>
     <string name="choose_language_china">中文(简体)</string>
-    <string name="choose_language_china_code">CN</string>
+    <string name="choose_language_china_code">Zh</string>
     <string name="choose_language_confirm">Bevestig</string>
     <string name="choose_language_continue">Ga door</string>
-    <string name="choose_language_dansk">Deens</string>
-    <string name="choose_language_dansk_code">DK</string>
-    <string name="choose_language_english">Engels</string>
-    <string name="choose_language_english_code">EN</string>
+    <string name="choose_language_dansk">Dansk</string>
+    <string name="choose_language_dansk_code">Dn</string>
+    <string name="choose_language_english">English</string>
+    <string name="choose_language_english_code">En</string>
     <string name="choose_language_spain">Español</string>
     <string name="choose_language_spain_code">Es</string>
     <string name="choose_language_hindi">हिन्दी</string>
@@ -155,11 +155,11 @@
     <string name="choose_language_korea">한국어</string>
     <string name="choose_language_korea_code">Ko</string>
     <string name="choose_language_nederlands">Nederlands</string>
-    <string name="choose_language_nederlands_code">NL</string>
+    <string name="choose_language_nederlands_code">Nl</string>
     <string name="choose_language_russia">Русский</string>
-    <string name="choose_language_russia_code">RU</string>
+    <string name="choose_language_russia_code">Ru</string>
     <string name="choose_language_turkey">Türkçe</string>
-    <string name="choose_language_turkey_code">TR</string>
+    <string name="choose_language_turkey_code">Tr</string>
     <string name="coinomat_success_subtitle">Na de betaling wordt uw saldo geüpdatet</string>
     <string name="coinomat_success_title">U wordt doorgestuurd naar «Indacoin»</string>
     <string name="common_action_close">Sluiten</string>
@@ -255,7 +255,7 @@
     <string name="fingerprint_dialog_not_recognized">Niet herkend</string>
     <string name="fingerprint_dialog_recognized">Vingerafdruk herkend</string>
     <string name="fingerprint_dialog_title">Aanmelden</string>
-    <string name="fingerprint_dialog_too_many_attempts">Te veel pogingen.\nProbeer het later opnieuw.</string>
+    <string name="fingerprint_dialog_too_many_attempts">Te veel pogingen. \nProbeer het later opnieuw.</string>
     <string name="fingerprint_fatal_error_key_invalidate">De toetsen die u wilde gebruiken, zijn ongeldig omdat het beveiligde vergrendelscherm is uitgeschakeld of de vingerafdrukken die op het apparaat zijn opgeslagen, zijn gewijzigd. U moet de gegevens opnieuw versleutelen om er toegang toe te hebben</string>
     <string name="fingerprint_fatal_error_root">Geroot apparaat, vingerafdruk authenticatie geannuleerd!</string>
     <string name="history_active_now">Nu actief</string>
@@ -283,7 +283,7 @@
     <string name="history_details_show_all">Alles weergeven (%1$s)</string>
     <string name="history_details_timestamp">Tijdstempel</string>
     <string name="history_details_unconfirmed">NIET BEVESTIGD</string>
-    <string name="history_empty">Niets hier…\nU hebt geen transacties</string>
+    <string name="history_empty">Niets hier… \nU hebt geen transacties</string>
     <string name="history_error_receive_data">Error tijdens opvragen van data. Probeer het later opnieuw.</string>
     <string name="history_exchanged">Uitgewisseld</string>
     <string name="history_issued">Uitgegeven</string>
@@ -320,7 +320,7 @@
     <string name="history_type_token_reissue">%s Token heruitgeven</string>
     <string name="history_type_unrecognised">Niet-herkende transactie</string>
     <string name="import_account_click_show_pairing">Klik op «Show Pairing Code»  om een ​​QR-code te tonen</string>
-    <string name="import_account_login_at_site">Meld u aan bij uw Waves Client via internet of Mac / pc</string>
+    <string name="import_account_login_at_site">Meld u aan bij uw Waves Client via internet of Mac / PC</string>
     <string name="import_account_scan_pairing_code">Koppelingscode scannen</string>
     <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Instellingen > Beveiliging > Koppelingscode]]></string>
     <string name="import_account_tab_manually">Handmatig</string>
@@ -332,7 +332,7 @@
     <string name="invalid_amount">Ongeldige hoeveelheid</string>
     <string name="invalid_monero_payment_id">Ongeldige Betalings-ID</string>
     <string name="last_trades_amount">Hoeveelheid</string>
-    <string name="last_trades_empty">Niets hier…\nDe handelsgeschiedenis is leeg</string>
+    <string name="last_trades_empty">Niets hier… \nDe handelsgeschiedenis is leeg</string>
     <string name="last_trades_price">Prijs</string>
     <string name="last_trades_sum">Som</string>
     <string name="last_trades_time">Tijd</string>
@@ -348,7 +348,7 @@
     <string name="my_orders_amount">Bedrag</string>
     <string name="my_orders_amount_sum">Hoeveelheid/Totaal</string>
     <string name="my_orders_date_time">Datum</string>
-    <string name="my_orders_empty">Niets hier…\nU heeft geen orders</string>
+    <string name="my_orders_empty">Niets hier.. \nU heeft geen orders</string>
     <string name="my_orders_price">Prijs</string>
     <string name="my_orders_side_price">Side/Prijs</string>
     <string name="my_orders_status">Status</string>
@@ -394,7 +394,7 @@
     <string name="no_internet_title">Geen verbinding met internet</string>
     <string name="ok_cap">OK</string>
     <string name="orderbook_amount_title">Hoeveelheid %s</string>
-    <string name="orderbook_empty">Niets hier…\nHet orderboek is leeg</string>
+    <string name="orderbook_empty">Niets hier… \nHet orderboek is leeg</string>
     <string name="orderbook_last_price">LAATSTE PRIJS</string>
     <string name="orderbook_loading">Orderboek laden …</string>
     <string name="orderbook_price_title">Prijs %s</string>
@@ -559,7 +559,7 @@
     <string name="token_burn_toolbar_title">Token Geburned</string>
     <string name="transaction_failed">Transactie mislukt</string>
     <string name="transfer">Overdracht</string>
-    <string name="tutorial_card_1_description">Neem alstublieft de tijd om enkele belangrijke dingen voor uw eigen veiligheid te begrijpen.\n\nWe kunnen uw geld niet terugkrijgen of uw account niet blokkeren als u een phishing-site bezoekt of uw back-upzin (ook wel SEED-zin genoemd) kwijtraakt.\n\nDoor ons platform te blijven gebruiken, gaat u ermee akkoord alle risico\'s te aanvaarden die gepaard gaan met het verlies van uw SEED, inclusief maar niet beperkt tot het onvermogen om uw geld te verkrijgen en te verwijderen. In het geval dat u uw SEED verliest, stemt u ermee in en erkent u dat het Waves Platform niet verantwoordelijk zou zijn voor de negatieve gevolgen hiervan.</string>
+    <string name="tutorial_card_1_description">Neem alstublieft de tijd om enkele belangrijke dingen voor uw eigen veiligheid te begrijpen. \n\nWe kunnen uw geld niet terugkrijgen of uw account niet blokkeren als u een phishing-site bezoekt of uw back-upzin (ook wel SEED-zin genoemd) kwijtraakt. \n\nDoor ons platform te blijven gebruiken, gaat u ermee akkoord alle risico\'s te aanvaarden die gepaard gaan met het verlies van uw SEED, inclusief maar niet beperkt tot het onvermogen om uw geld te verkrijgen en te verwijderen. In het geval dat u uw SEED verliest, stemt u ermee in en erkent u dat het Waves Platform niet verantwoordelijk zou zijn voor de negatieve gevolgen hiervan.</string>
     <string name="tutorial_card_1_title">Welkom bij het Waves Platform!</string>
     <string name="tutorial_card_2_description">Wanneer u uw account registreert, wordt u gevraagd om uw geheime zin (Seed) op te slaan en om uw account te beveiligen met een wachtwoord. Op normale gecentraliseerde servers wordt speciale aandacht besteed aan het wachtwoord, dat kan worden gewijzigd en gereset via e-mail, als de noodzaak zich voordoet. Op gedecentraliseerde platforms zoals Waves is alles echter anders geregeld:</string>
     <string name="tutorial_card_2_title">Wat u moet weten over uw SEED</string>
@@ -609,6 +609,6 @@
     <string name="your_address_your_qr_code">Uw QR-Code</string>
     <string name="your_asset_activity_all">Alles</string>
     <string name="your_asset_activity_greater_zero">Niet leeg</string>
-    <string name="your_assets_empty_state">Niets hier…\nJe hebt geen assets met waarde</string>
+    <string name="your_assets_empty_state">Niets hier… \nJe hebt geen assets met waarde</string>
     <string name="your_assets_toolbar_title">Uw assets</string>
 </resources>
