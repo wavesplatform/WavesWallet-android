@@ -53,6 +53,7 @@
         <activity
             android:name=".v2.ui.home.MainActivity"
             android:screenOrientation="portrait"
+            android:configChanges="orientation|locale|layoutDirection"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="adjustResize" />
 

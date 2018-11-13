@@ -174,6 +174,11 @@ class DexFragment : BaseFragment(), DexView {
         view.button_add_markets.click {
             launchActivity<DexMarketsActivity>(REQUEST_SELECT_MARKETS)
         }
+        view.button_add_markets.text = getString(R.string.dex_empty_button_text)
+        view.dex_empty_title.text =
+                getString(R.string.dex_empty_title)
+        view.dex_empty_subtitle.text =
+                getString(R.string.dex_empty_subtitle)
         return view
     }
 

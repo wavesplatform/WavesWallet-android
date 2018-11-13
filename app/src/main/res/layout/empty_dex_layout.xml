@@ -20,6 +20,7 @@
             app:srcCompat="@drawable/ic_userimg_dex_80_multy" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/dex_empty_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -30,6 +31,7 @@
             app:fontFamily="@font/roboto_medium" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/dex_empty_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
