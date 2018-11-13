@@ -9,13 +9,16 @@ import com.google.gson.GsonBuilder
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.wallet.BuildConfig
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
+import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.remote.*
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import ren.yale.android.retrofitcachelibrx2.RetrofitCache
 import ren.yale.android.retrofitcachelibrx2.intercept.CacheForceInterceptorNoNet
@@ -41,13 +44,53 @@ class NetworkModule {
         return Cache(cacheDirectory, cacheSize.toLong())
     }
 
+    @Provides
+    @Singleton
+    @Named("ReceivedCookiesInterceptor")
+    internal fun receivedCookiesInterceptor(prefsUtil: PrefsUtil): Interceptor {
+        return Interceptor { chain ->
+            val originalResponse = chain.proceed(chain.request())
+            if (originalResponse.request().url().url().toString().contains(BuildConfig.NODE_URL)
+                    && originalResponse.headers("Set-Cookie").isNotEmpty()
+                    && prefsUtil.getGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES).isEmpty()) {
+                val cookies = originalResponse.headers("Set-Cookie").toHashSet()
+                prefsUtil.setGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES, cookies)
+            }
+            originalResponse
+        }
+    }
+
+    @Provides
+    @Singleton
+    @Named("AddCookiesInterceptor")
+    internal fun addCookiesInterceptor(prefsUtil: PrefsUtil): Interceptor {
+        return Interceptor { chain ->
+            val cookies = prefsUtil.getGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES)
+            if (cookies.isNotEmpty() && chain.request().url().url().toString().contains(BuildConfig.NODE_URL)) {
+                val builder = chain.request().newBuilder()
+                cookies.forEach {
+                    builder.addHeader("Cookie", it)
+                }
+                chain.proceed(builder.build())
+            } else {
+                chain.proceed(chain.request())
+            }
+        }
+    }
+
+
     @Singleton
     @Provides
-    internal fun provideOkHttpClient(cache: Cache, @Named("timeout") timeout: Int): OkHttpClient {
+    internal fun provideOkHttpClient(cache: Cache, @Named("timeout") timeout: Int,
+                                     @Named("ReceivedCookiesInterceptor") receivedCookiesInterceptor: Interceptor,
+                                     @Named("AddCookiesInterceptor") addCookiesInterceptor: Interceptor
+    ): OkHttpClient {
         return OkHttpClient.Builder()
                 .cache(cache)
                 .readTimeout(timeout.toLong(), TimeUnit.SECONDS)
                 .writeTimeout(timeout.toLong(), TimeUnit.SECONDS)
+                .addInterceptor(receivedCookiesInterceptor)
+                .addInterceptor(addCookiesInterceptor)
                 .addInterceptor(CacheForceInterceptorNoNet())
                 .addNetworkInterceptor(CacheInterceptorOnNet())
                 .addInterceptor(OkLogInterceptor.builder().withAllLogData().build())

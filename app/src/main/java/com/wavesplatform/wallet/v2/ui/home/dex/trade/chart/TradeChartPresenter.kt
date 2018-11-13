@@ -21,14 +21,15 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     var watchMarket: WatchMarket? = null
     var selectedTimeFrame = 0
     var newSelectedTimeFrame = 0
-    val timeFrameList = arrayOf(ChartTimeFrame.FIVE_MINUTES,ChartTimeFrame.FIFTEEN_MINUTES,ChartTimeFrame.THIRTY_MINUTES,
-            ChartTimeFrame.ONE_HOUR,ChartTimeFrame.FOUR_HOURS,ChartTimeFrame.TWENTY_FOUR_HOURS)
+    val timeFrameList = arrayOf(ChartTimeFrame.FIVE_MINUTES, ChartTimeFrame.FIFTEEN_MINUTES, ChartTimeFrame.THIRTY_MINUTES,
+            ChartTimeFrame.ONE_HOUR, ChartTimeFrame.FOUR_HOURS, ChartTimeFrame.TWENTY_FOUR_HOURS)
 
     var chartModel: ChartModel = ChartModel()
     private var entries: ArrayList<CandleEntry> = ArrayList()
     private var barEntries: ArrayList<BarEntry> = ArrayList()
     var currentTimeFrame: Int = 30
         set(value) {
+            field = value
             watchMarket?.market?.currentTimeFrame = value
             watchMarket?.market?.save()
         }
@@ -61,6 +62,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
 
     fun pause() {
         timer?.cancel()
+        timer = null
     }
 
     fun resume() {
@@ -68,7 +70,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     }
 
     private fun startTimer() {
-        if (timer != null) timer?.cancel()
+        if (timer != null) pause()
 
         if (timer == null) {
             timer = Timer()

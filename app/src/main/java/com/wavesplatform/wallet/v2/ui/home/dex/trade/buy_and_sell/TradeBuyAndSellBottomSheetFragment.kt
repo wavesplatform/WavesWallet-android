@@ -39,6 +39,7 @@ class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), Trad
 
     companion object {
         var BUNDLE_DATA = "data"
+        var BUNDLE_ORDER_TYPE = "orderType"
         var BUY_TYPE = 0
         var SELL_TYPE = 1
 
@@ -59,8 +60,8 @@ class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), Trad
         presenter.data = arguments?.getParcelable<BuySellData>(BUNDLE_DATA)
 
         val fragments = arrayListOf<Fragment>(
-                TradeOrderFragment.newInstance(presenter.data, this),
-                TradeOrderFragment.newInstance(presenter.data, this)
+                TradeOrderFragment.newInstance(BUY_TYPE, presenter.data, this),
+                TradeOrderFragment.newInstance(SELL_TYPE, presenter.data, this)
         )
 
         val adapter = TradeBuyAndSellPageAdapter(childFragmentManager, fragments,

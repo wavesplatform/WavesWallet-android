@@ -18,14 +18,14 @@ import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.utils.EntryXComparator
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.dex.details.chart.CandleTouchListener
-import com.wavesplatform.wallet.v1.ui.dex.details.chart.OnCandleGestureListener
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.custom.CandleTouchListener
+import com.wavesplatform.wallet.v2.ui.custom.OnCandleGestureListener
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
@@ -36,6 +36,8 @@ import pers.victor.ext.click
 import pers.victor.ext.findColor
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.util.*
 import javax.inject.Inject
 
@@ -387,7 +389,11 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
                 candle_chart.invalidate()
             }
         } else {
-            Handler().postDelayed({ updateCandles(candles, barEntries) }, 100)
+            runDelayed(100) {
+                runOnUiThread {
+                    updateCandles(candles, barEntries)
+                }
+            }
         }
 
     }
@@ -396,18 +402,21 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         val barData = BarData()
         val baseDataSet = bar_chart.barData.getDataSetByIndex(0) as BarDataSet
 
-        for (barEntry in barEntries) {
-            baseDataSet.addEntry(barEntry)
+        barEntries.iterator().forEach {
+            baseDataSet.addEntry(it)
         }
+
         Collections.sort(baseDataSet.values, EntryXComparator())
         barData.addDataSet(baseDataSet)
 
         val candleDataSet = candle_chart.candleData.getDataSetByIndex(0) as CandleDataSet
         val prevCnt = candleDataSet.entryCount
         val lastPoint = candleDataSet.getEntryForIndex(0)
-        for (candleEntry in candles) {
-            candleDataSet.addEntry(candleEntry)
+
+        candles.iterator().forEach {
+            candleDataSet.addEntry(it)
         }
+
         Collections.sort(candleDataSet.values, EntryXComparator())
         val candleData = CandleData()
         candleData.addDataSet(candleDataSet)
@@ -440,7 +449,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
 
         val baseDataSet = bar_chart.barData.getDataSetByIndex(0) as BarDataSet
 
-        for (barEntry in barEntries) {
+        barEntries.iterator().forEach { barEntry ->
             val entries = baseDataSet.getEntriesForXValue(barEntry.x)
             if (entries.isEmpty()) {
                 baseDataSet.addEntry(barEntry)
@@ -449,6 +458,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
                 bar.y = barEntry.y
             }
         }
+
         baseDataSet.notifyDataSetChanged()
         val barData = BarData()
         barData.addDataSet(baseDataSet)
@@ -456,7 +466,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         bar_chart.notifyDataSetChanged()
 
         val candleDataSet = candle_chart.candleData.getDataSetByIndex(0) as CandleDataSet
-        for (candleEntry in candles) {
+        candles.iterator().forEach { candleEntry ->
             val entries = candleDataSet.getEntriesForXValue(candleEntry.x)
             if (entries.isEmpty()) {
                 candleDataSet.addEntry(candleEntry)
@@ -468,6 +478,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
                 c.close = candleEntry.close
             }
         }
+
         val candleData = CandleData()
         candleData.addDataSet(candleDataSet)
         candle_chart.data = candleData

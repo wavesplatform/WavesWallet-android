@@ -61,7 +61,11 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.DexOrderButtonClickEvent::class.java)
                 .subscribe {
-                    openOrderDialogWithoutInitValues(it.buy)
+                    if (it.buy) {
+                        openOrderDialog(true, getAskPrice())
+                    } else {
+                        openOrderDialog(false, getBidPrice())
+                    }
                 })
 
         presenter.watchMarket?.market.notNull {
@@ -83,29 +87,21 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
             when (item.itemType) {
                 TradeOrderBookAdapter.ASK_TYPE -> {
                     item as OrderBook.Ask
-                    val data = BuySellData(watchMarket = presenter.watchMarket, orderType = TradeBuyAndSellBottomSheetFragment.BUY_TYPE,
-                            bidPrice = getBidPrice(), askPrice = getAskPrice(), initAmount = item.amount, initPrice = item.price, lastPrice = getLastPrice())
-
-                    val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(data)
-                    dialog.show(fragmentManager, dialog::class.java.simpleName)
+                    openOrderDialog(true, item.price, item.amount)
                 }
                 TradeOrderBookAdapter.BID_TYPE -> {
                     item as OrderBook.Bid
-                    val data = BuySellData(watchMarket = presenter.watchMarket, orderType = TradeBuyAndSellBottomSheetFragment.BUY_TYPE,
-                            bidPrice = getBidPrice(), askPrice = getAskPrice(), initAmount = item.amount, initPrice = item.price, lastPrice = getLastPrice())
-
-                    val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(data)
-                    dialog.show(fragmentManager, dialog::class.java.simpleName)
+                    openOrderDialog(false, item.price, item.amount)
                 }
             }
         }
 
         linear_buy.click {
-            openOrderDialogWithoutInitValues(true)
+            openOrderDialog(true, getAskPrice())
         }
 
         linear_sell.click {
-            openOrderDialogWithoutInitValues(false)
+            openOrderDialog(false, getBidPrice())
         }
 
         presenter.loadOrderBook()
@@ -114,15 +110,18 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     private fun getLastPrice(): Long? {
         val itemEntity = adapter.data.firstOrNull { it.itemType == TradeOrderBookAdapter.LAST_PRICE_TYPE }
         return if (itemEntity != null) {
-            (itemEntity as LastPriceItem).lastTrade?.price?.toBigDecimal()?.setScale(presenter.watchMarket?.market?.priceAssetDecimals
-                    ?: 0, RoundingMode.HALF_UP)?.unscaledValue()?.toLong()
+            (itemEntity as LastPriceItem).lastTrade?.price?.toBigDecimal()?.setScale(8.plus(presenter.watchMarket?.market?.priceAssetDecimals
+                    ?: 0)
+                    .minus(presenter.watchMarket?.market?.amountAssetDecimals ?: 0)
+                    , RoundingMode.HALF_UP)?.unscaledValue()?.toLong()
         } else {
             null
         }
     }
 
-    private fun openOrderDialogWithoutInitValues(buy: Boolean) {
-        val data = BuySellData(watchMarket = presenter.watchMarket, bidPrice = getBidPrice(), askPrice = getAskPrice(), lastPrice = getLastPrice())
+    private fun openOrderDialog(buy: Boolean, initPriceValue: Long?, initAmountValue: Long? = null) {
+        val data = BuySellData(watchMarket = presenter.watchMarket, initAmount = initAmountValue, initPrice = initPriceValue,
+                bidPrice = getBidPrice(), askPrice = getAskPrice(), lastPrice = getLastPrice())
         data.orderType =
                 if (buy) TradeBuyAndSellBottomSheetFragment.BUY_TYPE
                 else TradeBuyAndSellBottomSheetFragment.SELL_TYPE
@@ -175,13 +174,15 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     private fun fillButtonsPrice() {
         rxEventBus.post(Events.UpdateButtonsPrice(getAskPrice(), getBidPrice()))
         recycle_orderbook.post {
-            getAskPrice().notNull {
-                text_sell_value.text = MoneyUtil.getScaledText(it, presenter.watchMarket?.market?.priceAssetDecimals
+            getBidPrice().notNull {
+                text_sell_value.text = MoneyUtil.getScaledPrice(it, presenter.watchMarket?.market?.amountAssetDecimals
+                        ?: 0, presenter.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros()
             }
 
-            getBidPrice().notNull {
-                text_buy_value.text = MoneyUtil.getScaledText(it, presenter.watchMarket?.market?.priceAssetDecimals
+            getAskPrice().notNull {
+                text_buy_value.text = MoneyUtil.getScaledPrice(it, presenter.watchMarket?.market?.amountAssetDecimals
+                        ?: 0, presenter.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros()
             }
         }

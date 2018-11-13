@@ -46,10 +46,11 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     override fun configLayoutRes() = R.layout.fragment_trade_order
 
     companion object {
-        fun newInstance(data: BuySellData?, listener: SuccessOrderListener): TradeOrderFragment {
+        fun newInstance(orderType: Int, data: BuySellData?, listener: SuccessOrderListener): TradeOrderFragment {
             val args = Bundle()
             args.classLoader = BuySellData::class.java.classLoader
             args.putParcelable(TradeBuyAndSellBottomSheetFragment.BUNDLE_DATA, data)
+            args.putInt(TradeBuyAndSellBottomSheetFragment.BUNDLE_ORDER_TYPE, orderType)
             val fragment = TradeOrderFragment()
             fragment.successListener = listener
             fragment.arguments = args
@@ -60,6 +61,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         arguments.notNull {
             presenter.data = it.getParcelable<BuySellData>(TradeBuyAndSellBottomSheetFragment.BUNDLE_DATA)
+            presenter.orderType = it.getInt(TradeBuyAndSellBottomSheetFragment.BUNDLE_ORDER_TYPE)
         }
 
         presenter.getMatcherKey()
@@ -112,6 +114,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 })
                 .build()
 
+
         eventSubscriptions.add(RxTextView.textChanges(edit_amount)
                 .skipInitialValue()
                 .map(CharSequence::toString)
@@ -133,20 +136,24 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     it.isNotEmpty()
                 }
                 .map {
-                    val isValid = it.toBigDecimal() < MoneyUtil.getScaledText(presenter.currentAmountBalance
-                            ?: 0, presenter.data?.watchMarket?.market?.amountAssetDecimals
-                            ?: 0).clearBalance().toBigDecimal()
-                    presenter.amountValidation = isValid
+                    if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
+                        val isValid = it.toBigDecimal() < MoneyUtil.getScaledText(presenter.currentAmountBalance
+                                ?: 0, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                                ?: 0).clearBalance().toBigDecimal()
+                        presenter.amountValidation = isValid
 
-                    if (isValid) {
-                        text_amount_error.text = ""
-                        text_amount_error.invisiable()
+                        if (isValid) {
+                            text_amount_error.text = ""
+                            text_amount_error.invisiable()
+                        } else {
+                            text_amount_error.text = getString(R.string.buy_and_sell_not_enough, presenter.data?.watchMarket?.market?.amountAssetShortName)
+                            text_amount_error.visiable()
+                        }
+                        makeButtonEnableIfValid()
+                        return@map Pair(isValid, it)
                     } else {
-                        text_amount_error.text = getString(R.string.buy_and_sell_not_enough, presenter.data?.watchMarket?.market?.amountAssetShortName)
-                        text_amount_error.visiable()
+                        return@map Pair(true, it)
                     }
-                    makeButtonEnableIfValid()
-                    return@map Pair(isValid, it)
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ isValid ->
@@ -155,7 +162,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                             edit_total_price.setText(
                                     (edit_amount.text.toString().toDouble() * edit_limit_price.text.toString().toDouble())
                                             .roundToDecimals(presenter.data?.watchMarket?.market?.priceAssetDecimals)
-                                            .toString()
+                                            .toBigDecimal()
+                                            .toPlainString()
                                             .stripZeros())
                         }
                     }
@@ -191,7 +199,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                         edit_total_price.setText(
                                 (edit_amount.text.toString().toDouble() * edit_limit_price.text.toString().toDouble())
                                         .roundToDecimals(presenter.data?.watchMarket?.market?.priceAssetDecimals)
-                                        .toString()
+                                        .toBigDecimal()
+                                        .toPlainString()
                                         .stripZeros())
                     }
                     makeButtonEnableIfValid()
@@ -211,9 +220,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     if (!presenter.humanTotalTyping) {
                         presenter.humanTotalTyping = edit_total_price.isFocused
                     }
-                }
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({ isValid ->
+                    presenter.totalPriceValidation = it.isNotEmpty()
                     if (edit_amount.text.isNullOrEmpty()) {
                         text_amount_error.text = getString(R.string.buy_and_sell_required)
                         text_amount_error.visiable()
@@ -233,6 +240,31 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                             }
                         }
                     }
+                    makeButtonEnableIfValid()
+                    return@map it
+                }
+                .map {
+                    if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
+                        val isValid = it.toBigDecimal() < MoneyUtil.getScaledText(presenter.currentPriceBalance
+                                ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                                ?: 0).clearBalance().toBigDecimal()
+                        presenter.totalPriceValidation = isValid
+
+                        if (isValid) {
+                            text_total_price_error.text = ""
+                            text_total_price_error.invisiable()
+                        } else {
+                            text_total_price_error.text = getString(R.string.buy_and_sell_not_enough, presenter.data?.watchMarket?.market?.priceAssetShortName)
+                            text_total_price_error.visiable()
+                        }
+                        makeButtonEnableIfValid()
+                        return@map Pair(isValid, it)
+                    } else {
+                        return@map Pair(true, it)
+                    }
+                }
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({ isValid ->
                     makeButtonEnableIfValid()
                 }, {
                     it.printStackTrace()
@@ -278,14 +310,16 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         }
 
         presenter.data?.watchMarket.notNull { watchMarket ->
-            if (presenter.data?.initAmount != null && presenter.data?.initPrice != null) {
+            if (presenter.data?.initAmount != null) {
                 val amountUIValue = MoneyUtil.getScaledText(presenter.data?.initAmount!!, watchMarket.market.amountAssetDecimals).clearBalance()
-                val priceUIValue = MoneyUtil.getScaledPrice(presenter.data?.initPrice!!, watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
-                val sum = amountUIValue.toDouble() * priceUIValue.toDouble()
-
                 edit_amount.setText(amountUIValue)
+            }
+            if (presenter.data?.initPrice != null) {
+                val priceUIValue = MoneyUtil.getScaledPrice(presenter.data?.initPrice!!, watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
                 edit_limit_price.setText(priceUIValue)
-
+            }
+            if (presenter.data?.initAmount != null && presenter.data?.initPrice != null) {
+                val sum = edit_limit_price.text.toString().toDouble() * edit_limit_price.text.toString().toDouble()
                 edit_total_price.setText(MoneyUtil.getFormattedTotal(sum, watchMarket.market.priceAssetDecimals))
             }
         }

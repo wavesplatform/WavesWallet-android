@@ -36,11 +36,12 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     var orderType: Int = TradeBuyAndSellBottomSheetFragment.BUY_TYPE
 
     var priceValidation = false
+    var totalPriceValidation = false
     var amountValidation = false
 
 
     fun isAllFieldsValid(): Boolean {
-        return priceValidation && amountValidation
+        return priceValidation && amountValidation && totalPriceValidation
     }
 
 
@@ -69,8 +70,9 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
 
         orderRequest.amount = amount.toBigDecimal().setScale(data?.watchMarket?.market?.amountAssetDecimals
                 ?: 0, RoundingMode.HALF_UP).unscaledValue().toLong()
-        orderRequest.price = price.toBigDecimal().setScale(data?.watchMarket?.market?.priceAssetDecimals
-                ?: 0, RoundingMode.HALF_UP).unscaledValue().toLong()
+        orderRequest.price = price.toBigDecimal().setScale((8.plus(data?.watchMarket?.market?.priceAssetDecimals
+                ?: 0).minus(data?.watchMarket?.market?.amountAssetDecimals
+                ?: 0)), RoundingMode.HALF_UP).unscaledValue().toLong()
 
         orderRequest.orderType = if (orderType == 0) OrderType.BUY else OrderType.SELL
         orderRequest.assetPair = createPair()

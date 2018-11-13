@@ -9,6 +9,9 @@ import android.text.TextUtils;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.inject.Inject;
 
 public class PrefsUtil {
@@ -37,8 +40,9 @@ public class PrefsUtil {
     public static final String KEY_SPAM_URL = "spam_url";
     public static final String KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS = "key_need_update_transaction_after_change_spam_settings";
 
-    // todo merge check consts above
     public static final String KEY_LAST_UPDATE_DEX_INFO = "last_update_dex_info";
+
+    public static final String KEY_GLOBAL_NODE_COOKIES = "node_cookies";
 
     public static final String KEY_AB_NAMES = "address_book_names";
     public static final String KEY_AB_ADDRESSES = "address_book_addresses";
@@ -79,11 +83,23 @@ public class PrefsUtil {
         return getValueInternal(name, value);
     }
 
+    public Set<String> getGlobalValue(String name) {
+        return getValueInternal(name);
+    }
+
     private String getValueInternal(String name, String value) {
         return preferenceManager.getString(name, TextUtils.isEmpty(value) ? "" : value);
     }
 
+    private Set<String> getValueInternal(String name) {
+        return preferenceManager.getStringSet(name, new HashSet<String>());
+    }
+
     public void setGlobalValue(String name, String value) {
+        setValueInternal(name, value);
+    }
+
+    public void setGlobalValue(String name, HashSet<String> value) {
         setValueInternal(name, value);
     }
 
@@ -101,6 +117,12 @@ public class PrefsUtil {
 
     public void setValue(String guid, String name, int value) {
         setValueInternal(guid + name, value);
+    }
+
+    private void setValueInternal(String name, HashSet<String> value) {
+        Editor editor = preferenceManager.edit();
+        editor.putStringSet(name, value);
+        editor.apply();
     }
 
     private void setValueInternal(String name, String value) {
