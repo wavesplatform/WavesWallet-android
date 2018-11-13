@@ -7,6 +7,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -84,8 +85,9 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
             item.notNull {
                 presenter.saveLanguage(it.language.code)
                 LocaleChanger.setLocale(Locale(getString(it.language.code).toLowerCase()))
+                setResult(Constants.RESULT_OK)
             }
-            onBackPressed()
+            finish()
         }
     }
 

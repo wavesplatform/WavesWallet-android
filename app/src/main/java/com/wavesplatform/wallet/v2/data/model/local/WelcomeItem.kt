@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.data.model.local
 
 import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
 
 
 /**
@@ -10,6 +9,6 @@ import android.support.annotation.StringRes
 
 data class WelcomeItem(
         @DrawableRes var image: Int,
-        @StringRes var title: Int,
-        @StringRes var description: Int
+        var title: String,
+        var description: String
 )

@@ -1,8 +1,10 @@
 package com.wavesplatform.wallet.v2.data.model.local
 
+import android.content.Context
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import com.wavesplatform.wallet.R
+import java.util.*
 
 
 /**
@@ -38,6 +40,20 @@ enum class Language(@DrawableRes var image: Int,
 
         fun getLanguageItemByCode(code: Int): LanguageItem {
             return LanguageItem(getLanguageByCode(code), false)
+        }
+
+        fun getSupportedLanguage(context: Context): List<Locale> {
+            return Arrays.asList(
+                    Locale(context.getString(R.string.choose_language_english_code).toLowerCase()),
+                    Locale(context.getString(R.string.choose_language_russia_code).toLowerCase()),
+                    Locale(context.getString(R.string.choose_language_spain_code).toLowerCase()),
+                    // Locale(context.getString(R.string.choose_language_china_code).toLowerCase()),
+                    // Locale(context.getString(R.string.choose_language_korea_code).toLowerCase()),
+                    // Locale(context.getString(R.string.choose_language_turkey_code).toLowerCase()),
+                    // Locale(context.getString(R.string.choose_language_hindi_code).toLowerCase()),
+                    // Locale(context.getString(R.string.choose_language_dansk_code).toLowerCase()),
+                    Locale(context.getString(R.string.choose_language_nederlands_code).toLowerCase())
+            )
         }
     }
 }

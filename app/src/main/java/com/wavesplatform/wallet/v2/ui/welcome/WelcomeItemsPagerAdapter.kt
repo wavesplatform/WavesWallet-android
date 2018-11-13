@@ -1,18 +1,14 @@
 package com.wavesplatform.wallet.v2.ui.welcome
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-
 import com.asksira.loopingviewpager.LoopingPagerAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
 import kotlinx.android.synthetic.main.item_welcome.view.*
 import pers.victor.ext.inflate
-
-import java.util.ArrayList
+import java.util.*
 
 class WelcomeItemsPagerAdapter(context: Context, itemList: ArrayList<WelcomeItem>, isInfinite: Boolean) : LoopingPagerAdapter<WelcomeItem>(context, itemList, isInfinite) {
 
@@ -22,7 +18,7 @@ class WelcomeItemsPagerAdapter(context: Context, itemList: ArrayList<WelcomeItem
 
     override fun bindView(convertView: View, listPosition: Int, viewType: Int) {
         convertView.image_welcome_photo.setImageResource(itemList[listPosition].image)
-        convertView.text_title.setText(itemList[listPosition].title)
-        convertView.text_descr.setText(itemList[listPosition].description)
+        convertView.text_title.text = itemList[listPosition].title
+        convertView.text_descr.text = itemList[listPosition].description
     }
 }

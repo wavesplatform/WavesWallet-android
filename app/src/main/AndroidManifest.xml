@@ -32,7 +32,7 @@
 
         <activity
             android:name=".v2.ui.splash.SplashActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|locale"
             android:launchMode="singleTask"
             android:noHistory="true"
             android:screenOrientation="portrait"
