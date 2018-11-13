@@ -1,769 +1,614 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">Waves Wallet</string>
-    <string name="create_pin_failed">PIN creation failed. Please try again.</string>
-    <string name="enter_passcode_error_wrong_password">Wrong password</string>
-    <string name="check_connectivity_exit">No connection to the Internet</string>
-    <string name="dialog_processing">Wait…</string>
-    <string name="invalid_address">Invalid address</string>
-    <string name="invalid_amount">Invalid amount</string>
-    <string name="insufficient_funds">Insufficient funds</string>
-    <string name="invalid_monero_payment_id">Invalid Payment ID</string>
-    <string name="attachment_too_long">Attachment is too long</string>
-    <string name="ok_cap">OK</string>
+    <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
+    <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>.\nIf you don’t we can’t credit your account.]]></string>
+    <string name="about_redirection_message">After you go through the verification you will receive an email with further instructions</string>
+    <string name="about_redirection_okay">Okay</string>
+    <string name="about_redirection_title">You were redirected to the «IDNow»\nfor verification</string>
+    <string name="add_address_address">Address</string>
+    <string name="add_address_btn_txt">Save</string>
+    <string name="add_address_name">Name</string>
+    <string name="add_address_toolbar_title">Add</string>
+    <string name="address_book_add">Add</string>
+    <string name="address_book_empty_state">Nothing Here…\nYour can create new address</string>
+    <string name="address_book_search">Search</string>
+    <string name="address_book_success_deleted">Address deleted</string>
+    <string name="address_book_toolbar_title">Address book</string>
     <string name="addresses">Assets</string>
-    <string name="transaction_failed">Transaction failed</string>
-    <string name="unexpected_error">Unexpected error, please try again later.</string>
+    <string name="addresses_and_keys_aliases">Aliases</string>
+    <string name="addresses_and_keys_private_key">Private key</string>
+    <string name="addresses_and_keys_public_key">Public key</string>
+    <string name="addresses_and_keys_show">Show</string>
+    <string name="addresses_and_keys_toolbar_title">Addresses, keys</string>
+    <string name="addresses_and_keys_you_do_not_have">You do not have</string>
+    <string name="addresses_and_keys_your_address">Your address</string>
+    <string name="alias_dialog_about_alias">About Alias</string>
+    <string name="alias_dialog_create_alias">Create new alias</string>
+    <string name="alias_dialog_description_1">An Alias is a nickname for your address. You can use an Alias instead of an address to make transactions.</string>
+    <string name="alias_dialog_description_2">Your Alias must be between 4 and 30 characters long, and must contain only lowercase Latin letters, digits and symbols (@, -, _ etc)</string>
+    <string name="alias_dialog_fee">Transaction Fee 0.001 Waves</string>
+    <string name="alias_dialog_you_dont_have">You do not have Aliases</string>
+    <string name="alias_dialog_you_have">You have %s</string>
+    <string name="alias_dialog_your_aliases">Your Aliases</string>
+    <string name="app_name">Waves Wallet</string>
+    <string name="asset_details_asset_info">Asset Info</string>
+    <string name="asset_details_available_balance">Available balance</string>
+    <string name="asset_details_coming_soon">Coming soon</string>
+    <string name="asset_details_cryptocurrency">Cryptocurrency</string>
+    <string name="asset_details_decimal">Decimal points</string>
+    <string name="asset_details_description">Description</string>
+    <string name="asset_details_flat_money">Fiat Money</string>
+    <string name="asset_details_id">ID</string>
+    <string name="asset_details_in_order">In order</string>
+    <string name="asset_details_issue_date">Issue date</string>
+    <string name="asset_details_issuer">Issuer</string>
+    <string name="asset_details_last_transactions">Last transactions</string>
+    <string name="asset_details_last_transactions_empty">You do not have any transactions</string>
+    <string name="asset_details_leased">Leased</string>
+    <string name="asset_details_name">Name</string>
+    <string name="asset_details_not_reissuable">Not reissuable</string>
+    <string name="asset_details_receive">Receive</string>
+    <string name="asset_details_reissuable">Reissuable</string>
+    <string name="asset_details_send">Send</string>
+    <string name="asset_details_token_burn">Token Burn</string>
+    <string name="asset_details_total">Total</string>
+    <string name="asset_details_total_amount">Total amount</string>
+    <string name="asset_details_type">Type</string>
+    <string name="asset_details_view_history">View history</string>
+    <string name="asset_details_waves_token">Waves token</string>
+    <string name="attachment_too_long">Attachment is too long</string>
+    <string name="backup_hint">Since only you control your money, you’ll need to save your backup phrase in case this app is deleted or go back</string>
+    <string name="backup_hint_2">Please carefully write down these 15 words or copy them</string>
+    <string name="backup_hint_3">You will confirm this phrase on the next screen</string>
+    <string name="backup_info_button">I understand</string>
+    <string name="backup_info_subtitle">Waves Platform would like to warn you about the increased frequency of scam and phishing attacks over the last month. Fraudsters are hiding their malware in their own versions of the Waves client and promising bonuses and discounts to lure in users.\n\nPlease be careful and never input your SEED into these \'clients\', because your account will be compromised and you will lose all of your funds.\n\nYou should ONLY use the official Waves client.</string>
+    <string name="backup_info_title">Treat your backup phrase with care!</string>
+    <string name="backup_pharse">Backup pharse</string>
+    <string name="backup_wrriten_down">I\'ve written it down</string>
+    <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
+    <string name="buy_and_sell_10">10%</string>
+    <string name="buy_and_sell_1_day">1 day</string>
+    <string name="buy_and_sell_1_hour">1 hour</string>
+    <string name="buy_and_sell_1_week">1 week</string>
+    <string name="buy_and_sell_29_days">29 days</string>
+    <string name="buy_and_sell_30_days">30 days</string>
+    <string name="buy_and_sell_30_min">30 min</string>
+    <string name="buy_and_sell_5">5%</string>
+    <string name="buy_and_sell_50">50%</string>
+    <string name="buy_and_sell_5_min">5 min</string>
+    <string name="buy_and_sell_amount_in">Amount in %1$s</string>
+    <string name="buy_and_sell_ask">Ask</string>
+    <string name="buy_and_sell_bid">Bid</string>
+    <string name="buy_and_sell_dialog_buy_tab">Buy</string>
+    <string name="buy_and_sell_dialog_sell_tab">Sell</string>
+    <string name="buy_and_sell_expiration">Expiration</string>
+    <string name="buy_and_sell_expiration_dialog_negative_btn">CANCEL</string>
+    <string name="buy_and_sell_expiration_dialog_positive_btn">OK</string>
+    <string name="buy_and_sell_expiration_dialog_title">Choose expiration</string>
+    <string name="buy_and_sell_fee">Fee</string>
+    <string name="buy_and_sell_last">Last</string>
+    <string name="buy_and_sell_limit_price_in">Limit Price in %1$s</string>
+    <string name="buy_and_sell_not_enough">Not enough %1$s</string>
+    <string name="buy_and_sell_required">This field is required</string>
+    <string name="buy_and_sell_success_amount">Amount</string>
+    <string name="buy_and_sell_success_okay">Okay</string>
+    <string name="buy_and_sell_success_opened">Opened</string>
+    <string name="buy_and_sell_success_price">Price</string>
+    <string name="buy_and_sell_success_status">Status</string>
+    <string name="buy_and_sell_success_the_order_is_created">The order is created</string>
+    <string name="buy_and_sell_success_time">Time</string>
+    <string name="buy_and_sell_total_in">Total in %1$s</string>
+    <string name="buy_and_sell_user_total_balance">Use total balance</string>
+    <string name="buy_btn_txt">Buy %s</string>
     <string name="cannot_launch_app">Waves Wallet cannot be run on this device.</string>
-    <string name="send_to_same_address_warning">Can\'t send to the same address.</string>
-    <string name="transfer">Transfer</string>
-    <string name="insufficient_fee">Transaction fee is too low.</string>
-    <string name="fingerprint_fatal_error_key_invalidate">The keys you wanted to use are invalidated because secure lock screen has turned off or changed the fingerprints stored on the device. You have to re-encrypt the data to access it</string>
-    <string name="fingerprint_fatal_error_root">Rooted device, Fingerprint auth canceled!</string>
-
-    <!-- ###################################################################  v2 ################################################################### -->
-
-    <!-- Common -->
-    <string name="common_action_close">Close</string>
-    <string name="common_action_information">Information</string>
-    <string name="common_msg_in_development">Sorry, this feature will be available in the near future</string>
-    <string name="common_persist">&amp;</string>
-    <string name="common_copied_to_clipboard">Copied to clipboard</string>
-    <string name="common_copied">Copied!</string>
-    <string name="common_or">or</string>
-    <string name="common_k_quantity">%sk</string>
-    <string name="common_kk_quantity">%skk</string>
-    <string name="common_kkk_quantity">%skkk</string>
-    <string name="common_load_more_status">Loading…</string>
-    <string name="common_dash">&#8211;</string>
-    <string name="common_feedback_title">Send feedback</string>
-    <string name="common_market_error">Unable to find market app</string>
-
-    <!-- Language-->
-    <string name="choose_language_russia">Русский</string>
-    <string name="choose_language_china">中文(简体)</string>
-    <string name="choose_language_korea">한국어</string>
-    <string name="choose_language_turkey">Türkçe</string>
-    <string name="choose_language_english">English</string>
-    <string name="choose_language_hindi">हिन्दी</string>
-    <string name="choose_language_dansk">Dansk</string>
-    <string name="choose_language_nederlands">Nederlands</string>
-
-    <string name="choose_language_russia_code">Ru</string>
-    <string name="choose_language_china_code">Zh</string>
-    <string name="choose_language_korea_code">Ko</string>
-    <string name="choose_language_turkey_code">Tr</string>
-    <string name="choose_language_english_code">En</string>
-    <string name="choose_language_hindi_code">Hi</string>
-    <string name="choose_language_dansk_code">Dn</string>
-    <string name="choose_language_nederlands_code">Nl</string>
-
-    <string name="choose_language_continue">Continue</string>
-    <string name="choose_language_confirm">Confirm</string>
-
-    <!--Tutorial-->
-    <string name="card_tutorial_next">Next</string>
-    <string name="card_tutorial_understand">I Understand</string>
-    <string name="tutorial_card_1_title">Welcome to the Waves Platform!</string>
-    <string name="tutorial_card_1_description">Please take some time to understand some important things for your own safety.\n\nWe cannot recover your funds or freeze your account if you visit a phishing site or lose your backup phrase (aka SEED phrase).\n\nBy continuing to use our platform, you agree to accept all risks associated with the loss of your SEED, including but not limited to the inability to obtain your funds and dispose of them. In case you lose your SEED, you agree and acknowledge that the Waves Platform would not be responsible for the negative consequences of this.</string>
-    <string name="tutorial_card_2_title">What you need to know about your SEED</string>
-    <string name="tutorial_card_2_description">When registering your account, you will be asked to save your secret phrase (Seed) and to protect your account with a password. On normal centralized servers, special attention is paid to the password, which can be changed and reset via email, if the need arises. However, on decentralized platforms such as Waves, everything is arranged differently:</string>
     <string name="card_tutorial_3_description_anonim">You use your wallet anonymously, meaning your account is not connected to an email account or any other identifying data.</string>
     <string name="card_tutorial_3_description_passbrowser">Your password protects your account when working on a certain device or browser. It is needed in order to ensure that your secret phrase is not saved in storage.</string>
     <string name="card_tutorial_4_description_backuo">If you forget your password, you can easily create a new one by using the account recovery form via your secret phrase. If you lose your secret phrase, however, you will have no way to access your account.</string>
     <string name="card_tutorial_4_description_shredder">You cannot change your secret phrase. If you accidentally sent it to someone or suspect that scammers have taken it over, then create a new Waves wallet immediately and transfer your funds to it.</string>
-    <string name="card_tutorial_5_title">How To Protect Yourself from Phishers</string>
     <string name="card_tutorial_5_description">One of the most common forms of scamming is phishing, which is when scammers create fake communities on Facebook or other websites that look similar to the authentic ones.</string>
+    <string name="card_tutorial_5_title">How To Protect Yourself from Phishers</string>
     <string name="card_tutorial_6_description_mailopen">Do not open emails or links from unknown senders.</string>
     <string name="card_tutorial_6_description_refreshbrowser">Regularly update your operating system.</string>
     <string name="card_tutorial_7_description_os">Use official security software. Do not install unknown software which could be hacked.</string>
     <string name="card_tutorial_7_description_wifi">Do not access your wallet when using public Wi-Fi or someone else’s device.</string>
-
-    <!-- Left Drawer -->
-    <string name="left_drawer_description">Keep up with the latest news and articles, and find out all about events happening on the Waves Platform</string>
-    <string name="left_drawer_site">wavescommunity.com</string>
-    <string name="left_drawer_whitepaper">Whitepaper</string>
-    <string name="left_drawer_terms_and_conditions">Terms and conditions</string>
-    <string name="left_drawer_support">Support Wavesplatform</string>
-    <string name="left_drawer_join_the_waves_community">Join the Waves Community</string>
-
-    <!-- Welcome -->
-    <string name="welcome_blockchain_title">Get Started with Blockchain</string>
-    <string name="welcome_blockchain_description">Become part of a fast-growing area of the crypto world. You are the only person who can access your crypto assets.</string>
-    <string name="welcome_wallet_title">Wallet</string>
-    <string name="welcome_wallet_description">Store, manage and receive interest on your digital assets balance, easily and securely.</string>
-    <string name="welcome_dex_title">Decentralised Exchange</string>
-    <string name="welcome_dex_description">Trade quickly and securely. You retain complete control over your funds when trading them on our decentralised exchange.</string>
-    <string name="welcome_token_title">Token Launcher</string>
-    <string name="welcome_token_description">Issue your own tokens. These can be integrated into your business not only as an internal currency but also as a token for decentralised voting, as a rating system, or loyalty program.</string>
-    <string name="welcome_create_new_acc">Create a new account</string>
-    <string name="welcome_create_sign_in_title">Sign in</string>
-    <string name="welcome_create_sign_in_description">to a saved account</string>
-    <string name="welcome_create_import_title">Import account</string>
-    <string name="welcome_create_import_description">via pairing code or manually</string>
-
-    <!-- New account -->
-    <string name="new_account_toolbar_title">New Account</string>
-    <string name="new_account_account_name_hint">Account name</string>
-    <string name="new_account_account_name_validation_length_error">Max: 20 symbols</string>
-    <string name="new_account_account_name_validation_required_error">Name is required</string>
-    <string name="new_account_account_name_validation_already_exist_error">Account name already use</string>
-    <string name="new_account_create_password_hint">Create a password</string>
-    <string name="new_account_create_password_validation_length_error">at least 8 characters</string>
-    <string name="new_account_confirm_password_hint">Confirm password</string>
-    <string name="new_account_confirm_password_validation_match_error">Passwords do not match</string>
-    <string name="new_account_continue">Continue</string>
-    <string name="new_account_avatar_title">Choose your address avatar</string>
-    <string name="new_account_avatar_description">This avatar is unique. You cannot change it later.</string>
-    <string name="new_account_avatar_error">Please select avatar</string>
-
-    <!-- Secret Phrase -->
-    <string name="secret_phrase_no_backup_no_money">No Backup, No Money</string>
-    <string name="secret_phrase_you_must_save_the_secret_phrase_it_is_crucial_for_accessing_your_account">You must save the secret phrase. It is crucial for accessing your account.</string>
-    <string name="secret_phrase_back_up_now">Back Up Now</string>
-    <string name="secret_phrase_do_it_later">Do it later</string>
-
-
-    <!-- Backup Info -->
-    <string name="backup_info_title">Treat your backup phrase with care!</string>
-    <string name="backup_info_subtitle">Waves Platform would like to warn you about the increased frequency of scam and phishing attacks over the last month. Fraudsters are hiding their malware in their own versions of the Waves client and promising bonuses and discounts to lure in users.\n\nPlease be careful and never input your SEED into these \'clients\', because your account will be compromised and you will lose all of your funds.\n\nYou should ONLY use the official Waves client.</string>
-    <string name="backup_info_button">I understand</string>
-
-    <!-- Wallet -->
-    <string name="wallet_toolbar_title">Wallet</string>
-    <string name="wallet_assets">Assets</string>
-    <string name="wallet_leasing">Leasing</string>
-
-    <!-- Wallet Assets -->
-    <string name="wallet_assets_hidden_category">Hidden assets (%1$s)</string>
-    <string name="wallet_assets_spam_category">Spam assets (%1$s)</string>
-    <string name="wallet_assets_spam_tag">Spam</string>
-    <string name="wallet_assets_my_asset">/ My Asset</string>
-
-    <!-- Wallet Leasing -->
-    <string name="wallet_leasing_active_now">Active now (%1$s)</string>
-    <string name="wallet_leasing_available_balance">Available balance</string>
-    <string name="wallet_leasing_total">Total</string>
-    <string name="wallet_leasing_leased">Leased</string>
-    <string name="wallet_leasing_start_lease">Start Lease</string>
-    <string name="wallet_leasing_view_history">View history</string>
-    <string name="wallet_leasing_quick_note">Quick note</string>
-    <string name="wallet_leasing_quick_note_1">You can only transfer or trade WAVES that aren’t leased. The leased amount cannot be transferred or traded by you or anyone else.</string>
-    <string name="wallet_leasing_quick_note_2">You can cancel a leasing transaction as soon as it appears in the blockchain which usually occurs in a minute or less.</string>
-    <string name="wallet_leasing_quick_note_3">The generating balance will be updated after 1000 blocks.</string>
-
-    <!-- History -->
-    <string name="history_toolbar_title">History</string>
-    <string name="history_all">All</string>
-    <string name="history_sent">Sent</string>
-    <string name="history_received">Received</string>
-    <string name="history_exchanged">Exchanged</string>
-    <string name="history_leased">Leased</string>
-    <string name="history_issued">Issued</string>
-    <string name="history_active_now">Active now</string>
-    <string name="history_canceled">Canceled</string>
-    <string name="history_empty">Nothing Here…\nYou do not have any transactions</string>
-    <string name="history_data_type_title">Entry in blockchain</string>
-
-    <string name="history_type_receive">Received %s</string>
-    <string name="history_type_sent">Sent %s</string>
-    <string name="history_type_started_leasing">Started Leasing</string>
-    <string name="history_type_exchange">%s %s</string>
-    <string name="history_type_canceled_leasing">Canceled Leasing</string>
-    <string name="history_type_token_generation">%s - Token Generation</string>
-    <string name="history_type_token_burn">%s Token Burn</string>
-    <string name="history_type_token_reissue">%s Token Reissue</string>
-    <string name="history_type_self_transfer">Self-transfer %s</string>
-    <string name="history_type_create_alias">Create Alias</string>
-    <string name="history_type_incoming_leasing">Incoming Leasing</string>
-    <string name="history_type_unrecognised">Unrecognised Transaction</string>
-    <string name="history_type_mass_send">Send %s</string>
-    <string name="history_type_mass_receive">Received %s</string>
-    <string name="history_type_spam_receive">Received %s</string>
-    <string name="history_type_mass_spam_receive">Received %s</string>
-    <string name="history_type_data">Data transaction</string>
-    <string name="history_type_set_script">Set script transaction</string>
-    <string name="history_type_cancel_script">Cancel script transaction</string>
-    <string name="history_type_set_sponsorship">Set sponsorship transaction</string>
-    <string name="history_type_cancel_sponsorship">Cancel sponsorship transaction</string>
-    <string name="history_error_receive_data">Error receive data. Please try later</string>
-
-    <!--History Details-->
-    <string name="history_details_received_from">Received from</string>
-    <string name="history_details_leasing_from">From</string>
-    <string name="history_details_fee">Fee</string>
-    <string name="history_details_confirmations">Confirmations</string>
-    <string name="history_details_block">Block</string>
-    <string name="history_details_timestamp">Timestamp</string>
-    <string name="history_details_copy_tx_id">Copy TX ID</string>
-    <string name="history_details_copy_all_data">Copy all data</string>
-    <string name="history_details_completed">COMPLETED</string>
-    <string name="history_details_active_now">ACTIVE NOW</string>
-    <string name="history_details_unconfirmed">UNCONFIRMED</string>
-    <string name="history_details_sent_to">Sent to</string>
-    <string name="history_details_send_again">Send again</string>
-    <string name="history_details_cancel_leasing">Cancel leasing</string>
-    <string name="history_details_leasing_to">Leasing to</string>
-    <string name="history_details_exchange_price">%s Price</string>
-    <string name="history_details_id">ID</string>
-    <string name="history_details_reissuable">Reissuable</string>
-    <string name="history_details_not_reissuable">Not Reissuable</string>
-    <string name="history_details_recipient">Recipient</string>
-    <string name="history_details_show_all">Show all (%1$s)</string>
-
-    <!-- History Sorting -->
-    <string name="history_sorting_week">Week</string>
-    <string name="history_sorting_month">Month</string>
-    <string name="history_sorting_half_year">Half-year</string>
-    <string name="history_sorting_period">Period</string>
-    <string name="history_sorting_display_spam">Display spam transactions</string>
-    <string name="history_sorting_close">Close</string>
-    <string name="history_sorting_filter">Filter</string>
-
-    <!-- DEX -->
-    <string name="dex_toolbar_title">DEX</string>
-    <string name="dex_last_update_value">Last update: %s</string>
-    <string name="dex_last_price_value">Price %s</string>
-    <string name="dex_last_update_not_known">not known</string>
-    <string name="dex_empty_title">Decentralised Exchange</string>
-    <string name="dex_empty_subtitle">Trade quickly and securely. You retain complete control over your funds when trading them on our decentralised exchange.</string>
-    <string name="dex_empty_button_text">Add Markets</string>
-
-    <!-- Your Address -->
-    <string name="your_address_toolbar_title">Your address</string>
-    <string name="your_address_your_qr_code">Your QR Code</string>
-
-    <!-- Wallet Sorting -->
-    <string name="wallet_sorting_toolbar_title">Sorting</string>
-    <string name="wallet_sorting_toolbar_visibility_action">Visibility</string>
-    <string name="wallet_sorting_toolbar_position_action">Position</string>
-
-    <!-- DEX Sorting -->
-    <string name="dex_sorting_toolbar_title">Sorting</string>
-    <string name="dex_sorting_empty">Nothing here…</string>
-
-    <!-- Markets -->
-    <string name="dex_market_toolbar_title">Markets</string>
-    <string name="dex_market_empty">Nothing here…</string>
-
-    <!-- Asset Details -->
-    <string name="asset_details_waves_token">Waves token</string>
-    <string name="asset_details_cryptocurrency">Cryptocurrency</string>
-    <string name="asset_details_flat_money">Fiat Money</string>
-    <string name="asset_details_available_balance">Available balance</string>
-    <string name="asset_details_total">Total</string>
-    <string name="asset_details_leased">Leased</string>
-    <string name="asset_details_in_order">In order</string>
-    <string name="asset_details_send">Send</string>
-    <string name="asset_details_receive">Receive</string>
-    <string name="asset_details_coming_soon">Coming soon</string>
-    <string name="asset_details_last_transactions">Last transactions</string>
-    <string name="asset_details_last_transactions_empty">You do not have any transactions</string>
-    <string name="asset_details_view_history">View history</string>
-    <string name="asset_details_asset_info">Asset Info</string>
-    <string name="asset_details_name">Name</string>
-    <string name="asset_details_issuer">Issuer</string>
-    <string name="asset_details_id">ID</string>
-    <string name="asset_details_total_amount">Total amount</string>
-    <string name="asset_details_decimal">Decimal points</string>
-    <string name="asset_details_type">Type</string>
-    <string name="asset_details_not_reissuable">Not reissuable</string>
-    <string name="asset_details_reissuable">Reissuable</string>
-    <string name="asset_details_issue_date">Issue date</string>
-    <string name="asset_details_description">Description</string>
-    <string name="asset_details_token_burn">Token Burn</string>
-
-    <!-- My Address QR -->
-    <string name="my_address_qr_copy">Copy</string>
-    <string name="my_address_qr_share">Share</string>
-
-    <!-- Address Book  -->
-    <string name="address_book_toolbar_title">Address book</string>
-    <string name="address_book_empty_state">Nothing Here…\nYour can create new address</string>
-    <string name="address_book_search">Search</string>
-    <string name="address_book_add">Add</string>
-    <string name="address_book_success_deleted">Address deleted</string>
-
-
-    <!-- Add Address -->
-    <string name="add_address_toolbar_title">Add</string>
-    <string name="add_address_address">Address</string>
-    <string name="add_address_name">Name</string>
-    <string name="add_address_btn_txt">Save</string>
-
-
-    <!-- Edit Address -->
-    <string name="edit_address_toolbar_title">Edit</string>
-    <string name="edit_address_address">Address</string>
-    <string name="edit_address_name">Name</string>
-    <string name="edit_address_btn_txt">Save</string>
-    <string name="edit_address_delete_txt">Delete address</string>
-    <string name="edit_address_delete_alert_title">Delete address</string>
-    <string name="edit_address_delete_alert_description">Are you sure you want to delete address form address book?</string>
-    <string name="edit_address_delete_alert_cancel">CANCEL</string>
-    <string name="edit_address_delete_alert_delete">DELETE</string>
-
-    <!--Profile language-->
-    <string name="profile_language_toolbar_title">Launguage</string>
-
-    <!-- PROFILE -->
-    <string name="profile_toolbar_title">Profile</string>
-    <string name="profile_general_setting">General settings</string>
-    <string name="profile_general_addresses_and_keys">Addresses, keys</string>
-    <string name="profile_general_addresses_book">Address book</string>
-    <string name="profile_general_language">Language</string>
-    <string name="profile_general_security">Security</string>
-    <string name="profile_general_change_password">Change password</string>
-    <string name="profile_general_change_passcode">Change passcode</string>
-    <string name="profile_general_metwork">Network</string>
-    <string name="profile_general_other">Other</string>
-    <string name="profile_general_rate_app">Rate app</string>
-    <string name="profile_general_feedback">Feedback</string>
-    <string name="profile_general_feedback_body_extra_title">---Device Info---</string>
-    <string name="profile_general_feedback_body_extra_os_version">OS Version: %s</string>
-    <string name="profile_general_feedback_body_extra_app_version">App Version: %1$s(%2$s)</string>
-    <string name="profile_general_feedback_body_extra_device_model">Device Model: %s</string>
-    <string name="profile_general_feedback_body_extra_language">Language: %s</string>
-    <string name="profile_general_feedback_body_extra_carrier">Carrier: %s</string>
-    <string name="profile_general_support_wavesplatform">Support Wavesplatform</string>
-    <string name="profile_general_current_height">Current height</string>
-    <string name="profile_general_current_version">Version</string>
-    <string name="profile_general_delete_account">Delete account from device</string>
-    <string name="profile_general_fingerprint">Fingerprint</string>
-    <string name="profile_general_backup_phrase">Backup phrase</string>
-    <string name="profile_general_push_notifications">Push Notifications</string>
-    <string name="profile_general_delete_account_dialog_title">Delete account</string>
-    <string name="profile_general_logout">Logout of account</string>
-    <string name="profile_general_delete_account_dialog_description">Deleting an account will lead to its irretrievable loss!</string>
-    <string name="profile_general_delete_account_dialog_delete">Delete</string>
-    <string name="profile_general_delete_account_dialog_cancel">Cancel</string>
-    <string name="profile_general_delete_account_dialog_warning">You did not save your SEED</string>
-    <string name="profile_save_seed_warning_title">Save your backup phrase (SEED)</string>
-    <string name="profile_save_seed_warning_subtitle">Store your SEED safely, it is the only way to restore your wallet</string>
-
-    <!-- NEW ALIAS -->
-    <string name="new_alias_toolbar_title">New alias</string>
-    <string name="new_alias_create">Create</string>
-    <string name="new_alias_symbol_name">Symbolic name</string>
-    <string name="new_alias_success_create">You created a new alias!</string>
-    <string name="new_alias_min_validation_error">Minimum 4 characters</string>
-    <string name="new_alias_max_validation_error">30 characters maximum</string>
-    <string name="new_alias_invalid_char_validation_error">Invalid character</string>
-    <string name="new_alias_already_use_validation_error">Already in use</string>
-
-    <!-- BACKUP PHARSE-->
-    <string name="backup_pharse">Backup pharse</string>
-    <string name="backup_wrriten_down">I\'ve written it down</string>
-    <string name="backup_hint">Since only you control your money, you’ll need to save your backup phrase in case this app is deleted or go back</string>
-    <string name="backup_hint_2">Please carefully write down these 15 words or copy them</string>
-    <string name="backup_hint_3">You will confirm this phrase on the next screen</string>
-
-    <!-- CONFIRM BACKUP-->
-    <string name="confirm_backup">Confirm backup</string>
-    <string name="confirm_backup_info">Please, tap each word in the correct order</string>
-    <string name="confirm_backup_error">Wrong order, try again</string>
-    <string name="confirm_backup_confirm">Confirm</string>
-
-    <!--Addresses and keys-->
-    <string name="addresses_and_keys_toolbar_title">Addresses, keys</string>
-    <string name="addresses_and_keys_aliases">Aliases</string>
-    <string name="addresses_and_keys_you_do_not_have">You do not have</string>
-    <string name="addresses_and_keys_your_address">Your address</string>
-    <string name="addresses_and_keys_public_key">Public key</string>
-    <string name="addresses_and_keys_private_key">Private key</string>
-    <string name="addresses_and_keys_show">Show</string>
-
-    <string name="alias_dialog_create_alias">Create new alias</string>
-    <string name="alias_dialog_you_dont_have">You do not have Aliases</string>
-    <string name="alias_dialog_you_have">You have %s</string>
-    <string name="alias_dialog_description_1">An Alias is a nickname for your address. You can use an Alias instead of an address to make transactions.</string>
-    <string name="alias_dialog_description_2">Your Alias must be between 4 and 30 characters long, and must contain only lowercase Latin letters, digits and symbols (@, -, _ etc)</string>
-    <string name="alias_dialog_fee">Transaction Fee 0.001 Waves</string>
-    <string name="alias_dialog_your_aliases">Your Aliases</string>
-    <string name="alias_dialog_about_alias">About Alias</string>
-
-    <!--Change password-->
-    <string name="change_password_toolbar_title">Change password</string>
-    <string name="change_password_old_password">Old password</string>
-    <string name="change_password_new_password">New password</string>
-    <string name="change_password_confirm_password">Confirm password</string>
+    <string name="card_tutorial_next">Next</string>
+    <string name="card_tutorial_understand">I Understand</string>
     <string name="change_password_confirm">Confirm</string>
+    <string name="change_password_confirm_password">Confirm password</string>
+    <string name="change_password_new_password">New password</string>
+    <string name="change_password_old_password">Old password</string>
     <string name="change_password_success">Change password successful</string>
+    <string name="change_password_toolbar_title">Change password</string>
     <string name="change_password_validation_new_password_already_use_error">Password already use</string>
     <string name="change_password_validation_old_password_wrong_error">Wrong</string>
-
-    <!--Network-->
-    <string name="network_toolbar_title">Network</string>
-    <string name="network_node_address">Node address</string>
-    <string name="network_matcher_address">Matcher address</string>
-    <string name="network_spam_filter">Spam filter</string>
-    <string name="network_switch_off_spam_filtering">Switch off spam filtering</string>
-    <string name="network_set_default">Set default</string>
-    <string name="network_save">Save</string>
-    <string name="network_spam_url_validation_bad_url">Bad url</string>
-    <string name="network_spam_url_validation_url_empty">Url is required</string>
-
-    <!--Choose account-->
+    <string name="chart_change_interval_dialog_cancel">CANCEL</string>
+    <string name="chart_change_interval_dialog_ok">OK</string>
+    <string name="chart_change_interval_dialog_title">Change Interval</string>
+    <string name="chart_empty">No chart data available</string>
+    <string name="chart_loading">Loading chart…</string>
+    <string name="chart_time_frame_15_min">15 minutes</string>
+    <string name="chart_time_frame_1_hour">1 hour</string>
+    <string name="chart_time_frame_24_hours">24 hours</string>
+    <string name="chart_time_frame_30_min">30 minutes</string>
+    <string name="chart_time_frame_4_hours">4 hours</string>
+    <string name="chart_time_frame_5_min">5 minutes</string>
+    <string name="check_connectivity_exit">No connection to the Internet</string>
     <string name="choose_account">Choose account</string>
-    <string name="choose_account_empty_state">Nothing Here…\nYou do not have saved accounts</string>
-    <string name="choose_account_delete_title">Delete account?</string>
-    <string name="choose_account_delete_msg">Are you sure you want to delete this account?</string>
     <string name="choose_account_cancel">Cancel</string>
-    <string name="choose_account_yes">Delete</string>
+    <string name="choose_account_delete_msg">Are you sure you want to delete this account?</string>
+    <string name="choose_account_delete_title">Delete account?</string>
     <string name="choose_account_deleted">Deleted</string>
-
-    <!--Edit account name-->
+    <string name="choose_account_empty_state">Nothing Here…\nYou do not have saved accounts</string>
+    <string name="choose_account_yes">Delete</string>
+    <string name="choose_language_china">中文(简体)</string>
+    <string name="choose_language_china_code">Zh</string>
+    <string name="choose_language_confirm">Confirm</string>
+    <string name="choose_language_continue">Continue</string>
+    <string name="choose_language_dansk">Dansk</string>
+    <string name="choose_language_dansk_code">Dn</string>
+    <string name="choose_language_english">English</string>
+    <string name="choose_language_english_code">En</string>
+    <string name="choose_language_spain">Español</string>
+    <string name="choose_language_spain_code">Es</string>
+    <string name="choose_language_hindi">हिन्दी</string>
+    <string name="choose_language_hindi_code">Hi</string>
+    <string name="choose_language_korea">한국어</string>
+    <string name="choose_language_korea_code">Ko</string>
+    <string name="choose_language_nederlands">Nederlands</string>
+    <string name="choose_language_nederlands_code">Nl</string>
+    <string name="choose_language_russia">Русский</string>
+    <string name="choose_language_russia_code">Ru</string>
+    <string name="choose_language_turkey">Türkçe</string>
+    <string name="choose_language_turkey_code">Tr</string>
+    <string name="coinomat_success_subtitle">After payment has been made your balance will be updated</string>
+    <string name="coinomat_success_title">You have been redirected to «Indacoin»</string>
+    <string name="common_action_close">Close</string>
+    <string name="common_action_information">Information</string>
+    <string name="common_copied">Copied!</string>
+    <string name="common_copied_to_clipboard">Copied to clipboard</string>
+    <string name="common_dash">–</string>
+    <string name="common_feedback_title">Send feedback</string>
+    <string name="common_k_quantity">%sk</string>
+    <string name="common_kk_quantity">%skk</string>
+    <string name="common_kkk_quantity">%skkk</string>
+    <string name="common_load_more_status">Loading…</string>
+    <string name="common_market_error">Unable to find market app</string>
+    <string name="common_msg_in_development">Sorry, this feature will be available in the near future</string>
+    <string name="common_or">or</string>
+    <string name="common_persist"><![CDATA[&]]></string>
+    <string name="confirm_backup">Confirm backup</string>
+    <string name="confirm_backup_confirm">Confirm</string>
+    <string name="confirm_backup_error">Wrong order, try again</string>
+    <string name="confirm_backup_info">Please, tap each word in the correct order</string>
+    <string name="confirm_cancel_leasing_result_value">You have canceled a leasing transaction</string>
+    <string name="confirm_confirm">Confirm</string>
+    <string name="confirm_free">Fee</string>
+    <string name="confirm_leasing">Confirmation</string>
+    <string name="confirm_leasing_okay">Okay</string>
+    <string name="confirm_leasing_progress">Loading…</string>
+    <string name="confirm_leasing_result_value">You have leased %1$s %2$s</string>
+    <string name="confirm_leasing_success">Your transaction is on way!</string>
+    <string name="confirm_node_address">Node address</string>
+    <string name="create_passcode_create_new_title">Create a new passcode</string>
+    <string name="create_passcode_create_title">Create a passcode</string>
+    <string name="create_passcode_validation_already_use_error">Passcode already use</string>
+    <string name="create_passcode_verify_title">Verify your passcode</string>
+    <string name="create_pin_failed">PIN creation failed. Please try again.</string>
+    <string name="dex_empty_button_text">Add Markets</string>
+    <string name="dex_empty_subtitle">Trade quickly and securely. You retain complete control over your funds when trading them on our decentralised exchange.</string>
+    <string name="dex_empty_title">Decentralised Exchange</string>
+    <string name="dex_last_price_value">Price %s</string>
+    <string name="dex_last_update_not_known">not known</string>
+    <string name="dex_last_update_value">Last update: %s</string>
+    <string name="dex_market_empty">Nothing here…</string>
+    <string name="dex_market_toolbar_title">Markets</string>
+    <string name="dex_markets_info_dialog_amount_asset">Amount Asset — %s</string>
+    <string name="dex_markets_info_dialog_popular">Popular</string>
+    <string name="dex_markets_info_dialog_price_asset">Price Asset — %s</string>
+    <string name="dex_markets_list_search">Search</string>
+    <string name="dex_markets_list_toolbar_title">Markets</string>
+    <string name="dex_sorting_empty">Nothing here…</string>
+    <string name="dex_sorting_toolbar_title">Sorting</string>
+    <string name="dex_toolbar_title">DEX</string>
+    <string name="dex_trade_buy">BUY</string>
+    <string name="dex_trade_sell">SELL</string>
+    <string name="dex_trade_tab_chart">Chart</string>
+    <string name="dex_trade_tab_last_trades">Last Trades</string>
+    <string name="dex_trade_tab_my_orders">My Orders</string>
+    <string name="dex_trade_tab_orderbook">Orderbook</string>
+    <string name="dialog_account_first_open_about_backup">I understand that if this app is moved to another device or deleted, my Waves can only be recovered with the backup phrase</string>
+    <string name="dialog_account_first_open_about_fund_on_device">I understand that my funds are held securely on this device, not by a company</string>
+    <string name="dialog_account_first_open_about_terms">I have read, understood, and agree to the\nTerms of Use</string>
+    <string name="dialog_account_first_open_about_terms_key">Terms of Use</string>
+    <string name="dialog_account_first_open_confirm_and_begin">Confirm and Begin</string>
+    <string name="dialog_account_first_open_subtitle">Waves is different — it cannot be held safely by a bank or web service</string>
+    <string name="dialog_account_first_open_title">Done! Let’s review.</string>
+    <string name="dialog_processing">Wait…</string>
     <string name="edit_account_name">Edit name</string>
     <string name="edit_account_new_name">New account name</string>
     <string name="edit_account_save">Save</string>
-
-    <!--Create passcode-->
-    <string name="create_passcode_create_title">Create a passcode</string>
-    <string name="create_passcode_create_new_title">Create a new passcode</string>
-    <string name="create_passcode_verify_title">Verify your passcode</string>
-    <string name="create_passcode_validation_already_use_error">Passcode already use</string>
-
-    <!--Use fingerprint-->
-    <string name="use_fingerprint_submit_txt">Use fingerprint</string>
-    <string name="use_fingerprint_not_now">Not now</string>
-    <string name="use_fingerprint_subtitle">Use your fingerprint for faster, easier access to your account</string>
-    <string name="use_fingerprint_title">Use fingerprint to sign in?</string>
-
-    <!--Fingerprint dialog-->
-    <string name="fingerprint_dialog_title">Sign in</string>
-    <string name="fingerprint_dialog_description">Confirm fingerprint to continue</string>
-    <string name="fingerprint_dialog_hint">Touch sensor</string>
-    <string name="fingerprint_dialog_not_recognized">Not recognized</string>
-    <string name="fingerprint_dialog_recognized">Fingerprint recognized</string>
-    <string name="fingerprint_dialog_too_many_attempts">Too many attempts.\nTry again later.</string>
-    <string name="fingerprint_dialog_cancel">CANCEL</string>
-
-    <!--Enter passcode-->
-    <string name="enter_passcode_title">Enter Passcode</string>
+    <string name="edit_address_address">Address</string>
+    <string name="edit_address_btn_txt">Save</string>
+    <string name="edit_address_delete_alert_cancel">CANCEL</string>
+    <string name="edit_address_delete_alert_delete">DELETE</string>
+    <string name="edit_address_delete_alert_description">Are you sure you want to delete address from address book?</string>
+    <string name="edit_address_delete_alert_title">Delete address</string>
+    <string name="edit_address_delete_txt">Delete address</string>
+    <string name="edit_address_name">Name</string>
+    <string name="edit_address_toolbar_title">Edit</string>
+    <string name="enter_passcode_error_wrong_password">Wrong password</string>
     <string name="enter_passcode_forgot_passcode">Forgot passcode?</string>
-    <string name="enter_passcode_use_account_password">Use account password</string>
-    <string name="enter_passcode_too_many_attempts_dialog_title">Too many attempts</string>
+    <string name="enter_passcode_title">Enter Passcode</string>
     <string name="enter_passcode_too_many_attempts_dialog_description">To unlock, sign in with your account password</string>
-    <string name="enter_passcode_too_many_attempts_dialog_positive_btn_txt">ENTER PASSWORD</string>
     <string name="enter_passcode_too_many_attempts_dialog_negative_btn_txt">CANCEL</string>
-
-    <!--Start leasing-->
-    <string name="start_leasing_toolbar">Start leasing</string>
-    <string name="start_leasing_balance">Balance</string>
-    <string name="start_leasing_generator">Generator</string>
-    <string name="start_leasing_note_address">Node address…</string>
-    <string name="start_leasing_choose_from_address">Choose from Address book</string>
-    <string name="start_leasing_amount">Amount</string>
-    <string name="start_leasing_use_total_balance">Use total balance</string>
-    <string name="start_leasing_0_100">0.100</string>
-    <string name="start_leasing_0_100000">0.00100000</string>
-    <string name="start_leasing_0_500000">0.00500000</string>
-    <string name="start_leasing_validation_is_required_error">Not filled out</string>
-    <string name="start_leasing_validation_address_is_invalid_error">The address is not valid</string>
-    <string name="start_leasing_validation_amount_insufficient_error">Insufficient funds</string>
-
-    <!--Confirmation leasing-->
-    <string name="confirm_leasing">Confirmation</string>
-    <string name="confirm_node_address">Node address</string>
-    <string name="confirm_free">Fee</string>
-    <string name="confirm_confirm">Confirm</string>
-
-    <!--Confirmation progress-->
-    <string name="confirm_leasing_progress">Loading…</string>
-
-    <!--Confirm leasing success-->
-    <string name="confirm_leasing_success">Your transaction is on way!</string>
-    <string name="confirm_leasing_okay">Okay</string>
-    <string name="confirm_leasing_result_value">You have leased %1$s %2$s</string>
-    <string name="confirm_cancel_leasing_result_value">You have canceled a leasing transaction</string>
-
-    <!--Use account password-->
-    <string name="use_account_password_account_password">Account password</string>
-    <string name="use_account_password_sign_in">Sign in</string>
-
-    <!--Import account-->
-    <string name="import_account_toolbar_title">Import account</string>
-    <string name="import_account_tab_scan">Scan</string>
-    <string name="import_account_tab_manually">Manually</string>
-    <string name="import_account_login_at_site">Log in to your Waves Client via web or Mac/PC</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Settings > Security > Pairing code]]></string>
-    <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
-    <string name="import_account_scan_pairing_code">Scan pairing code</string>
-
-
-    <!--Qr scanner-->
-    <string name="qr_scanner_toolbar_title">Scan pairing code</string>
-    <string name="qr_scanner_cancel">Cancel</string>
-    <string name="qr_scanner_flash_on">Flash on</string>
-    <string name="qr_scanner_flash_off">Flash off</string>
-
-
-    <!--Enter seed manually-->
+    <string name="enter_passcode_too_many_attempts_dialog_positive_btn_txt">ENTER PASSWORD</string>
+    <string name="enter_passcode_too_many_attempts_dialog_title">Too many attempts</string>
+    <string name="enter_passcode_use_account_password">Use account password</string>
     <string name="enter_seed_manually_continue">Continue</string>
     <string name="enter_seed_manually_hint_your_seed">Your account seed</string>
     <string name="enter_seed_manually_validation_required_seed_error">Seed is required</string>
     <string name="enter_seed_manually_validation_seed_exists_error">Seed already use</string>
     <string name="enter_seed_manually_validation_seed_is_invalid_error">Seed is invalid</string>
-
-
-    <!--Quick action dialog-->
-    <string name="quick_action_send">Send</string>
-    <string name="quick_action_receive">Receive</string>
-    <string name="quick_action_exchange">Exchange</string>
+    <string name="fingerprint_dialog_cancel">CANCEL</string>
+    <string name="fingerprint_dialog_description">Confirm fingerprint to continue</string>
+    <string name="fingerprint_dialog_hint">Touch sensor</string>
+    <string name="fingerprint_dialog_not_recognized">Not recognized</string>
+    <string name="fingerprint_dialog_recognized">Fingerprint recognized</string>
+    <string name="fingerprint_dialog_title">Sign in</string>
+    <string name="fingerprint_dialog_too_many_attempts">Too many attempts.\nTry again later.</string>
+    <string name="fingerprint_fatal_error_key_invalidate">The keys you wanted to use are invalidated because secure lock screen has turned off or changed the fingerprints stored on the device. You have to re-encrypt the data to access it</string>
+    <string name="fingerprint_fatal_error_root">Rooted device, Fingerprint auth canceled!</string>
+    <string name="history_active_now">Active now</string>
+    <string name="history_all">All</string>
+    <string name="history_canceled">Canceled</string>
+    <string name="history_data_type_title">Entry in blockchain</string>
+    <string name="history_details_active_now">ACTIVE NOW</string>
+    <string name="history_details_block">Block</string>
+    <string name="history_details_cancel_leasing">Cancel leasing</string>
+    <string name="history_details_completed">COMPLETED</string>
+    <string name="history_details_confirmations">Confirmations</string>
+    <string name="history_details_copy_all_data">Copy all data</string>
+    <string name="history_details_copy_tx_id">Copy TX ID</string>
+    <string name="history_details_exchange_price">%s Price</string>
+    <string name="history_details_fee">Fee</string>
+    <string name="history_details_id">ID</string>
+    <string name="history_details_leasing_from">From</string>
+    <string name="history_details_leasing_to">Leasing to</string>
+    <string name="history_details_not_reissuable">Not Reissuable</string>
+    <string name="history_details_received_from">Received from</string>
+    <string name="history_details_recipient">Recipient</string>
+    <string name="history_details_reissuable">Reissuable</string>
+    <string name="history_details_send_again">Send again</string>
+    <string name="history_details_sent_to">Sent to</string>
+    <string name="history_details_show_all">Show all (%1$s)</string>
+    <string name="history_details_timestamp">Timestamp</string>
+    <string name="history_details_unconfirmed">UNCONFIRMED</string>
+    <string name="history_empty">Nothing Here…\nYou do not have any transactions</string>
+    <string name="history_error_receive_data">Error receive data. Please try later</string>
+    <string name="history_exchanged">Exchanged</string>
+    <string name="history_issued">Issued</string>
+    <string name="history_leased">Leased</string>
+    <string name="history_received">Received</string>
+    <string name="history_sent">Sent</string>
+    <string name="history_sorting_close">Close</string>
+    <string name="history_sorting_display_spam">Display spam transactions</string>
+    <string name="history_sorting_filter">Filter</string>
+    <string name="history_sorting_half_year">Half-year</string>
+    <string name="history_sorting_month">Month</string>
+    <string name="history_sorting_period">Period</string>
+    <string name="history_sorting_week">Week</string>
+    <string name="history_toolbar_title">History</string>
+    <string name="history_type_cancel_script">Cancel script transaction</string>
+    <string name="history_type_cancel_sponsorship">Cancel sponsorship transaction</string>
+    <string name="history_type_canceled_leasing">Canceled Leasing</string>
+    <string name="history_type_create_alias">Create Alias</string>
+    <string name="history_type_data">Data transaction</string>
+    <string name="history_type_exchange">%s %s</string>
+    <string name="history_type_incoming_leasing">Incoming Leasing</string>
+    <string name="history_type_mass_receive">Received %s</string>
+    <string name="history_type_mass_send">Send %s</string>
+    <string name="history_type_mass_spam_receive">Received %s</string>
+    <string name="history_type_receive">Received %s</string>
+    <string name="history_type_self_transfer">Self-transfer %s</string>
+    <string name="history_type_sent">Sent %s</string>
+    <string name="history_type_set_script">Set script transaction</string>
+    <string name="history_type_set_sponsorship">Set sponsorship transaction</string>
+    <string name="history_type_spam_receive">Received %s</string>
+    <string name="history_type_started_leasing">Started Leasing</string>
+    <string name="history_type_token_burn">%s Token Burn</string>
+    <string name="history_type_token_generation">%s - Token Generation</string>
+    <string name="history_type_token_reissue">%s Token Reissue</string>
+    <string name="history_type_unrecognised">Unrecognised Transaction</string>
+    <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
+    <string name="import_account_login_at_site">Log in to your Waves Client via web or Mac/PC</string>
+    <string name="import_account_scan_pairing_code">Scan pairing code</string>
+    <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Settings > Security > Pairing code]]></string>
+    <string name="import_account_tab_manually">Manually</string>
+    <string name="import_account_tab_scan">Scan</string>
+    <string name="import_account_toolbar_title">Import account</string>
+    <string name="insufficient_fee">Transaction fee is too low.</string>
+    <string name="insufficient_funds">Insufficient funds</string>
+    <string name="invalid_address">Invalid address</string>
+    <string name="invalid_amount">Invalid amount</string>
+    <string name="invalid_monero_payment_id">Invalid Payment ID</string>
+    <string name="last_trades_amount">Amount</string>
+    <string name="last_trades_empty">Nothing Here…\nThe trading history is empty</string>
+    <string name="last_trades_price">Price</string>
+    <string name="last_trades_sum">Sum</string>
+    <string name="last_trades_time">Time</string>
+    <string name="leasing_history_toolbar_title">History</string>
+    <string name="left_drawer_description">Keep up with the latest news and articles, and find out all about events happening on the Waves Platform</string>
+    <string name="left_drawer_join_the_waves_community">Join the Waves Community</string>
+    <string name="left_drawer_site">wavescommunity.com</string>
+    <string name="left_drawer_support">Support Wavesplatform</string>
+    <string name="left_drawer_terms_and_conditions">Terms and conditions</string>
+    <string name="left_drawer_whitepaper">Whitepaper</string>
+    <string name="my_address_qr_copy">Copy</string>
+    <string name="my_address_qr_share">Share</string>
+    <string name="my_orders_amount">Amount</string>
+    <string name="my_orders_amount_sum">Amount/Sum</string>
+    <string name="my_orders_date_time">Date</string>
+    <string name="my_orders_empty">Nothing Here…\nYou do not have any orders</string>
+    <string name="my_orders_price">Price</string>
+    <string name="my_orders_side_price">Side/Price</string>
+    <string name="my_orders_status">Status</string>
+    <string name="my_orders_status_canceled">Cancelled</string>
+    <string name="my_orders_status_filled">Filled</string>
+    <string name="my_orders_status_open">Open</string>
+    <string name="my_orders_status_partial_filled">Partial</string>
+    <string name="my_orders_time">Time</string>
+    <string name="my_orders_type_buy">Buy</string>
+    <string name="my_orders_type_sell">Sell</string>
+    <string name="network_matcher_address">Matcher address</string>
+    <string name="network_node_address">Node address</string>
+    <string name="network_save">Save</string>
+    <string name="network_set_default">Set default</string>
+    <string name="network_spam_filter">Spam filter</string>
+    <string name="network_spam_url_validation_bad_url">Bad url</string>
+    <string name="network_spam_url_validation_url_empty">Url is required</string>
+    <string name="network_switch_off_spam_filtering">Switch off spam filtering</string>
+    <string name="network_toolbar_title">Network</string>
+    <string name="new_account_account_name_hint">Account name</string>
+    <string name="new_account_account_name_validation_already_exist_error">Account name already use</string>
+    <string name="new_account_account_name_validation_length_error">Max: 20 symbols</string>
+    <string name="new_account_account_name_validation_required_error">Name is required</string>
+    <string name="new_account_avatar_description">This avatar is unique. You cannot change it later.</string>
+    <string name="new_account_avatar_error">Please select avatar</string>
+    <string name="new_account_avatar_title">Choose your address avatar</string>
+    <string name="new_account_confirm_password_hint">Confirm password</string>
+    <string name="new_account_confirm_password_validation_match_error">Passwords do not match</string>
+    <string name="new_account_continue">Continue</string>
+    <string name="new_account_create_password_hint">Create a password</string>
+    <string name="new_account_create_password_validation_length_error">at least 8 characters</string>
+    <string name="new_account_toolbar_title">New Account</string>
+    <string name="new_alias_already_use_validation_error">Already in use</string>
+    <string name="new_alias_create">Create</string>
+    <string name="new_alias_invalid_char_validation_error">Invalid character</string>
+    <string name="new_alias_max_validation_error">30 characters maximum</string>
+    <string name="new_alias_min_validation_error">Minimum 4 characters</string>
+    <string name="new_alias_success_create">You created a new alias!</string>
+    <string name="new_alias_symbol_name">Symbolic name</string>
+    <string name="new_alias_toolbar_title">New alias</string>
+    <string name="no_internet_retry">Retry</string>
+    <string name="no_internet_subtitle">Check your connection to the mobile Internet or Wi-Fi network</string>
+    <string name="no_internet_title">No connection to the Internet</string>
+    <string name="ok_cap">OK</string>
+    <string name="orderbook_amount_title">Amount %s</string>
+    <string name="orderbook_empty">Nothing Here…\nThe order book is empty</string>
+    <string name="orderbook_last_price">LAST PRICE</string>
+    <string name="orderbook_loading">Loading orderbook…</string>
+    <string name="orderbook_price_title">Price %s</string>
+    <string name="orderbook_spread_percent">SPREAD %s%%</string>
+    <string name="orderbook_sum_title">Sum %s</string>
+    <string name="profile_general_addresses_and_keys">Addresses, keys</string>
+    <string name="profile_general_addresses_book">Address book</string>
+    <string name="profile_general_backup_phrase">Backup phrase</string>
+    <string name="profile_general_change_passcode">Change passcode</string>
+    <string name="profile_general_change_password">Change password</string>
+    <string name="profile_general_current_height">Current height</string>
+    <string name="profile_general_current_version">Version</string>
+    <string name="profile_general_delete_account">Delete account from device</string>
+    <string name="profile_general_delete_account_dialog_cancel">Cancel</string>
+    <string name="profile_general_delete_account_dialog_delete">Delete</string>
+    <string name="profile_general_delete_account_dialog_description">Deleting an account will lead to its irretrievable loss!</string>
+    <string name="profile_general_delete_account_dialog_title">Delete account</string>
+    <string name="profile_general_delete_account_dialog_warning">You did not save your SEED</string>
+    <string name="profile_general_feedback">Feedback</string>
+    <string name="profile_general_feedback_body_extra_app_version">App Version: %1$s(%2$s)</string>
+    <string name="profile_general_feedback_body_extra_carrier">Carrier: %s</string>
+    <string name="profile_general_feedback_body_extra_device_model">Device Model: %s</string>
+    <string name="profile_general_feedback_body_extra_language">Language: %s</string>
+    <string name="profile_general_feedback_body_extra_os_version">OS Version: %s</string>
+    <string name="profile_general_feedback_body_extra_title">---Device Info---</string>
+    <string name="profile_general_fingerprint">Fingerprint</string>
+    <string name="profile_general_language">Language</string>
+    <string name="profile_general_logout">Logout of account</string>
+    <string name="profile_general_metwork">Network</string>
+    <string name="profile_general_other">Other</string>
+    <string name="profile_general_push_notifications">Push Notifications</string>
+    <string name="profile_general_rate_app">Rate app</string>
+    <string name="profile_general_security">Security</string>
+    <string name="profile_general_setting">General settings</string>
+    <string name="profile_general_support_wavesplatform">Support Wavesplatform</string>
+    <string name="profile_language_toolbar_title">Language</string>
+    <string name="profile_save_seed_warning_subtitle">Store your SEED safely, it is the only way to restore your wallet</string>
+    <string name="profile_save_seed_warning_title">Save your backup phrase (SEED)</string>
+    <string name="profile_toolbar_title">Profile</string>
+    <string name="qr_scanner_cancel">Cancel</string>
+    <string name="qr_scanner_flash_off">Flash off</string>
+    <string name="qr_scanner_flash_on">Flash on</string>
+    <string name="qr_scanner_toolbar_title">Scan pairing code</string>
     <string name="quick_action_coming_soon">Coming soon</string>
-
-    <!--Your assets-->
-    <string name="your_assets_toolbar_title">Your assets</string>
-    <string name="your_assets_empty_state">Nothing Here…\nYou do not have assets with funds</string>
-
-    <!--Receive-->
-    <string name="receive_toolbar">Receive</string>
-    <string name="receive_cryptocurrency">Сryptocurrency</string>
-    <string name="receive_invoice">Invoice</string>
-    <string name="receive_card">Card</string>
-    <string name="receive_asset">Asset</string>
-    <string name="receive_sellect_asset">Select your asset or from the list</string>
-    <string name="receive_continue">Continue</string>
-    <string name="receive_minimum_amount">The minimum amount of deposit is %1$s %2$s</string>
-    <string name="receive_warning_will_send">If you will send less than %1$s %2$s, you will lose that money.</string>
-    <string name="receive_warning_crypto">Send only %1$s to this deposit address</string>
+    <string name="quick_action_exchange">Exchange</string>
+    <string name="quick_action_receive">Receive</string>
+    <string name="quick_action_send">Send</string>
+    <string name="receive_address_close">Close</string>
+    <string name="receive_address_copy">Copy</string>
+    <string name="receive_address_generate">Generate…</string>
+    <string name="receive_address_link_to_invoice">Link to an Invoice</string>
+    <string name="receive_address_share">Share</string>
+    <string name="receive_address_view_toolbar">Your Bitcoin address</string>
+    <string name="receive_address_waves_address">Your Waves address</string>
+    <string name="receive_address_your_qr_code">Your QR Code</string>
     <string name="receive_amount">Amount</string>
-    <string name="receive_will_send_other_currency">Sending any other currency to this address may result in the loss of your deposit.</string>
     <string name="receive_amount_title">Amount in %1$s</string>
-    <string name="receive_payment_method">Payment method</string>
-    <string name="receive_limit">The minimum is %1$s %2$s, the maximum is %3$s %4$s</string>
-    <string name="receive_error_amount">Wrong amount. Check limits</string>
-    <string name="receive_error_network">Error getting data. Try again later</string>
-    <string name="receive_fiat_choose_dialog_title">Choose Currency</string>
-    <string name="receive_fiat_choose_dialog_usd">USD</string>
-    <string name="receive_fiat_choose_dialog_euro">EUR</string>
-    <string name="receive_fiat_choose_dialog_cancel">Cancel</string>
-    <string name="receive_fiat_choose_dialog_ok">Ok</string>
-    <string name="receive_makink_payment">For making a payment from your card you will be redirected to the merchant\'s website</string>
-    <string name="receive_not_verified">Your account is not verified</string>
-    <string name="receive_step_1">Step 1</string>
-    <string name="receive_step_1_msg">In order to deposit Euro directly from your bank account through SEPA transfer you must get verified by our partner \nIDNow.eu</string>
-    <string name="receive_step_1_msg_link">IDNow.eu</string>
-    <string name="receive_step_url_link">"https://www.idnow.eu/"</string>
-    <string name="receive_step_2">Step 2</string>
-    <string name="receive_step_2_msg">After you go through the verification you will receive an email with further instructions</string>
-    <string name="receive_dont_accept_international">We don\'t accept international wire transfers from US Citizens or from USA Banks</string>
-    <string name="receive_list_of_countries">List of eligible countries and IDs</string>
-    <string name="receive_get_verified">Get verified</string>
+    <string name="receive_asset">Asset</string>
+    <string name="receive_card">Card</string>
     <string name="receive_contact_msg">In case of problems with verification or payment processing, please contact the Coinomat support team — support@coinomat.com</string>
     <string name="receive_contact_msg_key">support@coinomat.com</string>
+    <string name="receive_continue">Continue</string>
+    <string name="receive_cryptocurrency">Сryptocurrency</string>
+    <string name="receive_dont_accept_international">We don\'t accept international wire transfers from US Citizens or from USA Banks</string>
+    <string name="receive_error_amount">Wrong amount. Check limits</string>
+    <string name="receive_error_network">Error getting data. Try again later</string>
+    <string name="receive_fiat_choose_dialog_cancel">Cancel</string>
+    <string name="receive_fiat_choose_dialog_euro">EUR</string>
+    <string name="receive_fiat_choose_dialog_ok">Ok</string>
+    <string name="receive_fiat_choose_dialog_title">Choose Currency</string>
+    <string name="receive_fiat_choose_dialog_usd">USD</string>
+    <string name="receive_get_verified">Get verified</string>
+    <string name="receive_invoice">Invoice</string>
+    <string name="receive_limit">The minimum is %1$s %2$s, the maximum is %3$s %4$s</string>
+    <string name="receive_list_of_countries">List of eligible countries and IDs</string>
+    <string name="receive_makink_payment">For making a payment from your card you will be redirected to the merchant\'s website</string>
+    <string name="receive_minimum_amount">The minimum amount of deposit is %1$s %2$s</string>
+    <string name="receive_not_verified">Your account is not verified</string>
+    <string name="receive_payment_method">Payment method</string>
+    <string name="receive_sellect_asset">Select your asset or from the list</string>
+    <string name="receive_step_1">Step 1</string>
+    <string name="receive_step_1_msg">In order to deposit Euro directly from your bank account through SEPA transfer you must get verified by our partner\nIDNow.eu</string>
+    <string name="receive_step_1_msg_link">IDNow.eu</string>
+    <string name="receive_step_2">Step 2</string>
+    <string name="receive_step_2_msg">After you go through the verification you will receive an email with further instructions</string>
+    <string name="receive_step_url_link">https://www.idnow.eu/</string>
+    <string name="receive_toolbar">Receive</string>
+    <string name="receive_use_same_waves_address"><![CDATA[You must use the same Waves address that you used to make KYC&ALM request. If you make a mistake or put a different Waves address we can’t credit your account.]]></string>
     <string name="receive_verified">Your account is verified</string>
-    <string name="receive_use_same_waves_address">You must use the same Waves address that you used to make KYC&amp;ALM request. If you make a mistake or put a different Waves address we can’t credit your account.</string>
-
-    <!--Send-->
-    <string name="send_toolbar_title">Send</string>
+    <string name="receive_warning_crypto">Send only %1$s to this deposit address</string>
+    <string name="receive_warning_will_send">If you will send less than %1$s %2$s, you will lose that money.</string>
+    <string name="receive_will_send_other_currency">Sending any other currency to this address may result in the loss of your deposit.</string>
+    <string name="secret_phrase_back_up_now">Back Up Now</string>
+    <string name="secret_phrase_do_it_later">Do it later</string>
+    <string name="secret_phrase_no_backup_no_money">No Backup, No Money</string>
+    <string name="secret_phrase_you_must_save_the_secret_phrase_it_is_crucial_for_accessing_your_account">You must save the secret phrase. It is crucial for accessing your account.</string>
+    <string name="sell_btn_txt">Sell %s</string>
+    <string name="send_amount">Amount</string>
+    <string name="send_amount_error_insufficient_funds">Insufficient funds</string>
     <string name="send_asset">Asset</string>
-    <string name="send_select_your_asset">Select your asset</string>
-    <string name="send_recipient">Recipient</string>
-    <string name="send_recipient_the_address_is_not_valid">The address is not valid</string>
-    <string name="send_recipient_address_hint">Recipient address…</string>
+    <string name="send_choose_from_address_book">Choose from Address book</string>
+    <string name="send_confirmation_confirm">Confirm</string>
+    <string name="send_confirmation_description">Description</string>
+    <string name="send_confirmation_fee">Fee</string>
+    <string name="send_confirmation_sent_to">Sent to</string>
+    <string name="send_confirmation_the_description_is_too_long">The description is too long</string>
+    <string name="send_confirmation_toolbar_title">Confirmation</string>
+    <string name="send_confirmation_write_an_optional_message">Write an optional message</string>
+    <string name="send_continue">Continue</string>
+    <string name="send_error_get_data_from_qr">Error get data from QR</string>
+    <string name="send_errpr_you_don_t_have_enough_funds_to_pay_the_required_fees">You don\'t have enough funds to pay the required fees.</string>
+    <string name="send_fifty_percents">50%</string>
+    <string name="send_five_percents">5%</string>
+    <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Fees are 1% from the amount transferred.</string>
     <string name="send_gateway_info_gateway_fee">Gateway fee is %1$s %2$s</string>
     <string name="send_gateway_info_gateway_limits">We detected %1$s address and will send your money through Coinomat gateway to that address. Minimum amount is %2$s %1$s, maximum amount is %3$s %1$s.</string>
     <string name="send_gateway_info_gateway_warning">Do not withdraw %1$s to an ICO. We will not credit your account with tokens from that sale.</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">If you have been verified and have deposited US dollars, you can withdraw these dollars back to your bank account. Otherwise, get verified by our partner IDNow.eu</string>
-    <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Fees are 1% from the amount transferred.</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">The minimum amount is 500 US Dollar. If you have any questions, please just send an email to support@coinomat.com</string>
-    <string name="send_amount_error_insufficient_funds">Insufficient funds</string>
-    <string name="send_amount">Amount</string>
-    <string name="send_choose_from_address_book">Choose from Address book</string>
-    <string name="send_use_total_balance">Use total balance</string>
-    <string name="send_errpr_you_don_t_have_enough_funds_to_pay_the_required_fees">You don\'t have enough funds to pay the required fees.</string>
-    <string name="send_continue">Continue</string>
-    <string name="send_transaction_fee_0_001_waves">Transaction Fee 0.001 WAVES</string>
-    <string name="send_transaction_error_check_asset">Check asset</string>
     <string name="send_monero_payment_id">Monero Payment ID</string>
     <string name="send_monero_payment_id_hint">Paste or type your Payment ID</string>
-    <string name="send_error_get_data_from_qr">Error get data from QR</string>
-    <string name="send_five_percents">5%</string>
-    <string name="send_ten_percents">10%</string>
-    <string name="send_fifty_percents">50%</string>
-
-    <!--About redirection-->
-    <string name="about_redirection_title">You were redirected to the «IDNow» \nfor verification</string>
-    <string name="about_redirection_message">After you go through the verification you will receive an email with further instructions</string>
-    <string name="about_redirection_okay">Okay</string>
-    <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
-    <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>.\nIf you don’t we can’t credit your account.]]></string>
-
-    <!--Send Confirmation-->
-    <string name="send_confirmation_toolbar_title">Confirmation</string>
-    <string name="send_confirmation_sent_to">Sent to</string>
-    <string name="send_confirmation_fee">Fee</string>
-    <string name="send_confirmation_description">Description</string>
-    <string name="send_confirmation_the_description_is_too_long">The description is too long</string>
-    <string name="send_confirmation_write_an_optional_message">Write an optional message</string>
-    <string name="send_confirmation_confirm">Confirm</string>
-
-    <!--Send Progress-->
     <string name="send_progress_sending">Sending…</string>
-
-    <!--Send Success-->
+    <string name="send_recipient">Recipient</string>
+    <string name="send_recipient_address_hint">Recipient address…</string>
+    <string name="send_recipient_the_address_is_not_valid">The address is not valid</string>
+    <string name="send_select_your_asset">Select your asset</string>
     <string name="send_success_do_you_want_to_save_this_address">Do you want to save this address?</string>
-    <string name="send_success_your_transaction_is_on_the_way">Your transaction is on the way!</string>
-    <string name="send_success_you_have_sent_sum">You have sent %1$s %2$s</string>
     <string name="send_success_okay">Okay</string>
-
-    <!--Receive address view-->
-    <string name="receive_address_view_toolbar">Your Bitcoin address</string>
-    <string name="receive_address_generate">Generate…</string>
-    <string name="receive_address_your_qr_code">Your QR Code</string>
-    <string name="receive_address_share">Share</string>
-    <string name="receive_address_copy">Copy</string>
-    <string name="receive_address_close">Close</string>
-    <string name="receive_address_link_to_invoice">Link to an Invoice</string>
-    <string name="receive_address_waves_address">Your Waves address</string>
-
-    <!--Account first open alert-->
-    <string name="dialog_account_first_open_title">Done! Let’s review.</string>
-    <string name="dialog_account_first_open_subtitle">Waves is different — it cannot be held safely by a bank or web service</string>
-    <string name="dialog_account_first_open_about_fund_on_device">I understand that my funds are held securely on this device, not by a company</string>
-    <string name="dialog_account_first_open_about_backup">I understand that if this app is moved to another device or deleted, my Waves can only be recovered with the backup phrase</string>
-    <string name="dialog_account_first_open_about_terms">I have read, understood, and agree to the\nTerms of Use</string>
-    <string name="dialog_account_first_open_about_terms_key">Terms of Use</string>
-    <string name="dialog_account_first_open_confirm_and_begin">Confirm and Begin</string>
-
-    <!--Dex Markets-->
-    <string name="dex_markets_list_toolbar_title">Markets</string>
-    <string name="dex_markets_list_search">Search</string>
-
-    <!--Dex Markets Info Dialog-->
-    <string name="dex_markets_info_dialog_popular">Popular</string>
-    <string name="dex_markets_info_dialog_amount_asset">Amount Asset — %s</string>
-    <string name="dex_markets_info_dialog_price_asset">Price Asset — %s</string>
-
-    <!--Dex Trade-->
-    <string name="dex_trade_tab_orderbook">Orderbook</string>
-    <string name="dex_trade_tab_chart">Chart</string>
-    <string name="dex_trade_tab_last_trades">Last Trades</string>
-    <string name="dex_trade_tab_my_orders">My Orders</string>
-    <string name="dex_trade_buy">BUY</string>
-    <string name="dex_trade_sell">SELL</string>
-
-    <!--My orders-->
-    <string name="my_orders_empty">Nothing Here…\nYou do not have any orders</string>
-    <string name="my_orders_date_time">Date</string>
-    <string name="my_orders_side_price">Side/Price</string>
-    <string name="my_orders_amount_sum">Amount/Sum</string>
-    <string name="my_orders_status">Status</string>
-    <string name="my_orders_status_open">Open</string>
-    <string name="my_orders_status_partial_filled">Partial</string>
-    <string name="my_orders_status_filled">Filled</string>
-    <string name="my_orders_status_canceled">Cancelled</string>
-
-    <!--Last trades-->
-    <string name="last_trades_time">Time</string>
-    <string name="last_trades_price">Price</string>
-    <string name="last_trades_amount">Amount</string>
-    <string name="last_trades_sum">Sum</string>
-    <string name="last_trades_empty">Nothing Here…\nThe trading history is empty</string>
-
-    <!--Token burn-->
-    <string name="token_burn_toolbar_title">Token Burn</string>
-
-    <!--Token burn confirmation-->
-    <string name="token_burn_confirmation_toolbar_title">Confirmation</string>
-    <string name="token_burn_confirmation_id">ID</string>
-    <string name="token_burn_confirmationt_description">The Official Token of The Dating Decision Robot. www.choosee.site Choosee uses big data and artificial intelligence to facilitate dating. Making humans human again.</string>
-    <string name="token_burn_confirmation_type">Type</string>
-    <string name="token_burn_confirmation_fee">Fee</string>
+    <string name="send_success_you_have_sent_sum">You have sent %1$s %2$s</string>
+    <string name="send_success_your_transaction_is_on_the_way">Your transaction is on the way!</string>
+    <string name="send_ten_percents">10%</string>
+    <string name="send_to_same_address_warning">Can\'t send to the same address.</string>
+    <string name="send_toolbar_title">Send</string>
+    <string name="send_transaction_error_check_asset">Check asset</string>
+    <string name="send_transaction_fee_0_001_waves">Transaction Fee 0.001 WAVES</string>
+    <string name="send_use_total_balance">Use total balance</string>
+    <string name="start_leasing_0_100">0.100</string>
+    <string name="start_leasing_0_100000">0.00100000</string>
+    <string name="start_leasing_0_500000">0.00500000</string>
+    <string name="start_leasing_amount">Amount</string>
+    <string name="start_leasing_balance">Balance</string>
+    <string name="start_leasing_choose_from_address">Choose from Address book</string>
+    <string name="start_leasing_generator">Generator</string>
+    <string name="start_leasing_note_address">Node address…</string>
+    <string name="start_leasing_toolbar">Start leasing</string>
+    <string name="start_leasing_use_total_balance">Use total balance</string>
+    <string name="start_leasing_validation_address_is_invalid_error">The address is not valid</string>
+    <string name="start_leasing_validation_amount_insufficient_error">Insufficient funds</string>
+    <string name="start_leasing_validation_is_required_error">Not filled out</string>
     <string name="token_burn_confirmation_burn">Burn</string>
-    <string name="token_burn_confirmation_your_transaction_is_on_the_way">Your transaction is on the way</string>
-    <string name="token_burn_confirmation_you_have_burned">You have burned %1$s %2$s</string>
-    <string name="token_burn_confirmation_okay">Okay</string>
     <string name="token_burn_confirmation_burning">Burning…</string>
-    <string name="token_burn_confirmationt_reissuable">Reissuable</string>
+    <string name="token_burn_confirmation_fee">Fee</string>
+    <string name="token_burn_confirmation_id">ID</string>
+    <string name="token_burn_confirmation_okay">Okay</string>
+    <string name="token_burn_confirmation_toolbar_title">Confirmation</string>
+    <string name="token_burn_confirmation_type">Type</string>
+    <string name="token_burn_confirmation_you_have_burned">You have burned %1$s %2$s</string>
+    <string name="token_burn_confirmation_your_transaction_is_on_the_way">Your transaction is on the way</string>
+    <string name="token_burn_confirmationt_description">The Official Token of The Dating Decision Robot. www.choosee.site Choosee uses big data and artificial intelligence to facilitate dating. Making humans human again.</string>
     <string name="token_burn_confirmationt_not_reissuable">Not Reissuable</string>
-
-    <!--Chart-->
-    <string name="chart_empty">No chart data available</string>
-    <string name="chart_change_interval_dialog_title">Change Interval</string>
-    <string name="chart_change_interval_dialog_cancel">CANCEL</string>
-    <string name="chart_change_interval_dialog_ok">OK</string>
-    <string name="chart_time_frame_5_min">5 minutes</string>
-    <string name="chart_time_frame_15_min">15 minutes</string>
-    <string name="chart_time_frame_30_min">30 minutes</string>
-    <string name="chart_time_frame_1_hour">1 hour</string>
-    <string name="chart_time_frame_4_hours">4 hours</string>
-    <string name="chart_time_frame_24_hours">24 hours</string>
-    <string name="chart_loading">Loading chart…</string>
-
-
-
-    <!--Orderbook-->
-    <string name="orderbook_last_price">LAST PRICE</string>
-    <string name="orderbook_amount_title">Amount %s</string>
-    <string name="orderbook_price_title">Price %s</string>
-    <string name="orderbook_sum_title">Sum %s</string>
-    <string name="orderbook_empty">Nothing Here…\nThe order book is empty</string>
-    <string name="orderbook_spread_percent">SPREAD %s%%</string>
-    <string name="orderbook_loading">Loading orderbook…</string>
-
-
-    <!--Buy And Sell Dialog-->
-    <string name="buy_and_sell_dialog_buy_tab">Buy</string>
-    <string name="buy_and_sell_dialog_sell_tab">Sell</string>
-    <string name="buy_and_sell_amount_in">Amount in %1$s</string>
-    <string name="buy_and_sell_not_enough">Not enough %1$s</string>
-    <string name="buy_and_sell_required">This field is required</string>
-    <string name="buy_and_sell_user_total_balance">Use total balance</string>
-    <string name="buy_and_sell_50">50%</string>
-    <string name="buy_and_sell_10">10%</string>
-    <string name="buy_and_sell_5">5%</string>
-    <string name="buy_and_sell_limit_price_in">Limit Price in %1$s</string>
-    <string name="buy_and_sell_bid">Bid</string>
-    <string name="buy_and_sell_ask">Ask</string>
-    <string name="buy_and_sell_last">Last</string>
-    <string name="buy_and_sell_total_in">Total in %1$s</string>
-    <string name="buy_and_sell_fee">Fee</string>
-    <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
-    <string name="buy_and_sell_expiration">Expiration</string>
-    <string name="buy_and_sell_5_min">5 min</string>
-    <string name="buy_and_sell_30_min">30 min</string>
-    <string name="buy_and_sell_1_hour">1 hour</string>
-    <string name="buy_and_sell_1_day">1 day</string>
-    <string name="buy_and_sell_1_week">1 week</string>
-    <string name="buy_and_sell_29_days">29 days</string>
-    <string name="buy_and_sell_expiration_dialog_positive_btn">OK</string>
-    <string name="buy_and_sell_expiration_dialog_negative_btn">CANCEL</string>
-    <string name="buy_and_sell_expiration_dialog_title">Choose expiration</string>
-
-    <!--Buy-->
-    <string name="buy_btn_txt">Buy %s</string>
-
-    <!--Sell-->
-    <string name="sell_btn_txt">Sell %s</string>
-
-    <!--Buy and Sell Success-->
-    <string name="buy_and_sell_success_the_order_is_created">The order is created</string>
-    <string name="buy_and_sell_success_time">Time</string>
-    <string name="buy_and_sell_success_status">Status</string>
-    <string name="buy_and_sell_success_price">Price</string>
-    <string name="buy_and_sell_success_amount">Amount</string>
-    <string name="buy_and_sell_success_okay">Okay</string>
-
-    <!--What's new-->
+    <string name="token_burn_confirmationt_reissuable">Reissuable</string>
+    <string name="token_burn_toolbar_title">Token Burn</string>
+    <string name="transaction_failed">Transaction failed</string>
+    <string name="transfer">Transfer</string>
+    <string name="tutorial_card_1_description">Please take some time to understand some important things for your own safety.\n\nWe cannot recover your funds or freeze your account if you visit a phishing site or lose your backup phrase (aka SEED phrase).\n\nBy continuing to use our platform, you agree to accept all risks associated with the loss of your SEED, including but not limited to the inability to obtain your funds and dispose of them. In case you lose your SEED, you agree and acknowledge that the Waves Platform would not be responsible for the negative consequences of this.</string>
+    <string name="tutorial_card_1_title">Welcome to the Waves Platform!</string>
+    <string name="tutorial_card_2_description">When registering your account, you will be asked to save your secret phrase (Seed) and to protect your account with a password. On normal centralized servers, special attention is paid to the password, which can be changed and reset via email, if the need arises. However, on decentralized platforms such as Waves, everything is arranged differently:</string>
+    <string name="tutorial_card_2_title">What you need to know about your SEED</string>
+    <string name="unexpected_error">Unexpected error, please try again later.</string>
+    <string name="use_account_password_account_password">Account password</string>
+    <string name="use_account_password_sign_in">Sign in</string>
+    <string name="use_fingerprint_not_now">Not now</string>
+    <string name="use_fingerprint_submit_txt">Use fingerprint</string>
+    <string name="use_fingerprint_subtitle">Use your fingerprint for faster, easier access to your account</string>
+    <string name="use_fingerprint_title">Use fingerprint to sign in?</string>
+    <string name="wallet_assets">Assets</string>
+    <string name="wallet_assets_hidden_category">Hidden assets (%1$s)</string>
+    <string name="wallet_assets_my_asset">/ My Asset</string>
+    <string name="wallet_assets_spam_category">Spam assets (%1$s)</string>
+    <string name="wallet_assets_spam_tag">Spam</string>
+    <string name="wallet_leasing">Leasing</string>
+    <string name="wallet_leasing_active_now">Active now (%1$s)</string>
+    <string name="wallet_leasing_available_balance">Available balance</string>
+    <string name="wallet_leasing_leased">Leased</string>
+    <string name="wallet_leasing_quick_note">Quick note</string>
+    <string name="wallet_leasing_quick_note_1">You can only transfer or trade WAVES that aren’t leased. The leased amount cannot be transferred or traded by you or anyone else.</string>
+    <string name="wallet_leasing_quick_note_2">You can cancel a leasing transaction as soon as it appears in the blockchain which usually occurs in a minute or less.</string>
+    <string name="wallet_leasing_quick_note_3">The generating balance will be updated after 1000 blocks.</string>
+    <string name="wallet_leasing_start_lease">Start Lease</string>
+    <string name="wallet_leasing_total">Total</string>
+    <string name="wallet_leasing_view_history">View history</string>
+    <string name="wallet_sorting_toolbar_position_action">Position</string>
+    <string name="wallet_sorting_toolbar_title">Sorting</string>
+    <string name="wallet_sorting_toolbar_visibility_action">Visibility</string>
+    <string name="wallet_toolbar_title">Wallet</string>
+    <string name="welcome_blockchain_description">Become part of a fast-growing area of the crypto world. You are the only person who can access your crypto assets.</string>
+    <string name="welcome_blockchain_title">Get Started with Blockchain</string>
+    <string name="welcome_create_import_description">via pairing code or manually</string>
+    <string name="welcome_create_import_title">Import account</string>
+    <string name="welcome_create_new_acc">Create a new account</string>
+    <string name="welcome_create_sign_in_description">to a saved account</string>
+    <string name="welcome_create_sign_in_title">Sign in</string>
+    <string name="welcome_dex_description">Trade quickly and securely. You retain complete control over your funds when trading them on our decentralised exchange.</string>
+    <string name="welcome_dex_title">Decentralised Exchange</string>
+    <string name="welcome_token_description">Issue your own tokens. These can be integrated into your business not only as an internal currency but also as a token for decentralised voting, as a rating system, or loyalty program.</string>
+    <string name="welcome_token_title">Token Launcher</string>
+    <string name="welcome_wallet_description">Store, manage and receive interest on your digital assets balance, easily and securely.</string>
+    <string name="welcome_wallet_title">Wallet</string>
     <string name="whats_new_next">Next</string>
     <string name="whats_new_okay">Okay</string>
-
-    <!--Leasing history-->
-    <string name="leasing_history_toolbar_title">History</string>
-
+    <string name="your_address_toolbar_title">Your address</string>
+    <string name="your_address_your_qr_code">Your QR Code</string>
     <string name="your_asset_activity_all">All</string>
     <string name="your_asset_activity_greater_zero">Non empty</string>
-    <string name="coinomat_success_title">You have been redirected to «Indacoin»</string>
-    <string name="coinomat_success_subtitle">After payment has been made your balance will be updated</string>
-    <string name="my_orders_type_buy">Buy</string>
-    <string name="my_orders_type_sell">Sell</string>
-
-    <!--No internet-->
-    <string name="no_internet_title">No connection to the Internet</string>
-    <string name="no_internet_subtitle">Check your connection to the mobile Internet or Wi-Fi network</string>
-    <string name="no_internet_retry">Retry</string>
-
+    <string name="your_assets_empty_state">Nothing Here…\nYou do not have assets with funds</string>
+    <string name="your_assets_toolbar_title">Your assets</string>
 </resources>

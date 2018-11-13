@@ -227,9 +227,10 @@ class SendActivity : BaseActivity(), SendView {
         gateway_fee.text = getString(R.string.send_gateway_info_gateway_fee,
                 fee, ticker)
         gateway_limits.text = getString(R.string.send_gateway_info_gateway_limits,
-                ticker, inMax, inMin)
+                ticker, inMin, inMax)
         gateway_warning.text = getString(R.string.send_gateway_info_gateway_warning,
                 ticker)
+        setRecipientValid(presenter.isRecipientValid())
     }
 
     override fun showXRateError() {
@@ -405,7 +406,6 @@ class SendActivity : BaseActivity(), SendView {
                 skeletonView!!.show()
             }
             presenter.loadXRate(assetId)
-            setRecipientValid(presenter.isRecipientValid())
         } else {
             relative_gateway_fee.gone()
         }

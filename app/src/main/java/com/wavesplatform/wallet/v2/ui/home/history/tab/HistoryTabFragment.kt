@@ -40,6 +40,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     lateinit var layoutManager: LinearLayoutManager
     var changeTabBarVisibilityListener: ChangeTabBarVisibilityListener? = null
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
+    private var skeletonShow = false
     private lateinit var headerItemDecoration: PinnedHeaderItemDecoration
 
     override fun configLayoutRes(): Int = R.layout.fragment_history_tab
@@ -101,6 +102,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                 .load(R.layout.item_skeleton_wallet)
                 .frozen(false)
                 .show()
+        skeletonShow = true
 
         // make skeleton as designed
         recycle_history.post {
@@ -123,13 +125,19 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.StopUpdateHistoryScreen::class.java)
                 .subscribe {
                     swipe_refresh.isRefreshing = false
-                    skeletonScreen.notNull { it.hide() }
+                    skeletonScreen.notNull { skeleton ->
+                        if (skeletonShow) {
+                            skeleton.hide()
+                            skeletonShow = false
+                        }
+                    }
                 })
 
         runAsync {
             presenter.loadTransactions()
         }
 
+        adapter.setEmptyView(R.layout.layout_empty_data)
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             if (position == 0) return@OnItemClickListener // handle click on empty space
 
@@ -149,7 +157,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                 for (i in 0..position) {
                     if (data[i].header.isNotEmpty()) sectionSize++
                 }
-                var count = data.count { it.header.isNotEmpty() }
 
                 val selectedPositionWithoutHeaders = position - sectionSize
 
@@ -165,7 +172,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
     override fun afterSuccessLoadTransaction(data: ArrayList<HistoryItem>, type: String?) {
         adapter.setNewData(data)
-        adapter.setEmptyView(R.layout.layout_empty_data)
         skeletonScreen.notNull { it.hide() }
         swipe_refresh.isRefreshing = false
     }

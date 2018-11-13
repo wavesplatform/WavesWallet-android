@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_backup_pharse.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.findColor
+import pers.victor.ext.invisiable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -47,6 +48,11 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
         } else {
             launchActivity<EnterPassCodeActivity>(
                     requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
+        }
+
+        if (!App.getAccessManager().isCurrentAccountBackupSkipped()) {
+            button_written_down.invisiable()
+            text_view_written_down_hint.invisiable()
         }
     }
 

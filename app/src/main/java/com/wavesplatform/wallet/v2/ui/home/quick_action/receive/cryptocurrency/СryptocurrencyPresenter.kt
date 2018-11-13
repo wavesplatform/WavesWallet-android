@@ -26,7 +26,7 @@ class СryptocurrencyPresenter @Inject constructor() : BasePresenter<Сryptocurr
     fun getTunnel(assetId: String) {
         val currencyFrom = Constants.coinomatCryptoCurrencies[assetId]
         if (currencyFrom.isNullOrEmpty()) {
-            viewState.showError(App.getAppContext()
+            viewState.onShowError(App.getAppContext()
                     .getString(R.string.receive_error_network))
             return
         }
@@ -45,10 +45,10 @@ class СryptocurrencyPresenter @Inject constructor() : BasePresenter<Сryptocurr
                     .subscribe({ tunnel ->
                         this.tunnel = tunnel
                         runOnUiThread {
-                            viewState.showTunnel(tunnel)
+                            viewState.onShowTunnel(tunnel)
                         }
                     }, {
-                        viewState.showError(App.getAppContext()
+                        viewState.onShowError(App.getAppContext()
                                 .getString(R.string.receive_error_network))
                         it.printStackTrace()
                     }))
