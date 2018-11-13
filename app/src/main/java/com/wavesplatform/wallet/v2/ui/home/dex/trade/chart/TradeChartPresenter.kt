@@ -62,6 +62,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
 
     fun pause() {
         timer?.cancel()
+        timer = null
     }
 
     fun resume() {
@@ -69,7 +70,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     }
 
     private fun startTimer() {
-        if (timer != null) timer?.cancel()
+        if (timer != null) pause()
 
         if (timer == null) {
             timer = Timer()
