@@ -64,7 +64,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         button_continue.click {
             launchActivity<TokenBurnConfirmationActivity> {
                 putExtra(KEY_INTENT_ASSET_BALANCE, assetBalance)
-                putExtra(KEY_INTENT_AMOUNT, edit_amount.text.toString().toDouble())
+                putExtra(KEY_INTENT_AMOUNT, edit_amount.text.toString())
             }
         }
     }

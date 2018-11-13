@@ -342,20 +342,20 @@ class SendActivity : BaseActivity(), SendView {
                     .replace("/#send/", "/send/")
                     .replace("/%23send/", "/send/"))
             try {
-
                 val params = uri.query.split("&")
-                var recipient: String
-                var amount: String
                 for (parameter in params) {
                     if (parameter.contains("recipient=")) {
-                        recipient = parameter.replace("recipient=", "")
+                        val recipient = parameter.replace("recipient=", "")
                         edit_address.setText(recipient)
+                        edit_address.isEnabled = false
                     }
                     if (parameter.contains("amount=")) {
-                        amount = parameter.replace("amount=", "")
+                        val amount = parameter.replace("amount=", "")
                         edit_amount.setText(amount)
+                        edit_amount.isEnabled = false
                     }
                 }
+
                 var assetId = uri.path.split("/")[2]
                 if ("waves".equalsIgnoreCase(assetId)) {
                     assetId = ""
@@ -363,14 +363,15 @@ class SendActivity : BaseActivity(), SendView {
                 val assetBalance = queryFirst<AssetBalance> {
                     equalTo("assetId", assetId)
                 }
-                setAsset(assetBalance)
+
+                if (assetBalance != null) {
+                    setAsset(assetBalance)
+                    card_asset.click {  }
+                }
             } catch (error: Exception) {
                 showError(R.string.send_error_get_data_from_qr, R.id.root_view)
                 error.printStackTrace()
             }
-            edit_address.isEnabled = false
-            edit_amount.isEnabled = false
-            card_asset.click {  }
         } else {
             edit_address.setText(result)
 

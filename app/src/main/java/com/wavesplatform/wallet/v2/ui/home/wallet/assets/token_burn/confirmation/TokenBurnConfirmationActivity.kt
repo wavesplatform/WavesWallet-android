@@ -43,10 +43,11 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         setupToolbar(toolbar_view, true, getString(R.string.token_burn_confirmation_toolbar_title), R.drawable.ic_toolbar_back_white)
 
         presenter.assetBalance = intent.getParcelableExtra(KEY_INTENT_ASSET_BALANCE)
-        presenter.amount = intent.getDoubleExtra(KEY_INTENT_AMOUNT, 0.0)
+        val stringAmount = intent.getStringExtra(KEY_INTENT_AMOUNT)
+        presenter.amount = stringAmount.toDouble()
 
         text_id_value.text = presenter.assetBalance!!.assetId
-        text_sum.text = "-${presenter.amount.toBigDecimal()} ${presenter.assetBalance!!.getName()}"
+        text_sum.text = "-$stringAmount ${presenter.assetBalance!!.getName()}"
         text_type_value.text = if (presenter.assetBalance!!.reissuable == true) {
             getString(R.string.token_burn_confirmationt_reissuable)
         } else {
@@ -63,15 +64,16 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
             rotation.fillAfter = true
             image_loader.startAnimation(rotation)
         }
+
+        text_leasing_result_value.text = getString(
+                R.string.token_burn_confirmation_you_have_burned,
+                stringAmount, presenter.assetBalance!!.getName()
+        )
     }
 
     override fun onShowBurnSuccess(tx: BurnRequest?) {
         completeBurnProcessing()
         relative_success.visiable()
-        text_leasing_result_value.text = getString(
-                R.string.token_burn_confirmation_you_have_burned,
-                presenter.amount.toBigDecimal().toString(), presenter.assetBalance!!.getName()
-        )
 
         button_okay.click {
             launchActivity<MainActivity>(clear = true)
