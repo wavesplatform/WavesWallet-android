@@ -108,7 +108,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 } else if (Constants.MONERO_ASSET_ID == recipientAssetId
                         && moneroPaymentId != null
                         && (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH
-                                || !moneroPaymentId!!.matches(" ".toRegex()))) {
+                                || moneroPaymentId!!.contains(" ".toRegex()))) {
                     return R.string.invalid_monero_payment_id
                 }
         }

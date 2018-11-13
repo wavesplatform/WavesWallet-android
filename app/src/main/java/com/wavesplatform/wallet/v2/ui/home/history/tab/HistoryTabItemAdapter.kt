@@ -82,9 +82,9 @@ class HistoryTabItemAdapter @Inject constructor() :
                             } else {
                                 item.data.asset?.name
                             }
-                            view.text_transaction_name.text = String.format(it.title(), name)
+                            view.text_transaction_name.text = String.format(it.title(), name).trim()
                         } catch (e: MissingFormatArgumentException) {
-                            view.text_transaction_name.text = it.title()
+                            view.text_transaction_name.text = it.title().trim()
                         }
 
                         when (it) {
@@ -182,24 +182,26 @@ class HistoryTabItemAdapter @Inject constructor() :
                         }
                     }
 
-                    if (item.data.transactionType() != TransactionType.CREATE_ALIAS_TYPE
-                            && item.data.transactionType() != TransactionType.DATA_TYPE
-                            && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
-                            && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
-                            && item.data.transactionType() != TransactionType.EXCHANGE_TYPE) {
-                        if (showTag) {
-                            view.text_tag.visiable()
-                            view.text_tag.text = item.data.asset?.name
-                        } else {
-                            view.text_tag.gone()
-                            view.text_transaction_value.text = "${view.text_transaction_value.text} ${item.data.asset?.name}"
-                        }
-                    }
-
                     if (spam) {
                         view.text_tag.gone()
                         view.text_tag_spam.visiable()
-                        setSpamTitle(item.data, item.data.transactionType(), view.text_transaction_value)
+                        if (item.data.transactionType() != TransactionType.TOKEN_GENERATION_TYPE) {
+                            setSpamTitle(item.data, item.data.transactionType(), view.text_transaction_value)
+                        }
+                    } else {
+                        if (item.data.transactionType() != TransactionType.CREATE_ALIAS_TYPE
+                                && item.data.transactionType() != TransactionType.DATA_TYPE
+                                && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
+                                && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
+                                && item.data.transactionType() != TransactionType.EXCHANGE_TYPE) {
+                            if (showTag) {
+                                view.text_tag.visiable()
+                                view.text_tag.text = item.data.asset?.name
+                            } else {
+                                view.text_tag.gone()
+                                view.text_transaction_value.text = "${view.text_transaction_value.text} ${item.data.asset?.name}"
+                            }
+                        }
                     }
 
                     view.text_transaction_value.makeTextHalfBold()
@@ -212,10 +214,15 @@ class HistoryTabItemAdapter @Inject constructor() :
     private fun setSpamTitle(transaction: Transaction, it: TransactionType, view: AppCompatTextView) {
         if (transaction.transfers.isNotEmpty()) {
             val sum = transaction.transfers.sumByLong { it.amount }
-            if (it == TransactionType.MASS_SPAM_RECEIVE_TYPE || it == TransactionType.MASS_RECEIVE_TYPE) {
-                view.text = "+${MoneyUtil.getScaledText(sum, transaction.asset)}"
+            val sumString = MoneyUtil.getScaledText(sum, transaction.asset).trim()
+            if (!sumString.isEmpty()) {
+                if (it == TransactionType.MASS_SPAM_RECEIVE_TYPE || it == TransactionType.MASS_RECEIVE_TYPE) {
+                    view.text = "+$sumString"
+                } else {
+                    view.text = "-$sumString"
+                }
             } else {
-                view.text = "-${MoneyUtil.getScaledText(sum, transaction.asset)}"
+                view.text = ""
             }
         } else {
             view.text = "${MoneyUtil.getScaledText(transaction.amount, transaction.asset)}"

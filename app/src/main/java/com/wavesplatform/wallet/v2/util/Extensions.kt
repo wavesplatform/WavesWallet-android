@@ -52,7 +52,10 @@ import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import pers.victor.ext.*
+import pers.victor.ext.activityManager
+import pers.victor.ext.app
+import pers.victor.ext.clipboardManager
+import pers.victor.ext.findColor
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.toast
@@ -291,7 +294,7 @@ fun Fragment.showError(@StringRes msgId: Int, @IdRes viewId: Int) {
     showError(getString(msgId), viewId)
 }
 
-fun Fragment.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
+fun Fragment.showError(msg: String, @IdRes viewId: Int) {
     showMessage(msg, viewId, R.color.error400)
 }
 
