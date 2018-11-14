@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import com.wavesplatform.wallet.v2.util.clearBalance
 import java.math.BigDecimal
 
 class CounterHandler private constructor(builder: Builder) {
@@ -129,7 +130,7 @@ class CounterHandler private constructor(builder: Builder) {
 
         incrementValueWithRang.append("1")
 
-        val t = BigDecimal(currentValue)
+        val t = BigDecimal(currentValue.clearBalance())
 
         if (increment) {
             var number = t.add(BigDecimal(incrementValueWithRang.toString()))

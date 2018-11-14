@@ -74,10 +74,12 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 .listener(object : CounterHandler.CounterListener {
                     override fun onIncrement(view: EditText?, number: BigDecimal) {
                         view?.setText(number.toString())
+                        view?.setSelection(view.text.length)
                     }
 
                     override fun onDecrement(view: EditText?, number: BigDecimal) {
                         view?.setText(number.toString())
+                        view?.setSelection(view.text.length)
                     }
                 })
                 .build()
@@ -89,10 +91,12 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 .listener(object : CounterHandler.CounterListener {
                     override fun onIncrement(view: EditText?, number: BigDecimal) {
                         view?.setText(number.toString())
+                        view?.setSelection(view.text.length)
                     }
 
                     override fun onDecrement(view: EditText?, number: BigDecimal) {
                         view?.setText(number.toString())
+                        view?.setSelection(view.text.length)
                     }
                 })
                 .build()
@@ -105,11 +109,13 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     override fun onIncrement(view: EditText?, number: BigDecimal) {
                         presenter.humanTotalTyping = true
                         view?.setText(number.toString())
+                        view?.setSelection(view.text.length)
                     }
 
                     override fun onDecrement(view: EditText?, number: BigDecimal) {
                         presenter.humanTotalTyping = true
                         view?.setText(number.toString())
+                        view?.setSelection(view.text.length)
                     }
                 })
                 .build()
