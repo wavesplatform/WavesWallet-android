@@ -42,6 +42,8 @@ public class App extends DaggerApplication {
     AuthHelper authHelper;
     private static Context sContext;
     private static AccessManager accessManager;
+    private LocalizationApplicationDelegate localizationDelegate
+            = new LocalizationApplicationDelegate(this);
 
     @Override
     public void onCreate() {
@@ -104,10 +106,6 @@ public class App extends DaggerApplication {
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
         return DaggerApplicationV2Component.builder().create(this);
     }
-
-
-    private LocalizationApplicationDelegate localizationDelegate
-            = new LocalizationApplicationDelegate(this);
 
     @Override
     protected void attachBaseContext(Context base) {
