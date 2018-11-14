@@ -38,9 +38,7 @@ data class AliasRequest(
     }
 
     fun sign(privateKey: ByteArray) {
-        if (signature == null) {
-            signature = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()))
-        }
+        signature = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()))
     }
 
 }
