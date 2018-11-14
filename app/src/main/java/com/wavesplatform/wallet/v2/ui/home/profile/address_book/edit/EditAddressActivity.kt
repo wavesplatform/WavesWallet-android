@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit
 
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -8,17 +9,22 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.vicpin.krealmextensions.queryAsFlowable
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
+import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity.Companion.BUNDLE_POSITION
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.util.makeStyled
+import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_edit_address.*
 import pers.victor.ext.addTextChangedListener
@@ -53,7 +59,11 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
                         if (edit_address.tag == R.drawable.ic_deladdress_24_error_400) {
                             edit_address.setText("")
                         } else if (edit_address.tag == R.drawable.ic_qrcode_24_basic_500) {
-                            toast("Open scan QR code")
+                            IntentIntegrator(this@EditAddressActivity).setRequestCode(ScanSeedFragment.REQUEST_SCAN_QR_CODE)
+                                    .setOrientationLocked(true)
+                                    .setBeepEnabled(false)
+                                    .setCaptureActivity(QrCodeScannerActivity::class.java)
+                                    .initiateScan()
                         }
                     }
                 }
@@ -156,6 +166,20 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(BUNDLE_POSITION, -1))
         setResult(Constants.RESULT_OK_NO_RESULT, newIntent)
         finish()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val result = IntentIntegrator.parseActivityResult(resultCode, data)
+                    result.contents.replace(AddressUtil.WAVES_PREFIX, "").notNull {
+                        edit_address.setText(it.trim())
+                    }
+                }
+            }
+        }
     }
 
 }
