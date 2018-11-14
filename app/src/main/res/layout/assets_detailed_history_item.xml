@@ -42,7 +42,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="8dp"
                 android:layout_toEndOf="@+id/image_transaction"
-                android:text="Started Leasing"
+                tools:text="Started Leasing"
                 android:textColor="@color/disabled500"
                 android:textSize="12sp" />
 
@@ -56,7 +56,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
                 android:layout_toEndOf="@+id/image_transaction"
-                android:text="1.99800118"
+                tools:text="1.99800118"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -88,7 +88,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="4dp"
                 android:layout_toEndOf="@+id/text_tag"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="wrap_content"

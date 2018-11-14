@@ -75,7 +75,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
             }
         }
         card_language.click {
-            launchActivity<ChangeLanguageActivity>(requestCode = REQUEST_CHANGE_LANG) { }
+            launchActivity<ChangeLanguageActivity>()
         }
         card_change_password.click {
             launchActivity<ChangePasswordActivity>(requestCode = REQUEST_CHANGE_PASSWORD) { }
@@ -172,8 +172,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 "${getString(R.string.profile_general_feedback_body_extra_app_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toString())}\n" +
                 "${getString(R.string.profile_general_feedback_body_extra_device_model, getDeviceName())}\n" +
                 "${getString(R.string.profile_general_feedback_body_extra_language,
-                        getString(Language.getLanguageByCode(
-                                presenter.preferenceHelper.getLanguage()).code))}\n" +
+                        presenter.preferenceHelper.getLanguage())}\n" +
                 "${getString(R.string.profile_general_feedback_body_extra_carrier, telephonyManager.networkOperatorName)}\n"
     }
 
@@ -273,12 +272,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
                     showSuccess(R.string.change_password_success, R.id.root_scrollView)
                 }
             }
-
-            REQUEST_CHANGE_LANG -> {
-                if (resultCode == Constants.RESULT_OK) {
-                    launchActivity<MainActivity>(clear = true)
-                }
-            }
         }
     }
 
@@ -319,6 +312,5 @@ class ProfileFragment : BaseFragment(), ProfileView {
         const val REQUEST_ENTER_PASS_CODE_FOR_CHANGE = 5551
         const val REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT = 5552
         const val REQUEST_CHANGE_PASSWORD = 5553
-        const val REQUEST_CHANGE_LANG = 5554
     }
 }

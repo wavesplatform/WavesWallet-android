@@ -10,6 +10,7 @@ object Constants {
     // Production
     const val URL_SPAM = "https://raw.githubusercontent.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv"
     const val URL_WAVES_COMMUNITY = "https://wavescommunity.com"
+    const val URL_WAVES = "https://wavesplatform.com/"
     const val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
     const val URL_WHITEPAPER = "https://wavesplatform.com/files/images/whitepaper_v0.pdf"
     const val URL_TELEGRAM = "https://telegram.me/wavesnews"

@@ -6,4 +6,8 @@ import javax.inject.Inject
 
 @InjectViewState
 class WelcomePresenter @Inject constructor() : BasePresenter<WelcomeView>() {
+
+    fun saveLanguage(lang: String) {
+        preferenceHelper.setLanguage(lang)
+    }
 }

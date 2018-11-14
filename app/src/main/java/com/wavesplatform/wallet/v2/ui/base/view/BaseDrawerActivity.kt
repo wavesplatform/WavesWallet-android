@@ -13,8 +13,6 @@ import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
-import com.wavesplatform.wallet.v2.util.openUrlWithIntent
-import com.wavesplatform.wallet.v2.util.setSystemBarTheme
 import com.yarolegovich.slidingrootnav.SlidingRootNav
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 import com.yarolegovich.slidingrootnav.callback.DragStateListener
@@ -71,7 +69,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
         slidingRootNav.layout.linear_drawer.scaleX = 1.5f
         slidingRootNav.layout.linear_drawer.scaleY = 1.5f
         slidingRootNav.layout.text_site.paintFlags = slidingRootNav.layout.text_site.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        slidingRootNav.layout.text_site.click { openUrlWithChromeTab(Constants.URL_WAVES_COMMUNITY) }
+        slidingRootNav.layout.text_site.click { openUrlWithChromeTab(Constants.URL_WAVES) }
         slidingRootNav.layout.text_whitepaper.click { openUrlWithIntent(Constants.URL_WHITEPAPER) }
         slidingRootNav.layout.text_terms.click { openUrlWithIntent(Constants.URL_TERMS) }
         slidingRootNav.layout.text_support.click { openUrlWithIntent(Constants.SUPPORT_SITE) }

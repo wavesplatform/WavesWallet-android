@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -72,9 +71,9 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
 
         button_continue.click {
             val item = adapter.getItem(presenter.currentLanguagePosition)
-            item.notNull {
-                presenter.saveLanguage(it.language.code)
-                LocaleChanger.setLocale(Locale(getString(it.language.code).toLowerCase()))
+            item.notNull { langItem->
+                presenter.saveLanguage(langItem.language.code)
+                setLanguage(Locale(langItem.language.code))
             }
             exitAnimation()
         }

@@ -53,9 +53,10 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
 
         item.data.transactionType().notNull {
             try {
-                layout.text_transaction_name.text = String.format(it.title(), item.data.asset?.name)
+                layout.text_transaction_name.text =
+                        mContext.getString(it.title) + item.data.asset?.name
             } catch (e: MissingFormatArgumentException) {
-                layout.text_transaction_name.text = it.title()
+                layout.text_transaction_name.text = mContext.getString(it.title)
             }
 
             when (it) {
@@ -70,7 +71,7 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
                     }
                 }
                 TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE, TransactionType.MASS_RECEIVE_TYPE -> {
-                    if (item.data.transfers != null && item.data.transfers!!.isNotEmpty()) {
+                    if (item.data.transfers.isNotEmpty()) {
                         val sum = item.data.transfers.sumByLong { it.amount }
                         if (it == TransactionType.MASS_SPAM_RECEIVE_TYPE || it == TransactionType.MASS_RECEIVE_TYPE) {
                             layout.text_transaction_value.text = "+${MoneyUtil.getScaledText(sum.toLong(), item.data?.asset)}"
@@ -84,11 +85,11 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
                     layout.text_transaction_value.text = item.data.alias
                 }
                 TransactionType.EXCHANGE_TYPE -> {
-                    var myOrder =
+                    val myOrder =
                             if (item.data.order1?.sender == App.getAccessManager().getWallet()?.address) item.data.order1
                             else item.data.order2
 
-                    var pairOrder =
+                    val pairOrder =
                             if (item.data.order1?.sender != App.getAccessManager().getWallet()?.address) item.data.order1
                             else item.data.order2
 
@@ -122,17 +123,17 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
                     }
                 }
                 TransactionType.TOKEN_GENERATION_TYPE -> {
-                    val quantity = MoneyUtil.getScaledText(item.data.quantity
-                            ?: 0, item.data.asset).substringBefore(".")
+                    val quantity = MoneyUtil.getScaledText(
+                            item.data.quantity, item.data.asset).substringBefore(".")
                     layout.text_transaction_value.text = quantity
                 }
                 TransactionType.TOKEN_BURN_TYPE -> {
                     item.data.amount.notNull {
-                        val afterDot = MoneyUtil.getScaledText(it, item.data.asset).substringAfter(".").toInt()
-                        var amount = ""
-
-                        if (afterDot == 0) amount = MoneyUtil.getScaledText(it, item.data.asset).substringBefore(".")
-                        else amount = MoneyUtil.getScaledText(it, item.data.asset)
+                        val afterDot = MoneyUtil.getScaledText(it, item.data.asset)
+                                .substringAfter(".").toInt()
+                        val amount = if (afterDot == 0) MoneyUtil.getScaledText(it, item.data.asset)
+                                .substringBefore(".")
+                        else MoneyUtil.getScaledText(it, item.data.asset)
 
                         layout.text_transaction_value.text = "-$amount"
                     }

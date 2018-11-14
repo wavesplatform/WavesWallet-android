@@ -27,7 +27,12 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
                 val accountName = extras.getString(NewAccountActivity.KEY_INTENT_ACCOUNT_NAME)
                 val seed = extras.getString(NewAccountActivity.KEY_INTENT_SEED)
                 val skipBackup = extras.getBoolean(NewAccountActivity.KEY_INTENT_SKIP_BACKUP)
-                App.getAccessManager().storeWalletData(seed, password, accountName, skipBackup)
+                val guid = App.getAccessManager()
+                        .storeWalletData(seed, password, accountName, skipBackup)
+                if (extras.containsKey(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT)) {
+                    App.getAccessManager().setCurrentAccountBackupDone()
+                }
+                guid
             }
         }
         writePassCodeToRemoteDb(guid, password, passCode)
