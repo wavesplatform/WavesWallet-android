@@ -113,7 +113,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
                 uri = Uri.parse("fb://facewebmodal/f?href=$url")
             }
             startActivity(Intent(Intent.ACTION_VIEW, uri))
-        } catch (ignored: PackageManager.NameNotFoundException) {
+        } catch (ignored: Exception) {
             openUrlWithChromeTab(url)
         }
     }
