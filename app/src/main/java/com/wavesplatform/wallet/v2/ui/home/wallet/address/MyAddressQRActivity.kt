@@ -28,13 +28,13 @@ import javax.inject.Inject
 
 class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
     override fun afterSuccessLoadAliases(ownAliases: List<Alias>) {
-        text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
-
         card_aliases.click {
             val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
             if (ownAliases.isEmpty()) {
+                text_aliases_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
                 bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
             } else {
+                text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
                 bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
             }
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
