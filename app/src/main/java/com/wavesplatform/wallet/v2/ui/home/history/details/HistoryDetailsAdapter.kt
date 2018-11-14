@@ -48,10 +48,13 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
             TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE, TransactionType.MASS_RECEIVE_TYPE -> {
                 if (transaction.transfers.isNotEmpty()) {
                     val sum = transaction.transfers.sumByLong { it.amount }
-                    if (transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE || transaction.transactionType() == TransactionType.MASS_RECEIVE_TYPE) {
-                        layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(sum.toLong(), transaction.asset)}"
+                    if (transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE ||
+                            transaction.transactionType() == TransactionType.MASS_RECEIVE_TYPE) {
+                        layout.text_amount_or_title.text =
+                                "+${MoneyUtil.getScaledText(sum, transaction.asset)}"
                     } else {
-                        layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(sum.toLong(), transaction.asset)}"
+                        layout.text_amount_or_title.text =
+                                "-${MoneyUtil.getScaledText(sum, transaction.asset)}"
                     }
                 }
 

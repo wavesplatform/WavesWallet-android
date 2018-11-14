@@ -6,13 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.os.Build;
-import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
+import com.akexorcist.localizationactivity.core.LocalizationApplicationDelegate;
 import com.crashlytics.android.Crashlytics;
-import com.franmontiel.localechanger.LocaleChanger;
 import com.github.moduth.blockcanary.BlockCanary;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
@@ -22,7 +20,6 @@ import com.wavesplatform.wallet.v1.util.ApplicationLifeCycle;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
-import com.wavesplatform.wallet.v2.data.model.local.Language;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
 
@@ -46,25 +43,12 @@ public class App extends DaggerApplication {
     private static Context sContext;
     private static AccessManager accessManager;
 
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-
-        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            MultiDex.install(base);
-        }
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
         sContext = this;
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
-        LocaleChanger.initialize(getApplicationContext(),
-                Language.Companion.getSupportedLanguage(this));
-
         CodeProcessor.init(this);
 
         Realm.init(this);
@@ -122,9 +106,22 @@ public class App extends DaggerApplication {
     }
 
 
+    private LocalizationApplicationDelegate localizationDelegate
+            = new LocalizationApplicationDelegate(this);
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(localizationDelegate.attachBaseContext(base));
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        LocaleChanger.onConfigurationChanged();
+        localizationDelegate.onConfigurationChanged(this);
+    }
+
+    @Override
+    public Context getApplicationContext() {
+        return localizationDelegate.getApplicationContext(super.getApplicationContext());
     }
 }

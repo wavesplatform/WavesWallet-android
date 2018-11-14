@@ -5,6 +5,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.ActivityInfo
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.ColorRes
@@ -21,8 +22,9 @@ import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.Button
+import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
+import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
 import com.arellomobile.mvp.MvpAppCompatActivity
-import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -43,9 +45,11 @@ import org.fingerlinks.mobile.android.navigator.Navigator
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
-abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, HasFragmentInjector, HasSupportFragmentInjector {
+abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, HasFragmentInjector,
+        HasSupportFragmentInjector, OnLocaleChangedListener {
     private val mCompositeDisposable = CompositeDisposable()
     var eventSubscriptions: CompositeDisposable = CompositeDisposable()
 
@@ -75,6 +79,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     lateinit var preferencesHelper: PreferencesHelper
 
     private var progressDialog: ProgressDialog? = null
+    private val localizationDelegate = LocalizationActivityDelegate(this)
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return supportFragmentInjector
@@ -85,13 +90,14 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     override fun attachBaseContext(newBase: Context) {
-        val baseContext = LocaleChanger.configureBaseContext(newBase)
-        super.attachBaseContext(baseContext)
+        super.attachBaseContext(localizationDelegate.attachBaseContext(newBase))
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
+        localizationDelegate.addOnLocaleChangedListener(this)
+        localizationDelegate.onCreate(savedInstanceState)
         super.onCreate(savedInstanceState)
         if (!translucentStatusBar) {
             setStatusBarColor(R.color.white)
@@ -130,6 +136,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     public override fun onResume() {
         super.onResume()
+        localizationDelegate.onResume(this)
 
         if (this is SplashActivity) {
             return
@@ -285,4 +292,35 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     protected abstract fun onViewReady(savedInstanceState: Bundle?)
 
+    override fun getApplicationContext(): Context {
+        return localizationDelegate.getApplicationContext(super.getApplicationContext())
+    }
+
+    override fun getResources(): Resources {
+        return localizationDelegate.getResources(super.getResources())
+    }
+
+    fun setLanguage(language: String) {
+        localizationDelegate.setLanguage(this, language)
+    }
+
+    fun setLanguage(locale: Locale) {
+        localizationDelegate.setLanguage(this, locale)
+    }
+
+    fun setDefaultLanguage(language: String) {
+        localizationDelegate.setDefaultLanguage(language)
+    }
+
+    fun setDefaultLanguage(locale: Locale) {
+        localizationDelegate.setDefaultLanguage(locale)
+    }
+
+    fun getCurrentLanguage(): Locale {
+        return localizationDelegate.getLanguage(this)
+    }
+
+    override fun onBeforeLocaleChanged() {}
+
+    override fun onAfterLocaleChanged() {}
 }
