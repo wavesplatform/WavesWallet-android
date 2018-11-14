@@ -30,7 +30,7 @@
     <string name="alias_dialog_you_dont_have">U heeft geen aliassen</string>
     <string name="alias_dialog_you_have">U heeft %s</string>
     <string name="alias_dialog_your_aliases">Uw Aliassen</string>
-    <string name="app_name">Waves Wallet</string>
+    <string name="app_name">Waves</string>
     <string name="asset_details_asset_info">Asset Info</string>
     <string name="asset_details_available_balance">Beschikbaar saldo</string>
     <string name="asset_details_coming_soon">Komt binnenkort</string>

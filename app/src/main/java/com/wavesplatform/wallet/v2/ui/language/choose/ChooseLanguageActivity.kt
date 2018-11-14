@@ -38,6 +38,8 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
 
     override fun configLayoutRes() = R.layout.activity_choose_language
 
+    override fun askPassCode() = false
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         recycle_language.layoutManager = LinearLayoutManager(this)
         recycle_language.adapter = adapter

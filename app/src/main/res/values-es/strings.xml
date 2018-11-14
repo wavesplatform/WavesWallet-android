@@ -30,7 +30,7 @@
     <string name="alias_dialog_you_dont_have">No tienes alias</string>
     <string name="alias_dialog_you_have">Tu tienes %s</string>
     <string name="alias_dialog_your_aliases">Tus alias</string>
-    <string name="app_name">Cartera de Waves</string>
+    <string name="app_name">Waves</string>
     <string name="asset_details_asset_info">Información del activo</string>
     <string name="asset_details_available_balance">Saldo disponible</string>
     <string name="asset_details_coming_soon">Próximamente</string>

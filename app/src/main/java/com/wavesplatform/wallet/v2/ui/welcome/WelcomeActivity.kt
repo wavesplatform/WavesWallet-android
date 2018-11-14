@@ -43,6 +43,8 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         var REQUEST_IMPORT_ACC = 57
     }
 
+    override fun askPassCode() = false
+
     private fun createDataBundle(): Bundle {
         val options = Bundle()
         options.putString("animation", "left_slide")

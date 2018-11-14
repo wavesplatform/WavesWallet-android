@@ -30,7 +30,7 @@
     <string name="alias_dialog_you_dont_have">You do not have Aliases</string>
     <string name="alias_dialog_you_have">You have %s</string>
     <string name="alias_dialog_your_aliases">Your Aliases</string>
-    <string name="app_name">Waves Wallet</string>
+    <string name="app_name">Waves</string>
     <string name="asset_details_asset_info">Asset Info</string>
     <string name="asset_details_available_balance">Available balance</string>
     <string name="asset_details_coming_soon">Coming soon</string>

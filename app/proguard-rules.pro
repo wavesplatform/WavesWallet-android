@@ -367,3 +367,8 @@
 -dontwarn com.samsung.android.sdk.**
 -dontwarn afu.org.checkerframework.checker.**
 -dontnote com.samsung.android.sdk.**
+
+-keep public class * extends java.lang.Exception
+-printmapping mapping.txt
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
