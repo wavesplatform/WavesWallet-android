@@ -48,7 +48,7 @@ class HistoryTabItemAdapter @Inject constructor() :
     override fun convert(helper: BaseViewHolder, item: HistoryItem) {
         when (item.itemType) {
             HistoryItem.TYPE_HEADER -> {
-                helper.setText(R.id.text_header_text, item?.header)
+                helper.setText(R.id.text_header_text, item.header)
             }
             HistoryItem.TYPE_DATA -> {
                 try {

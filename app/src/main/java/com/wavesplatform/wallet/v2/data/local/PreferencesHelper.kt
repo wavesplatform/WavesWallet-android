@@ -22,8 +22,6 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         const val KEY_TUTORIAL = "keyTutorial"
         const val KEY_CURRENT_BLOCKS_HEIGHT = "currentBlocksHeight"
         const val KEY_LANGUAGE = "keyLanguage"
-        const val KEY_ACCOUNT_FIRST_OPEN = "key_account_first_open"
-        const val KEY_DEFAULT_ASSETS = "key_default_assets"
         const val KEY_SHOW_SAVE_SEED_WARNING = "key_show_save_seed_warning"
     }
 
@@ -40,30 +38,13 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         return mPref.getBoolean(KEY_TUTORIAL, false)
     }
 
-    fun getLanguage(): Int {
-        return mPref.getInt(KEY_LANGUAGE, 0)
+    fun getLanguage(): String {
+        return mPref.getString(KEY_LANGUAGE, "")
     }
 
-    fun setLanguage(lang: Int) {
-        mPref.edit().putInt(KEY_LANGUAGE, lang).apply()
+    fun setLanguage(lang: String) {
+        mPref.edit().putString(KEY_LANGUAGE, lang).apply()
     }
-
-    fun isDefaultAssetsAlreadyExist(): Boolean {
-        return mPref.getBoolean(KEY_DEFAULT_ASSETS, false)
-    }
-
-    fun setDefaultAssetsAlreadyExist(value: Boolean) {
-        mPref.edit().putBoolean(KEY_DEFAULT_ASSETS, value).apply()
-    }
-
-    fun isAccountFirstOpen(): Boolean {
-        return mPref.getBoolean(KEY_ACCOUNT_FIRST_OPEN, false)
-    }
-
-    fun setAccountFirstOpen(value: Boolean) {
-        mPref.edit().putBoolean(KEY_ACCOUNT_FIRST_OPEN, value).apply()
-    }
-
 
     fun getShowSaveSeedWarningTime(guid: String): Long {
         return mPref.getLong(KEY_SHOW_SAVE_SEED_WARNING + guid, 0)

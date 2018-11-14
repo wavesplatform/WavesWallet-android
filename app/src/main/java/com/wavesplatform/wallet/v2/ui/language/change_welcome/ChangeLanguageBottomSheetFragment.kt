@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.franmontiel.localechanger.LocaleChanger
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
@@ -16,7 +15,6 @@ import kotlinx.android.synthetic.main.fragment_bottom_sheet_change_language_layo
 import pers.victor.ext.click
 import pers.victor.ext.invisiable
 import pers.victor.ext.visiable
-import java.util.*
 import javax.inject.Inject
 
 
@@ -34,7 +32,7 @@ class ChangeLanguageBottomSheetFragment @Inject constructor() : BaseBottomSheetD
         rootView.recycle_language.layoutManager = LinearLayoutManager(activity)
         rootView.recycle_language.adapter = adapter
 
-        adapter.setNewData(getLanguages())
+        adapter.setNewData(Language.getLanguagesItems())
         markCurrentSelectedLanguage()
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
@@ -71,10 +69,8 @@ class ChangeLanguageBottomSheetFragment @Inject constructor() : BaseBottomSheetD
         rootView.button_confirm.click {
             val item = adapter.getItem(currentLanguagePosition)
             item.notNull {
-                saveLanguage(it.language.code)
-                LocaleChanger.setLocale(Locale(getString(it.language.code).toLowerCase()))
+                languageChooseListener?.onLanguageSelected(it.language.code)
             }
-            languageChooseListener?.onLanguageSelected()
             dismiss()
         }
 
@@ -91,15 +87,7 @@ class ChangeLanguageBottomSheetFragment @Inject constructor() : BaseBottomSheetD
         adapter.setData(position, languageItem)
     }
 
-    private fun getLanguages(): MutableList<LanguageItem>? {
-        return Language.getLanguagesItems()
-    }
-
-    private fun saveLanguage(lang: Int) {
-        preferencesHelper.setLanguage(lang)
-    }
-
     interface LanguageSelectListener {
-        fun onLanguageSelected()
+        fun onLanguageSelected(lang: String)
     }
 }

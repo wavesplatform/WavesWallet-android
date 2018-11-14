@@ -255,8 +255,10 @@ fun TextView.makeLinks(links: Array<String>, clickableSpans: Array<ClickableSpan
 
         val startIndexOfLink = this.text.indexOf(link)
 
-        spannableString.setSpan(clickableSpan, startIndexOfLink, startIndexOfLink + link.length,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        if (startIndexOfLink > -1) {
+            spannableString.setSpan(clickableSpan, startIndexOfLink, startIndexOfLink + link.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
     }
 
     this.movementMethod = LinkMovementMethod.getInstance()

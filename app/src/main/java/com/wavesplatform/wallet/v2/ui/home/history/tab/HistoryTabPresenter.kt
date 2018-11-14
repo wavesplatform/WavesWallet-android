@@ -16,7 +16,6 @@ import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import pers.victor.ext.app
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -136,7 +135,8 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     }
 
     private fun sortAndConfigToUi(it: List<Transaction>): ArrayList<HistoryItem> {
-        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale(app.getString(preferenceHelper.getLanguage())))
+        val dateFormat = SimpleDateFormat("MMMM dd, yyyy",
+                Locale(preferenceHelper.getLanguage()))
 
         val sortedList = it
                 .mapTo(mutableListOf()) {
