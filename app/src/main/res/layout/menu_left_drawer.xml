@@ -42,17 +42,18 @@
         android:textSize="16sp" />
 
     <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_whitepaper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="41dp"
-        android:paddingBottom="13dp"
-        android:paddingTop="13dp"
+        android:layout_marginEnd="64dp"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
         android:paddingStart="24dp"
+        android:paddingTop="13dp"
         android:paddingEnd="48dp"
+        android:paddingBottom="13dp"
         android:text="@string/left_drawer_whitepaper"
-        android:id="@+id/text_whitepaper"
-        android:clickable="true"
-        android:background="?android:selectableItemBackground"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
@@ -60,20 +61,21 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="64dp"
         android:background="@color/accent50" />
 
     <android.support.v7.widget.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/left_drawer_terms_and_conditions"
-        android:paddingStart="24dp"
-        android:paddingEnd="48dp"
         android:id="@+id/text_terms"
-        android:paddingBottom="13dp"
-        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
         android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:paddingStart="24dp"
         android:paddingTop="13dp"
+        android:paddingEnd="48dp"
+        android:paddingBottom="13dp"
+        android:text="@string/left_drawer_terms_and_conditions"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
@@ -81,20 +83,21 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="64dp"
         android:background="@color/accent50" />
 
     <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_support"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/left_drawer_support"
-        android:paddingStart="24dp"
-        android:paddingEnd="48dp"
-        android:id="@+id/text_support"
-        android:paddingBottom="13dp"
-        android:clickable="true"
+        android:layout_marginEnd="64dp"
         android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:paddingStart="24dp"
         android:paddingTop="13dp"
+        android:paddingEnd="48dp"
+        android:paddingBottom="13dp"
+        android:text="@string/left_drawer_support"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
@@ -102,7 +105,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="64dp"
         android:background="@color/accent50" />
 
     <android.support.v7.widget.AppCompatTextView
