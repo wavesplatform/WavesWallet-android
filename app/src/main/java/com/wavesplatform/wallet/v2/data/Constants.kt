@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.data
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
+import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 
 object Constants {
@@ -108,6 +109,9 @@ object Constants {
             Pair("persist", R.color.persist))
 
     val wavesAssetInfo = AssetInfo(id = WAVES_ASSET_ID, precision = 8, name = "WAVES", quantity = 10000000000000000L)
+
+    var MRTGeneralAsset = GlobalConfiguration.GeneralAssetId(assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
+            gatewayId = "MRT", displayName = "MinersReward")
 
     val defaultAssets = listOf(
             AssetBalance(WAVES_ASSET_ID, quantity = 10000000000000000L, isFavorite = true, issueTransaction = IssueTransaction(name = "WAVES", decimals = 8, quantity = 10000000000000000L, timestamp = 1460419200000L), isGateway = true),
