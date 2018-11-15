@@ -165,6 +165,7 @@
             </RelativeLayout>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/recipient_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -178,15 +179,17 @@
                 app:cardElevation="1dp">
 
                 <RelativeLayout
+                    android:id="@+id/recipient_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_rect_bordered_accent50">
 
                     <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/edit_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/container_qr_code"
-                        android:background="@color/white"
+                        android:background="@null"
                         android:drawablePadding="8dp"
                         android:hint="@string/send_recipient_address_hint"
                         android:imeOptions="actionNext"
@@ -474,6 +477,7 @@
 
 
             <android.support.v7.widget.CardView
+                android:id="@+id/amount_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -487,6 +491,7 @@
                 app:cardElevation="1dp">
 
                 <RelativeLayout
+                    android:id="@+id/amount_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -495,7 +500,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/text_amount_asset_name"
-                        android:background="@color/white"
+                        android:background="@null"
                         android:hint="0"
                         android:inputType="numberDecimal"
                         android:padding="14dp"
@@ -512,7 +517,7 @@
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="24dp"
                         android:lineSpacingExtra="4sp"
-                        android:text="≈ $ 00 000.00"
+                        tools:text="≈ $ 00 000.00"
                         android:textColor="@color/basic500"
                         android:textSize="12sp"
                         android:visibility="gone"/>

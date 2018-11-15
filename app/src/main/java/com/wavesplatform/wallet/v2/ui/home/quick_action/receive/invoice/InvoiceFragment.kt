@@ -121,7 +121,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         } else {
             edit_amount.text.toString()
         }
-        return "https//client.wavesplatform.com/#send/${presenter.assetBalance!!.assetId}?" +
+        return "https://client.wavesplatform.com/#send/${presenter.assetBalance!!.assetId}?" +
                 "recipient=${presenter.address}&" +
                 "amount=$amount"
     }
