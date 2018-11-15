@@ -118,7 +118,7 @@ object Constants {
             AssetBalance(LIGHTCOIN_ASSET_ID, quantity = 8400000000000000, issueTransaction = IssueTransaction(assetId = LIGHTCOIN_ASSET_ID, id = LIGHTCOIN_ASSET_ID, name = "Litecoin", decimals = 8, quantity = 8400000000000000), isGateway = true),
             AssetBalance(ZEC_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = ZEC_ASSET_ID, id = ZEC_ASSET_ID, name = "Zcash", decimals = 8, quantity = 2100000000000000), isGateway = true),
             AssetBalance(BITCOINCASH_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = BITCOINCASH_ASSET_ID, id = BITCOINCASH_ASSET_ID, name = "Bitcoin Cash", decimals = 8, quantity = 2100000000000000), isGateway = true),
-            AssetBalance(WTRY, quantity = 100000000, issueTransaction = IssueTransaction(assetId = WTRY, id = WTRY, name = "TRY", decimals = 3, quantity = 100000000), isFiatMoney = true, isGateway = true),
+            AssetBalance(WTRY, quantity = 100000000, issueTransaction = IssueTransaction(assetId = WTRY, id = WTRY, name = "TRY", decimals = 2, quantity = 100000000), isFiatMoney = true, isGateway = true),
             AssetBalance(DASH_ASSET_ID, quantity = 1890000000000000, issueTransaction = IssueTransaction(assetId = DASH_ASSET_ID, id = DASH_ASSET_ID, name = "DASH", decimals = 8, quantity = 1890000000000000), isGateway = true),
             AssetBalance(MONERO_ASSET_ID, quantity = 1603984700000000, issueTransaction = IssueTransaction(assetId = MONERO_ASSET_ID, id = MONERO_ASSET_ID, name = "Monero", decimals = 8, quantity = 1603984700000000), isGateway = true))
 
