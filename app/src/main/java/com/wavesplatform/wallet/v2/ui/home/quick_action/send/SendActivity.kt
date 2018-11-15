@@ -351,8 +351,10 @@ class SendActivity : BaseActivity(), SendView {
                     }
                     if (parameter.contains("amount=")) {
                         val amount = parameter.replace("amount=", "")
-                        edit_amount.setText(amount)
-                        amountEnable(false)
+                        if (amount.toDouble() > 0) {
+                            edit_amount.setText(amount)
+                            amountEnable(false)
+                        }
                     }
                 }
 
@@ -459,12 +461,14 @@ class SendActivity : BaseActivity(), SendView {
             amount_card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
             amount_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             edit_amount.isEnabled = true
+            horizontal_amount_suggestion.visiable()
         } else {
             ViewCompat.setElevation(amount_card, 0F)
             amount_card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.basic50))
             amount_layout.background = ContextCompat.getDrawable(this,
                     R.drawable.shape_rect_bordered_accent50)
             edit_amount.isEnabled = false
+            horizontal_amount_suggestion.gone()
         }
     }
 
