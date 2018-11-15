@@ -123,9 +123,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
             }
             dialog.setOnKeyListener(DialogInterface.OnKeyListener { _, keyCode, _ ->
                 if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-                    launchActivity<SplashActivity>(clear = true) {
-                        putExtra(SplashActivity.EXIT, true)
-                    }
+                    exit()
                     return@OnKeyListener true
                 }
                 false
@@ -134,13 +132,20 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         }
     }
 
+    protected fun exit() {
+        launchActivity<SplashActivity>(clear = true) {
+            putExtra(SplashActivity.EXIT, true)
+        }
+    }
+
     public override fun onResume() {
         super.onResume()
-        localizationDelegate.onResume(this)
 
         if (this is SplashActivity) {
             return
         }
+
+        localizationDelegate.onResume(this)
 
         if (!isNetworkConnection()) {
             checkInternet()

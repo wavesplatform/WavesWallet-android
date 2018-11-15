@@ -69,7 +69,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
                     text_next.text = getString(R.string.card_tutorial_understand)
                     text_next.click {
                         preferencesHelper.setTutorialPassed(true)
-                        launchActivity<WelcomeActivity>()
+                        launchActivity<WelcomeActivity>(clear = true)
                     }
                 } else {
                     text_next.text = getString(R.string.card_tutorial_next)

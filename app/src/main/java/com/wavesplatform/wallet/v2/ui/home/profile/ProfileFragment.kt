@@ -36,6 +36,7 @@ import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
+import pers.victor.ext.finish
 import pers.victor.ext.telephonyManager
 import javax.inject.Inject
 
@@ -237,6 +238,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     private fun logout() {
         App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
+        finish()
         launchActivity<WelcomeActivity>(clear = true)
     }
 
