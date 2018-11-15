@@ -139,6 +139,8 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     }
 
     private fun fillInformation(assetBalance: AssetBalance?) {
+        formatter.timeZone = TimeZone.getTimeZone("UTC")
+
         text_available_balance.text = assetBalance?.getDisplayAvailableBalance()
         text_in_order.text = assetBalance?.getDisplayInOrderBalance()
         text_leased.text = assetBalance?.getDisplayLeasedBalance()
