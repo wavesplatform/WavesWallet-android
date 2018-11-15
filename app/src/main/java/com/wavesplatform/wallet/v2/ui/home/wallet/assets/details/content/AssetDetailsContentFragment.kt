@@ -6,6 +6,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -17,10 +18,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.ReceiveActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
-import com.wavesplatform.wallet.v2.util.copyToClipboard
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.makeTextHalfBold
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_asset_details_content.*
 import pers.victor.ext.*
@@ -180,7 +178,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
         text_view_total_amount_value.text = getString(R.string.common_dash)
         assetBalance?.issueTransaction?.quantity.notNull {
-            text_view_total_amount_value.text = String.format(Locale.US, "%,d", it)
+            text_view_total_amount_value.text = MoneyUtil.getScaledText(it, assetBalance).stripZeros()
         }
 
 

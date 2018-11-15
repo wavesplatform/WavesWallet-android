@@ -80,6 +80,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                             assetBalance.issueTransaction?.name = it.issueTransaction?.name
                                             assetBalance.issueTransaction?.quantity = it.issueTransaction?.quantity
                                             assetBalance.issueTransaction?.decimals = it.issueTransaction?.decimals
+                                            assetBalance.issueTransaction?.timestamp = it.issueTransaction?.timestamp
                                             assetBalance.isFavorite = it.isFavorite
                                             assetBalance.isFiatMoney = it.isFiatMoney
                                             assetBalance.isGateway = it.isGateway
