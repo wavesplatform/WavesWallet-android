@@ -22,7 +22,7 @@ android {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 406
+        versionCode 407
         versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -177,10 +177,10 @@ dependencies {
     implementation "com.android.support:preference-v7:$supportVersion"
     implementation "com.android.support:preference-v14:$supportVersion"
     // Enable crash reporting only for release version
-    implementation 'com.google.firebase:firebase-core:16.0.3'
-    implementation "com.google.firebase:firebase-database:16.0.2"
-    implementation "com.google.firebase:firebase-messaging:17.3.2"
-    releaseImplementation "com.google.firebase:firebase-crash:16.2.0"
+    implementation 'com.google.firebase:firebase-core:16.0.5'
+    implementation "com.google.firebase:firebase-database:16.0.5"
+    implementation "com.google.firebase:firebase-messaging:17.3.4"
+    releaseImplementation "com.google.firebase:firebase-crash:16.2.1"
     implementation 'commons-io:commons-io:2.4'
 
     implementation 'commons-codec:commons-codec:1.10'
