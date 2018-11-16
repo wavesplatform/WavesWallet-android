@@ -52,7 +52,7 @@ class TransactionsBroadcastRequest(
                     getRecipientBytes(recipient),
                     SignUtil.arrayWithSize(Base58.encode((attachment ?: "").toByteArray())))
         } catch (e: Exception) {
-            Log.e("Wallet", "Couldn't create seed", e)
+            Log.e("Wallet", "Couldn't create transaction sign", e)
             ByteArray(0)
         }
     }
