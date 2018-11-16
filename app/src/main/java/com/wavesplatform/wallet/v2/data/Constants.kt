@@ -13,7 +13,7 @@ object Constants {
     const val URL_WAVES_COMMUNITY = "https://wavescommunity.com"
     const val URL_WAVES = "https://wavesplatform.com/"
     const val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
-    const val URL_WHITEPAPER = "https://wavesplatform.com/files/images/whitepaper_v0.pdf"
+    const val URL_WHITEPAPER = "https://wavesplatform.com/files/whitepaper_v0.pdf"
     const val URL_TELEGRAM = "https://telegram.me/wavesnews"
     const val URL_GITHUB = "https://github.com/wavesplatform/"
     const val URL_TWITTER = "https://twitter.com/wavesplatform"

@@ -102,22 +102,25 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     private fun getFirstOpenAlertView(): View? {
         val view = LayoutInflater.from(this)
                 .inflate(R.layout.dialog_account_first_open, null)
+        val padding = (14.0f * this.resources.displayMetrics.density + 0.5f).toInt()
+        view.checkbox_funds_on_device.setOnCheckedChangeListener { _, isChecked ->
+            presenter.checkedAboutBackup = isChecked
+            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
+        }
+        view.checkbox_funds_on_device.setPadding(padding, 0, 0, 0)
 
-        view.checkbox_terms_of_use
-                .setOnCheckedChangeListener { _, isChecked ->
-                    presenter.checkedAboutTerms = isChecked
-                    view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
-                }
-        view.checkbox_backup
-                .setOnCheckedChangeListener { _, isChecked ->
-                    presenter.checkedAboutBackup = isChecked
-                    view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
-                }
-        view.checkbox_funds_on_device
-                .setOnCheckedChangeListener { _, isChecked ->
-                    presenter.checkedAboutFundsOnDevice = isChecked
-                    view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
-                }
+
+        view.checkbox_backup.setOnCheckedChangeListener { _, isChecked ->
+            presenter.checkedAboutFundsOnDevice = isChecked
+            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
+        }
+        view.checkbox_backup.setPadding(padding, padding, 0, padding)
+
+        view.checkbox_terms_of_use.setPadding(padding, padding, 0, padding)
+        view.checkbox_terms_of_use.setOnCheckedChangeListener { _, isChecked ->
+            presenter.checkedAboutTerms = isChecked
+            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
+        }
 
         val siteClick = object : ClickableSpan() {
             override fun onClick(p0: View?) {

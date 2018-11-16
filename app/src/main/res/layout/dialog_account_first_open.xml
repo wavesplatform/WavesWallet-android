@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:padding="24dp">
 
-
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,58 +34,29 @@
         android:layerType="software"
         app:srcCompat="@drawable/shape_dashed_line" />
 
-    <LinearLayout
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/checkbox_funds_on_device"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:orientation="horizontal">
+        android:button="@drawable/selector_rounded_checkbox"
+        android:text="@string/dialog_account_first_open_about_fund_on_device"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
 
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/checkbox_funds_on_device"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:button="@drawable/selector_rounded_checkbox" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="14dp"
-            android:text="@string/dialog_account_first_open_about_fund_on_device"
-            android:textColor="@color/black"
-            android:textSize="11sp" />
-
-    </LinearLayout>
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/checkbox_backup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:button="@drawable/selector_rounded_checkbox"
+        android:text="@string/dialog_account_first_open_about_backup"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:orientation="horizontal">
-
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/checkbox_backup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:button="@drawable/selector_rounded_checkbox" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="14dp"
-            android:text="@string/dialog_account_first_open_about_backup"
-            android:textColor="@color/black"
-            android:textSize="11sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:orientation="horizontal">
 
         <android.support.v7.widget.AppCompatCheckBox
@@ -98,13 +68,12 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_about_terms"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="14dp"
             android:text="@string/dialog_account_first_open_about_terms"
             android:textColor="@color/black"
-            android:textSize="11sp" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 

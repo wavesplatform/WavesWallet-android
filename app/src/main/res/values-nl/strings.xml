@@ -208,7 +208,7 @@
     <string name="dex_trade_tab_orderbook">Orderboek</string>
     <string name="dialog_account_first_open_about_backup">Ik begrijp dat als deze app wordt verplaatst naar een ander apparaat of wordt verwijderd, mijn Waves alleen kunnen worden hersteld met de back-up regel.</string>
     <string name="dialog_account_first_open_about_fund_on_device">Ik begrijp dat mijn geld veilig wordt opgeslagen op dit apparaat, niet door een bedrijf.</string>
-    <string name="dialog_account_first_open_about_terms">Ik heb de gebruiksvoorwaarden gelezen, begrepen en ga ermee akkoord</string>
+    <string name="dialog_account_first_open_about_terms">Ik heb de Gebruiksvoorwaarden gelezen, begrepen en ga ermee akkoord</string>
     <string name="dialog_account_first_open_about_terms_key">Gebruiksvoorwaarden</string>
     <string name="dialog_account_first_open_confirm_and_begin">Bevestig en begin</string>
     <string name="dialog_account_first_open_subtitle">Waves is anders — het kan niet veilig worden bewaard door een bank of webservice</string>
