@@ -37,12 +37,12 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
         when (transaction.transactionType()) {
             TransactionType.SENT_TYPE -> {
                 transaction.amount.notNull {
-                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(it, transaction.asset)}"
+                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(it, transaction.asset).stripZeros()}"
                 }
             }
             TransactionType.RECEIVED_TYPE -> {
                 transaction.amount.notNull {
-                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(it, transaction.asset)}"
+                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(it, transaction.asset).stripZeros()}"
                 }
             }
             TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE, TransactionType.MASS_RECEIVE_TYPE -> {
@@ -51,10 +51,10 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                     if (transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE ||
                             transaction.transactionType() == TransactionType.MASS_RECEIVE_TYPE) {
                         layout.text_amount_or_title.text =
-                                "+${MoneyUtil.getScaledText(sum, transaction.asset)}"
+                                "+${MoneyUtil.getScaledText(sum, transaction.asset).stripZeros()}"
                     } else {
                         layout.text_amount_or_title.text =
-                                "-${MoneyUtil.getScaledText(sum, transaction.asset)}"
+                                "-${MoneyUtil.getScaledText(sum, transaction.asset).stripZeros()}"
                     }
                 }
 
@@ -73,11 +73,11 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
 
                 layout.text_amount_value_in_dollar.visiable()
                 if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                    layout.text_amount_value_in_dollar.text = "-${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.name}"
-                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
+                    layout.text_amount_value_in_dollar.text = "-${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject).stripZeros()} ${myOrder.assetPair?.amountAssetObject?.name}"
+                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
                 } else {
-                    layout.text_amount_value_in_dollar.text = "+${MoneyUtil.getScaledText(transaction.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.name}"
-                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
+                    layout.text_amount_value_in_dollar.text = "+${MoneyUtil.getScaledText(transaction.amount, myOrder?.assetPair?.amountAssetObject).stripZeros()} ${myOrder?.assetPair?.amountAssetObject?.name}"
+                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
                 }
 
                 showTag = Constants.defaultAssets.any {
@@ -97,7 +97,7 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
             }
             TransactionType.CANCELED_LEASING_TYPE -> {
                 transaction.lease?.amount.notNull {
-                    layout.text_amount_or_title.text = MoneyUtil.getScaledText(it.toLong(), transaction.asset)
+                    layout.text_amount_or_title.text = MoneyUtil.getScaledText(it.toLong(), transaction.asset).stripZeros()
                 }
             }
             TransactionType.TOKEN_GENERATION_TYPE -> {
@@ -125,7 +125,7 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
             }
             else -> {
                 transaction.amount.notNull {
-                    layout.text_amount_or_title.text = MoneyUtil.getScaledText(it, transaction.asset)
+                    layout.text_amount_or_title.text = MoneyUtil.getScaledText(it, transaction.asset).stripZeros()
                 }
             }
         }
