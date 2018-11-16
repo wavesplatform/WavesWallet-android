@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.request.OrderRequest
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.ErrorResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>() {
     var data: BuySellData? = BuySellData()
     var orderRequest: OrderRequest = OrderRequest()
+    var wavesBalance: AssetBalance = AssetBalance()
 
     var humanTotalTyping = false
 
@@ -44,12 +46,19 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
         return priceValidation && amountValidation && totalPriceValidation
     }
 
-
     fun getMatcherKey() {
         addSubscription(matcherDataManager.getMatcherKey()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     orderRequest.matcherPublicKey = it
+                })
+    }
+
+    fun loadWavesBalance() {
+        addSubscription(nodeDataManager.loadWavesBalance()
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe {
+                    wavesBalance = it
                 })
     }
 

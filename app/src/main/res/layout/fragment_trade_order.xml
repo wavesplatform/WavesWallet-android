@@ -4,6 +4,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:fillViewport="true"
     android:overScrollMode="never"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -96,6 +97,33 @@
             </LinearLayout>
 
         </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linear_fees_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_info_18_error_500" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14sp"
+                android:text="@string/buy_and_sell_fee_error"
+                android:textColor="@color/error500"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
 
 
         <HorizontalScrollView
@@ -273,7 +301,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatTextView

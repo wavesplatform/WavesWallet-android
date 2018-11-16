@@ -66,6 +66,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
         presenter.getMatcherKey()
         presenter.getBalanceFromAssetPair()
+        presenter.loadWavesBalance()
 
         CounterHandler.Builder()
                 .valueView(edit_amount)
@@ -129,9 +130,11 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 .map {
                     presenter.amountValidation = it.isNotEmpty()
                     if (it.isNotEmpty()) {
+                        horizontal_amount_suggestion.gone()
                         text_amount_error.text = ""
                         text_amount_error.invisiable()
                     } else {
+                        horizontal_amount_suggestion.visiable()
                         text_amount_error.text = getString(R.string.buy_and_sell_required)
                         text_amount_error.visiable()
                     }
@@ -235,6 +238,14 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                         text_limit_price_error.text = getString(R.string.buy_and_sell_required)
                         text_limit_price_error.visiable()
                     }
+                    presenter.wavesBalance.getAvailableBalance().notNull { wavesBalance ->
+                        if (wavesBalance < Constants.WAVES_DEX_FEE) {
+                            linear_fees_error.visiable()
+                        }else{
+                            linear_fees_error.gone()
+                        }
+                    }
+
                     if (presenter.humanTotalTyping) {
                         if (!edit_total_price.text.isNullOrEmpty() && !edit_limit_price.text.isNullOrEmpty()) {
                             if (edit_limit_price.text.toString().toDouble() != 0.0) {
