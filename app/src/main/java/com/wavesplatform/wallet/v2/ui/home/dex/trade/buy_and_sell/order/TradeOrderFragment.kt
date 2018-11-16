@@ -241,7 +241,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     presenter.wavesBalance.getAvailableBalance().notNull { wavesBalance ->
                         if (wavesBalance < Constants.WAVES_DEX_FEE) {
                             linear_fees_error.visiable()
-                        }else{
+                        } else {
                             linear_fees_error.gone()
                         }
                     }
@@ -381,9 +381,19 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     override fun successLoadPairBalance(pairBalance: LinkedTreeMap<String, Long>) {
         pairBalance[presenter.data?.watchMarket?.market?.amountAsset].notNull { balance ->
             linear_percent_values.children.forEach { children ->
+                var balance = balance
                 val quickBalanceView = children as AppCompatTextView
                 when (quickBalanceView.tag) {
                     TOTAL_BALANCE -> {
+                        if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true) {
+                            if (balance < Constants.WAVES_DEX_FEE) {
+                                balance = 0
+                                linear_fees_error.visiable()
+                            } else {
+                                balance -= Constants.WAVES_DEX_FEE
+                                linear_fees_error.gone()
+                            }
+                        }
                         quickBalanceView.click {
                             edit_amount.setText((MoneyUtil.getScaledText(balance, presenter.data?.watchMarket?.market?.amountAssetDecimals
                                     ?: 0)).clearBalance())
