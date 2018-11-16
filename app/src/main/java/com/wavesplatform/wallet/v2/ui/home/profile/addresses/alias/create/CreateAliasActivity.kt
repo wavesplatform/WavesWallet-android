@@ -11,6 +11,8 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -78,16 +80,28 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                         Pair(t1, t2)
                     })
                 }
-                .filter { it.first == true }
+                .filter { it.first }
+                .map {
+                    if (presenter.wavesBalance.getAvailableBalance() ?: 0 < Constants.WAVES_FEE){
+                        button_create_alias.isEnabled = false
+                        til_new_alias_symbol.error =  getString(R.string.buy_and_sell_not_enough, presenter.wavesBalance.getName())
+                        return@map ""
+                    }else{
+                        return@map it.second
+                    }
+                }
+                .filter { it.isNotEmpty() }
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    presenter.loadAlias(it.second)
+                    presenter.loadAlias(it)
                 })
 
         button_create_alias.click {
             presenter.createAlias(edit_new_alias_symbol.text?.trim()?.toString())
         }
+
+        presenter.loadWavesBalance()
     }
 
     override fun aliasIsAvailable() {
@@ -111,6 +125,12 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
             putExtra(RESULT_ALIAS, alias)
         })
         finish()
+    }
+
+    override fun failedCreateAlias(message: String?) {
+        message.notNull {
+            showError(it, R.id.root)
+        }
     }
 
 }

@@ -1,37 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:descendantFocusability="beforeDescendants"
     android:id="@+id/root"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:fitsSystemWindows="true"
-    tools:context="com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity">
+    android:fitsSystemWindows="true">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar_layout"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:fitsSystemWindows="true"
-        app:elevation="0dp">
+        app:titleTextAppearance="@style/Toolbar.Title"
+        app:titleTextColor="@color/black" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_view"
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_view">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             android:background="@color/white"
-            app:titleTextAppearance="@style/Toolbar.Title"
-            app:titleTextColor="@color/black" />
+            android:fitsSystemWindows="true">
 
-    </android.support.design.widget.AppBarLayout>
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:fitsSystemWindows="true"
+                app:contentScrim="@color/white"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                <com.mindorks.editdrawabletext.EditDrawableText
+                    android:id="@+id/edit_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="18dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/shape_search_address"
+                    android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_search_24_basic_500"
+                    android:fitsSystemWindows="true"
+                    android:hint="@string/dex_markets_list_search"
+                    android:longClickable="false"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/basic500"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycle_assets"
@@ -39,10 +68,19 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:overScrollMode="never"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:layoutManager="android.support.v7.widget.LinearLayoutManager"
             tools:listitem="@layout/your_assets_item"
             tools:orientation="vertical" />
 
-    </android.support.constraint.ConstraintLayout>
+        <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:progress_image="@drawable/ic_loader_24_submit_400" />
 
-</android.support.design.widget.CoordinatorLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</RelativeLayout>

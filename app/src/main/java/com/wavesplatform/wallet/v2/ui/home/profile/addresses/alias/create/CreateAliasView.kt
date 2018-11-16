@@ -7,4 +7,5 @@ interface CreateAliasView : BaseMvpView{
     fun aliasIsAvailable()
     fun aliasIsNotAvailable()
     fun successCreateAlias(alias: Alias)
+    fun failedCreateAlias(message: String?)
 }

@@ -166,7 +166,7 @@
                         android:id="@+id/button_start_lease"
                         style="@style/WavesButton"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:clickable="true"
                         android:text="@string/wallet_leasing_start_lease"

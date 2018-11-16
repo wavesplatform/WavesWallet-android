@@ -18,11 +18,11 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
 
     override fun convert(helper: BaseViewHolder, item: AssetBalance) {
         helper.setText(R.id.text_asset_name, item.getName())
-                .setText(R.id.text_asset_value, item.getDisplayTotalBalance())
+                .setText(R.id.text_asset_value, item.getDisplayAvailableBalance())
                 .setVisible(R.id.image_favourite, item.isFavorite)
                 .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
         helper.itemView.text_asset_value.visibility =
-                if ((item.getDisplayTotalBalance().replace(",", "")
+                if ((item.getDisplayAvailableBalance().replace(",", "")
                                 .toDouble()) == 0.toDouble()) {
                     View.GONE
                 } else {

@@ -22,7 +22,9 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_your_assets.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import pers.victor.ext.gone
 import pers.victor.ext.inflate
+import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -52,19 +54,15 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             adapter.currentAssetId = assetId
         }
 
-        val searchView = layoutInflater
-                .inflate(R.layout.search_view, null, false)
-        val search = searchView.findViewById<EditDrawableText>(R.id.editText_search)
-
-        eventSubscriptions.add(RxTextView.textChanges(search)
+        eventSubscriptions.add(RxTextView.textChanges(edit_search)
                 .skipInitialValue()
                 .map {
                     if (it.isNotEmpty()) {
-                        search.setCompoundDrawablesWithIntrinsicBounds(
+                        edit_search.setCompoundDrawablesWithIntrinsicBounds(
                                 R.drawable.ic_search_24_basic_500, 0,
                                 R.drawable.ic_clear_24_basic_500, 0)
                     } else {
-                        search.setCompoundDrawablesWithIntrinsicBounds(
+                        edit_search.setCompoundDrawablesWithIntrinsicBounds(
                                 R.drawable.ic_search_24_basic_500, 0, 0, 0)
                     }
                     return@map it.toString()
@@ -76,11 +74,11 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
                     adapter.filter(it)
                 })
 
-        search.setDrawableClickListener(object : onDrawableClickListener {
+        edit_search.setDrawableClickListener(object : onDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
                     DrawablePosition.RIGHT -> {
-                        search.text = null
+                        edit_search.text = null
                     }
                 }
             }
@@ -109,19 +107,18 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             finish()
         }
 
-        adapter.setHeaderView(searchView)
         adapter.emptyView = getEmptyView()
-
-        recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                enableElevation(recyclerView.computeVerticalScrollOffset() == 0)
-            }
-        })
     }
 
     override fun showAssets(assets: ArrayList<AssetBalance>) {
+        progress_bar.hide()
+
+        if (assets.isEmpty()) {
+            edit_search.gone()
+        } else {
+            edit_search.visiable()
+        }
+
         adapter.allData = ArrayList(assets)
         adapter.setNewData(assets)
     }
@@ -147,14 +144,6 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun enableElevation(enable: Boolean) {
-        if (enable) {
-            ViewCompat.setElevation(appbar_layout, 0F)
-        } else {
-            ViewCompat.setElevation(appbar_layout, 8F)
-        }
     }
 
     private fun getEmptyView(): View {
