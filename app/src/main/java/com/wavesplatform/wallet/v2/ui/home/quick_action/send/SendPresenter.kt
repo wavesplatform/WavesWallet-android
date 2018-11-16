@@ -101,8 +101,6 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     return R.string.invalid_amount
                 } else if (tx.fee <= 0 || tx.fee < TransferTransactionRequest.MinFee) {
                     return R.string.insufficient_fee
-                } else if (App.getAccessManager().getWallet()!!.address == tx.recipient) {
-                    return R.string.send_to_same_address_warning
                 } else if (!isFundSufficient(tx)) {
                     return R.string.insufficient_funds
                 } else if (Constants.MONERO_ASSET_ID == recipientAssetId

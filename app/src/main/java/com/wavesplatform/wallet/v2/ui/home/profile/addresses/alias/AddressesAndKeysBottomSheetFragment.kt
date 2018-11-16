@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.Create
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showSuccess
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_empty_layout.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_layout.view.*
@@ -113,7 +114,7 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
                     val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
                     bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
                     bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
-                    toast(getString(R.string.new_alias_success_create))
+                    showSuccess(getString(R.string.new_alias_success_create), R.id.root)
                 }
                 TYPE_CONTENT -> {
                     val aliasModel = data?.getParcelableExtra<Alias>(CreateAliasActivity.RESULT_ALIAS)

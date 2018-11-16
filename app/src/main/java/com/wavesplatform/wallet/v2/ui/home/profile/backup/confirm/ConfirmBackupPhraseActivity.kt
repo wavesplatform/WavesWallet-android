@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivit
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.activity_confirm_backup_pharse.*
 import pers.victor.ext.*
@@ -36,9 +37,12 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view,  true,
                 getString(R.string.confirm_backup), R.drawable.ic_toolbar_back_black)
-        val seedArray = intent?.getSerializableExtra(
-                BackupPhraseActivity.KEY_INTENT_SEED_AS_ARRAY) as Array<*>
-        presenter.getRandomPhrasePositions(seedArray.toList() as ArrayList<String>)
+        val seedArray = intent?.getStringArrayListExtra(
+                BackupPhraseActivity.KEY_INTENT_SEED_AS_ARRAY)
+
+        seedArray.notNull {
+            presenter.getRandomPhrasePositions(it)
+        }
     }
 
     override fun showRandomPhraseList(listRandomPhrase: ArrayList<String>) {

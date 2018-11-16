@@ -173,15 +173,15 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
 
     private fun fillButtonsPrice() {
         rxEventBus.post(Events.UpdateButtonsPrice(getAskPrice(), getBidPrice()))
-        recycle_orderbook.post {
+        recycle_orderbook?.post {
             getBidPrice().notNull {
-                text_sell_value.text = MoneyUtil.getScaledPrice(it, presenter.watchMarket?.market?.amountAssetDecimals
+                text_sell_value?.text = MoneyUtil.getScaledPrice(it, presenter.watchMarket?.market?.amountAssetDecimals
                         ?: 0, presenter.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros()
             }
 
             getAskPrice().notNull {
-                text_buy_value.text = MoneyUtil.getScaledPrice(it, presenter.watchMarket?.market?.amountAssetDecimals
+                text_buy_value?.text = MoneyUtil.getScaledPrice(it, presenter.watchMarket?.market?.amountAssetDecimals
                         ?: 0, presenter.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros()
             }

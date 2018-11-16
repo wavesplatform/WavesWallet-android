@@ -71,7 +71,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
         button_written_down.click {
             launchActivity<ConfirmBackupPhraseActivity>(
                     requestCode = REQUEST_CONFIRM_BACKUP, options = intent.extras) {
-                putExtra(KEY_INTENT_SEED_AS_ARRAY, phraseList.toTypedArray())
+                putStringArrayListExtra(KEY_INTENT_SEED_AS_ARRAY, ArrayList(phraseList))
                 if (intent.hasExtra(ProfileFragment.KEY_INTENT_SET_BACKUP)) {
                     putExtra(ProfileFragment.KEY_INTENT_SET_BACKUP, true)
                 }

@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.request.CancelOrderRequest
@@ -86,7 +87,9 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         if (allMarketsList.isEmpty()) {
             return Observable.zip(apiService.loadGlobalConfiguration()
                     .map {
-                        return@map it.generalAssetIds.associateBy { it.assetId }
+                        val globalAssets = it.generalAssetIds.toMutableList()
+                        globalAssets.add(Constants.MRTGeneralAsset)
+                        return@map globalAssets.associateBy { it.assetId }
                     },
                     matcherService.getAllMarkets()
                             .map { it.markets },

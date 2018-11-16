@@ -93,8 +93,10 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
         relative_alias.click {
             val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
             if (ownAliases.isEmpty()) {
+                text_alias_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
                 bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
             } else {
+                text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
                 bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
             }
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)

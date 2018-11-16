@@ -157,11 +157,15 @@ class SendActivity : BaseActivity(), SendView {
 
         val parameters = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        parameters.marginStart = ViewUtils.convertDpToPixel(4F, this).toInt()
         addressBook.layoutParams = parameters
+
         linear_recipient_suggestion.addView(addressBook)
 
         val addresses = prefsUtil.getGlobalValueList(PrefsUtil.KEY_LAST_SENT_ADDRESSES)
+
+        val parametersForAddress = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        parametersForAddress.marginStart = ViewUtils.convertDpToPixel(4F, this).toInt()
         for (address in addresses) {
             val lastRecipient = layoutInflater
                     .inflate(R.layout.view_text_tag, null) as AppCompatTextView
@@ -172,7 +176,7 @@ class SendActivity : BaseActivity(), SendView {
             lastRecipient.click {
                 edit_address.setText(address)
             }
-            lastRecipient.layoutParams = parameters
+            lastRecipient.layoutParams = parametersForAddress
             linear_recipient_suggestion.addView(lastRecipient)
         }
     }
@@ -425,7 +429,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun assetEnable(enable: Boolean) {
         if (enable) {
-            ViewCompat.setElevation(card_asset, ViewUtils.convertDpToPixel(4f, this))
+            ViewCompat.setElevation(card_asset, ViewUtils.convertDpToPixel(1f, this))
             card_asset.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
             asset_layout.background = null
             card_asset.click { launchAssets() }
@@ -442,7 +446,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun recipientEnable(enable: Boolean) {
         if (enable) {
-            ViewCompat.setElevation(recipient_card, ViewUtils.convertDpToPixel(4f, this))
+            ViewCompat.setElevation(recipient_card, ViewUtils.convertDpToPixel(1f, this))
             recipient_card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
             recipient_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             edit_address.isEnabled = true
@@ -457,7 +461,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun amountEnable(enable: Boolean) {
         if (enable) {
-            ViewCompat.setElevation(amount_card, ViewUtils.convertDpToPixel(4f, this))
+            ViewCompat.setElevation(amount_card, ViewUtils.convertDpToPixel(1f, this))
             amount_card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
             amount_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             edit_amount.isEnabled = true
