@@ -16,7 +16,6 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
-import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.util.isNetworkConnection
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
@@ -178,9 +177,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
 
     override fun onBackPressed() {
         if (intent.hasExtra(KEY_INTENT_GUID) && !intent.hasExtra(KEY_INTENT_USE_BACK_FOR_EXIT)) {
-            launchActivity<SplashActivity>(clear = true) {
-                putExtra(SplashActivity.EXIT, true)
-            }
+            exit()
         } else {
             setResult(Constants.RESULT_CANCELED)
             finish()

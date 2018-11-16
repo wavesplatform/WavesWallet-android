@@ -153,8 +153,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
     }
 
     override fun requestPassCode() {
-        launchActivity<EnterPassCodeActivity>(
-                requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
+        launchActivity<EnterPassCodeActivity>(requestCode = REQUEST_CONFIRM_SEND)
     }
 
     override fun onShowError(res: Int) {
@@ -166,7 +165,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
+            REQUEST_CONFIRM_SEND -> {
                 if (resultCode == Constants.RESULT_OK) {
                     showTransactionProcessing()
                     presenter.confirmSend()
@@ -185,5 +184,6 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         const val KEY_INTENT_ATTACHMENT = "intent_attachment"
         const val KEY_INTENT_MONERO_PAYMENT_ID = "intent_monero_payment_id"
         const val KEY_INTENT_TYPE = "intent_type"
+        const val REQUEST_CONFIRM_SEND = 1000
     }
 }

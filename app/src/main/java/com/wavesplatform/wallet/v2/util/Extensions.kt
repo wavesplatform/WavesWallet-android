@@ -536,6 +536,7 @@ inline fun <reified T : Any> Activity.launchActivity(
     if (options != null) intent.putExtras(options)
 
     if (clear) {
+        finishAffinity()
         intent = newClearIntent<T>(this)
     }
 

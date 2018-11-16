@@ -83,7 +83,7 @@ class SendActivity : BaseActivity(), SendView {
         when {
             intent.hasExtra(KEY_INTENT_ASSET_DETAILS) -> {
                 setAsset(intent.getParcelableExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM))
-                assetChangeEnable(false)
+                assetEnable(false)
             }
             intent.hasExtra(KEY_INTENT_REPEAT_TRANSACTION) -> {
                 val assetBalance = intent.getParcelableExtra<AssetBalance>(
@@ -95,13 +95,13 @@ class SendActivity : BaseActivity(), SendView {
                 val attachment = intent
                         .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT)
                 setAsset(assetBalance)
-                assetChangeEnable(false)
+                assetEnable(false)
                 edit_address.setText(recipientAddress)
                 edit_amount.setText(amount)
                 presenter.attachment = attachment
                 presenter.amount = amount
             }
-            else -> assetChangeEnable(true)
+            else -> assetEnable(true)
         }
 
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
@@ -121,9 +121,9 @@ class SendActivity : BaseActivity(), SendView {
             if (it.tag == R.drawable.ic_deladdress_24_error_400) {
                 edit_address.text = null
                 text_recipient_error.gone()
-                edit_address.isEnabled = true
-                edit_amount.isEnabled = true
-                card_asset.click { launchAssets() }
+                assetEnable(true)
+                recipientEnable(true)
+                amountEnable(true)
             } else if (it.tag == R.drawable.ic_qrcode_24_basic_500) {
                 IntentIntegrator(this).setRequestCode(REQUEST_SCAN_RECEIVE)
                         .setOrientationLocked(true)
@@ -351,12 +351,14 @@ class SendActivity : BaseActivity(), SendView {
                     if (parameter.contains("recipient=")) {
                         val recipient = parameter.replace("recipient=", "")
                         edit_address.setText(recipient)
-                        edit_address.isEnabled = false
+                        recipientEnable(false)
                     }
                     if (parameter.contains("amount=")) {
                         val amount = parameter.replace("amount=", "")
-                        edit_amount.setText(amount)
-                        edit_amount.isEnabled = false
+                        if (amount.toDouble() > 0) {
+                            edit_amount.setText(amount)
+                            amountEnable(false)
+                        }
                     }
                 }
 
@@ -370,7 +372,7 @@ class SendActivity : BaseActivity(), SendView {
 
                 if (assetBalance != null) {
                     setAsset(assetBalance)
-                    card_asset.click {  }
+                    assetEnable(false)
                 }
             } catch (error: Exception) {
                 showError(R.string.send_error_get_data_from_qr, R.id.root_view)
@@ -425,24 +427,52 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
-    private fun assetChangeEnable(enable: Boolean) {
+    private fun assetEnable(enable: Boolean) {
         if (enable) {
-            card_asset.click { _ -> launchAssets() }
-            image_change.visibility = View.VISIBLE
             ViewCompat.setElevation(card_asset, ViewUtils.convertDpToPixel(1f, this))
+            card_asset.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
             asset_layout.background = null
-            card_asset.setCardBackgroundColor(ContextCompat.getColor(
-                    this, R.color.white))
+            card_asset.click { launchAssets() }
+            image_change.visibility = View.VISIBLE
         } else {
-            card_asset.click {
-
-            }
-            image_change.visibility = View.GONE
             ViewCompat.setElevation(card_asset, 0F)
+            card_asset.setCardBackgroundColor(ContextCompat.getColor(this, R.color.basic50))
             asset_layout.background = ContextCompat.getDrawable(
                     this, R.drawable.shape_rect_bordered_accent50)
-            card_asset.setCardBackgroundColor(ContextCompat.getColor(
-                    this, R.color.basic50))
+            card_asset.click { /* do nothing */ }
+            image_change.visibility = View.GONE
+        }
+    }
+
+    private fun recipientEnable(enable: Boolean) {
+        if (enable) {
+            ViewCompat.setElevation(recipient_card, ViewUtils.convertDpToPixel(1f, this))
+            recipient_card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            recipient_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            edit_address.isEnabled = true
+        } else {
+            ViewCompat.setElevation(recipient_card, 0F)
+            recipient_card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.basic50))
+            recipient_layout.background = ContextCompat.getDrawable(this,
+                    R.drawable.shape_rect_bordered_accent50)
+            edit_address.isEnabled = false
+        }
+    }
+
+    private fun amountEnable(enable: Boolean) {
+        if (enable) {
+            ViewCompat.setElevation(amount_card, ViewUtils.convertDpToPixel(1f, this))
+            amount_card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            amount_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            edit_amount.isEnabled = true
+            horizontal_amount_suggestion.visiable()
+        } else {
+            ViewCompat.setElevation(amount_card, 0F)
+            amount_card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.basic50))
+            amount_layout.background = ContextCompat.getDrawable(this,
+                    R.drawable.shape_rect_bordered_accent50)
+            edit_amount.isEnabled = false
+            horizontal_amount_suggestion.gone()
         }
     }
 

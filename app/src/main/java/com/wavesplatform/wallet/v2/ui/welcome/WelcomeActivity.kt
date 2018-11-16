@@ -14,7 +14,6 @@ import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageBottomSheetFragment
-import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_welcome.*
@@ -115,7 +114,6 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
                         menu.notNull {
                             presenter.saveLanguage(lang)
                             setLanguage(Locale(lang))
-                            updateMenuTitle()
                         }
                     }
                 }
@@ -139,9 +137,6 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     }
 
     override fun onBackPressed() {
-        finish()
-        launchActivity<SplashActivity>(clear = true) {
-            putExtra(SplashActivity.EXIT, true)
-        }
+        exit()
     }
 }

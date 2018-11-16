@@ -17,7 +17,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.id.tab_navigation
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
@@ -351,6 +350,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 preferencesHelper.setShowSaveSeedWarningTime(currentGuid, now)
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        exit()
     }
 
     companion object {
