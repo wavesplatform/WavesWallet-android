@@ -252,7 +252,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                                 edit_amount.setText(
                                         (edit_total_price.text.toString().toDouble() / edit_limit_price.text.toString().toDouble())
                                                 .roundToDecimals(presenter.data?.watchMarket?.market?.amountAssetDecimals)
-                                                .toString()
+                                                .toBigDecimal()
+                                                .toPlainString()
                                                 .stripZeros())
                             }
                         }
