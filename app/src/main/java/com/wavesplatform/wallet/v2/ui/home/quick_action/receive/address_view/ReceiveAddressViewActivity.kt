@@ -47,6 +47,7 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         val assetBalance = intent?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
+        toolbar_view.title = getString(R.string.receive_address_view_toolbar, assetBalance!!.getName())
 
         image_asset_icon.isOval = true
         image_asset_icon.setAsset(assetBalance)

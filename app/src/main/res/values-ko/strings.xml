@@ -437,7 +437,7 @@
     <string name="receive_address_generate">생성 중…</string>
     <string name="receive_address_link_to_invoice">인보이스 링크</string>
     <string name="receive_address_share">공유</string>
-    <string name="receive_address_view_toolbar">귀하의 Bitcoin 주소</string>
+    <string name="receive_address_view_toolbar">귀하의 %1$s 주소</string>
     <string name="receive_address_waves_address">귀하의 Waves 주소</string>
     <string name="receive_address_your_qr_code">귀하의 QR 코드</string>
     <string name="receive_amount">수량</string>
