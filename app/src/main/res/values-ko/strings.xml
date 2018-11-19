@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_fill_payment_details">지불 정보 입력란에 다음 정보를 필히 기입해야합니다:</string>
-    <string name="about_fill_payment_info"><![CDATA[CNM — <귀하의 WAVES 주소>. \nIf그렇지 않으면 귀하의 계좌에 크레딧을 줄 수 없습니다]]></string>
+    <string name="about_fill_payment_info">CNM — 귀하의 WAVES 주소. \nIf그렇지 않으면 귀하의 계좌에 크레딧을 줄 수 없습니다</string>
     <string name="about_redirection_message">인증 작업 후 자세한 지시 사항을 이메일로 받게됩니다</string>
     <string name="about_redirection_okay">확인</string>
-    <string name="about_redirection_title"><![CDATA[확인을 위해 <<IDNow>>로\n이동됩니다]]></string>
+    <string name="about_redirection_title">확인을 위해 «IDNow» 로 \n이동됩니다</string>
     <string name="add_address_address">주소</string>
     <string name="add_address_btn_txt">저장</string>
     <string name="add_address_name">이름</string>
@@ -28,7 +28,7 @@
     <string name="alias_dialog_description_2">Alias는 4자에서 30자 사이어야하며 소문자, 숫자 및 기호(@, -, _ 등)를 포함해야 합니다.</string>
     <string name="alias_dialog_fee">트랜잭션 수수료 0.001 Waves</string>
     <string name="alias_dialog_you_dont_have">귀하는 Alias가 없습니다</string>
-    <string name="alias_dialog_you_have">%s 를 가지고 있습니다</string>
+    <string name="alias_dialog_you_have">%s 개를 가지고 있습니다</string>
     <string name="alias_dialog_your_aliases">귀하의 Alias</string>
     <string name="app_name">Waves</string>
     <string name="asset_details_asset_info">자산 정보</string>
@@ -53,18 +53,18 @@
     <string name="asset_details_token_burn">토큰 소각</string>
     <string name="asset_details_total">총</string>
     <string name="asset_details_total_amount">총 수량</string>
-    <string name="asset_details_type">구분</string>
+    <string name="asset_details_type">재발행 여부</string>
     <string name="asset_details_view_history">내역 보기</string>
     <string name="asset_details_waves_token">Waves 토큰</string>
     <string name="attachment_too_long">Attachment가 너무 깁니다</string>
-    <string name="backup_hint">귀하의 자산은 당신만 통제할 수 있습니다. 앱이 삭제될 경우를 대비해 반드시 백업 구절을 저장해야 합니다. 원치 않으시면 이전 페이지로 돌아가세요</string>
+    <string name="backup_hint">Since only you control your money, you’ll need to save your backup phrase in case this app is deleted</string>
     <string name="backup_hint_2">이 15 단어를 반드시 메모하거나 저장하세요</string>
     <string name="backup_hint_3">다음 페이지에서 백업 구절을 승인해야 합니다</string>
     <string name="backup_info_button">이해했습니다</string>
     <string name="backup_info_subtitle">Waves Platform은 지난 몇 달간 사기 및 피싱 공격의 빈도가 증가한 것에 대해 경고드리고 싶습니다. 사기범들은 악성코드를 가짜 Waves 클라이언트에 숨기고 보너스와 할인으로 조장하여 사용자들을 유인합니다. \n\n이를 실행하면 귀하의 계정이 해킹되어 모든 자금을 잃게 되므로 절대 SEED를 가짜 \'클라이언트\'에 입력하지 마십시오. \n\n공식 Waves 클라이언트만 사용하세요.</string>
     <string name="backup_info_title">백업 구절을 매우 신중히 다루세요!</string>
     <string name="backup_pharse">백업 구절</string>
-    <string name="backup_wrriten_down">메모하였습니다</string>
+    <string name="backup_wrriten_down">메모했습니다</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
     <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_1_day">1 일</string>
@@ -208,7 +208,7 @@
     <string name="dex_trade_tab_orderbook">호가창</string>
     <string name="dialog_account_first_open_about_backup">본 앱을 다른 장치로 이동하거나 삭제하면 귀하의 Waves 계정은 백업 구절로만 복구될 수 있음을 이해합니다.</string>
     <string name="dialog_account_first_open_about_fund_on_device">나의 자산이 거래소가 아닌 본 기기에서 안전하게 보관된다는 것을 이해합니다.</string>
-    <string name="dialog_account_first_open_about_terms">나는 본 이용 약관을 읽었으며 이해하였고 동의합니다</string>
+    <string name="dialog_account_first_open_about_terms">나는 본 이용 약관을 읽었으며 이해하고 동의합니다</string>
     <string name="dialog_account_first_open_about_terms_key">이용 약관을</string>
     <string name="dialog_account_first_open_confirm_and_begin">승인하고 시작</string>
     <string name="dialog_account_first_open_subtitle">Waves는 특별합니다 — 은행 또는 웹 서비스에서 안전하게 보관될 수 없습니다</string>
@@ -265,7 +265,7 @@
     <string name="history_details_leasing_from">Lease 보내는 주소</string>
     <string name="history_details_leasing_to">Lease 받는 주소</string>
     <string name="history_details_not_reissuable">재발행 불가</string>
-    <string name="history_details_received_from">발신된 주소</string>
+    <string name="history_details_received_from">발신한 주소</string>
     <string name="history_details_recipient">수신자</string>
     <string name="history_details_reissuable">재발행 가능</string>
     <string name="history_details_send_again">재전송</string>
@@ -273,7 +273,7 @@
     <string name="history_details_show_all">모두 보기 (%1$s)</string>
     <string name="history_details_timestamp">타임 스탬프</string>
     <string name="history_details_unconfirmed">미승인</string>
-    <string name="history_empty">아무것도 없습니다…\n트랜잭션이 없습니다</string>
+    <string name="history_empty">아무것도 없습니다… \n트랜잭션이 없습니다</string>
     <string name="history_error_receive_data">데이터 수신 오류. 나중에 다시 시도하세요</string>
     <string name="history_exchanged">거래 내역</string>
     <string name="history_issued">발행 내역</string>
@@ -310,9 +310,9 @@
     <string name="history_type_token_reissue">%s 토큰 재발행</string>
     <string name="history_type_unrecognised">알수없는 트랜잭션</string>
     <string name="import_account_click_show_pairing">QR 코드를 확인하기 위해 «페어링 코드 보기»를 클릭하세요</string>
-    <string name="import_account_login_at_site">웹 또는 Mac/PC를 통해 Waves 클라이언트에 로그인하세요</string>
+    <string name="import_account_login_at_site">Log in to your Waves Client via your PC or Mac</string>
     <string name="import_account_scan_pairing_code">페어링 코드 스캔</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[설정 > 보안 > 페어링 코드]]></string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">설정 — 보안 — 페어링 코드</string>
     <string name="import_account_tab_manually">수동</string>
     <string name="import_account_tab_scan">스캔</string>
     <string name="import_account_toolbar_title">계정 불러오기</string>
@@ -330,7 +330,7 @@
     <string name="left_drawer_description">최신 뉴스 및 기사를 확인하고 Waves Platform에서 업데이트하는 이벤트에 대해 알아보세요</string>
     <string name="left_drawer_join_the_waves_community">Waves 커뮤니티에 참여</string>
     <string name="left_drawer_site">wavesplatform.com</string>
-    <string name="left_drawer_support">Wavesplatform 지원</string>
+    <string name="left_drawer_support">Wavesplatform 지원센터</string>
     <string name="left_drawer_terms_and_conditions">이용 약관</string>
     <string name="left_drawer_whitepaper">백서</string>
     <string name="my_address_qr_copy">복사</string>
@@ -340,7 +340,7 @@
     <string name="my_orders_date_time">날짜</string>
     <string name="my_orders_empty">아무것도 없습니다… \n주문 내역이 없습니다</string>
     <string name="my_orders_price">가격</string>
-    <string name="my_orders_side_price">사이드/가격</string>
+    <string name="my_orders_side_price">유형/가격</string>
     <string name="my_orders_status">상태</string>
     <string name="my_orders_status_canceled">취소 완료</string>
     <string name="my_orders_status_filled">체결 완료</string>
@@ -419,7 +419,7 @@
     <string name="profile_general_rate_app">앱 평가하기</string>
     <string name="profile_general_security">보안</string>
     <string name="profile_general_setting">일반 설정</string>
-    <string name="profile_general_support_wavesplatform">Wavesplatform 지원</string>
+    <string name="profile_general_support_wavesplatform">Wavesplatform 지원센터</string>
     <string name="profile_language_toolbar_title">언어</string>
     <string name="profile_save_seed_warning_subtitle">SEED를 안전하게 보관하십시오. 지갑을 복원할 수 있는 유일한 수단입니다</string>
     <string name="profile_save_seed_warning_title">귀하의 백업 구절 (SEED) 저장</string>
@@ -466,7 +466,7 @@
     <string name="receive_payment_method">지불 방법</string>
     <string name="receive_sellect_asset">귀하의 자산을 선택하거나 목록에서 고르세요</string>
     <string name="receive_step_1">1 단계</string>
-    <string name="receive_step_1_msg">SEPA transfer를 통해 Euro 화를 은행 계좌에서 바로 입금하려면 당사의 파트너사인 IDNow.eu에서 승인을 받아야 합니다.</string>
+    <string name="receive_step_1_msg">SEPA transfer를 통해 Euro 화를 은행 계좌에서 바로 입금하려면 당사의 파트너사인 IDNow.eu에서 승인을 받아야 합니다</string>
     <string name="receive_step_1_msg_link">IDNow.eu</string>
     <string name="receive_step_2">2 단계</string>
     <string name="receive_step_2_msg">인증 단계를 마치면 자세한 지시 사항이 담긴 이메일을 받게 됩니다</string>
@@ -474,7 +474,7 @@
     <string name="receive_toolbar">받기</string>
     <string name="receive_use_same_waves_address">KYC와 ALM에 사용한 것과 동일한 Waves 주소를 사용해야 합니다. 다른 Waves 주소 또는 오입력 시 귀하의 계정에 크레딧을 줄 수 없습니다.</string>
     <string name="receive_verified">귀하의 계정인 인증되었습니다</string>
-    <string name="receive_warning_crypto">Send only %1$s to this deposit address</string>
+    <string name="receive_warning_crypto">KYC와 ALM에 사용한 것과 동일한 Waves 주소를 사용해야 합니다. 다른 Waves 주소 또는 오입력 시 귀하의 계정에 크레딧을 줄 수 없습니다.</string>
     <string name="receive_warning_will_send">%1$s %2$s 미만의 자산을 보내면 귀하는 해당 자산을 잃게 됩니다.</string>
     <string name="receive_will_send_other_currency">해당 주소로 다른 화폐 및 코인을 보내면 귀하의 자산을 잃을 수 있습니다.</string>
     <string name="secret_phrase_back_up_now">즉시 백업합니다</string>
@@ -574,11 +574,11 @@
     <string name="wallet_leasing_quick_note_2">귀하는 블록체인상에 올라간 Leasing 트랜잭션을 취소할 수 있습니다. 이는 일반적으로 1분 이내에 발생합니다.</string>
     <string name="wallet_leasing_quick_note_3">Generating 잔액은 1,000 블록 후에 업데이트됩니다.</string>
     <string name="wallet_leasing_start_lease">Lease 시작</string>
-    <string name="wallet_leasing_total">총</string>
+    <string name="wallet_leasing_total">총 수량</string>
     <string name="wallet_leasing_view_history">내역 보기</string>
-    <string name="wallet_sorting_toolbar_position_action">포지션</string>
+    <string name="wallet_sorting_toolbar_position_action">편집 완료</string>
     <string name="wallet_sorting_toolbar_title">분류</string>
-    <string name="wallet_sorting_toolbar_visibility_action">가시성</string>
+    <string name="wallet_sorting_toolbar_visibility_action">목록 편집</string>
     <string name="wallet_toolbar_title">지갑</string>
     <string name="welcome_blockchain_description">빠르게 성장하는 암호화폐 세계의 일원이 되세요. 당신은 당신의 암호화 자산에 액세스 할 수 있는 유일한 사람입니다.</string>
     <string name="welcome_blockchain_title">블록체인 시작하기</string>

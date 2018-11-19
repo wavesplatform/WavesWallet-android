@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_fill_payment_details">U moet de volgende informatie bij de betalingsdetails invoeren:</string>
-    <string name="about_fill_payment_info"><![CDATA[CNM — <Uw WAVES adres>.\n Als u dit niet invoert kunnen we uw account niet crediteren.]]></string>
+    <string name="about_fill_payment_info">CNM — Uw WAVES adres. \nAls u dit niet invoert kunnen we uw account niet crediteren.</string>
     <string name="about_redirection_message">Na de verificatie ontvangt u een email met verdere instructies.</string>
     <string name="about_redirection_okay">Oké</string>
-    <string name="about_redirection_title">U wordt doorgestuurd naar «IDNow»  \n voor verificatie</string>
+    <string name="about_redirection_title">U wordt doorgestuurd naar «IDNow» \nvoor verificatie</string>
     <string name="add_address_address">Adres</string>
     <string name="add_address_btn_txt">Opslaan</string>
     <string name="add_address_name">Naam</string>
@@ -165,7 +165,7 @@
     <string name="common_market_error">Kon de markt app niet vinden</string>
     <string name="common_msg_in_development">Sorry deze functie is momenteel nog niet beschikbaar</string>
     <string name="common_or">of</string>
-    <string name="common_persist"><![CDATA[&]]></string>
+    <string name="common_persist">&#x26;</string>
     <string name="confirm_backup">Bevestig backup</string>
     <string name="confirm_backup_confirm">Bevestig</string>
     <string name="confirm_backup_error">Verkeerde volgorde, probeer opnieuw</string>
@@ -277,7 +277,7 @@
     <string name="history_error_receive_data">Error tijdens opvragen van data. Probeer het later opnieuw.</string>
     <string name="history_exchanged">Uitgewisseld</string>
     <string name="history_issued">Uitgegeven</string>
-    <string name="history_leased">Geleasd</string>
+    <string name="history_leased">Geleased</string>
     <string name="history_received">Ontvangen</string>
     <string name="history_sent">Verzenden</string>
     <string name="history_sorting_close">Sluiten</string>
@@ -305,14 +305,14 @@
     <string name="history_type_set_sponsorship">Configureer gesponsorde transactie</string>
     <string name="history_type_spam_receive">Ontvangen %s</string>
     <string name="history_type_started_leasing">Begonnen met leasen</string>
-    <string name="history_type_token_burn">% s Token Burn</string>
+    <string name="history_type_token_burn">%s Token Burn</string>
     <string name="history_type_token_generation">%s - Token Creatie</string>
     <string name="history_type_token_reissue">%s Token heruitgeven</string>
     <string name="history_type_unrecognised">Niet-herkende transactie</string>
-    <string name="import_account_click_show_pairing">Klik op «Show Pairing Code»  om een ​​QR-code te tonen</string>
-    <string name="import_account_login_at_site">Meld u aan bij uw Waves Client via internet of Mac / PC</string>
+    <string name="import_account_click_show_pairing">Klik op «Show Pairing Code» om een ​​QR-code te tonen</string>
+    <string name="import_account_login_at_site">Log in to your Waves Client via your PC or Mac</string>
     <string name="import_account_scan_pairing_code">Koppelingscode scannen</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Instellingen > Beveiliging > Koppelingscode]]></string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Instellingen — Beveiliging — Koppelingscode</string>
     <string name="import_account_tab_manually">Handmatig</string>
     <string name="import_account_tab_scan">Scannen</string>
     <string name="import_account_toolbar_title">Account importeren</string>
@@ -472,7 +472,7 @@
     <string name="receive_step_2_msg">Nadat u de verificatie hebt doorlopen, ontvangt u een e-mail met verdere instructies</string>
     <string name="receive_step_url_link">https://www.idnow.eu/</string>
     <string name="receive_toolbar">Ontvangen</string>
-    <string name="receive_use_same_waves_address"><![CDATA[U moet hetzelfde Waves-adres gebruiken dat u hebt gebruikt om KYC & ALM-aanvragen te doen. Als u een fout maakt of een ander Waves-adres opgeeft, kunnen we uw account niet crediteren.]]></string>
+    <string name="receive_use_same_waves_address">U moet hetzelfde Waves-adres gebruiken dat u hebt gebruikt om KYC en ALM-aanvragen te doen. Als u een fout maakt of een ander Waves-adres opgeeft, kunnen we uw account niet crediteren.</string>
     <string name="receive_verified">Uw account is geverifieerd</string>
     <string name="receive_warning_crypto">Verzend slechts %1$s naar dit stortingsadres</string>
     <string name="receive_warning_will_send">Als u minder dan %1$s %2$s stuurt, verliest u dat geld.</string>
@@ -513,13 +513,13 @@
     <string name="send_select_your_asset">Selecteer uw asset</string>
     <string name="send_success_do_you_want_to_save_this_address">Wilt u dit adres opslaan?</string>
     <string name="send_success_okay">Oké</string>
-    <string name="send_success_you_have_sent_sum">U hebt% 1 $ s% 2 $ s verzonden</string>
+    <string name="send_success_you_have_sent_sum">U hebt %1$s %2$s verzonden</string>
     <string name="send_success_your_transaction_is_on_the_way">Uw transactie is onderweg!</string>
     <string name="send_ten_percents">10%</string>
     <string name="send_to_same_address_warning">Kan het niet naar hetzelfde adres verzenden.</string>
     <string name="send_toolbar_title">Versturen</string>
     <string name="send_transaction_error_check_asset">Controleer asset</string>
-    <string name="send_transaction_fee_0_001_waves">Transactiekosten 0,001 WAVES</string>
+    <string name="send_transaction_fee_0_001_waves">Transactiekosten 0.001 WAVES</string>
     <string name="send_use_total_balance">Gebruik de totale balans</string>
     <string name="start_leasing_0_100">0.100</string>
     <string name="start_leasing_0_100000">0.00100000</string>
@@ -541,7 +541,7 @@
     <string name="token_burn_confirmation_okay">Oké</string>
     <string name="token_burn_confirmation_toolbar_title">Bevestiging</string>
     <string name="token_burn_confirmation_type">Type</string>
-    <string name="token_burn_confirmation_you_have_burned">U hebt% 1 $ s% 2 $ s geburned</string>
+    <string name="token_burn_confirmation_you_have_burned">U hebt %1$s %2$s geburned</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">Uw transactie is onderweg</string>
     <string name="token_burn_confirmationt_description">De officiële token van de Dating Beslissing Robot. www.choosee.site Choosee gebruikt big data en kunstmatige intelligentie om het daten te vergemakkelijken. Mensen weer mens te maken.</string>
     <string name="token_burn_confirmationt_not_reissuable">Niet heruitgeefbaar</string>
@@ -549,9 +549,9 @@
     <string name="token_burn_toolbar_title">Token Geburned</string>
     <string name="transaction_failed">Transactie mislukt</string>
     <string name="transfer">Overdracht</string>
-    <string name="tutorial_card_1_description">Neem alstublieft de tijd om enkele belangrijke dingen voor uw eigen veiligheid te begrijpen. \n\nWe kunnen uw geld niet terugkrijgen of uw account niet blokkeren als u een phishing-site bezoekt of uw back-upzin (ook wel SEED-zin genoemd) kwijtraakt. \n\nDoor ons platform te blijven gebruiken, gaat u ermee akkoord alle risico\'s te aanvaarden die gepaard gaan met het verlies van uw SEED, inclusief maar niet beperkt tot het onvermogen om uw geld te verkrijgen en te verwijderen. In het geval dat u uw SEED verliest, stemt u ermee in en erkent u dat het Waves Platform niet verantwoordelijk zou zijn voor de negatieve gevolgen hiervan.</string>
+    <string name="tutorial_card_1_description">Neem alstublieft de tijd om enkele belangrijke dingen voor uw eigen veiligheid te begrijpen. \n\nWe kunnen uw geld niet terugkrijgen of uw account niet blokkeren als u een phishing-site bezoekt of uw back-up regel (ook wel SEED genoemd) kwijtraakt. \n\nDoor ons platform te blijven gebruiken, gaat u ermee akkoord alle risico\'s te aanvaarden die gepaard gaan met het verlies van uw SEED, inclusief maar niet beperkt tot het onvermogen om uw geld te verkrijgen en te verwijderen. In het geval dat u uw SEED verliest, stemt u ermee in en erkent u dat het Waves Platform niet verantwoordelijk is voor de negatieve gevolgen hiervan.</string>
     <string name="tutorial_card_1_title">Welkom bij het Waves Platform!</string>
-    <string name="tutorial_card_2_description">Wanneer u uw account registreert, wordt u gevraagd om uw geheime zin (Seed) op te slaan en om uw account te beveiligen met een wachtwoord. Op normale gecentraliseerde servers wordt speciale aandacht besteed aan het wachtwoord, dat kan worden gewijzigd en gereset via e-mail, als de noodzaak zich voordoet. Op gedecentraliseerde platforms zoals Waves is alles echter anders geregeld:</string>
+    <string name="tutorial_card_2_description">Wanneer u uw account registreert, wordt u gevraagd om uw geheime regel (SEED) op te slaan en om uw account te beveiligen met een wachtwoord. Op normale gecentraliseerde servers wordt speciale aandacht besteed aan het wachtwoord, dat kan worden gewijzigd en gereset via e-mail, als de noodzaak zich voordoet. Op gedecentraliseerde platforms zoals Waves is alles echter anders geregeld:</string>
     <string name="tutorial_card_2_title">Wat u moet weten over uw SEED</string>
     <string name="unexpected_error">Onverwachte fout, probeer het later opnieuw.</string>
     <string name="use_account_password_account_password">Account wachtwoord</string>
@@ -559,16 +559,16 @@
     <string name="use_fingerprint_not_now">Niet nu</string>
     <string name="use_fingerprint_submit_txt">Gebruik vingerafdruk</string>
     <string name="use_fingerprint_subtitle">Gebruik uw vingerafdruk voor snellere, eenvoudigere toegang tot uw account</string>
-    <string name="use_fingerprint_title">Gebruik je een vingerafdruk om in te loggen?</string>
+    <string name="use_fingerprint_title">Gebruik vingerafdruk om in te loggen?</string>
     <string name="wallet_assets">Assets</string>
     <string name="wallet_assets_hidden_category">Verborgen assets (%1$s)</string>
     <string name="wallet_assets_my_asset">/ Mijn Asset</string>
     <string name="wallet_assets_spam_category">Spam assets (%1$s)</string>
     <string name="wallet_assets_spam_tag">Spam</string>
-    <string name="wallet_leasing">Geleasd</string>
+    <string name="wallet_leasing">Geleased</string>
     <string name="wallet_leasing_active_now">Nu actief (%1$s)</string>
     <string name="wallet_leasing_available_balance">Beschikbaar saldo</string>
-    <string name="wallet_leasing_leased">Geleasd</string>
+    <string name="wallet_leasing_leased">Geleased</string>
     <string name="wallet_leasing_quick_note">Snelle notitie</string>
     <string name="wallet_leasing_quick_note_1">U kunt alleen WAVES die niet worden geleased overdragen of verhandelen. Het geleasde bedrag kan niet door u of iemand anders worden overgedragen of verhandeld.</string>
     <string name="wallet_leasing_quick_note_2">U kunt een leasing-transactie annuleren zodra deze in de blockchain verschijnt, dit komt meestal binnen een minuut of minder voor.</string>
@@ -580,7 +580,7 @@
     <string name="wallet_sorting_toolbar_title">Sorteren</string>
     <string name="wallet_sorting_toolbar_visibility_action">Zichtbaarheid</string>
     <string name="wallet_toolbar_title">Portemonnee</string>
-    <string name="welcome_blockchain_description">Word deel van een snelgroeiend deel van de crypto-wereld. U bent de enige persoon die toegang heeft tot uw crypto-assets.</string>
+    <string name="welcome_blockchain_description">Word onderdeel van een snelgroeiend deel van de crypto-wereld. U bent de enige persoon die toegang heeft tot uw crypto-assets.</string>
     <string name="welcome_blockchain_title">Aan de slag met Blockchain</string>
     <string name="welcome_create_import_description">via koppelingscode of handmatig</string>
     <string name="welcome_create_import_title">Importeer account</string>
@@ -599,6 +599,6 @@
     <string name="your_address_your_qr_code">Uw QR-Code</string>
     <string name="your_asset_activity_all">Alles</string>
     <string name="your_asset_activity_greater_zero">Niet leeg</string>
-    <string name="your_assets_empty_state">Niets hier… \nJe hebt geen assets met waarde</string>
+    <string name="your_assets_empty_state">Niets hier… \nU heeft geen assets met funds</string>
     <string name="your_assets_toolbar_title">Uw assets</string>
 </resources>
