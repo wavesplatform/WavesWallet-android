@@ -121,7 +121,14 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         } else {
             edit_amount.text.toString()
         }
-        return "https://client.wavesplatform.com/#send/${presenter.assetBalance!!.assetId}?" +
+
+        val assetId = if (presenter.assetBalance!!.assetId.isNullOrEmpty()) {
+            "WAVES"
+        } else {
+            presenter.assetBalance!!.assetId!!
+        }
+
+        return "https://client.wavesplatform.com/#send/$assetId?" +
                 "recipient=${presenter.address}&" +
                 "amount=$amount"
     }
