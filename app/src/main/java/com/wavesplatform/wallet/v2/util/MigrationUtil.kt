@@ -23,7 +23,7 @@ class MigrationUtil @Inject constructor() {
                         guid + KEY_AB_ADDRESSES)
                 if (names.isNotEmpty() && addresses.isNotEmpty()
                         && names.size == addresses.size) {
-                    for (i in 0..names.size) {
+                    for (i in 0 until names.size) {
                         AddressBookUser(addresses[i], names[i]).save()
                     }
                     prefs.removeGlobalValue(guid + KEY_AB_NAMES)
