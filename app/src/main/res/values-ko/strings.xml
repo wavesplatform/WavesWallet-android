@@ -474,7 +474,7 @@
     <string name="receive_toolbar">받기</string>
     <string name="receive_use_same_waves_address">KYC와 ALM에 사용한 것과 동일한 Waves 주소를 사용해야 합니다. 다른 Waves 주소 또는 오입력 시 귀하의 계정에 크레딧을 줄 수 없습니다.</string>
     <string name="receive_verified">귀하의 계정인 인증되었습니다</string>
-    <string name="receive_warning_crypto">KYC와 ALM에 사용한 것과 동일한 Waves 주소를 사용해야 합니다. 다른 Waves 주소 또는 오입력 시 귀하의 계정에 크레딧을 줄 수 없습니다.</string>
+    <string name="receive_warning_crypto">Send only %1$s to this deposit address</string>
     <string name="receive_warning_will_send">%1$s %2$s 미만의 자산을 보내면 귀하는 해당 자산을 잃게 됩니다.</string>
     <string name="receive_will_send_other_currency">해당 주소로 다른 화폐 및 코인을 보내면 귀하의 자산을 잃을 수 있습니다.</string>
     <string name="secret_phrase_back_up_now">즉시 백업합니다</string>
