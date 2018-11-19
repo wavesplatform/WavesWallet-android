@@ -266,7 +266,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     private fun showNewTabFragment(fragment: Fragment) {
-        if (!supportFragmentManager.fragments.contains(fragment)) {
+        if (supportFragmentManager.findFragmentByTag(fragment::class.java.simpleName) == null) {
             supportFragmentManager.beginTransaction().hide(activeFragment).add(R.id.frame_fragment_container, fragment, fragment::class.java.simpleName).show(fragment).commitAllowingStateLoss()
         } else {
             supportFragmentManager.beginTransaction().hide(activeFragment).show(fragment).commitAllowingStateLoss()
