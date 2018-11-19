@@ -2,13 +2,12 @@ package com.wavesplatform.wallet.v2.ui.auth.fingerprint
 
 
 import android.app.Dialog
-import android.app.DialogFragment
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.content.ContextCompat
+import android.support.v4.app.DialogFragment
 import android.support.v7.widget.AppCompatTextView
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,6 +27,7 @@ import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.fingerprint_dialog.*
 import kotlinx.android.synthetic.main.fingerprint_dialog.view.*
 import pers.victor.ext.click
+import pers.victor.ext.findColor
 
 
 class FingerprintAuthDialogFragment : DialogFragment() {
@@ -37,7 +37,8 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     private var fingerPrintDialogListener: FingerPrintDialogListener? = null
     private var authFingerprintDisposable = Disposables.empty()
     private var fingerprintDisposable = Disposables.empty()
-    private var mode = CRYPT
+    private var mode: Int? = CRYPT
+    private var handler = Handler()
 
     init {
         setFingerPrintDialogListener(object : FingerPrintDialogListener {})
@@ -56,13 +57,14 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         view.text_cancel.click {
             fingerPrintDialogListener?.onCancelButtonClicked(this.dialog, it)
         }
-        mode = arguments.getInt(KEY_INTENT_MODE, CRYPT)
+        mode = arguments?.getInt(KEY_INTENT_MODE, CRYPT)
         return view
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onDefaultState()
+
     }
 
     private fun createDisposable() {
@@ -74,7 +76,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         }
 
         when (mode) {
-            CRYPT -> authFingerprintDisposable = RxFingerprint.authenticate(activity)
+            CRYPT -> authFingerprintDisposable = RxFingerprint.authenticate(requireActivity())
                     .subscribe(
                             { result ->
                                 when (result?.result) {
@@ -97,11 +99,11 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     private fun crypt() {
-        val guid = arguments.getString(KEY_INTENT_GUID, "")
-        val passCode = arguments.getString(KEY_INTENT_PASS_CODE, "")
+        val guid = arguments?.getString(KEY_INTENT_GUID, "") ?: ""
+        val passCode = arguments?.getString(KEY_INTENT_PASS_CODE, "") ?: ""
         fingerprintDisposable = RxFingerprint.encrypt(
                 EncryptionMethod.RSA,
-                activity,
+                requireActivity(),
                 guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE,
                 passCode)
                 .subscribe(
@@ -122,8 +124,8 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     private fun decrypt() {
-        val guid = arguments.getString(KEY_INTENT_GUID, "")
-        fingerprintDisposable = RxFingerprint.decrypt(EncryptionMethod.RSA, activity,
+        val guid = arguments?.getString(KEY_INTENT_GUID, "") ?: ""
+        fingerprintDisposable = RxFingerprint.decrypt(EncryptionMethod.RSA, requireActivity(),
                 guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE,
                 App.getAccessManager().getEncryptedPassCode(guid))
                 .subscribe(
@@ -141,7 +143,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                         },
                         {
                             if (RxFingerprint.keyInvalidated(it)) {
-                                showErrorMessage(activity.getString(
+                                showErrorMessage(requireActivity().getString(
                                         R.string.fingerprint_fatal_error_key_invalidate),
                                         "decypt", it)
                             } else {
@@ -172,20 +174,25 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         dispose()
     }
 
+    override fun onDestroyView() {
+        handler.removeCallbacksAndMessages(null)
+        super.onDestroyView()
+    }
+
     private fun onSuccessRecognizedFingerprint() {
         fingerprintState = FingerprintState.SUCCESS
 
         image_fingerprint_state.setImageResource(R.drawable.ic_fingerprint_recognized_48_submit_300)
-        text_fingerprint_state.setTextColor(ContextCompat.getColor(activity, R.color.black))
+        text_fingerprint_state.setTextColor(findColor(R.color.black))
         text_fingerprint_state.setText(R.string.fingerprint_dialog_recognized)
     }
 
     private fun onDefaultState() {
         fingerprintState = FingerprintState.DEFAULT
 
-        image_fingerprint_state.setImageResource(R.drawable.ic_fingerprint_sensor_48_submit_300)
-        text_fingerprint_state.setTextColor(ContextCompat.getColor(activity, R.color.disabled500))
-        text_fingerprint_state.setText(R.string.fingerprint_dialog_hint)
+        image_fingerprint_state?.setImageResource(R.drawable.ic_fingerprint_sensor_48_submit_300)
+        text_fingerprint_state?.setTextColor(findColor(R.color.disabled500))
+        text_fingerprint_state?.setText(R.string.fingerprint_dialog_hint)
 
         createDisposable()
     }
@@ -194,7 +201,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         fingerprintState = FingerprintState.LOCKED
 
         image_fingerprint_state.setImageResource(R.drawable.ic_fingerprint_lock_48_submit_300)
-        text_fingerprint_state.setTextColor(ContextCompat.getColor(activity, R.color.error500))
+        text_fingerprint_state.setTextColor(findColor(R.color.error500))
         text_fingerprint_state.setText(R.string.fingerprint_dialog_too_many_attempts)
     }
 
@@ -202,12 +209,12 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         fingerprintState = FingerprintState.NOT_RECOGNIZED
 
         image_fingerprint_state.setImageResource(R.drawable.ic_fingerprint_sensor_48_submit_300)
-        text_fingerprint_state.setTextColor(ContextCompat.getColor(activity, R.color.error500))
+        text_fingerprint_state.setTextColor(findColor(R.color.error500))
         text_fingerprint_state.setText(R.string.fingerprint_dialog_not_recognized)
 
         dispose()
 
-        Handler().postDelayed({
+        handler.postDelayed({
             if (fingerprintState == FingerprintState.NOT_RECOGNIZED
                     || fingerprintState == FingerprintState.DEFAULT) {
                 onDefaultState()
