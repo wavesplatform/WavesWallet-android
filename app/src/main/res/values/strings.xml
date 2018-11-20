@@ -85,6 +85,7 @@
     <string name="buy_and_sell_expiration_dialog_negative_btn">CANCEL</string>
     <string name="buy_and_sell_expiration_dialog_positive_btn">OK</string>
     <string name="buy_and_sell_expiration_dialog_title">Choose expiration</string>
+    <string name="buy_and_sell_fee_error">You don\'t have enough Waves to pay the required fees.</string>
     <string name="buy_and_sell_fee">Fee</string>
     <string name="buy_and_sell_last">Last</string>
     <string name="buy_and_sell_limit_price_in">Limit Price in %1$s</string>
@@ -329,7 +330,7 @@
     <string name="leasing_history_toolbar_title">History</string>
     <string name="left_drawer_description">Keep up with the latest news and articles, and find out all about events happening on the Waves Platform</string>
     <string name="left_drawer_join_the_waves_community">Join the Waves Community</string>
-    <string name="left_drawer_site">wavesplatform.com</string>
+    <string name="left_drawer_site">forum.wavesplatform.com</string>
     <string name="left_drawer_support">Support Wavesplatform</string>
     <string name="left_drawer_terms_and_conditions">Terms and conditions</string>
     <string name="left_drawer_whitepaper">Whitepaper</string>

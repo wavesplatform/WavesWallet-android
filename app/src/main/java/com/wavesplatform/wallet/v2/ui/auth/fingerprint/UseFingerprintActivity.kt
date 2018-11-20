@@ -32,7 +32,7 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
 
             val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
             fingerprintDialog.isCancelable = false
-            fingerprintDialog.show(fragmentManager, "fingerprintDialog")
+            fingerprintDialog.show(supportFragmentManager, "fingerprintDialog")
             fingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint() {

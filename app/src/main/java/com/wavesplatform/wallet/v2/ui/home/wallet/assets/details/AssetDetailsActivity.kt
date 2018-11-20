@@ -60,7 +60,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
                         view_pager.setPagingEnabled(false)
                         toolbar_view.title = text_asset_name.text.toString()
                         presenter.isShow = true
-                    } else if(presenter.isShow) {
+                    } else if (presenter.isShow) {
                         view_pager.setPagingEnabled(true)
                         toolbar_view.title = " "
                         presenter.isShow = false
@@ -123,7 +123,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         adapterAvatar.notifyDataSetChanged()
         view_pager.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0), false)
         view_pager.post {
-            if (view_pager.beginFakeDrag()) {
+            if (view_pager.beginFakeDrag() && adapterAvatar.count != 0) {
                 view_pager.fakeDragBy(0f)
                 view_pager.endFakeDrag()
             }

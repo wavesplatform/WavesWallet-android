@@ -399,47 +399,49 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     }
 
     private fun updateCandles(candles: List<CandleEntry>, barEntries: List<BarEntry>) {
-        val barData = BarData()
-        val baseDataSet = bar_chart.barData.getDataSetByIndex(0) as BarDataSet
+        if (bar_chart != null && candle_chart != null) {
+            val barData = BarData()
+            val baseDataSet = bar_chart.barData.getDataSetByIndex(0) as BarDataSet
 
-        barEntries.iterator().forEach {
-            baseDataSet.addEntry(it)
+            barEntries.iterator().forEach {
+                baseDataSet.addEntry(it)
+            }
+
+            Collections.sort(baseDataSet.values, EntryXComparator())
+            barData.addDataSet(baseDataSet)
+
+            val candleDataSet = candle_chart.candleData.getDataSetByIndex(0) as CandleDataSet
+            val prevCnt = candleDataSet.entryCount
+            val lastPoint = candleDataSet.getEntryForIndex(0)
+
+            candles.iterator().forEach {
+                candleDataSet.addEntry(it)
+            }
+
+            Collections.sort(candleDataSet.values, EntryXComparator())
+            val candleData = CandleData()
+            candleData.addDataSet(candleDataSet)
+
+            candle_chart.data = candleData
+            bar_chart.data = barData
+
+            candle_chart.moveViewToX(lastPoint.x)
+            bar_chart.moveViewToX(lastPoint.x)
+
+            val zoom = if (prevCnt > 0) candleDataSet.entryCount.toFloat() / prevCnt else 0.0f
+
+            candle_chart.zoomToCenter(zoom, 0.0f)
+            candle_chart.setVisibleXRangeMinimum(5f)
+            candle_chart.setVisibleXRangeMaximum(100f)
+            candle_chart.notifyDataSetChanged()
+
+            bar_chart.zoomToCenter(zoom, 0.0f)
+            bar_chart.setVisibleXRangeMinimum(5f)
+            bar_chart.setVisibleXRangeMaximum(100f)
+            bar_chart.notifyDataSetChanged()
+
+            isLoading = false
         }
-
-        Collections.sort(baseDataSet.values, EntryXComparator())
-        barData.addDataSet(baseDataSet)
-
-        val candleDataSet = candle_chart.candleData.getDataSetByIndex(0) as CandleDataSet
-        val prevCnt = candleDataSet.entryCount
-        val lastPoint = candleDataSet.getEntryForIndex(0)
-
-        candles.iterator().forEach {
-            candleDataSet.addEntry(it)
-        }
-
-        Collections.sort(candleDataSet.values, EntryXComparator())
-        val candleData = CandleData()
-        candleData.addDataSet(candleDataSet)
-
-        candle_chart.data = candleData
-        bar_chart.data = barData
-
-        candle_chart.moveViewToX(lastPoint.x)
-        bar_chart.moveViewToX(lastPoint.x)
-
-        val zoom = if (prevCnt > 0) candleDataSet.entryCount.toFloat() / prevCnt else 0.0f
-
-        candle_chart.zoomToCenter(zoom, 0.0f)
-        candle_chart.setVisibleXRangeMinimum(5f)
-        candle_chart.setVisibleXRangeMaximum(100f)
-        candle_chart.notifyDataSetChanged()
-
-        bar_chart.zoomToCenter(zoom, 0.0f)
-        bar_chart.setVisibleXRangeMinimum(5f)
-        bar_chart.setVisibleXRangeMaximum(100f)
-        bar_chart.notifyDataSetChanged()
-
-        isLoading = false
     }
 
 

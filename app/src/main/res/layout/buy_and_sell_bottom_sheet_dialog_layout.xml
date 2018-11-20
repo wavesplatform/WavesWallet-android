@@ -36,12 +36,21 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <com.wavesplatform.wallet.v2.ui.custom.SwipeDisableViewPager
-        android:id="@+id/viewpager_buy_sell"
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/stl_buy_sell"
+        android:background="@color/white"
+        android:fillViewport="true"
         android:overScrollMode="never"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.wavesplatform.wallet.v2.ui.custom.SwipeDisableViewPager
+            android:id="@+id/viewpager_buy_sell"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/stl_buy_sell"
+            android:overScrollMode="never" />
+    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

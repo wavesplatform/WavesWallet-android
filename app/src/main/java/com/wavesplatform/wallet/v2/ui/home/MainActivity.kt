@@ -219,9 +219,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         }
         when (tab?.position) {
             QUICK_ACTION_SCREEN -> {
-                val quickActionDialog = QuickActionBottomSheetFragment()
-                quickActionDialog.show(supportFragmentManager,
-                        quickActionDialog::class.java.simpleName)
+                showQuickActionDialog()
             }
         }
     }
@@ -241,11 +239,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 toolbar_general.title = getString(R.string.dex_toolbar_title)
             }
             QUICK_ACTION_SCREEN -> {
-                val quickActionDialog = fragments[QUICK_ACTION_SCREEN]
-                if (quickActionDialog is QuickActionBottomSheetFragment) {
-                    quickActionDialog.show(supportFragmentManager,
-                            quickActionDialog::class.java.simpleName)
-                }
+                showQuickActionDialog()
             }
             HISTORY_SCREEN -> {
                 showNewTabFragment(fragments[HISTORY_SCREEN])
@@ -262,8 +256,17 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         }
     }
 
+    private fun showQuickActionDialog() {
+        val quickActionDialog = fragments[QUICK_ACTION_SCREEN]
+        if (quickActionDialog is QuickActionBottomSheetFragment) {
+            val ft = supportFragmentManager.beginTransaction()
+            ft.add(quickActionDialog, quickActionDialog::class.java.simpleName)
+            ft.commitAllowingStateLoss()
+        }
+    }
+
     private fun showNewTabFragment(fragment: Fragment) {
-        if (!supportFragmentManager.fragments.contains(fragment)) {
+        if (supportFragmentManager.findFragmentByTag(fragment::class.java.simpleName) == null) {
             supportFragmentManager.beginTransaction().hide(activeFragment).add(R.id.frame_fragment_container, fragment, fragment::class.java.simpleName).show(fragment).commitAllowingStateLoss()
         } else {
             supportFragmentManager.beginTransaction().hide(activeFragment).show(fragment).commitAllowingStateLoss()
