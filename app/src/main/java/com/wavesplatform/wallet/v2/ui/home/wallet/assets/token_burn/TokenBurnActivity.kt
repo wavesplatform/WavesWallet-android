@@ -7,6 +7,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
+import com.wavesplatform.wallet.v2.util.clearBalance
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_token_burn.*
 import pers.victor.ext.addTextChangedListener
@@ -42,8 +43,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         text_asset_value.text = assetBalance.getDisplayAvailableBalance()
 
         text_use_total_balance.click {
-            edit_amount.setText(assetBalance.getDisplayAvailableBalance()
-                    .replace(",", ""))
+            edit_amount.setText(assetBalance.getDisplayAvailableBalance().clearBalance())
         }
 
         button_continue.isEnabled = true
@@ -72,6 +72,5 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
     companion object {
         const val KEY_INTENT_ASSET_BALANCE = "asset_balance"
         const val KEY_INTENT_AMOUNT = "amount"
-
     }
 }
