@@ -122,7 +122,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             edit_amount.text.toString()
         }
 
-        val assetId = if (presenter.assetBalance!!.assetId.isNullOrEmpty()) {
+        val assetId = if (presenter.assetBalance?.assetId.isNullOrEmpty()) {
             "WAVES"
         } else {
             presenter.assetBalance!!.assetId!!
