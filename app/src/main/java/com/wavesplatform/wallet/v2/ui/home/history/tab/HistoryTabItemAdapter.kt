@@ -90,12 +90,12 @@ class HistoryTabItemAdapter @Inject constructor() :
                         when (it) {
                             TransactionType.SENT_TYPE -> {
                                 item.data.amount.notNull {
-                                    view.text_transaction_value.text = "-${MoneyUtil.getScaledText(it, item.data.asset)}"
+                                    view.text_transaction_value.text = "-${MoneyUtil.getScaledText(it, item.data.asset).stripZeros()}"
                                 }
                             }
                             TransactionType.RECEIVED_TYPE -> {
                                 item.data.amount.notNull {
-                                    view.text_transaction_value.text = "+${MoneyUtil.getScaledText(it, item.data.asset)}"
+                                    view.text_transaction_value.text = "+${MoneyUtil.getScaledText(it, item.data.asset).stripZeros()}"
                                 }
                             }
                             TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE, TransactionType.MASS_RECEIVE_TYPE -> {
@@ -115,11 +115,11 @@ class HistoryTabItemAdapter @Inject constructor() :
 
 
                                 if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                                    view.text_transaction_name.text = "-${MoneyUtil.getScaledText(item.data.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.name}"
-                                    view.text_transaction_value.text = "+${MoneyUtil.getScaledText(item.data.amount?.times(item.data.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
+                                    view.text_transaction_name.text = "-${MoneyUtil.getScaledText(item.data.amount, myOrder.assetPair?.amountAssetObject).stripZeros()} ${myOrder.assetPair?.amountAssetObject?.name}"
+                                    view.text_transaction_value.text = "+${MoneyUtil.getScaledText(item.data.amount?.times(item.data.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
                                 } else {
-                                    view.text_transaction_name.text = "+${MoneyUtil.getScaledText(item.data.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.name}"
-                                    view.text_transaction_value.text = "-${MoneyUtil.getScaledText(item.data.amount?.times(item.data.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
+                                    view.text_transaction_name.text = "+${MoneyUtil.getScaledText(item.data.amount, myOrder?.assetPair?.amountAssetObject).stripZeros()} ${myOrder?.assetPair?.amountAssetObject?.name}"
+                                    view.text_transaction_value.text = "-${MoneyUtil.getScaledText(item.data.amount?.times(item.data.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
                                 }
 
                                 showTag = Constants.defaultAssets.any {
@@ -145,7 +145,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.CANCELED_LEASING_TYPE -> {
                                 item.data.lease?.amount.notNull {
                                     view.text_transaction_value.text =
-                                            MoneyUtil.getScaledText(it.toLong(), item.data.asset)
+                                            MoneyUtil.getScaledText(it.toLong(), item.data.asset).stripZeros()
                                 }
                             }
                             TransactionType.TOKEN_GENERATION_TYPE -> {
@@ -157,7 +157,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.TOKEN_BURN_TYPE -> {
                                 item.data.amount.notNull {
                                     view.text_transaction_value.text =
-                                            "-${MoneyUtil.getScaledText(it, item.data.asset)}"
+                                            "-${MoneyUtil.getScaledText(it, item.data.asset).stripZeros()}"
                                 }
                             }
                             TransactionType.TOKEN_REISSUE_TYPE -> {
@@ -176,7 +176,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                             }
                             else -> {
                                 item.data.amount.notNull {
-                                    view.text_transaction_value.text = MoneyUtil.getScaledText(it, item.data.asset)
+                                    view.text_transaction_value.text = MoneyUtil.getScaledText(it, item.data.asset).stripZeros()
                                 }
                             }
                         }
@@ -214,7 +214,7 @@ class HistoryTabItemAdapter @Inject constructor() :
     private fun setSpamTitle(transaction: Transaction, it: TransactionType, view: AppCompatTextView) {
         if (transaction.transfers.isNotEmpty()) {
             val sum = transaction.transfers.sumByLong { it.amount }
-            val sumString = MoneyUtil.getScaledText(sum, transaction.asset).trim()
+            val sumString = MoneyUtil.getScaledText(sum, transaction.asset).trim().stripZeros()
             if (!sumString.isEmpty()) {
                 if (it == TransactionType.MASS_SPAM_RECEIVE_TYPE || it == TransactionType.MASS_RECEIVE_TYPE) {
                     view.text = "+$sumString"
@@ -225,7 +225,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                 view.text = ""
             }
         } else {
-            view.text = "${MoneyUtil.getScaledText(transaction.amount, transaction.asset)}"
+            view.text = "${MoneyUtil.getScaledText(transaction.amount, transaction.asset)}".stripZeros()
         }
     }
 }

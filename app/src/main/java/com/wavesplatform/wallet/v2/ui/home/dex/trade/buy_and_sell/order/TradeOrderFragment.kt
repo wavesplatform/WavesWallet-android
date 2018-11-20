@@ -66,6 +66,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
         presenter.getMatcherKey()
         presenter.getBalanceFromAssetPair()
+        presenter.loadWavesBalance()
 
         CounterHandler.Builder()
                 .valueView(edit_amount)
@@ -129,9 +130,11 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 .map {
                     presenter.amountValidation = it.isNotEmpty()
                     if (it.isNotEmpty()) {
+                        horizontal_amount_suggestion.gone()
                         text_amount_error.text = ""
                         text_amount_error.invisiable()
                     } else {
+                        horizontal_amount_suggestion.visiable()
                         text_amount_error.text = getString(R.string.buy_and_sell_required)
                         text_amount_error.visiable()
                     }
@@ -235,13 +238,22 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                         text_limit_price_error.text = getString(R.string.buy_and_sell_required)
                         text_limit_price_error.visiable()
                     }
+                    presenter.wavesBalance.getAvailableBalance().notNull { wavesBalance ->
+                        if (wavesBalance < Constants.WAVES_DEX_FEE) {
+                            linear_fees_error.visiable()
+                        } else {
+                            linear_fees_error.gone()
+                        }
+                    }
+
                     if (presenter.humanTotalTyping) {
                         if (!edit_total_price.text.isNullOrEmpty() && !edit_limit_price.text.isNullOrEmpty()) {
                             if (edit_limit_price.text.toString().toDouble() != 0.0) {
                                 edit_amount.setText(
                                         (edit_total_price.text.toString().toDouble() / edit_limit_price.text.toString().toDouble())
                                                 .roundToDecimals(presenter.data?.watchMarket?.market?.amountAssetDecimals)
-                                                .toString()
+                                                .toBigDecimal()
+                                                .toPlainString()
                                                 .stripZeros())
                             }
                         }
@@ -370,9 +382,19 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     override fun successLoadPairBalance(pairBalance: LinkedTreeMap<String, Long>) {
         pairBalance[presenter.data?.watchMarket?.market?.amountAsset].notNull { balance ->
             linear_percent_values.children.forEach { children ->
+                var balance = balance
                 val quickBalanceView = children as AppCompatTextView
                 when (quickBalanceView.tag) {
                     TOTAL_BALANCE -> {
+                        if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true) {
+                            if (balance < Constants.WAVES_DEX_FEE) {
+                                balance = 0
+                                linear_fees_error.visiable()
+                            } else {
+                                balance -= Constants.WAVES_DEX_FEE
+                                linear_fees_error.gone()
+                            }
+                        }
                         quickBalanceView.click {
                             edit_amount.setText((MoneyUtil.getScaledText(balance, presenter.data?.watchMarket?.market?.amountAssetDecimals
                                     ?: 0)).clearBalance())

@@ -8,11 +8,13 @@ import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.request.OrderRequest
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.ErrorResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.clearBalance
 import com.wavesplatform.wallet.v2.util.isWaves
 import pers.victor.ext.currentTimeMillis
 import java.math.RoundingMode
@@ -22,6 +24,7 @@ import javax.inject.Inject
 class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>() {
     var data: BuySellData? = BuySellData()
     var orderRequest: OrderRequest = OrderRequest()
+    var wavesBalance: AssetBalance = AssetBalance()
 
     var humanTotalTyping = false
 
@@ -44,12 +47,19 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
         return priceValidation && amountValidation && totalPriceValidation
     }
 
-
     fun getMatcherKey() {
         addSubscription(matcherDataManager.getMatcherKey()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     orderRequest.matcherPublicKey = it
+                })
+    }
+
+    fun loadWavesBalance() {
+        addSubscription(nodeDataManager.loadWavesBalance()
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe {
+                    wavesBalance = it
                 })
     }
 
@@ -68,9 +78,9 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     fun createOrder(amount: String, price: String) {
         viewState.showProgressBar(true)
 
-        orderRequest.amount = amount.toBigDecimal().setScale(data?.watchMarket?.market?.amountAssetDecimals
+        orderRequest.amount = amount.clearBalance().toBigDecimal().setScale(data?.watchMarket?.market?.amountAssetDecimals
                 ?: 0, RoundingMode.HALF_UP).unscaledValue().toLong()
-        orderRequest.price = price.toBigDecimal().setScale((8.plus(data?.watchMarket?.market?.priceAssetDecimals
+        orderRequest.price = price.clearBalance().toBigDecimal().setScale((8.plus(data?.watchMarket?.market?.priceAssetDecimals
                 ?: 0).minus(data?.watchMarket?.market?.amountAssetDecimals
                 ?: 0)), RoundingMode.HALF_UP).unscaledValue().toLong()
 

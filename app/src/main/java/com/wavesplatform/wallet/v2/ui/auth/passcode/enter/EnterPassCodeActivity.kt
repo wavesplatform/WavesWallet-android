@@ -172,7 +172,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
 
     private fun showFingerPrint() {
         fingerprintDialog.isCancelable = false
-        fingerprintDialog.show(fragmentManager, "fingerprintDialog")
+        fingerprintDialog.show(supportFragmentManager, "fingerprintDialog")
     }
 
     override fun onBackPressed() {

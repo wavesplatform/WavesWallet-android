@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.base.view
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
@@ -69,7 +68,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
         slidingRootNav.layout.linear_drawer.scaleX = 1.5f
         slidingRootNav.layout.linear_drawer.scaleY = 1.5f
         slidingRootNav.layout.text_site.paintFlags = slidingRootNav.layout.text_site.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        slidingRootNav.layout.text_site.click { openUrlWithChromeTab(Constants.URL_WAVES) }
+        slidingRootNav.layout.text_site.click { openUrlWithChromeTab(Constants.URL_WAVES_FORUM) }
         slidingRootNav.layout.text_whitepaper.click { openUrlWithIntent(Constants.URL_WHITEPAPER) }
         slidingRootNav.layout.text_terms.click { openUrlWithIntent(Constants.URL_TERMS) }
         slidingRootNav.layout.text_support.click { openUrlWithIntent(Constants.SUPPORT_SITE) }

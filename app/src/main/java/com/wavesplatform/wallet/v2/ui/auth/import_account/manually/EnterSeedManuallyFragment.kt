@@ -92,8 +92,6 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
             }
         }
 
-        edit_seed.imeOptions = EditorInfo.IME_ACTION_DONE
-        edit_seed.setRawInputType(InputType.TYPE_CLASS_TEXT)
         edit_seed.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE && button_continue.isEnabled) {
                 launchActivity<ProtectAccountActivity> {
