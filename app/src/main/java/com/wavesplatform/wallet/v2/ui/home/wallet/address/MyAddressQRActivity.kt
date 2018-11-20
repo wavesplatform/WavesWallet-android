@@ -27,27 +27,6 @@ import javax.inject.Inject
 
 
 class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
-    override fun afterSuccessLoadAliases(ownAliases: List<Alias>) {
-        card_aliases.click {
-            val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
-            if (ownAliases.isEmpty()) {
-                text_aliases_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
-                bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
-            } else {
-                text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
-                bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
-            }
-            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
-        }
-    }
-
-    override fun afterSuccessGenerateAvatar(bitmap: Bitmap, imageView: AppCompatImageView) {
-        Glide.with(applicationContext)
-                .load(bitmap)
-                .apply(RequestOptions()
-                        .circleCrop())
-                .into(imageView)
-    }
 
     @Inject
     @InjectPresenter
@@ -98,6 +77,7 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
 
         presenter.generateAvatars(App.getAccessManager().getWallet()?.address, image_avatar)
         presenter.generateQRCode(App.getAccessManager().getWallet()?.address, resources.getDimension(R.dimen._200sdp).toInt())
+
         presenter.loadAliases()
     }
 
@@ -111,4 +91,30 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text_address.text)
         startActivity(Intent.createChooser(sharingIntent, resources.getString(R.string.app_name)))
     }
+
+    override fun afterSuccessLoadAliases(ownAliases: List<Alias>) {
+        if (ownAliases.isEmpty()) {
+            text_aliases_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
+        } else {
+            text_aliases_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
+        }
+        card_aliases.click {
+            val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
+            if (ownAliases.isEmpty()) {
+                bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
+            } else {
+                bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
+            }
+            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+        }
+    }
+
+    override fun afterSuccessGenerateAvatar(bitmap: Bitmap, imageView: AppCompatImageView) {
+        Glide.with(applicationContext)
+                .load(bitmap)
+                .apply(RequestOptions()
+                        .circleCrop())
+                .into(imageView)
+    }
+
 }
