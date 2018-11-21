@@ -17,8 +17,6 @@ import javax.inject.Inject;
 public class PrefsUtil {
 
     public static final String GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment";
-    @Deprecated
-    public static final String GLOBAL_LOGGED_IN_GUID = "global_logged_in_wallet_guid";
     public static final String GLOBAL_LAST_LOGGED_IN_GUID = "global_logged_in_wallet_guid";
     public static final String GLOBAL_SCHEME_URL = "scheme_url";
     public static final String LIST_WALLET_GUIDS = "list_wallet_guid";
@@ -43,22 +41,6 @@ public class PrefsUtil {
     public static final String KEY_LAST_UPDATE_DEX_INFO = "last_update_dex_info";
 
     public static final String KEY_GLOBAL_NODE_COOKIES = "node_cookies";
-
-    public static final String KEY_AB_NAMES = "address_book_names";
-    public static final String KEY_AB_ADDRESSES = "address_book_addresses";
-
-    public static final String KEY_DISABLE_ROOT_WARNING = "disable_root_warning";
-    public static final String KEY_BACKUP_DATE_KEY = "backup_date_key";
-    public static final String KEY_LAST_BACKUP_PROMPT = "last_backup_prompt";
-    public static final String KEY_SECURITY_BACKUP_NEVER = "security_backup_never";
-    public static final String KEY_ENCRYPTED_PIN_CODE = "encrypted_pin_code";
-
-    public static final String KEY_FINGERPRINT_ENABLED = "fingerprint_enabled";
-    public static final String KEY_SHARED_KEY = "sharedKey";
-    public static final String KEY_NEWLY_CREATED_WALLET = "newly_created_wallet";
-    public static final String LOGGED_OUT = "logged_out";
-    public static final String KEY_RECEIVE_SHORTCUTS_ENABLED = "receive_shortcuts_enabled";
-    public static final String KEY_DONT_ASK_AGAIN_ORDER = "dont_ask_again_order";
 
     private SharedPreferences preferenceManager;
 
@@ -205,7 +187,7 @@ public class PrefsUtil {
      * Clears everything but the GUID for logging back in
      */
     public void logOut() {
-        removeGlobalValue(PrefsUtil.GLOBAL_LOGGED_IN_GUID);
+        removeGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID);
     }
 
     public void addGlobalListValue(String name, String value) {

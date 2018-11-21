@@ -19,6 +19,7 @@ import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
+import com.wavesplatform.wallet.v2.util.MigrationUtil
 import com.wavesplatform.wallet.v2.util.deleteRecursive
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -112,6 +113,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
             prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet!!.getEncryptedData(password))
             authHelper.configureDB(wallet?.address)
+            MigrationUtil.checkOldAddressBook(prefs, loggedInGuid)
             if (skipBackup) {
                 prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, true)
             }
@@ -200,6 +202,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         wallet = WavesWallet(getWalletData(guid), password)
         setLastLoggedInGuid(guid)
         authHelper.configureDB(wallet?.address)
+        MigrationUtil.checkOldAddressBook(prefs, guid)
     }
 
     fun getWallet(): WavesWallet? {

@@ -47,7 +47,7 @@ public class TransferTransactionRequest {
                     Base58.decode(recipient),
                     SignUtil.arrayWithSize(attachment));
         } catch (Exception e) {
-            Log.e("Wallet", "Couldn't create seed", e);
+            Log.e("Wallet", "Couldn't create transaction sign", e);
             return new byte[0];
         }
     }

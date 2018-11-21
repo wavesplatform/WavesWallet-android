@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_fill_payment_details">Usted DEBE completar las especificaciones de pago con la siguiente información:</string>
-    <string name="about_fill_payment_info"><![CDATA[CNM - <su dirección de WAVES>. \nSi no lo hace, no podemos acreditar su cuenta.]]></string>
+    <string name="about_fill_payment_info">CNM — su dirección de WAVES. \nSi no lo hace, no podemos acreditar su cuenta.</string>
     <string name="about_redirection_message">Después de realizar la verificación, recibirá un correo electrónico con más instrucciones.</string>
     <string name="about_redirection_okay">Ok</string>
     <string name="about_redirection_title">Fuiste redirigido a la «IDNow» \npara la verificación</string>
@@ -125,7 +125,7 @@
     <string name="chart_change_interval_dialog_ok">OK</string>
     <string name="chart_change_interval_dialog_title">Cambiar intervalo</string>
     <string name="chart_empty">No hay datos de gráficos disponibles</string>
-    <string name="chart_loading">Cargando gráfico …</string>
+    <string name="chart_loading">Cargando gráfico…</string>
     <string name="chart_time_frame_15_min">15 minutos</string>
     <string name="chart_time_frame_1_hour">1 hora</string>
     <string name="chart_time_frame_24_hours">24 horas</string>
@@ -165,8 +165,8 @@
     <string name="common_market_error">No se puede encontrar la aplicación de mercado</string>
     <string name="common_msg_in_development">Lo sentimos, esta artículo estará disponible en un futuro próximo.</string>
     <string name="common_or">o</string>
-    <string name="common_persist"><![CDATA[&]]></string>
-    <string name="confirm_backup">Confirmar el respaldo </string>
+    <string name="common_persist">&#x26;</string>
+    <string name="confirm_backup">Confirmar el respaldo</string>
     <string name="confirm_backup_confirm">Confirmar</string>
     <string name="confirm_backup_error">Orden equivocada, inténtalo de nuevo</string>
     <string name="confirm_backup_info">Por favor, ponga cada palabra en el orden correcto</string>
@@ -310,9 +310,9 @@
     <string name="history_type_token_reissue">%s Token Re-emitido</string>
     <string name="history_type_unrecognised">Transacción no reconocida</string>
     <string name="import_account_click_show_pairing">Haga clic en «Mostrar código» para revelar un código QR</string>
-    <string name="import_account_login_at_site">Inicie sesión en su cliente Waves a través de la web o Mac/PC</string>
+    <string name="import_account_login_at_site">Log in to your Waves Client via your PC or Mac</string>
     <string name="import_account_scan_pairing_code">Escanear código de emparejamiento</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Ajustes > Seguridad > Código de emparejamiento]]></string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Ajustes — Seguridad — Código de emparejamiento</string>
     <string name="import_account_tab_manually">Manualmente</string>
     <string name="import_account_tab_scan">Escanear</string>
     <string name="import_account_toolbar_title">Importar cuenta</string>
@@ -437,14 +437,14 @@
     <string name="receive_address_generate">Generar…</string>
     <string name="receive_address_link_to_invoice">Enlace a una factura</string>
     <string name="receive_address_share">Compartir</string>
-    <string name="receive_address_view_toolbar">Tu dirección de Bitcoin</string>
+    <string name="receive_address_view_toolbar">Tu dirección de %1$s</string>
     <string name="receive_address_waves_address">Tu dirección de Waves</string>
     <string name="receive_address_your_qr_code">Su código QR</string>
     <string name="receive_amount">Cantidad</string>
     <string name="receive_amount_title">Cantidad en %1$s</string>
     <string name="receive_asset">Activo</string>
     <string name="receive_card">Tarjeta</string>
-    <string name="receive_contact_msg">En caso de problemas con la verificación o el procesamiento de pagos, comuníquese con el equipo de soporte de Coinomat  —support@coinomat.com</string>
+    <string name="receive_contact_msg">En caso de problemas con la verificación o el procesamiento de pagos, comuníquese con el equipo de soporte de Coinomat — support@coinomat.com</string>
     <string name="receive_contact_msg_key">support@coinomat.com</string>
     <string name="receive_continue">Continuar</string>
     <string name="receive_cryptocurrency">Criptomoneda</string>
@@ -501,7 +501,7 @@
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Las tarifas son del 1% del importe transferido.</string>
     <string name="send_gateway_info_gateway_fee">La comsión de salida es %1$s %2$s</string>
     <string name="send_gateway_info_gateway_limits">Detectamos la dirección %1$s y le enviaremos su dinero a través de la entrada de Coinomat a esa dirección. La cantidad mínima es %2$s %1$s, la cantidad máxima es %3$s %1$s.</string>
-    <string name="send_gateway_info_gateway_warning">No retire %1$sa un ICO. No acreditaremos a su cuenta con tokens de esa venta.</string>
+    <string name="send_gateway_info_gateway_warning">No retire %1$s a un ICO. No acreditaremos a su cuenta con tokens de esa venta.</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Si ha sido verificado y ha depositado dólares estadounidenses, puede retirar estos dólares nuevamente a su cuenta bancaria. De lo contrario, verifíquese por nuestro socio IDNow.eu</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">La cantidad mínima es de 500 dólares estadounidenses. Si tiene alguna pregunta, envíe un correo electrónico a support@coinomat.com</string>
     <string name="send_monero_payment_id">ID de pago para Monero</string>
