@@ -28,8 +28,6 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
 
     @Inject
     lateinit var coinomatManager: CoinomatManager
-    private var nodeManager = NodeManager.createInstance(
-            App.getAccessManager().getWallet()!!.publicKeyStr)
 
     var recipient: String? = ""
     var amount: String? = ""
@@ -80,7 +78,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             if (signedTransaction.recipient.length <= 30) {
                 signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()
             }
-            addSubscription(nodeManager.transactionsBroadcast(signedTransaction)
+            addSubscription(nodeDataManager.transactionsBroadcast(signedTransaction)
                     .compose(RxUtil.applySchedulersToObservable()).subscribe({ tx ->
                         tx.recipient = tx.recipient.clearAlias()
                         saveLastSentAddress(tx.recipient)
@@ -129,7 +127,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             return
         }
 
-        val currencyFrom = "W$currencyTo"
+        val currencyFrom = "${Constants.ADDRESS_SCHEME}$currencyTo"
 
         runAsync {
             val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY
@@ -163,7 +161,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                                 signedTransaction.recipient = signedTransaction
                                         .recipient.makeAsAlias()
                             }
-                            nodeManager.transactionsBroadcast(signedTransaction)
+                            nodeDataManager.transactionsBroadcast(signedTransaction)
                         }
                     }
                     .subscribe(

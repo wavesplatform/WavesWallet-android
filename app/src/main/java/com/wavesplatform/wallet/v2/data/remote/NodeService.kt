@@ -5,10 +5,7 @@ import com.wavesplatform.wallet.v1.payload.WavesBalance
 import com.wavesplatform.wallet.v1.request.IssueTransactionRequest
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
-import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
-import com.wavesplatform.wallet.v2.data.model.remote.request.BurnRequest
-import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
-import com.wavesplatform.wallet.v2.data.model.remote.request.CreateLeasingRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.*
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalances
 import com.wavesplatform.wallet.v2.data.model.remote.response.Height
@@ -47,6 +44,9 @@ interface NodeService {
 
     @GET("transactions/unconfirmed")
     fun unconfirmedTransactions(): Observable<List<Transaction>>
+
+    @POST("transactions/broadcast")
+    fun transactionsBroadcast(@Body tx: TransactionsBroadcastRequest): Observable<TransactionsBroadcastRequest>
 
     @GET("blocks/height")
     fun currentBlocksHeight(): Observable<Height>

@@ -23,4 +23,6 @@ class Events {
     class NeedUpdateMyOrdersScreen
     class UpdateMarketAfterChangeChartTimeFrame(var id: String?, var timeServer: Int)
     class UpdateButtonsPrice(var askPrice: Long?, var bidPrice: Long?)
+
+    class UpdateAssetsBalance
 }
