@@ -59,7 +59,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         }
 
         relative_sign_in.click {
-            launchActivity<ChooseAccountActivity>(clear = true, requestCode = REQUEST_SIGN_IN)
+            launchActivity<ChooseAccountActivity>(requestCode = REQUEST_SIGN_IN)
         }
 
         relative_import_acc.click {

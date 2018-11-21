@@ -18,7 +18,6 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.util.applySpaceFilter
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
@@ -60,8 +59,6 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         val accountPasswordValidation = Validation(til_account_password)
                 .and(NotEmptyRule(" "))
                 .and(EqualsAccountPasswordRule(R.string.change_password_validation_old_password_wrong_error, guid))
-
-        edit_account_password.applySpaceFilter()
 
         edit_account_password.addTextChangedListener {
             on { s, start, before, count ->

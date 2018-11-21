@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_fill_payment_details">Вы ДОЛЖНЫ заполнить данные платежа следующей информацией:</string>
-    <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>. \nIf you don’t we can’t credit your account.]]></string>
+    <string name="about_fill_payment_info">CNM — your WAVES address. \nIf you don’t we can’t credit your account.</string>
     <string name="about_redirection_message">После того, как вы пройдете проверку, вы получите электронное письмо с дальнейшими инструкциями</string>
     <string name="about_redirection_okay">Хорошо</string>
     <string name="about_redirection_title">Вы были перенаправлены на «IDNow» \nдля верификации</string>
@@ -58,7 +58,7 @@
     <string name="asset_details_waves_token">Waves токен</string>
     <string name="attachment_too_long">Слишком длинное описание</string>
     <string name="backup_hint">Посколько только вы контролируете ваши деньги, вам необходимо сохранить секретную фразу</string>
-    <string name="backup_hint_2">Введите 15 слов, которые вы сохранили при создании аккаунта</string>
+    <string name="backup_hint_2">Пожалуйста, внимательно запишите эти 15 слов или скопируйте их</string>
     <string name="backup_hint_3">Вам нужно будет восстановить эту фразу на следующем шаге</string>
     <string name="backup_info_button">Я понимаю</string>
     <string name="backup_info_subtitle">Платформа Waves предупреждает вас об участившихся случаях мошенничества и фишинга за последний месяц. Мошенники скрывают своё вредоносное ПО в своих версиях клиента Waves и предлагают многообещающие бонусы и скидки для привлечения пользователей. \n\nБудьте осторожны и никогда не вводите свой СИД в таких «клиентах», потому что ваша учетная запись будет скомпрометирована, и вы потеряете все свои деньги. \n\nПользуйтесь ТОЛЬКО официальным клиентом Waves.</string>
@@ -312,7 +312,7 @@
     <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
     <string name="import_account_login_at_site">Войдите в Waves клиент через свой PC, Mac</string>
     <string name="import_account_scan_pairing_code">Scan pairing code</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Settings > Security > Pairing code]]></string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Settings — Security — Pairing code</string>
     <string name="import_account_tab_manually">Вручную</string>
     <string name="import_account_tab_scan">Сканировать</string>
     <string name="import_account_toolbar_title">Импортировать акканут</string>
@@ -437,7 +437,7 @@
     <string name="receive_address_generate">Генерируем…</string>
     <string name="receive_address_link_to_invoice">Ссылка на выставленный счет</string>
     <string name="receive_address_share">Поделиться</string>
-    <string name="receive_address_view_toolbar">Ваш Bitcoin адрес</string>
+    <string name="receive_address_view_toolbar">Ваш %1$s адрес</string>
     <string name="receive_address_waves_address">Ваш Waves адрес</string>
     <string name="receive_address_your_qr_code">Ваш QR-код</string>
     <string name="receive_amount">Количество</string>
@@ -472,7 +472,7 @@
     <string name="receive_step_2_msg">После того, как вы пройдете проверку, вы получите электронное письмо с дальнейшими инструкциями</string>
     <string name="receive_step_url_link">https://www.idnow.eu/</string>
     <string name="receive_toolbar">Получить</string>
-    <string name="receive_use_same_waves_address"><![CDATA[You must use the same Waves address that you used to make KYC&ALM request. If you make a mistake or put a different Waves address we can’t credit your account.]]></string>
+    <string name="receive_use_same_waves_address">Вы должны использовать тот же самый адрес Waves, который использовался для KYC и ALM. Если вы допустили ошибку или поместили другой адрес Waves, мы не можем кредитовать ваш аккаунт.</string>
     <string name="receive_verified">Ваша аккаунт подтвержден</string>
     <string name="receive_warning_crypto">Отправляйте только %1$s на этот адрес</string>
     <string name="receive_warning_will_send">Если вы отправите меньше чем %1$s %2$s, вы потеряете деньги.</string>

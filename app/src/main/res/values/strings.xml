@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
-    <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>. \nIf you don’t we can’t credit your account.]]></string>
+    <string name="about_fill_payment_info">CNM — your WAVES address. \nIf you don’t we can’t credit your account.</string>
     <string name="about_redirection_message">After you go through the verification you will receive an email with further instructions</string>
     <string name="about_redirection_okay">Okay</string>
     <string name="about_redirection_title">You were redirected to the «IDNow» \nfor verification</string>
@@ -166,7 +166,7 @@
     <string name="common_market_error">Unable to find market app</string>
     <string name="common_msg_in_development">Sorry, this feature will be available in the near future</string>
     <string name="common_or">or</string>
-    <string name="common_persist"><![CDATA[&]]></string>
+    <string name="common_persist">&#x26;</string>
     <string name="confirm_backup">Confirm backup</string>
     <string name="confirm_backup_confirm">Confirm</string>
     <string name="confirm_backup_error">Wrong order, try again</string>
@@ -313,7 +313,7 @@
     <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
     <string name="import_account_login_at_site">Log in to your Waves Client via your PC or Mac</string>
     <string name="import_account_scan_pairing_code">Scan pairing code</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Settings > Security > Pairing code]]></string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Settings — Security — Pairing code</string>
     <string name="import_account_tab_manually">Manually</string>
     <string name="import_account_tab_scan">Scan</string>
     <string name="import_account_toolbar_title">Import account</string>
@@ -438,7 +438,7 @@
     <string name="receive_address_generate">Generate…</string>
     <string name="receive_address_link_to_invoice">Link to an Invoice</string>
     <string name="receive_address_share">Share</string>
-    <string name="receive_address_view_toolbar">Your Bitcoin address</string>
+    <string name="receive_address_view_toolbar">Your %1$s address</string>
     <string name="receive_address_waves_address">Your Waves address</string>
     <string name="receive_address_your_qr_code">Your QR Code</string>
     <string name="receive_amount">Amount</string>
@@ -473,7 +473,7 @@
     <string name="receive_step_2_msg">After you go through the verification you will receive an email with further instructions</string>
     <string name="receive_step_url_link">https://www.idnow.eu/</string>
     <string name="receive_toolbar">Receive</string>
-    <string name="receive_use_same_waves_address"><![CDATA[You must use the same Waves address that you used to make KYC&ALM request. If you make a mistake or put a different Waves address we can’t credit your account.]]></string>
+    <string name="receive_use_same_waves_address">You must use the same Waves address that you used to make KYC and ALM request. If you make a mistake or put a different Waves address we can’t credit your account.</string>
     <string name="receive_verified">Your account is verified</string>
     <string name="receive_warning_crypto">Send only %1$s to this deposit address</string>
     <string name="receive_warning_will_send">If you will send less than %1$s %2$s, you will lose that money.</string>
