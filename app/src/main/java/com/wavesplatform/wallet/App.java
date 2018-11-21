@@ -12,7 +12,9 @@ import android.util.Log;
 import com.akexorcist.localizationactivity.core.LocalizationApplicationDelegate;
 import com.crashlytics.android.Crashlytics;
 import com.github.moduth.blockcanary.BlockCanary;
+import com.google.firebase.FirebaseApp;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
+import com.squareup.leakcanary.LeakCanary;
 import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v1.util.AppUtil;
@@ -48,6 +50,11 @@ public class App extends DaggerApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        FirebaseApp.initializeApp(this);
+        LeakCanary.install(this);
         Fabric.with(this, new Crashlytics());
         sContext = this;
         BlockCanary.install(this, new AppBlockCanaryContext()).start();

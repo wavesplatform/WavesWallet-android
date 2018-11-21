@@ -260,12 +260,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     private fun showQuickActionDialog() {
-        val quickActionDialog = fragments[QUICK_ACTION_SCREEN]
-        if (quickActionDialog is QuickActionBottomSheetFragment) {
-            val ft = supportFragmentManager.beginTransaction()
-            ft.add(quickActionDialog, quickActionDialog::class.java.simpleName)
-            ft.commitAllowingStateLoss()
-        }
+        val quickActionDialog = QuickActionBottomSheetFragment.newInstance()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.add(quickActionDialog, quickActionDialog::class.java.simpleName)
+        ft.commitAllowingStateLoss()
     }
 
     private fun showNewTabFragment(fragment: Fragment) {
