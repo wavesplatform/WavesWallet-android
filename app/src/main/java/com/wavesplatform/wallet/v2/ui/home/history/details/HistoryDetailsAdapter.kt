@@ -142,14 +142,17 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 layout.text_tag.text = transaction.asset?.name
             } else {
                 layout.text_tag.gone()
-                layout.text_amount_or_title.text = "${layout.text_amount_or_title.text} ${transaction.asset?.name}"
+                layout.text_amount_or_title.text = "${layout.text_amount_or_title.text}" +
+                        " ${transaction.asset?.name}"
             }
         }
 
         if (queryFirst<SpamAsset> { equalTo("assetId", transaction.assetId) } != null) {
             layout.text_tag.gone()
             layout.text_tag_spam.visiable()
-            layout.text_amount_or_title.text = "${layout.text_amount_or_title.text}"
+            layout.text_amount_or_title.text =
+                    "${MoneyUtil.getScaledText(transaction.amount, transaction.asset).stripZeros()} " +
+                    "${transaction.asset?.name}"
         }
 
 

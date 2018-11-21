@@ -48,15 +48,6 @@
             tools:text="WAVES"
             tools:visibility="visible" />
 
-        <com.wavesplatform.wallet.v2.ui.custom.SpamTag
-            android:id="@+id/text_tag_spam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="4dp"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatTextView
@@ -69,6 +60,15 @@
         android:textSize="12sp"
         android:visibility="gone"
         tools:text="≈ 00 000.00 US Dollar"
+        tools:visibility="visible" />
+
+    <com.wavesplatform.wallet.v2.ui.custom.SpamTag
+        android:id="@+id/text_tag_spam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
         tools:visibility="visible" />
 
 </LinearLayout>
