@@ -36,6 +36,10 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
 
     override fun configLayoutRes() = R.layout.activity_token_burn
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
@@ -124,6 +128,11 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
 
     private fun makeButtonEnableIfValid() {
         button_continue.isEnabled = presenter.isAllFieldsValid()
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     companion object {

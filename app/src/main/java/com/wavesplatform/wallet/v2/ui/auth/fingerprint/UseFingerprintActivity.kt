@@ -25,6 +25,11 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
 
     override fun configLayoutRes() = R.layout.activity_use_fingerprint
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         button_use_fingerprint.click { _ ->
             val passCode = intent.extras.getString(CreatePassCodeActivity.KEY_INTENT_PASS_CODE)

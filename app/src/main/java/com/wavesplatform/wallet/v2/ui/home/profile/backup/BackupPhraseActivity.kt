@@ -39,6 +39,11 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
 
     override fun configLayoutRes(): Int = R.layout.activity_backup_pharse
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view,  true,
                 getString(R.string.backup_pharse), R.drawable.ic_toolbar_back_black)
@@ -118,6 +123,11 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     companion object {

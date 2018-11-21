@@ -44,6 +44,12 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
 
     override fun configLayoutRes() = R.layout.activity_your_assets
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.white)
 
@@ -150,6 +156,11 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         val view = inflate(R.layout.layout_empty_data)
         view.text_empty.text = getString(R.string.your_assets_empty_state)
         return view
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     companion object {

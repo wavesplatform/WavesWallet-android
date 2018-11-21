@@ -34,6 +34,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
@@ -78,6 +79,11 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         button_okay.click {
             launchActivity<MainActivity>(clear = true)
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun onShowError(errorMessageRes: Int) {

@@ -53,6 +53,11 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
     override fun configLayoutRes(): Int = R.layout.activity_start_leasing
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
@@ -268,6 +273,11 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
 }

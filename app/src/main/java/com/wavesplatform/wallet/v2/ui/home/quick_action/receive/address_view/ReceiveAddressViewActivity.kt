@@ -40,6 +40,7 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
@@ -136,5 +137,10 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
 
     companion object {
         const val KEY_INTENT_QR_DATA = "intent_qr_data"
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

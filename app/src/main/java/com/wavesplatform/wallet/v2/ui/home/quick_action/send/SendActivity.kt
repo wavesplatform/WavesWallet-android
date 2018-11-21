@@ -73,6 +73,11 @@ class SendActivity : BaseActivity(), SendView {
     }
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
@@ -482,5 +487,10 @@ class SendActivity : BaseActivity(), SendView {
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
             }
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

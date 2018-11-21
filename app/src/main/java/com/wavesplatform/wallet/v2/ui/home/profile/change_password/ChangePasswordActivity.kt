@@ -38,6 +38,11 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
 
     override fun configLayoutRes() = R.layout.activity_change_password
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true,
@@ -172,5 +177,11 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         showProgressBar(false)
         setResult(Constants.RESULT_OK)
         finish()
+    }
+
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

@@ -31,6 +31,7 @@ class ConfirmationLeasingActivity : BaseActivity(), ConfirmationLeasingView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
@@ -89,8 +90,13 @@ class ConfirmationLeasingActivity : BaseActivity(), ConfirmationLeasingView {
 
         button_okay.click {
             setResult(Activity.RESULT_OK)
-            finish()
+            onBackPressed()
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun successStartLeasing() {

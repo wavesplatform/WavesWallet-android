@@ -41,6 +41,12 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         var RESULT_ALIAS = "alias"
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun configLayoutRes(): Int = R.layout.activity_create_alias
 
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -118,6 +124,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     override fun onBackPressed() {
         setResult(Constants.RESULT_CANCELED)
         finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun successCreateAlias(alias: Alias) {
@@ -125,6 +132,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
             putExtra(RESULT_ALIAS, alias)
         })
         finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun failedCreateAlias(message: String?) {
@@ -132,5 +140,4 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
             showError(it, R.id.root)
         }
     }
-
 }

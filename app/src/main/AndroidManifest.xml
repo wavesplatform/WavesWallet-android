@@ -204,7 +204,7 @@
         <activity
             android:name=".v2.ui.auth.qr_scanner.QrCodeScannerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
             android:name=".v2.ui.auth.import_account.protect_account.ProtectAccountActivity"
             android:screenOrientation="portrait"

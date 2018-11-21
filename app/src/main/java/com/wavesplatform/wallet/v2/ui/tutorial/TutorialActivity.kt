@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_tutorial.*
 import pers.victor.ext.click
+import pers.victor.ext.dp2px
 import pers.victor.ext.findColor
 import javax.inject.Inject
 
@@ -69,7 +70,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
                     text_next.text = getString(R.string.card_tutorial_understand)
                     text_next.click {
                         preferencesHelper.setTutorialPassed(true)
-                        launchActivity<WelcomeActivity>(clear = true)
+                        exitAnimation()
                     }
                 } else {
                     text_next.text = getString(R.string.card_tutorial_next)
@@ -79,6 +80,20 @@ class TutorialActivity : BaseActivity(), TutorialView {
                 }
             }
         })
+    }
+
+    private fun exitAnimation() {
+        relative_root.post {
+            relative_root.animate()
+                    .translationY(dp2px(50).toFloat())
+                    .alpha(0f)
+                    .setDuration(250)
+                    .withEndAction {
+                        launchActivity<WelcomeActivity>()
+                        overridePendingTransition(0, R.anim.fade_out)
+                    }
+                    .start()
+        }
     }
 
 }

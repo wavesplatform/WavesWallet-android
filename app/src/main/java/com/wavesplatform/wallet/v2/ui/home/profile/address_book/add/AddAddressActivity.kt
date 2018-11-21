@@ -46,6 +46,12 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
     override fun configLayoutRes() = R.layout.activity_add_address
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.add_address_toolbar_title), R.drawable.ic_toolbar_back_black)
 
@@ -141,5 +147,10 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

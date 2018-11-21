@@ -37,6 +37,12 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
 
     override fun configLayoutRes() = R.layout.activity_my_address_qr
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
@@ -115,6 +121,11 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
                 .apply(RequestOptions()
                         .circleCrop())
                 .into(imageView)
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
 }

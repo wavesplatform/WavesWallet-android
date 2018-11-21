@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.id.toolbar_view
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
@@ -45,6 +46,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
@@ -171,10 +173,15 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                     presenter.confirmSend()
                 } else {
                     setResult(Constants.RESULT_CANCELED)
-                    finish()
+                    onBackPressed()
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     companion object {

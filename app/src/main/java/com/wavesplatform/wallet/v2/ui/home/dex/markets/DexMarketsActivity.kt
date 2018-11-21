@@ -43,6 +43,11 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     override fun configLayoutRes() = R.layout.activity_dex_markets
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.dex_markets_list_toolbar_title), R.drawable.ic_toolbar_back_black)
 
@@ -129,5 +134,6 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
             putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
         })
         finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }
