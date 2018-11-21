@@ -259,7 +259,7 @@
     <string name="history_details_confirmations">Bevestigingen</string>
     <string name="history_details_copy_all_data">Kopieer alle gegevens</string>
     <string name="history_details_copy_tx_id">TX ID kopiëren</string>
-    <string name="history_details_exchange_price">%s prijs</string>
+    <string name="history_details_exchange_price">Prijs</string>
     <string name="history_details_fee">Transactiekosten</string>
     <string name="history_details_id">ID</string>
     <string name="history_details_leasing_from">Van</string>
@@ -278,6 +278,9 @@
     <string name="history_exchanged">Uitgewisseld</string>
     <string name="history_issued">Uitgegeven</string>
     <string name="history_leased">Geleased</string>
+    <string name="history_my_dex_intent_buy">Buy: %1$s/%2$s</string>
+    <string name="history_my_dex_intent_sell">Sell: %1$s/%2$s</string>
+    <string name="history_my_dex_type">Type</string>
     <string name="history_received">Ontvangen</string>
     <string name="history_sent">Verzenden</string>
     <string name="history_sorting_close">Sluiten</string>

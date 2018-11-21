@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="24dp">
 
@@ -12,6 +12,7 @@
         android:layout_width="@dimen/asset_icon_size"
         android:layout_height="@dimen/asset_icon_size"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="14dp"
         app:srcCompat="@drawable/ic_startlease" />
 
     <LinearLayout
@@ -26,10 +27,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="1.99800118"
             android:textColor="@color/black"
-            android:textSize="16sp" />
-
+            android:textSize="16sp"
+            tools:text="1.99800118" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_tag"
@@ -38,15 +38,15 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="4dp"
             android:background="@drawable/asset_price_border"
-            android:paddingBottom="2dp"
-            android:paddingEnd="4dp"
             android:paddingStart="4dp"
             android:paddingTop="2dp"
-            tools:text="WAVES"
+            android:paddingEnd="4dp"
+            android:paddingBottom="2dp"
             android:textColor="@color/info500"
             android:textSize="12sp"
             android:visibility="gone"
-            tools:visibility="visible"/>
+            tools:text="WAVES"
+            tools:visibility="visible" />
 
         <com.wavesplatform.wallet.v2.ui.custom.SpamTag
             android:id="@+id/text_tag_spam"
@@ -55,7 +55,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="4dp"
             android:visibility="gone"
-            tools:visibility="visible"/>
+            tools:visibility="visible" />
+
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatTextView
@@ -64,9 +65,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
-        tools:text="≈ 00 000.00 US Dollar"
         android:textColor="@color/disabled500"
         android:textSize="12sp"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:text="≈ 00 000.00 US Dollar"
+        tools:visibility="visible" />
+
 </LinearLayout>

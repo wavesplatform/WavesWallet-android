@@ -259,7 +259,7 @@
     <string name="history_details_confirmations">승인</string>
     <string name="history_details_copy_all_data">모든 데이터 복사</string>
     <string name="history_details_copy_tx_id">TX ID 복사</string>
-    <string name="history_details_exchange_price">%s 가격</string>
+    <string name="history_details_exchange_price">가격</string>
     <string name="history_details_fee">수수료</string>
     <string name="history_details_id">ID</string>
     <string name="history_details_leasing_from">Lease 보내는 주소</string>
@@ -278,6 +278,9 @@
     <string name="history_exchanged">거래 내역</string>
     <string name="history_issued">발행 내역</string>
     <string name="history_leased">Lease 내역</string>
+    <string name="history_my_dex_intent_buy">Buy: %1$s/%2$s</string>
+    <string name="history_my_dex_intent_sell">Sell: %1$s/%2$s</string>
+    <string name="history_my_dex_type">Type</string>
     <string name="history_received">수신 내역</string>
     <string name="history_sent">발신 내역</string>
     <string name="history_sorting_close">닫기</string>

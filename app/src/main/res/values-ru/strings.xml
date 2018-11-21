@@ -259,7 +259,7 @@
     <string name="history_details_confirmations">Подтверждений</string>
     <string name="history_details_copy_all_data">Скопировать всё</string>
     <string name="history_details_copy_tx_id">Копировать TX ID</string>
-    <string name="history_details_exchange_price">%s цена</string>
+    <string name="history_details_exchange_price">Цена</string>
     <string name="history_details_fee">Комиссия</string>
     <string name="history_details_id">ID</string>
     <string name="history_details_leasing_from">От</string>
@@ -278,6 +278,9 @@
     <string name="history_exchanged">Exchanged</string>
     <string name="history_issued">Выпущен</string>
     <string name="history_leased">В лизинге</string>
+    <string name="history_my_dex_intent_buy">Покупка: %1$s/%2$s</string>
+    <string name="history_my_dex_intent_sell">Продажа: %1$s/%2$s</string>
+    <string name="history_my_dex_type">Тип</string>
     <string name="history_received">Получено</string>
     <string name="history_sent">Отправлено</string>
     <string name="history_sorting_close">Закрыть</string>

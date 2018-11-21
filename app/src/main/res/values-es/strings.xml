@@ -259,7 +259,7 @@
     <string name="history_details_confirmations">Confirmaciones</string>
     <string name="history_details_copy_all_data">Copiar todos los datos</string>
     <string name="history_details_copy_tx_id">Copiar ID de TX</string>
-    <string name="history_details_exchange_price">Precio %s</string>
+    <string name="history_details_exchange_price">Precio</string>
     <string name="history_details_fee">Comisión </string>
     <string name="history_details_id">ID</string>
     <string name="history_details_leasing_from">Desde</string>
@@ -278,6 +278,9 @@
     <string name="history_exchanged">Intercambiado</string>
     <string name="history_issued">Emitido</string>
     <string name="history_leased">Arrendado</string>
+    <string name="history_my_dex_intent_buy">Buy: %1$s/%2$s</string>
+    <string name="history_my_dex_intent_sell">Sell: %1$s/%2$s</string>
+    <string name="history_my_dex_type">Type</string>
     <string name="history_received">Recibido</string>
     <string name="history_sent">Enviado </string>
     <string name="history_sorting_close">Cerrar</string>

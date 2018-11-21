@@ -63,13 +63,15 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 layout.text_amount_or_title.text = transaction.alias
             }
             TransactionType.EXCHANGE_TYPE -> {
-                val myOrder =
-                        if (transaction.order1?.sender == App.getAccessManager().getWallet()?.address) transaction.order1
-                        else transaction.order2
 
-                val pairOrder =
-                        if (transaction.order1?.sender != App.getAccessManager().getWallet()?.address) transaction.order1
-                        else transaction.order2
+                val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
+                        App.getAccessManager().getWallet()?.address!!)
+
+                val pairOrder = if (myOrder.id == transaction.order1!!.id) {
+                    transaction.order2!!
+                } else {
+                    transaction.order1!!
+                }
 
                 layout.text_amount_value_in_dollar.visiable()
                 if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
