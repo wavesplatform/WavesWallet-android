@@ -53,7 +53,7 @@
                 android:translationZ="1dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="2dp"
-                app:cardElevation="1dp">
+                app:cardElevation="2dp">
 
                 <RelativeLayout
                     android:id="@+id/asset_layout"
@@ -175,13 +175,13 @@
                 android:animateLayoutChanges="true"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="2dp"
-                app:cardElevation="1dp">
+                app:cardElevation="2dp">
 
                 <RelativeLayout
                     android:id="@+id/recipient_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/shape_rect_bordered_accent50">
+                  >
 
                     <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/edit_address"
@@ -425,7 +425,7 @@
                     android:translationZ="1dp"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="2dp"
-                    app:cardElevation="1dp">
+                    app:cardElevation="2dp">
 
                     <EditText
                         android:id="@+id/edit_monero_payment_id"
@@ -488,7 +488,7 @@
                 android:translationZ="1dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="2dp"
-                app:cardElevation="1dp">
+                app:cardElevation="2dp">
 
                 <RelativeLayout
                     android:id="@+id/amount_layout"
