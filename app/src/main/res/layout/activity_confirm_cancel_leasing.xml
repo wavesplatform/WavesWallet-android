@@ -43,7 +43,7 @@
                 android:layout_height="@dimen/asset_icon_size"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                app:srcCompat="@drawable/ic_t_startlease_48" />
+                app:srcCompat="@drawable/ic_t_closelease_48" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -100,11 +100,11 @@
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/confirm_node_address"
+                android:text="@string/confirmaton_cancel_leasing_tx_hint"
                 android:textColor="@color/basic500" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_node_address"
+                android:id="@+id/text_tx_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
@@ -122,7 +122,7 @@
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/confirm_free"
+                android:text="@string/confirmaton_cancel_leasing_fee_hint"
                 android:textColor="@color/basic500" />
 
             <android.support.v7.widget.AppCompatTextView
@@ -145,6 +145,7 @@
         <Button
             android:id="@+id/button_confirm"
             style="@style/WavesButton"
+            android:background="@drawable/selector_btn_error_400"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -152,7 +153,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:clickable="true"
-            android:text="@string/confirm_confirm"
+            android:text="@string/confirmaton_cancel_leasing_button_txt"
             android:textStyle="bold" />
 
     </android.support.v7.widget.CardView>

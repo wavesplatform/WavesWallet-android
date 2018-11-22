@@ -20,7 +20,7 @@ import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
-import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -81,10 +81,10 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         }
 
         button_continue.click {
-            launchActivity<ConfirmationLeasingActivity>(REQUEST_LEASING_CONFIRMATION) {
-                putExtra(ConfirmationLeasingActivity.BUNDLE_ADDRESS, edit_address.text.toString())
-                putExtra(ConfirmationLeasingActivity.BUNDLE_AMOUNT, edit_amount.text.toString())
-                putExtra(ConfirmationLeasingActivity.BUNDLE_RECIPIENT_IS_ALIAS, presenter.recipientIsAlias)
+            launchActivity<ConfirmationStartLeasingActivity>(REQUEST_LEASING_CONFIRMATION) {
+                putExtra(ConfirmationStartLeasingActivity.BUNDLE_ADDRESS, edit_address.text.toString())
+                putExtra(ConfirmationStartLeasingActivity.BUNDLE_AMOUNT, edit_amount.text.toString())
+                putExtra(ConfirmationStartLeasingActivity.BUNDLE_RECIPIENT_IS_ALIAS, presenter.recipientIsAlias)
             }
         }
 

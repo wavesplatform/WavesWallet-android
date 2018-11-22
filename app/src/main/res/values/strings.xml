@@ -609,4 +609,7 @@
     <string name="token_burn_validation_amount_insufficient_error">Insufficient funds</string>
     <string name="token_burn_validation_is_required_error">Not filled out</string>
     <string name="start_leasing_transaction_fee_0_001_waves">Transaction Fee 0.001 WAVES</string>
+    <string name="confirmaton_cancel_leasing_tx_hint">Leasing TX</string>
+    <string name="confirmaton_cancel_leasing_fee_hint">Fee</string>
+    <string name="confirmaton_cancel_leasing_button_txt">Cancel leasing</string>
 </resources>
