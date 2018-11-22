@@ -34,6 +34,10 @@ class NetworkActivity : BaseActivity(), NetworkView {
 
     override fun configLayoutRes() = R.layout.activity_network
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.network_toolbar_title), R.drawable.ic_toolbar_back_black)
@@ -104,6 +108,11 @@ class NetworkActivity : BaseActivity(), NetworkView {
 
     private fun isFieldsValid() {
         button_save.isEnabled = presenter.isAllFieldsValid()
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
 }

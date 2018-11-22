@@ -51,6 +51,7 @@
 
     <style name="TextLabel" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/basic500</item>
+        <item name="android:textSize">13sp</item>
     </style>
 
     <style name="Toolbar.Title" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">

@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_invoice.*
 import pers.victor.ext.click
+import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
@@ -96,7 +97,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         image_asset_icon.isOval = true
         image_asset_icon.setAsset(assetBalance)
         text_asset_name.text = assetBalance.getName()
-        text_asset_value.text = assetBalance.getDisplayTotalBalance()
+        text_asset_value.text = assetBalance.getDisplayAvailableBalance()
         image_down_arrow.visibility = if (assetBalance.isGateway) {
             View.VISIBLE
         } else {
@@ -142,7 +143,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
                 launchAssets()
             }
             image_change.visibility = View.VISIBLE
-            ViewCompat.setElevation(edit_asset_card, ViewUtils.convertDpToPixel(4f, activity!!))
+            ViewCompat.setElevation(edit_asset_card, dp2px(2).toFloat())
             edit_asset_layout.background = null
             edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
                     activity!!, R.color.white))

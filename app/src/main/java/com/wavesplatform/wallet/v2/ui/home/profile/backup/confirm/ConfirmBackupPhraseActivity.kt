@@ -34,6 +34,11 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
 
     override fun configLayoutRes(): Int = R.layout.activity_confirm_backup_pharse
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view,  true,
                 getString(R.string.confirm_backup), R.drawable.ic_toolbar_back_black)
@@ -164,5 +169,10 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
         } else {
             text_please_tap.gone()
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

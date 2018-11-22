@@ -37,6 +37,7 @@ class ScanSeedFragment : BaseFragment(), ScanSeedView {
                     .setBeepEnabled(false)
                     .setCaptureActivity(QrCodeScannerActivity::class.java)
                     .initiateScan()
+
         }
     }
 }

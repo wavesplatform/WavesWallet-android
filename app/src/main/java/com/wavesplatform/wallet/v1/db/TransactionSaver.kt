@@ -31,6 +31,7 @@ class TransactionSaver @Inject constructor() {
     private var subscriptions: CompositeDisposable = CompositeDisposable()
     private var currentLimit = DEFAULT_LIMIT
     private var prevLimit = DEFAULT_LIMIT
+    private var needCheckToUpdateBalance = false
 
 
     fun saveTransactions(sortedList: List<Transaction>, limit: Int = DEFAULT_LIMIT,
@@ -79,6 +80,7 @@ class TransactionSaver @Inject constructor() {
                                     {
                                         if (it.isEmpty()) {
                                             // only few new transaction
+                                            needCheckToUpdateBalance = true
                                             saveToDb(sortedList)
                                         } else {
                                             runOnUiThread {
@@ -93,7 +95,7 @@ class TransactionSaver @Inject constructor() {
 
     private fun saveToDb(transactions: List<Transaction>) {
 
-        // grab all assetsIds without duplicates
+        // grab all assetsIds
         val tempGrabbedAssets = mutableListOf<String?>()
         transactions.forEach { transition ->
             transition.order1?.assetPair?.notNull { assetPair ->
@@ -104,6 +106,7 @@ class TransactionSaver @Inject constructor() {
             tempGrabbedAssets.add(transition.feeAssetId)
         }
 
+        // filter all without duplicates
         val allTransactionsAssets = tempGrabbedAssets.asSequence()
                 .filter { !it.isNullOrEmpty() }
                 .distinct()
@@ -174,6 +177,18 @@ class TransactionSaver @Inject constructor() {
                                 }
                             }
                             trans.transactionTypeId = transactionUtil.getTransactionType(trans)
+                        }
+
+                        if (needCheckToUpdateBalance) {
+                            needCheckToUpdateBalance = false
+                            val needUpdateBalance = transactions.any {
+                                it.transactionType() == TransactionType.SPAM_RECEIVE_TYPE || it.transactionType() == TransactionType.RECEIVED_TYPE ||
+                                        it.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE || it.transactionType() == TransactionType.MASS_RECEIVE_TYPE ||
+                                        it.transactionType() == TransactionType.EXCHANGE_TYPE
+                            }
+                            if (needUpdateBalance) {
+                                rxEventBus.post(Events.UpdateAssetsBalance())
+                            }
                         }
 
                         // check old started leasing transaction correct status

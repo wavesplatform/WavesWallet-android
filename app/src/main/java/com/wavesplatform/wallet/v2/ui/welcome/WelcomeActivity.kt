@@ -56,14 +56,17 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
         button_create_account.click {
             launchActivity<NewAccountActivity>(requestCode = REQUEST_NEW_ACCOUNT, options = createDataBundle())
+            overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         }
 
         relative_sign_in.click {
             launchActivity<ChooseAccountActivity>(requestCode = REQUEST_SIGN_IN)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         }
 
         relative_import_acc.click {
             launchActivity<ImportAccountActivity>(REQUEST_IMPORT_ACC)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         }
 
         view_pager.setPageTransformer(false) { page, position ->

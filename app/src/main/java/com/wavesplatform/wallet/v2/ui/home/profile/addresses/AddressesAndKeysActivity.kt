@@ -37,6 +37,12 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
 
     override fun configLayoutRes(): Int = R.layout.activity_profile_addresses_and_keys
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
 
@@ -89,17 +95,24 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
     }
 
     override fun afterSuccessLoadAliases(ownAliases: List<Alias>) {
-        text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
+        if (ownAliases.isEmpty()) {
+            text_alias_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
+        }else{
+            text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
+        }
         relative_alias.click {
             val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
             if (ownAliases.isEmpty()) {
-                text_alias_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
                 bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
             } else {
-                text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
                 bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
             }
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

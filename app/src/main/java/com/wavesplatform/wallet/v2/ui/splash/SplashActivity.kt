@@ -23,11 +23,13 @@ class SplashActivity : BaseActivity(), SplashView {
         if (preferencesHelper.isTutorialPassed()) {
             if (TextUtils.isEmpty(App.getAccessManager().getLastLoggedInGuid())) {
                 launchActivity<WelcomeActivity>()
+                overridePendingTransition(R.anim.null_animation, R.anim.fade_out)
             } else {
                 launchActivity<MainActivity>(clear = true)
             }
         } else {
             launchActivity<ChooseLanguageActivity>()
+            overridePendingTransition(R.anim.null_animation, R.anim.fade_out)
         }
     }
 
@@ -36,6 +38,7 @@ class SplashActivity : BaseActivity(), SplashView {
             launchActivity<MainActivity>(clear = true)
         } else {
             launchActivity<ChooseLanguageActivity>()
+            overridePendingTransition(R.anim.null_animation, R.anim.fade_out)
         }
     }
 

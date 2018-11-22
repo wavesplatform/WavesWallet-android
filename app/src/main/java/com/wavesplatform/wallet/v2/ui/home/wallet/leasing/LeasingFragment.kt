@@ -72,6 +72,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.UpdateListOfActiveTransaction::class.java)
                 .subscribe {
                     adapterActiveAdapter.remove(it.position)
+                    text_active_leasing.text = getString(R.string.wallet_leasing_active_now, adapterActiveAdapter.data.size.toString())
                 })
 
         swipe_container.setColorSchemeResources(R.color.submit400)

@@ -11,16 +11,21 @@ class AboutRedirectionActivity : BaseActivity(), AboutRedirectionView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-
         button_okay.click {
             setResult(Constants.RESULT_OK)
-            finish()
+            onBackPressed()
         }
     }
 
     override fun configLayoutRes(): Int = R.layout.activity_about_redirection
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+    }
 }

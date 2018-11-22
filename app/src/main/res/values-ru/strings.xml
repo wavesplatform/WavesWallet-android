@@ -235,9 +235,9 @@
     <string name="enter_passcode_too_many_attempts_dialog_title">Слишком много попыток</string>
     <string name="enter_passcode_use_account_password">Использовать пароль аккаунта</string>
     <string name="enter_seed_manually_continue">Продолжить</string>
-    <string name="enter_seed_manually_hint_your_seed">Секретная фраза вашего аккаунта</string>
+    <string name="enter_seed_manually_hint_your_seed">Секретная фраза</string>
     <string name="enter_seed_manually_validation_required_seed_error">Требуется секретная фраза</string>
-    <string name="enter_seed_manually_validation_seed_exists_error">Секретная фраза уже используется вами</string>
+    <string name="enter_seed_manually_validation_seed_exists_error">Уже используется</string>
     <string name="enter_seed_manually_validation_seed_is_invalid_error">Секретная фраз неправильна</string>
     <string name="fingerprint_dialog_cancel">ОТМЕНИТЬ</string>
     <string name="fingerprint_dialog_description">Подтвердите отпечаток пальца</string>

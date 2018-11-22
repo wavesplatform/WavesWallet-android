@@ -112,6 +112,9 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             text_change_time.text = presenter.timeFrameList[presenter.selectedTimeFrame].timeUI
             presenter.currentTimeFrame = presenter.timeFrameList[presenter.selectedTimeFrame].timeServer
 
+            linear_charts.gone()
+            progress_bar.show()
+
             presenter.loadCandles(Date().time, true)
             presenter.getTradesByPair()
 

@@ -45,6 +45,10 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
 
     override fun configLayoutRes() = R.layout.activity_edit_address
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view,  true, getString(R.string.edit_address_toolbar_title), R.drawable.ic_toolbar_back_black)
@@ -129,7 +133,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         }else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE){
 
             edit_address.addTextChangedListener {
-                on({ s, start, before, count ->
+                on { s, start, before, count ->
                     presenter.addressFieldValid = edit_address.text.isNotEmpty()
                     isFieldsValid()
                     if (presenter.addressFieldValid) {
@@ -139,7 +143,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
                         edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_qrcode_24_basic_500, 0)
                         edit_address.tag = R.drawable.ic_qrcode_24_basic_500
                     }
-                })
+                }
             }
         }
     }
@@ -182,4 +186,9 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         }
     }
 
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+    }
 }
