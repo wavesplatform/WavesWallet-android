@@ -7,7 +7,7 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import pyxis.uzuki.live.richutilskt.utils.runAsync
-import java.util.*
+import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 @InjectViewState
@@ -35,7 +35,9 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
                                 it.asSequence().filter { !it.isHidden && !it.isSpam }.sortedByDescending { it.isGateway }.sortedBy { it.position }.sortedByDescending { it.isFavorite }.toMutableList()
                             }
                         }
-                        viewState.afterSuccessLoadAssets(allItems)
+                        runOnUiThread {
+                            viewState.afterSuccessLoadAssets(allItems)
+                        }
                     }, {
                         it.printStackTrace()
                     }))

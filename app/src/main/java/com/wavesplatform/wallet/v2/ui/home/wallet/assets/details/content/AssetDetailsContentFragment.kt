@@ -22,7 +22,6 @@ import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_asset_details_content.*
 import pers.victor.ext.*
-import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -39,7 +38,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     fun providePresenter(): AssetDetailsContentPresenter = presenter
 
     lateinit var historyAdapter: HistoryTransactionPagerAdapter
-    var formatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm")
+    private var formatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm")
 
     override fun configLayoutRes() = R.layout.fragment_asset_details_content
 
@@ -49,7 +48,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.assetBalance = arguments?.getParcelable<AssetBalance>(BUNDLE_ASSET)
+        presenter.assetBalance = arguments?.getParcelable(BUNDLE_ASSET)
 
         historyAdapter = HistoryTransactionPagerAdapter(app, fragmentManager)
 
@@ -95,9 +94,8 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
         fillInformation(presenter.assetBalance)
 
-
-        runAsync {
-            presenter.loadLastTransactions()
+        presenter.assetBalance.notNull {
+            presenter.loadLastTransactionsFor(it.assetId)
         }
     }
 
