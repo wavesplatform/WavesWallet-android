@@ -82,7 +82,6 @@
         <activity
             android:name=".v2.ui.tutorial.TutorialActivity"
             android:configChanges="orientation|locale"
-            android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
