@@ -7,10 +7,12 @@ import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.content.res.Resources
 import android.os.Build
+import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
@@ -25,6 +27,7 @@ import android.widget.Button
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -40,7 +43,9 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import org.fingerlinks.mobile.android.navigator.Navigator
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
@@ -81,6 +86,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     private var progressDialog: ProgressDialog? = null
     private val localizationDelegate = LocalizationActivityDelegate(this)
 
+    private var noInternetSnackbar: Snackbar? = null
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return supportFragmentInjector
     }
@@ -107,6 +114,14 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         setContentView(configLayoutRes())
         Timber.tag(javaClass.simpleName)
         onViewReady(savedInstanceState)
+
+        eventSubscriptions.add(ReactiveNetwork
+                .observeInternetConnectivity()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { connected ->
+                    onNetworkConnectionChanged(connected)
+                })
     }
 
     protected fun checkInternet() {
@@ -146,11 +161,11 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         }
 
         localizationDelegate.onResume(this)
-
-        if (!isNetworkConnection()) {
-            checkInternet()
-            return
-        }
+//
+//        if (!isNetworkConnection()) {
+//            checkInternet()
+//            return
+//        }
 
         askPassCodeIfNeed()
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)
@@ -328,4 +343,15 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     override fun onBeforeLocaleChanged() {}
 
     override fun onAfterLocaleChanged() {}
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        if (networkConnected) {
+
+        } else {
+            if (noInternetSnackbar == null) {
+                noInternetSnackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.no_internet_title), Snackbar.LENGTH_INDEFINITE)
+                noInternetSnackbar?.show()
+            }
+        }
+    }
 }
