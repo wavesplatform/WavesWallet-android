@@ -26,7 +26,7 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
                         return@map it
                                 .sortedByDescending { it.timestamp }
                                 .filter { transaction ->
-                                    return@filter isSpam(transaction)
+                                    return@filter isNotSpam(transaction)
                                 }
                                 .filter { transaction ->
                                     when {
@@ -61,7 +61,7 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
             (transaction.order1?.assetPair?.amountAssetObject?.id == assetId
                     || transaction.order1?.assetPair?.priceAssetObject?.id == assetId)
 
-    private fun isSpam(transaction: Transaction) =
+    private fun isNotSpam(transaction: Transaction) =
             transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
                     || transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
 }
