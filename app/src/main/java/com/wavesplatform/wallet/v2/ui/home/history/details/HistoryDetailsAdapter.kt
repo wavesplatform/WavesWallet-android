@@ -74,16 +74,27 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 }
 
                 layout.text_amount_value_in_dollar.visiable()
-                if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                    layout.text_amount_value_in_dollar.text = "-${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject).stripZeros()} ${myOrder.assetPair?.amountAssetObject?.name}"
-                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
+                if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
+                    layout.text_amount_value_in_dollar.text =
+                            "-${MoneyUtil.getScaledText(transaction.amount,
+                                    myOrder.assetPair?.amountAssetObject).stripZeros()}" +
+                            " ${myOrder.assetPair?.amountAssetObject?.name}"
+                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(
+                            transaction.amount?.times(transaction.price!!)?.div(100000000),
+                            pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
                 } else {
-                    layout.text_amount_value_in_dollar.text = "+${MoneyUtil.getScaledText(transaction.amount, myOrder?.assetPair?.amountAssetObject).stripZeros()} ${myOrder?.assetPair?.amountAssetObject?.name}"
-                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
+                    layout.text_amount_value_in_dollar.text =
+                            "+${MoneyUtil.getScaledText(transaction.amount,
+                                    myOrder?.assetPair?.amountAssetObject).stripZeros()}" +
+                            " ${myOrder?.assetPair?.amountAssetObject?.name}"
+                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(
+                            transaction.amount?.times(transaction.price!!)?.div(100000000),
+                            pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
                 }
 
                 showTag = Constants.defaultAssets.any {
-                    it.assetId == pairOrder?.assetPair?.priceAssetObject?.id || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
+                    it.assetId == pairOrder.assetPair?.priceAssetObject?.id
+                            || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
                 }
 
                 if (showTag) {
@@ -91,7 +102,9 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                     layout.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.name
                 } else {
                     layout.text_tag.gone()
-                    layout.text_amount_value_in_dollar.text = "${layout.text_amount_value_in_dollar.text} ${pairOrder?.assetPair?.priceAssetObject?.name}"
+                    layout.text_amount_value_in_dollar.text =
+                            "${layout.text_amount_value_in_dollar.text} " +
+                            "${pairOrder?.assetPair?.priceAssetObject?.name}"
                 }
             }
             TransactionType.DATA_TYPE -> {
