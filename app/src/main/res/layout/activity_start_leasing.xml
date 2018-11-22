@@ -305,7 +305,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="8dp"
                         android:tag="100"
-                        android:text="@string/start_leasing_use_total_balance"
+                        android:text="@string/common_100_percent"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 
@@ -322,24 +322,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="8dp"
                         android:tag="50"
-                        android:text="@string/start_leasing_0_100"
-                        android:textColor="@color/basic500"
-                        android:textSize="12sp" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_leasing_30_percent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@drawable/basic100_rounded"
-                        android:lineSpacingExtra="4sp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="8dp"
-                        android:tag="30"
-                        android:text="@string/start_leasing_0_100000"
+                        android:text="@string/common_50_percent"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 
@@ -356,7 +339,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="8dp"
                         android:tag="10"
-                        android:text="@string/start_leasing_0_500000"
+                        android:text="@string/common_10_percent"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 
@@ -373,7 +356,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="8dp"
                         android:tag="5"
-                        android:text="@string/start_leasing_0_500000"
+                        android:text="@string/common_5_percent"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 
