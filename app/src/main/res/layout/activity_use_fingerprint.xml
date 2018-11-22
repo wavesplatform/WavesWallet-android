@@ -21,6 +21,8 @@
         android:layout_below="@+id/image_backup"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
         app:fontFamily="@font/roboto_medium"
         android:gravity="center_horizontal"
         android:text="@string/use_fingerprint_title"

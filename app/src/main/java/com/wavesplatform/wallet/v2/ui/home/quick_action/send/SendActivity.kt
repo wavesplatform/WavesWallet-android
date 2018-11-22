@@ -141,9 +141,9 @@ class SendActivity : BaseActivity(), SendView {
         button_continue.click { presenter.sendClicked() }
 
         text_use_total_balance.click { setPercent(1.0) }
-        text_leasing_0_100.click { setPercent(0.05) }
-        text_leasing_0_100000.click { setPercent(0.10) }
-        text_leasing_0_500000.click { setPercent(0.50) }
+        text_50_percent.click { setPercent(0.50) }
+        text_10_percent.click { setPercent(0.10) }
+        text_5_percent.click { setPercent(0.05) }
 
         setRecipientSuggestions()
     }

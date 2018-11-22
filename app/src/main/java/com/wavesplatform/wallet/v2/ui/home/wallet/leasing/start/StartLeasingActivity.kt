@@ -30,6 +30,7 @@ import pers.victor.ext.children
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
+import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -181,27 +182,31 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                         text_amount_error.text = getString(R.string.start_leasing_validation_is_required_error)
                         text_amount_error.visiable()
                     }
-                    makeButtonEnableIfValid()
                     return@map it
                 }
                 .filter {
                     it.isNotEmpty()
                 }
                 .map {
-                    val feeValue = MoneyUtil.getScaledText(Constants.WAVES_FEE, presenter.wavesAsset).toBigDecimal()
-                    val currentValueWithFee = it.toBigDecimal() + feeValue
-                    val isValid = currentValueWithFee <= presenter.wavesAsset?.getDisplayAvailableBalance()?.toBigDecimal() && currentValueWithFee > feeValue
-                    presenter.amountValidation = isValid
+                    if (it.toDouble() != 0.0) {
+                        val feeValue = MoneyUtil.getScaledText(Constants.WAVES_FEE, presenter.wavesAsset).toBigDecimal()
+                        val currentValueWithFee = it.toBigDecimal() + feeValue
+                        val isValid = currentValueWithFee <= presenter.wavesAsset?.getDisplayAvailableBalance()?.toBigDecimal() && currentValueWithFee > feeValue
+                        presenter.amountValidation = isValid
 
-                    if (isValid) {
-                        text_amount_error.text = ""
-                        text_amount_error.gone()
-                    } else {
-                        text_amount_error.text = getString(R.string.start_leasing_validation_amount_insufficient_error)
-                        text_amount_error.visiable()
+                        if (isValid) {
+                            text_amount_error.text = ""
+                            text_amount_error.gone()
+                        } else {
+                            text_amount_error.text = getString(R.string.start_leasing_validation_amount_insufficient_error)
+                            text_amount_error.visiable()
+                        }
+                        makeButtonEnableIfValid()
+                        return@map Pair(isValid, it)
+                    }else{
+                        presenter.amountValidation = false
+                        return@map Pair(false, it)
                     }
-                    makeButtonEnableIfValid()
-                    return@map Pair(isValid, it)
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ isValid ->
@@ -265,7 +270,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }
                 else -> {
                     val percentBalance = (waves.getAvailableBalance()?.times((quickBalanceView.tag.toString().toDouble().div(100))))?.toLong()
-                    quickBalanceView.text = MoneyUtil.getScaledText(percentBalance, waves)
                     quickBalanceView.click {
                         edit_amount.setText(MoneyUtil.getScaledText(percentBalance, waves))
                         edit_amount.setSelection(edit_amount.text.length)

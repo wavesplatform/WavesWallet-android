@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_tutorial.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.findColor
+import java.util.*
 import javax.inject.Inject
 
 
@@ -28,6 +29,15 @@ class TutorialActivity : BaseActivity(), TutorialView {
     override fun configLayoutRes() = R.layout.activity_tutorial
 
     override fun askPassCode() = false
+
+    companion object {
+        var BUNDLE_LANG = "lang"
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setLanguage(Locale(intent.getStringExtra(BUNDLE_LANG)))
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)

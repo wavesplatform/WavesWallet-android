@@ -615,4 +615,8 @@
     <string name="confirmaton_cancel_leasing_tx_hint">Leasing TX</string>
     <string name="confirmaton_cancel_leasing_fee_hint">Fee</string>
     <string name="confirmaton_cancel_leasing_button_txt">Cancel leasing</string>
+    <string name="common_100_percent">Use total balance</string>
+    <string name="common_50_percent">50%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="common_5_percent">5%</string>
 </resources>
