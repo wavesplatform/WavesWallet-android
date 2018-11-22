@@ -182,7 +182,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                         text_amount_error.text = getString(R.string.start_leasing_validation_is_required_error)
                         text_amount_error.visiable()
                     }
-                    makeButtonEnableIfValid()
                     return@map it
                 }
                 .filter {
