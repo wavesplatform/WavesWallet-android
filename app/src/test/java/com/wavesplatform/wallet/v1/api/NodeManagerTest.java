@@ -1,22 +1,19 @@
-package com.wavesplatform.wallet.api;
+package com.wavesplatform.wallet.v1.api;
 
 import com.google.gson.GsonBuilder;
-import com.wavesplatform.wallet.crypto.Base58;
-import com.wavesplatform.wallet.crypto.CryptoProvider;
-import com.wavesplatform.wallet.crypto.PrivateKeyAccount;
-import com.wavesplatform.wallet.data.auth.WavesWallet;
-import com.wavesplatform.wallet.payload.Transaction;
-import com.wavesplatform.wallet.request.IssueTransactionRequest;
-import com.wavesplatform.wallet.request.TransferTransactionRequest;
+import com.wavesplatform.wallet.v1.crypto.Base58;
+import com.wavesplatform.wallet.v1.crypto.CryptoProvider;
+import com.wavesplatform.wallet.v1.crypto.PrivateKeyAccount;
+import com.wavesplatform.wallet.v1.data.auth.WavesWallet;
+import com.wavesplatform.wallet.v1.payload.Transaction;
+import com.wavesplatform.wallet.v1.request.IssueTransactionRequest;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-import io.reactivex.Observable;
-
-import static com.wavesplatform.wallet.request.TransferTransactionRequest.SignatureLength;
+import static com.wavesplatform.wallet.v1.request.TransferTransactionRequest.SignatureLength;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -61,7 +58,7 @@ public class NodeManagerTest {
 
     @Test
     public void broadcast() throws Exception {
-        WavesWallet wavesWallet = new WavesWallet(
+        /*WavesWallet wavesWallet = new WavesWallet(
                 "trial appear battle what fiber hello weasel grunt spare heavy produce beach one friend sad".getBytes());
         NodeManager.createInstance(wavesWallet.getPublicKeyStr());
         TransferTransactionRequest tx = new TransferTransactionRequest(
@@ -80,7 +77,7 @@ public class NodeManagerTest {
             System.out.println(resp);
         }, err -> {
             System.out.println(err);
-        });
+        });*/
     }
 
     @Test

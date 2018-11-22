@@ -1,10 +1,10 @@
-package com.wavesplatform.wallet.payload;
+package com.wavesplatform.wallet.v1.payload;
 
 import com.google.gson.Gson;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class PayloadJsonTest {
 

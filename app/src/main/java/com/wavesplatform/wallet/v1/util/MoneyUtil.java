@@ -19,12 +19,13 @@ public class MoneyUtil {
     private static String defaultSeparator;
 
     private final DecimalFormat wavesFormat;
-    private final SparseArray<DecimalFormat> formatsMap = new SparseArray<DecimalFormat>();
+    private final SparseArray<DecimalFormat> formatsMap = new SparseArray<>();
 
     private MoneyUtil() {
         wavesFormat = createFormatter(8);
-        for (int i = 0; i <= 8; ++i)
+        for (int i = 0; i <= 8; ++i) {
             formatsMap.put(i, createFormatter(i));
+        }
     }
 
     private DecimalFormat createFormatter(int decimals) {
