@@ -57,11 +57,15 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
         }
     }
 
-    private fun isAssetIdInExchange(transaction: Transaction, assetId: String) =
-            (transaction.order1?.assetPair?.amountAssetObject?.id == assetId
-                    || transaction.order1?.assetPair?.priceAssetObject?.id == assetId)
 
-    private fun isNotSpam(transaction: Transaction) =
-            transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
-                    || transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
+    companion object {
+
+        fun isAssetIdInExchange(transaction: Transaction, assetId: String) =
+                (transaction.order1?.assetPair?.amountAssetObject?.id == assetId
+                        || transaction.order1?.assetPair?.priceAssetObject?.id == assetId)
+
+        private fun isNotSpam(transaction: Transaction) =
+                transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
+                        || transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
+    }
 }
