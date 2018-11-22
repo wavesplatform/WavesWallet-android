@@ -405,7 +405,7 @@ class SendActivity : BaseActivity(), SendView {
 
             text_asset_name.text = it.getName()
 
-            text_asset_value.text = it.getDisplayTotalBalance()
+            text_asset_value.text = it.getDisplayAvailableBalance()
             if (it.isFavorite) {
                 image_asset_is_favourite.visiable()
             } else {
