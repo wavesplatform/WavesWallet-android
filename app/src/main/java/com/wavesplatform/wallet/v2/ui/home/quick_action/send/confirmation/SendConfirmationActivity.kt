@@ -72,17 +72,21 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.getAddressName(presenter.recipient!!)
         text_fee_value.text = "${Constants.WAVES_FEE / 100_000_000F} ${Constants.CUSTOM_FEE_ASSET_NAME}"
 
-        button_confirm.click { requestPassCode() }
-
-        eventSubscriptions.add(RxTextView.textChanges(edit_optional_message)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    presenter.attachment = it.toString()
-                })
-
-        if (intent.hasExtra(KEY_INTENT_ATTACHMENT)) {
-            edit_optional_message.setText(intent!!.extras!!.getString(KEY_INTENT_ATTACHMENT))
+        if (presenter.type == SendPresenter.Type.GATEWAY) {
+            attachment_layout.gone()
+        } else {
+            attachment_layout.visiable()
+            eventSubscriptions.add(RxTextView.textChanges(edit_optional_message)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        presenter.attachment = it.toString()
+                    })
+            if (intent.hasExtra(KEY_INTENT_ATTACHMENT)) {
+                edit_optional_message.setText(intent!!.extras!!.getString(KEY_INTENT_ATTACHMENT))
+            }
         }
+
+        button_confirm.click { requestPassCode() }
     }
 
     override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {
@@ -144,12 +148,12 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             text_sent_to_name.text = name
             text_sent_to_name.visiable()
         } else {
-            text_sent_to_name.invisiable()
+            text_sent_to_name.gone()
         }
     }
 
     override fun hideAddressBookUser() {
-        text_sent_to_name.invisiable()
+        text_sent_to_name.gone()
     }
 
     override fun requestPassCode() {
