@@ -51,7 +51,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.assetBalance = arguments?.getParcelable<AssetBalance>(BUNDLE_ASSET)
 
-        historyAdapter = HistoryTransactionPagerAdapter(app, fragmentManager)
+        historyAdapter = HistoryTransactionPagerAdapter(app, childFragmentManager)
 
         view_pager_transaction_history.adapter = historyAdapter
         view_pager_transaction_history.offscreenPageLimit = 3
@@ -95,10 +95,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
         fillInformation(presenter.assetBalance)
 
-
-        runAsync {
-            presenter.loadLastTransactions()
-        }
+        presenter.loadLastTransactions()
     }
 
     override fun showLastTransactions(data: MutableList<HistoryItem>) {
