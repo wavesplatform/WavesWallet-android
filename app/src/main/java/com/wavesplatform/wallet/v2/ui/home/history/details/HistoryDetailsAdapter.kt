@@ -63,25 +63,38 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 layout.text_amount_or_title.text = transaction.alias
             }
             TransactionType.EXCHANGE_TYPE -> {
-                val myOrder =
-                        if (transaction.order1?.sender == App.getAccessManager().getWallet()?.address) transaction.order1
-                        else transaction.order2
 
-                val pairOrder =
-                        if (transaction.order1?.sender != App.getAccessManager().getWallet()?.address) transaction.order1
-                        else transaction.order2
+                val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
+                        App.getAccessManager().getWallet()?.address!!)
+
+                val pairOrder = if (myOrder.id == transaction.order1!!.id) {
+                    transaction.order2!!
+                } else {
+                    transaction.order1!!
+                }
 
                 layout.text_amount_value_in_dollar.visiable()
-                if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                    layout.text_amount_value_in_dollar.text = "-${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject).stripZeros()} ${myOrder.assetPair?.amountAssetObject?.name}"
-                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
+                if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
+                    layout.text_amount_value_in_dollar.text =
+                            "-${MoneyUtil.getScaledText(transaction.amount,
+                                    myOrder.assetPair?.amountAssetObject).stripZeros()}" +
+                            " ${myOrder.assetPair?.amountAssetObject?.name}"
+                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(
+                            transaction.amount?.times(transaction.price!!)?.div(100000000),
+                            pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
                 } else {
-                    layout.text_amount_value_in_dollar.text = "+${MoneyUtil.getScaledText(transaction.amount, myOrder?.assetPair?.amountAssetObject).stripZeros()} ${myOrder?.assetPair?.amountAssetObject?.name}"
-                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
+                    layout.text_amount_value_in_dollar.text =
+                            "+${MoneyUtil.getScaledText(transaction.amount,
+                                    myOrder?.assetPair?.amountAssetObject).stripZeros()}" +
+                            " ${myOrder?.assetPair?.amountAssetObject?.name}"
+                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(
+                            transaction.amount?.times(transaction.price!!)?.div(100000000),
+                            pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
                 }
 
                 showTag = Constants.defaultAssets.any {
-                    it.assetId == pairOrder?.assetPair?.priceAssetObject?.id || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
+                    it.assetId == pairOrder.assetPair?.priceAssetObject?.id
+                            || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
                 }
 
                 if (showTag) {
@@ -89,7 +102,9 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                     layout.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.name
                 } else {
                     layout.text_tag.gone()
-                    layout.text_amount_value_in_dollar.text = "${layout.text_amount_value_in_dollar.text} ${pairOrder?.assetPair?.priceAssetObject?.name}"
+                    layout.text_amount_value_in_dollar.text =
+                            "${layout.text_amount_value_in_dollar.text} " +
+                            "${pairOrder?.assetPair?.priceAssetObject?.name}"
                 }
             }
             TransactionType.DATA_TYPE -> {
@@ -140,14 +155,17 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 layout.text_tag.text = transaction.asset?.name
             } else {
                 layout.text_tag.gone()
-                layout.text_amount_or_title.text = "${layout.text_amount_or_title.text} ${transaction.asset?.name}"
+                layout.text_amount_or_title.text = "${layout.text_amount_or_title.text}" +
+                        " ${transaction.asset?.name}"
             }
         }
 
         if (queryFirst<SpamAsset> { equalTo("assetId", transaction.assetId) } != null) {
             layout.text_tag.gone()
             layout.text_tag_spam.visiable()
-            layout.text_amount_or_title.text = "${layout.text_amount_or_title.text}"
+            layout.text_amount_or_title.text =
+                    "${MoneyUtil.getScaledText(transaction.amount, transaction.asset).stripZeros()} " +
+                    "${transaction.asset?.name}"
         }
 
 

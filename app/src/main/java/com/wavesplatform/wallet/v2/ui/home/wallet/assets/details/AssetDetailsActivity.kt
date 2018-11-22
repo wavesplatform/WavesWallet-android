@@ -138,8 +138,10 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         showFavorite(view_pager.currentItem)
 
         // configure contents pager
-        view_pager_content.adapter = AssetDetailsContentPageAdapter(supportFragmentManager, ArrayList(sortedToFirstFavoriteList))
-        view_pager_content.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0), false)
+        view_pager_content.adapter = AssetDetailsContentPageAdapter(supportFragmentManager,
+                ArrayList(sortedToFirstFavoriteList))
+        view_pager_content.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0),
+                false)
     }
 
     fun showFavorite(currentItem: Int) {
