@@ -128,7 +128,9 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     }
 
     override fun onBackPressed() {
-        presenter.saveSelectedMarkets(this.adapter.allData)
+        if (this.adapter.allData.isNotEmpty()) {
+            presenter.saveSelectedMarkets(this.adapter.allData)
+        }
 
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
