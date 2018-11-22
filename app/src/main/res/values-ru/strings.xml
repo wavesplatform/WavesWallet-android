@@ -604,4 +604,7 @@
     <string name="your_asset_activity_greater_zero">Non empty</string>
     <string name="your_assets_empty_state">Пока ничего нет…</string>
     <string name="your_assets_toolbar_title">Ваши ассеты</string>
+    <string name="common_50_percent">50%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="common_5_percent">5%</string>
 </resources>

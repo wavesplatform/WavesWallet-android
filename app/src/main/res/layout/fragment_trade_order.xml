@@ -145,7 +145,7 @@
                 android:paddingRight="10dp"
                 android:paddingTop="8dp"
                 android:tag="100"
-                android:text="@string/buy_and_sell_user_total_balance"
+                android:text="@string/common_100_percent"
                 android:textColor="@color/basic500"
                 android:textSize="12sp" />
 
@@ -162,12 +162,12 @@
                 android:paddingRight="10dp"
                 android:paddingTop="8dp"
                 android:tag="50"
-                android:text="@string/buy_and_sell_50"
+                android:text="@string/common_50_percent"
                 android:textColor="@color/basic500"
                 android:textSize="12sp" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_leasing_0_100000"
+                android:id="@+id/text_50_percent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -179,7 +179,7 @@
                 android:paddingRight="10dp"
                 android:paddingTop="8dp"
                 android:tag="10"
-                android:text="@string/buy_and_sell_10"
+                android:text="@string/common_10_percent"
                 android:textColor="@color/basic500"
                 android:textSize="12sp" />
 
@@ -196,7 +196,7 @@
                 android:paddingRight="10dp"
                 android:paddingTop="8dp"
                 android:tag="5"
-                android:text="@string/buy_and_sell_5"
+                android:text="@string/common_5_percent"
                 android:textColor="@color/basic500"
                 android:textSize="12sp" />
 

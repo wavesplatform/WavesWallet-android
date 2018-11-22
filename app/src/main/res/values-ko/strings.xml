@@ -604,4 +604,7 @@
     <string name="your_asset_activity_greater_zero">비어있지 않습니다</string>
     <string name="your_assets_empty_state">아무것도 없습니다… \n자금이 있는 자산이 없습니다</string>
     <string name="your_assets_toolbar_title">귀하의 자산</string>
+    <string name="common_50_percent">50%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="common_5_percent">5%</string>
 </resources>
