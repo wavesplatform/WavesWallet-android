@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
+import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.isNetworkConnection
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
@@ -38,6 +39,12 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     fun providePresenter(): EnterPassCodePresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_enter_passcode
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.null_animation, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.white)
@@ -110,7 +117,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     private fun clearAndLogout() {
         App.getAccessManager().setLastLoggedInGuid("")
         App.getAccessManager().resetWallet()
-        launchActivity<ChooseAccountActivity>(clear = true)
+        launchActivity<WelcomeActivity>(clear = true)
     }
 
     private fun startUsePasswordScreen() {
@@ -153,6 +160,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         setResult(Constants.RESULT_OK, data)
         App.getAccessManager().setWallet(getGuid(), password)
         finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_down)
     }
 
     override fun onFailValidatePassCode(overMaxWrongPassCode: Boolean, errorMessage: String?) {
@@ -181,6 +189,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         } else {
             setResult(Constants.RESULT_CANCELED)
             finish()
+            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_down)
         }
     }
 

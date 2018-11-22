@@ -59,6 +59,11 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
     override fun configLayoutRes() = R.layout.activity_address_book
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.address_book_toolbar_title), R.drawable.ic_toolbar_back_black)
 
@@ -206,6 +211,11 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         val view = LayoutInflater.from(this).inflate(R.layout.address_book_empty_state, null)
         view.text_empty.text = getString(R.string.address_book_empty_state)
         return view
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     enum class AddressBookScreenType(var type: Int) {

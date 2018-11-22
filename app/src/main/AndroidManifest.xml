@@ -194,7 +194,11 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity"
+            android:name="com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+        <activity
+            android:name="com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
@@ -204,7 +208,7 @@
         <activity
             android:name=".v2.ui.auth.qr_scanner.QrCodeScannerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
             android:name=".v2.ui.auth.import_account.protect_account.ProtectAccountActivity"
             android:screenOrientation="portrait"

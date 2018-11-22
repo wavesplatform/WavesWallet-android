@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.request.CancelOrderRequest
@@ -64,6 +65,9 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
             cancelOrderRequest.sign(it)
         }
         return matcherService.cancelOrder(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, cancelOrderRequest)
+                .doOnNext {
+                    rxEventBus.post(Events.UpdateAssetsBalance())
+                }
     }
 
     fun getBalanceFromAssetPair(watchMarket: WatchMarket?): Observable<LinkedTreeMap<String, Long>> {
@@ -80,6 +84,9 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
             orderRequest.sign(privateKey)
         }
         return matcherService.placeOrder(orderRequest)
+                .doOnNext {
+                    rxEventBus.post(Events.UpdateAssetsBalance())
+                }
     }
 
 

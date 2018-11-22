@@ -36,7 +36,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.github.kbiakov.codeview.CodeView
@@ -243,14 +243,12 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 if (transaction.status == LeasingStatus.ACTIVE.status) {
                     status?.text = getString(R.string.history_details_active_now)
                     cancelLeasingBtn?.findViewById<FrameLayout>(R.id.frame_cancel_button)?.click {
-                        launchActivity<ConfirmationLeasingActivity>(
-                                StartLeasingActivity.REQUEST_CANCEL_LEASING_CONFIRMATION) {
-                            putExtra(ConfirmationLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING,
-                                    true)
-                            putExtra(ConfirmationLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING_TX,
+                        launchActivity<ConfirmationCancelLeasingActivity>(
+                                ConfirmationCancelLeasingActivity.REQUEST_CANCEL_LEASING_CONFIRMATION) {
+                            putExtra(ConfirmationCancelLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING_TX,
                                     transaction.id)
-                            putExtra(ConfirmationLeasingActivity.BUNDLE_ADDRESS, transaction.recipient)
-                            putExtra(ConfirmationLeasingActivity.BUNDLE_AMOUNT,
+                            putExtra(ConfirmationCancelLeasingActivity.BUNDLE_ADDRESS, transaction.recipient)
+                            putExtra(ConfirmationCancelLeasingActivity.BUNDLE_AMOUNT,
                                     MoneyUtil.getScaledText(transaction.amount, transaction.asset))
                         }
                     }

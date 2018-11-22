@@ -5,6 +5,7 @@ import android.support.v7.widget.AppCompatImageView
 import com.arellomobile.mvp.InjectViewState
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
+import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.R.id.card_aliases
@@ -17,6 +18,8 @@ import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
@@ -62,10 +65,21 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
 
     fun loadAliases() {
         runAsync {
-            queryAllAsync<Alias> { aliases ->
-                val ownAliases = aliases.filter { it.own }
-                runOnUiThread { viewState.afterSuccessLoadAliases(ownAliases) }
-            }
+            addSubscription(
+                    queryAllAsSingle<Alias>().toObservable()
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .map { aliases ->
+                                val ownAliases = aliases.filter { it.own }
+                                runOnUiThread { viewState.afterSuccessLoadAliases(ownAliases) }
+                            }
+                            .observeOn(Schedulers.io())
+                            .flatMap {
+                                apiDataManager.loadAliases()
+                            }
+                            .compose(RxUtil.applyObservableDefaultSchedulers())
+                            .subscribe {
+                                runOnUiThread { viewState.afterSuccessLoadAliases(it) }
+                            })
         }
     }
 }

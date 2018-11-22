@@ -73,6 +73,11 @@ class SendActivity : BaseActivity(), SendView {
     }
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
@@ -400,7 +405,7 @@ class SendActivity : BaseActivity(), SendView {
 
             text_asset_name.text = it.getName()
 
-            text_asset_value.text = it.getDisplayTotalBalance()
+            text_asset_value.text = it.getDisplayAvailableBalance()
             if (it.isFavorite) {
                 image_asset_is_favourite.visiable()
             } else {
@@ -429,7 +434,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun assetEnable(enable: Boolean) {
         if (enable) {
-            ViewCompat.setElevation(card_asset, ViewUtils.convertDpToPixel(1f, this))
+            ViewCompat.setElevation(card_asset, dp2px(2).toFloat())
             card_asset.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
             asset_layout.background = null
             card_asset.click { launchAssets() }
@@ -446,7 +451,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun recipientEnable(enable: Boolean) {
         if (enable) {
-            ViewCompat.setElevation(recipient_card, ViewUtils.convertDpToPixel(1f, this))
+            ViewCompat.setElevation(recipient_card, dp2px(2).toFloat())
             recipient_card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
             recipient_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             edit_address.isEnabled = true
@@ -461,7 +466,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun amountEnable(enable: Boolean) {
         if (enable) {
-            ViewCompat.setElevation(amount_card, ViewUtils.convertDpToPixel(1f, this))
+            ViewCompat.setElevation(amount_card, dp2px(2).toFloat())
             amount_card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
             amount_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             edit_amount.isEnabled = true
@@ -482,5 +487,10 @@ class SendActivity : BaseActivity(), SendView {
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
             }
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

@@ -28,6 +28,7 @@ import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
+import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.isMyServiceRunning
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
@@ -79,6 +80,13 @@ class AssetsFragment : BaseFragment(), AssetsView {
                         recycle_assets.scrollToPosition(0)
                         changeTabBarVisibilityListener?.changeTabBarVisibility(true)
                     }
+                })
+
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.UpdateAssetsBalance::class.java)
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe {
+                    swipe_container.isRefreshing = true
+                    presenter.loadAssetsBalance()
                 })
 
         presenter.loadAliases()
@@ -171,7 +179,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 }
                 // minus hidden and spam sections header and all clear and hidden assets
                 item.isSpam -> position - getCorrectionIndex() - adapter.data.count {
-                    (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET } -
+                    (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
+                } -
                         adapter.data.count {
                             (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HIDDEN_ASSET
                         }

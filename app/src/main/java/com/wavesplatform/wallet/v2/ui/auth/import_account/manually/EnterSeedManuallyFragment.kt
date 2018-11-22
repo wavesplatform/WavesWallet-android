@@ -48,7 +48,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
 
         validator = Validator.with(baseActivity).setMode(Mode.CONTINUOUS)
         val seedValidation = Validation(til_seed)
-                .and(NotEmptyTrimRule(getString(R.string.enter_seed_manually_validation_required_seed_error)))
+                .and(NotEmptyTrimRule(" "))
                 .and(SeedRule(getString(R.string.enter_seed_manually_validation_seed_exists_error)))
 
         val identicon = Identicon()

@@ -191,7 +191,7 @@
             android:clipToPadding="true"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="2dp"
-            app:cardElevation="4dp">
+            app:cardElevation="2dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"

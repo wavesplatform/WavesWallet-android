@@ -31,6 +31,7 @@ class QrCodeScannerActivity : BaseActivity(), QrCodeScannerView,
     override fun configLayoutRes() = R.layout.activity_qr_code_scanner
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_up, R.anim.null_animation)
         super.onCreate(savedInstanceState)
         setStatusBarColor(R.color.black)
         setNavigationBarColor(R.color.black)
@@ -51,7 +52,7 @@ class QrCodeScannerActivity : BaseActivity(), QrCodeScannerView,
             switchFlashlight()
         }
         button_cancel.click {
-            finish()
+            onBackPressed()
         }
 
         capture = CaptureManager(this, zxing_barcode_scanner)
@@ -116,4 +117,8 @@ class QrCodeScannerActivity : BaseActivity(), QrCodeScannerView,
         image_flash.setImageResource(R.drawable.ic_topbar_flash_on)
     }
 
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_down)
+    }
 }

@@ -15,13 +15,8 @@ import com.flyco.tablayout.listener.OnTabSelectListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
-import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order.TradeOrderFragment
-import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity.Companion.BUNDLE_AMOUNT
-import com.wavesplatform.wallet.v2.util.RxEventBus
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.buy_and_sell_bottom_sheet_dialog_layout.*
 import kotlinx.android.synthetic.main.buy_and_sell_bottom_sheet_dialog_layout.view.*
 import pers.victor.ext.dp2px

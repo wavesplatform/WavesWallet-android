@@ -31,6 +31,11 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     override fun configLayoutRes() = R.layout.activity_create_passcode
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, false,
                 icon = R.drawable.ic_toolbar_back_black)

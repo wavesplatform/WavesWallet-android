@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:animateLayoutChanges="true"
-    android:background="@drawable/img_brand"
-    android:paddingBottom="56dp">
+    android:background="@drawable/img_brand">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"
@@ -44,7 +43,7 @@
                 android:layout_height="@dimen/asset_icon_size"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                app:srcCompat="@drawable/ic_startlease" />
+                app:srcCompat="@drawable/ic_t_startlease_48" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
