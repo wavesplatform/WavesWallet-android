@@ -441,7 +441,7 @@
     <string name="receive_address_link_to_invoice">Link naar een factuur</string>
     <string name="receive_address_share">Delen</string>
     <string name="receive_address_view_toolbar">Uw %1$s adres</string>
-    <string name="receive_address_waves_address">Uw Waves adres</string>
+    <string name="receive_address_waves_address">Uw %1$s adres</string>
     <string name="receive_address_your_qr_code">Uw QR-code</string>
     <string name="receive_amount">Bedrag</string>
     <string name="receive_amount_title">Bedrag in %1$s</string>

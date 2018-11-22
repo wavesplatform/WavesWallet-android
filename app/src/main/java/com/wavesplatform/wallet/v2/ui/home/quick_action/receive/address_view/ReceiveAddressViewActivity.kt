@@ -110,8 +110,9 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
             container_invoice_link.visiable()
             image_down_arrow.gone()
 
-            image_asset_icon.setImageResource(R.drawable.logo_waves_48)
-            toolbar_view.title = getString(R.string.receive_address_waves_address)
+            toolbar_view.title = getString(R.string.receive_address_waves_address,
+                    assetBalance?.getName() ?: "")
+            image_asset_icon.setAsset(assetBalance)
         }
 
         val text: String

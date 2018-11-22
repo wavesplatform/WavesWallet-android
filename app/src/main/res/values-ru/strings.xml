@@ -441,7 +441,7 @@
     <string name="receive_address_link_to_invoice">Ссылка на выставленный счет</string>
     <string name="receive_address_share">Поделиться</string>
     <string name="receive_address_view_toolbar">Ваш %1$s адрес</string>
-    <string name="receive_address_waves_address">Ваш Waves адрес</string>
+    <string name="receive_address_waves_address">Ваш %1$s адрес</string>
     <string name="receive_address_your_qr_code">Ваш QR-код</string>
     <string name="receive_amount">Количество</string>
     <string name="receive_amount_title">Количество в %1$s</string>

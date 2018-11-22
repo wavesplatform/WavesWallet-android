@@ -442,7 +442,7 @@
     <string name="receive_address_link_to_invoice">Link to an Invoice</string>
     <string name="receive_address_share">Share</string>
     <string name="receive_address_view_toolbar">Your %1$s address</string>
-    <string name="receive_address_waves_address">Your Waves address</string>
+    <string name="receive_address_waves_address">Your %1$s address</string>
     <string name="receive_address_your_qr_code">Your QR Code</string>
     <string name="receive_amount">Amount</string>
     <string name="receive_amount_title">Amount in %1$s</string>

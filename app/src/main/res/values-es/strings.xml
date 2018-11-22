@@ -441,7 +441,7 @@
     <string name="receive_address_link_to_invoice">Enlace a una factura</string>
     <string name="receive_address_share">Compartir</string>
     <string name="receive_address_view_toolbar">Tu dirección de %1$s</string>
-    <string name="receive_address_waves_address">Tu dirección de Waves</string>
+    <string name="receive_address_waves_address">Tu dirección de %1$s</string>
     <string name="receive_address_your_qr_code">Su código QR</string>
     <string name="receive_amount">Cantidad</string>
     <string name="receive_amount_title">Cantidad en %1$s</string>
