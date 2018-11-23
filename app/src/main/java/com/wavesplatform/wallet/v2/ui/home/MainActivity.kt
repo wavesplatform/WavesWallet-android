@@ -34,11 +34,12 @@ import com.wavesplatform.wallet.v2.util.makeLinks
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
-import pers.victor.ext.click
-import pers.victor.ext.findColor
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import javax.inject.Inject
+import android.view.MotionEvent
+import android.widget.LinearLayout
+import com.wavesplatform.wallet.R.color.i
+import java.lang.System.exit
 
 
 class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedListener {
@@ -173,6 +174,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
         tab_navigation.addOnTabSelectedListener(this)
 
+        tab_navigation.post { extraInternetMessageMargin = tab_navigation.height }
+
         setupBottomNavigationFragments()
     }
 
@@ -260,10 +263,12 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     private fun showQuickActionDialog() {
-        val quickActionDialog = QuickActionBottomSheetFragment.newInstance()
-        val ft = supportFragmentManager.beginTransaction()
-        ft.add(quickActionDialog, quickActionDialog::class.java.simpleName)
-        ft.commitAllowingStateLoss()
+        if (isNetworkConnected()) {
+            val quickActionDialog = QuickActionBottomSheetFragment.newInstance()
+            val ft = supportFragmentManager.beginTransaction()
+            ft.add(quickActionDialog, quickActionDialog::class.java.simpleName)
+            ft.commitAllowingStateLoss()
+        }
     }
 
     private fun showNewTabFragment(fragment: Fragment) {
@@ -353,6 +358,19 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 }
                 preferencesHelper.setShowSaveSeedWarningTime(currentGuid, now)
             }
+        }
+    }
+
+    override fun needShowNetworkBottomMessage() = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        if (networkConnected) {
+            // enable quick action tab
+            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.ENABLE_VIEW
+        } else {
+            // disable quick action tab
+            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.DISABLE_VIEW
         }
     }
 

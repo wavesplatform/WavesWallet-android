@@ -161,4 +161,6 @@ object Constants {
             WUSD,
             WTRY)
 
+    val ENABLE_VIEW = 1f
+    val DISABLE_VIEW = 0.3f
 }

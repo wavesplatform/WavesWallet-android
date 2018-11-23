@@ -612,4 +612,5 @@
     <string name="confirmaton_cancel_leasing_tx_hint">Leasing TX</string>
     <string name="confirmaton_cancel_leasing_fee_hint">Fee</string>
     <string name="confirmaton_cancel_leasing_button_txt">Cancel leasing</string>
+    <string name="common_no_internet_bottom_msg">No connection to the Internet</string>
 </resources>

@@ -7,12 +7,10 @@ import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.content.res.Resources
 import android.os.Build
-import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
@@ -20,9 +18,8 @@ import android.support.v7.app.ActionBar
 import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
-import android.view.KeyEvent
-import android.view.MenuItem
-import android.view.WindowManager
+import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
@@ -43,12 +40,15 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
+import pyxis.uzuki.live.richutilskt.utils.inflate
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -65,6 +65,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         get() = super.getSupportFragmentManager()
     val fragmentContainer: Int
         @IdRes get() = 0
+
+    var extraInternetMessageMargin = 0
 
     @Inject
     lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
@@ -86,7 +88,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     private var progressDialog: ProgressDialog? = null
     private val localizationDelegate = LocalizationActivityDelegate(this)
 
-    private var noInternetSnackbar: Snackbar? = null
+    private var noInternetLayout: View? = null
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return supportFragmentInjector
@@ -115,13 +117,18 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         Timber.tag(javaClass.simpleName)
         onViewReady(savedInstanceState)
 
+        noInternetLayout = inflate(R.layout.no_internet_bottom_message_layout)
+
         eventSubscriptions.add(ReactiveNetwork
                 .observeInternetConnectivity()
+                .onErrorResumeNext(Observable.empty())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { connected ->
+                .subscribe({ connected ->
                     onNetworkConnectionChanged(connected)
-                })
+                }, {
+                    it.printStackTrace()
+                }))
     }
 
     protected fun checkInternet() {
@@ -345,13 +352,28 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     override fun onAfterLocaleChanged() {}
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
-        if (networkConnected) {
+        if (needShowNetworkBottomMessage()){
+            val rootContent = findViewById<ViewGroup>(android.R.id.content)
 
-        } else {
-            if (noInternetSnackbar == null) {
-                noInternetSnackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.no_internet_title), Snackbar.LENGTH_INDEFINITE)
-                noInternetSnackbar?.show()
+            if (networkConnected) {
+                noInternetLayout?.image_no_internet?.clearAnimation()
+                rootContent.removeView(noInternetLayout)
+                noInternetLayout = null
+            } else {
+                if (noInternetLayout == null) {
+                    noInternetLayout = inflate(R.layout.no_internet_bottom_message_layout)
+                }
+                noInternetLayout?.linear_no_internet_message?.setMargins(0, 0, 0, extraInternetMessageMargin)
+                rootContent.addView(noInternetLayout)
+                noInternetLayout?.image_no_internet?.startAnimation(AnimationUtils.loadAnimation(this, R.anim.easy_rotate))
             }
         }
     }
+
+    fun snakeAnimationForNetworkMsg() {
+        val animation = AnimationUtils.loadAnimation(this, R.anim.easy_shake_error)
+        noInternetLayout?.startAnimation(animation)
+    }
+
+    open fun needShowNetworkBottomMessage() = false
 }

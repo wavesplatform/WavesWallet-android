@@ -111,5 +111,6 @@
     <color name="z">#72d28b</color>
     <color name="persist">#96bca0</color>
     <color name="overlayDark">#33001a39</color>
+    <color name="no_network_msg_bg">#bd001a39</color>
 
 </resources>
