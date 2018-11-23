@@ -48,8 +48,6 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         translucentStatusBar = true
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {

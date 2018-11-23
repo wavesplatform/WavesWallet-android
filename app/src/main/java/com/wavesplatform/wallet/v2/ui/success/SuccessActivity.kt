@@ -28,8 +28,6 @@ class SuccessActivity : BaseActivity(), SuccessView {
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {

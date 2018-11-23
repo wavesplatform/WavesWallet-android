@@ -371,6 +371,7 @@
             app:cardElevation="2dp">
 
             <RelativeLayout
+                android:id="@+id/relative_burn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="12dp"

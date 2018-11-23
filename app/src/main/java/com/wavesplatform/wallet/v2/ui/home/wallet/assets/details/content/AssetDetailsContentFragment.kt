@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
 
 import android.os.Bundle
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
@@ -49,26 +50,33 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         var BUNDLE_ASSET = "asset"
     }
 
-
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         if (networkConnected) {
             // enable quick action tab
-            send.alpha = Constants.ENABLE_VIEW
-            receive.alpha = Constants.ENABLE_VIEW
-            exchange.alpha = Constants.ENABLE_VIEW
-            send.isClickable = true
-            receive.isClickable = true
-            exchange.isClickable = true
+            enableView(send)
+            enableView(receive)
+            enableView(exchange)
+            enableView(relative_burn)
+            card_burn.isClickable = true
         } else {
             // disable quick action tab
-            send.alpha = Constants.DISABLE_VIEW
-            receive.alpha = Constants.DISABLE_VIEW
-            exchange.alpha = Constants.DISABLE_VIEW
-            send.isClickable = false
-            receive.isClickable = false
-            exchange.isClickable = false
+            disableView(send)
+            disableView(receive)
+            disableView(exchange)
+            disableView(relative_burn)
+            card_burn.isClickable = false
         }
+    }
+
+    private fun enableView(view: View) {
+        view.isClickable = true
+        view.alpha = Constants.ENABLE_VIEW
+    }
+
+    private fun disableView(view: View) {
+        view.isClickable = false
+        view.alpha = Constants.DISABLE_VIEW
     }
 
 
@@ -109,7 +117,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             }
         }
 
-        send.click{
+        send.click {
             launchActivity<SendActivity> {
                 putExtra(SendActivity.KEY_INTENT_ASSET_DETAILS, true)
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
