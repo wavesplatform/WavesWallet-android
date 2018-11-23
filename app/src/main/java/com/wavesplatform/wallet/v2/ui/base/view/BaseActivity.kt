@@ -357,8 +357,10 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
             val rootContent = findViewById<ViewGroup>(android.R.id.content)
 
             if (networkConnected) {
-                noInternetLayout?.image_no_internet?.clearAnimation()
-                rootContent.removeView(noInternetLayout)
+                if (noInternetLayout?.parent != null) {
+                    noInternetLayout?.image_no_internet?.clearAnimation()
+                    rootContent.removeView(noInternetLayout)
+                }
             } else {
                 if (noInternetLayout?.parent == null) {
                     noInternetLayout?.linear_no_internet_message?.setMargins(0, 0, 0, extraInternetMessageMargin)
