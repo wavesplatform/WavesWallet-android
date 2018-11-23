@@ -121,6 +121,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
         eventSubscriptions.add(ReactiveNetwork
                 .observeInternetConnectivity()
+                .distinctUntilChanged()
                 .onErrorResumeNext(Observable.empty())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -352,20 +353,18 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     override fun onAfterLocaleChanged() {}
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
-        if (needShowNetworkBottomMessage()){
+        if (needShowNetworkBottomMessage()) {
             val rootContent = findViewById<ViewGroup>(android.R.id.content)
 
             if (networkConnected) {
                 noInternetLayout?.image_no_internet?.clearAnimation()
                 rootContent.removeView(noInternetLayout)
-                noInternetLayout = null
             } else {
-                if (noInternetLayout == null) {
-                    noInternetLayout = inflate(R.layout.no_internet_bottom_message_layout)
+                if (noInternetLayout?.parent == null) {
+                    noInternetLayout?.linear_no_internet_message?.setMargins(0, 0, 0, extraInternetMessageMargin)
+                    rootContent.addView(noInternetLayout)
+                    noInternetLayout?.image_no_internet?.startAnimation(AnimationUtils.loadAnimation(this, R.anim.easy_rotate))
                 }
-                noInternetLayout?.linear_no_internet_message?.setMargins(0, 0, 0, extraInternetMessageMargin)
-                rootContent.addView(noInternetLayout)
-                noInternetLayout?.image_no_internet?.startAnimation(AnimationUtils.loadAnimation(this, R.anim.easy_rotate))
             }
         }
     }

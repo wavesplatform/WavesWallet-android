@@ -13,9 +13,11 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.ui.welcome.AlphaScalePageTransformer
 import kotlinx.android.synthetic.main.activity_asset_details.*
+import kotlinx.android.synthetic.main.activity_main_v2.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
@@ -185,4 +187,6 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
+
+    override fun needShowNetworkBottomMessage() = true
 }

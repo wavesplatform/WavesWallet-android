@@ -7,10 +7,12 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
@@ -45,6 +47,28 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     companion object {
         var BUNDLE_ASSET = "asset"
+    }
+
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        if (networkConnected) {
+            // enable quick action tab
+            send.alpha = Constants.ENABLE_VIEW
+            receive.alpha = Constants.ENABLE_VIEW
+            exchange.alpha = Constants.ENABLE_VIEW
+            send.isClickable = true
+            receive.isClickable = true
+            exchange.isClickable = true
+        } else {
+            // disable quick action tab
+            send.alpha = Constants.DISABLE_VIEW
+            receive.alpha = Constants.DISABLE_VIEW
+            exchange.alpha = Constants.DISABLE_VIEW
+            send.isClickable = false
+            receive.isClickable = false
+            exchange.isClickable = false
+        }
     }
 
 

@@ -18,7 +18,10 @@ import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
 import android.support.design.widget.Snackbar
-
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 
 abstract class BaseFragment : MvpAppCompatFragment(), BaseView, BaseMvpView, HasSupportFragmentInjector {
@@ -57,6 +60,16 @@ abstract class BaseFragment : MvpAppCompatFragment(), BaseView, BaseMvpView, Has
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        eventSubscriptions.add(ReactiveNetwork
+                .observeInternetConnectivity()
+                .onErrorResumeNext(Observable.empty())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ connected ->
+                    onNetworkConnectionChanged(connected)
+                }, {
+                    it.printStackTrace()
+                }))
         onViewReady(savedInstanceState)
     }
 
