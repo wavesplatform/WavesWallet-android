@@ -66,8 +66,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     val fragmentContainer: Int
         @IdRes get() = 0
 
-    var extraInternetMessageMargin = 0
-
     @Inject
     lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
     @Inject
@@ -353,18 +351,16 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     override fun onAfterLocaleChanged() {}
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
-        if (needShowNetworkBottomMessage()) {
-            val rootContent = findViewById<ViewGroup>(android.R.id.content)
-
+        if (needToShowNetworkMessage()) {
             if (networkConnected) {
                 if (noInternetLayout?.parent != null) {
                     noInternetLayout?.image_no_internet?.clearAnimation()
-                    rootContent.removeView(noInternetLayout)
+                    rootLayoutToShowNetworkMessage().removeView(noInternetLayout)
                 }
             } else {
                 if (noInternetLayout?.parent == null) {
-                    noInternetLayout?.linear_no_internet_message?.setMargins(0, 0, 0, extraInternetMessageMargin)
-                    rootContent.addView(noInternetLayout)
+                    noInternetLayout?.linear_no_internet_message?.setMargins(0, 0, 0, extraBottomMarginToShowNetworkMessage())
+                    rootLayoutToShowNetworkMessage().addView(noInternetLayout)
                     noInternetLayout?.image_no_internet?.startAnimation(AnimationUtils.loadAnimation(this, R.anim.easy_rotate))
                 }
             }
@@ -376,5 +372,9 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         noInternetLayout?.startAnimation(animation)
     }
 
-    open fun needShowNetworkBottomMessage() = false
+    open fun needToShowNetworkMessage(): Boolean = false
+
+    open fun extraBottomMarginToShowNetworkMessage(): Int = 0
+
+    open fun rootLayoutToShowNetworkMessage(): ViewGroup = findViewById(android.R.id.content)
 }

@@ -96,7 +96,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         card_progress.gone()
     }
 
-    override fun needShowNetworkBottomMessage() = true
+    override fun needToShowNetworkMessage() = true
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)

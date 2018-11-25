@@ -117,7 +117,7 @@ class NetworkActivity : BaseActivity(), NetworkView {
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
-    override fun needShowNetworkBottomMessage() = true
+    override fun needToShowNetworkMessage() = true
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)

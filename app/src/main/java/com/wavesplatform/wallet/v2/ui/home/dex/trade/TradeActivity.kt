@@ -76,5 +76,5 @@ class TradeActivity : BaseActivity(), TradeView {
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
-    override fun needShowNetworkBottomMessage() = true
+    override fun needToShowNetworkMessage() = true
 }

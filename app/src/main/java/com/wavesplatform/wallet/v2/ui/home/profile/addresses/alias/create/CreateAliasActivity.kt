@@ -150,7 +150,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         }
     }
 
-    override fun needShowNetworkBottomMessage() = true
+    override fun needToShowNetworkMessage() = true
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)

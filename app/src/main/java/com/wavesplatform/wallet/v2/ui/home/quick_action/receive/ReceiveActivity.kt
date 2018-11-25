@@ -114,5 +114,5 @@ class ReceiveActivity : BaseActivity(), ReceiveView {
     }
 
 
-    override fun needShowNetworkBottomMessage(): Boolean = true
+    override fun needToShowNetworkMessage(): Boolean = true
 }

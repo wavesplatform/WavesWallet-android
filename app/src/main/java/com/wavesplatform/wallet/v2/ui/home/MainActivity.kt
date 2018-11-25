@@ -12,6 +12,7 @@ import android.text.TextPaint
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -36,10 +37,6 @@ import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
 import pers.victor.ext.*
 import javax.inject.Inject
-import android.view.MotionEvent
-import android.widget.LinearLayout
-import com.wavesplatform.wallet.R.color.i
-import java.lang.System.exit
 
 
 class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedListener {
@@ -173,8 +170,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 getCustomView(R.drawable.ic_tabbar_profile_default)).setTag(TAG_NOT_CENTRAL_TAB))
 
         tab_navigation.addOnTabSelectedListener(this)
-
-        tab_navigation.post { extraInternetMessageMargin = tab_navigation.height }
 
         setupBottomNavigationFragments()
     }
@@ -361,7 +356,13 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         }
     }
 
-    override fun needShowNetworkBottomMessage() = true
+    override fun needToShowNetworkMessage() = true
+
+    override fun rootLayoutToShowNetworkMessage(): ViewGroup = frame_root
+
+    override fun extraBottomMarginToShowNetworkMessage(): Int {
+        return tab_navigation.height
+    }
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)

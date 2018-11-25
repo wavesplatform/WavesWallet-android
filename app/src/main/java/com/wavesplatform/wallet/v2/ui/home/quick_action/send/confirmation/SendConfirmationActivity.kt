@@ -185,7 +185,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
-    override fun needShowNetworkBottomMessage(): Boolean = true
+    override fun needToShowNetworkMessage(): Boolean = true
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)

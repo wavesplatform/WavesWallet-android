@@ -94,7 +94,7 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
     }
 
 
-    override fun needShowNetworkBottomMessage() = true
+    override fun needToShowNetworkMessage() = true
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
