@@ -12,6 +12,8 @@ import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentPresenter
+import com.wavesplatform.wallet.v2.util.isWaves
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -35,7 +37,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         addSubscription(loadFromDb()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({list ->
+                .subscribe({ list ->
                     if (list.isEmpty()) {
                         loadLastTransactions()
                     } else {
@@ -108,9 +110,17 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
             // history only for detailed asset
             assetBalance.notNull {
-                allItemsFromDb = allItemsFromDb.filter {
-                    if (assetBalance?.isWaves() == true) it.assetId.isNullOrEmpty()
-                    else it.assetId == assetBalance?.assetId
+                allItemsFromDb = allItemsFromDb.filter { transaction ->
+                    val assetId = assetBalance!!.assetId
+                    when {
+                        assetId.isWaves() ->
+                            return@filter transaction.assetId.isNullOrEmpty()
+                        AssetDetailsContentPresenter.isAssetIdInExchange(
+                                transaction, assetId) ->
+                            return@filter true
+                        else ->
+                            return@filter transaction.assetId == assetId
+                    }
                 }
             }
 
@@ -122,7 +132,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         addSubscription(nodeDataManager.loadLightTransactions()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({list ->
+                .subscribe({ list ->
                     if (list.isEmpty()) {
                         viewState.afterSuccessLoadTransaction(arrayListOf(), type)
                     } else {
@@ -146,10 +156,17 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         val list = arrayListOf<HistoryItem>()
 
         sortedList.forEach {
-            val date = (it.data.timestamp) / (1000 * 60 * 60 * 24)
-            if (hashOfTimestamp[date] == null) {
-                hashOfTimestamp[date] = date
-                list.add(HistoryItem(HistoryItem.TYPE_HEADER, dateFormat.format(Date(it.data.timestamp)).capitalize()))
+            val startDate = Calendar.getInstance()
+            startDate.timeInMillis = it.data.timestamp
+            startDate.set(Calendar.HOUR_OF_DAY, 0)
+            startDate.set(Calendar.MINUTE, 0)
+            startDate.set(Calendar.SECOND, 0)
+            startDate.set(Calendar.MILLISECOND, 0)
+            val timestamp = startDate.timeInMillis
+            if (hashOfTimestamp[timestamp] == null) {
+                hashOfTimestamp[timestamp] = timestamp
+                list.add(HistoryItem(HistoryItem.TYPE_HEADER,
+                        dateFormat.format(Date(it.data.timestamp)).capitalize()))
                 totalHeaders++
             }
             list.add(it)

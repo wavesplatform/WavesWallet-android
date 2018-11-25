@@ -113,7 +113,7 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/asset_gray_icon"
                         app:text_number="1"
-                        app:text_size="16" />
+                        app:text_size="24" />
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/image_down_arrow"

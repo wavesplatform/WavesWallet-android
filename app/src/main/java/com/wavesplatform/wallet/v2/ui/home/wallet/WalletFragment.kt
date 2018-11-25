@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.wallet
 
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
-import android.support.v4.app.Fragment
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -44,7 +43,7 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
 
         adapter = WalletFragmentPageAdapter(
                 childFragmentManager,
-                arrayListOf<Fragment>(assetsFragment, leasingFragment),
+                arrayListOf(assetsFragment, leasingFragment),
                 arrayOf(getString(R.string.wallet_assets), getString(R.string.wallet_leasing)))
     }
 

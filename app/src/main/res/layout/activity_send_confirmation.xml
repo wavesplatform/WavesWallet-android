@@ -165,10 +165,45 @@
                 tools:text="0.001 Waves" />
 
             <LinearLayout
-                android:id="@+id/attachment_layout"
+                android:id="@+id/gateway_commission_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_fee_value"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="@drawable/shape_dashed_line"
+                    android:layerType="software" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_gateway_fee_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:text="@string/send_confirmation_gateway_fee"
+                    android:textColor="@color/basic500"
+                    android:textSize="14sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_gateway_fee_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/disabled900"
+                    android:textSize="14sp"
+                    tools:text="0.001 Waves" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/attachment_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/gateway_commission_layout"
                 android:layout_marginTop="14dp"
                 android:orientation="vertical">
 

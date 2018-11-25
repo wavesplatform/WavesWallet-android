@@ -4,7 +4,6 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.api.NodeManager
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil
@@ -30,20 +29,19 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     lateinit var coinomatManager: CoinomatManager
 
     var recipient: String? = ""
-    var amount: String? = ""
+    var amount: Float = 0F
     var attachment: String = ""
     var selectedAsset: AssetBalance? = null
     var assetInfo: AssetInfo? = null
     var moneroPaymentId: String? = null
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
+    var gatewayCommission: Float = 0F
 
 
     fun confirmSend() {
         val singed = signTransaction()
         if (singed != null) {
             submitPayment(singed)
-        } else {
-            viewState.requestPassCode()
         }
     }
 
@@ -100,11 +98,17 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             recipient = recipient!!.makeAsAlias()
         }
 
+        val totalAmount = if (type == SendPresenter.Type.GATEWAY) {
+            amount + gatewayCommission
+        } else {
+            amount
+        }
+
         return TransactionsBroadcastRequest(
-                selectedAsset!!.assetId ?: "",
+                selectedAsset!!.assetId,
                 App.getAccessManager().getWallet()!!.publicKeyStr,
                 recipient!!,
-                MoneyUtil.getUnscaledValue(amount, selectedAsset),
+                MoneyUtil.getUnscaledValue(totalAmount.toString(), selectedAsset),
                 System.currentTimeMillis(),
                 Constants.WAVES_FEE,
                 attachment)

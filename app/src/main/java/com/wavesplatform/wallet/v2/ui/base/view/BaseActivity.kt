@@ -25,6 +25,7 @@ import android.widget.Button
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -80,6 +81,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     private var progressDialog: ProgressDialog? = null
     private val localizationDelegate = LocalizationActivityDelegate(this)
+    protected lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return supportFragmentInjector
@@ -99,6 +101,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         localizationDelegate.addOnLocaleChangedListener(this)
         localizationDelegate.onCreate(savedInstanceState)
         super.onCreate(savedInstanceState)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         if (!translucentStatusBar) {
             setStatusBarColor(R.color.white)
             setNavigationBarColor(R.color.white)

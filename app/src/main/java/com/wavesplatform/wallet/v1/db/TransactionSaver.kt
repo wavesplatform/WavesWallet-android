@@ -230,7 +230,7 @@ class TransactionSaver @Inject constructor() {
     }
 
     companion object {
-        const val MAX_LIMIT = 10000
+        const val MAX_LIMIT = 1000
         const val DEFAULT_LIMIT = 100
     }
 

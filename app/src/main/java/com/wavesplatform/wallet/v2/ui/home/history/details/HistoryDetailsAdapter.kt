@@ -63,49 +63,7 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 layout.text_amount_or_title.text = transaction.alias
             }
             TransactionType.EXCHANGE_TYPE -> {
-
-                val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
-                        App.getAccessManager().getWallet()?.address!!)
-
-                val pairOrder = if (myOrder.id == transaction.order1!!.id) {
-                    transaction.order2!!
-                } else {
-                    transaction.order1!!
-                }
-
-                layout.text_amount_value_in_dollar.visiable()
-                if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
-                    layout.text_amount_value_in_dollar.text =
-                            "-${MoneyUtil.getScaledText(transaction.amount,
-                                    myOrder.assetPair?.amountAssetObject).stripZeros()}" +
-                            " ${myOrder.assetPair?.amountAssetObject?.name}"
-                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(
-                            transaction.amount?.times(transaction.price!!)?.div(100000000),
-                            pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
-                } else {
-                    layout.text_amount_value_in_dollar.text =
-                            "+${MoneyUtil.getScaledText(transaction.amount,
-                                    myOrder?.assetPair?.amountAssetObject).stripZeros()}" +
-                            " ${myOrder?.assetPair?.amountAssetObject?.name}"
-                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(
-                            transaction.amount?.times(transaction.price!!)?.div(100000000),
-                            pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
-                }
-
-                showTag = Constants.defaultAssets.any {
-                    it.assetId == pairOrder.assetPair?.priceAssetObject?.id
-                            || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
-                }
-
-                if (showTag) {
-                    layout.text_tag.visiable()
-                    layout.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.name
-                } else {
-                    layout.text_tag.gone()
-                    layout.text_amount_value_in_dollar.text =
-                            "${layout.text_amount_value_in_dollar.text} " +
-                            "${pairOrder?.assetPair?.priceAssetObject?.name}"
-                }
+                setExchangeItem(transaction, layout)
             }
             TransactionType.DATA_TYPE -> {
                 layout.text_amount_or_title.text = app.getString(R.string.history_data_type_title)
@@ -173,6 +131,51 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
 
         collection.addView(layout)
         return layout
+    }
+
+    private fun setExchangeItem(transaction: Transaction, view: View) {
+        val myOrder = findMyOrder(
+                transaction.order1!!,
+                transaction.order2!!,
+                App.getAccessManager().getWallet()?.address!!)
+
+        val directionSignPrice: String
+        val directionSignAmount: String
+        val amountAsset = myOrder.assetPair?.amountAssetObject!!
+        val priceAsset = myOrder.assetPair?.priceAssetObject!!
+        val amountValue = MoneyUtil.getScaledText(transaction.amount, amountAsset).stripZeros()
+        val priceValue = MoneyUtil.getScaledText(
+                transaction.amount.times(transaction.price).div(100000000),
+                priceAsset).stripZeros()
+
+        if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
+            directionSignPrice = "+"
+            directionSignAmount = "-"
+        } else {
+            directionSignPrice = "-"
+            directionSignAmount = "+"
+        }
+
+        view.text_amount_value_in_dollar.visiable()
+        view.text_amount_value_in_dollar.text =
+                directionSignPrice + priceValue + " " + priceAsset.name
+
+        val amountAssetTicker = if (amountAsset.name == "WAVES") {
+            "WAVES"
+        } else {
+            amountAsset.ticker
+        }
+
+        val assetName = if (amountAssetTicker.isNullOrEmpty()) {
+            view.text_tag.gone()
+            " ${amountAsset.name}"
+        } else {
+            view.text_tag.visiable()
+            view.text_tag.text = amountAssetTicker
+            ""
+        }
+
+        view.text_amount_or_title.text = directionSignAmount + amountValue + assetName
     }
 
     override fun destroyItem(collection: ViewGroup, position: Int, view: Any) {

@@ -5,7 +5,6 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface SendConfirmationView : BaseMvpView {
 
-    fun requestPassCode()
     fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest)
     fun onShowError(res: Int)
     fun showAddressBookUser(name: String)
