@@ -204,7 +204,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun setPercent(percent: Double) {
-        presenter.selectedAsset.notNull { assetBalance->
+        presenter.selectedAsset.notNull { assetBalance ->
             assetBalance.balance.notNull { balance ->
                 val amount = (balance * percent).toLong()
                 edit_amount.setText(MoneyUtil.getScaledText(amount, assetBalance))
@@ -492,5 +492,12 @@ class SendActivity : BaseActivity(), SendView {
     override fun onBackPressed() {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+    }
+
+    override fun needShowNetworkBottomMessage(): Boolean = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_continue.isEnabled = networkConnected
     }
 }

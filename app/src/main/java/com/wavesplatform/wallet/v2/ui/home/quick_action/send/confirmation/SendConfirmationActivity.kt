@@ -182,6 +182,13 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
+    override fun needShowNetworkBottomMessage(): Boolean = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_confirm.isEnabled = networkConnected
+    }
+
     companion object {
         const val KEY_INTENT_SELECTED_ASSET = "intent_selected_asset"
         const val KEY_INTENT_SELECTED_RECIPIENT = "intent_selected_recipient"
