@@ -22,13 +22,11 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send_confirmation.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.invisiable
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import javax.inject.Inject
 
 
@@ -66,7 +64,8 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.assetInfo = queryFirst { equalTo("id", presenter.selectedAsset!!.assetId) }
         presenter.type = intent!!.extras!!.getSerializable(KEY_INTENT_TYPE) as SendPresenter.Type
 
-        text_sum.text = "- ${presenter.amount}"
+        text_sum.text = "-${presenter.amount}"
+        text_sum.makeTextHalfBold()
         text_tag.text = presenter.selectedAsset!!.getName()
         text_sent_to_address.text = presenter.recipient
         presenter.getAddressName(presenter.recipient!!)
@@ -144,12 +143,16 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             text_sent_to_name.text = name
             text_sent_to_name.visiable()
         } else {
-            text_sent_to_name.invisiable()
+            text_sent_to_address.textSize = 14f
+            text_sent_to_address.setTextColor(findColor(R.color.disabled900))
+            text_sent_to_name.gone()
         }
     }
 
     override fun hideAddressBookUser() {
-        text_sent_to_name.invisiable()
+        text_sent_to_address.textSize = 14f
+        text_sent_to_address.setTextColor(findColor(R.color.disabled900))
+        text_sent_to_name.gone()
     }
 
     override fun requestPassCode() {

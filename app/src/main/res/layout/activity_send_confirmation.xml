@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@drawable/img_brand"
-    android:orientation="vertical"
-    android:paddingBottom="56dp">
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"
@@ -15,7 +14,6 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
-        android:layout_marginTop="24dp"
         app:titleTextAppearance="@style/Toolbar.Title"
         app:titleTextColor="@color/white" />
 
@@ -26,7 +24,7 @@
         android:layout_marginBottom="-2dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         app:cardCornerRadius="2dp"
         app:cardElevation="3dp">
 
@@ -223,7 +221,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="8dp"
                 android:text="@string/send_confirmation_confirm" />
 
         </RelativeLayout>
