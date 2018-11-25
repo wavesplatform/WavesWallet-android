@@ -376,7 +376,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     }
 
     private fun makeButtonEnableIfValid() {
-        button_confirm.isEnabled = presenter.isAllFieldsValid()
+        button_confirm.isEnabled = presenter.isAllFieldsValid() && isNetworkConnected()
     }
 
     override fun successLoadPairBalance(pairBalance: LinkedTreeMap<String, Long>) {
@@ -426,5 +426,10 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
     override fun afterFailedPlaceOrder(message: String?) {
         message.notNull { showError(it, R.id.root) }
+    }
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_confirm.isEnabled = presenter.isAllFieldsValid() && networkConnected
     }
 }

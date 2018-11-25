@@ -21,10 +21,7 @@ import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.fragment_trade_orderbook.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.inflate
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import java.math.RoundingMode
 import javax.inject.Inject
 
@@ -83,15 +80,17 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         adapter.bindToRecyclerView(recycle_orderbook)
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as MultiItemEntity
-            when (item.itemType) {
-                TradeOrderBookAdapter.ASK_TYPE -> {
-                    item as OrderBook.Ask
-                    openOrderDialog(true, item.price, item.amount)
-                }
-                TradeOrderBookAdapter.BID_TYPE -> {
-                    item as OrderBook.Bid
-                    openOrderDialog(false, item.price, item.amount)
+            if (isNetworkConnected()) {
+                val item = adapter.getItem(position) as MultiItemEntity
+                when (item.itemType) {
+                    TradeOrderBookAdapter.ASK_TYPE -> {
+                        item as OrderBook.Ask
+                        openOrderDialog(true, item.price, item.amount)
+                    }
+                    TradeOrderBookAdapter.BID_TYPE -> {
+                        item as OrderBook.Bid
+                        openOrderDialog(false, item.price, item.amount)
+                    }
                 }
             }
         }
@@ -205,5 +204,18 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     override fun onDestroyView() {
         progress_bar.hide()
         super.onDestroyView()
+    }
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        linear_buy.isClickable = networkConnected
+        linear_sell.isClickable = networkConnected
+        if (networkConnected) {
+            linear_buy.setBackgroundResource(R.drawable.shape_btn_waves_blue_default)
+            linear_sell.setBackgroundResource(R.drawable.shape_btn_red_default)
+        } else {
+            linear_buy.setBackgroundResource(R.drawable.shape_btn_waves_blue_disabled)
+            linear_sell.setBackgroundResource(R.drawable.shape_btn_red_disabled)
+        }
     }
 }

@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_dex_new.*
 import kotlinx.android.synthetic.main.header_dex_layout.view.*
 import pers.victor.ext.click
 import pers.victor.ext.inflate
+import pers.victor.ext.isNetworkConnected
 import java.util.*
 import javax.inject.Inject
 
@@ -85,11 +86,13 @@ class DexFragment : BaseFragment(), DexView {
                 })
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val args = Bundle()
-            args.classLoader = WatchMarket::class.java.classLoader
-            args.putParcelable(TradeActivity.BUNDLE_MARKET, this@DexFragment.adapter.getItem(position))
+            if (isNetworkConnected()) {
+                val args = Bundle()
+                args.classLoader = WatchMarket::class.java.classLoader
+                args.putParcelable(TradeActivity.BUNDLE_MARKET, this@DexFragment.adapter.getItem(position))
 
-            launchActivity<TradeActivity>(options = args)
+                launchActivity<TradeActivity>(options = args)
+            }
         }
 
         recycle_dex.addOnScrollListener(object : RecyclerView.OnScrollListener() {

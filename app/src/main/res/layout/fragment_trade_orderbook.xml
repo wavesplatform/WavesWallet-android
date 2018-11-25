@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:layout_weight="1"
-                    android:background="@drawable/selector_waves_primary_button"
+                    android:background="@drawable/shape_btn_waves_blue_default"
                     android:clickable="true"
                     android:orientation="vertical"
                     android:padding="6dp">
