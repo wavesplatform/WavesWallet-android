@@ -107,6 +107,11 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     private fun configureTitleForAssets(position: Int) {
+        if (position >= adapterAvatar.items.size ) {
+            text_asset_description.text = ""
+            return
+        }
+
         val item = adapterAvatar.items[position]
         text_asset_name.text = item.getName()
 
@@ -136,14 +141,15 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
                 view_pager.endFakeDrag()
             }
         }
-        configureTitleForAssets(view_pager.currentItem)
-        showFavorite(view_pager.currentItem)
 
         // configure contents pager
         view_pager_content.adapter = AssetDetailsContentPageAdapter(supportFragmentManager,
                 ArrayList(sortedToFirstFavoriteList))
         view_pager_content.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0),
                 false)
+
+        configureTitleForAssets(view_pager.currentItem)
+        showFavorite(view_pager.currentItem)
     }
 
     fun showFavorite(currentItem: Int) {

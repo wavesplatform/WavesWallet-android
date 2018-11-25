@@ -102,11 +102,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                     image_copy_id.copyToClipboard(text_view_id_value.text.toString())
                 })
 
-        card_burn.click {
-            launchActivity<TokenBurnActivity> {
-                putExtra(TokenBurnActivity.KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
-            }
-        }
 
         receive.click {
             launchActivity<ReceiveActivity> {
@@ -214,7 +209,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
         when {
             assetBalance?.isWaves() == true -> {
-                card_burn.gone()
                 relative_issuer.gone()
                 text_view_issuer.gone()
                 text_description.gone()
@@ -224,10 +218,20 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 linear_last_transactions.gone()
                 linear_transfer_buttons.gone()
                 linear_blocked_transfer_buttons.visiable()
+                setBurnButton(spam_card_burn_container)
             }
             else -> {
-
+                setBurnButton(card_burn_container)
             }
         }
+    }
+
+    private fun setBurnButton(cardBurnContainer: View) {
+        cardBurnContainer.click {
+            launchActivity<TokenBurnActivity> {
+                putExtra(TokenBurnActivity.KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
+            }
+        }
+        cardBurnContainer.visiable()
     }
 }

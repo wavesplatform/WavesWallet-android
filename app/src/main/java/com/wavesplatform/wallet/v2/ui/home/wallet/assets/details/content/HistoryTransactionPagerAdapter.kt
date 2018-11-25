@@ -56,7 +56,7 @@ class HistoryTransactionPagerAdapter @Inject constructor(
         item.data.transactionType().notNull {
             try {
                 layout.text_transaction_name.text =
-                        mContext.getString(it.title, item.data.asset?.name)
+                        mContext.getString(it.title)
             } catch (e: MissingFormatArgumentException) {
                 layout.text_transaction_name.text = mContext.getString(it.title)
             }

@@ -58,6 +58,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
 
         val nameValidation = Validation(til_account_name)
                 .and(NotEmptyTrimRule(R.string.new_account_account_name_validation_required_error))
+                .and(MinTrimRule(2, R.string.new_account_account_name_validation_min_length_error))
                 .and(MaxRule(20, R.string.new_account_account_name_validation_length_error))
                 .and(AccountNameRule(R.string.new_account_account_name_validation_already_exist_error))
 

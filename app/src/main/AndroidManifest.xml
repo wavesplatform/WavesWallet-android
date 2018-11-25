@@ -233,6 +233,7 @@
         <activity
             android:name=".v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity"
             android:screenOrientation="portrait"
+            android:noHistory="true"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
             android:name=".v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity"
@@ -258,6 +259,7 @@
         <activity
             android:name=".v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity"
             android:screenOrientation="portrait"
+            android:noHistory="true"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
             android:name=".v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity"

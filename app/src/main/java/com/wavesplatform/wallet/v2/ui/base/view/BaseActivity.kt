@@ -25,6 +25,7 @@ import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -85,6 +86,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     private var progressDialog: ProgressDialog? = null
     private val localizationDelegate = LocalizationActivityDelegate(this)
+    protected lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var noInternetLayout: View? = null
 
@@ -106,6 +108,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         localizationDelegate.addOnLocaleChangedListener(this)
         localizationDelegate.onCreate(savedInstanceState)
         super.onCreate(savedInstanceState)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         if (!translucentStatusBar) {
             setStatusBarColor(R.color.white)
             setNavigationBarColor(R.color.white)
@@ -167,11 +170,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         }
 
         localizationDelegate.onResume(this)
-//
-//        if (!isNetworkConnection()) {
-//            checkInternet()
-//            return
-//        }
 
         askPassCodeIfNeed()
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)
