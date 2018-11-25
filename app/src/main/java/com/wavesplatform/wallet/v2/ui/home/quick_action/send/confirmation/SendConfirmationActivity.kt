@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.WindowManager
@@ -10,11 +9,9 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.id.toolbar_view
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -23,6 +20,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressAc
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
+import com.wavesplatform.wallet.v2.util.stripZeros
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send_confirmation.*
 import pers.victor.ext.click
@@ -63,12 +61,27 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
 
         presenter.selectedAsset = intent!!.extras!!.getParcelable(KEY_INTENT_SELECTED_ASSET)
         presenter.recipient = intent!!.extras!!.getString(KEY_INTENT_SELECTED_RECIPIENT)
-        presenter.amount = intent!!.extras!!.getString(KEY_INTENT_SELECTED_AMOUNT)
+        presenter.amount = intent!!.extras!!.getFloat(KEY_INTENT_SELECTED_AMOUNT)
         presenter.moneroPaymentId = intent!!.extras!!.getString(KEY_INTENT_MONERO_PAYMENT_ID)
         presenter.assetInfo = queryFirst { equalTo("id", presenter.selectedAsset!!.assetId) }
         presenter.type = intent!!.extras!!.getSerializable(KEY_INTENT_TYPE) as SendPresenter.Type
 
-        text_sum.text = "- ${presenter.amount}"
+        if (presenter.type == SendPresenter.Type.GATEWAY) {
+            presenter.gatewayCommission = intent!!.extras!!.getFloat(KEY_INTENT_GATEWAY_COMMISSION)
+            text_sum.text = "-${(presenter.amount + presenter.gatewayCommission)
+                    .toBigDecimal()
+                    .toPlainString()
+                    .stripZeros()}"
+            text_gateway_fee_value.text = "${presenter.gatewayCommission}" +
+                    " ${presenter.selectedAsset!!.getName()}"
+            gateway_commission_layout.visiable()
+        } else {
+            text_sum.text = "-${(presenter.amount)
+                    .toBigDecimal()
+                    .toPlainString()
+                    .stripZeros()}"
+        }
+
         text_tag.text = presenter.selectedAsset!!.getName()
         text_sent_to_address.text = presenter.recipient
         presenter.getAddressName(presenter.recipient!!)
@@ -88,7 +101,10 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             }
         }
 
-        button_confirm.click { requestPassCode() }
+        button_confirm.click {
+            showTransactionProcessing()
+            presenter.confirmSend()
+        }
     }
 
     override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {
@@ -158,29 +174,9 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         text_sent_to_name.gone()
     }
 
-    override fun requestPassCode() {
-        launchActivity<EnterPassCodeActivity>(requestCode = REQUEST_CONFIRM_SEND)
-    }
-
     override fun onShowError(res: Int) {
         cancelTransactionProcessing()
         showError(res, R.id.relative_root)
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CONFIRM_SEND -> {
-                if (resultCode == Constants.RESULT_OK) {
-                    showTransactionProcessing()
-                    presenter.confirmSend()
-                } else {
-                    setResult(Constants.RESULT_CANCELED)
-                    onBackPressed()
-                }
-            }
-        }
     }
 
     override fun onBackPressed() {
@@ -192,9 +188,9 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         const val KEY_INTENT_SELECTED_ASSET = "intent_selected_asset"
         const val KEY_INTENT_SELECTED_RECIPIENT = "intent_selected_recipient"
         const val KEY_INTENT_SELECTED_AMOUNT = "intent_selected_amount"
+        const val KEY_INTENT_GATEWAY_COMMISSION = "intent_gateway_commission"
         const val KEY_INTENT_ATTACHMENT = "intent_attachment"
         const val KEY_INTENT_MONERO_PAYMENT_ID = "intent_monero_payment_id"
         const val KEY_INTENT_TYPE = "intent_type"
-        const val REQUEST_CONFIRM_SEND = 1000
     }
 }

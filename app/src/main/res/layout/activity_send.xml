@@ -47,8 +47,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
                 android:clipToPadding="true"
                 android:translationZ="1dp"
                 app:cardBackgroundColor="@color/white"
@@ -140,8 +140,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
                     android:layout_marginTop="24dp"
+                    android:layout_marginRight="16dp"
                     android:lineSpacingExtra="4sp"
                     android:text="@string/send_recipient"
                     android:textColor="@color/basic500"
@@ -153,8 +153,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
                     android:layout_marginTop="24dp"
+                    android:layout_marginRight="16dp"
                     android:lineSpacingExtra="4sp"
                     android:text="@string/send_recipient_the_address_is_not_valid"
                     android:textColor="@color/error500"
@@ -168,11 +168,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:animateLayoutChanges="true"
                 android:clipToPadding="true"
                 android:translationZ="1dp"
-                android:animateLayoutChanges="true"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="2dp">
@@ -180,8 +180,7 @@
                 <RelativeLayout
                     android:id="@+id/recipient_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                  >
+                    android:layout_height="wrap_content">
 
                     <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/edit_address"
@@ -228,8 +227,8 @@
                 android:id="@+id/horizontal_recipient_suggestion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
                 android:scrollbars="none">
 
@@ -237,7 +236,7 @@
                     android:id="@+id/linear_recipient_suggestion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"/>
+                    android:orientation="horizontal" />
 
             </HorizontalScrollView>
 
@@ -246,8 +245,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginRight="16dp"
                 android:visibility="gone"
                 tools:visibility="visible">
 
@@ -263,10 +262,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:layout_toEndOf="@+id/image_info"
-                    tools:text="@string/send_gateway_info_gateway_fee"
                     android:textColor="@color/black"
                     android:textSize="12sp"
-                    app:fontFamily="@font/roboto_bold" />
+                    app:fontFamily="@font/roboto_bold"
+                    tools:text="@string/send_gateway_info_gateway_fee" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/gateway_limits"
@@ -276,9 +275,9 @@
                     android:layout_marginStart="14dp"
                     android:layout_marginTop="2dp"
                     android:layout_toEndOf="@+id/image_info"
-                    tools:text="@string/send_gateway_info_gateway_limits"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    tools:text="@string/send_gateway_info_gateway_limits" />
 
                 <RelativeLayout
                     android:id="@+id/relative_do_not_withdraw"
@@ -302,9 +301,9 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="14dp"
                         android:layout_toEndOf="@+id/image_warning"
-                        tools:text="@string/send_gateway_info_gateway_warning"
                         android:textColor="@color/disabled500"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        tools:text="@string/send_gateway_info_gateway_warning" />
 
                 </RelativeLayout>
 
@@ -319,13 +318,13 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/relative_fiat_fee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="24dp">
+                android:visibility="gone">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/image_warning_fiat"
@@ -395,52 +394,67 @@
 
             </RelativeLayout>
 
-            <LinearLayout
+            <android.support.v7.widget.CardView
                 android:id="@+id/monero_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_height="48dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="24dp"
+                android:clipToPadding="true"
+                android:translationZ="1dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="2dp"
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginRight="16dp"
-                    android:lineSpacingExtra="4sp"
-                    android:text="@string/send_monero_payment_id"
-                    android:textColor="@color/basic500"
-                    android:textSize="12sp" />
-
-                <android.support.v7.widget.CardView
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="24dp"
-                    android:clipToPadding="true"
-                    android:translationZ="1dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="2dp"
-                    app:cardElevation="2dp">
+                    android:layout_height="wrap_content">
 
-                    <EditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/edit_monero_payment_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
+                        android:layout_toLeftOf="@+id/monero_container_qr_code"
+                        android:background="@null"
+                        android:drawablePadding="8dp"
                         android:hint="@string/send_monero_payment_id_hint"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
                         android:padding="14dp"
                         android:singleLine="true"
-                        android:textColorHint="@color/accent100"
-                        android:textSize="14sp"/>
+                        android:textColorHint="@color/accent100" />
 
-                </android.support.v7.widget.CardView>
+                    <RelativeLayout
+                        android:id="@+id/monero_container_qr_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal">
 
-            </LinearLayout>
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="24dp"
+                            android:layout_centerVertical="true"
+                            android:background="@color/accent100" />
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/image_view_monero_action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:padding="14dp"
+                            app:srcCompat="@drawable/ic_qrcode_24_basic_500" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -451,8 +465,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
                     android:layout_marginTop="24dp"
+                    android:layout_marginRight="16dp"
                     android:lineSpacingExtra="4sp"
                     android:text="@string/send_amount"
                     android:textColor="@color/basic500"
@@ -465,8 +479,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
                     android:layout_marginTop="24dp"
+                    android:layout_marginRight="16dp"
                     android:lineSpacingExtra="4sp"
                     android:text="@string/send_amount_error_insufficient_funds"
                     android:textColor="@color/error500"
@@ -480,10 +494,10 @@
                 android:id="@+id/amount_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
                 android:clipToPadding="true"
                 android:translationZ="1dp"
                 app:cardBackgroundColor="@color/white"
@@ -514,13 +528,13 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
                         android:layout_marginTop="24dp"
+                        android:layout_marginRight="16dp"
                         android:lineSpacingExtra="4sp"
-                        tools:text="≈ $ 00 000.00"
                         android:textColor="@color/basic500"
                         android:textSize="12sp"
-                        android:visibility="gone"/>
+                        android:visibility="gone"
+                        tools:text="≈ $ 00 000.00" />
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 
@@ -543,10 +557,10 @@
                         android:layout_marginRight="4dp"
                         android:background="@drawable/basic100_rounded"
                         android:lineSpacingExtra="4sp"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/common_100_percent"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
@@ -559,10 +573,10 @@
                         android:layout_marginRight="4dp"
                         android:background="@drawable/basic100_rounded"
                         android:lineSpacingExtra="4sp"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/common_50_percent"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
@@ -575,10 +589,10 @@
                         android:layout_marginRight="4dp"
                         android:background="@drawable/basic100_rounded"
                         android:lineSpacingExtra="4sp"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/common_10_percent"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
@@ -591,10 +605,10 @@
                         android:layout_marginRight="4dp"
                         android:background="@drawable/basic100_rounded"
                         android:lineSpacingExtra="4sp"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/common_5_percent"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
@@ -607,8 +621,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
@@ -633,8 +647,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginRight="16dp"
                 android:clickable="true"
                 android:text="@string/send_continue"
                 android:textStyle="bold" />
@@ -644,8 +658,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="34dp"
                 android:layout_marginTop="14dp"
+                android:layout_marginBottom="34dp"
                 android:text="@string/send_transaction_fee_0_001_waves"
                 android:textColor="@color/disabled500"
                 android:textSize="12sp" />
