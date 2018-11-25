@@ -365,6 +365,7 @@
     <string name="new_account_account_name_hint">Имя аккаунта</string>
     <string name="new_account_account_name_validation_already_exist_error">Имя аккаунта уже используется</string>
     <string name="new_account_account_name_validation_length_error">Максимум 20 символов</string>
+    <string name="new_account_account_name_validation_min_length_error">Минимум: 2 символа</string>
     <string name="new_account_account_name_validation_required_error">Требуется имя</string>
     <string name="new_account_avatar_description">Этот аватар уникален. Вы не сможете изменить его потом.</string>
     <string name="new_account_avatar_error">Выберите аватар</string>

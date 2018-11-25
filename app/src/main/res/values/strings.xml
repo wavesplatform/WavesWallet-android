@@ -366,6 +366,7 @@
     <string name="new_account_account_name_hint">Account name</string>
     <string name="new_account_account_name_validation_already_exist_error">Account name already use</string>
     <string name="new_account_account_name_validation_length_error">Max: 20 symbols</string>
+    <string name="new_account_account_name_validation_min_length_error">Min: 2 symbols</string>
     <string name="new_account_account_name_validation_required_error">Name is required</string>
     <string name="new_account_avatar_description">This avatar is unique. You cannot change it later.</string>
     <string name="new_account_avatar_error">Please select avatar</string>

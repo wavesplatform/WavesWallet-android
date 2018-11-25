@@ -365,6 +365,7 @@
     <string name="new_account_account_name_hint">Accountnaam</string>
     <string name="new_account_account_name_validation_already_exist_error">Accountnaam al in gebruik</string>
     <string name="new_account_account_name_validation_length_error">Max: 20 karakters</string>
+    <string name="new_account_account_name_validation_min_length_error">Min: 2 karakters</string>
     <string name="new_account_account_name_validation_required_error">Naam is vereist</string>
     <string name="new_account_avatar_description">Deze avatar is uniek. U kunt deze later niet veranderen.</string>
     <string name="new_account_avatar_error">Selecteer een avatar</string>

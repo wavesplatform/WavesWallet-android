@@ -365,6 +365,7 @@
     <string name="new_account_account_name_hint">계정 이름</string>
     <string name="new_account_account_name_validation_already_exist_error">이미 존재하는 계정 이름입니다</string>
     <string name="new_account_account_name_validation_length_error">최대: 20자</string>
+    <string name="new_account_account_name_validation_min_length_error">최저한의: 2자</string>
     <string name="new_account_account_name_validation_required_error">이름이 필요합니다</string>
     <string name="new_account_avatar_description">본 아바타는 고유합니다. 추후 변경할 수 없습니다</string>
     <string name="new_account_avatar_error">아바타를 선택하세요</string>

@@ -365,6 +365,7 @@
     <string name="new_account_account_name_hint">Nombre de la cuenta</string>
     <string name="new_account_account_name_validation_already_exist_error">El nombre de la cuenta ya está en uso</string>
     <string name="new_account_account_name_validation_length_error">Max: 20 símbolos</string>
+    <string name="new_account_account_name_validation_min_length_error">Min: 2 símbolos</string>
     <string name="new_account_account_name_validation_required_error">Se requiere el nombre</string>
     <string name="new_account_avatar_description">Este avatar es único. No puedes cambiarlo más tarde.</string>
     <string name="new_account_avatar_error">Por favor seleccione un avatar</string>
