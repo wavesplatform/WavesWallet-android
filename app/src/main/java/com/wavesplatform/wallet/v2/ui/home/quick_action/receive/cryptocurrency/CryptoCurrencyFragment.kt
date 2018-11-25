@@ -73,7 +73,12 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
                 }
             }
         }
-        button_continue.isEnabled = false
+        presenter.nextStepValidation = false
+        needMakeButtonEnable()
+    }
+
+    private fun needMakeButtonEnable() {
+        button_continue.isEnabled = presenter.nextStepValidation && isNetworkConnected()
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -99,7 +104,8 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         if (tunnel?.tunnel == null
                 || tunnel.tunnel?.inMin.isNullOrEmpty()
                 || tunnel.tunnel?.currencyFrom.isNullOrEmpty()) {
-            button_continue.isEnabled = false
+            presenter.nextStepValidation = false
+            needMakeButtonEnable()
             onShowError(App.getAppContext().getString(R.string.receive_error_network))
             return
         }
@@ -111,7 +117,8 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
                 min,
                 tunnel.tunnel?.currencyFrom)
         warning_crypto.text = getString(R.string.receive_warning_crypto, tunnel.tunnel?.currencyFrom)
-        button_continue.isEnabled = true
+        presenter.nextStepValidation = true
+        needMakeButtonEnable()
         container_info.visiable()
     }
 
@@ -136,7 +143,8 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         edit_asset.gone()
         container_asset.visiable()
 
-        button_continue.isEnabled = true
+        presenter.nextStepValidation = true
+        needMakeButtonEnable()
 
         if (assetBalance != null) {
             presenter.getTunnel(assetBalance.assetId!!)
@@ -180,5 +188,11 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
             }
         }
+    }
+
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_continue.isEnabled = presenter.nextStepValidation && networkConnected
     }
 }

@@ -21,6 +21,7 @@ class СryptocurrencyPresenter @Inject constructor() : BasePresenter<Сryptocurr
     var tunnel: GetTunnel? = null
     private var address: String? = App.getAccessManager().getWallet()!!.address
     private var lang: String = "ru_RU"
+    var nextStepValidation = false
 
 
     fun getTunnel(assetId: String) {

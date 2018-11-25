@@ -112,4 +112,7 @@ class ReceiveActivity : BaseActivity(), ReceiveView {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
+
+
+    override fun needShowNetworkBottomMessage(): Boolean = true
 }
