@@ -30,7 +30,7 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                         .retry(3)
                         .flatMap {
                             return@flatMap Observable.zip(matcherDataManager.loadOrderBook(watchMarket),
-                                    dataFeedManager.getTradesByPair(watchMarket, 1)
+                                    dataFeedManager.getLastTradeByPair(watchMarket)
                                             .map { it.firstOrNull() },
                                     BiFunction { orderBook: OrderBook, lastPrice: LastTrade? ->
                                         return@BiFunction Pair(orderBook, lastPrice)

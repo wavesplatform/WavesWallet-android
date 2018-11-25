@@ -13,6 +13,10 @@ import javax.inject.Singleton
 class DataFeedManager @Inject constructor() : BaseDataManager() {
     fun getTradesByPair(watchMarket: WatchMarket?, limit: Int): Observable<List<LastTrade>> {
         return dataFeedService.getTradesByPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, limit)
+    }
+
+    fun getLastTradeByPair(watchMarket: WatchMarket?): Observable<List<LastTrade>> {
+        return dataFeedService.getTradesByPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, 1)
                 .onErrorResumeNext(Observable.just(arrayListOf()))
     }
 
