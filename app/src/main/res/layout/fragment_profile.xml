@@ -529,7 +529,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="44dp"
             android:foreground="?attr/selectableItemBackground"
-            android:background="@drawable/selector_btn_error_400"
+            android:background="@drawable/selector_btn_red"
             android:drawablePadding="16dp"
             android:gravity="center"
             android:padding="16dp"
