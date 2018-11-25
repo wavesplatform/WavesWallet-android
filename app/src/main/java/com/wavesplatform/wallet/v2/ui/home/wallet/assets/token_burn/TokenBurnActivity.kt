@@ -1,11 +1,11 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn
 
+import android.content.Intent
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -16,7 +16,6 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_token_burn.*
-import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -123,7 +122,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
                 }))
 
         button_continue.click {
-            launchActivity<TokenBurnConfirmationActivity> {
+            launchActivity<TokenBurnConfirmationActivity>(REQUEST_BURN_CONFIRM) {
                 putExtra(KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
                 putExtra(KEY_INTENT_AMOUNT, edit_amount.text.toString())
             }
@@ -139,8 +138,20 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_BURN_CONFIRM -> {
+                if (resultCode == Constants.RESULT_OK) {
+                    finish()
+                }
+            }
+        }
+    }
+
     companion object {
         const val KEY_INTENT_ASSET_BALANCE = "asset_balance"
         const val KEY_INTENT_AMOUNT = "amount"
+        const val REQUEST_BURN_CONFIRM = 10001
     }
 }

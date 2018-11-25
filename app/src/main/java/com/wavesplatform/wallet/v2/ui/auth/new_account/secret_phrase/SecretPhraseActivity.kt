@@ -66,6 +66,7 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
 
 
     override fun onBackPressed() {
-
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

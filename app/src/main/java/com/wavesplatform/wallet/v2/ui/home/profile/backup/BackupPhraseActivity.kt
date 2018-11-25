@@ -49,10 +49,9 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
                 getString(R.string.backup_pharse), R.drawable.ic_toolbar_back_black)
 
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
-            setSeed(intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED))
+            setSeed(intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED, ""))
         } else {
-            launchActivity<EnterPassCodeActivity>(
-                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
+            setSeed(App.getAccessManager().getWallet()?.seedStr ?: "")
         }
 
         if (!App.getAccessManager().isCurrentAccountBackupSkipped()) {

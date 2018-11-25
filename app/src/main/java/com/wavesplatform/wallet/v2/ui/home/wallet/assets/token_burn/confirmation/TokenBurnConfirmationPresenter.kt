@@ -16,7 +16,7 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
     var amount: Double = 0.0
 
     fun burn() {
-        val decimals = assetBalance!!.getDecimals() ?: 0
+        val decimals = assetBalance!!.getDecimals()
         val quantity = if (amount == 0.0) {
             0
         } else {
@@ -24,15 +24,15 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
         }
 
         val request = BurnRequest(
-                assetId = assetBalance!!.assetId!!,
+                assetId = assetBalance!!.assetId,
                 quantity = quantity,
                 senderPublicKey = App.getAccessManager().getWallet()!!.publicKeyStr)
         request.sign(App.getAccessManager().getWallet()!!.privateKey)
 
         addSubscription(nodeDataManager.burn(request)
                 .compose(RxUtil.applySchedulersToObservable()).subscribe({ it ->
-                    viewState.onShowBurnSuccess(it)
-                }, { _ ->
+                    viewState.onShowBurnSuccess(it, quantity >= assetBalance?.balance ?: 0)
+                }, {
                     viewState.onShowError(R.string.transaction_failed)
                 }))
     }

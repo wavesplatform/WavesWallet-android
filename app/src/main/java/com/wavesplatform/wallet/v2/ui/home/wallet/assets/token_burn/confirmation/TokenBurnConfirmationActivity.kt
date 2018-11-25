@@ -72,7 +72,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         )
     }
 
-    override fun onShowBurnSuccess(tx: BurnRequest?) {
+    override fun onShowBurnSuccess(tx: BurnRequest?, totalBurn: Boolean) {
         completeBurnProcessing()
         relative_success.visiable()
 
