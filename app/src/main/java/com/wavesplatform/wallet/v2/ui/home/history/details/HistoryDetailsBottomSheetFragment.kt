@@ -138,9 +138,14 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
         feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()} ${transaction.feeAssetObject?.name}"
 
-        confirmation?.text = (preferencesHelper.currentBlocksHeight - transaction.height).toString()
+        val confirmations = preferencesHelper.currentBlocksHeight - transaction.height
+        confirmation?.text = if (confirmations < 0) {
+            "0"
+        } else {
+            confirmations.toString()
+        }
         block?.text = transaction.height.toString()
-        timeStamp?.text = transaction.timestamp.date("dd.MM.yyyy 'at' HH:mm")
+        timeStamp?.text = transaction.timestamp.date("dd.MM.yyyy HH:mm")
 
         if (preferencesHelper.currentBlocksHeight.minus(transaction.height) > 0) {
             status?.setBackgroundResource(R.drawable.success400_01_shape)
