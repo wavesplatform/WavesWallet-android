@@ -156,10 +156,17 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         val list = arrayListOf<HistoryItem>()
 
         sortedList.forEach {
-            val date = (it.data.timestamp) / (1000 * 60 * 60 * 24)
-            if (hashOfTimestamp[date] == null) {
-                hashOfTimestamp[date] = date
-                list.add(HistoryItem(HistoryItem.TYPE_HEADER, dateFormat.format(Date(it.data.timestamp)).capitalize()))
+            val startDate = Calendar.getInstance()
+            startDate.timeInMillis = it.data.timestamp
+            startDate.set(Calendar.HOUR_OF_DAY, 0)
+            startDate.set(Calendar.MINUTE, 0)
+            startDate.set(Calendar.SECOND, 0)
+            startDate.set(Calendar.MILLISECOND, 0)
+            val timestamp = startDate.timeInMillis
+            if (hashOfTimestamp[timestamp] == null) {
+                hashOfTimestamp[timestamp] = timestamp
+                list.add(HistoryItem(HistoryItem.TYPE_HEADER,
+                        dateFormat.format(Date(it.data.timestamp)).capitalize()))
                 totalHeaders++
             }
             list.add(it)
