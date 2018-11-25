@@ -23,6 +23,7 @@ import io.reactivex.functions.BiFunction
 import kotlinx.android.synthetic.main.activity_create_alias.*
 import pers.victor.ext.app
 import pers.victor.ext.click
+import pers.victor.ext.isNetworkConnected
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -76,7 +77,8 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         eventSubscriptions.add(RxTextView.textChanges(edit_new_alias_symbol)
                 .skipInitialValue()
                 .map {
-                    button_create_alias.isEnabled = false
+                    presenter.aliasValidation = false
+                    makeButtonEnableIfValid()
                     return@map it.toString()
                 }
                 .filter { !it.isEmpty() }
@@ -89,7 +91,8 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                 .filter { it.first }
                 .map {
                     if (presenter.wavesBalance.getAvailableBalance() ?: 0 < Constants.WAVES_FEE){
-                        button_create_alias.isEnabled = false
+                        presenter.aliasValidation = false
+                        makeButtonEnableIfValid()
                         til_new_alias_symbol.error =  getString(R.string.buy_and_sell_not_enough, presenter.wavesBalance.getName())
                         return@map ""
                     }else{
@@ -110,14 +113,20 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         presenter.loadWavesBalance()
     }
 
+    fun makeButtonEnableIfValid() {
+        button_create_alias.isEnabled = presenter.aliasValidation && isNetworkConnected()
+    }
+
     override fun aliasIsAvailable() {
-        button_create_alias.isEnabled = !edit_new_alias_symbol.text.toString().trim().isEmpty()
+        presenter.aliasValidation = !edit_new_alias_symbol.text.toString().trim().isEmpty()
+        makeButtonEnableIfValid()
         if (til_new_alias_symbol.error == getString(R.string.new_alias_already_use_validation_error))
             til_new_alias_symbol.error = ""
     }
 
     override fun aliasIsNotAvailable() {
-        button_create_alias.isEnabled = false
+        presenter.aliasValidation = false
+        makeButtonEnableIfValid()
         til_new_alias_symbol.error = getString(R.string.new_alias_already_use_validation_error)
     }
 
@@ -140,4 +149,12 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
             showError(it, R.id.root)
         }
     }
+
+    override fun needShowNetworkBottomMessage() = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_create_alias.isEnabled = presenter.aliasValidation && networkConnected
+    }
+
 }
