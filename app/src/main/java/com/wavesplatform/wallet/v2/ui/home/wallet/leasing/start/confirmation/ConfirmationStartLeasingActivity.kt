@@ -93,4 +93,12 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
         card_leasing_preview_info.visiable()
     }
 
+
+    override fun needShowNetworkBottomMessage() = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_confirm.isEnabled = networkConnected
+    }
+
 }

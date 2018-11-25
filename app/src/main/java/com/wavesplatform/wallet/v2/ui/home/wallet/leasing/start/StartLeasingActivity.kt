@@ -26,10 +26,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_start_leasing.*
-import pers.victor.ext.children
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -223,7 +220,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
 
     fun makeButtonEnableIfValid() {
-        button_continue.isEnabled = presenter.isAllFieldsValid()
+        button_continue.isEnabled = presenter.isAllFieldsValid() && isNetworkConnected()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -286,4 +283,10 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
+    override fun needShowNetworkBottomMessage() = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_continue.isEnabled = presenter.isAllFieldsValid() && networkConnected
+    }
 }

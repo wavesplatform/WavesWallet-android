@@ -53,14 +53,12 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         if (networkConnected) {
-            // enable quick action tab
             enableView(send)
             enableView(receive)
             enableView(exchange)
             enableView(relative_burn)
             card_burn.isClickable = true
         } else {
-            // disable quick action tab
             disableView(send)
             disableView(receive)
             disableView(exchange)

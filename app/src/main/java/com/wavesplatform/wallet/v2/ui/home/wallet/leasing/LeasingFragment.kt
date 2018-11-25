@@ -198,4 +198,10 @@ class LeasingFragment : BaseFragment(), LeasingView {
         adapterActiveAdapter.setNewData(transactions)
         text_active_leasing.text = getString(R.string.wallet_leasing_active_now, transactions.size.toString())
     }
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_start_lease.isEnabled = networkConnected
+    }
+
 }

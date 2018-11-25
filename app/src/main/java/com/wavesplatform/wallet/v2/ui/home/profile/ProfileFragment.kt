@@ -139,7 +139,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         if (networkConnected) {
-            // enable quick action tab
             frame_network.alpha = Constants.ENABLE_VIEW
             frame_change_passcode.alpha = Constants.ENABLE_VIEW
             frame_fingerprint.alpha = Constants.ENABLE_VIEW
@@ -148,7 +147,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
             card_change_passcode.isClickable = true
             card_fingerprint.isClickable = true
         } else {
-            // disable quick action tab
             frame_network.alpha = Constants.DISABLE_VIEW
             frame_change_passcode.alpha = Constants.DISABLE_VIEW
             frame_fingerprint.alpha = Constants.DISABLE_VIEW
