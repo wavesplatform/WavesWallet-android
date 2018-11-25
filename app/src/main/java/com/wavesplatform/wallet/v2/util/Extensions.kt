@@ -50,6 +50,7 @@ import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.response.Order
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import pers.victor.ext.activityManager
@@ -231,14 +232,13 @@ fun Context.getToolBarHeight(): Int {
     return mActionBarSize
 }
 
-fun Number.roundTo(numFractionDigits: Int?)
-        = String.format("%.${numFractionDigits}f", toDouble()).toDouble()
+fun Number.roundTo(numFractionDigits: Int?) = String.format("%.${numFractionDigits}f", toDouble()).toDouble()
 
 fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
-    return if (numDecimalPlaces != null){
+    return if (numDecimalPlaces != null) {
         val factor = Math.pow(10.0, numDecimalPlaces.toDouble())
         Math.round(this * factor) / factor
-    }else{
+    } else {
         this
     }
 }
@@ -388,7 +388,7 @@ fun View.copyToClipboard(text: String, textView: AppCompatTextView,
         runDelayed(1500) {
             this.context.notNull {
                 view.setCompoundDrawablesWithIntrinsicBounds(
-                    ContextCompat.getDrawable(it, copyIcon), null, null, null)
+                        ContextCompat.getDrawable(it, copyIcon), null, null, null)
                 textView.setTextColor(ContextCompat.getColor(it, copyColor))
             }
         }
@@ -648,4 +648,24 @@ fun TextView.makeTextHalfBold() {
         str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
     this.text = str.append(" $textAfter")
+}
+
+fun findMyOrder(first: Order, second: Order, address: String): Order {
+    return if (first.sender == second.sender) {
+        if (first.timestamp > second.timestamp) {
+            first
+        } else {
+            second
+        }
+    } else if (first.sender == address) {
+        first
+    } else if (second.sender == address) {
+        second
+    } else {
+        if (first.timestamp > second.timestamp) {
+            first
+        } else {
+            second
+        }
+    }
 }

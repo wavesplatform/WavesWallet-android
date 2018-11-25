@@ -75,26 +75,30 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
                         text_quantity_error.text = getString(R.string.token_burn_validation_is_required_error)
                         text_quantity_error.visiable()
                     }
-                    makeButtonEnableIfValid()
                     return@map it
                 }
                 .filter {
                     it.isNotEmpty()
                 }
                 .map {
-                    val isValid = it.toBigDecimal() <= presenter.assetBalance.getDisplayAvailableBalance().clearBalance().toBigDecimal() && it.toBigDecimal() != BigDecimal.ZERO
-                    presenter.quantityValidation = isValid
+                    if (it.toDouble() != 0.0) {
+                        val isValid = it.toBigDecimal() <= presenter.assetBalance.getDisplayAvailableBalance().clearBalance().toBigDecimal() && it.toBigDecimal() != BigDecimal.ZERO
+                        presenter.quantityValidation = isValid
 
-                    if (isValid) {
-                        text_quantity_error.text = ""
-                        text_quantity_error.gone()
+                        if (isValid) {
+                            text_quantity_error.text = ""
+                            text_quantity_error.gone()
+                        } else {
+                            text_quantity_error.text = getString(R.string.token_burn_validation_amount_insufficient_error)
+                            text_quantity_error.visiable()
+                        }
+
+                        makeButtonEnableIfValid()
+                        return@map Pair(isValid, it)
                     } else {
-                        text_quantity_error.text = getString(R.string.token_burn_validation_amount_insufficient_error)
-                        text_quantity_error.visiable()
+                        presenter.quantityValidation = false
+                        return@map Pair(false, it)
                     }
-
-                    makeButtonEnableIfValid()
-                    return@map Pair(isValid, it)
                 }
                 .map {
                     if (it.first) {

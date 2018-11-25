@@ -179,7 +179,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                         text_amount_error.text = getString(R.string.start_leasing_validation_is_required_error)
                         text_amount_error.visiable()
                     }
-                    makeButtonEnableIfValid()
                     return@map it
                 }
                 .filter {
@@ -268,7 +267,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }
                 else -> {
                     val percentBalance = (waves.getAvailableBalance()?.times((quickBalanceView.tag.toString().toDouble().div(100))))?.toLong()
-                    quickBalanceView.text = MoneyUtil.getScaledText(percentBalance, waves)
                     quickBalanceView.click {
                         edit_amount.setText(MoneyUtil.getScaledText(percentBalance, waves))
                         edit_amount.setSelection(edit_amount.text.length)

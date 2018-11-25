@@ -260,24 +260,33 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 }
             }
             TransactionType.EXCHANGE_TYPE -> {
-                val exchangeView = inflater?.inflate(R.layout.fragment_bottom_sheet_exchange_layout, historyContainer, false)
-                val btcPrice = exchangeView?.findViewById<AppCompatTextView>(R.id.text_btc_price)
-                val priceTitle = exchangeView?.findViewById<AppCompatTextView>(R.id.history_details_btc_price)
+                val exchangeView = inflater?.inflate(
+                        R.layout.fragment_bottom_sheet_exchange_layout,
+                        historyContainer, false)
+                val typeView = exchangeView?.findViewById<AppCompatTextView>(
+                        R.id.text_type)
+                val btcPrice = exchangeView?.findViewById<AppCompatTextView>(
+                        R.id.text_btc_price)
 
-                val myOrder =
-                        if (transaction.order1?.sender == App.getAccessManager().getWallet()?.address) transaction.order1
-                        else transaction.order2
+                val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
+                        App.getAccessManager().getWallet()?.address!!)
 
-                val pairOrder =
-                        if (transaction.order1?.sender != App.getAccessManager().getWallet()?.address) transaction.order1
-                        else transaction.order2
-
-                if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                    priceTitle?.text = String.format(getString(R.string.history_details_exchange_price), myOrder.assetPair?.priceAssetObject?.name)
-                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.name}"
+                if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
+                    typeView?.text = getString(
+                            R.string.history_my_dex_intent_sell,
+                            myOrder.assetPair?.amountAssetObject!!.name,
+                            myOrder.assetPair?.priceAssetObject?.name)
+                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.price,
+                            myOrder.assetPair?.priceAssetObject)} " +
+                            "${myOrder.assetPair?.amountAssetObject?.name}"
                 } else {
-                    priceTitle?.text = String.format(getString(R.string.history_details_exchange_price), myOrder?.assetPair?.amountAssetObject?.name)
-                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)} ${myOrder?.assetPair?.priceAssetObject?.name}"
+                    typeView?.text = getString(
+                            R.string.history_my_dex_intent_buy,
+                            myOrder.assetPair?.amountAssetObject!!.name,
+                            myOrder.assetPair?.priceAssetObject?.name)
+                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.price,
+                            myOrder?.assetPair?.priceAssetObject)} " +
+                            "${myOrder?.assetPair?.priceAssetObject?.name}"
                 }
 
                 historyContainer?.addView(exchangeView)

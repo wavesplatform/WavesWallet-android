@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home.history.tab
 import android.annotation.SuppressLint
 import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
@@ -105,38 +106,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 view.text_transaction_value.text = item.data.alias
                             }
                             TransactionType.EXCHANGE_TYPE -> {
-                                val myOrder =
-                                        if (item.data.order1?.sender == App.getAccessManager().getWallet()?.address) item.data.order1
-                                        else item.data.order2
-
-                                val pairOrder =
-                                        if (item.data.order1?.sender != App.getAccessManager().getWallet()?.address) item.data.order1
-                                        else item.data.order2
-
-
-                                if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                                    view.text_transaction_name.text = "-${MoneyUtil.getScaledText(item.data.amount, myOrder.assetPair?.amountAssetObject).stripZeros()} ${myOrder.assetPair?.amountAssetObject?.name}"
-                                    view.text_transaction_value.text = "+${MoneyUtil.getScaledText(item.data.amount?.times(item.data.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
-                                } else {
-                                    view.text_transaction_name.text = "+${MoneyUtil.getScaledText(item.data.amount, myOrder?.assetPair?.amountAssetObject).stripZeros()} ${myOrder?.assetPair?.amountAssetObject?.name}"
-                                    view.text_transaction_value.text = "-${MoneyUtil.getScaledText(item.data.amount?.times(item.data.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject).stripZeros()}"
-                                }
-
-                                showTag = Constants.defaultAssets.any {
-                                    it.assetId == pairOrder?.assetPair?.priceAssetObject?.id
-                                            || pairOrder?.assetPair?.priceAssetObject?.id
-                                            .isNullOrEmpty()
-                                }
-
-                                if (showTag) {
-                                    view.text_tag.visiable()
-                                    view.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.name
-                                } else {
-                                    view.text_tag.gone()
-                                    view.text_transaction_value.text =
-                                            "${view.text_transaction_value.text} " +
-                                            "${pairOrder?.assetPair?.priceAssetObject?.name}"
-                                }
+                                setExchangeItem(item.data, view)
                             }
                             TransactionType.DATA_TYPE -> {
                                 view.text_transaction_value.text = mContext
@@ -209,6 +179,53 @@ class HistoryTabItemAdapter @Inject constructor() :
             }
         }
 
+    }
+
+    private fun setExchangeItem(transaction: Transaction, view: View) {
+        val myOrder = findMyOrder(
+                transaction.order1!!,
+                transaction.order2!!,
+                App.getAccessManager().getWallet()?.address!!)
+        val secondOrder = if (myOrder.id == transaction.order1!!.id) {
+            transaction.order2!!
+        } else {
+            transaction.order1!!
+        }
+
+        val directionStringResId: Int
+        val directionSign: String
+        val amountAsset = myOrder.assetPair?.amountAssetObject!!
+        val amountValue = MoneyUtil.getScaledText(transaction.amount, amountAsset).stripZeros()
+
+        if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
+            directionStringResId = R.string.history_my_dex_intent_sell
+            directionSign = "-"
+        } else {
+            directionStringResId = R.string.history_my_dex_intent_buy
+            directionSign = "+"
+        }
+
+        view.text_transaction_name.text = mContext.getString(
+                directionStringResId,
+                amountAsset.name,
+                secondOrder.assetPair?.priceAssetObject?.name)
+
+        val amountAssetTicker = if (amountAsset.name == "WAVES") {
+            "WAVES"
+        } else {
+            amountAsset.ticker
+        }
+
+        val assetName = if (amountAssetTicker.isNullOrEmpty()) {
+            view.text_tag.gone()
+            " ${amountAsset.name}"
+        } else {
+            view.text_tag.visiable()
+            view.text_tag.text = amountAssetTicker
+            ""
+        }
+
+        view.text_transaction_value.text = directionSign + amountValue + assetName
     }
 
     private fun setSpamTitle(transaction: Transaction, it: TransactionType, view: AppCompatTextView) {

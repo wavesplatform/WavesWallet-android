@@ -73,11 +73,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         if (type == SendPresenter.Type.GATEWAY) {
             createGateAndPayment()
         } else {
-            signedTransaction.attachment = Base58.encode(
-                    (signedTransaction.attachment ?: "").toByteArray())
-            if (signedTransaction.recipient.length <= 30) {
-                signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()
-            }
+            checkRecipientAlias(signedTransaction)
             addSubscription(nodeDataManager.transactionsBroadcast(signedTransaction)
                     .compose(RxUtil.applySchedulersToObservable()).subscribe({ tx ->
                         tx.recipient = tx.recipient.clearAlias()
@@ -86,6 +82,14 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                     }, { _ ->
                         viewState.onShowError(R.string.transaction_failed)
                     }))
+        }
+    }
+
+    private fun checkRecipientAlias(signedTransaction: TransactionsBroadcastRequest) {
+        signedTransaction.attachment = Base58.encode(
+                (signedTransaction.attachment ?: "").toByteArray())
+        if (signedTransaction.recipient.length <= 30) {
+            signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()
         }
     }
 
@@ -151,16 +155,12 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                     }
                     .flatMap {
                         recipient = it.tunnel!!.walletFrom
+                        attachment = it.tunnel!!.attachment ?: ""
                         val signedTransaction = signTransaction()
                         if (signedTransaction == null) {
                             null
                         } else {
-                            signedTransaction.attachment = Base58.encode(
-                                    (signedTransaction.attachment ?: "").toByteArray())
-                            if (signedTransaction.recipient.length <= 30) {
-                                signedTransaction.recipient = signedTransaction
-                                        .recipient.makeAsAlias()
-                            }
+                            checkRecipientAlias(signedTransaction)
                             nodeDataManager.transactionsBroadcast(signedTransaction)
                         }
                     }

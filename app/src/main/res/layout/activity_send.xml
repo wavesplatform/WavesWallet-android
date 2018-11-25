@@ -547,12 +547,12 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="8dp"
-                        android:text="@string/send_use_total_balance"
+                        android:text="@string/common_100_percent"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_leasing_0_100"
+                        android:id="@+id/text_50_percent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
@@ -563,12 +563,12 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="8dp"
-                        android:text="@string/send_five_percents"
+                        android:text="@string/common_50_percent"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_leasing_0_100000"
+                        android:id="@+id/text_10_percent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
@@ -579,12 +579,12 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="8dp"
-                        android:text="@string/send_ten_percents"
+                        android:text="@string/common_10_percent"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_leasing_0_500000"
+                        android:id="@+id/text_5_percent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
@@ -595,7 +595,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="8dp"
-                        android:text="@string/send_fifty_percents"
+                        android:text="@string/common_5_percent"
                         android:textColor="@color/basic500"
                         android:textSize="12sp" />
 

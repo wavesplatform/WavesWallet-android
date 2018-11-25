@@ -10,7 +10,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.id.toolbar_view
+import com.wavesplatform.wallet.R.id.*
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
@@ -71,17 +71,21 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.getAddressName(presenter.recipient!!)
         text_fee_value.text = "${Constants.WAVES_FEE / 100_000_000F} ${Constants.CUSTOM_FEE_ASSET_NAME}"
 
-        button_confirm.click { requestPassCode() }
-
-        eventSubscriptions.add(RxTextView.textChanges(edit_optional_message)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    presenter.attachment = it.toString()
-                })
-
-        if (intent.hasExtra(KEY_INTENT_ATTACHMENT)) {
-            edit_optional_message.setText(intent!!.extras!!.getString(KEY_INTENT_ATTACHMENT))
+        if (presenter.type == SendPresenter.Type.GATEWAY) {
+            attachment_layout.gone()
+        } else {
+            attachment_layout.visiable()
+            eventSubscriptions.add(RxTextView.textChanges(edit_optional_message)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        presenter.attachment = it.toString()
+                    })
+            if (intent.hasExtra(KEY_INTENT_ATTACHMENT)) {
+                edit_optional_message.setText(intent!!.extras!!.getString(KEY_INTENT_ATTACHMENT))
+            }
         }
+
+        button_confirm.click { requestPassCode() }
     }
 
     override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {
