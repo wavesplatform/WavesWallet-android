@@ -110,10 +110,8 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
             setResult(Activity.RESULT_OK, Intent().apply {
                 putExtra(BUNDLE_ASSET_ITEM, item)
             })
-            finish()
+            onBackPressed()
         }
-
-        adapter.emptyView = getEmptyView()
     }
 
     override fun showAssets(assets: ArrayList<AssetBalance>) {
@@ -127,6 +125,10 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
 
         adapter.allData = ArrayList(assets)
         adapter.setNewData(assets)
+
+        if (adapter.emptyView == null) {
+            adapter.emptyView = getEmptyView()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
