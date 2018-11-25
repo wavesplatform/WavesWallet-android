@@ -71,7 +71,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
         slidingRootNav.layout.text_site.click { openUrlWithChromeTab(Constants.URL_WAVES_FORUM) }
         slidingRootNav.layout.text_whitepaper.click { openUrlWithIntent(Constants.URL_WHITEPAPER) }
         slidingRootNav.layout.text_terms.click { openUrlWithIntent(Constants.URL_TERMS) }
-        slidingRootNav.layout.text_support.click { openUrlWithIntent(Constants.SUPPORT_SITE) }
+        slidingRootNav.layout.text_support.click { openUrlWithChromeTab(Constants.SUPPORT_SITE) }
         slidingRootNav.layout.image_discord.click { openDiscord(Constants.URL_DISCORD) }
         slidingRootNav.layout.image_facebook.click { openFacebook(Constants.URL_FACEBOOK) }
         slidingRootNav.layout.image_github.click { openUrlWithChromeTab(Constants.URL_GITHUB) }
@@ -97,8 +97,12 @@ abstract class BaseDrawerActivity : BaseActivity() {
     }
 
     fun openUrlWithIntent(url: String) {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        startActivity(browserIntent)
+        if (isNetworkConnected()){
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(browserIntent)
+        }else{
+            showNetworkError()
+        }
     }
 
     fun openFacebook(url: String) {
