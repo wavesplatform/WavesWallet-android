@@ -37,7 +37,8 @@ abstract class BaseFragment : MvpAppCompatFragment(), BaseView, BaseMvpView, Has
     val toolbar: Toolbar
         get() = baseActivity.toolbar
 
-    @Inject lateinit var rxEventBus: RxEventBus
+    @Inject
+    lateinit var rxEventBus: RxEventBus
 
     @Inject
     lateinit var childFragmentInjector: DispatchingAndroidInjector<Fragment>
@@ -97,6 +98,6 @@ abstract class BaseFragment : MvpAppCompatFragment(), BaseView, BaseMvpView, Has
     }
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
-        baseActivity.onNetworkConnectionChanged(networkConnected)
+        // nothing
     }
 }
