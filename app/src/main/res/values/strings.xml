@@ -304,14 +304,14 @@
     <string name="history_type_mass_spam_receive">Received</string>
     <string name="history_type_receive">Received</string>
     <string name="history_type_self_transfer">Self-transfer</string>
-    <string name="history_type_sent">Sent %s</string>
+    <string name="history_type_sent">Sent</string>
     <string name="history_type_set_script">Set script transaction</string>
     <string name="history_type_set_sponsorship">Set sponsorship transaction</string>
     <string name="history_type_spam_receive">Received</string>
     <string name="history_type_started_leasing">Started Leasing</string>
     <string name="history_type_token_burn">Token Burn</string>
     <string name="history_type_token_generation">Token Generation</string>
-    <string name="history_type_token_reissue">%s Token Reissue</string>
+    <string name="history_type_token_reissue">Token Reissue</string>
     <string name="history_type_unrecognised">Unrecognised Transaction</string>
     <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
     <string name="import_account_login_at_site">Log in to your Waves Client via your PC or Mac</string>
