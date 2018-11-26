@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity.Companion.QUICK_ACTION_SCREEN
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.clearBalance
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_token_burn.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
+import pers.victor.ext.*
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -129,8 +131,22 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         }
     }
 
+    override fun needToShowNetworkMessage() = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        if (networkConnected) {
+            // enable quick action tab
+            button_continue.isEnabled = presenter.isAllFieldsValid()
+        } else {
+            // disable quick action tab
+            button_continue.isEnabled = false
+        }
+    }
+
+
     private fun makeButtonEnableIfValid() {
-        button_continue.isEnabled = presenter.isAllFieldsValid()
+        button_continue.isEnabled = presenter.isAllFieldsValid() && isNetworkConnected()
     }
 
     override fun onBackPressed() {

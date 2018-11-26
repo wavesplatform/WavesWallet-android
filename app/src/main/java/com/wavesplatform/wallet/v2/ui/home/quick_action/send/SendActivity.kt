@@ -547,4 +547,11 @@ class SendActivity : BaseActivity(), SendView {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
+
+    override fun needToShowNetworkMessage(): Boolean = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_continue.isEnabled = networkConnected
+    }
 }

@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.data.rules.UrlRule
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity.Companion.QUICK_ACTION_SCREEN
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_network.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.app
 import pers.victor.ext.click
+import pers.victor.ext.isNetworkConnected
 import javax.inject.Inject
 
 
@@ -107,7 +109,7 @@ class NetworkActivity : BaseActivity(), NetworkView {
     }
 
     private fun isFieldsValid() {
-        button_save.isEnabled = presenter.isAllFieldsValid()
+        button_save.isEnabled = presenter.isAllFieldsValid() && isNetworkConnected()
     }
 
     override fun onBackPressed() {
@@ -115,4 +117,10 @@ class NetworkActivity : BaseActivity(), NetworkView {
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
+    override fun needToShowNetworkMessage() = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_save.isEnabled = presenter.isAllFieldsValid() && networkConnected
+    }
 }

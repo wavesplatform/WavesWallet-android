@@ -213,6 +213,10 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         alertDialog.makeStyled()
     }
 
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        checkInternet()
+    }
+
     private fun getDescriptionView(): View? {
         return inflate(R.layout.layout_many_attepmts)
     }

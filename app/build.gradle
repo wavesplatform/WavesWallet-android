@@ -195,6 +195,7 @@ dependencies {
         transitive = true
     }
     implementation 'com.github.mukeshsolanki:country-picker-android:1.1.6'
+    implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.0'
 
     // RxJava
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"

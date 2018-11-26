@@ -137,7 +137,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     }
 
     fun getTradesByPair() {
-        addSubscription(dataFeedManager.getTradesByPair(watchMarket, 1)
+        addSubscription(dataFeedManager.getLastTradeByPair(watchMarket)
                 .map { it.firstOrNull() }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ tradesMarket ->

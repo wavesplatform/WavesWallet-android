@@ -9,6 +9,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R.id.*
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
@@ -19,14 +20,12 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.showError
 import com.wavesplatform.wallet.v2.util.stripZeros
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send_confirmation.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.invisiable
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import javax.inject.Inject
 
 
@@ -46,8 +45,6 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         translucentStatusBar = true
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -72,6 +69,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                     .toBigDecimal()
                     .toPlainString()
                     .stripZeros()}"
+            text_sum.makeTextHalfBold()
             text_gateway_fee_value.text = "${presenter.gatewayCommission}" +
                     " ${presenter.selectedAsset!!.getName()}"
             gateway_commission_layout.visiable()
@@ -80,6 +78,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
                     .toBigDecimal()
                     .toPlainString()
                     .stripZeros()}"
+            text_sum.makeTextHalfBold()
         }
 
         text_tag.text = presenter.selectedAsset!!.getName()
@@ -166,11 +165,15 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             text_sent_to_name.text = name
             text_sent_to_name.visiable()
         } else {
+            text_sent_to_address.textSize = 14f
+            text_sent_to_address.setTextColor(findColor(R.color.disabled900))
             text_sent_to_name.gone()
         }
     }
 
     override fun hideAddressBookUser() {
+        text_sent_to_address.textSize = 14f
+        text_sent_to_address.setTextColor(findColor(R.color.disabled900))
         text_sent_to_name.gone()
     }
 
@@ -182,6 +185,13 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
     override fun onBackPressed() {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+    }
+
+    override fun needToShowNetworkMessage(): Boolean = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_confirm.isEnabled = networkConnected
     }
 
     companion object {

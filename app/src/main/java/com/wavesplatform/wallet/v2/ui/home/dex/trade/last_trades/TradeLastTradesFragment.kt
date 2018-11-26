@@ -123,4 +123,17 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
             linear_fields_name.gone()
         }
     }
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        linear_buy.isClickable = networkConnected
+        linear_sell.isClickable = networkConnected
+        if (networkConnected) {
+            linear_buy.setBackgroundResource(R.drawable.shape_btn_waves_blue_default)
+            linear_sell.setBackgroundResource(R.drawable.shape_btn_red_default)
+        } else {
+            linear_buy.setBackgroundResource(R.drawable.shape_btn_waves_blue_disabled)
+            linear_sell.setBackgroundResource(R.drawable.shape_btn_red_disabled)
+        }
+    }
 }

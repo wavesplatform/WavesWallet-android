@@ -12,6 +12,7 @@ import android.text.TextPaint
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -34,10 +35,7 @@ import com.wavesplatform.wallet.v2.util.makeLinks
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
-import pers.victor.ext.click
-import pers.victor.ext.findColor
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import javax.inject.Inject
 
 
@@ -260,10 +258,12 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     private fun showQuickActionDialog() {
-        val quickActionDialog = QuickActionBottomSheetFragment.newInstance()
-        val ft = supportFragmentManager.beginTransaction()
-        ft.add(quickActionDialog, quickActionDialog::class.java.simpleName)
-        ft.commitAllowingStateLoss()
+        if (isNetworkConnected()) {
+            val quickActionDialog = QuickActionBottomSheetFragment.newInstance()
+            val ft = supportFragmentManager.beginTransaction()
+            ft.add(quickActionDialog, quickActionDialog::class.java.simpleName)
+            ft.commitAllowingStateLoss()
+        }
     }
 
     private fun showNewTabFragment(fragment: Fragment) {
@@ -353,6 +353,25 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 }
                 preferencesHelper.setShowSaveSeedWarningTime(currentGuid, now)
             }
+        }
+    }
+
+    override fun needToShowNetworkMessage() = true
+
+    override fun rootLayoutToShowNetworkMessage(): ViewGroup = frame_root
+
+    override fun extraBottomMarginToShowNetworkMessage(): Int {
+        return tab_navigation.height
+    }
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        if (networkConnected) {
+            // enable quick action tab
+            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.ENABLE_VIEW
+        } else {
+            // disable quick action tab
+            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.DISABLE_VIEW
         }
     }
 

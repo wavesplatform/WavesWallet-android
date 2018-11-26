@@ -15,6 +15,7 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
 
     var aliasRequest: AliasRequest = AliasRequest()
     var wavesBalance: AssetBalance = AssetBalance()
+    var aliasValidation = false
 
     fun loadAlias(alias: String) {
         addSubscription(apiDataManager.loadAlias(alias)

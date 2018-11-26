@@ -145,7 +145,7 @@
         <Button
             android:id="@+id/button_confirm"
             style="@style/WavesButton"
-            android:background="@drawable/selector_btn_error_400"
+            android:background="@drawable/selector_btn_red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

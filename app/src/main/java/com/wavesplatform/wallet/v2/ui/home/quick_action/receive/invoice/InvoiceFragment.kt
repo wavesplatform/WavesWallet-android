@@ -113,7 +113,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         edit_asset.gone()
         container_asset.visiable()
 
-        button_continue.isEnabled = true
+        button_continue.isEnabled = presenter.assetBalance != null
     }
 
     private fun createLink(): String {
@@ -169,5 +169,10 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
             }
         }
+    }
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_continue.isEnabled = presenter.assetBalance != null && networkConnected
     }
 }
