@@ -39,10 +39,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendCo
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_TYPE
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.showError
-import com.wavesplatform.wallet.v2.util.stripZeros
+import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.activity_send.*
 import pers.victor.ext.*
 import java.math.BigDecimal
@@ -97,7 +94,7 @@ class SendActivity : BaseActivity(), SendView {
                 val assetBalance = intent.getParcelableExtra<AssetBalance>(
                         SendActivity.KEY_INTENT_TRANSACTION_ASSET_BALANCE)
                 val amount = intent
-                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT)
+                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT).clearBalance()
                 val recipientAddress = intent
                         .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_RECIPIENT)
                 val attachment = intent
