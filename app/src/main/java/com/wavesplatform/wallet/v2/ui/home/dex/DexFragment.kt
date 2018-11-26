@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_dex_new.*
 import kotlinx.android.synthetic.main.header_dex_layout.view.*
 import pers.victor.ext.click
 import pers.victor.ext.inflate
+import pers.victor.ext.isNetworkConnected
 import java.util.*
 import javax.inject.Inject
 
@@ -85,11 +86,13 @@ class DexFragment : BaseFragment(), DexView {
                 })
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val args = Bundle()
-            args.classLoader = WatchMarket::class.java.classLoader
-            args.putParcelable(TradeActivity.BUNDLE_MARKET, this@DexFragment.adapter.getItem(position))
+            if (isNetworkConnected()) {
+                val args = Bundle()
+                args.classLoader = WatchMarket::class.java.classLoader
+                args.putParcelable(TradeActivity.BUNDLE_MARKET, this@DexFragment.adapter.getItem(position))
 
-            launchActivity<TradeActivity>(options = args)
+                launchActivity<TradeActivity>(options = args)
+            }
         }
 
         recycle_dex.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -139,7 +142,11 @@ class DexFragment : BaseFragment(), DexView {
         presenter.clearOldPairsSubscriptions()
 
         adapter.setNewData(list)
-        adapter.emptyView = getEmptyView()
+
+        if (adapter.emptyView == null) {
+            adapter.emptyView = getEmptyView()
+        }
+
         if (list.isEmpty()) {
             menu?.findItem(R.id.action_sorting)?.isVisible = false
             adapter.removeAllHeaderView()
@@ -213,6 +220,18 @@ class DexFragment : BaseFragment(), DexView {
             presenter.clearOldPairsSubscriptions()
         } else {
             loadInfoForPairs()
+        }
+    }
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        val addMarketsItem = this.menu?.findItem(R.id.action_add_market)
+        adapter.emptyView?.button_add_markets?.isEnabled = networkConnected
+        addMarketsItem?.isEnabled = networkConnected
+        if (networkConnected) {
+            addMarketsItem?.icon?.alpha = 255 // 1.0
+        } else {
+            addMarketsItem?.icon?.alpha = 77 // 0.3
         }
     }
 }

@@ -9,10 +9,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity
@@ -39,15 +37,19 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
 
     override fun configLayoutRes(): Int = R.layout.activity_backup_pharse
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view,  true,
                 getString(R.string.backup_pharse), R.drawable.ic_toolbar_back_black)
 
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
-            setSeed(intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED))
+            setSeed(intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED, ""))
         } else {
-            launchActivity<EnterPassCodeActivity>(
-                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE)
+            setSeed(App.getAccessManager().getWallet()?.seedStr ?: "")
         }
 
         if (!App.getAccessManager().isCurrentAccountBackupSkipped()) {
@@ -101,23 +103,17 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
-                if (resultCode == Constants.RESULT_OK) {
-                    val password = data!!.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
-                    val wallet = WavesWallet(App.getAccessManager()
-                            .getCurrentWavesWalletEncryptedData(), password)
-                    setSeed(wallet.seedStr)
-                } else {
-                    finish()
-                }
-            }
-
             REQUEST_CONFIRM_BACKUP -> {
                 if (resultCode == Constants.RESULT_OK) {
                     finish()
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     companion object {

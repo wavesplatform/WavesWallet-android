@@ -13,13 +13,11 @@ import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.data.rules.NotEqualsAccountPasswordRule
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.util.applySpaceFilter
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
-import io.github.anderscheow.validator.rules.common.MinRule
 import io.github.anderscheow.validator.rules.common.NotEmptyRule
 import kotlinx.android.synthetic.main.activity_change_password.*
 import pers.victor.ext.addTextChangedListener
@@ -40,6 +38,11 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
 
     override fun configLayoutRes() = R.layout.activity_change_password
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true,
@@ -57,10 +60,6 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         val newPasswordValidation = Validation(til_new_password)
                 .and(MinTrimRule(8, R.string.new_account_create_password_validation_length_error))
                 .and(NotEqualsAccountPasswordRule(R.string.change_password_validation_new_password_already_use_error))
-
-        edit_confirm_password.applySpaceFilter()
-        edit_new_password.applySpaceFilter()
-        edit_old_password.applySpaceFilter()
 
         edit_old_password.addTextChangedListener {
             on { s, start, before, count ->
@@ -178,5 +177,11 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         showProgressBar(false)
         setResult(Constants.RESULT_OK)
         finish()
+    }
+
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

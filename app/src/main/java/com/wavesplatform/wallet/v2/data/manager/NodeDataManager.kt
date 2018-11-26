@@ -6,12 +6,10 @@ import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.wallet.v2.data.model.remote.request.AliasRequest
-import com.wavesplatform.wallet.v2.data.model.remote.request.BurnRequest
-import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
-import com.wavesplatform.wallet.v2.data.model.remote.request.CreateLeasingRequest
+import com.wavesplatform.wallet.v2.data.model.remote.request.*
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.notNull
@@ -25,6 +23,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.ArrayList
+
 @Singleton
 class NodeDataManager @Inject constructor() : BaseDataManager() {
     @Inject
@@ -56,6 +55,13 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     } else {
                         return@map spamListFromDb
                     }
+                }
+    }
+
+    fun transactionsBroadcast(tx: TransactionsBroadcastRequest): Observable<TransactionsBroadcastRequest> {
+        return nodeService.transactionsBroadcast(tx)
+                .doOnNext {
+                    rxEventBus.post(Events.UpdateAssetsBalance())
                 }
     }
 
@@ -152,6 +158,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     it.save()
                     return@map it
                 }
+                .doOnNext {
+                    rxEventBus.post(Events.UpdateAssetsBalance())
+                }
     }
 
     fun cancelLeasing(cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction> {
@@ -169,6 +178,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     first?.save()
                     return@map it
                 }
+                .doOnNext {
+                    rxEventBus.post(Events.UpdateAssetsBalance())
+                }
     }
 
     fun startLeasing(createLeasingRequest: CreateLeasingRequest, recipientIsAlias: Boolean): Observable<Transaction> {
@@ -180,6 +192,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
             createLeasingRequest.sign(it, recipientIsAlias)
         }
         return nodeService.createLeasing(createLeasingRequest)
+                .doOnNext {
+                    rxEventBus.post(Events.UpdateAssetsBalance())
+                }
     }
 
     fun loadTransactions(currentLoadTransactionLimitPerRequest: Int): Observable<List<Transaction>> {
@@ -243,6 +258,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     fun burn(burn: BurnRequest): Observable<BurnRequest> {
         return nodeService.burn(burn)
+                .doOnNext {
+                    rxEventBus.post(Events.UpdateAssetsBalance())
+                }
     }
 
 }

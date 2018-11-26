@@ -38,7 +38,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:lineSpacingExtra="4sp"
-                android:text="Asset"
+                android:text="@string/token_burn_asset_hint"
                 android:textColor="@color/basic500"
                 android:textSize="12sp" />
 
@@ -93,17 +93,41 @@
                     tools:text="00000000.00000000" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginRight="16dp"
-                android:lineSpacingExtra="4sp"
-                android:text="Quantity of tokens to be burned"
-                android:textColor="@color/basic500"
-                android:textSize="12sp" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginRight="16dp"
+                    android:lineSpacingExtra="4sp"
+                    android:text="@string/token_burn_quantity_of_tokens_to_be_burned_hint"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_quantity_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="16dp"
+                    android:gravity="right"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="24dp"
+                    android:lineSpacingExtra="4sp"
+                    android:text="@string/start_leasing_validation_is_required_error"
+                    android:textColor="@color/error500"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+
+
+
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -147,6 +171,32 @@
                         android:textSize="12sp" />
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
+
+
+            <LinearLayout
+                android:id="@+id/linear_fees_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_info_18_error_500" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14sp"
+                    android:text="@string/buy_and_sell_fee_error"
+                    android:textColor="@color/error500"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
 
             <HorizontalScrollView
                 android:id="@+id/horizontal_amount_suggestion"
@@ -192,7 +242,7 @@
         android:layout_marginRight="16dp"
         android:enabled="false"
         android:clickable="true"
-        android:text="Continue"
+        android:text="@string/token_burn_continue_btn"
         android:textStyle="bold" />
 
     <android.support.v7.widget.AppCompatTextView
@@ -203,7 +253,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="24dp"
         android:layout_marginTop="14dp"
-        android:text="Transaction Fee 0.001 WAVES"
+        android:text="@string/token_burn_transaction_fee_0_001_waves"
         android:textColor="@color/disabled500"
         android:textSize="12sp" />
 </RelativeLayout>

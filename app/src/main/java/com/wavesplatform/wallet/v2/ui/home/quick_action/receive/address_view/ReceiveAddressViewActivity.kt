@@ -40,13 +40,16 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        val assetBalance = intent?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
+        val assetBalance = intent?.getParcelableExtra<AssetBalance>(
+                YourAssetsActivity.BUNDLE_ASSET_ITEM)
+        toolbar_view.title = getString(R.string.receive_address_view_toolbar,
+                assetBalance?.getName()
+                        ?: "")
 
         image_asset_icon.isOval = true
         image_asset_icon.setAsset(assetBalance)
@@ -105,8 +108,9 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
             container_invoice_link.visiable()
             image_down_arrow.gone()
 
-            image_asset_icon.setImageResource(R.drawable.logo_waves_48)
-            toolbar_view.title = getString(R.string.receive_address_waves_address)
+            toolbar_view.title = getString(R.string.receive_address_waves_address,
+                    assetBalance?.getName() ?: "")
+            image_asset_icon.setAsset(assetBalance)
         }
 
         val text: String
@@ -132,5 +136,10 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
 
     companion object {
         const val KEY_INTENT_QR_DATA = "intent_qr_data"
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

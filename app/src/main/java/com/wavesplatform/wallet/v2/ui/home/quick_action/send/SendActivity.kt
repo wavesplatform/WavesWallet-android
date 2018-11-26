@@ -31,6 +31,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActiv
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_GATEWAY_COMMISSION
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_MONERO_PAYMENT_ID
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_AMOUNT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ASSET
@@ -41,6 +42,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
+import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.activity_send.*
 import pers.victor.ext.*
 import java.math.BigDecimal
@@ -64,6 +66,7 @@ class SendActivity : BaseActivity(), SendView {
     companion object {
         const val REQUEST_YOUR_ASSETS = 43
         const val REQUEST_SCAN_RECEIVE = 44
+        const val REQUEST_SCAN_MONERO = 45
         const val KEY_INTENT_ASSET_DETAILS = "asset_details"
         const val KEY_INTENT_REPEAT_TRANSACTION = "repeat_transaction"
         const val KEY_INTENT_TRANSACTION_ASSET_BALANCE = "transaction_asset_balance"
@@ -72,6 +75,11 @@ class SendActivity : BaseActivity(), SendView {
         const val KEY_INTENT_TRANSACTION_RECIPIENT = "transaction_recipient"
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
@@ -99,7 +107,7 @@ class SendActivity : BaseActivity(), SendView {
                 edit_address.setText(recipientAddress)
                 edit_amount.setText(amount)
                 presenter.attachment = attachment
-                presenter.amount = amount
+                presenter.amount = amount.toFloat()
             }
             else -> assetEnable(true)
         }
@@ -112,7 +120,7 @@ class SendActivity : BaseActivity(), SendView {
         edit_amount.addTextChangedListener {
             on { s, _, _, _ ->
                 if (edit_amount.text!!.isNotEmpty()) {
-                    presenter.amount = s.toString()
+                    presenter.amount = s.toString().toFloat()
                 }
             }
         }
@@ -132,13 +140,41 @@ class SendActivity : BaseActivity(), SendView {
                         .initiateScan()
             }
         }
+        image_view_monero_action.click {
+            if (it.tag == R.drawable.ic_deladdress_24_error_400) {
+                edit_monero_payment_id.text = null
+            } else if (it.tag == R.drawable.ic_qrcode_24_basic_500) {
+                IntentIntegrator(this).setRequestCode(REQUEST_SCAN_MONERO)
+                        .setOrientationLocked(true)
+                        .setBeepEnabled(false)
+                        .setCaptureActivity(QrCodeScannerActivity::class.java)
+                        .initiateScan()
+            }
+        }
 
         button_continue.click { presenter.sendClicked() }
 
-        text_use_total_balance.click { setPercent(1.0) }
-        text_leasing_0_100.click { setPercent(0.05) }
-        text_leasing_0_100000.click { setPercent(0.10) }
-        text_leasing_0_500000.click { setPercent(0.50) }
+        text_use_total_balance.click {
+            if (presenter.type == SendPresenter.Type.GATEWAY) {
+                presenter.selectedAsset.notNull { assetBalance ->
+                    assetBalance.balance.notNull { balance ->
+                        if (presenter.type == SendPresenter.Type.GATEWAY) {
+                            val total = BigDecimal.valueOf(balance,
+                                    assetBalance.getDecimals())
+                                    .minus(presenter.gatewayCommission)
+                            if (total.toFloat() > 0) {
+                                edit_amount.setText(total.toString().stripZeros())
+                            }
+                        }
+                    }
+                }
+            } else {
+                setPercent(1.0)
+            }
+        }
+        text_50_percent.click { setPercent(0.50) }
+        text_10_percent.click { setPercent(0.10) }
+        text_5_percent.click { setPercent(0.05) }
 
         setRecipientSuggestions()
     }
@@ -190,6 +226,7 @@ class SendActivity : BaseActivity(), SendView {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
             putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)
             putExtra(KEY_INTENT_SELECTED_AMOUNT, presenter.amount)
+            putExtra(KEY_INTENT_GATEWAY_COMMISSION, presenter.gatewayCommission.toFloat())
             if (!presenter.attachment.isNullOrEmpty()) {
                 putExtra(KEY_INTENT_ATTACHMENT, presenter.attachment)
             }
@@ -199,7 +236,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun setPercent(percent: Double) {
-        presenter.selectedAsset.notNull { assetBalance->
+        presenter.selectedAsset.notNull { assetBalance ->
             assetBalance.balance.notNull { balance ->
                 val amount = (balance * percent).toLong()
                 edit_amount.setText(MoneyUtil.getScaledText(amount, assetBalance))
@@ -210,10 +247,10 @@ class SendActivity : BaseActivity(), SendView {
     override fun showXRate(xRate: XRate, ticker: String) {
         skeletonView!!.hide()
 
-        val fee = if (xRate.fee == null) {
+        val fee = if (xRate.feeOut == null) {
             "-"
         } else {
-            BigDecimal(xRate.fee).toString()
+            BigDecimal(xRate.feeOut).toString()
         }
 
         val inMin = if (xRate.inMin == null) {
@@ -264,12 +301,15 @@ class SendActivity : BaseActivity(), SendView {
                     if (presenter.recipientAssetId.isNullOrEmpty()) {
                         presenter.type = SendPresenter.Type.UNKNOWN
                         setRecipientValid(false)
-                        relative_gateway_fee.gone()
                         monero_layout.gone()
                     } else {
-                        setRecipientValid(true)
-                        checkMonero(presenter.recipientAssetId)
-                        loadGatewayXRate(presenter.recipientAssetId!!)
+                        if (presenter.recipientAssetId == presenter.selectedAsset?.assetId) {
+                            setRecipientValid(true)
+                            checkMonero(presenter.recipientAssetId)
+                            loadGatewayXRate(presenter.recipientAssetId!!)
+                        } else {
+                            setRecipientValid(false)
+                        }
                     }
                 }
             }
@@ -292,6 +332,15 @@ class SendActivity : BaseActivity(), SendView {
             eventSubscriptions.add(RxTextView.textChanges(edit_monero_payment_id)
                     .subscribe { paymentId ->
                         presenter.moneroPaymentId = paymentId.toString()
+                        if (paymentId.isNullOrEmpty()) {
+                            image_view_monero_action.setImageResource(
+                                    R.drawable.ic_qrcode_24_basic_500)
+                            image_view_monero_action.tag = R.drawable.ic_qrcode_24_basic_500
+                        } else {
+                            image_view_monero_action.setImageResource(
+                                    R.drawable.ic_deladdress_24_error_400)
+                            image_view_monero_action.tag = R.drawable.ic_deladdress_24_error_400
+                        }
                     })
         } else {
             monero_layout.gone()
@@ -304,6 +353,7 @@ class SendActivity : BaseActivity(), SendView {
             text_recipient_error.gone()
         } else {
             text_recipient_error.visiable()
+            relative_gateway_fee.gone()
         }
     }
 
@@ -316,6 +366,15 @@ class SendActivity : BaseActivity(), SendView {
                             .contents
                             .replace(AddressUtil.WAVES_PREFIX, "")
                     parseDataFromQr(result)
+                }
+            }
+
+            REQUEST_SCAN_MONERO -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val result = IntentIntegrator.parseActivityResult(resultCode, data)
+                            .contents
+                            .replace(AddressUtil.WAVES_PREFIX, "")
+                    edit_monero_payment_id.setText(result)
                 }
             }
 
@@ -400,7 +459,7 @@ class SendActivity : BaseActivity(), SendView {
 
             text_asset_name.text = it.getName()
 
-            text_asset_value.text = it.getDisplayTotalBalance()
+            text_asset_value.text = it.getDisplayAvailableBalance()
             if (it.isFavorite) {
                 image_asset_is_favourite.visiable()
             } else {
@@ -429,7 +488,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun assetEnable(enable: Boolean) {
         if (enable) {
-            ViewCompat.setElevation(card_asset, ViewUtils.convertDpToPixel(1f, this))
+            ViewCompat.setElevation(card_asset, dp2px(2).toFloat())
             card_asset.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
             asset_layout.background = null
             card_asset.click { launchAssets() }
@@ -446,7 +505,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun recipientEnable(enable: Boolean) {
         if (enable) {
-            ViewCompat.setElevation(recipient_card, ViewUtils.convertDpToPixel(1f, this))
+            ViewCompat.setElevation(recipient_card, dp2px(2).toFloat())
             recipient_card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
             recipient_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             edit_address.isEnabled = true
@@ -461,7 +520,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun amountEnable(enable: Boolean) {
         if (enable) {
-            ViewCompat.setElevation(amount_card, ViewUtils.convertDpToPixel(1f, this))
+            ViewCompat.setElevation(amount_card, dp2px(2).toFloat())
             amount_card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
             amount_layout.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             edit_amount.isEnabled = true
@@ -482,5 +541,17 @@ class SendActivity : BaseActivity(), SendView {
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
             }
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+    }
+
+    override fun needToShowNetworkMessage(): Boolean = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_continue.isEnabled = networkConnected
     }
 }

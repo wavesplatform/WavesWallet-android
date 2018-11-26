@@ -38,6 +38,11 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
     override fun configLayoutRes() = R.layout.activity_change_language
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.profile_language_toolbar_title), R.drawable.ic_toolbar_back_black)
 
@@ -97,6 +102,11 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
         val languageItem = adapter.getItem(position) as LanguageItem
         languageItem.checked = true
         adapter.setData(position, languageItem)
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
 }

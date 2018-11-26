@@ -47,7 +47,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
     override fun onBackPressed() {
         setResult(Activity.RESULT_CANCELED)
         finish()
-        overridePendingTransition(0, android.R.anim.fade_out)
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

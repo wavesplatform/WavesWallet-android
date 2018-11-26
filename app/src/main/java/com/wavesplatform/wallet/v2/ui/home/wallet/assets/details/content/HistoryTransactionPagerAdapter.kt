@@ -24,7 +24,9 @@ import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
-class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var mContext: Context, var fragmentManager: FragmentManager?) : PagerAdapter() {
+class HistoryTransactionPagerAdapter @Inject constructor(
+        @ApplicationContext var mContext: Context,
+        var fragmentManager: FragmentManager?) : PagerAdapter() {
     var items: MutableList<HistoryItem> = arrayListOf()
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
@@ -54,7 +56,7 @@ class HistoryTransactionPagerAdapter @Inject constructor(@ApplicationContext var
         item.data.transactionType().notNull {
             try {
                 layout.text_transaction_name.text =
-                        mContext.getString(it.title, item.data.asset?.name)
+                        mContext.getString(it.title)
             } catch (e: MissingFormatArgumentException) {
                 layout.text_transaction_name.text = mContext.getString(it.title)
             }

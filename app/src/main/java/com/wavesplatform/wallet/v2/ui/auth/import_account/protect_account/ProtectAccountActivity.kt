@@ -16,7 +16,6 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
-import com.wavesplatform.wallet.v2.util.applySpaceFilter
 import com.wavesplatform.wallet.v2.util.launchActivity
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -42,6 +41,11 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
 
     override fun configLayoutRes() = R.layout.activity_protect_account
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, icon = R.drawable.ic_toolbar_back_black)
@@ -61,9 +65,6 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
 
         val passwordValidation = Validation(til_create_password)
                 .and(MinTrimRule(8, R.string.new_account_create_password_validation_length_error))
-
-        edit_confirm_password.applySpaceFilter()
-        edit_create_password.applySpaceFilter()
 
         edit_account_name.addTextChangedListener {
             on { s, start, before, count ->
@@ -181,5 +182,10 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
 
     fun isFieldsValid() {
         button_create_account.isEnabled = presenter.isAllFieldsValid()
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

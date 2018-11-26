@@ -27,7 +27,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
     var fiat: String = "USD"
     private var min: Float = 0F
     private var max: Float = 0F
-    private var asset: AssetBalance? = null
+    var asset: AssetBalance? = null
     private var rate = ""
 
     fun invalidate() {
@@ -49,6 +49,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
                     .subscribe({
                         if (it.size == 1) {
                             runOnUiThread {
+                                asset = it[0]
                                 viewState.showWaves(it[0])
                             }
                         }

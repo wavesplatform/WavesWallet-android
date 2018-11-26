@@ -20,16 +20,14 @@ import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
-import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_start_leasing.*
-import pers.victor.ext.children
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
+import pers.victor.ext.*
+import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -52,6 +50,11 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
     }
 
     override fun configLayoutRes(): Int = R.layout.activity_start_leasing
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
@@ -76,10 +79,10 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         }
 
         button_continue.click {
-            launchActivity<ConfirmationLeasingActivity>(REQUEST_LEASING_CONFIRMATION) {
-                putExtra(ConfirmationLeasingActivity.BUNDLE_ADDRESS, edit_address.text.toString())
-                putExtra(ConfirmationLeasingActivity.BUNDLE_AMOUNT, edit_amount.text.toString())
-                putExtra(ConfirmationLeasingActivity.BUNDLE_RECIPIENT_IS_ALIAS, presenter.recipientIsAlias)
+            launchActivity<ConfirmationStartLeasingActivity>(REQUEST_LEASING_CONFIRMATION) {
+                putExtra(ConfirmationStartLeasingActivity.BUNDLE_ADDRESS, edit_address.text.toString())
+                putExtra(ConfirmationStartLeasingActivity.BUNDLE_AMOUNT, edit_amount.text.toString())
+                putExtra(ConfirmationStartLeasingActivity.BUNDLE_RECIPIENT_IS_ALIAS, presenter.recipientIsAlias)
             }
         }
 
@@ -176,27 +179,31 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                         text_amount_error.text = getString(R.string.start_leasing_validation_is_required_error)
                         text_amount_error.visiable()
                     }
-                    makeButtonEnableIfValid()
                     return@map it
                 }
                 .filter {
                     it.isNotEmpty()
                 }
                 .map {
-                    val feeValue = MoneyUtil.getScaledText(Constants.WAVES_FEE, presenter.wavesAsset).toBigDecimal()
-                    val currentValueWithFee = it.toBigDecimal() + feeValue
-                    val isValid = currentValueWithFee <= presenter.wavesAsset?.getDisplayAvailableBalance()?.toBigDecimal() && currentValueWithFee > feeValue
-                    presenter.amountValidation = isValid
+                    if (it.toDouble() != 0.0) {
+                        val feeValue = MoneyUtil.getScaledText(Constants.WAVES_FEE, presenter.wavesAsset).toBigDecimal()
+                        val currentValueWithFee = it.toBigDecimal() + feeValue
+                        val isValid = currentValueWithFee <= presenter.wavesAsset?.getDisplayAvailableBalance()?.toBigDecimal() && currentValueWithFee > feeValue
+                        presenter.amountValidation = isValid
 
-                    if (isValid) {
-                        text_amount_error.text = ""
-                        text_amount_error.gone()
-                    } else {
-                        text_amount_error.text = getString(R.string.start_leasing_validation_amount_insufficient_error)
-                        text_amount_error.visiable()
+                        if (isValid) {
+                            text_amount_error.text = ""
+                            text_amount_error.gone()
+                        } else {
+                            text_amount_error.text = getString(R.string.start_leasing_validation_amount_insufficient_error)
+                            text_amount_error.visiable()
+                        }
+                        makeButtonEnableIfValid()
+                        return@map Pair(isValid, it)
+                    }else{
+                        presenter.amountValidation = false
+                        return@map Pair(false, it)
                     }
-                    makeButtonEnableIfValid()
-                    return@map Pair(isValid, it)
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ isValid ->
@@ -212,7 +219,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
 
     fun makeButtonEnableIfValid() {
-        button_continue.isEnabled = presenter.isAllFieldsValid()
+        button_continue.isEnabled = presenter.isAllFieldsValid() && isNetworkConnected()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -260,7 +267,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }
                 else -> {
                     val percentBalance = (waves.getAvailableBalance()?.times((quickBalanceView.tag.toString().toDouble().div(100))))?.toLong()
-                    quickBalanceView.text = MoneyUtil.getScaledText(percentBalance, waves)
                     quickBalanceView.click {
                         edit_amount.setText(MoneyUtil.getScaledText(percentBalance, waves))
                         edit_amount.setSelection(edit_amount.text.length)
@@ -270,4 +276,15 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         }
     }
 
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+    }
+
+    override fun needToShowNetworkMessage() = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_continue.isEnabled = presenter.isAllFieldsValid() && networkConnected
+    }
 }

@@ -34,9 +34,8 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -71,13 +70,18 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         )
     }
 
-    override fun onShowBurnSuccess(tx: BurnRequest?) {
+    override fun onShowBurnSuccess(tx: BurnRequest?, totalBurn: Boolean) {
         completeBurnProcessing()
         relative_success.visiable()
 
         button_okay.click {
             launchActivity<MainActivity>(clear = true)
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun onShowError(errorMessageRes: Int) {
@@ -91,4 +95,12 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         image_loader.clearAnimation()
         card_progress.gone()
     }
+
+    override fun needToShowNetworkMessage() = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_confirm.isEnabled = networkConnected
+    }
+
 }

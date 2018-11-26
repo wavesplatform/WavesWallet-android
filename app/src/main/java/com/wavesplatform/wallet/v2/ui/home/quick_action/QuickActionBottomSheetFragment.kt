@@ -28,8 +28,8 @@ class QuickActionBottomSheetFragment : BaseBottomSheetDialogFragment() {
             launchActivity<SendActivity> {  }
         }
         rootView.relative_receive.click {
-            launchActivity<ReceiveActivity> {  }
             dismiss()
+            launchActivity<ReceiveActivity> {  }
         }
         rootView.relative_exchange.click {
         }
@@ -38,7 +38,6 @@ class QuickActionBottomSheetFragment : BaseBottomSheetDialogFragment() {
     }
 
     companion object {
-
         fun newInstance(): QuickActionBottomSheetFragment {
             return QuickActionBottomSheetFragment()
         }

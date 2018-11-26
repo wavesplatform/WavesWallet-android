@@ -17,7 +17,7 @@
         android:fitsSystemWindows="true"
         android:fontFamily="@font/roboto"
         android:layout_marginTop="24dp"
-        app:title="@string/receive_address_view_toolbar"
+        tools:title="@string/receive_address_view_toolbar"
         app:titleTextAppearance="@style/Toolbar.Title"
         app:titleTextColor="@color/white">
 
@@ -113,7 +113,7 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/asset_gray_icon"
                         app:text_number="1"
-                        app:text_size="16" />
+                        app:text_size="24" />
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/image_down_arrow"

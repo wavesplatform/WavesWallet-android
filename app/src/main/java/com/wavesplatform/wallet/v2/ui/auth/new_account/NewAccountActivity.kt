@@ -17,7 +17,6 @@ import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.util.applySpaceFilter
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
@@ -59,14 +58,12 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
 
         val nameValidation = Validation(til_account_name)
                 .and(NotEmptyTrimRule(R.string.new_account_account_name_validation_required_error))
+                .and(MinTrimRule(2, R.string.new_account_account_name_validation_min_length_error))
                 .and(MaxRule(20, R.string.new_account_account_name_validation_length_error))
                 .and(AccountNameRule(R.string.new_account_account_name_validation_already_exist_error))
 
         val passwordValidation = Validation(til_create_password)
                 .and(MinTrimRule(8, R.string.new_account_create_password_validation_length_error))
-
-        edit_confirm_password.applySpaceFilter()
-        edit_create_password.applySpaceFilter()
 
         edit_account_name.addTextChangedListener {
             on { s, start, before, count ->
@@ -209,7 +206,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     override fun onBackPressed() {
         setResult(Activity.RESULT_CANCELED)
         finish()
-        overridePendingTransition(0, android.R.anim.fade_out)
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     companion object {

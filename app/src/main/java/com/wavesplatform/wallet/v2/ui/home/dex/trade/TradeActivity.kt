@@ -32,6 +32,7 @@ class TradeActivity : BaseActivity(), TradeView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
     }
 
@@ -70,5 +71,10 @@ class TradeActivity : BaseActivity(), TradeView {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+    }
 
+    override fun needToShowNetworkMessage() = true
 }

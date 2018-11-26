@@ -1,28 +1,20 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses
 
-import android.content.Intent
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
-import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
-import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
-import com.wavesplatform.wallet.v2.util.launchActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -36,6 +28,12 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
     fun providePresenter(): AddressesAndKeysPresenter = presenter
 
     override fun configLayoutRes(): Int = R.layout.activity_profile_addresses_and_keys
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.addresses_and_keys_toolbar_title), R.drawable.ic_toolbar_back_black)
@@ -65,41 +63,34 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
                 })
 
         button_show.click {
-            launchActivity<EnterPassCodeActivity>(
-                    requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) { }
+            button_show.gone()
+            val wallet = App.getAccessManager().getWallet()
+            text_private_key.text = (wallet?.privateKeyStr)
+            relative_private_key_block.visiable()
         }
 
         presenter.loadAliases()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE -> {
-                if (resultCode == Constants.RESULT_OK) {
-                    button_show.gone()
-                    val password = data!!.extras.getString(NewAccountActivity.KEY_INTENT_PASSWORD)
-                    val wallet = WavesWallet(App.getAccessManager()
-                            .getCurrentWavesWalletEncryptedData(), password)
-                    text_private_key.text = (wallet.privateKeyStr)
-                    relative_private_key_block.visiable()
-                }
-            }
-        }
-    }
-
     override fun afterSuccessLoadAliases(ownAliases: List<Alias>) {
-        text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
+        if (ownAliases.isEmpty()) {
+            text_alias_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
+        } else {
+            text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
+        }
         relative_alias.click {
             val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
             if (ownAliases.isEmpty()) {
-                text_alias_count.text = getString(R.string.addresses_and_keys_you_do_not_have)
                 bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_EMPTY
             } else {
-                text_alias_count.text = String.format(getString(R.string.alias_dialog_you_have), ownAliases.size)
                 bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
             }
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

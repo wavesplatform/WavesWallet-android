@@ -12,6 +12,7 @@ import android.text.TextPaint
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -34,10 +35,7 @@ import com.wavesplatform.wallet.v2.util.makeLinks
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
-import pers.victor.ext.click
-import pers.victor.ext.findColor
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import javax.inject.Inject
 
 
@@ -102,22 +100,25 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     private fun getFirstOpenAlertView(): View? {
         val view = LayoutInflater.from(this)
                 .inflate(R.layout.dialog_account_first_open, null)
+        val padding = (14.0f * this.resources.displayMetrics.density + 0.5f).toInt()
+        view.checkbox_funds_on_device.setOnCheckedChangeListener { _, isChecked ->
+            presenter.checkedAboutBackup = isChecked
+            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
+        }
+        view.checkbox_funds_on_device.setPadding(padding, 0, 0, 0)
 
-        view.checkbox_terms_of_use
-                .setOnCheckedChangeListener { _, isChecked ->
-                    presenter.checkedAboutTerms = isChecked
-                    view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
-                }
-        view.checkbox_backup
-                .setOnCheckedChangeListener { _, isChecked ->
-                    presenter.checkedAboutBackup = isChecked
-                    view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
-                }
-        view.checkbox_funds_on_device
-                .setOnCheckedChangeListener { _, isChecked ->
-                    presenter.checkedAboutFundsOnDevice = isChecked
-                    view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
-                }
+
+        view.checkbox_backup.setOnCheckedChangeListener { _, isChecked ->
+            presenter.checkedAboutFundsOnDevice = isChecked
+            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
+        }
+        view.checkbox_backup.setPadding(padding, padding, 0, padding)
+
+        view.checkbox_terms_of_use.setPadding(padding, padding, 0, padding)
+        view.checkbox_terms_of_use.setOnCheckedChangeListener { _, isChecked ->
+            presenter.checkedAboutTerms = isChecked
+            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
+        }
 
         val siteClick = object : ClickableSpan() {
             override fun onClick(p0: View?) {
@@ -219,9 +220,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         }
         when (tab?.position) {
             QUICK_ACTION_SCREEN -> {
-                val quickActionDialog = QuickActionBottomSheetFragment()
-                quickActionDialog.show(supportFragmentManager,
-                        quickActionDialog::class.java.simpleName)
+                showQuickActionDialog()
             }
         }
     }
@@ -241,11 +240,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 toolbar_general.title = getString(R.string.dex_toolbar_title)
             }
             QUICK_ACTION_SCREEN -> {
-                val quickActionDialog = fragments[QUICK_ACTION_SCREEN]
-                if (quickActionDialog is QuickActionBottomSheetFragment) {
-                    quickActionDialog.show(supportFragmentManager,
-                            quickActionDialog::class.java.simpleName)
-                }
+                showQuickActionDialog()
             }
             HISTORY_SCREEN -> {
                 showNewTabFragment(fragments[HISTORY_SCREEN])
@@ -262,8 +257,17 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         }
     }
 
+    private fun showQuickActionDialog() {
+        if (isNetworkConnected()) {
+            val quickActionDialog = QuickActionBottomSheetFragment.newInstance()
+            val ft = supportFragmentManager.beginTransaction()
+            ft.add(quickActionDialog, quickActionDialog::class.java.simpleName)
+            ft.commitAllowingStateLoss()
+        }
+    }
+
     private fun showNewTabFragment(fragment: Fragment) {
-        if (!supportFragmentManager.fragments.contains(fragment)) {
+        if (supportFragmentManager.findFragmentByTag(fragment::class.java.simpleName) == null) {
             supportFragmentManager.beginTransaction().hide(activeFragment).add(R.id.frame_fragment_container, fragment, fragment::class.java.simpleName).show(fragment).commitAllowingStateLoss()
         } else {
             supportFragmentManager.beginTransaction().hide(activeFragment).show(fragment).commitAllowingStateLoss()
@@ -349,6 +353,25 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 }
                 preferencesHelper.setShowSaveSeedWarningTime(currentGuid, now)
             }
+        }
+    }
+
+    override fun needToShowNetworkMessage() = true
+
+    override fun rootLayoutToShowNetworkMessage(): ViewGroup = frame_root
+
+    override fun extraBottomMarginToShowNetworkMessage(): Int {
+        return tab_navigation.height
+    }
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        if (networkConnected) {
+            // enable quick action tab
+            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.ENABLE_VIEW
+        } else {
+            // disable quick action tab
+            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.DISABLE_VIEW
         }
     }
 

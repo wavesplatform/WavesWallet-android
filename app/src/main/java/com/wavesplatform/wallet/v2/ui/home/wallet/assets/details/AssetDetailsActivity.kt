@@ -13,9 +13,11 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.ui.welcome.AlphaScalePageTransformer
 import kotlinx.android.synthetic.main.activity_asset_details.*
+import kotlinx.android.synthetic.main.activity_main_v2.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
@@ -44,6 +46,12 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         var BUNDLE_ASSET_TYPE = "type"
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
@@ -60,7 +68,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
                         view_pager.setPagingEnabled(false)
                         toolbar_view.title = text_asset_name.text.toString()
                         presenter.isShow = true
-                    } else if(presenter.isShow) {
+                    } else if (presenter.isShow) {
                         view_pager.setPagingEnabled(true)
                         toolbar_view.title = " "
                         presenter.isShow = false
@@ -99,6 +107,11 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     private fun configureTitleForAssets(position: Int) {
+        if (position >= adapterAvatar.items.size ) {
+            text_asset_description.text = ""
+            return
+        }
+
         val item = adapterAvatar.items[position]
         text_asset_name.text = item.getName()
 
@@ -123,17 +136,20 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         adapterAvatar.notifyDataSetChanged()
         view_pager.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0), false)
         view_pager.post {
-            if (view_pager.beginFakeDrag()) {
+            if (view_pager.beginFakeDrag() && adapterAvatar.count != 0) {
                 view_pager.fakeDragBy(0f)
                 view_pager.endFakeDrag()
             }
         }
-        configureTitleForAssets(view_pager.currentItem)
-        showFavorite(view_pager.currentItem)
 
         // configure contents pager
-        view_pager_content.adapter = AssetDetailsContentPageAdapter(supportFragmentManager, ArrayList(sortedToFirstFavoriteList))
-        view_pager_content.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0), false)
+        view_pager_content.adapter = AssetDetailsContentPageAdapter(supportFragmentManager,
+                ArrayList(sortedToFirstFavoriteList))
+        view_pager_content.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0),
+                false)
+
+        configureTitleForAssets(view_pager.currentItem)
+        showFavorite(view_pager.currentItem)
     }
 
     fun showFavorite(currentItem: Int) {
@@ -177,5 +193,8 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
             putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
         })
         finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
+
+    override fun needToShowNetworkMessage() = true
 }

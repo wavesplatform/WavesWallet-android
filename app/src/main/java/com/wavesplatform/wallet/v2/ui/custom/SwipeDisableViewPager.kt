@@ -14,17 +14,25 @@ class SwipeDisableViewPager(context: Context, attrs: AttributeSet) : ViewPager(c
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        return if (this.pagingEnabled) {
-            super.onTouchEvent(event)
-        } else false
-
+        if (this.pagingEnabled) {
+            try {
+                return super.onTouchEvent(event)
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+        return false
     }
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
-        return if (this.pagingEnabled) {
-            super.onInterceptTouchEvent(event)
-        } else false
-
+        if (this.pagingEnabled) {
+            try {
+                return super.onInterceptTouchEvent(event)
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+        return false
     }
 
     fun setPagingEnabled(enabled: Boolean) {

@@ -130,6 +130,11 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         }
     }
 
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+    }
+
     companion object {
         const val REQUEST_EDIT_ACCOUNT_NAME = 999
         const val KEY_INTENT_ITEM_ADDRESS = "intent_item_address"

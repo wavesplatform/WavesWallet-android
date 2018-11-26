@@ -10,13 +10,14 @@ import android.widget.TextView
 import com.wavesplatform.wallet.R
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
+import pers.victor.ext.sp2px
 
 
 class TopRightErrorTextInputLayout(context: Context, attrs: AttributeSet) : TextInputLayout(context, attrs) {
     var topRightAlignedErrorText: TextView = TextView(context)
 
     init {
-        topRightAlignedErrorText.setTextColor(ContextCompat.getColor(context, R.color.warning_color))
+        topRightAlignedErrorText.setTextColor(ContextCompat.getColor(context, R.color.error500))
         topRightAlignedErrorText.textSize = 12f
         val params = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
         params.rightMargin =  dp2px(4)
@@ -26,7 +27,7 @@ class TopRightErrorTextInputLayout(context: Context, attrs: AttributeSet) : Text
 
         this.post {
             topRightAlignedErrorText.post {
-                topRightAlignedErrorText.translationY = -this.height + topRightAlignedErrorText.height.toFloat()
+                topRightAlignedErrorText.translationY = -this.height + topRightAlignedErrorText.height.toFloat() - sp2px(2)
             }
             if (childCount == 3) {
                 getChildAt(1).gone()

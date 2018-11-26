@@ -161,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_weight="1"
-                    android:background="@drawable/selector_btn_error_400"
+                    android:background="@drawable/selector_btn_red"
                     android:clickable="true"
                     android:orientation="vertical"
                     android:padding="6dp">

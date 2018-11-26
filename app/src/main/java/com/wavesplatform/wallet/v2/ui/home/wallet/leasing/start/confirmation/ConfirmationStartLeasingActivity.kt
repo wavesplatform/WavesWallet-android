@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation
+package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation
 
 import android.app.Activity
 import android.os.Bundle
@@ -18,27 +18,24 @@ import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-class ConfirmationLeasingActivity : BaseActivity(), ConfirmationLeasingView {
+class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasingView {
 
     @Inject
     @InjectPresenter
-    lateinit var presenter: ConfirmationLeasingPresenter
+    lateinit var presenter: ConfirmationStartLeasingPresenter
 
     @ProvidePresenter
-    fun providePresenter(): ConfirmationLeasingPresenter = presenter
+    fun providePresenter(): ConfirmationStartLeasingPresenter = presenter
 
     override fun configLayoutRes(): Int = R.layout.activity_confirm_leasing
 
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     companion object {
-        var BUNDLE_CANCEL_CONFIRMATION_LEASING = "cancel_confirmation_leasing"
-        var BUNDLE_CANCEL_CONFIRMATION_LEASING_TX = "cancel_confirmation_leasing_tx"
         var BUNDLE_ADDRESS = "address"
         var BUNDLE_AMOUNT = "amount"
         var BUNDLE_RECIPIENT_IS_ALIAS = "recipient_is_alias"
@@ -56,15 +53,7 @@ class ConfirmationLeasingActivity : BaseActivity(), ConfirmationLeasingView {
         text_free_value.text = "${MoneyUtil.getScaledText(Constants.WAVES_FEE, 8).stripZeros()} ${Constants.wavesAssetInfo.name}"
         text_node_address.text = presenter.address
 
-
-        presenter.startLeasing = !intent.hasExtra(
-                ConfirmationLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING)
-
-        if (presenter.startLeasing) {
-            text_leasing_result_value.text = getString(R.string.confirm_leasing_result_value, presenter.amount, Constants.wavesAssetInfo.name)
-        } else {
-            text_leasing_result_value.text = getString(R.string.confirm_cancel_leasing_result_value)
-        }
+        text_leasing_result_value.text = getString(R.string.confirm_leasing_result_value, presenter.amount, Constants.wavesAssetInfo.name)
 
         button_confirm.click {
             supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -78,19 +67,18 @@ class ConfirmationLeasingActivity : BaseActivity(), ConfirmationLeasingView {
             rotation.fillAfter = true
             image_loader.startAnimation(rotation)
 
-            if (presenter.startLeasing) {
-                presenter.startLeasing()
-            } else {
-                val transactionId = intent.getStringExtra(
-                        ConfirmationLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING_TX)
-                presenter.cancelLeasing(transactionId)
-            }
+            presenter.startLeasing()
         }
 
         button_okay.click {
             setResult(Activity.RESULT_OK)
-            finish()
+            onBackPressed()
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun successStartLeasing() {
@@ -105,16 +93,12 @@ class ConfirmationLeasingActivity : BaseActivity(), ConfirmationLeasingView {
         card_leasing_preview_info.visiable()
     }
 
-    override fun successCancelLeasing() {
-        image_loader.clearAnimation()
-        card_progress.gone()
-        card_success.visiable()
-    }
 
-    override fun failedCancelLeasing() {
-        image_loader.clearAnimation()
-        card_progress.gone()
-        card_leasing_preview_info.visiable()
+    override fun needToShowNetworkMessage() = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_confirm.isEnabled = networkConnected
     }
 
 }

@@ -23,7 +23,7 @@ data class AssetBalances(
 @RealmClass
 open class AssetBalance(
         @PrimaryKey
-        @SerializedName("assetId") var assetId: String? = "",
+        @SerializedName("assetId") var assetId: String = "",
         @SerializedName("balance") var balance: Long? = 0,
         @SerializedName("leasedBalance") var leasedBalance: Long? = 0,
         @SerializedName("inOrderBalance") var inOrderBalance: Long? = 0,

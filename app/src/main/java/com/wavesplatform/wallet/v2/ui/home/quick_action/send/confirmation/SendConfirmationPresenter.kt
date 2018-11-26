@@ -4,7 +4,6 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.api.NodeManager
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil
@@ -28,24 +27,21 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
 
     @Inject
     lateinit var coinomatManager: CoinomatManager
-    private var nodeManager = NodeManager.createInstance(
-            App.getAccessManager().getWallet()!!.publicKeyStr)
 
     var recipient: String? = ""
-    var amount: String? = ""
+    var amount: Float = 0F
     var attachment: String = ""
     var selectedAsset: AssetBalance? = null
     var assetInfo: AssetInfo? = null
     var moneroPaymentId: String? = null
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
+    var gatewayCommission: Float = 0F
 
 
     fun confirmSend() {
         val singed = signTransaction()
         if (singed != null) {
             submitPayment(singed)
-        } else {
-            viewState.requestPassCode()
         }
     }
 
@@ -75,12 +71,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         if (type == SendPresenter.Type.GATEWAY) {
             createGateAndPayment()
         } else {
-            signedTransaction.attachment = Base58.encode(
-                    (signedTransaction.attachment ?: "").toByteArray())
-            if (signedTransaction.recipient.length <= 30) {
-                signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()
-            }
-            addSubscription(nodeManager.transactionsBroadcast(signedTransaction)
+            checkRecipientAlias(signedTransaction)
+            addSubscription(nodeDataManager.transactionsBroadcast(signedTransaction)
                     .compose(RxUtil.applySchedulersToObservable()).subscribe({ tx ->
                         tx.recipient = tx.recipient.clearAlias()
                         saveLastSentAddress(tx.recipient)
@@ -91,6 +83,14 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         }
     }
 
+    private fun checkRecipientAlias(signedTransaction: TransactionsBroadcastRequest) {
+        signedTransaction.attachment = Base58.encode(
+                (signedTransaction.attachment ?: "").toByteArray())
+        if (signedTransaction.recipient.length <= 30) {
+            signedTransaction.recipient = signedTransaction.recipient.makeAsAlias()
+        }
+    }
+
     private fun getTxRequest(): TransactionsBroadcastRequest {
         if (recipient == null || recipient!!.length < 4) {
             recipient = ""
@@ -98,11 +98,17 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             recipient = recipient!!.makeAsAlias()
         }
 
+        val totalAmount = if (type == SendPresenter.Type.GATEWAY) {
+            amount + gatewayCommission
+        } else {
+            amount
+        }
+
         return TransactionsBroadcastRequest(
-                selectedAsset!!.assetId ?: "",
+                selectedAsset!!.assetId,
                 App.getAccessManager().getWallet()!!.publicKeyStr,
                 recipient!!,
-                MoneyUtil.getUnscaledValue(amount, selectedAsset),
+                MoneyUtil.getUnscaledValue(totalAmount.toString(), selectedAsset),
                 System.currentTimeMillis(),
                 Constants.WAVES_FEE,
                 attachment)
@@ -129,7 +135,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             return
         }
 
-        val currencyFrom = "W$currencyTo"
+        val currencyFrom = "${Constants.ADDRESS_SCHEME}$currencyTo"
 
         runAsync {
             val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY
@@ -153,17 +159,13 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                     }
                     .flatMap {
                         recipient = it.tunnel!!.walletFrom
+                        attachment = it.tunnel!!.attachment ?: ""
                         val signedTransaction = signTransaction()
                         if (signedTransaction == null) {
                             null
                         } else {
-                            signedTransaction.attachment = Base58.encode(
-                                    (signedTransaction.attachment ?: "").toByteArray())
-                            if (signedTransaction.recipient.length <= 30) {
-                                signedTransaction.recipient = signedTransaction
-                                        .recipient.makeAsAlias()
-                            }
-                            nodeManager.transactionsBroadcast(signedTransaction)
+                            checkRecipientAlias(signedTransaction)
+                            nodeDataManager.transactionsBroadcast(signedTransaction)
                         }
                     }
                     .subscribe(

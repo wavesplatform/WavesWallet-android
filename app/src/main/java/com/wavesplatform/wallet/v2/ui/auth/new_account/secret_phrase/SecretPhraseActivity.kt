@@ -27,6 +27,11 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
 
     override fun configLayoutRes() = R.layout.activity_secret_phrase
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view)
 
@@ -61,6 +66,7 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
 
 
     override fun onBackPressed() {
-
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

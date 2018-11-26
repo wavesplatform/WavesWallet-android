@@ -10,7 +10,9 @@ import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_tutorial.*
 import pers.victor.ext.click
+import pers.victor.ext.dp2px
 import pers.victor.ext.findColor
+import java.util.*
 import javax.inject.Inject
 
 
@@ -27,6 +29,15 @@ class TutorialActivity : BaseActivity(), TutorialView {
     override fun configLayoutRes() = R.layout.activity_tutorial
 
     override fun askPassCode() = false
+
+    companion object {
+        var BUNDLE_LANG = "lang"
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setLanguage(Locale(intent.getStringExtra(BUNDLE_LANG)))
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
@@ -69,7 +80,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
                     text_next.text = getString(R.string.card_tutorial_understand)
                     text_next.click {
                         preferencesHelper.setTutorialPassed(true)
-                        launchActivity<WelcomeActivity>(clear = true)
+                        exitAnimation()
                     }
                 } else {
                     text_next.text = getString(R.string.card_tutorial_next)
@@ -79,6 +90,20 @@ class TutorialActivity : BaseActivity(), TutorialView {
                 }
             }
         })
+    }
+
+    private fun exitAnimation() {
+        relative_root.post {
+            relative_root.animate()
+                    .translationY(dp2px(50).toFloat())
+                    .alpha(0f)
+                    .setDuration(250)
+                    .withEndAction {
+                        launchActivity<WelcomeActivity>()
+                        overridePendingTransition(0, R.anim.fade_out)
+                    }
+                    .start()
+        }
     }
 
 }

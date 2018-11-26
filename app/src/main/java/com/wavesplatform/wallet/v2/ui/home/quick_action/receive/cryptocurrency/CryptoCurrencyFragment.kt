@@ -22,10 +22,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
-import pers.victor.ext.visiableIf
+import pers.victor.ext.*
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -76,7 +73,12 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
                 }
             }
         }
-        button_continue.isEnabled = false
+        presenter.nextStepValidation = false
+        needMakeButtonEnable()
+    }
+
+    private fun needMakeButtonEnable() {
+        button_continue.isEnabled = presenter.nextStepValidation && isNetworkConnected()
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -102,7 +104,8 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         if (tunnel?.tunnel == null
                 || tunnel.tunnel?.inMin.isNullOrEmpty()
                 || tunnel.tunnel?.currencyFrom.isNullOrEmpty()) {
-            button_continue.isEnabled = false
+            presenter.nextStepValidation = false
+            needMakeButtonEnable()
             onShowError(App.getAppContext().getString(R.string.receive_error_network))
             return
         }
@@ -114,7 +117,8 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
                 min,
                 tunnel.tunnel?.currencyFrom)
         warning_crypto.text = getString(R.string.receive_warning_crypto, tunnel.tunnel?.currencyFrom)
-        button_continue.isEnabled = true
+        presenter.nextStepValidation = true
+        needMakeButtonEnable()
         container_info.visiable()
     }
 
@@ -130,7 +134,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         image_asset_icon.isOval = true
         image_asset_icon.setAsset(assetBalance)
         text_asset_name.text = assetBalance?.getName()
-        text_asset_value.text = assetBalance?.getDisplayTotalBalance()
+        text_asset_value.text = assetBalance?.getDisplayAvailableBalance()
 
         image_is_favourite.visiableIf {
             assetBalance?.isFavorite!!
@@ -139,7 +143,8 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
         edit_asset.gone()
         container_asset.visiable()
 
-        button_continue.isEnabled = true
+        presenter.nextStepValidation = true
+        needMakeButtonEnable()
 
         if (assetBalance != null) {
             presenter.getTunnel(assetBalance.assetId!!)
@@ -156,7 +161,7 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
             edit_asset.click { launchAssets() }
             container_asset.click { launchAssets() }
             image_change.visibility = View.VISIBLE
-            ViewCompat.setElevation(edit_asset_card, ViewUtils.convertDpToPixel(4f, activity!!))
+            ViewCompat.setElevation(edit_asset_card, dp2px(2).toFloat())
             edit_asset_layout.background = null
             edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
                     activity!!, R.color.white))
@@ -183,5 +188,11 @@ class CryptoCurrencyFragment : BaseFragment(), СryptocurrencyView {
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
             }
         }
+    }
+
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_continue.isEnabled = presenter.nextStepValidation && networkConnected
     }
 }

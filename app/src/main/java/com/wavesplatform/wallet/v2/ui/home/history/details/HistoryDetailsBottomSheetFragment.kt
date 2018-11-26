@@ -36,7 +36,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.confirmation.ConfirmationLeasingActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.github.kbiakov.codeview.CodeView
@@ -138,9 +138,14 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
         feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()} ${transaction.feeAssetObject?.name}"
 
-        confirmation?.text = (preferencesHelper.currentBlocksHeight - transaction.height).toString()
+        val confirmations = preferencesHelper.currentBlocksHeight - transaction.height
+        confirmation?.text = if (confirmations < 0) {
+            "0"
+        } else {
+            confirmations.toString()
+        }
         block?.text = transaction.height.toString()
-        timeStamp?.text = transaction.timestamp.date("dd.MM.yyyy 'at' HH:mm")
+        timeStamp?.text = transaction.timestamp.date("dd.MM.yyyy HH:mm")
 
         if (preferencesHelper.currentBlocksHeight.minus(transaction.height) > 0) {
             status?.setBackgroundResource(R.drawable.success400_01_shape)
@@ -243,14 +248,12 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 if (transaction.status == LeasingStatus.ACTIVE.status) {
                     status?.text = getString(R.string.history_details_active_now)
                     cancelLeasingBtn?.findViewById<FrameLayout>(R.id.frame_cancel_button)?.click {
-                        launchActivity<ConfirmationLeasingActivity>(
-                                StartLeasingActivity.REQUEST_CANCEL_LEASING_CONFIRMATION) {
-                            putExtra(ConfirmationLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING,
-                                    true)
-                            putExtra(ConfirmationLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING_TX,
+                        launchActivity<ConfirmationCancelLeasingActivity>(
+                                ConfirmationCancelLeasingActivity.REQUEST_CANCEL_LEASING_CONFIRMATION) {
+                            putExtra(ConfirmationCancelLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING_TX,
                                     transaction.id)
-                            putExtra(ConfirmationLeasingActivity.BUNDLE_ADDRESS, transaction.recipient)
-                            putExtra(ConfirmationLeasingActivity.BUNDLE_AMOUNT,
+                            putExtra(ConfirmationCancelLeasingActivity.BUNDLE_ADDRESS, transaction.recipient)
+                            putExtra(ConfirmationCancelLeasingActivity.BUNDLE_AMOUNT,
                                     MoneyUtil.getScaledText(transaction.amount, transaction.asset))
                         }
                     }
@@ -262,24 +265,33 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 }
             }
             TransactionType.EXCHANGE_TYPE -> {
-                val exchangeView = inflater?.inflate(R.layout.fragment_bottom_sheet_exchange_layout, historyContainer, false)
-                val btcPrice = exchangeView?.findViewById<AppCompatTextView>(R.id.text_btc_price)
-                val priceTitle = exchangeView?.findViewById<AppCompatTextView>(R.id.history_details_btc_price)
+                val exchangeView = inflater?.inflate(
+                        R.layout.fragment_bottom_sheet_exchange_layout,
+                        historyContainer, false)
+                val typeView = exchangeView?.findViewById<AppCompatTextView>(
+                        R.id.text_type)
+                val btcPrice = exchangeView?.findViewById<AppCompatTextView>(
+                        R.id.text_btc_price)
 
-                val myOrder =
-                        if (transaction.order1?.sender == App.getAccessManager().getWallet()?.address) transaction.order1
-                        else transaction.order2
+                val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
+                        App.getAccessManager().getWallet()?.address!!)
 
-                val pairOrder =
-                        if (transaction.order1?.sender != App.getAccessManager().getWallet()?.address) transaction.order1
-                        else transaction.order2
-
-                if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                    priceTitle?.text = String.format(getString(R.string.history_details_exchange_price), myOrder.assetPair?.priceAssetObject?.name)
-                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.name}"
+                if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
+                    typeView?.text = getString(
+                            R.string.history_my_dex_intent_sell,
+                            myOrder.assetPair?.amountAssetObject!!.name,
+                            myOrder.assetPair?.priceAssetObject?.name)
+                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.price,
+                            myOrder.assetPair?.priceAssetObject)} " +
+                            "${myOrder.assetPair?.amountAssetObject?.name}"
                 } else {
-                    priceTitle?.text = String.format(getString(R.string.history_details_exchange_price), myOrder?.assetPair?.amountAssetObject?.name)
-                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.amount?.times(transaction.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)} ${myOrder?.assetPair?.priceAssetObject?.name}"
+                    typeView?.text = getString(
+                            R.string.history_my_dex_intent_buy,
+                            myOrder.assetPair?.amountAssetObject!!.name,
+                            myOrder.assetPair?.priceAssetObject?.name)
+                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.price,
+                            myOrder?.assetPair?.priceAssetObject)} " +
+                            "${myOrder?.assetPair?.priceAssetObject?.name}"
                 }
 
                 historyContainer?.addView(exchangeView)

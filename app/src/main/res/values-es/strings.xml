@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_fill_payment_details">Usted DEBE completar las especificaciones de pago con la siguiente información:</string>
-    <string name="about_fill_payment_info"><![CDATA[CNM - <su dirección de WAVES>. \nSi no lo hace, no podemos acreditar su cuenta.]]></string>
+    <string name="about_fill_payment_info">CNM — su dirección de WAVES. \nSi no lo hace, no podemos acreditar su cuenta.</string>
     <string name="about_redirection_message">Después de realizar la verificación, recibirá un correo electrónico con más instrucciones.</string>
     <string name="about_redirection_okay">Ok</string>
     <string name="about_redirection_title">Fuiste redirigido a la «IDNow» \npara la verificación</string>
@@ -125,7 +125,7 @@
     <string name="chart_change_interval_dialog_ok">OK</string>
     <string name="chart_change_interval_dialog_title">Cambiar intervalo</string>
     <string name="chart_empty">No hay datos de gráficos disponibles</string>
-    <string name="chart_loading">Cargando gráfico …</string>
+    <string name="chart_loading">Cargando gráfico…</string>
     <string name="chart_time_frame_15_min">15 minutos</string>
     <string name="chart_time_frame_1_hour">1 hora</string>
     <string name="chart_time_frame_24_hours">24 horas</string>
@@ -165,8 +165,8 @@
     <string name="common_market_error">No se puede encontrar la aplicación de mercado</string>
     <string name="common_msg_in_development">Lo sentimos, esta artículo estará disponible en un futuro próximo.</string>
     <string name="common_or">o</string>
-    <string name="common_persist"><![CDATA[&]]></string>
-    <string name="confirm_backup">Confirmar el respaldo </string>
+    <string name="common_persist">&#x26;</string>
+    <string name="confirm_backup">Confirmar el respaldo</string>
     <string name="confirm_backup_confirm">Confirmar</string>
     <string name="confirm_backup_error">Orden equivocada, inténtalo de nuevo</string>
     <string name="confirm_backup_info">Por favor, ponga cada palabra en el orden correcto</string>
@@ -259,7 +259,7 @@
     <string name="history_details_confirmations">Confirmaciones</string>
     <string name="history_details_copy_all_data">Copiar todos los datos</string>
     <string name="history_details_copy_tx_id">Copiar ID de TX</string>
-    <string name="history_details_exchange_price">Precio %s</string>
+    <string name="history_details_exchange_price">Precio</string>
     <string name="history_details_fee">Comisión </string>
     <string name="history_details_id">ID</string>
     <string name="history_details_leasing_from">Desde</string>
@@ -278,6 +278,9 @@
     <string name="history_exchanged">Intercambiado</string>
     <string name="history_issued">Emitido</string>
     <string name="history_leased">Arrendado</string>
+    <string name="history_my_dex_intent_buy">Buy: %1$s/%2$s</string>
+    <string name="history_my_dex_intent_sell">Sell: %1$s/%2$s</string>
+    <string name="history_my_dex_type">Type</string>
     <string name="history_received">Recibido</string>
     <string name="history_sent">Enviado </string>
     <string name="history_sorting_close">Cerrar</string>
@@ -295,29 +298,30 @@
     <string name="history_type_data">Transacción de datos</string>
     <string name="history_type_exchange">%s %s</string>
     <string name="history_type_incoming_leasing">Arrendamiento entrante</string>
-    <string name="history_type_mass_receive">Recibido %s </string>
-    <string name="history_type_mass_send">Enviar %s</string>
-    <string name="history_type_mass_spam_receive">Recibido %s </string>
-    <string name="history_type_receive">Recibido %s </string>
-    <string name="history_type_self_transfer">Auto-transferir %s</string>
-    <string name="history_type_sent">Enviado %s</string>
+    <string name="history_type_mass_receive">Recibido</string>
+    <string name="history_type_mass_send">Enviar</string>
+    <string name="history_type_mass_spam_receive">Recibido</string>
+    <string name="history_type_receive">Recibido</string>
+    <string name="history_type_self_transfer">Auto-transferir</string>
+    <string name="history_type_sent">Enviado</string>
     <string name="history_type_set_script">Establecer transacción de script</string>
     <string name="history_type_set_sponsorship">Establecer transacción de patrocinio</string>
-    <string name="history_type_spam_receive">Recibido %s</string>
+    <string name="history_type_spam_receive">Recibido</string>
     <string name="history_type_started_leasing">Comenzó el arrendamiento</string>
-    <string name="history_type_token_burn">%s Token Quemados</string>
-    <string name="history_type_token_generation">%s - Token generados</string>
-    <string name="history_type_token_reissue">%s Token Re-emitido</string>
+    <string name="history_type_token_burn">Token Quemados</string>
+    <string name="history_type_token_generation">Token generados</string>
+    <string name="history_type_token_reissue">Token Re-emitido</string>
     <string name="history_type_unrecognised">Transacción no reconocida</string>
     <string name="import_account_click_show_pairing">Haga clic en «Mostrar código» para revelar un código QR</string>
-    <string name="import_account_login_at_site">Inicie sesión en su cliente Waves a través de la web o Mac/PC</string>
+    <string name="import_account_login_at_site">Log in to your Waves Client via your PC or Mac</string>
     <string name="import_account_scan_pairing_code">Escanear código de emparejamiento</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Ajustes > Seguridad > Código de emparejamiento]]></string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Ajustes — Seguridad — Código de emparejamiento</string>
     <string name="import_account_tab_manually">Manualmente</string>
     <string name="import_account_tab_scan">Escanear</string>
     <string name="import_account_toolbar_title">Importar cuenta</string>
     <string name="insufficient_fee">La tarifa de transacción es demasiado baja.</string>
     <string name="insufficient_funds">Fondos insuficientes</string>
+    <string name="insufficient_gateway_funds_error">Check gateway limits and commissions</string>
     <string name="invalid_address">Dirección inválida</string>
     <string name="invalid_amount">Monto inválido</string>
     <string name="invalid_monero_payment_id">ID de pago no válido</string>
@@ -329,7 +333,7 @@
     <string name="leasing_history_toolbar_title">Historial</string>
     <string name="left_drawer_description">Manténgase al día con las últimas noticias y artículos, y descubra todo lo que sucede en la plataforma Waves</string>
     <string name="left_drawer_join_the_waves_community">Únete a la comunidad de Waves</string>
-    <string name="left_drawer_site">wavesplatform.com</string>
+    <string name="left_drawer_site">forum.wavesplatform.com</string>
     <string name="left_drawer_support">Soporte Wavesplatform</string>
     <string name="left_drawer_terms_and_conditions">Términos y Condiciones</string>
     <string name="left_drawer_whitepaper">Whitepaper</string>
@@ -361,6 +365,7 @@
     <string name="new_account_account_name_hint">Nombre de la cuenta</string>
     <string name="new_account_account_name_validation_already_exist_error">El nombre de la cuenta ya está en uso</string>
     <string name="new_account_account_name_validation_length_error">Max: 20 símbolos</string>
+    <string name="new_account_account_name_validation_min_length_error">Min: 2 símbolos</string>
     <string name="new_account_account_name_validation_required_error">Se requiere el nombre</string>
     <string name="new_account_avatar_description">Este avatar es único. No puedes cambiarlo más tarde.</string>
     <string name="new_account_avatar_error">Por favor seleccione un avatar</string>
@@ -437,14 +442,14 @@
     <string name="receive_address_generate">Generar…</string>
     <string name="receive_address_link_to_invoice">Enlace a una factura</string>
     <string name="receive_address_share">Compartir</string>
-    <string name="receive_address_view_toolbar">Tu dirección de Bitcoin</string>
-    <string name="receive_address_waves_address">Tu dirección de Waves</string>
+    <string name="receive_address_view_toolbar">Tu dirección de %1$s</string>
+    <string name="receive_address_waves_address">Tu dirección de %1$s</string>
     <string name="receive_address_your_qr_code">Su código QR</string>
     <string name="receive_amount">Cantidad</string>
     <string name="receive_amount_title">Cantidad en %1$s</string>
     <string name="receive_asset">Activo</string>
     <string name="receive_card">Tarjeta</string>
-    <string name="receive_contact_msg">En caso de problemas con la verificación o el procesamiento de pagos, comuníquese con el equipo de soporte de Coinomat  —support@coinomat.com</string>
+    <string name="receive_contact_msg">En caso de problemas con la verificación o el procesamiento de pagos, comuníquese con el equipo de soporte de Coinomat — support@coinomat.com</string>
     <string name="receive_contact_msg_key">support@coinomat.com</string>
     <string name="receive_continue">Continuar</string>
     <string name="receive_cryptocurrency">Criptomoneda</string>
@@ -489,6 +494,7 @@
     <string name="send_confirmation_confirm">Confirmar</string>
     <string name="send_confirmation_description">Descripción</string>
     <string name="send_confirmation_fee">Comisión</string>
+    <string name="send_confirmation_gateway_fee">Gateway Fee</string>
     <string name="send_confirmation_sent_to">Enviado a</string>
     <string name="send_confirmation_the_description_is_too_long">La descripción es demasiado larga.</string>
     <string name="send_confirmation_toolbar_title">Confirmación</string>
@@ -501,7 +507,7 @@
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Las tarifas son del 1% del importe transferido.</string>
     <string name="send_gateway_info_gateway_fee">La comsión de salida es %1$s %2$s</string>
     <string name="send_gateway_info_gateway_limits">Detectamos la dirección %1$s y le enviaremos su dinero a través de la entrada de Coinomat a esa dirección. La cantidad mínima es %2$s %1$s, la cantidad máxima es %3$s %1$s.</string>
-    <string name="send_gateway_info_gateway_warning">No retire %1$sa un ICO. No acreditaremos a su cuenta con tokens de esa venta.</string>
+    <string name="send_gateway_info_gateway_warning">No retire %1$s a un ICO. No acreditaremos a su cuenta con tokens de esa venta.</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Si ha sido verificado y ha depositado dólares estadounidenses, puede retirar estos dólares nuevamente a su cuenta bancaria. De lo contrario, verifíquese por nuestro socio IDNow.eu</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">La cantidad mínima es de 500 dólares estadounidenses. Si tiene alguna pregunta, envíe un correo electrónico a support@coinomat.com</string>
     <string name="send_monero_payment_id">ID de pago para Monero</string>
@@ -601,4 +607,7 @@
     <string name="your_asset_activity_greater_zero">No vacio</string>
     <string name="your_assets_empty_state">Nada por aquí… \nNo tienes activos con fondos</string>
     <string name="your_assets_toolbar_title">Sus activos</string>
+    <string name="common_50_percent">50%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="common_5_percent">5%</string>
 </resources>

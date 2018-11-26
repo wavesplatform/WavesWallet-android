@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
-    <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>. \nIf you don’t we can’t credit your account.]]></string>
+    <string name="about_fill_payment_info">CNM — your WAVES address. \nIf you don’t we can’t credit your account.</string>
     <string name="about_redirection_message">After you go through the verification you will receive an email with further instructions</string>
     <string name="about_redirection_okay">Okay</string>
     <string name="about_redirection_title">You were redirected to the «IDNow» \nfor verification</string>
@@ -85,6 +85,7 @@
     <string name="buy_and_sell_expiration_dialog_negative_btn">CANCEL</string>
     <string name="buy_and_sell_expiration_dialog_positive_btn">OK</string>
     <string name="buy_and_sell_expiration_dialog_title">Choose expiration</string>
+    <string name="buy_and_sell_fee_error">You don\'t have enough WAVES to pay the required fees.</string>
     <string name="buy_and_sell_fee">Fee</string>
     <string name="buy_and_sell_last">Last</string>
     <string name="buy_and_sell_limit_price_in">Limit Price in %1$s</string>
@@ -165,7 +166,7 @@
     <string name="common_market_error">Unable to find market app</string>
     <string name="common_msg_in_development">Sorry, this feature will be available in the near future</string>
     <string name="common_or">or</string>
-    <string name="common_persist"><![CDATA[&]]></string>
+    <string name="common_persist">&#x26;</string>
     <string name="confirm_backup">Confirm backup</string>
     <string name="confirm_backup_confirm">Confirm</string>
     <string name="confirm_backup_error">Wrong order, try again</string>
@@ -259,7 +260,7 @@
     <string name="history_details_confirmations">Confirmations</string>
     <string name="history_details_copy_all_data">Copy all data</string>
     <string name="history_details_copy_tx_id">Copy TX ID</string>
-    <string name="history_details_exchange_price">%s Price</string>
+    <string name="history_details_exchange_price">Price</string>
     <string name="history_details_fee">Fee</string>
     <string name="history_details_id">ID</string>
     <string name="history_details_leasing_from">From</string>
@@ -277,6 +278,9 @@
     <string name="history_error_receive_data">Error receive data. Please try later</string>
     <string name="history_exchanged">Exchanged</string>
     <string name="history_issued">Issued</string>
+    <string name="history_my_dex_intent_buy">Buy: %1$s/%2$s</string>
+    <string name="history_my_dex_intent_sell">Sell: %1$s/%2$s</string>
+    <string name="history_my_dex_type">Type</string>
     <string name="history_leased">Leased</string>
     <string name="history_received">Received</string>
     <string name="history_sent">Sent</string>
@@ -295,29 +299,30 @@
     <string name="history_type_data">Data transaction</string>
     <string name="history_type_exchange">%s %s</string>
     <string name="history_type_incoming_leasing">Incoming Leasing</string>
-    <string name="history_type_mass_receive">Received %s</string>
-    <string name="history_type_mass_send">Send %s</string>
-    <string name="history_type_mass_spam_receive">Received %s</string>
-    <string name="history_type_receive">Received %s</string>
-    <string name="history_type_self_transfer">Self-transfer %s</string>
+    <string name="history_type_mass_receive">Received</string>
+    <string name="history_type_mass_send">Send</string>
+    <string name="history_type_mass_spam_receive">Received</string>
+    <string name="history_type_receive">Received</string>
+    <string name="history_type_self_transfer">Self-transfer</string>
     <string name="history_type_sent">Sent %s</string>
     <string name="history_type_set_script">Set script transaction</string>
     <string name="history_type_set_sponsorship">Set sponsorship transaction</string>
-    <string name="history_type_spam_receive">Received %s</string>
+    <string name="history_type_spam_receive">Received</string>
     <string name="history_type_started_leasing">Started Leasing</string>
-    <string name="history_type_token_burn">%s Token Burn</string>
-    <string name="history_type_token_generation">%s - Token Generation</string>
+    <string name="history_type_token_burn">Token Burn</string>
+    <string name="history_type_token_generation">Token Generation</string>
     <string name="history_type_token_reissue">%s Token Reissue</string>
     <string name="history_type_unrecognised">Unrecognised Transaction</string>
     <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
     <string name="import_account_login_at_site">Log in to your Waves Client via your PC or Mac</string>
     <string name="import_account_scan_pairing_code">Scan pairing code</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Settings > Security > Pairing code]]></string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Settings — Security — Pairing code</string>
     <string name="import_account_tab_manually">Manually</string>
     <string name="import_account_tab_scan">Scan</string>
     <string name="import_account_toolbar_title">Import account</string>
     <string name="insufficient_fee">Transaction fee is too low.</string>
     <string name="insufficient_funds">Insufficient funds</string>
+    <string name="insufficient_gateway_funds_error">Check gateway limits and commissions</string>
     <string name="invalid_address">Invalid address</string>
     <string name="invalid_amount">Invalid amount</string>
     <string name="invalid_monero_payment_id">Invalid Payment ID</string>
@@ -329,7 +334,7 @@
     <string name="leasing_history_toolbar_title">History</string>
     <string name="left_drawer_description">Keep up with the latest news and articles, and find out all about events happening on the Waves Platform</string>
     <string name="left_drawer_join_the_waves_community">Join the Waves Community</string>
-    <string name="left_drawer_site">wavesplatform.com</string>
+    <string name="left_drawer_site">forum.wavesplatform.com</string>
     <string name="left_drawer_support">Support Wavesplatform</string>
     <string name="left_drawer_terms_and_conditions">Terms and conditions</string>
     <string name="left_drawer_whitepaper">Whitepaper</string>
@@ -361,6 +366,7 @@
     <string name="new_account_account_name_hint">Account name</string>
     <string name="new_account_account_name_validation_already_exist_error">Account name already use</string>
     <string name="new_account_account_name_validation_length_error">Max: 20 symbols</string>
+    <string name="new_account_account_name_validation_min_length_error">Min: 2 symbols</string>
     <string name="new_account_account_name_validation_required_error">Name is required</string>
     <string name="new_account_avatar_description">This avatar is unique. You cannot change it later.</string>
     <string name="new_account_avatar_error">Please select avatar</string>
@@ -437,8 +443,8 @@
     <string name="receive_address_generate">Generate…</string>
     <string name="receive_address_link_to_invoice">Link to an Invoice</string>
     <string name="receive_address_share">Share</string>
-    <string name="receive_address_view_toolbar">Your Bitcoin address</string>
-    <string name="receive_address_waves_address">Your Waves address</string>
+    <string name="receive_address_view_toolbar">Your %1$s address</string>
+    <string name="receive_address_waves_address">Your %1$s address</string>
     <string name="receive_address_your_qr_code">Your QR Code</string>
     <string name="receive_amount">Amount</string>
     <string name="receive_amount_title">Amount in %1$s</string>
@@ -472,7 +478,7 @@
     <string name="receive_step_2_msg">After you go through the verification you will receive an email with further instructions</string>
     <string name="receive_step_url_link">https://www.idnow.eu/</string>
     <string name="receive_toolbar">Receive</string>
-    <string name="receive_use_same_waves_address"><![CDATA[You must use the same Waves address that you used to make KYC&ALM request. If you make a mistake or put a different Waves address we can’t credit your account.]]></string>
+    <string name="receive_use_same_waves_address">You must use the same Waves address that you used to make KYC and ALM request. If you make a mistake or put a different Waves address we can’t credit your account.</string>
     <string name="receive_verified">Your account is verified</string>
     <string name="receive_warning_crypto">Send only %1$s to this deposit address</string>
     <string name="receive_warning_will_send">If you will send less than %1$s %2$s, you will lose that money.</string>
@@ -489,6 +495,7 @@
     <string name="send_confirmation_confirm">Confirm</string>
     <string name="send_confirmation_description">Description</string>
     <string name="send_confirmation_fee">Fee</string>
+    <string name="send_confirmation_gateway_fee">Gateway Fee</string>
     <string name="send_confirmation_sent_to">Sent to</string>
     <string name="send_confirmation_the_description_is_too_long">The description is too long</string>
     <string name="send_confirmation_toolbar_title">Confirmation</string>
@@ -601,4 +608,19 @@
     <string name="your_asset_activity_greater_zero">Non empty</string>
     <string name="your_assets_empty_state">Nothing Here… \nYou do not have assets with funds</string>
     <string name="your_assets_toolbar_title">Your assets</string>
+    <string name="token_burn_asset_hint">Asset</string>
+    <string name="token_burn_quantity_of_tokens_to_be_burned_hint">Quantity of tokens to be burned</string>
+    <string name="token_burn_continue_btn">Continue</string>
+    <string name="token_burn_transaction_fee_0_001_waves">Transaction Fee 0.001 WAVES</string>
+    <string name="token_burn_validation_amount_insufficient_error">Insufficient funds</string>
+    <string name="token_burn_validation_is_required_error">Not filled out</string>
+    <string name="start_leasing_transaction_fee_0_001_waves">Transaction Fee 0.001 WAVES</string>
+    <string name="confirmaton_cancel_leasing_tx_hint">Leasing TX</string>
+    <string name="confirmaton_cancel_leasing_fee_hint">Fee</string>
+    <string name="confirmaton_cancel_leasing_button_txt">Cancel leasing</string>
+    <string name="common_100_percent">Use total balance</string>
+    <string name="common_50_percent">50%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="common_5_percent">5%</string>
+    <string name="common_no_internet_bottom_msg">No connection to the Internet</string>
 </resources>

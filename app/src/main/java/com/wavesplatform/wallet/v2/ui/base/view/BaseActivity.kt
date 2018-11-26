@@ -18,13 +18,14 @@ import android.support.v7.app.ActionBar
 import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
-import android.view.KeyEvent
-import android.view.MenuItem
-import android.view.WindowManager
+import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -40,10 +41,15 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
+import pyxis.uzuki.live.richutilskt.utils.inflate
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -80,6 +86,9 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     private var progressDialog: ProgressDialog? = null
     private val localizationDelegate = LocalizationActivityDelegate(this)
+    protected lateinit var firebaseAnalytics: FirebaseAnalytics
+
+    private var noInternetLayout: View? = null
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return supportFragmentInjector
@@ -99,6 +108,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         localizationDelegate.addOnLocaleChangedListener(this)
         localizationDelegate.onCreate(savedInstanceState)
         super.onCreate(savedInstanceState)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         if (!translucentStatusBar) {
             setStatusBarColor(R.color.white)
             setNavigationBarColor(R.color.white)
@@ -107,6 +117,20 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         setContentView(configLayoutRes())
         Timber.tag(javaClass.simpleName)
         onViewReady(savedInstanceState)
+
+        noInternetLayout = inflate(R.layout.no_internet_bottom_message_layout)
+
+        eventSubscriptions.add(ReactiveNetwork
+                .observeInternetConnectivity()
+                .distinctUntilChanged()
+                .onErrorResumeNext(Observable.empty())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ connected ->
+                    onNetworkConnectionChanged(connected)
+                }, {
+                    it.printStackTrace()
+                }))
     }
 
     protected fun checkInternet() {
@@ -146,11 +170,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         }
 
         localizationDelegate.onResume(this)
-
-        if (!isNetworkConnection()) {
-            checkInternet()
-            return
-        }
 
         askPassCodeIfNeed()
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)
@@ -328,4 +347,32 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     override fun onBeforeLocaleChanged() {}
 
     override fun onAfterLocaleChanged() {}
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        if (needToShowNetworkMessage()) {
+            if (networkConnected) {
+                if (noInternetLayout?.parent != null) {
+                    noInternetLayout?.image_no_internet?.clearAnimation()
+                    rootLayoutToShowNetworkMessage().removeView(noInternetLayout)
+                }
+            } else {
+                if (noInternetLayout?.parent == null) {
+                    noInternetLayout?.linear_no_internet_message?.setMargins(0, 0, 0, extraBottomMarginToShowNetworkMessage())
+                    rootLayoutToShowNetworkMessage().addView(noInternetLayout)
+                    noInternetLayout?.image_no_internet?.startAnimation(AnimationUtils.loadAnimation(this, R.anim.easy_rotate))
+                }
+            }
+        }
+    }
+
+    fun snakeAnimationForNetworkMsg() {
+        val animation = AnimationUtils.loadAnimation(this, R.anim.easy_shake_error)
+        noInternetLayout?.startAnimation(animation)
+    }
+
+    open fun needToShowNetworkMessage(): Boolean = false
+
+    open fun extraBottomMarginToShowNetworkMessage(): Int = 0
+
+    open fun rootLayoutToShowNetworkMessage(): ViewGroup = findViewById(android.R.id.content)
 }

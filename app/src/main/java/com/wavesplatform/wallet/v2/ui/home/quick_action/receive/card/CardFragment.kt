@@ -57,11 +57,11 @@ class CardFragment : BaseFragment(), CardView {
         }
 
 
-        RxTextView.textChanges(edit_amount)
+        eventSubscriptions.add(RxTextView.textChanges(edit_amount)
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .subscribe { string ->
                     presenter.amountChanged(string.toString())
-                }
+                })
 
         fiat_change.click {
             showDialogFiatChange()
@@ -110,7 +110,7 @@ class CardFragment : BaseFragment(), CardView {
         image_asset_icon.isOval = true
         image_asset_icon.setAsset(assetBalance)
         text_asset_name.text = assetBalance?.getName()
-        text_asset_value.text = assetBalance?.getDisplayTotalBalance()
+        text_asset_value.text = assetBalance?.getDisplayAvailableBalance()
 
         image_is_favourite.visiableIf {
             assetBalance?.isFavorite!!
@@ -119,7 +119,7 @@ class CardFragment : BaseFragment(), CardView {
         edit_asset.gone()
         container_asset.visiable()
         container_info.visiable()
-        button_continue.isEnabled = true
+        button_continue.isEnabled = presenter.asset != null
     }
 
     private fun showDialogFiatChange() {
@@ -170,6 +170,12 @@ class CardFragment : BaseFragment(), CardView {
             EURO -> getString(R.string.receive_fiat_choose_dialog_euro)
             else -> value!!
         }
+    }
+
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_continue.isEnabled = presenter.asset != null && networkConnected
     }
 
     companion object {

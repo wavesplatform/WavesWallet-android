@@ -87,7 +87,7 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         dots?.passCodesNotMatches()
 
         val animation = AnimationUtils.loadAnimation(context, R.anim.shake_error)
-        dots?.startAnimation(animation);
+        dots?.startAnimation(animation)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
         }else{

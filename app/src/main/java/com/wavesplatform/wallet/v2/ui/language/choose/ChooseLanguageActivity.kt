@@ -73,7 +73,6 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
             val item = adapter.getItem(presenter.currentLanguagePosition)
             item.notNull { langItem->
                 presenter.saveLanguage(langItem.language.code)
-                setLanguage(Locale(langItem.language.code))
             }
             exitAnimation()
         }
@@ -101,9 +100,11 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
             relative_root.animate()
                     .translationY(dp2px(50).toFloat())
                     .alpha(0f)
-                    .setDuration(350)
+                    .setDuration(250)
                     .withEndAction {
-                        launchActivity<TutorialActivity>()
+                        launchActivity<TutorialActivity>(){
+                            putExtra(TutorialActivity.BUNDLE_LANG, preferencesHelper.getLanguage())
+                        }
                         overridePendingTransition(0, R.anim.fade_out)
                     }
                     .start()

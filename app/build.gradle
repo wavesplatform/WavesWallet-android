@@ -22,7 +22,7 @@ android {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 407
+        versionCode 408
         versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -132,13 +132,16 @@ android {
         enabled = true
     }
     // Always show the result of every unit test, even if it passes.
-    testOptions.unitTests.all {
-        testLogging {
-            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+    testOptions.unitTests {
+        returnDefaultValues = true
+        all {
+            testLogging {
+                events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+            }
+            reports.junitXml.destination = file('../build/test-results/')
+            // This allows "unstable" builds on CI rather than straight failures
+            ignoreFailures true
         }
-        reports.junitXml.destination = file('../build/test-results/')
-        // This allows "unstable" builds on CI rather than straight failures
-        ignoreFailures true
     }
 }
 
@@ -192,6 +195,7 @@ dependencies {
         transitive = true
     }
     implementation 'com.github.mukeshsolanki:country-picker-android:1.1.6'
+    implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.0'
 
     // RxJava
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
@@ -256,8 +260,9 @@ dependencies {
 
     implementation 'com.intuit.sdp:sdp-android:1.0.5'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
     implementation 'com.ethanhua:skeleton:1.1.1'
     implementation 'io.supercharge:shimmerlayout:2.1.0'

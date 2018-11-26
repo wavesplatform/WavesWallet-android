@@ -35,7 +35,7 @@
             android:clipToPadding="true"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="2dp"
-            app:cardElevation="4dp">
+            app:cardElevation="2dp">
 
             <RelativeLayout
                 android:id="@+id/edit_asset_layout"

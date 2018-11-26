@@ -23,7 +23,11 @@ class BackupInfoActivity : BaseActivity(), BackupInfoView {
 
     override fun configLayoutRes() = R.layout.activity_backup_info
 
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+    
     override fun onViewReady(savedInstanceState: Bundle?) {
         button_confirm.click {
             launchActivity<BackupPhraseActivity>(options = intent.extras)
@@ -31,6 +35,7 @@ class BackupInfoActivity : BaseActivity(), BackupInfoView {
     }
 
     override fun onBackPressed() {
-
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 }

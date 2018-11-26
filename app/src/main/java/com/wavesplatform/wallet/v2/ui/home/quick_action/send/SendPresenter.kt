@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.isValidAddress
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
+import java.math.BigDecimal
 import javax.inject.Inject
 
 @InjectViewState
@@ -28,11 +29,14 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     var selectedAsset: AssetBalance? = null
     var recipient: String? = ""
-    var amount: String? = ""
+    var amount: Float = 0F
     var attachment: String? = ""
     var moneroPaymentId: String? = null
     var recipientAssetId: String? = null
     var type: Type? = null
+    var gatewayCommission: BigDecimal = BigDecimal.ZERO
+    var gatewayMin: BigDecimal = BigDecimal.ZERO
+    var gatewayMax: BigDecimal = BigDecimal.ZERO
 
     fun sendClicked() {
         val res = validateTransfer()
@@ -71,10 +75,10 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     private fun getTxRequest(): TransactionsBroadcastRequest {
         return TransactionsBroadcastRequest(
-                selectedAsset!!.assetId ?: "",
+                selectedAsset!!.assetId,
                 App.getAccessManager().getWallet()!!.publicKeyStr,
                 recipient ?: "",
-                MoneyUtil.getUnscaledValue(amount, selectedAsset),
+                MoneyUtil.getUnscaledValue(amount.toString(), selectedAsset),
                 System.currentTimeMillis(),
                 Constants.WAVES_FEE,
                 "")
@@ -103,6 +107,8 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     return R.string.insufficient_fee
                 } else if (!isFundSufficient(tx)) {
                     return R.string.insufficient_funds
+                } else if (isGatewayAmountError()) {
+                    return R.string.insufficient_gateway_funds_error
                 } else if (Constants.MONERO_ASSET_ID == recipientAssetId
                         && moneroPaymentId != null
                         && (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH
@@ -111,6 +117,18 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 }
         }
         return 0
+    }
+
+    private fun isGatewayAmountError(): Boolean {
+        if (type == Type.GATEWAY && selectedAsset != null && gatewayMax.toFloat() > 0) {
+            val totalAmount = BigDecimal(amount.toDouble()).plus(gatewayCommission).toFloat()
+            val balance = BigDecimal.valueOf(selectedAsset!!.balance ?: 0,
+                    selectedAsset!!.getDecimals()).toFloat()
+            return !(balance >= totalAmount
+                    && totalAmount >= gatewayMin.toFloat()
+                    && totalAmount <= gatewayMax.toFloat())
+        }
+        return false
     }
 
     private fun isFundSufficient(tx: TransactionsBroadcastRequest): Boolean {
@@ -126,12 +144,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     private fun isSameSendingAndFeeAssets(): Boolean {
         if (selectedAsset != null) {
-            if (feeAsset.assetId == null && selectedAsset!!.assetId == null) {
-                return true
-            } else {
-                if (feeAsset.assetId != null && selectedAsset!!.assetId != null)
-                    return feeAsset.assetId == selectedAsset!!.assetId
-            }
+            return feeAsset.assetId == selectedAsset!!.assetId
         }
         return false
     }
@@ -151,6 +164,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             addSubscription(coinomatManager.getXRate(currencyFrom, currencyTo, LANG)
                     .subscribe({ xRate ->
                         type = SendPresenter.Type.GATEWAY
+                        gatewayCommission = BigDecimal(xRate.feeOut ?: "0")
+                        gatewayMin = BigDecimal(xRate.inMin ?: "0")
+                        gatewayMax = BigDecimal(xRate.inMax ?: "0")
                         runOnUiThread {
                             if (xRate == null) {
                                 viewState.showXRateError()

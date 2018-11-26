@@ -63,7 +63,7 @@ public class OrderRequest {
                     Longs.toByteArray(expiration),
                     Longs.toByteArray(matcherFee));
         } catch (Exception e) {
-            Log.e("Wallet", "Couldn't create seed", e);
+            Log.e("Wallet", "Couldn't create order sign", e);
             return new byte[0];
         }
     }

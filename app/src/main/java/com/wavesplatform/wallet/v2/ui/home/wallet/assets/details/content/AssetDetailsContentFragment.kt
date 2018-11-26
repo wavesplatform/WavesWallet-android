@@ -2,15 +2,18 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
 
 import android.os.Bundle
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
@@ -22,7 +25,6 @@ import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_asset_details_content.*
 import pers.victor.ext.*
-import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -39,7 +41,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     fun providePresenter(): AssetDetailsContentPresenter = presenter
 
     lateinit var historyAdapter: HistoryTransactionPagerAdapter
-    var formatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm")
+    private var formatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm")
 
     override fun configLayoutRes() = R.layout.fragment_asset_details_content
 
@@ -47,11 +49,38 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         var BUNDLE_ASSET = "asset"
     }
 
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        if (networkConnected) {
+            enableView(send)
+            enableView(receive)
+            enableView(exchange)
+            enableView(relative_burn)
+            card_burn.isClickable = true
+        } else {
+            disableView(send)
+            disableView(receive)
+            disableView(exchange)
+            disableView(relative_burn)
+            card_burn.isClickable = false
+        }
+    }
+
+    private fun enableView(view: View) {
+        view.isClickable = true
+        view.alpha = Constants.ENABLE_VIEW
+    }
+
+    private fun disableView(view: View) {
+        view.isClickable = false
+        view.alpha = Constants.DISABLE_VIEW
+    }
+
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.assetBalance = arguments?.getParcelable<AssetBalance>(BUNDLE_ASSET)
+        presenter.assetBalance = arguments?.getParcelable(BUNDLE_ASSET)
 
-        historyAdapter = HistoryTransactionPagerAdapter(app, fragmentManager)
+        historyAdapter = HistoryTransactionPagerAdapter(app, childFragmentManager)
 
         view_pager_transaction_history.adapter = historyAdapter
         view_pager_transaction_history.offscreenPageLimit = 3
@@ -73,11 +102,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                     image_copy_id.copyToClipboard(text_view_id_value.text.toString())
                 })
 
-        card_burn.click {
-            launchActivity<TokenBurnActivity> {
-                putExtra(TokenBurnActivity.KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
-            }
-        }
 
         receive.click {
             launchActivity<ReceiveActivity> {
@@ -85,7 +109,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             }
         }
 
-        send.click{
+        send.click {
             launchActivity<SendActivity> {
                 putExtra(SendActivity.KEY_INTENT_ASSET_DETAILS, true)
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
@@ -95,9 +119,8 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
         fillInformation(presenter.assetBalance)
 
-
-        runAsync {
-            presenter.loadLastTransactions()
+        presenter.assetBalance.notNull {
+            presenter.loadLastTransactionsFor(it.assetId)
         }
     }
 
@@ -186,7 +209,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
         when {
             assetBalance?.isWaves() == true -> {
-                card_burn.gone()
                 relative_issuer.gone()
                 text_view_issuer.gone()
                 text_description.gone()
@@ -196,10 +218,20 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 linear_last_transactions.gone()
                 linear_transfer_buttons.gone()
                 linear_blocked_transfer_buttons.visiable()
+                setBurnButton(spam_card_burn_container)
             }
             else -> {
-
+                setBurnButton(card_burn_container)
             }
         }
+    }
+
+    private fun setBurnButton(cardBurnContainer: View) {
+        cardBurnContainer.click {
+            launchActivity<TokenBurnActivity> {
+                putExtra(TokenBurnActivity.KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
+            }
+        }
+        cardBurnContainer.visiable()
     }
 }

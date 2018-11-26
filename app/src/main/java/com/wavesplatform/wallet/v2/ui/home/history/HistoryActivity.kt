@@ -12,6 +12,11 @@ class HistoryActivity : BaseActivity() {
     override fun configLayoutRes() = R.layout.activity_leasing_history
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.leasing_history_toolbar_title), R.drawable.ic_toolbar_back_black)
@@ -31,4 +36,9 @@ class HistoryActivity : BaseActivity() {
         openFragment(R.id.frame_fragment_container, fragment)
     }
 
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+    }
 }

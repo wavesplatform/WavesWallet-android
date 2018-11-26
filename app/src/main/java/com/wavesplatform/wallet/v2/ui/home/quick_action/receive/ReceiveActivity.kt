@@ -18,6 +18,12 @@ class ReceiveActivity : BaseActivity(), ReceiveView {
 
     override fun configLayoutRes(): Int = R.layout.activity_receive
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
@@ -101,4 +107,12 @@ class ReceiveActivity : BaseActivity(), ReceiveView {
             }
         }
     }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+    }
+
+
+    override fun needToShowNetworkMessage(): Boolean = true
 }

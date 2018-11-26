@@ -69,7 +69,7 @@ public class IssueTransactionRequest {
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp));
         } catch (Exception e) {
-            Log.e("Wallet", "Couldn't create seed", e);
+            Log.e("Wallet", "Couldn't create issue transaction sign", e);
             return new byte[0];
         }
     }

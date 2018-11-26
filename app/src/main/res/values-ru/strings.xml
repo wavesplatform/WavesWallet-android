@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_fill_payment_details">Вы ДОЛЖНЫ заполнить данные платежа следующей информацией:</string>
-    <string name="about_fill_payment_info"><![CDATA[CNM — <your WAVES address>. \nIf you don’t we can’t credit your account.]]></string>
+    <string name="about_fill_payment_info">CNM — your WAVES address. \nIf you don’t we can’t credit your account.</string>
     <string name="about_redirection_message">После того, как вы пройдете проверку, вы получите электронное письмо с дальнейшими инструкциями</string>
     <string name="about_redirection_okay">Хорошо</string>
     <string name="about_redirection_title">Вы были перенаправлены на «IDNow» \nдля верификации</string>
@@ -58,7 +58,7 @@
     <string name="asset_details_waves_token">Waves токен</string>
     <string name="attachment_too_long">Слишком длинное описание</string>
     <string name="backup_hint">Посколько только вы контролируете ваши деньги, вам необходимо сохранить секретную фразу</string>
-    <string name="backup_hint_2">Введите 15 слов, которые вы сохранили при создании аккаунта</string>
+    <string name="backup_hint_2">Пожалуйста, внимательно запишите эти 15 слов или скопируйте их</string>
     <string name="backup_hint_3">Вам нужно будет восстановить эту фразу на следующем шаге</string>
     <string name="backup_info_button">Я понимаю</string>
     <string name="backup_info_subtitle">Платформа Waves предупреждает вас об участившихся случаях мошенничества и фишинга за последний месяц. Мошенники скрывают своё вредоносное ПО в своих версиях клиента Waves и предлагают многообещающие бонусы и скидки для привлечения пользователей. \n\nБудьте осторожны и никогда не вводите свой СИД в таких «клиентах», потому что ваша учетная запись будет скомпрометирована, и вы потеряете все свои деньги. \n\nПользуйтесь ТОЛЬКО официальным клиентом Waves.</string>
@@ -235,9 +235,9 @@
     <string name="enter_passcode_too_many_attempts_dialog_title">Слишком много попыток</string>
     <string name="enter_passcode_use_account_password">Использовать пароль аккаунта</string>
     <string name="enter_seed_manually_continue">Продолжить</string>
-    <string name="enter_seed_manually_hint_your_seed">Секретная фраза вашего аккаунта</string>
+    <string name="enter_seed_manually_hint_your_seed">Секретная фраза</string>
     <string name="enter_seed_manually_validation_required_seed_error">Требуется секретная фраза</string>
-    <string name="enter_seed_manually_validation_seed_exists_error">Секретная фраза уже используется вами</string>
+    <string name="enter_seed_manually_validation_seed_exists_error">Уже используется</string>
     <string name="enter_seed_manually_validation_seed_is_invalid_error">Секретная фраз неправильна</string>
     <string name="fingerprint_dialog_cancel">ОТМЕНИТЬ</string>
     <string name="fingerprint_dialog_description">Подтвердите отпечаток пальца</string>
@@ -259,7 +259,7 @@
     <string name="history_details_confirmations">Подтверждений</string>
     <string name="history_details_copy_all_data">Скопировать всё</string>
     <string name="history_details_copy_tx_id">Копировать TX ID</string>
-    <string name="history_details_exchange_price">%s цена</string>
+    <string name="history_details_exchange_price">Цена</string>
     <string name="history_details_fee">Комиссия</string>
     <string name="history_details_id">ID</string>
     <string name="history_details_leasing_from">От</string>
@@ -278,6 +278,9 @@
     <string name="history_exchanged">Exchanged</string>
     <string name="history_issued">Выпущен</string>
     <string name="history_leased">В лизинге</string>
+    <string name="history_my_dex_intent_buy">Покупка: %1$s/%2$s</string>
+    <string name="history_my_dex_intent_sell">Продажа: %1$s/%2$s</string>
+    <string name="history_my_dex_type">Тип</string>
     <string name="history_received">Получено</string>
     <string name="history_sent">Отправлено</string>
     <string name="history_sorting_close">Закрыть</string>
@@ -295,29 +298,30 @@
     <string name="history_type_data">Дата транзакция</string>
     <string name="history_type_exchange">%s %s</string>
     <string name="history_type_incoming_leasing">Входящий лизинг</string>
-    <string name="history_type_mass_receive">Получение %s</string>
-    <string name="history_type_mass_send">Отправка %s</string>
-    <string name="history_type_mass_spam_receive">Получение %s</string>
-    <string name="history_type_receive">Получение %s</string>
-    <string name="history_type_self_transfer">Отправка себе %s</string>
-    <string name="history_type_sent">Отправка %s</string>
+    <string name="history_type_mass_receive">Получение</string>
+    <string name="history_type_mass_send">Отправка</string>
+    <string name="history_type_mass_spam_receive">Получение</string>
+    <string name="history_type_receive">Получение</string>
+    <string name="history_type_self_transfer">Отправка себе</string>
+    <string name="history_type_sent">Отправка</string>
     <string name="history_type_set_script">Set script transaction</string>
     <string name="history_type_set_sponsorship">Set sponsorship transaction</string>
-    <string name="history_type_spam_receive">Получение %s</string>
+    <string name="history_type_spam_receive">Получение</string>
     <string name="history_type_started_leasing">Передача в лизинг</string>
-    <string name="history_type_token_burn">%s Сожжение токена</string>
-    <string name="history_type_token_generation">%s - Генерация токена</string>
-    <string name="history_type_token_reissue">%s - Перевыпуск токена</string>
+    <string name="history_type_token_burn">Сожжение токена</string>
+    <string name="history_type_token_generation">Генерация токена</string>
+    <string name="history_type_token_reissue">Перевыпуск токена</string>
     <string name="history_type_unrecognised">Неопознанная транзакция</string>
     <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
     <string name="import_account_login_at_site">Войдите в Waves клиент через свой PC, Mac</string>
     <string name="import_account_scan_pairing_code">Scan pairing code</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code"><![CDATA[Settings > Security > Pairing code]]></string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Settings — Security — Pairing code</string>
     <string name="import_account_tab_manually">Вручную</string>
     <string name="import_account_tab_scan">Сканировать</string>
     <string name="import_account_toolbar_title">Импортировать акканут</string>
     <string name="insufficient_fee">Transaction fee is too low.</string>
     <string name="insufficient_funds">Недостаточно средств</string>
+    <string name="insufficient_gateway_funds_error">Check gateway limits and commissions</string>
     <string name="invalid_address">Неверный адрес</string>
     <string name="invalid_amount">Недопустимая сумма</string>
     <string name="invalid_monero_payment_id">Неверный ID платежа</string>
@@ -329,7 +333,7 @@
     <string name="leasing_history_toolbar_title">История</string>
     <string name="left_drawer_description">Следите за последними новостями и статьями и узнавайте о событиях, происходящих на платформе Waves</string>
     <string name="left_drawer_join_the_waves_community">Присоединиться к сообществу Waves</string>
-    <string name="left_drawer_site">wavesplatform.com</string>
+    <string name="left_drawer_site">forum.wavesplatform.com</string>
     <string name="left_drawer_support">Поддержка Wavesplatform</string>
     <string name="left_drawer_terms_and_conditions">Условия и положения</string>
     <string name="left_drawer_whitepaper">Whitepaper</string>
@@ -361,6 +365,7 @@
     <string name="new_account_account_name_hint">Имя аккаунта</string>
     <string name="new_account_account_name_validation_already_exist_error">Имя аккаунта уже используется</string>
     <string name="new_account_account_name_validation_length_error">Максимум 20 символов</string>
+    <string name="new_account_account_name_validation_min_length_error">Минимум: 2 символа</string>
     <string name="new_account_account_name_validation_required_error">Требуется имя</string>
     <string name="new_account_avatar_description">Этот аватар уникален. Вы не сможете изменить его потом.</string>
     <string name="new_account_avatar_error">Выберите аватар</string>
@@ -437,8 +442,8 @@
     <string name="receive_address_generate">Генерируем…</string>
     <string name="receive_address_link_to_invoice">Ссылка на выставленный счет</string>
     <string name="receive_address_share">Поделиться</string>
-    <string name="receive_address_view_toolbar">Ваш Bitcoin адрес</string>
-    <string name="receive_address_waves_address">Ваш Waves адрес</string>
+    <string name="receive_address_view_toolbar">Ваш %1$s адрес</string>
+    <string name="receive_address_waves_address">Ваш %1$s адрес</string>
     <string name="receive_address_your_qr_code">Ваш QR-код</string>
     <string name="receive_amount">Количество</string>
     <string name="receive_amount_title">Количество в %1$s</string>
@@ -472,7 +477,7 @@
     <string name="receive_step_2_msg">После того, как вы пройдете проверку, вы получите электронное письмо с дальнейшими инструкциями</string>
     <string name="receive_step_url_link">https://www.idnow.eu/</string>
     <string name="receive_toolbar">Получить</string>
-    <string name="receive_use_same_waves_address"><![CDATA[You must use the same Waves address that you used to make KYC&ALM request. If you make a mistake or put a different Waves address we can’t credit your account.]]></string>
+    <string name="receive_use_same_waves_address">Вы должны использовать тот же самый адрес Waves, который использовался для KYC и ALM. Если вы допустили ошибку или поместили другой адрес Waves, мы не можем кредитовать ваш аккаунт.</string>
     <string name="receive_verified">Ваша аккаунт подтвержден</string>
     <string name="receive_warning_crypto">Отправляйте только %1$s на этот адрес</string>
     <string name="receive_warning_will_send">Если вы отправите меньше чем %1$s %2$s, вы потеряете деньги.</string>
@@ -489,6 +494,7 @@
     <string name="send_confirmation_confirm">Подтвердить</string>
     <string name="send_confirmation_description">Описание</string>
     <string name="send_confirmation_fee">Комиссия</string>
+    <string name="send_confirmation_gateway_fee">Gateway Fee</string>
     <string name="send_confirmation_sent_to">Получатель</string>
     <string name="send_confirmation_the_description_is_too_long">Описание слишком длинное</string>
     <string name="send_confirmation_toolbar_title">Подтверждений</string>
@@ -601,4 +607,7 @@
     <string name="your_asset_activity_greater_zero">Non empty</string>
     <string name="your_assets_empty_state">Пока ничего нет…</string>
     <string name="your_assets_toolbar_title">Ваши ассеты</string>
+    <string name="common_50_percent">50%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="common_5_percent">5%</string>
 </resources>

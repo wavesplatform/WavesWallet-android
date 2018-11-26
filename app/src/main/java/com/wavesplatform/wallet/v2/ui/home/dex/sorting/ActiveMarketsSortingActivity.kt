@@ -43,6 +43,10 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
 
     override fun configLayoutRes() = R.layout.activity_active_markets_sorting
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
@@ -121,6 +125,7 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
             putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
         })
         finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
     override fun afterSuccessLoadMarkets(list: List<MarketResponse>) {
