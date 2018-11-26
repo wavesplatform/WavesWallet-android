@@ -55,7 +55,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
     var selectedItem: Transaction? = null
     var allItems: List<Transaction>? = ArrayList()
     var viewPager: ViewPager? = null
-    var rooView: View? = null
+    var rootView: View? = null
     var inflater: LayoutInflater? = null
 
     @Inject
@@ -78,21 +78,21 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
         this.inflater = inflater
 
-        rooView = inflater.inflate(R.layout.history_details_bottom_sheet_dialog, container, false)
+        rootView = inflater.inflate(R.layout.history_details_bottom_sheet_dialog, container, false)
 
-        setupHistoryViewPager(rooView!!)
+        setupHistoryViewPager(rootView!!)
 
-        rooView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.click {
+        rootView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.click {
             viewPager?.currentItem = viewPager?.currentItem!! - 1
 
             checkStepIconState()
         }
-        rooView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.click {
+        rootView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.click {
             viewPager?.currentItem = viewPager?.currentItem!! + 1
             checkStepIconState()
         }
 
-        return rooView
+        return rootView
     }
 
     private fun copyToClipboard(textToCopy: String, view: TextView, btnText: Int) {
@@ -110,7 +110,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
     }
 
     private fun setupView(transaction: Transaction) {
-        val historyContainer = rooView?.findViewById<LinearLayout>(R.id.main_container)
+        val historyContainer = rootView?.findViewById<LinearLayout>(R.id.main_container)
         val commentBlock = inflater?.inflate(R.layout.history_detailed_transcation_comment_block_layout, historyContainer, false)
         val baseInfoLayout = inflater?.inflate(R.layout.fragment_history_bottom_sheet_base_info_layout, historyContainer, false)
         val bottomBtns = inflater?.inflate(R.layout.fragment_history_bottom_sheet_bottom_btns, historyContainer, false)
@@ -527,17 +527,17 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
     private fun checkStepIconState() {
         if (viewPager?.currentItem == 0 && viewPager?.adapter?.count == 1) {
-            rooView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 0.5F
-            rooView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 0.5F
+            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 0.5F
+            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 0.5F
         } else if (viewPager?.currentItem == 0) {
-            rooView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 0.5F
-            rooView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 1.0F
+            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 0.5F
+            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 1.0F
         } else if (viewPager?.currentItem == viewPager?.adapter?.count!! - 1) {
-            rooView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 1.0F
-            rooView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 0.5F
+            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 1.0F
+            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 0.5F
         } else {
-            rooView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 1.0F
-            rooView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 1.0F
+            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 1.0F
+            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 1.0F
         }
     }
 
@@ -558,7 +558,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
             }
         }
     }
-
 
     fun configureData(selectedItem: Transaction, selectedPosition: Int, allItems: List<Transaction>) {
         this.selectedItem = selectedItem
