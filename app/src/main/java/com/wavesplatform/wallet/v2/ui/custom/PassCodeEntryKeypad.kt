@@ -10,6 +10,7 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import kotlinx.android.synthetic.main.pass_code_entry_keyboard_layout.view.*
 import pers.victor.ext.vibrator
 import pers.victor.ext.visiableIf
@@ -21,6 +22,8 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
     private var dots: PinDotsLayout? = null
     private var passCode = ""
     private var isFingerprintAvailable: Boolean = false
+
+    private var allButtons = arrayListOf<View>()
 
     constructor(context: Context) : this(context, null) {
     }
@@ -57,6 +60,9 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         button9.setOnClickListener(this)
         button_fingerprint.setOnClickListener(this)
         button_delete.setOnClickListener(this)
+
+        allButtons = arrayListOf(button0, button1, button2, button3, button4, button5,
+                button6, button7, button8, button9, button_fingerprint, button_delete)
     }
 
     fun attachDots(dotsLayout: PinDotsLayout) {
@@ -89,8 +95,8 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         val animation = AnimationUtils.loadAnimation(context, R.anim.shake_error)
         dots?.startAnimation(animation)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
-        }else{
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
             vibrator.vibrate(500);
         }
         runDelayed(500, {
@@ -99,7 +105,7 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         })
     }
 
-    fun clearPassCode(){
+    fun clearPassCode() {
         dots?.clearDots()
         passCode = ""
     }
@@ -116,7 +122,7 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         listener?.onFingerprintClicked()
     }
 
-    fun isFingerprintAvailable(enable : Boolean){
+    fun isFingerprintAvailable(enable: Boolean) {
         isFingerprintAvailable = enable
         button_fingerprint.visiableIf { isFingerprintAvailable }
     }
@@ -131,15 +137,29 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         }
     }
 
+    fun setEnable(isEnable: Boolean) {
+        if (isEnable) {
+            allButtons.forEach { button ->
+                button.isClickable = true
+                button.alpha = Constants.ENABLE_VIEW
+            }
+        } else {
+            allButtons.forEach { button ->
+                button.isClickable = false
+                button.alpha = Constants.DISABLE_VIEW
+            }
+        }
+    }
+
     interface OnPinEntryPadClickedListener {
 
-        fun onNumberClicked(number: String){}
+        fun onNumberClicked(number: String) {}
 
-        fun onPassCodeEntered(passCode: String){}
+        fun onPassCodeEntered(passCode: String) {}
 
-        fun onDeleteClicked(){}
+        fun onDeleteClicked() {}
 
-        fun onFingerprintClicked(){}
+        fun onFingerprintClicked() {}
 
     }
 }
