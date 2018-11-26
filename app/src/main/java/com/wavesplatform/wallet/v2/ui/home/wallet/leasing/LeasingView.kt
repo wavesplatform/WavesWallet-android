@@ -7,4 +7,5 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 interface LeasingView : BaseMvpView {
     fun showBalances(wavesAsset: AssetBalance)
     fun showActiveLeasingTransaction(transactions: List<Transaction>)
+    fun afterFailedLoadLeasing()
 }
