@@ -93,11 +93,9 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map {
                     if (it.isNotEmpty()) {
-                        linear_address_suggestions.gone()
                         text_address_error.text = ""
                         text_address_error.gone()
                     } else {
-                        linear_address_suggestions.visiable()
                         text_address_error.text = getString(R.string.start_leasing_validation_is_required_error)
                         text_address_error.visiable()
                     }
@@ -171,11 +169,9 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map {
                     if (it.isNotEmpty()) {
-                        linear_amount_suggestions.gone()
                         text_amount_error.text = ""
                         text_amount_error.gone()
                     } else {
-                        linear_amount_suggestions.visiable()
                         text_amount_error.text = getString(R.string.start_leasing_validation_is_required_error)
                         text_amount_error.visiable()
                     }
