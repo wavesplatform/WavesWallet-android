@@ -12,6 +12,7 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.KEY_INTENT_AMOUNT
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.KEY_INTENT_ASSET_BALANCE
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_token_burn_confirmation.*
 import pers.victor.ext.click
@@ -47,6 +48,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
 
         text_id_value.text = presenter.assetBalance!!.assetId
         text_sum.text = "-$stringAmount ${presenter.assetBalance!!.getName()}"
+        text_sum.makeTextHalfBold()
         text_type_value.text = if (presenter.assetBalance!!.reissuable == true) {
             getString(R.string.token_burn_confirmationt_reissuable)
         } else {

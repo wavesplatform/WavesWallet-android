@@ -9,7 +9,7 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_welcome_photo"
-        app:srcCompat="@drawable/ic_userimg_wallet_80"
+        app:srcCompat="@drawable/userimg_blockchain_80"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

@@ -35,7 +35,7 @@ open class BasePresenter<T : MvpView> @Inject constructor(): MvpPresenter<T>(){
         mCompositeDisposable.clear()
     }
 
-    fun addSubscription(subscription: Disposable) {
+    open fun addSubscription(subscription: Disposable) {
         mCompositeDisposable.add(subscription)
     }
 }
