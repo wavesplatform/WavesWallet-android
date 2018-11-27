@@ -94,7 +94,7 @@ class SendActivity : BaseActivity(), SendView {
                 val assetBalance = intent.getParcelableExtra<AssetBalance>(
                         SendActivity.KEY_INTENT_TRANSACTION_ASSET_BALANCE)
                 val amount = intent
-                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT)
+                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT).clearBalance()
                 val recipientAddress = intent
                         .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_RECIPIENT)
                 val attachment = intent

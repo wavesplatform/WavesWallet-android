@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.activity_new_account.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.children
 import pers.victor.ext.click
+import pers.victor.ext.isNetworkConnected
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
@@ -148,7 +149,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     }
 
     private fun goNext() {
-        if (presenter.isAllFieldsValid()) {
+        if (presenter.isAllFieldsValid() && isNetworkConnected()) {
             if (presenter.avatarValid) {
                 launchActivity<SecretPhraseActivity>(options = createDataBundle())
             } else {
@@ -200,13 +201,20 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
     }
 
     private fun isFieldsValid() {
-        button_create_account.isEnabled = presenter.isAllFieldsValid()
+        button_create_account.isEnabled = presenter.isAllFieldsValid() && isNetworkConnected()
     }
 
     override fun onBackPressed() {
         setResult(Activity.RESULT_CANCELED)
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+    }
+
+    override fun needToShowNetworkMessage(): Boolean = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_create_account.isEnabled = presenter.isAllFieldsValid() && networkConnected
     }
 
     companion object {

@@ -146,7 +146,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
             showProgressBar(true)
             presenter.validate(getGuid(), passCode)
         } else {
-            checkInternet()
+            pass_keypad.passCodesNotMatches()
         }
     }
 
@@ -213,8 +213,11 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         alertDialog.makeStyled()
     }
 
+    override fun needToShowNetworkMessage(): Boolean = true
+
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
-        checkInternet()
+        super.onNetworkConnectionChanged(networkConnected)
+        pass_keypad.setEnable(networkConnected)
     }
 
     private fun getDescriptionView(): View? {

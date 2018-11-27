@@ -39,7 +39,7 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
     }
 
     private fun writePassCodeToRemoteDb(guid: String, password: String, passCode: String) {
-        App.getAccessManager()
+        addSubscription(App.getAccessManager()
                 .writePassCodeObservable(guid, password, passCode)
                 .subscribe({
                     App.getAccessManager().resetPassCodeInputFails(guid)
@@ -48,6 +48,6 @@ class CreatePassCodePresenter @Inject constructor() : BasePresenter<CreatePassco
                     Log.e("CreatePassCodeActivity", throwable.message)
                     App.getAccessManager().deleteCurrentWavesWallet()
                     viewState.onFailCreatePassCode()
-                })
+                }))
     }
 }

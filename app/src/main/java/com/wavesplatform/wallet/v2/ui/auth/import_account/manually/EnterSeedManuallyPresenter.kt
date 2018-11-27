@@ -6,5 +6,5 @@ import javax.inject.Inject
 
 @InjectViewState
 class EnterSeedManuallyPresenter @Inject constructor() : BasePresenter<EnterSeedManuallyView>() {
-
+    var nextStepValidation = false
 }

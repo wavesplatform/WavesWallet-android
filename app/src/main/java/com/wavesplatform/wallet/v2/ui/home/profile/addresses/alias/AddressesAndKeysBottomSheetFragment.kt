@@ -21,6 +21,7 @@ import com.wavesplatform.wallet.v2.util.showSuccess
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_empty_layout.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_layout.view.*
+import pers.victor.ext.app
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.toast
@@ -39,6 +40,8 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
             }
         }
 
+    var rootView: View = View(app)
+
     @Inject
     lateinit var adapter: AliasesAdapter
 
@@ -55,8 +58,6 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        var rootView = View(this.context)
-
         when (type) {
             TYPE_EMPTY -> {
                 rootView = inflater.inflate(R.layout.bottom_sheet_dialog_aliases_empty_layout, container, false)
@@ -124,5 +125,9 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 }
             }
         }
+    }
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        rootView.button_create_alias_content.isEnabled = networkConnected
     }
 }
