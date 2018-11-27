@@ -24,8 +24,8 @@
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/backup_hint"
             android:textColor="@color/basic500"
             android:textSize="12sp" />
@@ -34,9 +34,9 @@
             android:id="@+id/flow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
             android:background="@color/basic50"
             android:foreground="@drawable/shape_rect_outline_gray"
             android:padding="7dp"
@@ -49,14 +49,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:paddingLeft="16dp">
+            android:paddingStart="16dp">
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="16dp"
-                android:layout_toLeftOf="@+id/image_copy"
+                android:layout_marginEnd="16dp"
+                android:layout_toStartOf="@+id/image_copy"
                 android:text="@string/backup_hint_2"
                 android:textColor="@color/basic500"
                 android:textSize="12sp" />
@@ -81,7 +81,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/button_written_down"
         android:layout_centerHorizontal="true"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/backup_hint_3"
         android:textColor="@color/basic500"
         android:textSize="12sp" />
@@ -92,9 +93,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="24dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="24dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="24dp"
         android:text="@string/backup_wrriten_down" />
 </RelativeLayout>

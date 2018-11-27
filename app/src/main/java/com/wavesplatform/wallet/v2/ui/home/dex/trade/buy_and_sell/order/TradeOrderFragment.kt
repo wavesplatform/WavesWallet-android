@@ -130,11 +130,9 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 .map {
                     presenter.amountValidation = it.isNotEmpty()
                     if (it.isNotEmpty()) {
-                        horizontal_amount_suggestion.gone()
                         text_amount_error.text = ""
                         text_amount_error.invisiable()
                     } else {
-                        horizontal_amount_suggestion.visiable()
                         text_amount_error.text = getString(R.string.buy_and_sell_required)
                         text_amount_error.visiable()
                     }

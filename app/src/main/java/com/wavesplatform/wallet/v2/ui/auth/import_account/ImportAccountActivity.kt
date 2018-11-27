@@ -79,4 +79,6 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
             }
         }
     }
+
+    override fun needToShowNetworkMessage(): Boolean = true
 }

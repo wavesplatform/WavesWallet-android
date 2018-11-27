@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_protect_account.*
 import org.apache.commons.io.Charsets
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
+import pers.victor.ext.isNetworkConnected
 import javax.inject.Inject
 
 
@@ -181,11 +182,18 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
 
 
     fun isFieldsValid() {
-        button_create_account.isEnabled = presenter.isAllFieldsValid()
+        button_create_account.isEnabled = presenter.isAllFieldsValid() && isNetworkConnected()
     }
 
     override fun onBackPressed() {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+    }
+
+    override fun needToShowNetworkMessage(): Boolean = true
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_create_account.isEnabled = presenter.isAllFieldsValid() && networkConnected
     }
 }
