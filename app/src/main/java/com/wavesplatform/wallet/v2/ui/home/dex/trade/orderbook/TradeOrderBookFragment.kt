@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSel
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.fragment_trade_orderbook.*
+import kotlinx.android.synthetic.main.global_server_error_layout.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.*
 import java.math.RoundingMode
@@ -95,6 +96,14 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
             }
         }
 
+        button_retry.click {
+            error_layout.gone()
+            progress_bar.show()
+
+            presenter.clearSubscriptions()
+            presenter.loadOrderBook()
+        }
+
         linear_buy.click {
             openOrderDialog(true, getAskPrice())
         }
@@ -152,6 +161,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         progress_bar.hide()
         adapter.setNewData(data)
         adapter.emptyView = getEmptyView()
+        linear_buttons.visiable()
         if (data.isNotEmpty()) {
             linear_fields_name.visiable()
             if (presenter.needFirstScrollToLastPrice) {
@@ -190,8 +200,10 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     override fun afterFailedOrderbook() {
         progress_bar.hide()
         if (adapter.data.isEmpty()) {
-            adapter.emptyView = getEmptyView()
+            linear_buttons.gone()
             linear_fields_name.gone()
+
+            error_layout.visiable()
         }
     }
 

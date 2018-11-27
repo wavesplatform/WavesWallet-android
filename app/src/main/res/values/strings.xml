@@ -623,4 +623,5 @@
     <string name="common_10_percent">10%</string>
     <string name="common_5_percent">5%</string>
     <string name="common_no_internet_bottom_msg">No connection to the Internet</string>
+    <string name="common_server_error">Something went wrong</string>
 </resources>
