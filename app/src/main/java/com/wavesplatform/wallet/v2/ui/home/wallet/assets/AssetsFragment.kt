@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -132,13 +133,13 @@ class AssetsFragment : BaseFragment(), AssetsView {
         recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!swipe_container.isRefreshing) {
+                    swipe_container.isEnabled = !recycle_assets.canScrollVertically(-1)
+                }
                 if (headerItemDecoration?.pinnedHeaderView != null) {
-                    swipe_container.isEnabled = false
                     if (headerItemDecoration?.pinnedHeaderView?.image_arrow?.isVisible() == true) {
                         headerItemDecoration?.pinnedHeaderView?.image_arrow?.gone()
                     }
-                } else {
-                    swipe_container.isEnabled = true
                 }
             }
 
