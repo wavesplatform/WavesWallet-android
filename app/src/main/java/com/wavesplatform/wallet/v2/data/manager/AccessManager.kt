@@ -260,6 +260,12 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_PUB_KEY)
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_WALLET_NAME)
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_ENCRYPTED_WALLET)
+        prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_SKIP_BACKUP)
+        prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_LAST_UPDATE_DEX_INFO)
+        prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_ENCRYPTED_PASSWORD)
+        prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_ACCOUNT_FIRST_OPEN)
+        prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_DEFAULT_ASSETS)
+        prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS)
 
         prefs.setGlobalValue(EnvironmentManager.get().current().getName()
                 + PrefsUtil.LIST_WALLET_GUIDS, createGuidsListWithout(searchWalletGuid))
