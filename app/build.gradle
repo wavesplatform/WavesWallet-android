@@ -329,6 +329,9 @@ dependencies {
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true
     }
+
+    implementation 'com.appsflyer:af-android-sdk:4.8.18@aar'
+    implementation 'com.android.installreferrer:installreferrer:1.0'
 }
 
 buildscript {

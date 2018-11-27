@@ -116,6 +116,10 @@ class SendActivity : BaseActivity(), SendView {
 
         edit_amount.addTextChangedListener {
             on { s, _, _, _ ->
+                if (s.isNotEmpty()) {
+                    horizontal_amount_suggestion.visiable()
+                    linear_fees_error.gone()
+                }
                 if (edit_amount.text!!.isNotEmpty()) {
                     presenter.amount = s.toString().toFloat()
                 }
@@ -129,6 +133,7 @@ class SendActivity : BaseActivity(), SendView {
                 assetEnable(true)
                 recipientEnable(true)
                 amountEnable(true)
+                linear_fees_error.gone()
             } else if (it.tag == R.drawable.ic_qrcode_24_basic_500) {
                 IntentIntegrator(this).setRequestCode(REQUEST_SCAN_RECEIVE)
                         .setOrientationLocked(true)
@@ -140,6 +145,7 @@ class SendActivity : BaseActivity(), SendView {
         image_view_monero_action.click {
             if (it.tag == R.drawable.ic_deladdress_24_error_400) {
                 edit_monero_payment_id.text = null
+                linear_fees_error.gone()
             } else if (it.tag == R.drawable.ic_qrcode_24_basic_500) {
                 IntentIntegrator(this).setRequestCode(REQUEST_SCAN_MONERO)
                         .setOrientationLocked(true)
@@ -151,24 +157,7 @@ class SendActivity : BaseActivity(), SendView {
 
         button_continue.click { presenter.sendClicked() }
 
-        text_use_total_balance.click {
-            if (presenter.type == SendPresenter.Type.GATEWAY) {
-                presenter.selectedAsset.notNull { assetBalance ->
-                    assetBalance.balance.notNull { balance ->
-                        if (presenter.type == SendPresenter.Type.GATEWAY) {
-                            val total = BigDecimal.valueOf(balance,
-                                    assetBalance.getDecimals())
-                                    .minus(presenter.gatewayCommission)
-                            if (total.toFloat() > 0) {
-                                edit_amount.setText(total.toString().stripZeros())
-                            }
-                        }
-                    }
-                }
-            } else {
-                setPercent(1.0)
-            }
-        }
+        text_use_total_balance.click { setPercent(1.0) }
         text_50_percent.click { setPercent(0.50) }
         text_10_percent.click { setPercent(0.10) }
         text_5_percent.click { setPercent(0.05) }
@@ -234,10 +223,48 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun setPercent(percent: Double) {
         presenter.selectedAsset.notNull { assetBalance ->
-            assetBalance.balance.notNull { balance ->
+            assetBalance.getAvailableBalance().notNull { balance ->
                 val amount = (balance * percent).toLong()
-                edit_amount.setText(MoneyUtil.getScaledText(amount, assetBalance))
+                checkAndSetAmount(amount, assetBalance)
             }
+        }
+    }
+
+    private fun checkAndSetAmount(amount: Long, assetBalance: AssetBalance) {
+        if (presenter.type == SendPresenter.Type.GATEWAY) {
+            val total = BigDecimal.valueOf(amount,
+                    assetBalance.getDecimals())
+                    .minus(presenter.gatewayCommission)
+            if (total.toFloat() > 0) {
+                edit_amount.setText(total.toString().stripZeros())
+                linear_fees_error.gone()
+            } else {
+                linear_fees_error.visiable()
+                edit_amount.setText("")
+                horizontal_amount_suggestion.gone()
+                text_amount_fee_error.text = getString(
+                        R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
+                        presenter.gatewayCommission.toPlainString(),
+                        assetBalance.getName() ?: "")
+                presenter.amount = 0F
+            }
+        } else if (presenter.type == SendPresenter.Type.WAVES
+                && assetBalance.assetId.isWavesId()) {
+            val total = BigDecimal.valueOf(amount - Constants.WAVES_FEE,
+                    assetBalance.getDecimals())
+            if (total.toFloat() > 0) {
+                edit_amount.setText(total.toString().stripZeros())
+                linear_fees_error.gone()
+            } else {
+                edit_amount.setText("")
+                horizontal_amount_suggestion.gone()
+                text_amount_error.visiable()
+                presenter.amount = 0F
+            }
+        } else {
+            edit_amount.setText(MoneyUtil.getScaledText(amount, assetBalance)
+                    .replace(",", "")
+                    .stripZeros())
         }
     }
 

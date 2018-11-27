@@ -364,6 +364,10 @@
 -dontwarn com.google.j2objc.annotations.Weak
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 
+# AppsFlyer
+-dontwarn com.android.installreferrer
+-keep class com.appsflyer.** { *; }
+
 -dontwarn com.samsung.android.sdk.**
 -dontwarn afu.org.checkerframework.checker.**
 -dontnote com.samsung.android.sdk.**

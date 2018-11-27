@@ -103,6 +103,10 @@ fun String.isWaves(): Boolean {
     return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
 }
 
+fun String.isWavesId(): Boolean {
+    return this.toLowerCase() == Constants.wavesAssetInfo.id
+}
+
 fun getActionBarHeight(): Int {
     val tv = TypedValue()
     return if (app.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
