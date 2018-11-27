@@ -485,7 +485,8 @@
                     android:text="@string/send_amount_error_insufficient_funds"
                     android:textColor="@color/error500"
                     android:textSize="12sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
 
             </RelativeLayout>
 
@@ -624,7 +625,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="wrap_content"
@@ -632,10 +634,11 @@
                     app:srcCompat="@drawable/ic_info_18_error_500" />
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_amount_fee_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14sp"
-                    android:text="@string/send_errpr_you_don_t_have_enough_funds_to_pay_the_required_fees"
+                    android:text="@string/send_error_you_don_t_have_enough_funds_to_pay_the_required_fees"
                     android:textColor="@color/error500"
                     android:textSize="12sp" />
 
