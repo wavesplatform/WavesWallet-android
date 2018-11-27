@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="new_account_account_name_validation_min_length_error">Mindestens 2 zeichen</string>
     <string name="about_fill_payment_details">Sie MÜSSEN das Feld mit den Zahlungsinformationen mit folgenden Informationen ausfüllen:</string>
     <string name="about_fill_payment_info">CNM — Ihre WAVES-Adresse. \nWenn Sie Ihren Account nicht angeben, können wir Ihnen nichts überweisen.</string>
     <string name="about_redirection_message">Nach der Überprüfung erhalten Sie eine E-Mail mit weiteren Anweisungen</string>
@@ -10,7 +14,7 @@
     <string name="add_address_name">Name</string>
     <string name="add_address_toolbar_title">Hinzufügen</string>
     <string name="address_book_add">Hinzufügen</string>
-    <string name="address_book_empty_state">Nichts hier … \nSie können eine neue Adresse erstellen</string>
+    <string name="address_book_empty_state">Nichts hier… \nSie können eine neue Adresse erstellen</string>
     <string name="address_book_search">Suche</string>
     <string name="address_book_success_deleted">Konto gelöscht</string>
     <string name="address_book_toolbar_title">Adressbuch</string>
@@ -66,15 +70,15 @@
     <string name="backup_pharse">Backup-Phrase</string>
     <string name="backup_wrriten_down">Ich habe es aufgeschrieben</string>
     <string name="buy_and_sell_0_001_waves">0,003 Waves</string>
-    <string name="common_10_percent">10%</string>
+    <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_1_day">1 Tag</string>
     <string name="buy_and_sell_1_hour">1 Stunde</string>
     <string name="buy_and_sell_1_week">1 Woche</string>
     <string name="buy_and_sell_29_days">29 tage</string>
     <string name="buy_and_sell_30_days">30 Tage</string>
     <string name="buy_and_sell_30_min">30 Minuten</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_50_percent">50%</string>
+    <string name="buy_and_sell_5">5%</string>
+    <string name="buy_and_sell_50">50%</string>
     <string name="buy_and_sell_5_min">5 Minuten</string>
     <string name="buy_and_sell_amount_in">Betrag in %1$s</string>
     <string name="buy_and_sell_ask">Anfrage</string>
@@ -377,8 +381,7 @@
     <string name="network_toolbar_title">Netzwerk</string>
     <string name="new_account_account_name_hint">Accountbezeichnung</string>
     <string name="new_account_account_name_validation_already_exist_error">Accountname bereits verwendet</string>
-    <string name="new_account_account_name_validation_length_error">Max. 20 Symbole</string>
-    <string name="new_account_account_name_validation_min_length_error">Min. 2 Symbole</string>
+    <string name="new_account_account_name_validation_length_error">20 zeichen maximal</string>
     <string name="new_account_account_name_validation_required_error">Name ist erforderlich</string>
     <string name="new_account_avatar_description">Sie können es später nicht mehr ändern</string>
     <string name="new_account_avatar_error">Bitte wählen Sie einen Avatar aus</string>

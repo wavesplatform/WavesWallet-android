@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="new_account_account_name_validation_min_length_error">कम से कम 2 अक्षर</string>
     <string name="about_fill_payment_details">आपको निम्नलिखित जानकारी के साथ भुगतान विवरण फ़ील्ड भरना होगा:</string>
     <string name="about_fill_payment_info">सीएनएम — आपके वेव्स पता \nअगर आप नहीं करते हैं तो हम आपके खाते को क्रेडिट नहीं कर सकते हैं।</string>
     <string name="about_redirection_message">सत्यापन के माध्यम से जाने के बाद आपको आगे के निर्देशों के साथ एक ईमेल प्राप्त होगा</string>
@@ -66,15 +70,15 @@
     <string name="backup_pharse">बैकप फ्रेज</string>
     <string name="backup_wrriten_down">मैंने इसे लिखा है</string>
     <string name="buy_and_sell_0_001_waves">0.003 वेव्स</string>
-    <string name="common_10_percent">10%</string>
+    <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_1_day">एक दिन</string>
     <string name="buy_and_sell_1_hour">1 घंटा</string>
     <string name="buy_and_sell_1_week">1 सप्ताह</string>
     <string name="buy_and_sell_29_days">29 डेज</string>
     <string name="buy_and_sell_30_days">30 डेज</string>
     <string name="buy_and_sell_30_min">30 मिनट</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_50_percent">50%</string>
+    <string name="buy_and_sell_5">5%</string>
+    <string name="buy_and_sell_50">50%</string>
     <string name="buy_and_sell_5_min">5 मिनट</string>
     <string name="buy_and_sell_amount_in">%1$s में राशि</string>
     <string name="buy_and_sell_ask">पूछना</string>
@@ -126,7 +130,7 @@
     <string name="chart_change_interval_dialog_ok">ठीक</string>
     <string name="chart_change_interval_dialog_title">अंतराल बदलें</string>
     <string name="chart_empty">कोई चार्ट डेटा उपलब्ध नहीं है</string>
-    <string name="chart_loading">चार्ट लोड हो रहा है …</string>
+    <string name="chart_loading">चार्ट लोड हो रहा है…</string>
     <string name="chart_time_frame_15_min">15 मिनट</string>
     <string name="chart_time_frame_1_hour">1 घंटा</string>
     <string name="chart_time_frame_24_hours">चौबीस घंटे</string>
@@ -377,8 +381,7 @@
     <string name="network_toolbar_title">नेटवर्क</string>
     <string name="new_account_account_name_hint">खाते का नाम</string>
     <string name="new_account_account_name_validation_already_exist_error">खाता नाम पहले से ही उपयोग है</string>
-    <string name="new_account_account_name_validation_length_error">अधिकतम: 20 प्रतीकों</string>
-    <string name="new_account_account_name_validation_min_length_error">मन्यूनतम: 2 प्रतीको</string>
+    <string name="new_account_account_name_validation_length_error">अधिकतम 20 अक्षर</string>
     <string name="new_account_account_name_validation_required_error">नाम आवश्यक है</string>
     <string name="new_account_avatar_description">आप इसे बाद में नहीं बदल सकते हैं</string>
     <string name="new_account_avatar_error">अवतार का चयन करें</string>
@@ -452,7 +455,7 @@
     <string name="quick_action_send">भेजना</string>
     <string name="receive_address_close">बंद करे</string>
     <string name="receive_address_copy">कॉपी</string>
-    <string name="receive_address_generate">उत्पन्न …</string>
+    <string name="receive_address_generate">उत्पन्न…</string>
     <string name="receive_address_link_to_invoice">इनवॉइस से लिंक करें</string>
     <string name="receive_address_share">शेयर</string>
     <string name="receive_address_view_toolbar">आपका %1$s पता</string>
@@ -525,7 +528,7 @@
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">न्यूनतम राशि 500 ​​अमेरिकी डॉलर है। यदि आपके कोई प्रश्न हैं, तो कृपया support@coinomat.com पर एक ईमेल भेजें</string>
     <string name="send_monero_payment_id">मोनरो पेमेंट आईडी</string>
     <string name="send_monero_payment_id_hint">पेस्ट करें या अपनी पेमेंट आईडी टाइप करें</string>
-    <string name="send_progress_sending">भेजा जा रहा है…</string>
+    <string name="send_progress_sending">भेजा जा रहा है...</string>
     <string name="send_recipient">प्राप्त करने वाला</string>
     <string name="send_recipient_address_hint">प्राप्तकर्ता का पता…</string>
     <string name="send_recipient_the_address_is_not_valid">पता मान्य नहीं है</string>
@@ -547,7 +550,7 @@
     <string name="start_leasing_balance">बैलेंस</string>
     <string name="start_leasing_choose_from_address">पता पुस्तिका से चुनें</string>
     <string name="start_leasing_generator">जनक</string>
-    <string name="start_leasing_note_address">नोड पता …</string>
+    <string name="start_leasing_note_address">नोड पता…</string>
     <string name="start_leasing_toolbar">लीजिंग शुरू करें</string>
     <string name="start_leasing_transaction_fee_0_001_waves">लेनदेन फ़ीस 0.001 वेव</string>
     <string name="start_leasing_use_total_balance">पूर्ण बैलेंस का प्रयोग करें</string>

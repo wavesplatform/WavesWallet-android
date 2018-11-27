@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="new_account_account_name_validation_min_length_error">Setidaknya 2 karakter</string>
     <string name="about_fill_payment_details">Anda HARUS mengisi bidang detail pembayaran dengan informasi berikut:</string>
     <string name="about_fill_payment_info">CNM — alamat WAVES Anda. \nJika tidak, kami tidak dapat mengkredit akun Anda.</string>
     <string name="about_redirection_message">Setelah Anda melalui verifikasi, Anda akan menerima email dengan instruksi lebih lanjut</string>
@@ -66,15 +70,15 @@
     <string name="backup_pharse">Frase cadangan</string>
     <string name="backup_wrriten_down">Saya telah menuliskannya</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
-    <string name="common_10_percent">10%</string>
+    <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_1_day">1 hari</string>
     <string name="buy_and_sell_1_hour">1 jam</string>
     <string name="buy_and_sell_1_week">1 minggu</string>
     <string name="buy_and_sell_29_days">29 hari</string>
     <string name="buy_and_sell_30_days">30 hari</string>
     <string name="buy_and_sell_30_min">30 menit</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_50_percent">50%</string>
+    <string name="buy_and_sell_5">5%</string>
+    <string name="buy_and_sell_50">50%</string>
     <string name="buy_and_sell_5_min">5 menit</string>
     <string name="buy_and_sell_amount_in">Jumlah dalam %1$s</string>
     <string name="buy_and_sell_ask">Permintaan</string>
@@ -126,7 +130,7 @@
     <string name="chart_change_interval_dialog_ok">baik</string>
     <string name="chart_change_interval_dialog_title">Ubah Interval</string>
     <string name="chart_empty">Tidak ada data grafik yang tersedia</string>
-    <string name="chart_loading">Memuat bagan …</string>
+    <string name="chart_loading">Memuat bagan…</string>
     <string name="chart_time_frame_15_min">15 menit</string>
     <string name="chart_time_frame_1_hour">1 jam</string>
     <string name="chart_time_frame_24_hours">24 jam</string>
@@ -139,7 +143,7 @@
     <string name="choose_account_delete_msg">Anda yakin ingin menghapus akun ini?</string>
     <string name="choose_account_delete_title">Hapus akun?</string>
     <string name="choose_account_deleted">Dihapus</string>
-    <string name="choose_account_empty_state">Tidak Ada di Sini … \nAnda tidak memiliki akun yang disimpan</string>
+    <string name="choose_account_empty_state">Tidak Ada di Sini… \nAnda tidak memiliki akun yang disimpan</string>
     <string name="choose_account_yes">Hapus</string>
     <string name="choose_language_brazilian">Português do Brasil</string>
     <string name="choose_language_china">中文(简体)</string>
@@ -286,7 +290,7 @@
     <string name="history_details_show_all">Tampilkan semua (%1$s)</string>
     <string name="history_details_timestamp">Cap waktu</string>
     <string name="history_details_unconfirmed">TIDAK DIKONFIRMASI</string>
-    <string name="history_empty">Tidak Ada di Sini … \nAnda tidak memiliki transaksi apa pun</string>
+    <string name="history_empty">Tidak Ada di Sini… \nAnda tidak memiliki transaksi apa pun</string>
     <string name="history_error_receive_data">Kesalahan menerima data. Silakan coba lagi nanti</string>
     <string name="history_exchanged">Ditukar</string>
     <string name="history_issued">Diterbitkan</string>
@@ -377,8 +381,7 @@
     <string name="network_toolbar_title">Jaringan</string>
     <string name="new_account_account_name_hint">Nama akun</string>
     <string name="new_account_account_name_validation_already_exist_error">Nama akun sudah digunakan</string>
-    <string name="new_account_account_name_validation_length_error">Maks: 20 simbol</string>
-    <string name="new_account_account_name_validation_min_length_error">Min: 2 simbol</string>
+    <string name="new_account_account_name_validation_length_error">20 karakter maksimal</string>
     <string name="new_account_account_name_validation_required_error">Nama wajib diisi</string>
     <string name="new_account_avatar_description">Anda tidak dapat mengubahnya nanti</string>
     <string name="new_account_avatar_error">Silakan pilih avatar</string>
@@ -404,7 +407,7 @@
     <string name="orderbook_amount_title">Jumlah</string>
     <string name="orderbook_empty">Tidak Ada di Sini… \nBuku pesanan kosong</string>
     <string name="orderbook_last_price">HARGA TERAKHIR</string>
-    <string name="orderbook_loading">Memuat buku pesanan …</string>
+    <string name="orderbook_loading">Memuat buku pesanan…</string>
     <string name="orderbook_price_title">Harga %s</string>
     <string name="orderbook_spread_percent">SEBARAN %s%%</string>
     <string name="orderbook_sum_title">Jumlah %s</string>

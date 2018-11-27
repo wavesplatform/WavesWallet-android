@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="new_account_account_name_validation_min_length_error">Mínimo de 2 caracteres</string>
     <string name="about_fill_payment_details">Por favor, preenche o campo de detalhes da transferência com a seguinte informação:</string>
     <string name="about_fill_payment_info">CNM — o teu endereço WAVES. \nSe não o fizeres não teremos como creditar os fundos na tua conta.</string>
     <string name="about_redirection_message">Depois de concluíres o processo de verificação vais receber um email com as instruções de como prosseguir.</string>
@@ -66,15 +70,15 @@
     <string name="backup_pharse">Backup das palavras de recuperação</string>
     <string name="backup_wrriten_down">Escrevi as palavras corretamente</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
-    <string name="common_10_percent">10%</string>
+    <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_1_day">1 dia</string>
     <string name="buy_and_sell_1_hour">1 hora</string>
     <string name="buy_and_sell_1_week">1 semana</string>
     <string name="buy_and_sell_29_days">29 dias</string>
     <string name="buy_and_sell_30_days">30 dias</string>
     <string name="buy_and_sell_30_min">30 minutos</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_50_percent">50%</string>
+    <string name="buy_and_sell_5">5%</string>
+    <string name="buy_and_sell_50">50%</string>
     <string name="buy_and_sell_5_min">5 minutos</string>
     <string name="buy_and_sell_amount_in">Quantidade em %1$s</string>
     <string name="buy_and_sell_ask">Compra</string>
@@ -377,8 +381,7 @@
     <string name="network_toolbar_title">Rede</string>
     <string name="new_account_account_name_hint">Nome da conta</string>
     <string name="new_account_account_name_validation_already_exist_error">O nome da conta já se encontra em uso</string>
-    <string name="new_account_account_name_validation_length_error">Máximo: 20 símbolos</string>
-    <string name="new_account_account_name_validation_min_length_error">Mínimo: 2 símbolos</string>
+    <string name="new_account_account_name_validation_length_error">20 caracteres no máximo</string>
     <string name="new_account_account_name_validation_required_error">É necessário um Nome</string>
     <string name="new_account_avatar_description">Não vais poder mudar mais tarde</string>
     <string name="new_account_avatar_error">Por favor escolhe um Avatar</string>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="new_account_account_name_validation_min_length_error">최소 2자</string>
     <string name="about_fill_payment_details">지불 정보 입력란에 다음 정보를 필히 기입해야합니다:</string>
     <string name="about_fill_payment_info">CNM — 귀하의 WAVES 주소. \nIf그렇지 않으면 귀하의 계좌에 크레딧을 줄 수 없습니다</string>
     <string name="about_redirection_message">인증 작업 후 자세한 지시 사항을 이메일로 받게됩니다</string>
@@ -66,15 +70,15 @@
     <string name="backup_pharse">백업 구절</string>
     <string name="backup_wrriten_down">메모했습니다</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
-    <string name="common_10_percent">10%</string>
+    <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_1_day">1 일</string>
     <string name="buy_and_sell_1_hour">1 시간</string>
     <string name="buy_and_sell_1_week">1 주</string>
     <string name="buy_and_sell_29_days">29일</string>
     <string name="buy_and_sell_30_days">30 일</string>
     <string name="buy_and_sell_30_min">30 분</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_50_percent">50%</string>
+    <string name="buy_and_sell_5">5%</string>
+    <string name="buy_and_sell_50">50%</string>
     <string name="buy_and_sell_5_min">5 분</string>
     <string name="buy_and_sell_amount_in">%1$s 수량</string>
     <string name="buy_and_sell_ask">매도 호가</string>
@@ -377,8 +381,7 @@
     <string name="network_toolbar_title">네트워크</string>
     <string name="new_account_account_name_hint">계정 이름</string>
     <string name="new_account_account_name_validation_already_exist_error">이미 존재하는 계정 이름입니다</string>
-    <string name="new_account_account_name_validation_length_error">최대: 20자</string>
-    <string name="new_account_account_name_validation_min_length_error">최소: 2자</string>
+    <string name="new_account_account_name_validation_length_error">최대 20자</string>
     <string name="new_account_account_name_validation_required_error">이름이 필요합니다</string>
     <string name="new_account_avatar_description">향후 변경할 수 없습니다</string>
     <string name="new_account_avatar_error">아바타를 선택하세요</string>

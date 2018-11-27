@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="new_account_account_name_validation_min_length_error">Минимум 2 символа</string>
     <string name="about_fill_payment_details">Вы ДОЛЖНЫ заполнить данные платежа следующей информацией:</string>
     <string name="about_fill_payment_info">CNM — ваш WAVES адрес. \nЕсли вы этого не сделаете, мы не можем кредитовать ваш аккаунт.</string>
     <string name="about_redirection_message">После того, как вы пройдете проверку, вы получите электронное письмо с дальнейшими инструкциями</string>
@@ -66,15 +70,15 @@
     <string name="backup_pharse">Секретная фраза</string>
     <string name="backup_wrriten_down">Я всё записал</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
-    <string name="common_10_percent">10%</string>
+    <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_1_day">1 день</string>
     <string name="buy_and_sell_1_hour">1 час</string>
     <string name="buy_and_sell_1_week">1 неделя</string>
     <string name="buy_and_sell_29_days">29 дней</string>
     <string name="buy_and_sell_30_days">30 дней</string>
     <string name="buy_and_sell_30_min">30 минут</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_50_percent">50%</string>
+    <string name="buy_and_sell_5">5%</string>
+    <string name="buy_and_sell_50">50%</string>
     <string name="buy_and_sell_5_min">5 мин</string>
     <string name="buy_and_sell_amount_in">Сумма в %1$s</string>
     <string name="buy_and_sell_ask">Ask</string>
@@ -126,7 +130,7 @@
     <string name="chart_change_interval_dialog_ok">ХОРОШО</string>
     <string name="chart_change_interval_dialog_title">Изменить интервал</string>
     <string name="chart_empty">Нет данных графика</string>
-    <string name="chart_loading">Загрузка графика …</string>
+    <string name="chart_loading">Загрузка графика…</string>
     <string name="chart_time_frame_15_min">15 минут</string>
     <string name="chart_time_frame_1_hour">1 час</string>
     <string name="chart_time_frame_24_hours">24 часа</string>
@@ -377,8 +381,7 @@
     <string name="network_toolbar_title">Cеть</string>
     <string name="new_account_account_name_hint">Имя аккаунта</string>
     <string name="new_account_account_name_validation_already_exist_error">Имя аккаунта уже используется</string>
-    <string name="new_account_account_name_validation_length_error">Максимум 20 символов</string>
-    <string name="new_account_account_name_validation_min_length_error">Минимум: 2 символа</string>
+    <string name="new_account_account_name_validation_length_error">Максимум 20</string>
     <string name="new_account_account_name_validation_required_error">Требуется имя</string>
     <string name="new_account_avatar_description">Вы не сможете изменить его потом</string>
     <string name="new_account_avatar_error">Выберите аватар</string>
@@ -392,8 +395,8 @@
     <string name="new_alias_already_use_validation_error">Уже в используется</string>
     <string name="new_alias_create">Создать</string>
     <string name="new_alias_invalid_char_validation_error">Неправильный символ</string>
-    <string name="new_alias_max_validation_error">30 символов макс.</string>
-    <string name="new_alias_min_validation_error">минимум 4 символа</string>
+    <string name="new_alias_max_validation_error">Максимум 30</string>
+    <string name="new_alias_min_validation_error">Минимум 4 символа</string>
     <string name="new_alias_success_create">Вы создали новый алиас!</string>
     <string name="new_alias_symbol_name">Символическое имя</string>
     <string name="new_alias_toolbar_title">Новый алиас</string>
@@ -404,7 +407,7 @@
     <string name="orderbook_amount_title">Количество %s</string>
     <string name="orderbook_empty">Пока ничего нет… \nСписок сделок пуст</string>
     <string name="orderbook_last_price">ПОСЛЕДНЯЯ ЦЕНА</string>
-    <string name="orderbook_loading">Загрузка ордербука …</string>
+    <string name="orderbook_loading">Загрузка ордербука…</string>
     <string name="orderbook_price_title">Цена %s</string>
     <string name="orderbook_spread_percent">SPREAD %s%%</string>
     <string name="orderbook_sum_title">Сумма %s</string>

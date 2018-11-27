@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="new_account_account_name_validation_min_length_error">Minimum 2 characters</string>
     <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
     <string name="about_fill_payment_info">CNM — your WAVES address. \nIf you don’t do it, we can’t credit your account.</string>
     <string name="about_redirection_message">After you go through the verification you will receive an email with further instructions</string>
@@ -66,15 +70,15 @@
     <string name="backup_pharse">Backup pharse</string>
     <string name="backup_wrriten_down">I\'ve written it down</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
-    <string name="common_10_percent">10%</string>
+    <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_1_day">1 day</string>
     <string name="buy_and_sell_1_hour">1 hour</string>
     <string name="buy_and_sell_1_week">1 week</string>
     <string name="buy_and_sell_29_days">29 days</string>
     <string name="buy_and_sell_30_days">30 days</string>
     <string name="buy_and_sell_30_min">30 min</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_50_percent">50%</string>
+    <string name="buy_and_sell_5">5%</string>
+    <string name="buy_and_sell_50">50%</string>
     <string name="buy_and_sell_5_min">5 min</string>
     <string name="buy_and_sell_amount_in">Amount in %1$s</string>
     <string name="buy_and_sell_ask">Ask</string>
@@ -377,8 +381,7 @@
     <string name="network_toolbar_title">Network</string>
     <string name="new_account_account_name_hint">Account name</string>
     <string name="new_account_account_name_validation_already_exist_error">Account name already use</string>
-    <string name="new_account_account_name_validation_length_error">Max: 20 symbols</string>
-    <string name="new_account_account_name_validation_min_length_error">Min: 2 symbols</string>
+    <string name="new_account_account_name_validation_length_error">20 characters maximum</string>
     <string name="new_account_account_name_validation_required_error">Name is required</string>
     <string name="new_account_avatar_description">You cannot change it later</string>
     <string name="new_account_avatar_error">Please select avatar</string>

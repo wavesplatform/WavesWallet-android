@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="new_account_account_name_validation_min_length_error">至少2个字符</string>
     <string name="about_fill_payment_details">您必须将以下信息填写到付款详细信息中：</string>
     <string name="about_fill_payment_info">CNM -- 您的WAVES地址。 \nlf 如果您不知道，我们没法确认您的账户。</string>
     <string name="about_redirection_message">完成验证后，您将收到一封包含进一步说明的电子邮件</string>
@@ -66,15 +70,15 @@
     <string name="backup_pharse">备份短语</string>
     <string name="backup_wrriten_down">我已经把它写下来了</string>
     <string name="buy_and_sell_0_001_waves">0.003waves币</string>
-    <string name="common_10_percent">10％</string>
+    <string name="buy_and_sell_10">10％</string>
     <string name="buy_and_sell_1_day">1天</string>
     <string name="buy_and_sell_1_hour">1小时</string>
     <string name="buy_and_sell_1_week">1周</string>
     <string name="buy_and_sell_29_days">29天</string>
     <string name="buy_and_sell_30_days">30天</string>
     <string name="buy_and_sell_30_min">30分钟</string>
-    <string name="common_5_percent">5％</string>
-    <string name="common_50_percent">50％</string>
+    <string name="buy_and_sell_5">5％</string>
+    <string name="buy_and_sell_50">50％</string>
     <string name="buy_and_sell_5_min">5分钟</string>
     <string name="buy_and_sell_amount_in">金额为 %1$s</string>
     <string name="buy_and_sell_ask">询问</string>
@@ -278,7 +282,7 @@
     <string name="history_details_leasing_from">租赁给</string>
     <string name="history_details_leasing_to">租赁给</string>
     <string name="history_details_not_reissuable">不可再发行</string>
-    <string name="history_details_received_from">从……收到</string>
+    <string name="history_details_received_from">从 收到</string>
     <string name="history_details_recipient">接收者</string>
     <string name="history_details_reissuable">可再发行</string>
     <string name="history_details_send_again">重新发送</string>
@@ -377,8 +381,7 @@
     <string name="network_toolbar_title">网络</string>
     <string name="new_account_account_name_hint">用户名</string>
     <string name="new_account_account_name_validation_already_exist_error">帐户名已经使用</string>
-    <string name="new_account_account_name_validation_length_error">最大：20个符号</string>
-    <string name="new_account_account_name_validation_min_length_error">最少：2个符号</string>
+    <string name="new_account_account_name_validation_length_error">最多20个字符</string>
     <string name="new_account_account_name_validation_required_error">需要名称</string>
     <string name="new_account_avatar_description">该操作实施后不能更改</string>
     <string name="new_account_avatar_error">请选择头像</string>

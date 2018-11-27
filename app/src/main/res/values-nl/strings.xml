@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="new_account_account_name_validation_min_length_error">Ten minste 2 karakters</string>
     <string name="about_fill_payment_details">U moet de volgende informatie bij de betalingsdetails invoeren:</string>
     <string name="about_fill_payment_info">CNM — Uw WAVES adres. \nAls u dit niet invoert kunnen we uw account niet crediteren.</string>
     <string name="about_redirection_message">Na de verificatie ontvangt u een email met verdere instructies.</string>
@@ -66,15 +70,15 @@
     <string name="backup_pharse">Backup regel</string>
     <string name="backup_wrriten_down">Ik heb het opgeschreven</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
-    <string name="common_10_percent">10%</string>
+    <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_1_day">1 dag</string>
     <string name="buy_and_sell_1_hour">1 uur</string>
     <string name="buy_and_sell_1_week">1 week</string>
     <string name="buy_and_sell_29_days">29 dagen</string>
     <string name="buy_and_sell_30_days">30 dagen</string>
     <string name="buy_and_sell_30_min">30 min</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_50_percent">50%</string>
+    <string name="buy_and_sell_5">5%</string>
+    <string name="buy_and_sell_50">50%</string>
     <string name="buy_and_sell_5_min">5 min</string>
     <string name="buy_and_sell_amount_in">Hoeveelheid in %1$s</string>
     <string name="buy_and_sell_ask">Vraag</string>
@@ -126,7 +130,7 @@
     <string name="chart_change_interval_dialog_ok">OK</string>
     <string name="chart_change_interval_dialog_title">Wijzig Interval</string>
     <string name="chart_empty">Geen grafiek data beschikbaar</string>
-    <string name="chart_loading">Grafiek laden …</string>
+    <string name="chart_loading">Grafiek laden…</string>
     <string name="chart_time_frame_15_min">15 minuten</string>
     <string name="chart_time_frame_1_hour">1 uur</string>
     <string name="chart_time_frame_24_hours">24 uur</string>
@@ -170,7 +174,7 @@
     <string name="common_k_quantity">%sk</string>
     <string name="common_kk_quantity">%skk</string>
     <string name="common_kkk_quantity">%skkk</string>
-    <string name="common_load_more_status">Laden …</string>
+    <string name="common_load_more_status">Laden…</string>
     <string name="common_market_error">Kon de markt app niet vinden</string>
     <string name="common_msg_in_development">Sorry deze functie is momenteel nog niet beschikbaar</string>
     <string name="common_no_internet_bottom_msg">Geen verbinding met het internet</string>
@@ -185,7 +189,7 @@
     <string name="confirm_free">Transactiekosten</string>
     <string name="confirm_leasing">Bevestiging</string>
     <string name="confirm_leasing_okay">Oké</string>
-    <string name="confirm_leasing_progress">Laden …</string>
+    <string name="confirm_leasing_progress">Laden…</string>
     <string name="confirm_leasing_result_value">U heeft %1$s %2$s geleased</string>
     <string name="confirm_leasing_success">Uw transactie is onderweg!</string>
     <string name="confirm_node_address">Node adres</string>
@@ -203,14 +207,14 @@
     <string name="dex_last_price_value">Prijs %s</string>
     <string name="dex_last_update_not_known">onbekend</string>
     <string name="dex_last_update_value">Laatste update: %s</string>
-    <string name="dex_market_empty">Niks hier …</string>
+    <string name="dex_market_empty">Niks hier…</string>
     <string name="dex_market_toolbar_title">Markten</string>
     <string name="dex_markets_info_dialog_amount_asset">Hoeveelheid Asset — %s</string>
     <string name="dex_markets_info_dialog_popular">Populair</string>
     <string name="dex_markets_info_dialog_price_asset">Prijs Asset — %s</string>
     <string name="dex_markets_list_search">Zoeken</string>
     <string name="dex_markets_list_toolbar_title">Markten</string>
-    <string name="dex_sorting_empty">Niks hier …</string>
+    <string name="dex_sorting_empty">Niks hier…</string>
     <string name="dex_sorting_toolbar_title">Sorteer</string>
     <string name="dex_toolbar_title">DEX</string>
     <string name="dex_trade_buy">KOPEN</string>
@@ -377,8 +381,7 @@
     <string name="network_toolbar_title">Netwerk</string>
     <string name="new_account_account_name_hint">Accountnaam</string>
     <string name="new_account_account_name_validation_already_exist_error">Accountnaam al in gebruik</string>
-    <string name="new_account_account_name_validation_length_error">Max: 20 karakters</string>
-    <string name="new_account_account_name_validation_min_length_error">Min: 2 karakters</string>
+    <string name="new_account_account_name_validation_length_error">Maximaal 20 karakters</string>
     <string name="new_account_account_name_validation_required_error">Naam is vereist</string>
     <string name="new_account_avatar_description">U kunt dit later niet wijzigen</string>
     <string name="new_account_avatar_error">Selecteer een avatar</string>
@@ -404,7 +407,7 @@
     <string name="orderbook_amount_title">Hoeveelheid %s</string>
     <string name="orderbook_empty">Niets hier… \nHet orderboek is leeg</string>
     <string name="orderbook_last_price">LAATSTE PRIJS</string>
-    <string name="orderbook_loading">Orderboek laden …</string>
+    <string name="orderbook_loading">Orderboek laden…</string>
     <string name="orderbook_price_title">Prijs %s</string>
     <string name="orderbook_spread_percent">SPREIDING %s%%</string>
     <string name="orderbook_sum_title">Som %s</string>
@@ -452,7 +455,7 @@
     <string name="quick_action_send">Verzenden</string>
     <string name="receive_address_close">Sluiten</string>
     <string name="receive_address_copy">Kopiëren</string>
-    <string name="receive_address_generate">Genereer …</string>
+    <string name="receive_address_generate">Genereer…</string>
     <string name="receive_address_link_to_invoice">Link naar een factuur</string>
     <string name="receive_address_share">Delen</string>
     <string name="receive_address_view_toolbar">Uw %1$s adres</string>
@@ -527,7 +530,7 @@
     <string name="send_monero_payment_id_hint">Plak of typ uw betalings ID</string>
     <string name="send_progress_sending">Bezig met verzenden…</string>
     <string name="send_recipient">Ontvanger</string>
-    <string name="send_recipient_address_hint">Ontvanger adres …</string>
+    <string name="send_recipient_address_hint">Ontvanger adres…</string>
     <string name="send_recipient_the_address_is_not_valid">Het adres is niet geldig</string>
     <string name="send_select_your_asset">Selecteer uw asset</string>
     <string name="send_success_do_you_want_to_save_this_address">Wilt u dit adres opslaan?</string>

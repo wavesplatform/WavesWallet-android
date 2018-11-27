@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
+    <string name="common_10_percent">10%</string>
+    <string name="new_account_account_name_validation_min_length_error">Al menos 2 caracteres</string>
     <string name="about_fill_payment_details">Usted DEBE completar las especificaciones de pago con la siguiente información:</string>
     <string name="about_fill_payment_info">CNM — su dirección de WAVES. \nSi no lo hace, no podemos acreditar su cuenta.</string>
     <string name="about_redirection_message">Después de realizar la verificación, recibirá un correo electrónico con más instrucciones.</string>
@@ -66,15 +70,15 @@
     <string name="backup_pharse">Farse de respaldo</string>
     <string name="backup_wrriten_down">Lo he escrito</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
-    <string name="common_10_percent">10%</string>
+    <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_1_day">1 día</string>
     <string name="buy_and_sell_1_hour">1 hora</string>
     <string name="buy_and_sell_1_week">1 semana</string>
     <string name="buy_and_sell_29_days">29 días</string>
     <string name="buy_and_sell_30_days">30 dias</string>
     <string name="buy_and_sell_30_min">30 minutos</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_50_percent">50%</string>
+    <string name="buy_and_sell_5">5%</string>
+    <string name="buy_and_sell_50">50%</string>
     <string name="buy_and_sell_5_min">5 minutos</string>
     <string name="buy_and_sell_amount_in">Cantidad en %1$s</string>
     <string name="buy_and_sell_ask">Pedir</string>
@@ -126,7 +130,7 @@
     <string name="chart_change_interval_dialog_ok">OK</string>
     <string name="chart_change_interval_dialog_title">Cambiar intervalo</string>
     <string name="chart_empty">No hay datos de gráficos disponibles</string>
-    <string name="chart_loading">Cargando gráfico …</string>
+    <string name="chart_loading">Cargando gráfico…</string>
     <string name="chart_time_frame_15_min">15 minutos</string>
     <string name="chart_time_frame_1_hour">1 hora</string>
     <string name="chart_time_frame_24_hours">24 horas</string>
@@ -377,8 +381,7 @@
     <string name="network_toolbar_title">Red</string>
     <string name="new_account_account_name_hint">Nombre de la cuenta</string>
     <string name="new_account_account_name_validation_already_exist_error">El nombre de la cuenta ya está en uso</string>
-    <string name="new_account_account_name_validation_length_error">Max: 20 símbolos</string>
-    <string name="new_account_account_name_validation_min_length_error">Min: 2 símbolos</string>
+    <string name="new_account_account_name_validation_length_error">20 caracteres máximo</string>
     <string name="new_account_account_name_validation_required_error">Se requiere el nombre</string>
     <string name="new_account_avatar_description">No puedes cambiarlo más tarde</string>
     <string name="new_account_avatar_error">Por favor seleccione un avatar</string>
