@@ -151,6 +151,13 @@
     <string name="choose_language_nederlands">Nederlands</string>
     <string name="choose_language_russia">Русский</string>
     <string name="choose_language_turkey">Türkçe</string>
+    <string name="choose_language_danish">Dansk</string>
+    <string name="choose_language_indonesian">Indonesia</string>
+    <string name="choose_language_german">Deutsch</string>
+    <string name="choose_language_japan">日本語</string>
+    <string name="choose_language_portuguese">Português</string>
+    <string name="choose_language_brazilian">Português do Brasil</string>
+    <string name="choose_language_polish">Polszczyzna</string>
     <string name="coinomat_success_subtitle">After payment has been made your balance will be updated</string>
     <string name="coinomat_success_title">You have been redirected to «Indacoin»</string>
     <string name="common_action_close">Close</string>
@@ -502,7 +509,7 @@
     <string name="send_confirmation_write_an_optional_message">Write an optional message</string>
     <string name="send_continue">Continue</string>
     <string name="send_error_get_data_from_qr">Error get data from QR</string>
-    <string name="send_errpr_you_don_t_have_enough_funds_to_pay_the_required_fees">You don\'t have enough funds to pay the required fees.</string>
+    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">You don\'t have enough funds to pay the required fees. You must pay 0.001 WAVES transaction fee and %1$s %2$s gateway fee.</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Fees are 1% from the amount transferred.</string>
