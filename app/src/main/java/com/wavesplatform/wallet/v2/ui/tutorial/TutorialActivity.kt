@@ -99,7 +99,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
                     .alpha(0f)
                     .setDuration(250)
                     .withEndAction {
-                        launchActivity<WelcomeActivity>()
+                        launchActivity<WelcomeActivity>(clear = true)
                         overridePendingTransition(0, R.anim.fade_out)
                     }
                     .start()

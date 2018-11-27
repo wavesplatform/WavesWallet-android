@@ -25,9 +25,9 @@ enum class Language(@DrawableRes var image: Int,
     // DANISH(R.drawable.ic_flag_18_danish, R.string.choose_language_danish, "dn"),
     INDONESIAN(R.drawable.ic_flag_18_indonesia, R.string.choose_language_indonesian, "id"),
     GERMAN(R.drawable.ic_flag_18_germany, R.string.choose_language_german, "de"),
-    // JAPAN(R.drawable.ic_flag_18_japan, R.string.choose_language_japan, "jp"),
+    JAPAN(R.drawable.ic_flag_18_japan, R.string.choose_language_japan, "ja"),
     PORTUGUESE(R.drawable.ic_flag_18_portugal, R.string.choose_language_portuguese, "pt"),
-    BRAZILIAN(R.drawable.ic_flag_18_brazil, R.string.choose_language_brazilian, "pt-rBR"),
+    // BRAZILIAN(R.drawable.ic_flag_18_brazil, R.string.choose_language_brazilian, "pt-rBR"),
     // POLISH(R.drawable.ic_flag_18_polszczyzna, R.string.choose_language_polish, "pl")
     ;
 

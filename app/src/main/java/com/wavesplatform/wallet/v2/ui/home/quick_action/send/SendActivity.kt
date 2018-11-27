@@ -262,7 +262,9 @@ class SendActivity : BaseActivity(), SendView {
                 presenter.amount = 0F
             }
         } else {
-            edit_amount.setText(MoneyUtil.getScaledText(amount, assetBalance).stripZeros())
+            edit_amount.setText(MoneyUtil.getScaledText(amount, assetBalance)
+                    .replace(",", "")
+                    .stripZeros())
         }
     }
 
