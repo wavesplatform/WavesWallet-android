@@ -82,6 +82,8 @@
         android:layout_above="@+id/button_written_down"
         android:layout_centerHorizontal="true"
         android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:gravity="center"
         android:text="@string/backup_hint_3"
         android:textColor="@color/basic500"
         android:textSize="12sp" />
