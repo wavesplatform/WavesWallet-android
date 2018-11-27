@@ -630,4 +630,5 @@
     <string name="your_asset_activity_greater_zero">Non empty</string>
     <string name="your_assets_empty_state">Nothing Here… \nYou do not have assets with funds</string>
     <string name="your_assets_toolbar_title">Your assets</string>
+    <string name="common_server_error">Something went wrong</string>
 </resources>
