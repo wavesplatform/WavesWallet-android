@@ -180,6 +180,7 @@
     <string name="common_no_internet_bottom_msg">Tidak ada koneksi ke Internet</string>
     <string name="common_or">atau</string>
     <string name="common_persist"><![CDATA[&#x26;]]></string>
+    <string name="common_server_error">Ada yang salah</string>
     <string name="confirm_backup">Konfirmasi pencadangan</string>
     <string name="confirm_backup_confirm">Konfirmasi</string>
     <string name="confirm_backup_error">Urutan salah, coba lagi</string>

@@ -179,7 +179,8 @@
     <string name="common_msg_in_development">申し訳ございません。本機能は、近日中に利用可能になる予定です</string>
     <string name="common_no_internet_bottom_msg">インターネット接続がありません</string>
     <string name="common_or">もしくは</string>
-    <string name="common_persist">＆＃X26;</string>
+    <string name="common_persist"><![CDATA[&#x26;]]></string>
+    <string name="common_server_error">何かが間違っていた</string>
     <string name="confirm_backup">バックアップを確定する</string>
     <string name="confirm_backup_confirm">確定する</string>
     <string name="confirm_backup_error">注文が間違っています。やり直してください。</string>

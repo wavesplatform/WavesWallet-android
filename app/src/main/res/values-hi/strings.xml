@@ -179,7 +179,8 @@
     <string name="common_msg_in_development">क्षमा करें, यह सुविधा निकट भविष्य में उपलब्ध होगी</string>
     <string name="common_no_internet_bottom_msg">इंटरनेट से कोई कनेक्शन नहीं</string>
     <string name="common_or">या</string>
-    <string name="common_persist"><![CDATA[&]]></string>
+    <string name="common_persist"><![CDATA[&#x26;]]></string>
+    <string name="common_server_error">कुछ गलत हो गया</string>
     <string name="confirm_backup">बैकअप की पुष्टि करें</string>
     <string name="confirm_backup_confirm">की पुष्टि करें</string>
     <string name="confirm_backup_error">गलत आदेश, फिर प्रयास करें</string>
