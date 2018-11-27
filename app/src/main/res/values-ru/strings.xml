@@ -364,7 +364,7 @@
     <string name="my_orders_price">Цена</string>
     <string name="my_orders_side_price">Side/Price</string>
     <string name="my_orders_status">Статус</string>
-    <string name="my_orders_status_canceled">Cancelled</string>
+    <string name="my_orders_status_canceled">Отменен</string>
     <string name="my_orders_status_filled">Заполнен</string>
     <string name="my_orders_status_open">Открыт</string>
     <string name="my_orders_status_partial_filled">Частично</string>
