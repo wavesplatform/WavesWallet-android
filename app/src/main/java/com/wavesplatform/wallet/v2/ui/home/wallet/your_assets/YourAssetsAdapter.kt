@@ -33,7 +33,7 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
         helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)
 
-        if (item.assetId != null && item.assetId.equals(currentAssetId)) {
+        if (item.assetId == currentAssetId) {
             currentAssetIdCheckbox = helper.itemView.checkbox_choose
             helper.itemView.checkbox_choose.isChecked = true
         }
