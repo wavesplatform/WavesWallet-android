@@ -96,6 +96,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                     }
                                 }
 
+                                findElementsInDbWithZeroBalancesAndDelete(assetsFromDb, tripple)
+
                                 tripple.third.balances.forEachIndexed { index, assetBalance ->
                                     assetBalance.inOrderBalance = tripple.second[assetBalance.assetId] ?: 0L
 
@@ -118,6 +120,23 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                             }
                             .subscribeOn(Schedulers.io())
                 }
+    }
+
+    private fun findElementsInDbWithZeroBalancesAndDelete(assetsFromDb: List<AssetBalance>?, tripple: Triple<AssetBalance, Map<String, Long>, AssetBalances>) {
+        if (assetsFromDb?.size != tripple.third.balances.size) {
+            val dbIds = assetsFromDb?.mapTo(ArrayList()) { it.assetId }
+            val apiIds = tripple.third.balances.mapTo(ArrayList()) { it.assetId }
+            val offsetAsset = dbIds?.minus(apiIds)
+
+            offsetAsset?.forEach { id ->
+                if (id.isNotEmpty()) {
+                    val assetBalance = queryFirst<AssetBalance> { equalTo("assetId", id) }
+                    if (assetBalance?.isGateway == false) {
+                        assetBalance.delete { equalTo("assetId", id) }
+                    }
+                }
+            }
+        }
     }
 
     fun loadWavesBalance(): Observable<AssetBalance> {

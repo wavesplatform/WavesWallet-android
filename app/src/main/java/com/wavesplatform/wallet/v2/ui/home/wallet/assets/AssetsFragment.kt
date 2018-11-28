@@ -132,13 +132,13 @@ class AssetsFragment : BaseFragment(), AssetsView {
         recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!swipe_container.isRefreshing) {
+                    swipe_container.isEnabled = !recycle_assets.canScrollVertically(-1)
+                }
                 if (headerItemDecoration?.pinnedHeaderView != null) {
-                    swipe_container.isEnabled = false
                     if (headerItemDecoration?.pinnedHeaderView?.image_arrow?.isVisible() == true) {
                         headerItemDecoration?.pinnedHeaderView?.image_arrow?.gone()
                     }
-                } else {
-                    swipe_container.isEnabled = true
                 }
             }
 
@@ -218,7 +218,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
     override fun startServiceToLoadData(assets: ArrayList<AssetBalance>) {
         runOnUiThread {
-            if (!baseActivity.isMyServiceRunning(UpdateApiDataService::class.java)) {
+            if (!isMyServiceRunning(UpdateApiDataService::class.java)) {
                 val intent = Intent(baseActivity, UpdateApiDataService::class.java)
                 baseActivity.startService(intent)
             }
@@ -243,7 +243,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
     override fun afterFailedLoadAssets() {
         swipe_container?.isRefreshing = false
-        toast(getString(R.string.unexpected_error))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

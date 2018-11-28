@@ -6,6 +6,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.util.clearBalance
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.your_assets_item.view.*
 import javax.inject.Inject
@@ -22,7 +23,8 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
                 .setVisible(R.id.image_favourite, item.isFavorite)
                 .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
         helper.itemView.text_asset_value.visibility =
-                if ((item.getDisplayAvailableBalance().replace(",", "")
+                if ((item.getDisplayAvailableBalance()
+                                .clearBalance()
                                 .toDouble()) == 0.toDouble()) {
                     View.GONE
                 } else {
@@ -31,7 +33,7 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
         helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)
 
-        if (item.assetId != null && item.assetId.equals(currentAssetId)) {
+        if (item.assetId == currentAssetId) {
             currentAssetIdCheckbox = helper.itemView.checkbox_choose
             helper.itemView.checkbox_choose.isChecked = true
         }

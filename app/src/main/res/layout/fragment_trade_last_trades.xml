@@ -102,6 +102,20 @@
                     android:paddingBottom="8dp" />
             </android.support.v4.widget.SwipeRefreshLayout>
 
+            <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:progress_image="@drawable/ic_loader_24_submit_400"
+                app:progress_text="@string/common_load_more_status" />
+
+            <include
+                android:id="@+id/error_layout"
+                android:visibility="gone"
+                layout="@layout/global_server_error_layout"/>
+
+
             <View
                 android:id="@+id/view_divider"
                 android:layout_width="match_parent"

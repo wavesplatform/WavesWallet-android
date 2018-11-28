@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.LinearLayout
@@ -16,7 +17,6 @@ import pers.victor.ext.app
 import pers.victor.ext.dp2px
 import pers.victor.ext.findColorStateList
 import pers.victor.ext.findDrawable
-import android.view.Gravity
 
 
 class ImageProgressBar : LinearLayout {
@@ -24,43 +24,47 @@ class ImageProgressBar : LinearLayout {
     private var imageProgress: AppCompatImageView = AppCompatImageView(app)
     private var textProgress: AppCompatTextView = AppCompatTextView(app)
 
-    private var mContext: Context = app
     private var animator: ObjectAnimator? = null
     private var stopAnimation: Boolean = false
 
     private var progressTextColorResource: ColorStateList? = findColorStateList(R.color.disabled500)
     private var progressImageResource: Drawable? = findDrawable(R.drawable.ic_loader_24_submit_400)
-    private var progressTextResource: String = app.getString(R.string.common_load_more_status)
+    private var progressTextResource: String = ""
     private var progressDurationResource: Int = DEFAULT_DURATION
 
     companion object {
         const val DEFAULT_DURATION = 750
     }
 
-    constructor(context: Context) : super(context) {
-        mContext = context
-    }
+    constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        mContext = context
         handelAttributes(attrs)
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        mContext = context
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int)
+            : super(context, attrs, defStyleAttr) {
         handelAttributes(attrs)
     }
 
     private fun handelAttributes(attrs: AttributeSet) {
         orientation = LinearLayout.VERTICAL
-        val typedArray = mContext.obtainStyledAttributes(attrs, R.styleable.ImageProgressBar, 0, 0)
+        val typedArray = context.obtainStyledAttributes(
+                attrs, R.styleable.ImageProgressBar, 0, 0)
 
         // load attributes
         try {
-            progressImageResource = typedArray.getDrawable(R.styleable.ImageProgressBar_progress_image) ?: findDrawable(R.drawable.ic_loader_24_submit_400)
-            progressDurationResource = typedArray.getInt(R.styleable.ImageProgressBar_progress_duration, DEFAULT_DURATION)
-            progressTextResource = typedArray.getString(R.styleable.ImageProgressBar_progress_text) ?: app.getString(R.string.common_load_more_status)
-            progressTextColorResource = typedArray.getColorStateList(R.styleable.ImageProgressBar_progress_text_color) ?: findColorStateList(R.color.disabled500)
+            progressImageResource = typedArray.getDrawable(
+                    R.styleable.ImageProgressBar_progress_image)
+                    ?: findDrawable(R.drawable.ic_loader_24_submit_400)
+            progressDurationResource = typedArray.getInt(
+                    R.styleable.ImageProgressBar_progress_duration, DEFAULT_DURATION)
+            progressTextResource = typedArray.getString(
+                    R.styleable.ImageProgressBar_progress_text)
+                    ?: context.getString(R.string.common_load_more_status)
+            progressTextColorResource = typedArray.getColorStateList(
+                    R.styleable.ImageProgressBar_progress_text_color)
+                    ?: findColorStateList(R.color.disabled500)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -72,7 +76,8 @@ class ImageProgressBar : LinearLayout {
 
     private fun configureProgressAndStart() {
         // configure gravity
-        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         params.gravity = Gravity.CENTER
 
         textProgress.layoutParams = params

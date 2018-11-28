@@ -86,6 +86,11 @@
             app:progress_text="@string/chart_loading" />
 
         <include
+            android:id="@+id/error_layout"
+            android:visibility="gone"
+            layout="@layout/global_server_error_layout"/>
+
+        <include
             android:id="@+id/layout_empty"
             layout="@layout/layout_empty_data"
             android:visibility="gone" />

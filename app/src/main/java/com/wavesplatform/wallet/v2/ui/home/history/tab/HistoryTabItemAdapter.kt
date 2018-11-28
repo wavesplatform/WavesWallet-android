@@ -83,23 +83,29 @@ class HistoryTabItemAdapter @Inject constructor() :
                             } else {
                                 item.data.asset?.name
                             }
-                            view.text_transaction_name.text = String.format(it.title(), name).trim()
+                            view.text_transaction_name.text = String.format(
+                                    mContext.getString(it.title), name).trim()
                         } catch (e: MissingFormatArgumentException) {
-                            view.text_transaction_name.text = it.title().trim()
+                            view.text_transaction_name.text = mContext.getString(it.title)
                         }
 
                         when (it) {
                             TransactionType.SENT_TYPE -> {
                                 item.data.amount.notNull {
-                                    view.text_transaction_value.text = "-${MoneyUtil.getScaledText(it, item.data.asset).stripZeros()}"
+                                    view.text_transaction_value.text =
+                                            "-${MoneyUtil.getScaledText(it, item.data.asset)
+                                                    .stripZeros()}"
                                 }
                             }
                             TransactionType.RECEIVED_TYPE -> {
                                 item.data.amount.notNull {
-                                    view.text_transaction_value.text = "+${MoneyUtil.getScaledText(it, item.data.asset).stripZeros()}"
+                                    view.text_transaction_value.text =
+                                            "+${MoneyUtil.getScaledText(it, item.data.asset)
+                                                    .stripZeros()}"
                                 }
                             }
-                            TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE, TransactionType.MASS_RECEIVE_TYPE -> {
+                            TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE,
+                            TransactionType.MASS_RECEIVE_TYPE -> {
                                 setSpamTitle(item.data, it, view.text_transaction_value)
                             }
                             TransactionType.CREATE_ALIAS_TYPE -> {
@@ -115,7 +121,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.CANCELED_LEASING_TYPE -> {
                                 item.data.lease?.amount.notNull {
                                     view.text_transaction_value.text =
-                                            MoneyUtil.getScaledText(it.toLong(), item.data.asset).stripZeros()
+                                            MoneyUtil.getScaledText(it.toLong(), item.data.asset)
+                                                    .stripZeros()
                                 }
                             }
                             TransactionType.TOKEN_GENERATION_TYPE -> {
@@ -127,7 +134,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.TOKEN_BURN_TYPE -> {
                                 item.data.amount.notNull {
                                     view.text_transaction_value.text =
-                                            "-${MoneyUtil.getScaledText(it, item.data.asset).stripZeros()}"
+                                            "-${MoneyUtil.getScaledText(it, item.data.asset)
+                                                    .stripZeros()}"
                                 }
                             }
                             TransactionType.TOKEN_REISSUE_TYPE -> {
@@ -146,7 +154,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                             }
                             else -> {
                                 item.data.amount.notNull {
-                                    view.text_transaction_value.text = MoneyUtil.getScaledText(it, item.data.asset).stripZeros()
+                                    view.text_transaction_value.text = MoneyUtil
+                                            .getScaledText(it, item.data.asset).stripZeros()
                                 }
                             }
                         }
@@ -169,7 +178,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 view.text_tag.text = item.data.asset?.name
                             } else {
                                 view.text_tag.gone()
-                                view.text_transaction_value.text = "${view.text_transaction_value.text} ${item.data.asset?.name}"
+                                view.text_transaction_value.text =
+                                        "${view.text_transaction_value.text} ${item.data.asset?.name}"
                             }
                         }
                     }

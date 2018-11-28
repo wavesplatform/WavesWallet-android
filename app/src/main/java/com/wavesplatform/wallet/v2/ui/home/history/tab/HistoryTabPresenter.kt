@@ -13,7 +13,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentPresenter
-import com.wavesplatform.wallet.v2.util.isWaves
+import com.wavesplatform.wallet.v2.util.isWavesId
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -113,7 +113,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 allItemsFromDb = allItemsFromDb.filter { transaction ->
                     val assetId = assetBalance!!.assetId
                     when {
-                        assetId.isWaves() ->
+                        assetId.isWavesId() ->
                             return@filter transaction.assetId.isNullOrEmpty()
                         AssetDetailsContentPresenter.isAssetIdInExchange(
                                 transaction, assetId) ->

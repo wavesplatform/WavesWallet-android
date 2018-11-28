@@ -72,7 +72,7 @@ android {
     productFlavors {
         prod {
             signingConfig signingConfigs.config
-            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher"]
+            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher", appIconRound: "@mipmap/ic_launcher_round"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
@@ -82,7 +82,7 @@ android {
         }
         dev {
             applicationIdSuffix ".dev"
-            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev"]
+            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev", appIconRound: "@mipmap/ic_launcher_dev_round"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
@@ -92,7 +92,7 @@ android {
         }
         devTest {
             applicationIdSuffix ".test"
-            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test"]
+            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test", appIconRound: "@mipmap/ic_launcher_test_round"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
@@ -252,7 +252,7 @@ dependencies {
     implementation 'com.arello-mobile:moxy-app-compat:1.5.3'
     kapt 'com.arello-mobile:moxy-compiler:1.5.3'
 
-    implementation "com.github.vicpinm:krealmextensions:2.2.0"
+    implementation "com.github.vicpinm:krealmextensions:2.3.0"
     implementation "com.yuyakaido.android:card-stack-view:1.0.0-beta8"
     implementation 'com.yarolegovich:sliding-root-nav:1.1.0'
     implementation 'io.github.anderscheow:validator:1.1.5'
@@ -329,6 +329,9 @@ dependencies {
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true
     }
+
+    implementation 'com.appsflyer:af-android-sdk:4.8.18@aar'
+    implementation 'com.android.installreferrer:installreferrer:1.0'
 }
 
 buildscript {

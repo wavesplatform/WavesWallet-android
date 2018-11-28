@@ -9,4 +9,5 @@ interface TradeChartView : BaseMvpView {
     fun successGetTrades(tradesMarket: LastTrade?)
     fun onShowCandlesSuccess(entries: ArrayList<CandleEntry>, barEntries: ArrayList<BarEntry>, firstRequest: Boolean)
     fun onRefreshCandles(ces: ArrayList<CandleEntry>, bes: ArrayList<BarEntry>)
+    fun afterFailedLoadCandles(firstRequest: Boolean)
 }

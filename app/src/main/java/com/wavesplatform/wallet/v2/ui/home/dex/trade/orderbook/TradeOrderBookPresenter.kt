@@ -14,6 +14,8 @@ import com.wavesplatform.wallet.v2.util.clearBalance
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.stripZeros
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.util.concurrent.TimeUnit
@@ -23,6 +25,7 @@ import javax.inject.Inject
 class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBookView>() {
     var watchMarket: WatchMarket? = null
     var needFirstScrollToLastPrice = true
+    val subscriptions = CompositeDisposable()
 
     fun loadOrderBook() {
         addSubscription(
@@ -92,6 +95,19 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
             it.sum = sum
         }
         return list
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        clearSubscriptions()
+    }
+
+    override fun addSubscription(subscription: Disposable) {
+        subscriptions.add(subscription)
+    }
+
+    fun clearSubscriptions() {
+        subscriptions.clear()
     }
 
 }
