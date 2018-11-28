@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v1.util.RootUtil
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.fingerprint_dialog.*
 import kotlinx.android.synthetic.main.fingerprint_dialog.view.*
@@ -37,6 +38,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     private var fingerPrintDialogListener: FingerPrintDialogListener? = null
     private var authFingerprintDisposable = Disposables.empty()
     private var fingerprintDisposable = Disposables.empty()
+    private var subscriptions = CompositeDisposable()
     private var mode: Int? = CRYPT
     private var handler = Handler()
 
@@ -63,11 +65,11 @@ class FingerprintAuthDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        startScanning()
         onDefaultState()
-
     }
 
-    private fun createDisposable() {
+    private fun startScanning() {
         if (RootUtil.isDeviceRooted()) {
             val message = getString(R.string.fingerprint_fatal_error_root)
             showErrorMessage(message,
@@ -76,32 +78,29 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         }
 
         when (mode) {
-            CRYPT -> authFingerprintDisposable = RxFingerprint.authenticate(requireActivity())
-                    .subscribe(
-                            { result ->
-                                when (result?.result) {
-                                    FingerprintResult.FAILED -> onFingerprintDoNotMatchTryAgain()
-                                    FingerprintResult.HELP -> showHelpMessage(result.message)
-                                    FingerprintResult.AUTHENTICATED -> {
-                                        crypt()
+            CRYPT -> {
+                subscriptions.add(RxFingerprint.authenticate(requireActivity())
+                        .subscribe(
+                                { result ->
+                                    when (result?.result) {
+                                        FingerprintResult.FAILED -> onFingerprintDoNotMatchTryAgain()
+                                        FingerprintResult.HELP -> showHelpMessage(result.message)
+                                        FingerprintResult.AUTHENTICATED -> {
+                                            crypt()
+                                        }
                                     }
-                                }
-                            },
-                            { showErrorMessage(it.message, "authenticate", it) }
-                    )
+                                },
+                                { showErrorMessage(it.message, "authenticate", it) }
+                        ))
+            }
             DECRYPT -> decrypt()
         }
-    }
-
-    private fun dispose() {
-        authFingerprintDisposable.dispose()
-        fingerprintDisposable.dispose()
     }
 
     private fun crypt() {
         val guid = arguments?.getString(KEY_INTENT_GUID, "") ?: ""
         val passCode = arguments?.getString(KEY_INTENT_PASS_CODE, "") ?: ""
-        fingerprintDisposable = RxFingerprint.encrypt(
+        subscriptions.add(RxFingerprint.encrypt(
                 EncryptionMethod.RSA,
                 requireActivity(),
                 guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE,
@@ -115,17 +114,20 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                                     App.getAccessManager()
                                             .setEncryptedPassCode(guid, encryptionResult.encrypted)
                                     onSuccessRecognizedFingerprint()
-                                    fingerPrintDialogListener?.onSuccessRecognizedFingerprint()
-                                    dismiss()
+
+                                    handler.postDelayed({
+                                        fingerPrintDialogListener?.onSuccessRecognizedFingerprint()
+                                        dismiss()
+                                    }, DELAY_TO_CHANGE_STATE)
                                 }
                             }
                         },
-                        { showErrorMessage(it.message, "crypt", it) })
+                        { showErrorMessage(it.message, "crypt", it) }))
     }
 
     private fun decrypt() {
         val guid = arguments?.getString(KEY_INTENT_GUID, "") ?: ""
-        fingerprintDisposable = RxFingerprint.decrypt(EncryptionMethod.RSA, requireActivity(),
+        subscriptions.add(RxFingerprint.decrypt(EncryptionMethod.RSA, requireActivity(),
                 guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE,
                 App.getAccessManager().getEncryptedPassCode(guid))
                 .subscribe(
@@ -135,9 +137,12 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                                 FingerprintResult.HELP -> showHelpMessage(result.message)
                                 FingerprintResult.AUTHENTICATED -> {
                                     onSuccessRecognizedFingerprint()
-                                    fingerPrintDialogListener?.onSuccessRecognizedFingerprint(
-                                            result.decrypted)
-                                    dismiss()
+
+                                    handler.postDelayed({
+                                        fingerPrintDialogListener?.onSuccessRecognizedFingerprint(
+                                                result.decrypted)
+                                        dismiss()
+                                    }, DELAY_TO_CHANGE_STATE)
                                 }
                             }
                         },
@@ -149,7 +154,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                             } else {
                                 showErrorMessage(it.message, "decypt", it)
                             }
-                        })
+                        }))
     }
 
     private fun showHelpMessage(message: String?) {
@@ -169,12 +174,8 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                 ToastCustom.TYPE_ERROR)
     }
 
-    override fun onStop() {
-        super.onStop()
-        dispose()
-    }
-
     override fun onDestroyView() {
+        subscriptions.clear()
         handler.removeCallbacksAndMessages(null)
         super.onDestroyView()
     }
@@ -193,8 +194,6 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         image_fingerprint_state?.setImageResource(R.drawable.ic_fingerprint_sensor_48_submit_300)
         text_fingerprint_state?.setTextColor(findColor(R.color.disabled500))
         text_fingerprint_state?.setText(R.string.fingerprint_dialog_hint)
-
-        createDisposable()
     }
 
     private fun onFingerprintLocked() {
@@ -212,14 +211,12 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         text_fingerprint_state.setTextColor(findColor(R.color.error500))
         text_fingerprint_state.setText(R.string.fingerprint_dialog_not_recognized)
 
-        dispose()
-
         handler.postDelayed({
             if (fingerprintState == FingerprintState.NOT_RECOGNIZED
                     || fingerprintState == FingerprintState.DEFAULT) {
                 onDefaultState()
             }
-        }, 2000)
+        }, DELAY_TO_CHANGE_STATE)
 
         numberOfAttempts++
         if (numberOfAttempts == AVAILABLE_TIMES) {
@@ -252,6 +249,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     companion object {
         const val AVAILABLE_TIMES = 5
 
+        private const val DELAY_TO_CHANGE_STATE = 1500L
         private const val KEY_INTENT_MODE = "intent_mode"
         private const val KEY_INTENT_PASS_CODE = "intent_pass_code"
         private const val KEY_INTENT_GUID = "intent_guid"
