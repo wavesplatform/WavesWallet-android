@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.your_assets
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -44,11 +45,18 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
                         return@BiFunction Pair(t1, t2)
                     }).compose(RxUtil.applySingleDefaultSchedulers())
                     .subscribe({
-                        val assets = arrayListOf<AssetBalance>()
+                        val assets = mutableListOf<AssetBalance>()
                         assets.addAll(it.first)
                         assets.addAll(it.second)
+
+                        val filteredSpamAssets = if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+                            assets
+                        } else {
+                            assets.filter { !it.isSpam }.toMutableList()
+                        }
+
                         runOnUiThread {
-                            viewState.showAssets(assets)
+                            viewState.showAssets(filteredSpamAssets)
                         }
                     }, {
                         it.printStackTrace()
@@ -77,7 +85,7 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        val assets = arrayListOf<AssetBalance>()
+                        val assets = mutableListOf<AssetBalance>()
                         assets.addAll(it)
                         runOnUiThread {
                             viewState.showAssets(assets)
