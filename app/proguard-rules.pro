@@ -320,6 +320,9 @@
 -keep @io.realm.internal.Keep class *
 -dontwarn io.realm.**
 
+# com.github.vicpinm:krealmextensions
+-keep class com.vicpin.krealmextensions.**
+
 
 # Gson specific classes
 -keep class sun.misc.Unsafe { *; }

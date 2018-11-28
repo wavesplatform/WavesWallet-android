@@ -209,7 +209,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         return wallet
     }
 
-    fun createAddressBookCurrentAccount(): AddressBookUser? {
+    private fun createAddressBookCurrentAccount(): AddressBookUser? {
         if (TextUtils.isEmpty(loggedInGuid)) {
             return null
         }
@@ -244,11 +244,14 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
     private fun deleteRealmDBForAccount(address: String) {
         // force delete db
         try {
-            val dbFile = File(DBHelper.getInstance().realmConfig.realmDirectory, String.format("%s.realm", address))
-            val dbLockFile = File(DBHelper.getInstance().realmConfig.realmDirectory, String.format("%s.realm.lock", address))
+            val dbFile = File(DBHelper.getInstance().realmConfig.realmDirectory,
+                    String.format("%s.realm", address))
+            val dbLockFile = File(DBHelper.getInstance().realmConfig.realmDirectory,
+                    String.format("%s.realm.lock", address))
             dbFile.delete()
             dbLockFile.delete()
-            deleteRecursive(File(DBHelper.getInstance().realmConfig.realmDirectory, String.format("%s.realm.management", address)))
+            deleteRecursive(File(DBHelper.getInstance().realmConfig.realmDirectory,
+                    String.format("%s.realm.management", address)))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -314,14 +317,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         }
         val publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "")
         return AddressUtil.addressFromPublicKey(publicKey)
-    }
-
-    fun findPublicKeyBy(address: String): String {
-        if (TextUtils.isEmpty(address)) {
-            return ""
-        }
-        return prefs.getValue(App.getAccessManager().findGuidBy(address),
-                PrefsUtil.KEY_PUB_KEY, "")
     }
 
     fun storePassword(guid: String, publicKeyStr: String, encryptedPassword: String) {
