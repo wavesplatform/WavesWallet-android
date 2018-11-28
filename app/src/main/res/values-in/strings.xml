@@ -228,7 +228,7 @@
     <string name="dialog_account_first_open_about_backup">Saya memahami bahwa jika aplikasi ini dipindahkan ke perangkat lain atau dihapus, Waves saya hanya dapat dipulihkan dengan frasa cadangan</string>
     <string name="dialog_account_first_open_about_fund_on_device">Saya memahami bahwa dana saya disimpan dengan aman di perangkat ini, bukan oleh perusahaan</string>
     <string name="dialog_account_first_open_about_terms">Saya telah membaca, memahami, dan menyetujui \nPersyaratan Penggunaan</string>
-    <string name="dialog_account_first_open_about_terms_key">Syarat Penggunaan</string>
+    <string name="dialog_account_first_open_about_terms_key">Persyaratan Penggunaan</string>
     <string name="dialog_account_first_open_confirm_and_begin">Konfirmasi dan Mulai</string>
     <string name="dialog_account_first_open_subtitle">Waves itu berbeda - tidak dapat ditahan dengan aman oleh bank atau layanan web</string>
     <string name="dialog_account_first_open_title">Selesai!</string>

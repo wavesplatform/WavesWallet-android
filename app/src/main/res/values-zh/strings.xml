@@ -230,7 +230,7 @@
     <string name="dialog_account_first_open_about_terms">我已阅读，理解并同意 \n使用条款</string>
     <string name="dialog_account_first_open_about_terms_key">使用条款</string>
     <string name="dialog_account_first_open_confirm_and_begin">确认并开始</string>
-    <string name="dialog_account_first_open_subtitle">waves币是不同的 -- 它不能由银行或网络设备保存</string>
+    <string name="dialog_account_first_open_subtitle">waves币是不同的 — 它不能由银行或网络设备保存</string>
     <string name="dialog_account_first_open_title">完成！</string>
     <string name="dialog_processing">等待中…</string>
     <string name="edit_account_name">编辑名称</string>

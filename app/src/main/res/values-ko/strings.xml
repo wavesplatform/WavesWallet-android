@@ -228,7 +228,7 @@
     <string name="dialog_account_first_open_about_backup">본 앱을 다른 장치로 이동하거나 삭제하면 귀하의 Waves 계정은 백업 구절로만 복구될 수 있음을 이해합니다.</string>
     <string name="dialog_account_first_open_about_fund_on_device">나의 자산이 거래소가 아닌 본 기기에서 안전하게 보관된다는 것을 이해합니다.</string>
     <string name="dialog_account_first_open_about_terms">나는 본 이용 약관을 읽었으며 이해하고 동의합니다</string>
-    <string name="dialog_account_first_open_about_terms_key">이용 약관</string>
+    <string name="dialog_account_first_open_about_terms_key">이용 약관을</string>
     <string name="dialog_account_first_open_confirm_and_begin">승인하고 시작</string>
     <string name="dialog_account_first_open_subtitle">Waves는 특별합니다 — 은행 또는 웹 서비스에서 안전하게 보관될 수 없습니다</string>
     <string name="dialog_account_first_open_title">완료!</string>
