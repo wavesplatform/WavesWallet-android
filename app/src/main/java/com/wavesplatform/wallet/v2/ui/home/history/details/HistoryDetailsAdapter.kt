@@ -7,6 +7,7 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
@@ -19,6 +20,9 @@ import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
+
+    @Inject
+    lateinit var prefsUtil: PrefsUtil
 
     var mData: List<Transaction> = arrayListOf()
 
@@ -125,11 +129,17 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
         }
 
         if (queryFirst<SpamAsset> { equalTo("assetId", transaction.assetId) } != null) {
+            if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+                layout.text_tag_spam.gone()
+            } else {
+                layout.text_tag_spam.visiable()
+            }
             layout.text_tag.gone()
-            layout.text_tag_spam.visiable()
-            layout.text_amount_or_title.text =
-                    "${MoneyUtil.getScaledText(transaction.amount, transaction.asset).stripZeros()} " +
-                    "${transaction.asset?.name}"
+            val sumString = MoneyUtil.getScaledText(
+                    transaction.transfers.sumByLong { it.amount }, transaction.asset)
+                    .trim()
+                    .stripZeros()
+            layout.text_amount_or_title.text = "$sumString ${transaction.asset?.name}"
         }
 
 
