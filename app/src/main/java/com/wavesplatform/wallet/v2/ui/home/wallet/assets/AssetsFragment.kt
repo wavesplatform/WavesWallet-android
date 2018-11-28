@@ -243,7 +243,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
     override fun afterFailedLoadAssets() {
         swipe_container?.isRefreshing = false
-        toast(getString(R.string.unexpected_error))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

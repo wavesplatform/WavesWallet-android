@@ -30,6 +30,7 @@ import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_trade.*
 import kotlinx.android.synthetic.main.fragment_trade_chart.*
+import kotlinx.android.synthetic.main.global_server_error_layout.*
 import kotlinx.android.synthetic.main.layout_empty_data.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
@@ -84,6 +85,15 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
 
         text_change_time.click {
             showTimeFrameDialog()
+        }
+
+
+        button_retry.click {
+            error_layout.gone()
+            progress_bar.show()
+
+            presenter.loadCandles(Date().time, true)
+            presenter.getTradesByPair()
         }
 
         setUpChart()
@@ -488,5 +498,17 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         candleData.addDataSet(candleDataSet)
         candle_chart.data = candleData
         candle_chart.notifyDataSetChanged()
+    }
+
+    override fun afterFailedLoadCandles(firstRequest: Boolean) {
+        progress_bar.hide()
+        if (firstRequest) {
+            relative_timeframe.gone()
+            linear_charts.gone()
+
+            error_layout.visiable()
+
+            presenter.pause()
+        }
     }
 }
