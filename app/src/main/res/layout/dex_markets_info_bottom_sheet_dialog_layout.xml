@@ -30,12 +30,12 @@
         android:id="@+id/text_popular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:text="@string/dex_markets_info_dialog_popular"
         android:textColor="@color/disabled500"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"
@@ -56,14 +56,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="16dp">
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp">
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_amount_asset_value"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/image_copy_amount_asset"
             android:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"
             android:textColor="@color/disabled900"
             android:textSize="14sp" />
@@ -82,9 +83,9 @@
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/shape_dashed_line"
         android:layerType="software" />
 
@@ -104,14 +105,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="16dp">
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp">
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_price_asset_value"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/image_copy_price_asset"
             android:text="WAVES"
             android:textColor="@color/disabled900"
             android:textSize="14sp" />
