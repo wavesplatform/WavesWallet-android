@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSel
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.fragment_trade_last_trades.*
+import kotlinx.android.synthetic.main.global_server_error_layout.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -90,11 +91,17 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
             rxEventBus.post(Events.DexOrderButtonClickEvent(false))
         }
 
+        button_retry.click {
+            error_layout.gone()
+
+            progress_bar.show()
+            loadLastTrades()
+        }
+
         loadLastTrades()
     }
 
     private fun loadLastTrades() {
-        swipe_container.isRefreshing = true
         presenter.loadLastTrades()
     }
 
@@ -106,7 +113,9 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
 
 
     override fun afterSuccessLoadLastTrades(data: List<LastTrade>) {
+        progress_bar.hide()
         swipe_container.isRefreshing = false
+        error_layout.gone()
         adapter.setNewData(data)
         adapter.emptyView = getEmptyView()
         if (data.isNotEmpty()) {
@@ -117,10 +126,13 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
     }
 
     override fun afterFailedLoadLastTrades() {
+        progress_bar.hide()
         swipe_container.isRefreshing = false
         if (adapter.data.isEmpty()) {
-            adapter.emptyView = getEmptyView()
+            linear_buttons.gone()
             linear_fields_name.gone()
+
+            error_layout.visiable()
         }
     }
 
