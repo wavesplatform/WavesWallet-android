@@ -489,4 +489,10 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         candle_chart.data = candleData
         candle_chart.notifyDataSetChanged()
     }
+
+    override fun onDestroyView() {
+        bar_chart.onDestroy()
+        candle_chart.onDestroy()
+        super.onDestroyView()
+    }
 }
