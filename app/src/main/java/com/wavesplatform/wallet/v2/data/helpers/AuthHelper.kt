@@ -22,19 +22,19 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
 
         Realm.compactRealm(config)
 
-        RealmConfigStore.init(AssetBalance::class.java, config)
-        RealmConfigStore.init(IssueTransaction::class.java, config)
-        RealmConfigStore.init(Transaction::class.java, config)
-        RealmConfigStore.init(Transfer::class.java, config)
-        RealmConfigStore.init(Data::class.java, config)
-        RealmConfigStore.init(AssetPair::class.java, config)
-        RealmConfigStore.init(Order::class.java, config)
-        RealmConfigStore.init(Lease::class.java, config)
-        RealmConfigStore.init(Alias::class.java, config)
-        RealmConfigStore.init(SpamAsset::class.java, config)
-        RealmConfigStore.init(AddressBookUser::class.java, config)
-        RealmConfigStore.init(AssetInfo::class.java, config)
-        RealmConfigStore.init(MarketResponse::class.java, config)
+        RealmConfigStore.initModule(AssetBalance::class.java, config)
+        RealmConfigStore.initModule(IssueTransaction::class.java, config)
+        RealmConfigStore.initModule(Transaction::class.java, config)
+        RealmConfigStore.initModule(Transfer::class.java, config)
+        RealmConfigStore.initModule(Data::class.java, config)
+        RealmConfigStore.initModule(AssetPair::class.java, config)
+        RealmConfigStore.initModule(Order::class.java, config)
+        RealmConfigStore.initModule(Lease::class.java, config)
+        RealmConfigStore.initModule(Alias::class.java, config)
+        RealmConfigStore.initModule(SpamAsset::class.java, config)
+        RealmConfigStore.initModule(AddressBookUser::class.java, config)
+        RealmConfigStore.initModule(AssetInfo::class.java, config)
+        RealmConfigStore.initModule(MarketResponse::class.java, config)
 
         DBHelper.getInstance().realmConfig = config
         Realm.getInstance(config).isAutoRefresh = false
