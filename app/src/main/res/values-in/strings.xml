@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">Saldo Tersedia</string>
     <string name="asset_details_coming_soon">Segera akan datang</string>
     <string name="asset_details_cryptocurrency">Cryptocurrency</string>
+    <string name="asset_details_error_perfom_transaction">Anda tidak dapat melakukan transaksi dengan aset ini</string>
     <string name="asset_details_decimal">Poin desimal</string>
     <string name="asset_details_description">Deskripsi</string>
     <string name="asset_details_flat_money">Uang Fiat</string>
@@ -227,7 +228,7 @@
     <string name="dialog_account_first_open_about_backup">Saya memahami bahwa jika aplikasi ini dipindahkan ke perangkat lain atau dihapus, Waves saya hanya dapat dipulihkan dengan frasa cadangan</string>
     <string name="dialog_account_first_open_about_fund_on_device">Saya memahami bahwa dana saya disimpan dengan aman di perangkat ini, bukan oleh perusahaan</string>
     <string name="dialog_account_first_open_about_terms">Saya telah membaca, memahami, dan menyetujui \nPersyaratan Penggunaan</string>
-    <string name="dialog_account_first_open_about_terms_key">Syarat Penggunaan</string>
+    <string name="dialog_account_first_open_about_terms_key">Persyaratan Penggunaan</string>
     <string name="dialog_account_first_open_confirm_and_begin">Konfirmasi dan Mulai</string>
     <string name="dialog_account_first_open_subtitle">Waves itu berbeda - tidak dapat ditahan dengan aman oleh bank atau layanan web</string>
     <string name="dialog_account_first_open_title">Selesai!</string>
@@ -378,7 +379,7 @@
     <string name="network_spam_filter">Filter spam</string>
     <string name="network_spam_url_validation_bad_url">Url buruk</string>
     <string name="network_spam_url_validation_url_empty">Url wajib diisi</string>
-    <string name="network_switch_off_spam_filtering">Pemfilteran spam</string>
+    <string name="network_switch_off_spam_filtering">Show SPAM</string>
     <string name="network_toolbar_title">Jaringan</string>
     <string name="new_account_account_name_hint">Nama akun</string>
     <string name="new_account_account_name_validation_already_exist_error">Nama akun sudah digunakan</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">Alamat Anda</string>
     <string name="your_address_your_qr_code">Kode QR Anda</string>
     <string name="your_asset_activity_all">Semua</string>
-    <string name="your_asset_activity_greater_zero">Tidak kosong</string>
+    <string name="your_asset_activity_greater_zero">Dengan Saldo</string>
     <string name="your_assets_empty_state">Tidak Ada di Sini… \nAnda tidak memiliki aset dengan dana</string>
     <string name="your_assets_toolbar_title">Aset Anda</string>
 </resources>

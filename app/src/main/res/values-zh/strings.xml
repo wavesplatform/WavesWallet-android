@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">可用余额</string>
     <string name="asset_details_coming_soon">即将更新</string>
     <string name="asset_details_cryptocurrency">数字货币</string>
+    <string name="asset_details_error_perfom_transaction">您无法使用此资产执行交易</string>
     <string name="asset_details_decimal">小数点</string>
     <string name="asset_details_description">描述</string>
     <string name="asset_details_flat_money">法币</string>
@@ -229,7 +230,7 @@
     <string name="dialog_account_first_open_about_terms">我已阅读，理解并同意 \n使用条款</string>
     <string name="dialog_account_first_open_about_terms_key">使用条款</string>
     <string name="dialog_account_first_open_confirm_and_begin">确认并开始</string>
-    <string name="dialog_account_first_open_subtitle">waves币是不同的 -- 它不能由银行或网络设备保存</string>
+    <string name="dialog_account_first_open_subtitle">waves币是不同的 — 它不能由银行或网络设备保存</string>
     <string name="dialog_account_first_open_title">完成！</string>
     <string name="dialog_processing">等待中…</string>
     <string name="edit_account_name">编辑名称</string>
@@ -378,7 +379,7 @@
     <string name="network_spam_filter">垃圾邮件过滤器</string>
     <string name="network_spam_url_validation_bad_url">无效网址</string>
     <string name="network_spam_url_validation_url_empty">需要网址</string>
-    <string name="network_switch_off_spam_filtering">垃圾邮件过滤</string>
+    <string name="network_switch_off_spam_filtering">Show SPAM</string>
     <string name="network_toolbar_title">网络</string>
     <string name="new_account_account_name_hint">用户名</string>
     <string name="new_account_account_name_validation_already_exist_error">帐户名已经使用</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">你的地址</string>
     <string name="your_address_your_qr_code">你的QR二维码</string>
     <string name="your_asset_activity_all">所有</string>
-    <string name="your_asset_activity_greater_zero">非空</string>
+    <string name="your_asset_activity_greater_zero">余额</string>
     <string name="your_assets_empty_state">没有内容  \n你没有资金</string>
     <string name="your_assets_toolbar_title">你的资产</string>
 </resources>

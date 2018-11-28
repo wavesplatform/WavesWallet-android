@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">Beschikbaar saldo</string>
     <string name="asset_details_coming_soon">Komt binnenkort</string>
     <string name="asset_details_cryptocurrency">Cryptovaluta</string>
+    <string name="asset_details_error_perfom_transaction">U kunt geen transacties met deze asset doen</string>
     <string name="asset_details_decimal">Decimaalpunten</string>
     <string name="asset_details_description">Beschrijving</string>
     <string name="asset_details_flat_money">Fiat geld</string>
@@ -226,7 +227,7 @@
     <string name="dex_trade_tab_orderbook">Orderboek</string>
     <string name="dialog_account_first_open_about_backup">Ik begrijp dat als deze app wordt verplaatst naar een ander apparaat of wordt verwijderd, mijn Waves alleen kunnen worden hersteld met de back-up regel.</string>
     <string name="dialog_account_first_open_about_fund_on_device">Ik begrijp dat mijn geld veilig wordt opgeslagen op dit apparaat, niet door een bedrijf.</string>
-    <string name="dialog_account_first_open_about_terms">Ik heb de gebruiksvoorwaarden gelezen, \nbegrepen en ga ermee akkoord</string>
+    <string name="dialog_account_first_open_about_terms">Ik heb de Gebruiksvoorwaarden gelezen, \nbegrepen en ga ermee akkoord</string>
     <string name="dialog_account_first_open_about_terms_key">Gebruiksvoorwaarden</string>
     <string name="dialog_account_first_open_confirm_and_begin">Bevestig en begin</string>
     <string name="dialog_account_first_open_subtitle">Waves is anders — het kan niet veilig worden bewaard door een bank of webservice</string>
@@ -378,7 +379,7 @@
     <string name="network_spam_filter">Spamfilter</string>
     <string name="network_spam_url_validation_bad_url">Verkeerde URL</string>
     <string name="network_spam_url_validation_url_empty">URL is vereist</string>
-    <string name="network_switch_off_spam_filtering">Spamfilters</string>
+    <string name="network_switch_off_spam_filtering">Show SPAM</string>
     <string name="network_toolbar_title">Netwerk</string>
     <string name="new_account_account_name_hint">Accountnaam</string>
     <string name="new_account_account_name_validation_already_exist_error">Accountnaam al in gebruik</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">Uw Adres</string>
     <string name="your_address_your_qr_code">Uw QR-Code</string>
     <string name="your_asset_activity_all">Alles</string>
-    <string name="your_asset_activity_greater_zero">Niet leeg</string>
+    <string name="your_asset_activity_greater_zero">Met saldo</string>
     <string name="your_assets_empty_state">Niets hier… \nU heeft geen assets met funds</string>
     <string name="your_assets_toolbar_title">Uw assets</string>
 </resources>

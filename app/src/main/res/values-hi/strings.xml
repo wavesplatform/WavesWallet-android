@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">उपलब्ध शेष राशि</string>
     <string name="asset_details_coming_soon">जल्द आ रहा है</string>
     <string name="asset_details_cryptocurrency">क्रिप्टोकरेन्सी</string>
+    <string name="asset_details_error_perfom_transaction">आप इस संपत्ति के साथ लेनदेन नहीं कर सकते हैं</string>
     <string name="asset_details_decimal">डेसीमल पॉइंट्स</string>
     <string name="asset_details_description">विवरण</string>
     <string name="asset_details_flat_money">फिएट पैसे</string>
@@ -227,7 +228,7 @@
     <string name="dialog_account_first_open_about_backup">मैं समझता हूं कि यदि यह ऐप किसी अन्य डिवाइस पर ले जाया गया है या हटा दिया गया है, तो मेरी वेव्स केवल बैकअप फ्रेज से पुनर्प्राप्त की जा सकती हैं</string>
     <string name="dialog_account_first_open_about_fund_on_device">मैं समझता हूं कि मेरे फंड इस डिवाइस पर सुरक्षित रूप से आयोजित किए जाते हैं, न कि किसी कंपनी द्वारा</string>
     <string name="dialog_account_first_open_about_terms">मैंने पढ़ा, समझ लिया है, और सहमत हूं \nउपयोग की शर्तों को</string>
-    <string name="dialog_account_first_open_about_terms_key">उपयोग की शर्तें</string>
+    <string name="dialog_account_first_open_about_terms_key">उपयोग की शर्तों कों</string>
     <string name="dialog_account_first_open_confirm_and_begin">पुष्टि करें और शुरू करें</string>
     <string name="dialog_account_first_open_subtitle">वेव्स अलग हैं - इसे किसी बैंक या वेब सेवा द्वारा सुरक्षित रूप से नहीं रखा जा सकता है</string>
     <string name="dialog_account_first_open_title">पूर्ण हुआ!</string>
@@ -378,7 +379,7 @@
     <string name="network_spam_filter">स्पैम छांटना</string>
     <string name="network_spam_url_validation_bad_url">खराब यूआरएल</string>
     <string name="network_spam_url_validation_url_empty">यूआरएल आवश्यक है</string>
-    <string name="network_switch_off_spam_filtering">स्पैम फ़िल्टरिंग</string>
+    <string name="network_switch_off_spam_filtering">Show SPAM</string>
     <string name="network_toolbar_title">नेटवर्क</string>
     <string name="new_account_account_name_hint">खाते का नाम</string>
     <string name="new_account_account_name_validation_already_exist_error">खाता नाम पहले से ही उपयोग है</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">आपका पता</string>
     <string name="your_address_your_qr_code">आपका क्यूआर कोड</string>
     <string name="your_asset_activity_all">सब</string>
-    <string name="your_asset_activity_greater_zero">खाली नहीं</string>
+    <string name="your_asset_activity_greater_zero">बैलेंस के साथ</string>
     <string name="your_assets_empty_state">यहां कुछ नहीं… \nआपके पास धन के साथ संपत्ति नहीं है</string>
     <string name="your_assets_toolbar_title">आपकी संपत्ति</string>
 </resources>

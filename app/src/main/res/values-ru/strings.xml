@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">Доступный баланс</string>
     <string name="asset_details_coming_soon">Скоро</string>
     <string name="asset_details_cryptocurrency">Криптовалюта</string>
+    <string name="asset_details_error_perfom_transaction">Вы не можете совершать транзакции с этим ассетом</string>
     <string name="asset_details_decimal">Знаков после запятой</string>
     <string name="asset_details_description">Описание</string>
     <string name="asset_details_flat_money">Фиатные деньги</string>
@@ -378,7 +379,7 @@
     <string name="network_spam_filter">Спам-фильтр</string>
     <string name="network_spam_url_validation_bad_url">Плохой URL</string>
     <string name="network_spam_url_validation_url_empty">Требуется URL</string>
-    <string name="network_switch_off_spam_filtering">Фильтрация спама</string>
+    <string name="network_switch_off_spam_filtering">Show SPAM</string>
     <string name="network_toolbar_title">Cеть</string>
     <string name="new_account_account_name_hint">Имя аккаунта</string>
     <string name="new_account_account_name_validation_already_exist_error">Имя аккаунта уже используется</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">Ваш адрес</string>
     <string name="your_address_your_qr_code">Ваш QR-код</string>
     <string name="your_asset_activity_all">Все</string>
-    <string name="your_asset_activity_greater_zero">Не пусто</string>
+    <string name="your_asset_activity_greater_zero">С балансом</string>
     <string name="your_assets_empty_state">Пока ничего нет…</string>
     <string name="your_assets_toolbar_title">Ваши ассеты</string>
 </resources>

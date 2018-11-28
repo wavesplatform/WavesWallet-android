@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">Saldo disponible</string>
     <string name="asset_details_coming_soon">Próximamente</string>
     <string name="asset_details_cryptocurrency">Criptomoneda</string>
+    <string name="asset_details_error_perfom_transaction">No puede realizar transacciones con este activo</string>
     <string name="asset_details_decimal">Decimales</string>
     <string name="asset_details_description">Descripción</string>
     <string name="asset_details_flat_money">Dinero Fiat</string>
@@ -227,7 +228,7 @@
     <string name="dialog_account_first_open_about_backup">Entiendo que si esta aplicación se mueve a otro dispositivo o se elimina, mis Waves solo se pueden recuperar con la frase de respaldo</string>
     <string name="dialog_account_first_open_about_fund_on_device">Entiendo que mis fondos se mantienen de forma segura en este dispositivo, no por una empresa</string>
     <string name="dialog_account_first_open_about_terms">He leído, entiendo y acepto los \nTérminos de uso</string>
-    <string name="dialog_account_first_open_about_terms_key">Términos de Uso</string>
+    <string name="dialog_account_first_open_about_terms_key">Términos de uso</string>
     <string name="dialog_account_first_open_confirm_and_begin">Confirmar y comenzar</string>
     <string name="dialog_account_first_open_subtitle">Waves es diferente — no puede ser guardado de manera segura por un banco o servicio web</string>
     <string name="dialog_account_first_open_title">¡Hecho!</string>
@@ -378,7 +379,7 @@
     <string name="network_spam_filter">Filtro de spam</string>
     <string name="network_spam_url_validation_bad_url">Url incorrecto</string>
     <string name="network_spam_url_validation_url_empty">Se requiere url</string>
-    <string name="network_switch_off_spam_filtering">Filtrado de spam</string>
+    <string name="network_switch_off_spam_filtering">Show SPAM</string>
     <string name="network_toolbar_title">Red</string>
     <string name="new_account_account_name_hint">Nombre de la cuenta</string>
     <string name="new_account_account_name_validation_already_exist_error">El nombre de la cuenta ya está en uso</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">Su dirección</string>
     <string name="your_address_your_qr_code">Su código QR</string>
     <string name="your_asset_activity_all">Todos</string>
-    <string name="your_asset_activity_greater_zero">No vacio</string>
+    <string name="your_asset_activity_greater_zero">Con balance</string>
     <string name="your_assets_empty_state">Nada por aquí… \nNo tienes activos con fondos</string>
     <string name="your_assets_toolbar_title">Sus activos</string>
 </resources>
