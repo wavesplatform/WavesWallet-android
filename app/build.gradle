@@ -72,7 +72,7 @@ android {
     productFlavors {
         prod {
             signingConfig signingConfigs.config
-            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher"]
+            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher", appIconRound: "@mipmap/ic_launcher_round"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
@@ -82,7 +82,7 @@ android {
         }
         dev {
             applicationIdSuffix ".dev"
-            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev"]
+            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev", appIconRound: "@mipmap/ic_launcher_dev_round"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
@@ -92,7 +92,7 @@ android {
         }
         devTest {
             applicationIdSuffix ".test"
-            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test"]
+            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test", appIconRound: "@mipmap/ic_launcher_test_round"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
             buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
