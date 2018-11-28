@@ -180,6 +180,7 @@
     <string name="common_no_internet_bottom_msg">没有连接到互联网</string>
     <string name="common_or">或者</string>
     <string name="common_persist"><![CDATA[&#x26;]]></string>
+    <string name="common_server_error">有些不对劲ा</string>
     <string name="confirm_backup">确认备份</string>
     <string name="confirm_backup_confirm">确认</string>
     <string name="confirm_backup_error">订单错误，请再试一次</string>

@@ -163,7 +163,9 @@ class DexFragment : BaseFragment(), DexView {
 
 
     override fun afterSuccessLoadPairInfo(watchMarket: WatchMarket, index: Int) {
-        adapter.headerLayout?.text_last_update?.text = presenter.prefsUtil.getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L).currentDateAsTimeSpanString()
+        adapter.headerLayout?.text_last_update?.text = presenter.prefsUtil
+                .getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L)
+                .currentDateAsTimeSpanString(activity!!)
 
         swipe_container.isRefreshing = false
 
@@ -172,7 +174,8 @@ class DexFragment : BaseFragment(), DexView {
 
     private fun getHeaderView(): View? {
         val view = inflate(R.layout.header_dex_layout)
-        view.text_last_update.text = presenter.prefsUtil.getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L).currentDateAsTimeSpanString()
+        view.text_last_update.text = presenter.prefsUtil.getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L)
+                .currentDateAsTimeSpanString(activity!!)
         return view
     }
 

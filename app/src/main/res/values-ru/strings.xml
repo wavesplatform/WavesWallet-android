@@ -180,6 +180,7 @@
     <string name="common_no_internet_bottom_msg">Нет подключения к Интернету</string>
     <string name="common_or">или</string>
     <string name="common_persist">и</string>
+    <string name="common_server_error">Что-то пошло не так</string>
     <string name="confirm_backup">Подтвердить</string>
     <string name="confirm_backup_confirm">Подтвердить</string>
     <string name="confirm_backup_error">Неверный порядок, повторите попытку</string>
@@ -311,7 +312,7 @@
     <string name="history_type_cancel_script">Отменить скрипт транзакцию</string>
     <string name="history_type_cancel_sponsorship">Отменить спонсорскую транзакцию</string>
     <string name="history_type_canceled_leasing">Отменен лизинг</string>
-    <string name="history_type_create_alias">Создать алиас</string>
+    <string name="history_type_create_alias">Создание алиаса</string>
     <string name="history_type_data">Дата транзакция</string>
     <string name="history_type_exchange">%s %s</string>
     <string name="history_type_incoming_leasing">Входящий лизинг</string>
@@ -363,7 +364,7 @@
     <string name="my_orders_price">Цена</string>
     <string name="my_orders_side_price">Side/Price</string>
     <string name="my_orders_status">Статус</string>
-    <string name="my_orders_status_canceled">Cancelled</string>
+    <string name="my_orders_status_canceled">Отменен</string>
     <string name="my_orders_status_filled">Заполнен</string>
     <string name="my_orders_status_open">Открыт</string>
     <string name="my_orders_status_partial_filled">Частично</string>

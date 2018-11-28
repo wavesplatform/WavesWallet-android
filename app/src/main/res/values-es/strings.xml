@@ -180,6 +180,7 @@
     <string name="common_no_internet_bottom_msg">No hay conexión a internet</string>
     <string name="common_or">o</string>
     <string name="common_persist"><![CDATA[&#x26;]]></string>
+    <string name="common_server_error">Algo salió mal</string>
     <string name="confirm_backup">Confirmar el respaldo </string>
     <string name="confirm_backup_confirm">Confirmar</string>
     <string name="confirm_backup_error">Orden equivocada, inténtalo de nuevo</string>

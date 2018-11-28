@@ -180,6 +180,7 @@
     <string name="common_no_internet_bottom_msg">Keine Verbindung zum Internet</string>
     <string name="common_or">oder</string>
     <string name="common_persist"><![CDATA[&#x26;]]></string>
+    <string name="common_server_error">Etwas ist schief gelaufen</string>
     <string name="confirm_backup">Bestätigen Sie die Sicherung</string>
     <string name="confirm_backup_confirm">Bestätigen</string>
     <string name="confirm_backup_error">Falsche Order, nochmal versuchen</string>

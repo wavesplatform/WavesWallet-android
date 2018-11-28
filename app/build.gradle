@@ -252,7 +252,7 @@ dependencies {
     implementation 'com.arello-mobile:moxy-app-compat:1.5.3'
     kapt 'com.arello-mobile:moxy-compiler:1.5.3'
 
-    implementation "com.github.vicpinm:krealmextensions:2.2.0"
+    implementation "com.github.vicpinm:krealmextensions:2.3.0"
     implementation "com.yuyakaido.android:card-stack-view:1.0.0-beta8"
     implementation 'com.yarolegovich:sliding-root-nav:1.1.0'
     implementation 'io.github.anderscheow:validator:1.1.5'

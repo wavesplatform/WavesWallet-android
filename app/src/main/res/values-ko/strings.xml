@@ -180,6 +180,7 @@
     <string name="common_no_internet_bottom_msg">인터넷에 연결되어 있지 않습니다</string>
     <string name="common_or">또는</string>
     <string name="common_persist">그리고</string>
+    <string name="common_server_error">문제가 발생했습니다</string>
     <string name="confirm_backup">백업 승인</string>
     <string name="confirm_backup_confirm">승인</string>
     <string name="confirm_backup_error">잘못된 순서입니다. 다시 시도하세요</string>

@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.chart
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.view.MotionEvent
 import android.widget.Button
@@ -77,7 +76,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             presenter.selectedTimeFrame = position
             presenter.newSelectedTimeFrame = position
 
-            text_change_time.text = it.timeUI
+            text_change_time.text = getString(it.timeUI)
             presenter.currentTimeFrame = it.timeServer
         }
 
@@ -95,7 +94,8 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     private fun showTimeFrameDialog() {
         val alt_bld = AlertDialog.Builder(baseActivity)
         alt_bld.setTitle(getString(R.string.chart_change_interval_dialog_title))
-        alt_bld.setSingleChoiceItems(presenter.timeFrameList.map { it.timeUI }.toTypedArray(), presenter.selectedTimeFrame) { dialog, item ->
+        alt_bld.setSingleChoiceItems(presenter.timeFrameList.map { getString(it.timeUI) }.toTypedArray(),
+                presenter.selectedTimeFrame) { dialog, item ->
             if (presenter.selectedTimeFrame == item) {
                 buttonPositive?.setTextColor(findColor(R.color.basic300))
                 buttonPositive?.isClickable = false
@@ -109,7 +109,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             dialog.dismiss()
             presenter.selectedTimeFrame = presenter.newSelectedTimeFrame
 
-            text_change_time.text = presenter.timeFrameList[presenter.selectedTimeFrame].timeUI
+            text_change_time.text = getString(presenter.timeFrameList[presenter.selectedTimeFrame].timeUI)
             presenter.currentTimeFrame = presenter.timeFrameList[presenter.selectedTimeFrame].timeServer
 
             linear_charts.gone()

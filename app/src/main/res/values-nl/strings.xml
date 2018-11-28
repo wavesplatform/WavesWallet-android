@@ -180,6 +180,7 @@
     <string name="common_no_internet_bottom_msg">Geen verbinding met het internet</string>
     <string name="common_or">of</string>
     <string name="common_persist"><![CDATA[&#x26;]]></string>
+    <string name="common_server_error">Er is iets fout gegaan</string>
     <string name="confirm_backup">Bevestig backup</string>
     <string name="confirm_backup_confirm">Bevestig</string>
     <string name="confirm_backup_error">Verkeerde volgorde, probeer opnieuw</string>

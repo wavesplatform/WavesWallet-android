@@ -217,7 +217,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                             putExtra(SendActivity.KEY_INTENT_TRANSACTION_ASSET_BALANCE, assetBalance)
                             putExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT,
                                     MoneyUtil.getScaledText(transaction.amount, transaction.asset)
-                                            .replace(",", ""))
+                                            .clearBalance())
                             putExtra(SendActivity.KEY_INTENT_TRANSACTION_RECIPIENT,
                                     transaction.recipientAddress)
                             if (showCommentBlock) {
