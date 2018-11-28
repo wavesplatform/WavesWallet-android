@@ -111,6 +111,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
                     viewState.onShowCandlesSuccess(entries, barEntries, firstRequest)
                 }, {
                     it.printStackTrace()
+                    viewState.afterFailedLoadCandles(firstRequest)
                 }))
     }
 
