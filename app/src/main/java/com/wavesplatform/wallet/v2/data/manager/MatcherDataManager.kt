@@ -96,6 +96,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                     .map {
                         val globalAssets = it.generalAssetIds.toMutableList()
                         globalAssets.add(Constants.MRTGeneralAsset)
+                        globalAssets.add(Constants.WCTGeneralAsset)
                         return@map globalAssets.associateBy { it.assetId }
                     },
                     matcherService.getAllMarkets()
