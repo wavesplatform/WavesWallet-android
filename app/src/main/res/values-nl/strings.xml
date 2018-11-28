@@ -379,7 +379,7 @@
     <string name="network_spam_filter">Spamfilter</string>
     <string name="network_spam_url_validation_bad_url">Verkeerde URL</string>
     <string name="network_spam_url_validation_url_empty">URL is vereist</string>
-    <string name="network_switch_off_spam_filtering">Spamfilters</string>
+    <string name="network_switch_off_spam_filtering">Show SPAM</string>
     <string name="network_toolbar_title">Netwerk</string>
     <string name="new_account_account_name_hint">Accountnaam</string>
     <string name="new_account_account_name_validation_already_exist_error">Accountnaam al in gebruik</string>

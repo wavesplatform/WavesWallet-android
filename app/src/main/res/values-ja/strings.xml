@@ -379,7 +379,7 @@
     <string name="network_spam_filter">スパムフィルタ</string>
     <string name="network_spam_url_validation_bad_url">無効なURLです</string>
     <string name="network_spam_url_validation_url_empty">URLが必須です</string>
-    <string name="network_switch_off_spam_filtering">スパムフィルタを無効にする</string>
+    <string name="network_switch_off_spam_filtering">Show SPAM</string>
     <string name="network_toolbar_title">ネットワーク</string>
     <string name="new_account_account_name_hint">アカウント名</string>
     <string name="new_account_account_name_validation_already_exist_error">このアカウント名は既に使用されています</string>

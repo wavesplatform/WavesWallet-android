@@ -379,7 +379,7 @@
     <string name="network_spam_filter">스팸 필터</string>
     <string name="network_spam_url_validation_bad_url">URL이 존재하지 않습니다</string>
     <string name="network_spam_url_validation_url_empty">URL이 필요합니다</string>
-    <string name="network_switch_off_spam_filtering">스팸 필터링</string>
+    <string name="network_switch_off_spam_filtering">Show SPAM</string>
     <string name="network_toolbar_title">네트워크</string>
     <string name="new_account_account_name_hint">계정 이름</string>
     <string name="new_account_account_name_validation_already_exist_error">이미 존재하는 계정 이름입니다</string>
