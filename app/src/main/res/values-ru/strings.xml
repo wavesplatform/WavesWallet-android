@@ -312,7 +312,7 @@
     <string name="history_type_cancel_script">Отменить скрипт транзакцию</string>
     <string name="history_type_cancel_sponsorship">Отменить спонсорскую транзакцию</string>
     <string name="history_type_canceled_leasing">Отменен лизинг</string>
-    <string name="history_type_create_alias">Создать алиас</string>
+    <string name="history_type_create_alias">Создание алиаса</string>
     <string name="history_type_data">Дата транзакция</string>
     <string name="history_type_exchange">%s %s</string>
     <string name="history_type_incoming_leasing">Входящий лизинг</string>
