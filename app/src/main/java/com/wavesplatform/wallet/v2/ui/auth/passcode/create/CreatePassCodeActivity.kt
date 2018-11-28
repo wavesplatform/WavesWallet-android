@@ -106,6 +106,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                         }
 
                         override fun onCancelButtonClicked(dialog: Dialog, button: AppCompatTextView) {
+                            App.getAccessManager().setUseFingerPrint(false)
                             launchActivity<MainActivity>(clear = true)
                         }
                     })
