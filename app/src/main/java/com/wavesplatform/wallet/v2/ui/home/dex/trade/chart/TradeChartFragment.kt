@@ -511,4 +511,10 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             presenter.pause()
         }
     }
+
+    override fun onDestroyView() {
+        bar_chart.onDestroy()
+        candle_chart.onDestroy()
+        super.onDestroyView()
+    }
 }
