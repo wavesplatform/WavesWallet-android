@@ -230,7 +230,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="8dp"
-                            android:text="You can not perform transactions with this asset"
+                            android:text="@string/asset_details_error_perfom_transaction"
                             android:textColor="@color/disabled500"
                             android:textSize="12sp" />
 

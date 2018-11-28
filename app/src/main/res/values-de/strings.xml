@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">Verfügbares Guthaben</string>
     <string name="asset_details_coming_soon">Demnächst</string>
     <string name="asset_details_cryptocurrency">Kryptowährung</string>
+    <string name="asset_details_error_perfom_transaction">Sie können keine Transaktionen mit diesem Asset durchführen</string>
     <string name="asset_details_decimal">Dezimalpunkte</string>
     <string name="asset_details_description">Beschreibung</string>
     <string name="asset_details_flat_money">Fiat Geld</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">Deine Adresse</string>
     <string name="your_address_your_qr_code">Ihr QR-Code</string>
     <string name="your_asset_activity_all">Alles</string>
-    <string name="your_asset_activity_greater_zero">Nicht leer</string>
+    <string name="your_asset_activity_greater_zero">Mit Guthaben</string>
     <string name="your_assets_empty_state">Sie haben keine Guthaben</string>
     <string name="your_assets_toolbar_title">Ihr Guthaben</string>
 </resources>

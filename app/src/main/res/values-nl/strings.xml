@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">Beschikbaar saldo</string>
     <string name="asset_details_coming_soon">Komt binnenkort</string>
     <string name="asset_details_cryptocurrency">Cryptovaluta</string>
+    <string name="asset_details_error_perfom_transaction">U kunt geen transacties met deze asset doen</string>
     <string name="asset_details_decimal">Decimaalpunten</string>
     <string name="asset_details_description">Beschrijving</string>
     <string name="asset_details_flat_money">Fiat geld</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">Uw Adres</string>
     <string name="your_address_your_qr_code">Uw QR-Code</string>
     <string name="your_asset_activity_all">Alles</string>
-    <string name="your_asset_activity_greater_zero">Niet leeg</string>
+    <string name="your_asset_activity_greater_zero">Met saldo</string>
     <string name="your_assets_empty_state">Niets hier… \nU heeft geen assets met funds</string>
     <string name="your_assets_toolbar_title">Uw assets</string>
 </resources>

@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">利用可能残高</string>
     <string name="asset_details_coming_soon">準備中</string>
     <string name="asset_details_cryptocurrency">暗号通貨</string>
+    <string name="asset_details_error_perfom_transaction">あなたはこの資産でトランザクションを実行することができません</string>
     <string name="asset_details_decimal">小数点</string>
     <string name="asset_details_description">説明</string>
     <string name="asset_details_flat_money">法定通貨</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">あなたのアドレス</string>
     <string name="your_address_your_qr_code">あなたのQRコード</string>
     <string name="your_asset_activity_all">すべて</string>
-    <string name="your_asset_activity_greater_zero">空ではありません</string>
+    <string name="your_asset_activity_greater_zero">残高と</string>
     <string name="your_assets_empty_state">何もありません… \n資金がありません</string>
     <string name="your_assets_toolbar_title">あなたの資産</string>
 </resources>

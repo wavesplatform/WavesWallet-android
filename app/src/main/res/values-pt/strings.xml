@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">Saldo disponível</string>
     <string name="asset_details_coming_soon">Em breve</string>
     <string name="asset_details_cryptocurrency">Criptomoeda</string>
+    <string name="asset_details_error_perfom_transaction">Você não pode realizar transações com este ativo</string>
     <string name="asset_details_decimal">Casas decimais</string>
     <string name="asset_details_description">Descrição</string>
     <string name="asset_details_flat_money">Moeda Fiduciária (FIAT)</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">O teu endereço</string>
     <string name="your_address_your_qr_code">O teu código QR</string>
     <string name="your_asset_activity_all">Tudo</string>
-    <string name="your_asset_activity_greater_zero">Contém informação</string>
+    <string name="your_asset_activity_greater_zero">Com equilíbrio</string>
     <string name="your_assets_empty_state">Não há nada aqui… \nNão tens ativos valorizados</string>
     <string name="your_assets_toolbar_title">Os teus Ativos</string>
 </resources>

@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">उपलब्ध शेष राशि</string>
     <string name="asset_details_coming_soon">जल्द आ रहा है</string>
     <string name="asset_details_cryptocurrency">क्रिप्टोकरेन्सी</string>
+    <string name="asset_details_error_perfom_transaction">आप इस संपत्ति के साथ लेनदेन नहीं कर सकते हैं</string>
     <string name="asset_details_decimal">डेसीमल पॉइंट्स</string>
     <string name="asset_details_description">विवरण</string>
     <string name="asset_details_flat_money">फिएट पैसे</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">आपका पता</string>
     <string name="your_address_your_qr_code">आपका क्यूआर कोड</string>
     <string name="your_asset_activity_all">सब</string>
-    <string name="your_asset_activity_greater_zero">खाली नहीं</string>
+    <string name="your_asset_activity_greater_zero">बैलेंस के साथ</string>
     <string name="your_assets_empty_state">यहां कुछ नहीं… \nआपके पास धन के साथ संपत्ति नहीं है</string>
     <string name="your_assets_toolbar_title">आपकी संपत्ति</string>
 </resources>

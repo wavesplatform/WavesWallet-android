@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">Saldo disponible</string>
     <string name="asset_details_coming_soon">Próximamente</string>
     <string name="asset_details_cryptocurrency">Criptomoneda</string>
+    <string name="asset_details_error_perfom_transaction">No puede realizar transacciones con este activo</string>
     <string name="asset_details_decimal">Decimales</string>
     <string name="asset_details_description">Descripción</string>
     <string name="asset_details_flat_money">Dinero Fiat</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">Su dirección</string>
     <string name="your_address_your_qr_code">Su código QR</string>
     <string name="your_asset_activity_all">Todos</string>
-    <string name="your_asset_activity_greater_zero">No vacio</string>
+    <string name="your_asset_activity_greater_zero">Con balance</string>
     <string name="your_assets_empty_state">Nada por aquí… \nNo tienes activos con fondos</string>
     <string name="your_assets_toolbar_title">Sus activos</string>
 </resources>

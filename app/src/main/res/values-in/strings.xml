@@ -39,6 +39,7 @@
     <string name="asset_details_available_balance">Saldo Tersedia</string>
     <string name="asset_details_coming_soon">Segera akan datang</string>
     <string name="asset_details_cryptocurrency">Cryptocurrency</string>
+    <string name="asset_details_error_perfom_transaction">Anda tidak dapat melakukan transaksi dengan aset ini</string>
     <string name="asset_details_decimal">Poin desimal</string>
     <string name="asset_details_description">Deskripsi</string>
     <string name="asset_details_flat_money">Uang Fiat</string>
@@ -628,7 +629,7 @@
     <string name="your_address_toolbar_title">Alamat Anda</string>
     <string name="your_address_your_qr_code">Kode QR Anda</string>
     <string name="your_asset_activity_all">Semua</string>
-    <string name="your_asset_activity_greater_zero">Tidak kosong</string>
+    <string name="your_asset_activity_greater_zero">Dengan Saldo</string>
     <string name="your_assets_empty_state">Tidak Ada di Sini… \nAnda tidak memiliki aset dengan dana</string>
     <string name="your_assets_toolbar_title">Aset Anda</string>
 </resources>
