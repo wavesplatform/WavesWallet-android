@@ -320,6 +320,9 @@
 -keep @io.realm.internal.Keep class *
 -dontwarn io.realm.**
 
+# com.github.vicpinm:krealmextensions
+-keep class com.vicpin.krealmextensions.**
+
 
 # Gson specific classes
 -keep class sun.misc.Unsafe { *; }
@@ -363,6 +366,10 @@
 -dontwarn java.lang.ClassValue
 -dontwarn com.google.j2objc.annotations.Weak
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
+# AppsFlyer
+-dontwarn com.android.installreferrer
+-keep class com.appsflyer.** { *; }
 
 -dontwarn com.samsung.android.sdk.**
 -dontwarn afu.org.checkerframework.checker.**

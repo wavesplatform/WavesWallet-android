@@ -7,13 +7,13 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.history_details_layout.view.*
-import pers.victor.ext.app
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
@@ -21,11 +21,15 @@ import javax.inject.Inject
 
 class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
 
+    @Inject
+    lateinit var prefsUtil: PrefsUtil
+
     var mData: List<Transaction> = arrayListOf()
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
         val transaction = mData[position]
-        val layout = inflate(R.layout.history_details_layout, collection, false) as ViewGroup
+        val layout = inflate(R.layout.history_details_layout, collection,
+                false) as ViewGroup
 
         var showTag = Constants.defaultAssets.any {
             it.assetId == transaction.assetId || transaction.assetId.isNullOrEmpty()
@@ -37,15 +41,18 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
         when (transaction.transactionType()) {
             TransactionType.SENT_TYPE -> {
                 transaction.amount.notNull {
-                    layout.text_amount_or_title.text = "-${MoneyUtil.getScaledText(it, transaction.asset).stripZeros()}"
+                    layout.text_amount_or_title.text =
+                            "-${MoneyUtil.getScaledText(it, transaction.asset).stripZeros()}"
                 }
             }
             TransactionType.RECEIVED_TYPE -> {
                 transaction.amount.notNull {
-                    layout.text_amount_or_title.text = "+${MoneyUtil.getScaledText(it, transaction.asset).stripZeros()}"
+                    layout.text_amount_or_title.text =
+                            "+${MoneyUtil.getScaledText(it, transaction.asset).stripZeros()}"
                 }
             }
-            TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE, TransactionType.MASS_RECEIVE_TYPE -> {
+            TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE,
+            TransactionType.MASS_RECEIVE_TYPE -> {
                 if (transaction.transfers.isNotEmpty()) {
                     val sum = transaction.transfers.sumByLong { it.amount }
                     if (transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE ||
@@ -66,11 +73,13 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 setExchangeItem(transaction, layout)
             }
             TransactionType.DATA_TYPE -> {
-                layout.text_amount_or_title.text = app.getString(R.string.history_data_type_title)
+                layout.text_amount_or_title.text = layout.context.getString(
+                        R.string.history_data_type_title)
             }
             TransactionType.CANCELED_LEASING_TYPE -> {
                 transaction.lease?.amount.notNull {
-                    layout.text_amount_or_title.text = MoneyUtil.getScaledText(it.toLong(), transaction.asset).stripZeros()
+                    layout.text_amount_or_title.text = MoneyUtil.getScaledText(
+                            it.toLong(), transaction.asset).stripZeros()
                 }
             }
             TransactionType.TOKEN_GENERATION_TYPE -> {
@@ -98,7 +107,8 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
             }
             else -> {
                 transaction.amount.notNull {
-                    layout.text_amount_or_title.text = MoneyUtil.getScaledText(it, transaction.asset).stripZeros()
+                    layout.text_amount_or_title.text =
+                            MoneyUtil.getScaledText(it, transaction.asset).stripZeros()
                 }
             }
         }
@@ -119,11 +129,17 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
         }
 
         if (queryFirst<SpamAsset> { equalTo("assetId", transaction.assetId) } != null) {
+            if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+                layout.text_tag_spam.gone()
+            } else {
+                layout.text_tag_spam.visiable()
+            }
             layout.text_tag.gone()
-            layout.text_tag_spam.visiable()
-            layout.text_amount_or_title.text =
-                    "${MoneyUtil.getScaledText(transaction.amount, transaction.asset).stripZeros()} " +
-                    "${transaction.asset?.name}"
+            val sumString = MoneyUtil.getScaledText(
+                    transaction.transfers.sumByLong { it.amount }, transaction.asset)
+                    .trim()
+                    .stripZeros()
+            layout.text_amount_or_title.text = "$sumString ${transaction.asset?.name}"
         }
 
 

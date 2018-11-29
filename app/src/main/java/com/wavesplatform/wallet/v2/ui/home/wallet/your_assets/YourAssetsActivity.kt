@@ -3,9 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.your_assets
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,7 +12,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
-import com.mindorks.editdrawabletext.EditDrawableText
 import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -114,7 +111,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         }
     }
 
-    override fun showAssets(assets: ArrayList<AssetBalance>) {
+    override fun showAssets(assets: MutableList<AssetBalance>) {
         progress_bar.hide()
 
         if (assets.isEmpty()) {

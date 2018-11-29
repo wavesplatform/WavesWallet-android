@@ -19,9 +19,9 @@ class CustomBarChart : BarChart {
     override fun onTouchEvent(ev: MotionEvent): Boolean {
         val action = ev.action
         when (action) {
-            MotionEvent.ACTION_DOWN -> view!!.requestDisallowInterceptTouchEvent(true)
+            MotionEvent.ACTION_DOWN -> view?.requestDisallowInterceptTouchEvent(true)
 
-            MotionEvent.ACTION_UP -> view!!.requestDisallowInterceptTouchEvent(false)
+            MotionEvent.ACTION_UP -> view?.requestDisallowInterceptTouchEvent(false)
         }
 
         super.onTouchEvent(ev)
@@ -30,5 +30,9 @@ class CustomBarChart : BarChart {
 
     fun setView(view: ViewPager) {
         this.view = view
+    }
+
+    fun onDestroy() {
+        this.view = null
     }
 }

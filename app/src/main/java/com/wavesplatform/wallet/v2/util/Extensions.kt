@@ -74,7 +74,7 @@ fun Context.isNetworkConnection(): Boolean {
     return activeNetwork != null && activeNetwork.isConnectedOrConnecting
 }
 
-fun Context.isMyServiceRunning(serviceClass: Class<*>): Boolean {
+fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
     for (service in activityManager.getRunningServices(Integer.MAX_VALUE)) {
         if (serviceClass.name == service.service.className) {
             return true
@@ -83,24 +83,30 @@ fun Context.isMyServiceRunning(serviceClass: Class<*>): Boolean {
     return false
 }
 
-fun Long.currentDateAsTimeSpanString(): String {
+fun Long.currentDateAsTimeSpanString(context: Context): String {
     val currentTime = this
 
     if (currentTime == 0L) {
-        return app.getString(R.string.dex_last_update_value, app.getString(R.string.dex_last_update_not_known))
+        return context.getString(R.string.dex_last_update_value,
+                context.getString(R.string.dex_last_update_not_known))
     }
 
     // get current date as string
-    val timeDayRelative = DateUtils.getRelativeTimeSpanString(currentTime, currentTime, DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_ABBREV_RELATIVE)
+    val timeDayRelative = DateUtils.getRelativeTimeSpanString(
+            currentTime, currentTime, DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_ABBREV_RELATIVE)
 
     // get hour in 24 hour time
     val timeHour = currentTime.asDateString("HH:mm")
 
-    return app.getString(R.string.dex_last_update_value, "$timeDayRelative, $timeHour")
+    return context.getString(R.string.dex_last_update_value, "$timeDayRelative, $timeHour")
 }
 
 fun String.isWaves(): Boolean {
     return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
+}
+
+fun String.isWavesId(): Boolean {
+    return this.toLowerCase() == Constants.wavesAssetInfo.id
 }
 
 fun getActionBarHeight(): Int {
@@ -184,19 +190,8 @@ fun Transaction.transactionType(): TransactionType {
     return TransactionType.getTypeById(this.transactionTypeId)
 }
 
-fun Long.toKKType(): String {
-    if (this / 1000000000 >= 1) return String.format(app.getString(R.string.common_kkk_quantity), this / 1000000000)
-    if (this / 1000000 >= 1) return String.format(app.getString(R.string.common_kk_quantity), this / 1000000)
-    if (this / 1000 > 0) return String.format(app.getString(R.string.common_k_quantity), this / 1000)
-    return this.toString()
-}
-
 fun TransactionType.icon(): Drawable? {
     return ContextCompat.getDrawable(app, this.image)
-}
-
-fun TransactionType.title(): String {
-    return app.getString(this.title)
 }
 
 fun AlertDialog.makeStyled() {

@@ -36,6 +36,7 @@ class LeasingPresenter @Inject constructor() : BasePresenter<LeasingView>() {
                         viewState.showActiveLeasingTransaction(it.second)
                     },{
                         it.printStackTrace()
+                        viewState.afterFailedLoadLeasing()
                     }))
         }
     }

@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.chart
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.view.MotionEvent
 import android.widget.Button
@@ -31,6 +30,7 @@ import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_trade.*
 import kotlinx.android.synthetic.main.fragment_trade_chart.*
+import kotlinx.android.synthetic.main.global_server_error_layout.*
 import kotlinx.android.synthetic.main.layout_empty_data.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
@@ -77,7 +77,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             presenter.selectedTimeFrame = position
             presenter.newSelectedTimeFrame = position
 
-            text_change_time.text = it.timeUI
+            text_change_time.text = getString(it.timeUI)
             presenter.currentTimeFrame = it.timeServer
         }
 
@@ -85,6 +85,15 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
 
         text_change_time.click {
             showTimeFrameDialog()
+        }
+
+
+        button_retry.click {
+            error_layout.gone()
+            progress_bar.show()
+
+            presenter.loadCandles(Date().time, true)
+            presenter.getTradesByPair()
         }
 
         setUpChart()
@@ -95,7 +104,8 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     private fun showTimeFrameDialog() {
         val alt_bld = AlertDialog.Builder(baseActivity)
         alt_bld.setTitle(getString(R.string.chart_change_interval_dialog_title))
-        alt_bld.setSingleChoiceItems(presenter.timeFrameList.map { it.timeUI }.toTypedArray(), presenter.selectedTimeFrame) { dialog, item ->
+        alt_bld.setSingleChoiceItems(presenter.timeFrameList.map { getString(it.timeUI) }.toTypedArray(),
+                presenter.selectedTimeFrame) { dialog, item ->
             if (presenter.selectedTimeFrame == item) {
                 buttonPositive?.setTextColor(findColor(R.color.basic300))
                 buttonPositive?.isClickable = false
@@ -109,7 +119,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             dialog.dismiss()
             presenter.selectedTimeFrame = presenter.newSelectedTimeFrame
 
-            text_change_time.text = presenter.timeFrameList[presenter.selectedTimeFrame].timeUI
+            text_change_time.text = getString(presenter.timeFrameList[presenter.selectedTimeFrame].timeUI)
             presenter.currentTimeFrame = presenter.timeFrameList[presenter.selectedTimeFrame].timeServer
 
             linear_charts.gone()
@@ -488,5 +498,23 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         candleData.addDataSet(candleDataSet)
         candle_chart.data = candleData
         candle_chart.notifyDataSetChanged()
+    }
+
+    override fun afterFailedLoadCandles(firstRequest: Boolean) {
+        progress_bar.hide()
+        if (firstRequest) {
+            relative_timeframe.gone()
+            linear_charts.gone()
+
+            error_layout.visiable()
+
+            presenter.pause()
+        }
+    }
+
+    override fun onDestroyView() {
+        bar_chart.onDestroy()
+        candle_chart.onDestroy()
+        super.onDestroyView()
     }
 }

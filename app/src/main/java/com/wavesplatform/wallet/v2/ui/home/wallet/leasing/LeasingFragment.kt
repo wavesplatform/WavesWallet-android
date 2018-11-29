@@ -204,4 +204,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
         button_start_lease.isEnabled = networkConnected
     }
 
+    override fun afterFailedLoadLeasing() {
+        swipe_container.isRefreshing = false
+    }
 }

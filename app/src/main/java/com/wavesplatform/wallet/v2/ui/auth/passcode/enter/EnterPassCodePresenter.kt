@@ -11,11 +11,8 @@ import javax.inject.Inject
 @InjectViewState
 class EnterPassCodePresenter @Inject constructor() : BasePresenter<EnterPasscodeView>() {
 
-    val passCode: String = ""
-    lateinit var step: CreatePassCodeActivity.CreatePassCodeStep
-
     fun validate(guid: String, passCode: String) {
-        App.getAccessManager()
+        addSubscription(App.getAccessManager()
                 .validatePassCodeObservable(guid, passCode)
                 .subscribe({ password ->
                     App.getAccessManager().resetPassCodeInputFails(guid)
@@ -27,9 +24,8 @@ class EnterPassCodePresenter @Inject constructor() : BasePresenter<EnterPasscode
                         App.getAccessManager().incrementPassCodeInputFails(guid)
                     }
                     viewState.onFailValidatePassCode(overMaxWrongPassCodes(guid), error.message)
-                })
+                }))
     }
-
 
 
     companion object {

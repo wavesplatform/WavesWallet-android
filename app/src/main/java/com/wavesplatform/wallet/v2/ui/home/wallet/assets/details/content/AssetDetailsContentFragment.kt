@@ -13,7 +13,6 @@ import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
@@ -55,14 +54,18 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             enableView(send)
             enableView(receive)
             enableView(exchange)
-            enableView(relative_burn)
-            card_burn.isClickable = true
+            enableView(card_burn_container)
+            enableView(spam_card_burn_container)
+            card_burn_container.isClickable = true
+            spam_card_burn_container.isClickable = true
         } else {
             disableView(send)
             disableView(receive)
             disableView(exchange)
-            disableView(relative_burn)
-            card_burn.isClickable = false
+            disableView(card_burn_container)
+            disableView(spam_card_burn_container)
+            card_burn_container.isClickable = false
+            spam_card_burn_container.isClickable = false
         }
     }
 

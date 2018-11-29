@@ -11,6 +11,7 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
@@ -27,6 +28,9 @@ import javax.inject.Inject
 
 class HistoryTabItemAdapter @Inject constructor() :
         BaseMultiItemQuickAdapter<HistoryItem, BaseViewHolder>(null) {
+
+    @Inject
+    lateinit var prefsUtil: PrefsUtil
 
     init {
         addItemType(HistoryItem.TYPE_HEADER, R.layout.asset_header)
@@ -83,23 +87,29 @@ class HistoryTabItemAdapter @Inject constructor() :
                             } else {
                                 item.data.asset?.name
                             }
-                            view.text_transaction_name.text = String.format(it.title(), name).trim()
+                            view.text_transaction_name.text = String.format(
+                                    mContext.getString(it.title), name).trim()
                         } catch (e: MissingFormatArgumentException) {
-                            view.text_transaction_name.text = it.title().trim()
+                            view.text_transaction_name.text = mContext.getString(it.title)
                         }
 
                         when (it) {
                             TransactionType.SENT_TYPE -> {
                                 item.data.amount.notNull {
-                                    view.text_transaction_value.text = "-${MoneyUtil.getScaledText(it, item.data.asset).stripZeros()}"
+                                    view.text_transaction_value.text =
+                                            "-${MoneyUtil.getScaledText(it, item.data.asset)
+                                                    .stripZeros()}"
                                 }
                             }
                             TransactionType.RECEIVED_TYPE -> {
                                 item.data.amount.notNull {
-                                    view.text_transaction_value.text = "+${MoneyUtil.getScaledText(it, item.data.asset).stripZeros()}"
+                                    view.text_transaction_value.text =
+                                            "+${MoneyUtil.getScaledText(it, item.data.asset)
+                                                    .stripZeros()}"
                                 }
                             }
-                            TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE, TransactionType.MASS_RECEIVE_TYPE -> {
+                            TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE,
+                            TransactionType.MASS_RECEIVE_TYPE -> {
                                 setSpamTitle(item.data, it, view.text_transaction_value)
                             }
                             TransactionType.CREATE_ALIAS_TYPE -> {
@@ -115,7 +125,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.CANCELED_LEASING_TYPE -> {
                                 item.data.lease?.amount.notNull {
                                     view.text_transaction_value.text =
-                                            MoneyUtil.getScaledText(it.toLong(), item.data.asset).stripZeros()
+                                            MoneyUtil.getScaledText(it.toLong(), item.data.asset)
+                                                    .stripZeros()
                                 }
                             }
                             TransactionType.TOKEN_GENERATION_TYPE -> {
@@ -127,7 +138,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.TOKEN_BURN_TYPE -> {
                                 item.data.amount.notNull {
                                     view.text_transaction_value.text =
-                                            "-${MoneyUtil.getScaledText(it, item.data.asset).stripZeros()}"
+                                            "-${MoneyUtil.getScaledText(it, item.data.asset)
+                                                    .stripZeros()}"
                                 }
                             }
                             TransactionType.TOKEN_REISSUE_TYPE -> {
@@ -146,7 +158,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                             }
                             else -> {
                                 item.data.amount.notNull {
-                                    view.text_transaction_value.text = MoneyUtil.getScaledText(it, item.data.asset).stripZeros()
+                                    view.text_transaction_value.text = MoneyUtil
+                                            .getScaledText(it, item.data.asset).stripZeros()
                                 }
                             }
                         }
@@ -154,10 +167,17 @@ class HistoryTabItemAdapter @Inject constructor() :
 
                     if (spam) {
                         view.text_tag.gone()
-                        view.text_tag_spam.visiable()
-                        if (item.data.transactionType() != TransactionType.TOKEN_GENERATION_TYPE) {
-                            setSpamTitle(item.data, item.data.transactionType(), view.text_transaction_value)
+                        var sumString = MoneyUtil.getScaledText(
+                                item.data.transfers.sumByLong { it.amount }, item.data.asset)
+                                .trim()
+                                .stripZeros()
+                        if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+                            view.text_tag_spam.gone()
+                            sumString = sumString + " " + item.data.asset?.name
+                        } else {
+                            view.text_tag_spam.visiable()
                         }
+                        view.text_transaction_value.text = "$sumString"
                     } else {
                         if (item.data.transactionType() != TransactionType.CREATE_ALIAS_TYPE
                                 && item.data.transactionType() != TransactionType.DATA_TYPE
@@ -169,7 +189,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 view.text_tag.text = item.data.asset?.name
                             } else {
                                 view.text_tag.gone()
-                                view.text_transaction_value.text = "${view.text_transaction_value.text} ${item.data.asset?.name}"
+                                view.text_transaction_value.text =
+                                        "${view.text_transaction_value.text} ${item.data.asset?.name}"
                             }
                         }
                     }
@@ -233,11 +254,7 @@ class HistoryTabItemAdapter @Inject constructor() :
             val sum = transaction.transfers.sumByLong { it.amount }
             val sumString = MoneyUtil.getScaledText(sum, transaction.asset).trim().stripZeros()
             if (!sumString.isEmpty()) {
-                if (it == TransactionType.MASS_SPAM_RECEIVE_TYPE || it == TransactionType.MASS_RECEIVE_TYPE) {
-                    view.text = "+$sumString"
-                } else {
-                    view.text = "-$sumString"
-                }
+                view.text = "$sumString"
             } else {
                 view.text = ""
             }

@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
-import android.icu.util.UniversalTimeScale.toBigDecimal
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatTextView
@@ -23,7 +22,6 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActi
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_trade_order.*
-import kotlinx.android.synthetic.main.spinner_item.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import java.math.BigDecimal
@@ -130,11 +128,9 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 .map {
                     presenter.amountValidation = it.isNotEmpty()
                     if (it.isNotEmpty()) {
-                        horizontal_amount_suggestion.gone()
                         text_amount_error.text = ""
                         text_amount_error.invisiable()
                     } else {
-                        horizontal_amount_suggestion.visiable()
                         text_amount_error.text = getString(R.string.buy_and_sell_required)
                         text_amount_error.visiable()
                     }
@@ -345,7 +341,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         text_expiration_value.click {
             val alt_bld = AlertDialog.Builder(baseActivity)
             alt_bld.setTitle(getString(R.string.buy_and_sell_expiration_dialog_title))
-            alt_bld.setSingleChoiceItems(presenter.expirationList.map { it.timeUI }.toTypedArray(), presenter.selectedExpiration) { dialog, item ->
+            alt_bld.setSingleChoiceItems(presenter.expirationList.map { getString(it.timeUI) }
+                    .toTypedArray(), presenter.selectedExpiration) { dialog, item ->
                 if (presenter.selectedExpiration == item) {
                     buttonPositive?.setTextColor(findColor(R.color.basic300))
                     buttonPositive?.isClickable = false
@@ -358,7 +355,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             alt_bld.setPositiveButton(getString(R.string.buy_and_sell_expiration_dialog_positive_btn)) { dialog, which ->
                 dialog.dismiss()
                 presenter.selectedExpiration = presenter.newSelectedExpiration
-                text_expiration_value.text = presenter.expirationList[presenter.selectedExpiration].timeUI
+                text_expiration_value.text = getString(
+                        presenter.expirationList[presenter.selectedExpiration].timeUI)
             }
             alt_bld.setNegativeButton(getString(R.string.buy_and_sell_expiration_dialog_negative_btn)) { dialog, which -> dialog.dismiss() }
             val alert = alt_bld.create()

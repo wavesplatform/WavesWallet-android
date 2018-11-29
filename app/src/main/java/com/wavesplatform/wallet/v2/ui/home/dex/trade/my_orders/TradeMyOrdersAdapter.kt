@@ -18,13 +18,13 @@ class TradeMyOrdersAdapter @Inject constructor() : BaseQuickAdapter<OrderRespons
 
     override fun convert(helper: BaseViewHolder, item: OrderResponse) {
         helper
-                .setText(R.id.text_side, item.getType().typeUI)
+                .setText(R.id.text_side, mContext.getString(item.getType().typeUI))
                 .setText(R.id.text_price, MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals).stripZeros())
                 .setText(R.id.text_date, item.timestamp.asDateString("dd.MM.yy"))
                 .setText(R.id.text_time, item.timestamp.asDateString("HH:mm:ss"))
                 .setText(R.id.text_amount, MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros())
                 .setText(R.id.text_sum, MoneyUtil.getTextStripZeros(BigInteger.valueOf(item.amount).multiply(BigInteger.valueOf(item.price)).divide(BigInteger.valueOf(100000000)).toLong(), market.priceAssetDecimals).stripZeros())
-                .setText(R.id.text_status, item.getStatus().status)
+                .setText(R.id.text_status, mContext.getString(item.getStatus().status))
                 .setText(R.id.text_failed_value, MoneyUtil.getTextStripZeros(MoneyUtil.getTextStripZeros(item.filled, market.amountAssetDecimals)))
                 .setVisible(R.id.text_failed_value, Arrays.asList(OrderStatus.Filled, OrderStatus.Cancelled, OrderStatus.PartiallyFilled).contains(item.getStatus()))
                 .setTextColor(R.id.text_side, item.getType().color)

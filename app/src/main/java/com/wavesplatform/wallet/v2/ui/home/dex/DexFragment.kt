@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActiv
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.currentDateAsTimeSpanString
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.empty_dex_layout.view.*
 import kotlinx.android.synthetic.main.fragment_dex_new.*
 import kotlinx.android.synthetic.main.header_dex_layout.view.*
@@ -112,7 +113,7 @@ class DexFragment : BaseFragment(), DexView {
                 presenter.loadDexPairInfo(watchMarket, index)
             }
         } else {
-            swipe_container.isRefreshing = false
+            swipe_container.notNull { it.isRefreshing = false }
         }
     }
 
@@ -163,7 +164,9 @@ class DexFragment : BaseFragment(), DexView {
 
 
     override fun afterSuccessLoadPairInfo(watchMarket: WatchMarket, index: Int) {
-        adapter.headerLayout?.text_last_update?.text = presenter.prefsUtil.getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L).currentDateAsTimeSpanString()
+        adapter.headerLayout?.text_last_update?.text = presenter.prefsUtil
+                .getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L)
+                .currentDateAsTimeSpanString(activity!!)
 
         swipe_container.isRefreshing = false
 
@@ -172,7 +175,8 @@ class DexFragment : BaseFragment(), DexView {
 
     private fun getHeaderView(): View? {
         val view = inflate(R.layout.header_dex_layout)
-        view.text_last_update.text = presenter.prefsUtil.getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L).currentDateAsTimeSpanString()
+        view.text_last_update.text = presenter.prefsUtil.getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L)
+                .currentDateAsTimeSpanString(activity!!)
         return view
     }
 

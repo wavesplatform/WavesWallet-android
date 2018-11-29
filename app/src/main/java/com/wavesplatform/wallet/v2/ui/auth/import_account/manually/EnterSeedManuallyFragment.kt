@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_enter_seed_manually.*
 import org.apache.commons.io.Charsets
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
+import pers.victor.ext.isNetworkConnected
 import javax.inject.Inject
 
 
@@ -58,7 +59,8 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
-                                button_continue.isEnabled = true
+                                presenter.nextStepValidation = true
+                                makeButtonEnableIfValid()
                                 if (values.isNotEmpty() && values[0].length > 24) {
                                     val wallet = WavesWallet(values[0].trim().toByteArray(Charsets.UTF_8))
                                     activity?.let {
@@ -112,8 +114,13 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
         }
     }
 
+    private fun makeButtonEnableIfValid() {
+        button_continue.isEnabled = presenter.nextStepValidation && isNetworkConnected()
+    }
+
     fun setSkeleton() {
-        button_continue.isEnabled = false
+        presenter.nextStepValidation = false
+        makeButtonEnableIfValid()
         skeleton_address_asset.visibility = View.VISIBLE
         address_asset.visibility = View.GONE
         activity.notNull {
@@ -122,5 +129,10 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                     .apply(RequestOptions().circleCrop())
                     .into(image_asset)
         }
+    }
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        button_continue.isEnabled = presenter.nextStepValidation && networkConnected
     }
 }

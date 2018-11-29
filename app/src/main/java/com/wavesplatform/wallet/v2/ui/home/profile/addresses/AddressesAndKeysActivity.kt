@@ -93,4 +93,6 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
+
+    override fun needToShowNetworkMessage(): Boolean = true
 }

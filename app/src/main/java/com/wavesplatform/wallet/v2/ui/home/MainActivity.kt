@@ -18,6 +18,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
@@ -30,12 +31,14 @@ import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
+import com.wavesplatform.wallet.v2.util.Analytics
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeLinks
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
 import pers.victor.ext.*
+import pyxis.uzuki.live.richutilskt.utils.put
 import javax.inject.Inject
 
 
@@ -140,6 +143,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             prefsUtil.setValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, false)
             accountFirstOpenDialog?.cancel()
             showBackUpSeedWarning()
+            val values = Bundle()
+            values.put("wallets_count", prefsUtil.getGlobalValueList(
+                    EnvironmentManager.get().current().getName()
+                            + PrefsUtil.LIST_WALLET_GUIDS).size.toString())
+            Analytics.sendEvent(firebaseAnalytics, "new_wallet", values)
         }
 
         return view

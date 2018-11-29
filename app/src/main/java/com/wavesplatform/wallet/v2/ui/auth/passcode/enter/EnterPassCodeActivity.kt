@@ -146,7 +146,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
             showProgressBar(true)
             presenter.validate(getGuid(), passCode)
         } else {
-            checkInternet()
+            pass_keypad.passCodesNotMatches()
         }
     }
 
@@ -180,7 +180,9 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
 
     private fun showFingerPrint() {
         fingerprintDialog.isCancelable = false
-        fingerprintDialog.show(supportFragmentManager, "fingerprintDialog")
+        if (!fingerprintDialog.isAdded) {
+            fingerprintDialog.show(supportFragmentManager, fingerprintDialog::class.java.simpleName)
+        }
     }
 
     override fun onBackPressed() {
@@ -213,8 +215,11 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         alertDialog.makeStyled()
     }
 
+    override fun needToShowNetworkMessage(): Boolean = true
+
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
-        checkInternet()
+        super.onNetworkConnectionChanged(networkConnected)
+        pass_keypad.setEnable(networkConnected)
     }
 
     private fun getDescriptionView(): View? {
