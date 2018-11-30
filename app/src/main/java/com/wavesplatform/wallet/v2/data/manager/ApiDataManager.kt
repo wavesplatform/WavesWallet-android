@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.data.manager
 
+import android.util.Log
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
@@ -9,6 +10,7 @@ import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
+import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import pers.victor.ext.currentTimeMillis
@@ -18,6 +20,10 @@ import javax.inject.Singleton
 
 @Singleton
 class ApiDataManager @Inject constructor() : BaseDataManager() {
+
+    companion object {
+        var DEFAULT_LAST_TRADES_LIMIT = 50
+    }
 
     fun loadAliases(): Observable<List<Alias>> {
         return apiService.aliases(getAddress())
@@ -80,4 +86,10 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
+    fun loadLastTradesByPair(watchMarket: WatchMarket?): Observable<ArrayList<LastTradesResponse.Data.ExchangeTransaction>> {
+        return apiService.loadLastTradesByPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, DEFAULT_LAST_TRADES_LIMIT)
+                .map {
+                    return@map it.data.mapTo(ArrayList()) { it.transaction }
+                }
+    }
 }

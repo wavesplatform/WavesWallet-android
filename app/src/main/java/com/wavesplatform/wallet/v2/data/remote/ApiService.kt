@@ -24,4 +24,8 @@ interface ApiService {
 
     @GET("pairs/{amountAsset}/{priceAsset}")
     fun loadDexPairInfo(@Path("amountAsset") amountAsset: String?, @Path("priceAsset") priceAsset: String?): Observable<PairResponse>
+
+    @GET("transactions/exchange")
+    fun loadLastTradesByPair(@Query("amountAsset") amountAsset: String?, @Query("priceAsset") priceAsset: String?,
+                             @Query("limit") limit: Int): Observable<LastTradesResponse>
 }
