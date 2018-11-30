@@ -10,8 +10,8 @@ import javax.inject.Inject
 
 @InjectViewState
 class EditAddressPresenter @Inject constructor() : BasePresenter<EditAddressView>() {
-    var nameFieldValid = false
-    var addressFieldValid = false
+    var nameFieldValid = true
+    var addressFieldValid = true
     var addressBookUser: AddressBookUser? = null
 
     fun isAllFieldsValid(): Boolean {
