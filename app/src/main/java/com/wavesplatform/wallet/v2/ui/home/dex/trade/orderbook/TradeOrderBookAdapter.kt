@@ -7,16 +7,11 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.util.stripZeros
-import kotlinx.android.synthetic.main.recycle_item_orderbook.view.*
 import pers.victor.ext.findColor
-import pers.victor.ext.setWidth
 import javax.inject.Inject
-import android.widget.RelativeLayout
-import com.wavesplatform.wallet.v2.util.clearBalance
 
 
 class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder>(null) {

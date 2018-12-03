@@ -5,12 +5,9 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.internal.bind.util.ISO8601Utils
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
-import pers.victor.ext.findColor
 import pyxis.uzuki.live.richutilskt.utils.asDateString
-import pyxis.uzuki.live.richutilskt.utils.parseDate
 import java.text.ParsePosition
 import javax.inject.Inject
 
