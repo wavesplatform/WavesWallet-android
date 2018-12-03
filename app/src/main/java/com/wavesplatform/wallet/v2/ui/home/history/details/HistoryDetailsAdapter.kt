@@ -90,7 +90,7 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
             TransactionType.TOKEN_BURN_TYPE -> {
                 transaction.amount.notNull {
                     val afterDot = MoneyUtil.getScaledText(it, transaction.asset)
-                            .substringAfter(".").toInt()
+                            .substringAfter(".").clearBalance().toInt()
                     val amount = if (afterDot == 0) {
                         MoneyUtil.getScaledText(it, transaction.asset).substringBefore(".")
                     } else {
