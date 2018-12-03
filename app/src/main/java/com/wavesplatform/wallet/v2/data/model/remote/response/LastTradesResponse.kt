@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.data.model.remote.response
 
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
 
 data class LastTradesResponse(
         @SerializedName("__type")
@@ -72,13 +73,34 @@ data class LastTradesResponse(
                     @SerializedName("timestamp")
                     var timestamp: String = ""
             ) {
+
                 data class AssetPair(
                         @SerializedName("amountAsset")
                         var amountAsset: String = "",
                         @SerializedName("priceAsset")
                         var priceAsset: String = ""
                 )
+
+                companion object {
+                    var API_BUY_TYPE = "buy"
+                    var API_SELL_TYPE = "sell"
+                }
+
+                fun getType(): OrderType {
+                    return when (orderType) {
+                        API_BUY_TYPE -> OrderType.BUY
+                        API_SELL_TYPE -> OrderType.SELL
+                        else -> OrderType.BUY
+                    }
+                }
+            }
+
+            fun getMyOrder(): ExchangeOrder {
+                return if (order1.timestamp > order2.timestamp) order1
+                else order2
             }
         }
+
+
     }
 }
