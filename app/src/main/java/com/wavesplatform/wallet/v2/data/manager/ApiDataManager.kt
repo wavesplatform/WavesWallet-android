@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
+import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
@@ -91,5 +92,13 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                 .map {
                     return@map it.data.mapTo(ArrayList()) { it.transaction }
                 }
+    }
+
+    fun getLastTradeByPair(watchMarket: WatchMarket?): Observable<ArrayList<LastTradesResponse.Data.ExchangeTransaction>> {
+        return apiService.loadLastTradesByPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, 1)
+                .map {
+                    return@map it.data.mapTo(ArrayList()) { it.transaction }
+                }
+                .onErrorResumeNext(Observable.just(arrayListOf()))
     }
 }
