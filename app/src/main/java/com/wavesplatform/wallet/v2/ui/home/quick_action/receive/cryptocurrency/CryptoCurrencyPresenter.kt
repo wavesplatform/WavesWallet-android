@@ -13,7 +13,7 @@ import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 @InjectViewState
-class СryptocurrencyPresenter @Inject constructor() : BasePresenter<СryptocurrencyView>() {
+class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurrencyView>() {
 
     @Inject
     lateinit var coinomatManager: CoinomatManager
