@@ -23,7 +23,7 @@ open class Lease(
         @SerializedName("timestamp") var timestamp: Long = 0,
         @SerializedName("signature") var signature: String = "",
         @SerializedName("version") var version: Int = 0,
-        @SerializedName("amount") var amount: Int = 0,
+        @SerializedName("amount") var amount: Long = 0,
         @SerializedName("recipient") var recipient: String = ""
 ) : RealmModel
 
