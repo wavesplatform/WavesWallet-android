@@ -423,7 +423,7 @@ class SendActivity : BaseActivity(), SendView {
 
         if (result.contains("https://client.wavesplatform.com/#send/".toRegex()) ||
                 result.contains("https://client.wavesplatform.com/%23send/".toRegex())) {
-            val uri = URI.create(result
+            val uri = URI.create(result.replace(" ", "")
                     .replace("/#send/", "/send/")
                     .replace("/%23send/", "/send/"))
             try {
