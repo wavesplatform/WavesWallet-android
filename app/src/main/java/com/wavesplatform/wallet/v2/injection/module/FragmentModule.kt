@@ -16,7 +16,7 @@ import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomS
 import com.wavesplatform.wallet.v2.ui.home.history.filter.HistoryFilterBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
-import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AliasBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.bank.BankFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card.CardFragment
@@ -103,7 +103,7 @@ abstract class FragmentModule {
 
     @PerFragment
     @ContributesAndroidInjector
-    internal abstract fun addressesAndKeysBottomSheetFragment(): AddressesAndKeysBottomSheetFragment
+    internal abstract fun aliasBottomSheetFragment(): AliasBottomSheetFragment
 
     @PerFragment
     @ContributesAndroidInjector
