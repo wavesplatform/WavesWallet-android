@@ -369,7 +369,7 @@
     <string name="network_spam_filter">Spam Filter</string>
     <string name="network_spam_url_validation_bad_url">Falsche URL</string>
     <string name="network_spam_url_validation_url_empty">URL ist erforderlich</string>
-    <string name="network_switch_off_spam_filtering">Spam-Filterung</string>
+    <string name="network_switch_show_spam">Show spam</string>
     <string name="network_toolbar_title">Netzwerk</string>
     <string name="new_account_account_name_hint">Accountbezeichnung</string>
     <string name="new_account_account_name_validation_already_exist_error">Accountname bereits verwendet</string>

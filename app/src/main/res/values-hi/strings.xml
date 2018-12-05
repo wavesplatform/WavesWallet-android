@@ -369,7 +369,7 @@
     <string name="network_spam_filter">स्पैम छांटना</string>
     <string name="network_spam_url_validation_bad_url">खराब यूआरएल</string>
     <string name="network_spam_url_validation_url_empty">यूआरएल आवश्यक है</string>
-    <string name="network_switch_off_spam_filtering">स्पैम फ़िल्टरिंग</string>
+    <string name="network_switch_show_spam">Show spam</string>
     <string name="network_toolbar_title">नेटवर्क</string>
     <string name="new_account_account_name_hint">खाते का नाम</string>
     <string name="new_account_account_name_validation_already_exist_error">खाता नाम पहले से ही उपयोग है</string>
