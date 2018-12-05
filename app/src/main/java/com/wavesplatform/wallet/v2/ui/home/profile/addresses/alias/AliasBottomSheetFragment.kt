@@ -6,30 +6,35 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import com.vicpin.krealmextensions.queryAllAsync
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
-import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showSuccess
-import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_empty_layout.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_layout.view.*
 import pers.victor.ext.app
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
-import pers.victor.ext.toast
-import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 
-class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
+class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
+
+    @Inject
+    lateinit var adapter: AliasesAdapter
+
+    @Inject
+    @InjectPresenter
+    lateinit var presenter: AliasPresenter
+
+    @ProvidePresenter
+    fun providePresenter(): AliasPresenter = presenter
 
     var type = TYPE_EMPTY
         set(value) {
@@ -40,20 +45,12 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
             }
         }
 
-    var rootView: View = View(app)
-
-    @Inject
-    lateinit var adapter: AliasesAdapter
+    lateinit var rootView: View
 
     companion object {
         var TYPE_EMPTY = 1
         var TYPE_CONTENT = 2
         var REQUEST_CREATE_ALIAS = 43
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -74,12 +71,6 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 rootView.recycle_aliases.isNestedScrollingEnabled = false
                 rootView.recycle_aliases.adapter = adapter
 
-                runAsync {
-                    queryAllAsync<Alias> {
-                        val ownAliases = it.filter { it.own }
-                        adapter.setNewData(ownAliases)
-                    }
-                }
 
                 rootView.relative_about_alias.click {
                     if (rootView.expandable_layout_hidden.isExpanded) {
@@ -100,6 +91,10 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
                 rootView.button_create_alias_content.click {
                     launchActivity<CreateAliasActivity>(REQUEST_CREATE_ALIAS) { }
                 }
+
+                presenter.loadAliases {
+                    adapter.setNewData(it)
+                }
             }
         }
 
@@ -112,8 +107,8 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
             when (type) {
                 TYPE_EMPTY -> {
                     dismiss()
-                    val bottomSheetFragment = AddressesAndKeysBottomSheetFragment()
-                    bottomSheetFragment.type = AddressesAndKeysBottomSheetFragment.TYPE_CONTENT
+                    val bottomSheetFragment = AliasBottomSheetFragment()
+                    bottomSheetFragment.type = AliasBottomSheetFragment.TYPE_CONTENT
                     bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
                     showSuccess(getString(R.string.new_alias_success_create), R.id.root)
                 }
@@ -129,5 +124,8 @@ class AddressesAndKeysBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         rootView.button_create_alias_content.isEnabled = networkConnected
+    }
+
+    override fun afterSuccessLoadAliases(ownAliases: List<Alias>) {
     }
 }

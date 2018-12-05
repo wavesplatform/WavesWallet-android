@@ -16,6 +16,6 @@ data class PairResponse(
             @SerializedName("firstPrice") var firstPrice: BigDecimal = BigDecimal(0),
             @SerializedName("lastPrice") var lastPrice: BigDecimal = BigDecimal(0),
             @SerializedName("volume") var volume: BigDecimal = BigDecimal(0),
-            @SerializedName("volumeWaves") var volumeWaves: BigDecimal = BigDecimal(0)
+            @SerializedName("volumeWaves") var volumeWaves: BigDecimal? = BigDecimal(0)
     ) : Parcelable
 }

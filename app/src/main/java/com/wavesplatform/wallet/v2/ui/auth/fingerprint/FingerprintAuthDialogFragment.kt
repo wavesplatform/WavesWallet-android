@@ -117,7 +117,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
 
                                     handler.postDelayed({
                                         fingerPrintDialogListener?.onSuccessRecognizedFingerprint()
-                                        dismiss()
+                                        dismissAllowingStateLoss()
                                     }, DELAY_TO_CHANGE_STATE)
                                 }
                             }
@@ -141,7 +141,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                                     handler.postDelayed({
                                         fingerPrintDialogListener?.onSuccessRecognizedFingerprint(
                                                 result.decrypted)
-                                        dismiss()
+                                        dismissAllowingStateLoss()
                                     }, DELAY_TO_CHANGE_STATE)
                                 }
                             }

@@ -632,4 +632,12 @@
     <string name="your_asset_activity_greater_zero">With balance</string>
     <string name="your_assets_empty_state">Nothing Here… \nYou do not have assets with funds</string>
     <string name="your_assets_toolbar_title">Your assets</string>
+
+    <string name="address_book_name_validation_min_length_error">Minimum 2 characters</string>
+    <string name="address_book_name_validation_max_length_error">20 characters maximum</string>
+    <string name="address_book_name_validation_required_error">Name is required</string>
+    <string name="address_book_name_validation_already_use_error">Already in use</string>
+
+    <string name="address_book_address_validation_required_error">Address is required</string>
+    <string name="address_book_address_validation_already_use_error">Already in use</string>
 </resources>

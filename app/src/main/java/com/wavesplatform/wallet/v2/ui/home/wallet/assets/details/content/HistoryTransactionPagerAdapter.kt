@@ -132,8 +132,8 @@ class HistoryTransactionPagerAdapter @Inject constructor(
                 TransactionType.TOKEN_BURN_TYPE -> {
                     item.data.amount.notNull {
                         val afterDot = MoneyUtil.getScaledText(it, item.data.asset)
-                                .substringAfter(".").toInt()
-                        val amount = if (afterDot == 0) MoneyUtil.getScaledText(it, item.data.asset)
+                                .substringAfter(".").clearBalance().toLong()
+                        val amount = if (afterDot == 0L) MoneyUtil.getScaledText(it, item.data.asset)
                                 .substringBefore(".")
                         else MoneyUtil.getScaledText(it, item.data.asset)
 

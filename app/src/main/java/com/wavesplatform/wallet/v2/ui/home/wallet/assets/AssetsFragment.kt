@@ -163,11 +163,11 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 .show()
 
         // make skeleton as designed
-        recycle_assets.post {
-            recycle_assets.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
-            recycle_assets.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
-            recycle_assets.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
-            recycle_assets.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
+        recycle_assets?.post {
+            recycle_assets?.layoutManager?.findViewByPosition(1)?.alpha = 0.7f
+            recycle_assets?.layoutManager?.findViewByPosition(2)?.alpha = 0.5f
+            recycle_assets?.layoutManager?.findViewByPosition(3)?.alpha = 0.4f
+            recycle_assets?.layoutManager?.findViewByPosition(4)?.alpha = 0.2f
         }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->

@@ -17,6 +17,10 @@ import com.vicpin.krealmextensions.queryAsFlowable
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.rules.AddressBookAddressRule
+import com.wavesplatform.wallet.v2.data.rules.AddressBookNameRule
+import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
+import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -25,6 +29,10 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActiv
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
+import io.github.anderscheow.validator.Validation
+import io.github.anderscheow.validator.Validator
+import io.github.anderscheow.validator.constant.Mode
+import io.github.anderscheow.validator.rules.common.MaxRule
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_edit_address.*
 import pers.victor.ext.addTextChangedListener
@@ -40,6 +48,8 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
     @InjectPresenter
     lateinit var presenter: EditAddressPresenter
 
+    lateinit var validator: Validator
+
     @ProvidePresenter
     fun providePresenter(): EditAddressPresenter = presenter
 
@@ -51,10 +61,16 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setupToolbar(toolbar_view,  true, getString(R.string.edit_address_toolbar_title), R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, getString(R.string.edit_address_toolbar_title), R.drawable.ic_toolbar_back_black)
+        validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
         presenter.addressBookUser = intent.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
 
+        val nameValidation = Validation(til_name)
+                .and(NotEmptyTrimRule(R.string.address_book_name_validation_required_error))
+                .and(MinTrimRule(2, R.string.address_book_name_validation_min_length_error))
+                .and(MaxRule(20, R.string.address_book_name_validation_max_length_error))
+                .and(AddressBookNameRule(R.string.address_book_name_validation_already_use_error))
 
         edit_address.setDrawableClickListener(object : onDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
@@ -74,23 +90,24 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
             }
         })
 
-        eventSubscriptions.add(RxTextView.textChanges(edit_name)
-                .skipInitialValue()
-                .map {
-                    return@map it.toString()
-                }
-                .debounce(350, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .flatMap {
-                    return@flatMap queryAsFlowable<AddressBookUser> { equalTo("name", it) }.toObservable()
-                }
-                .map {
-                    presenter.nameFieldValid = edit_name.text!!.isNotEmpty() && it.isEmpty()
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { name ->
-                    isFieldsValid()
-                })
+        fillFields()
+        configureWithType()
+
+        edit_name.addTextChangedListener {
+            on { s, start, before, count ->
+                validator.validate(object : Validator.OnValidateListener {
+                    override fun onValidateSuccess(values: List<String>) {
+                        presenter.nameFieldValid = true
+                        isFieldsValid()
+                    }
+
+                    override fun onValidateFailed() {
+                        presenter.nameFieldValid = false
+                        isFieldsValid()
+                    }
+                }, nameValidation)
+            }
+        }
 
         if (edit_address.text.isEmpty()) edit_address.tag = R.drawable.ic_qrcode_24_basic_500
         else edit_address.tag = R.drawable.ic_deladdress_24_error_400
@@ -103,19 +120,16 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
             val alertDialog = AlertDialog.Builder(this).create()
             alertDialog.setTitle(getString(R.string.edit_address_delete_alert_title))
             alertDialog.setMessage(getString(R.string.edit_address_delete_alert_description))
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.edit_address_delete_alert_delete),
-                    DialogInterface.OnClickListener { dialog, which ->
-                        presenter.deleteAddress()
-                        dialog.dismiss()
-                    })
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.edit_address_delete_alert_cancel),
-                    DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.edit_address_delete_alert_delete)) { dialog, which ->
+                presenter.deleteAddress()
+                dialog.dismiss()
+            }
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.edit_address_delete_alert_cancel)) { dialog, which ->
+                dialog.dismiss()
+            }
             alertDialog.show()
             alertDialog.makeStyled()
         }
-
-        configureWithType()
-        fillFields()
     }
 
     private fun configureWithType() {
@@ -130,13 +144,25 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
 
             edit_address.setText(intent.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM).address)
             presenter.addressFieldValid = edit_address.text.isNotEmpty()
-        }else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE){
+        } else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE) {
+            val addressValidation = Validation(til_address)
+                    .and(NotEmptyTrimRule(R.string.address_book_address_validation_required_error))
+                    .and(AddressBookAddressRule(R.string.address_book_address_validation_already_use_error))
 
             edit_address.addTextChangedListener {
                 on { s, start, before, count ->
-                    presenter.addressFieldValid = edit_address.text.isNotEmpty()
-                    isFieldsValid()
-                    if (presenter.addressFieldValid) {
+                    validator.validate(object : Validator.OnValidateListener {
+                        override fun onValidateSuccess(values: List<String>) {
+                            presenter.addressFieldValid = true
+                            isFieldsValid()
+                        }
+
+                        override fun onValidateFailed() {
+                            presenter.addressFieldValid = false
+                            isFieldsValid()
+                        }
+                    }, addressValidation)
+                    if (edit_address.text.isNotEmpty()) {
                         edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_deladdress_24_error_400, 0)
                         edit_address.tag = R.drawable.ic_deladdress_24_error_400
                     } else {

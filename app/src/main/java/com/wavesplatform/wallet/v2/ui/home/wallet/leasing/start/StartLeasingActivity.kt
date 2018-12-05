@@ -196,7 +196,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                         }
                         makeButtonEnableIfValid()
                         return@map Pair(isValid, it)
-                    }else{
+                    } else {
                         presenter.amountValidation = false
                         return@map Pair(false, it)
                     }
@@ -257,7 +257,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             when (quickBalanceView.tag) {
                 TOTAL_BALANCE -> {
                     quickBalanceView.click {
-                        edit_amount.setText((waves.getDisplayAvailableBalance().toBigDecimal() - MoneyUtil.getScaledText(Constants.WAVES_FEE, presenter.wavesAsset).toBigDecimal()).toString())
+                        edit_amount.setText(MoneyUtil.getScaledText(waves.getAvailableBalance()?.minus(Constants.WAVES_FEE), waves).clearBalance().toBigDecimal().toString())
                         edit_amount.setSelection(edit_amount.text.length)
                     }
                 }
