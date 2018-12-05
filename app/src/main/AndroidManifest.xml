@@ -226,6 +226,7 @@
             android:name=".v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity"
             android:screenOrientation="portrait"
             android:noHistory="true"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
             android:name=".v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity"

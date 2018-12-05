@@ -358,8 +358,8 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         return prefs.getGuidValue(guid, PrefsUtil.KEY_USE_FINGERPRINT, false)
     }
 
-    fun isUseFingerPrint(): Boolean {
-        return prefs.getValue(PrefsUtil.KEY_USE_FINGERPRINT, false)
+    fun isUseFingerPrint(guid: String): Boolean {
+        return prefs.getGuidValue(guid, PrefsUtil.KEY_USE_FINGERPRINT, false)
     }
 
     fun setEncryptedPassCode(guid: String, data: String) {

@@ -95,7 +95,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                 putExtra(CreatePassCodeActivity.KEY_INTENT_GUID, guid)
                 putExtra(CreatePassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
             }
-        } else if (App.getAccessManager().isUseFingerPrint()) {
+        } else if (App.getAccessManager().isUseFingerPrint(guid)) {
             val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
             fingerprintDialog.isCancelable = false
             fingerprintDialog.show(supportFragmentManager, "fingerprintDialog")
