@@ -136,10 +136,6 @@ open class Transaction(
     val conterParty: Optional<String>
         get() = Optional.absent()
 
-    val isOwn: Boolean
-        get() = ArrayUtils.isEquals(NodeManager.get().address, sender)
-
-
     fun isForAsset(assetId: String): Boolean {
         return false
     }

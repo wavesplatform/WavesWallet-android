@@ -6,16 +6,11 @@ import com.arellomobile.mvp.InjectViewState
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.vicpin.krealmextensions.queryAllAsync
-import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.id.card_aliases
-import com.wavesplatform.wallet.R.id.text_aliases_count
 import com.wavesplatform.wallet.v1.ui.zxing.Contents
 import com.wavesplatform.wallet.v1.ui.zxing.encode.QRCodeEncoder
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
-import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AddressesAndKeysBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

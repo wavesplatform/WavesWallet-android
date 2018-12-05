@@ -14,13 +14,13 @@ import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.vicpin.krealmextensions.delete
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.payload.Market
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
+import com.wavesplatform.wallet.v2.util.notNull
 import io.realm.kotlin.deleteFromRealm
 import kotlinx.android.synthetic.main.activity_active_markets_sorting.*
 import kotlinx.android.synthetic.main.dex_active_markets_sorting_item.view.*
@@ -69,12 +69,14 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
                 R.id.image_delete -> {
                     presenter.needToUpdate = true
 
-                    val item = this.adapter.getItem(position) as MarketResponse
-                    item.delete { equalTo("id", item.id) }
+                    val item = this.adapter.getItem(position)
+                    item.notNull { item ->
+                        item.delete { equalTo("id", item.id) }
 
-                    // remove from current list
-                    this.adapter.data.removeAt(position)
-                    this.adapter.notifyItemRemoved(position)
+                        // remove from current list
+                        this.adapter.data.removeAt(position)
+                        this.adapter.notifyItemRemoved(position)
+                    }
                 }
             }
         }

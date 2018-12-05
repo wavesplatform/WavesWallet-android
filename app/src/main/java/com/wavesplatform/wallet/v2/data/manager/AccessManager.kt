@@ -114,9 +114,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet!!.getEncryptedData(password))
             authHelper.configureDB(wallet?.address)
             MigrationUtil.checkOldAddressBook(prefs, loggedInGuid)
-            if (skipBackup) {
-                prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, true)
-            }
+            prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, true)
             return guid
         } catch (e: Exception) {
             Log.e(javaClass.simpleName, "storeWalletData: ", e)

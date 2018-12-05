@@ -100,12 +100,12 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                     presenter.needToUpdate = true
 
                     // manage UI
-
                     val item = this.adapterFavorites.getItem(position) as AssetBalance
                     if (!item.assetId.isNullOrEmpty()) {
                         item.isFavorite = false
 
                         // add to not favorite list
+                        item.configureVisibleState = presenter.visibilityConfigurationActive
                         this.adapter.addData(0, item)
 
                         // remove from favorite list
@@ -191,8 +191,10 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         when (item.itemId) {
             R.id.action_assets_visibility -> {
                 if (item.title == getString(R.string.wallet_sorting_toolbar_visibility_action)) {
+                    presenter.visibilityConfigurationActive = true
                     item.title = getString(R.string.wallet_sorting_toolbar_position_action)
                 } else {
+                    presenter.visibilityConfigurationActive = false
                     item.title = getString(R.string.wallet_sorting_toolbar_visibility_action)
                 }
                 adapter.data.forEach {
@@ -212,6 +214,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
     override fun onBackPressed() {
         presenter.saveSortedPositions(adapter.data)
+        presenter.saveSortedPositions(adapterFavorites.data)
 
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)

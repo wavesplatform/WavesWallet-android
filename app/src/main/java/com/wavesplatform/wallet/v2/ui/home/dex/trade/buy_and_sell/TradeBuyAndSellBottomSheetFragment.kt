@@ -87,7 +87,7 @@ class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), Trad
 
         rootView.appbar_layout.addOnOffsetChangedListener(
                 AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
-                    val offsetForShowShadow = appbar_layout.totalScrollRange - dp2px(9)
+                    val offsetForShowShadow = appbar_layout?.totalScrollRange?.minus(dp2px(9)) ?: 0
                     if (-verticalOffset > offsetForShowShadow) {
                         rootView.viewpager_buy_sell.setPagingEnabled(false)
                     } else {
