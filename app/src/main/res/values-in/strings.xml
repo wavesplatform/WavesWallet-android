@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common_50_percent">50%</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_10_percent">10%</string>
-    <string name="new_account_account_name_validation_min_length_error">Setidaknya 2 karakter</string>
+    <string name="address_book_address_validation_already_use_error">Telah digunakan</string>
+    <string name="address_book_address_validation_required_error">Alamat diperlukan</string>
+    <string name="address_book_name_validation_already_use_error">Telah digunakan</string>
+    <string name="address_book_name_validation_required_error">Nama wajib diisi</string>
+    <string name="address_book_name_validation_max_length_error">20 karakter maksimal</string>
+    <string name="address_book_name_validation_min_length_error">Setidaknya 2 karakter</string>
     <string name="about_fill_payment_details">Anda HARUS mengisi bidang detail pembayaran dengan informasi berikut:</string>
     <string name="about_fill_payment_info">CNM — alamat WAVES Anda. \nJika tidak, kami tidak dapat mengkredit akun Anda.</string>
     <string name="about_redirection_message">Setelah Anda melalui verifikasi, Anda akan menerima email dengan instruksi lebih lanjut</string>
@@ -18,12 +20,12 @@
     <string name="address_book_search">Pencarian</string>
     <string name="address_book_success_deleted">Alamat dihapus</string>
     <string name="address_book_toolbar_title">Buku alamat</string>
-    <string name="addresses">Aktiva</string>
+    <string name="addresses">Aset</string>
     <string name="addresses_and_keys_aliases">Alias</string>
     <string name="addresses_and_keys_private_key">Kunci pribadi</string>
     <string name="addresses_and_keys_public_key">Kunci publik</string>
     <string name="addresses_and_keys_show">Tunjukkan</string>
-    <string name="addresses_and_keys_toolbar_title">Alamat, kunci</string>
+    <string name="addresses_and_keys_toolbar_title">Alamat dan kunci</string>
     <string name="addresses_and_keys_you_do_not_have">Anda tidak memiliki</string>
     <string name="addresses_and_keys_your_address">Alamat Anda</string>
     <string name="alias_dialog_about_alias">Tentang Alias</string>
@@ -39,9 +41,9 @@
     <string name="asset_details_available_balance">Saldo Tersedia</string>
     <string name="asset_details_coming_soon">Segera akan datang</string>
     <string name="asset_details_cryptocurrency">Cryptocurrency</string>
-    <string name="asset_details_error_perfom_transaction">Anda tidak dapat melakukan transaksi dengan aset ini</string>
     <string name="asset_details_decimal">Poin desimal</string>
     <string name="asset_details_description">Deskripsi</string>
+    <string name="asset_details_error_perfom_transaction">Anda tidak dapat melakukan transaksi dengan aset ini</string>
     <string name="asset_details_flat_money">Uang Fiat</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">Dalam urutan</string>
@@ -59,7 +61,7 @@
     <string name="asset_details_total">Total</string>
     <string name="asset_details_total_amount">Jumlah total</string>
     <string name="asset_details_type">Tipe</string>
-    <string name="asset_details_view_history">Sejarah transaksi</string>
+    <string name="asset_details_view_history">Histori transaksi</string>
     <string name="asset_details_waves_token">Token Waves</string>
     <string name="attachment_too_long">Lampiran terlalu panjang</string>
     <string name="backup_hint">Karena hanya Anda yang mengontrol uang Anda, Anda harus menyimpan frasa cadangan Anda jika aplikasi ini dihapus</string>
@@ -166,6 +168,9 @@
     <string name="coinomat_success_subtitle">Setelah pembayaran telah dilakukan, saldo Anda akan diperbarui</string>
     <string name="coinomat_success_title">Anda dialihkan ke «Indacoin»</string>
     <string name="common_100_percent">Gunakan saldo total</string>
+    <string name="common_10_percent">10%</string>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
     <string name="common_action_close">Tutup</string>
     <string name="common_action_information">Informasi</string>
     <string name="common_copied">Disalin!</string>
@@ -186,7 +191,7 @@
     <string name="confirm_backup_confirm">Konfirmasi</string>
     <string name="confirm_backup_error">Urutan salah, coba lagi</string>
     <string name="confirm_backup_info">Tolong, ketuk setiap kata dengan urutan yang benar</string>
-    <string name="confirm_cancel_leasing_result_value">Anda telah membatalkan transaksi leasing</string>
+    <string name="confirm_cancel_leasing_result_value">Anda telah membatalkan transaksi sewa</string>
     <string name="confirm_confirm">Konfirmasi</string>
     <string name="confirm_free">Biaya</string>
     <string name="confirm_leasing">Konfirmasi</string>
@@ -198,10 +203,10 @@
     <string name="confirmaton_cancel_leasing_button_txt">Batalkan sewa</string>
     <string name="confirmaton_cancel_leasing_fee_hint">Biaya</string>
     <string name="confirmaton_cancel_leasing_tx_hint">TX Sewa</string>
-    <string name="create_passcode_create_new_title">Buat kode sandi baru</string>
-    <string name="create_passcode_create_title">Buat kode sandi</string>
+    <string name="create_passcode_create_new_title">Buat passcode baru</string>
+    <string name="create_passcode_create_title">Buat passcode</string>
     <string name="create_passcode_validation_already_use_error">Passcode sudah digunakan</string>
-    <string name="create_passcode_verify_title">Verifikasi kode sandi Anda</string>
+    <string name="create_passcode_verify_title">Verifikasi passcode Anda</string>
     <string name="create_pin_failed">Pembuatan PIN gagal. Silakan coba lagi.</string>
     <string name="dex_empty_button_text">Tambahkan Pasar</string>
     <string name="dex_empty_subtitle">Berdagang dengan cepat dan aman. Anda tetap memegang kendali penuh atas dana Anda saat menukarkannya di bursa kami yang terdesentralisasi.</string>
@@ -211,7 +216,7 @@
     <string name="dex_last_update_value">Pembaruan terakhir: %s</string>
     <string name="dex_market_empty">Tidak ada disini…</string>
     <string name="dex_market_toolbar_title">Pasar</string>
-    <string name="dex_markets_info_dialog_amount_asset">Jumlah Aset — %s</string>
+    <string name="dex_markets_info_dialog_amount_asset">Pasar Aset — %s</string>
     <string name="dex_markets_info_dialog_popular">Populer</string>
     <string name="dex_markets_info_dialog_price_asset">Aset Harga — %s</string>
     <string name="dex_markets_list_search">Cari</string>
@@ -227,8 +232,8 @@
     <string name="dex_trade_tab_orderbook">Buku pesanan</string>
     <string name="dialog_account_first_open_about_backup">Saya memahami bahwa jika aplikasi ini dipindahkan ke perangkat lain atau dihapus, Waves saya hanya dapat dipulihkan dengan frasa cadangan</string>
     <string name="dialog_account_first_open_about_fund_on_device">Saya memahami bahwa dana saya disimpan dengan aman di perangkat ini, bukan oleh perusahaan</string>
-    <string name="dialog_account_first_open_about_terms">Saya telah membaca, memahami, dan menyetujui \nPersyaratan Penggunaan</string>
-    <string name="dialog_account_first_open_about_terms_key">Persyaratan Penggunaan</string>
+    <string name="dialog_account_first_open_about_terms">Saya telah membaca, memahami, dan menyetujui \nSyarat Penggunaan</string>
+    <string name="dialog_account_first_open_about_terms_key">Syarat Penggunaan</string>
     <string name="dialog_account_first_open_confirm_and_begin">Konfirmasi dan Mulai</string>
     <string name="dialog_account_first_open_subtitle">Waves itu berbeda - tidak dapat ditahan dengan aman oleh bank atau layanan web</string>
     <string name="dialog_account_first_open_title">Selesai!</string>
@@ -246,7 +251,7 @@
     <string name="edit_address_name">Nama</string>
     <string name="edit_address_toolbar_title">Edit</string>
     <string name="enter_passcode_error_wrong_password">Kata sandi salah</string>
-    <string name="enter_passcode_forgot_passcode">Lupa kode sandi?</string>
+    <string name="enter_passcode_forgot_passcode">Lupa passcode?</string>
     <string name="enter_passcode_title">Masukkan Passcode</string>
     <string name="enter_passcode_too_many_attempts_dialog_description">Untuk membuka kunci, masuk dengan kata sandi akun Anda</string>
     <string name="enter_passcode_too_many_attempts_dialog_negative_btn_txt">BATALKAN</string>
@@ -282,7 +287,7 @@
     <string name="history_details_fee">Biaya</string>
     <string name="history_details_id">ID</string>
     <string name="history_details_leasing_from">Sewakan ke</string>
-    <string name="history_details_leasing_to">Leasing ke</string>
+    <string name="history_details_leasing_to">Sewakan ke</string>
     <string name="history_details_not_reissuable">Tidak dapat diterbitkan kembali</string>
     <string name="history_details_received_from">Diterima dari</string>
     <string name="history_details_recipient">Penerima</string>
@@ -309,14 +314,14 @@
     <string name="history_sorting_month">Bulan</string>
     <string name="history_sorting_period">Periode</string>
     <string name="history_sorting_week">Minggu</string>
-    <string name="history_toolbar_title">Sejarah</string>
+    <string name="history_toolbar_title">Histori</string>
     <string name="history_type_cancel_script">Batalkan transaksi skrip</string>
     <string name="history_type_cancel_sponsorship">Batalkan transaksi sponsor</string>
-    <string name="history_type_canceled_leasing">Leasing Dibatalkan</string>
+    <string name="history_type_canceled_leasing">Sewa Dibatalkan</string>
     <string name="history_type_create_alias">Buat Alias</string>
     <string name="history_type_data">Transaksi data</string>
     <string name="history_type_exchange">%s %s</string>
-    <string name="history_type_incoming_leasing">Leasing Masuk</string>
+    <string name="history_type_incoming_leasing">Sewa Masuk</string>
     <string name="history_type_mass_receive">Transaksi Masal diterima</string>
     <string name="history_type_mass_send">Kirim secara massal</string>
     <string name="history_type_mass_spam_receive">Diterima</string>
@@ -326,7 +331,7 @@
     <string name="history_type_set_script">Setel transaksi skrip</string>
     <string name="history_type_set_sponsorship">Setel transaksi sponsor</string>
     <string name="history_type_spam_receive">Diterima</string>
-    <string name="history_type_started_leasing">Memulai Leasing</string>
+    <string name="history_type_started_leasing">Memulai Sewa</string>
     <string name="history_type_token_burn">Token Dibakar</string>
     <string name="history_type_token_generation">Token Dibuat</string>
     <string name="history_type_token_reissue">Token Diterbitkan Kembali</string>
@@ -334,7 +339,7 @@
     <string name="import_account_click_show_pairing">Klik \"Tunjukkan Kode Pasangan\" untuk menampilkan Kode QR</string>
     <string name="import_account_login_at_site">Masuk ke Klien Waves Anda melalui PC atau Mac Anda</string>
     <string name="import_account_scan_pairing_code">Pindai kode pemasangan</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code">Pengaturan — Keamanan — Kode pemasangan</string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Pengaturan — Umum — Ekspor akun</string>
     <string name="import_account_tab_manually">Secara manual</string>
     <string name="import_account_tab_scan">Pindai</string>
     <string name="import_account_toolbar_title">Impor akun</string>
@@ -353,7 +358,7 @@
     <string name="left_drawer_description">Ikuti terus berita dan artikel terbaru, dan temukan semua tentang peristiwa yang terjadi di Waves Platform</string>
     <string name="left_drawer_join_the_waves_community">Bergabunglah dengan Waves Community</string>
     <string name="left_drawer_site">wavescommunity.com</string>
-    <string name="left_drawer_support">Mendukung Wavesplatform</string>
+    <string name="left_drawer_support">Pusat Bantuan</string>
     <string name="left_drawer_terms_and_conditions">Syarat dan ketentuan</string>
     <string name="left_drawer_whitepaper">Kertas putih</string>
     <string name="my_address_qr_copy">Salin</string>
@@ -379,11 +384,12 @@
     <string name="network_spam_filter">Filter spam</string>
     <string name="network_spam_url_validation_bad_url">Url buruk</string>
     <string name="network_spam_url_validation_url_empty">Url wajib diisi</string>
-    <string name="network_switch_off_spam_filtering">Show SPAM</string>
+    <string name="network_switch_off_spam_filtering">Pemfilteran spam</string>
     <string name="network_toolbar_title">Jaringan</string>
     <string name="new_account_account_name_hint">Nama akun</string>
     <string name="new_account_account_name_validation_already_exist_error">Nama akun sudah digunakan</string>
     <string name="new_account_account_name_validation_length_error">20 karakter maksimal</string>
+    <string name="new_account_account_name_validation_min_length_error">Setidaknya 2 karakter</string>
     <string name="new_account_account_name_validation_required_error">Nama wajib diisi</string>
     <string name="new_account_avatar_description">Anda tidak dapat mengubahnya nanti</string>
     <string name="new_account_avatar_error">Silakan pilih avatar</string>
@@ -413,10 +419,10 @@
     <string name="orderbook_price_title">Harga %s</string>
     <string name="orderbook_spread_percent">SEBARAN %s%%</string>
     <string name="orderbook_sum_title">Jumlah %s</string>
-    <string name="profile_general_addresses_and_keys">Alamat, kunci</string>
+    <string name="profile_general_addresses_and_keys">Alamat dan kunci</string>
     <string name="profile_general_addresses_book">Buku alamat</string>
     <string name="profile_general_backup_phrase">Frasa cadangan</string>
-    <string name="profile_general_change_passcode">Ubah kode sandi</string>
+    <string name="profile_general_change_passcode">Ubah passcode</string>
     <string name="profile_general_change_password">Ganti kata sandi</string>
     <string name="profile_general_current_height">Tinggi saat ini</string>
     <string name="profile_general_current_version">Versi</string>
@@ -426,7 +432,7 @@
     <string name="profile_general_delete_account_dialog_description">Menghapus akun akan menyebabkan kerugian yang tidak dapat dipulihkan!</string>
     <string name="profile_general_delete_account_dialog_title">Hapus akun</string>
     <string name="profile_general_delete_account_dialog_warning">Anda tidak menyimpan SEED Anda</string>
-    <string name="profile_general_feedback">Umpan balik</string>
+    <string name="profile_general_feedback">Berikan Umpan balik</string>
     <string name="profile_general_feedback_body_extra_app_version">Versi Aplikasi: %1$s(%2$s)</string>
     <string name="profile_general_feedback_body_extra_carrier">Operator: %s</string>
     <string name="profile_general_feedback_body_extra_device_model">Model Perangkat: %s</string>
@@ -442,7 +448,7 @@
     <string name="profile_general_rate_app">Beri nilai aplikasi</string>
     <string name="profile_general_security">Keamanan</string>
     <string name="profile_general_setting">Pengaturan Umum</string>
-    <string name="profile_general_support_wavesplatform">Dukungan Wavesplatform</string>
+    <string name="profile_general_support_wavesplatform">Pusat Bantuan</string>
     <string name="profile_language_toolbar_title">Bahasa</string>
     <string name="profile_save_seed_warning_subtitle">Simpan SEED Anda dengan aman, itulah satu-satunya cara mengembalikan dompet Anda</string>
     <string name="profile_save_seed_warning_title">Simpan frasa cadangan Anda (SEED)</string>
@@ -553,7 +559,7 @@
     <string name="start_leasing_choose_from_address">Pilih dari buku Alamat</string>
     <string name="start_leasing_generator">Generator</string>
     <string name="start_leasing_note_address">Alamat node…</string>
-    <string name="start_leasing_toolbar">Mulai leasing</string>
+    <string name="start_leasing_toolbar">Mulai sewa</string>
     <string name="start_leasing_transaction_fee_0_001_waves">Biaya Transaksi 0,001 WAVES</string>
     <string name="start_leasing_use_total_balance">Gunakan saldo total</string>
     <string name="start_leasing_validation_address_is_invalid_error">Alamatnya tidak valid</string>
@@ -596,7 +602,7 @@
     <string name="wallet_assets_my_asset">/ Aset Ku</string>
     <string name="wallet_assets_spam_category">Aset spam  (%1$s)</string>
     <string name="wallet_assets_spam_tag">Spam</string>
-    <string name="wallet_leasing">Leasing</string>
+    <string name="wallet_leasing">Sewa</string>
     <string name="wallet_leasing_active_now">Aktif sekarang (%1$s)</string>
     <string name="wallet_leasing_available_balance">Saldo Tersedia</string>
     <string name="wallet_leasing_leased">Disewa</string>
@@ -606,7 +612,7 @@
     <string name="wallet_leasing_quick_note_3">Saldo tambahan akan diperbarui setelah 1000 blok.</string>
     <string name="wallet_leasing_start_lease">Mulai Sewa</string>
     <string name="wallet_leasing_total">Total</string>
-    <string name="wallet_leasing_view_history">Sejarah transaksi</string>
+    <string name="wallet_leasing_view_history">Histori transaksi</string>
     <string name="wallet_sorting_toolbar_position_action">Posisi</string>
     <string name="wallet_sorting_toolbar_title">Sortir</string>
     <string name="wallet_sorting_toolbar_visibility_action">Visibilitas</string>

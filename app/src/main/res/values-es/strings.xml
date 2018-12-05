@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common_50_percent">50%</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_10_percent">10%</string>
-    <string name="new_account_account_name_validation_min_length_error">Al menos 2 caracteres</string>
+    <string name="address_book_address_validation_already_use_error">Ya está en uso</string>
+    <string name="address_book_address_validation_required_error">La dirección es necesaria</string>
+    <string name="address_book_name_validation_already_use_error">Ya está en uso</string>
+    <string name="address_book_name_validation_required_error">Se requiere el nombre</string>
+    <string name="address_book_name_validation_max_length_error">20 caracteres máximo</string>
+    <string name="address_book_name_validation_min_length_error">Al menos 2 caracteres</string>
     <string name="about_fill_payment_details">Usted DEBE completar las especificaciones de pago con la siguiente información:</string>
     <string name="about_fill_payment_info">CNM — su dirección de WAVES. \nSi no lo hace, no podemos acreditar su cuenta.</string>
     <string name="about_redirection_message">Después de realizar la verificación, recibirá un correo electrónico con más instrucciones.</string>
@@ -39,9 +41,9 @@
     <string name="asset_details_available_balance">Saldo disponible</string>
     <string name="asset_details_coming_soon">Próximamente</string>
     <string name="asset_details_cryptocurrency">Criptomoneda</string>
-    <string name="asset_details_error_perfom_transaction">No puede realizar transacciones con este activo</string>
     <string name="asset_details_decimal">Decimales</string>
     <string name="asset_details_description">Descripción</string>
+    <string name="asset_details_error_perfom_transaction">No puede realizar transacciones con este activo</string>
     <string name="asset_details_flat_money">Dinero Fiat</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">En orden</string>
@@ -166,6 +168,9 @@
     <string name="coinomat_success_subtitle">Una vez realizado el pago se actualizará su saldo.</string>
     <string name="coinomat_success_title">Has sido redirigido a «Indacoin».</string>
     <string name="common_100_percent">Usar el saldo total</string>
+    <string name="common_10_percent">10%</string>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
     <string name="common_action_close">Cerrar</string>
     <string name="common_action_information">Información</string>
     <string name="common_copied">¡Copiado!</string>
@@ -227,8 +232,8 @@
     <string name="dex_trade_tab_orderbook">Libro de órdenes</string>
     <string name="dialog_account_first_open_about_backup">Entiendo que si esta aplicación se mueve a otro dispositivo o se elimina, mis Waves solo se pueden recuperar con la frase de respaldo</string>
     <string name="dialog_account_first_open_about_fund_on_device">Entiendo que mis fondos se mantienen de forma segura en este dispositivo, no por una empresa</string>
-    <string name="dialog_account_first_open_about_terms">He leído, entiendo y acepto los \nTérminos de uso</string>
-    <string name="dialog_account_first_open_about_terms_key">Términos de uso</string>
+    <string name="dialog_account_first_open_about_terms">He leído, entiendo y acepto los \nTérminos de Uso</string>
+    <string name="dialog_account_first_open_about_terms_key">Términos de Uso</string>
     <string name="dialog_account_first_open_confirm_and_begin">Confirmar y comenzar</string>
     <string name="dialog_account_first_open_subtitle">Waves es diferente — no puede ser guardado de manera segura por un banco o servicio web</string>
     <string name="dialog_account_first_open_title">¡Hecho!</string>
@@ -334,7 +339,7 @@
     <string name="import_account_click_show_pairing">Haga clic en «Mostrar código» para revelar un código QR</string>
     <string name="import_account_login_at_site">Inicie sesión en su Waves Client a través de su PC o Mac</string>
     <string name="import_account_scan_pairing_code">Escanear código de emparejamiento</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code">Ajustes — Seguridad — Código de emparejamiento</string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Ajustes — General — Exportar cuenta</string>
     <string name="import_account_tab_manually">Manualmente</string>
     <string name="import_account_tab_scan">Escanear</string>
     <string name="import_account_toolbar_title">Importar cuenta</string>
@@ -353,7 +358,7 @@
     <string name="left_drawer_description">Manténgase al día con las últimas noticias y artículos, y descubra todo lo que sucede en la plataforma Waves</string>
     <string name="left_drawer_join_the_waves_community">Únete a la comunidad de Waves</string>
     <string name="left_drawer_site">wavescommunity.com</string>
-    <string name="left_drawer_support">Soporte Wavesplatform</string>
+    <string name="left_drawer_support">Soporte a  Wavesplatform</string>
     <string name="left_drawer_terms_and_conditions">Términos y Condiciones</string>
     <string name="left_drawer_whitepaper">Whitepaper</string>
     <string name="my_address_qr_copy">Copiar</string>
@@ -379,11 +384,12 @@
     <string name="network_spam_filter">Filtro de spam</string>
     <string name="network_spam_url_validation_bad_url">Url incorrecto</string>
     <string name="network_spam_url_validation_url_empty">Se requiere url</string>
-    <string name="network_switch_off_spam_filtering">Show SPAM</string>
+    <string name="network_switch_off_spam_filtering">Filtrado de spam</string>
     <string name="network_toolbar_title">Red</string>
     <string name="new_account_account_name_hint">Nombre de la cuenta</string>
     <string name="new_account_account_name_validation_already_exist_error">El nombre de la cuenta ya está en uso</string>
     <string name="new_account_account_name_validation_length_error">20 caracteres máximo</string>
+    <string name="new_account_account_name_validation_min_length_error">Al menos 2 caracteres</string>
     <string name="new_account_account_name_validation_required_error">Se requiere el nombre</string>
     <string name="new_account_avatar_description">No puedes cambiarlo más tarde</string>
     <string name="new_account_avatar_error">Por favor seleccione un avatar</string>
@@ -416,7 +422,7 @@
     <string name="profile_general_addresses_and_keys">Direcciones, llaves</string>
     <string name="profile_general_addresses_book">Directorio</string>
     <string name="profile_general_backup_phrase">Frase de respaldo</string>
-    <string name="profile_general_change_passcode">Cambiar contraseña</string>
+    <string name="profile_general_change_passcode">Cambiar código de acceso</string>
     <string name="profile_general_change_password">Cambia contraseña</string>
     <string name="profile_general_current_height">Altura actual</string>
     <string name="profile_general_current_version">Versión</string>
@@ -426,7 +432,7 @@
     <string name="profile_general_delete_account_dialog_description">¡Eliminar una cuenta conducirá a su pérdida irreparable!</string>
     <string name="profile_general_delete_account_dialog_title">Borrar cuenta</string>
     <string name="profile_general_delete_account_dialog_warning">No has guardado tu SEMILLA</string>
-    <string name="profile_general_feedback">Realimentación</string>
+    <string name="profile_general_feedback">Feedback</string>
     <string name="profile_general_feedback_body_extra_app_version">Versión de la aplicación: %1$s(%2$s)</string>
     <string name="profile_general_feedback_body_extra_carrier">Portador: %s</string>
     <string name="profile_general_feedback_body_extra_device_model">Modelo del dispositivo: %s</string>
