@@ -112,7 +112,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             prefs.setValue(PrefsUtil.KEY_PUB_KEY, wallet!!.publicKeyStr)
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
             prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet!!.getEncryptedData(password))
-            authHelper.configureDB(wallet?.address)
+            authHelper.configureDB(wallet?.address, guid)
             MigrationUtil.checkOldAddressBook(prefs, loggedInGuid)
             prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, true)
             return guid
@@ -199,7 +199,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
     fun setWallet(guid: String, password: String) {
         wallet = WavesWallet(getWalletData(guid), password)
         setLastLoggedInGuid(guid)
-        authHelper.configureDB(wallet?.address)
+        authHelper.configureDB(wallet?.address, guid)
         MigrationUtil.checkOldAddressBook(prefs, guid)
     }
 
@@ -276,7 +276,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             prefs.removeGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID)
         }
 
-        deleteRealmDBForAccount(address)
+        deleteRealmDBForAccount(searchWalletGuid)
         clearRealmConfiguration()
     }
 
