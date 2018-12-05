@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
+import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment.Companion.REQUEST_SCAN_QR_CODE
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -39,15 +40,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
     @ProvidePresenter
     fun providePresenter(): StartLeasingPresenter = presenter
-
-    companion object {
-        var REQUEST_CHOOSE_ADDRESS = 57
-        var REQUEST_LEASING_CONFIRMATION = 59
-        var REQUEST_CANCEL_LEASING_CONFIRMATION = 60
-        var REQUEST_SCAN_QR_CODE = 52
-        var BUNDLE_WAVES = "waves"
-        var TOTAL_BALANCE = "100"
-    }
 
     override fun configLayoutRes(): Int = R.layout.activity_start_leasing
 
@@ -282,5 +274,14 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         button_continue.isEnabled = presenter.isAllFieldsValid() && networkConnected
+    }
+
+    companion object {
+        var REQUEST_CHOOSE_ADDRESS = 57
+        var REQUEST_LEASING_CONFIRMATION = 59
+        var REQUEST_CANCEL_LEASING_CONFIRMATION = 60
+        var REQUEST_SCAN_QR_CODE = 52
+        var BUNDLE_WAVES = "waves"
+        var TOTAL_BALANCE = "100"
     }
 }

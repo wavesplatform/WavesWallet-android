@@ -35,12 +35,6 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
     override fun configLayoutRes() = R.layout.activity_welcome
 
-    companion object {
-        var REQUEST_NEW_ACCOUNT = 55
-        var REQUEST_SIGN_IN = 56
-        var REQUEST_IMPORT_ACC = 57
-    }
-
     override fun askPassCode() = false
 
     private fun createDataBundle(): Bundle {
@@ -141,5 +135,11 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
     override fun onBackPressed() {
         exit()
+    }
+
+    companion object {
+        var REQUEST_NEW_ACCOUNT = 55
+        var REQUEST_SIGN_IN = 56
+        var REQUEST_IMPORT_ACC = 57
     }
 }

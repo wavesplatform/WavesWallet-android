@@ -30,10 +30,6 @@ class TutorialActivity : BaseActivity(), TutorialView {
 
     override fun askPassCode() = false
 
-    companion object {
-        var BUNDLE_LANG = "lang"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         setLanguage(Locale(intent.getStringExtra(BUNDLE_LANG)))
         super.onCreate(savedInstanceState)
@@ -106,4 +102,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
         }
     }
 
+    companion object {
+        var BUNDLE_LANG = "lang"
+    }
 }

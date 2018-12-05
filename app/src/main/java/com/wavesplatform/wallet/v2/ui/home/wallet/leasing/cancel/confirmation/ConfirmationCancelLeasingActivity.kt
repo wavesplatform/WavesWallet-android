@@ -35,13 +35,6 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
         super.onCreate(savedInstanceState)
     }
 
-    companion object {
-        var REQUEST_CANCEL_LEASING_CONFIRMATION = 60
-        var BUNDLE_CANCEL_CONFIRMATION_LEASING_TX = "cancel_confirmation_leasing_tx"
-        var BUNDLE_ADDRESS = "address"
-        var BUNDLE_AMOUNT = "amount"
-    }
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.confirm_leasing), R.drawable.ic_toolbar_back_white)
 
@@ -100,6 +93,13 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         button_confirm.isEnabled = networkConnected
+    }
+
+    companion object {
+        var REQUEST_CANCEL_LEASING_CONFIRMATION = 60
+        var BUNDLE_CANCEL_CONFIRMATION_LEASING_TX = "cancel_confirmation_leasing_tx"
+        var BUNDLE_ADDRESS = "address"
+        var BUNDLE_AMOUNT = "amount"
     }
 
 }

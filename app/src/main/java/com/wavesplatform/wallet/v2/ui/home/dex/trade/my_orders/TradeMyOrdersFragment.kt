@@ -33,17 +33,6 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
     @Inject
     lateinit var adapter: TradeMyOrdersAdapter
 
-    companion object {
-        fun newInstance(watchMarket: WatchMarket?): TradeMyOrdersFragment {
-            val args = Bundle()
-            args.classLoader = WatchMarket::class.java.classLoader
-            args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
-            val fragment = TradeMyOrdersFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     @ProvidePresenter
     fun providePresenter(): TradeMyOrdersPresenter = presenter
 
@@ -109,5 +98,16 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
     private fun loadOrders() {
         swipe_container.isRefreshing = true
         presenter.loadMyOrders()
+    }
+
+    companion object {
+        fun newInstance(watchMarket: WatchMarket?): TradeMyOrdersFragment {
+            val args = Bundle()
+            args.classLoader = WatchMarket::class.java.classLoader
+            args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
+            val fragment = TradeMyOrdersFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

@@ -38,11 +38,6 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     @ProvidePresenter
     fun providePresenter(): CreateAliasPresenter = presenter
 
-    companion object {
-        var RESULT_ALIAS = "alias"
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
@@ -157,4 +152,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         button_create_alias.isEnabled = presenter.aliasValidation && networkConnected
     }
 
+    companion object {
+        var RESULT_ALIAS = "alias"
+    }
 }
