@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.data.model.remote.response
 import com.google.common.base.Optional
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.api.NodeManager
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.util.clearAlias
