@@ -36,6 +36,9 @@ class AssetsSortingAdapter @Inject constructor() : BaseItemDraggableAdapter<Asse
         if (item.isHidden) {
             helper.itemView.card_asset.cardElevation = 0f
             helper.itemView.card_asset.setCardBackgroundColor(findColor(android.R.color.transparent))
+        } else {
+            helper.itemView.card_asset.cardElevation = dp2px(2).toFloat()
+            helper.itemView.card_asset.setCardBackgroundColor(findColor(R.color.white))
         }
 
         helper.itemView.image_asset_icon.isOval = true

@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.injection.module
 
 import android.content.Context
 import android.util.Log
-import com.github.simonpercic.oklog3.OkLogInterceptor
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -11,7 +10,6 @@ import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
-import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.remote.*
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
@@ -93,7 +91,6 @@ class NetworkModule {
                 .addInterceptor(addCookiesInterceptor)
                 .addInterceptor(CacheForceInterceptorNoNet())
                 .addNetworkInterceptor(CacheInterceptorOnNet())
-                .addInterceptor(OkLogInterceptor.builder().withAllLogData().build())
                 .addInterceptor(LoggingInterceptor.Builder()
                         .loggable(BuildConfig.DEBUG)
                         .setLevel(Level.BASIC)
