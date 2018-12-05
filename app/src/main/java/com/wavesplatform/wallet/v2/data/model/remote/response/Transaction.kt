@@ -2,8 +2,12 @@ package com.wavesplatform.wallet.v2.data.model.remote.response
 
 import com.google.common.base.Optional
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.api.NodeManager
+import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.util.clearAlias
+import com.wavesplatform.wallet.v2.util.findMyOrder
 import com.wavesplatform.wallet.v2.util.stripZeros
 import io.realm.RealmList
 import io.realm.RealmModel
@@ -189,17 +193,70 @@ open class Transaction(
             }
             return "Transaction ID: ${transaction.id}\n" +
                     "Type: ${transaction.type} (${getNameBy(transaction.type)})\n" +
-                    "Date: ${transaction.timestamp
-                            .date("MM/dd/yyyy HH:mm")}\n" +
+                    "Date: ${transaction.timestamp.date("MM/dd/yyyy HH:mm")}\n" +
                     "Sender: ${transaction.sender}\n" +
-                    "Recipient: ${transaction.recipient}\n" +
-                    "Amount: ${MoneyUtil.getScaledText(transaction.amount, transaction.asset)
-                            .stripZeros()} ${transaction.asset?.name} (${transaction.asset?.id})\n" +
-                    "Fee: ${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject)
-                            .stripZeros()} ${transaction.feeAssetObject?.name}" + feeAssetId
+                    recipient(transaction) +
+                    amount(transaction) +
+                    exchangePrice(transaction) +
+                    fee(transaction, feeAssetId) +
+                    attachment(transaction)
+        }
+
+        private fun recipient(transaction: Transaction): String {
+            return (if (transaction.recipient.isNullOrEmpty()) {
+                ""
+            } else {
+                "Recipient: ${transaction.recipient.clearAlias()}\n"
+            })
+        }
+
+        private fun fee(transaction: Transaction, feeAssetId: String): String {
+            return "Fee: ${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject)
+                    .stripZeros()} ${transaction.feeAssetObject?.name}" + feeAssetId
+        }
+
+        private fun attachment(transaction: Transaction): String {
+            return if (transaction.attachment.isNullOrEmpty()) {
+                ""
+            } else {
+                "\nAttachment: ${String(Base58.decode(transaction.attachment))}"
+            }
+        }
+
+        private fun amount(transaction: Transaction): String {
+            return "Amount: ${MoneyUtil.getScaledText(transaction.amount, transaction.asset)
+                    .stripZeros()} ${transaction.asset?.name}" +
+                    if (transaction.asset?.id.isNullOrEmpty()) {
+                        "\n"
+                    } else {
+                        " (${transaction.asset?.id})\n"
+                    }
+        }
+
+        private fun exchangePrice(transaction: Transaction): String {
+            return if (transaction.type == EXCHANGE) {
+                val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
+                        App.getAccessManager().getWallet()?.address!!)
+                val priceAsset = myOrder.assetPair?.priceAssetObject
+                val priceValue = MoneyUtil.getScaledText(
+                        transaction.amount.times(transaction.price).div(100000000),
+                        priceAsset).stripZeros()
+
+                "Price: ${MoneyUtil.getScaledText(transaction.price,
+                        myOrder.assetPair?.priceAssetObject)
+                        .stripZeros()} " +
+                        "${priceAsset?.name} " +
+                        if (priceAsset?.id.isNullOrEmpty()) {
+                            "\n"
+                        } else {
+                            " (${priceAsset?.id})\n"
+                        } +
+                        "Total price: $priceValue ${priceAsset?.name}\n"
+            } else {
+                ""
+            }
         }
     }
-
 }
 
 @RealmClass

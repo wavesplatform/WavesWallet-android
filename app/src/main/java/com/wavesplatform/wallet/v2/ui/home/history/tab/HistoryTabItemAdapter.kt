@@ -74,7 +74,7 @@ class HistoryTabItemAdapter @Inject constructor() :
 
                     view.image_transaction.setImageDrawable(item.data.transactionType()?.icon())
 
-                    var showTag = Constants.defaultAssets.any {
+                    val showTag = Constants.defaultAssets.any {
                         it.assetId == item.data.assetId || item.data.assetId.isNullOrEmpty()
                     }
 
@@ -185,8 +185,11 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
                                 && item.data.transactionType() != TransactionType.EXCHANGE_TYPE) {
                             if (showTag) {
-                                view.text_tag.visiable()
-                                view.text_tag.text = item.data.asset?.name
+                                val ticker = item.data.asset?.getTicker()
+                                if (!ticker.isNullOrBlank()) {
+                                    view.text_tag.text = ticker
+                                    view.text_tag.visiable()
+                                }
                             } else {
                                 view.text_tag.gone()
                                 view.text_transaction_value.text =
@@ -199,7 +202,6 @@ class HistoryTabItemAdapter @Inject constructor() :
                 }
             }
         }
-
     }
 
     private fun setExchangeItem(transaction: Transaction, view: View) {

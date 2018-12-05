@@ -18,10 +18,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActiv
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.makeTextHalfBold
-import com.wavesplatform.wallet.v2.util.showError
-import com.wavesplatform.wallet.v2.util.stripZeros
+import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send_confirmation.*
 import pers.victor.ext.*
@@ -81,7 +78,12 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             text_sum.makeTextHalfBold()
         }
 
-        text_tag.text = presenter.selectedAsset!!.getName()
+        val ticker = presenter.assetInfo?.getTicker()
+        if (ticker.isNullOrBlank()) {
+            text_tag.text = presenter.selectedAsset!!.getName()
+        } else {
+            text_tag.text = ticker
+        }
         text_sent_to_address.text = presenter.recipient
         presenter.getAddressName(presenter.recipient!!)
         text_fee_value.text = "${Constants.WAVES_FEE / 100_000_000F} ${Constants.CUSTOM_FEE_ASSET_NAME}"
