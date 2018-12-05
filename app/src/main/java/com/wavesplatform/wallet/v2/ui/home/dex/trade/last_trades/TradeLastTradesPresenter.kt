@@ -11,7 +11,7 @@ class TradeLastTradesPresenter @Inject constructor() : BasePresenter<TradeLastTr
     var watchMarket: WatchMarket? = null
 
     fun loadLastTrades() {
-        addSubscription(dataFeedManager.getTradesByPair(watchMarket, 50)
+        addSubscription(apiDataManager.loadLastTradesByPair(watchMarket)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     val sortedByTimestamp = it.sortedByDescending { it.timestamp }

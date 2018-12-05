@@ -23,7 +23,6 @@ open class BasePresenter<T : MvpView> @Inject constructor(): MvpPresenter<T>(){
     @Inject lateinit var apiDataManager: ApiDataManager
     @Inject lateinit var matcherDataManager: MatcherDataManager
     @Inject lateinit var spamDataManager: SpamDataManager
-    @Inject lateinit var dataFeedManager: DataFeedManager
     @Inject lateinit var prefsUtil: PrefsUtil
     @Inject lateinit var rxEventBus: RxEventBus
     @Inject lateinit var appUtil: AppUtil

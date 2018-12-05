@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.data.model.remote.response
 
 import com.google.common.base.Optional
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.wallet.v1.api.NodeManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.util.stripZeros
 import io.realm.RealmList
@@ -131,10 +130,6 @@ open class Transaction(
 
     val conterParty: Optional<String>
         get() = Optional.absent()
-
-    val isOwn: Boolean
-        get() = ArrayUtils.isEquals(NodeManager.get().address, sender)
-
 
     fun isForAsset(assetId: String): Boolean {
         return false

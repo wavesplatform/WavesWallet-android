@@ -144,22 +144,6 @@ class NetworkModule {
     }
 
     @Singleton
-    @Named("DataFeedRetrofit")
-    @Provides
-    internal fun provideDataFeedRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(BuildConfig.DATA_FEED_URL)
-                .client(httpClient)
-                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-        RetrofitCache.getInstance().addRetrofit(retrofit)
-        return retrofit
-    }
-
-
-    @Singleton
     @Named("SpamRetrofit")
     @Provides
     internal fun provideSpamRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
@@ -235,12 +219,6 @@ class NetworkModule {
     @Provides
     internal fun provideCoinomatService(@Named("CoinomatRetrofit") retrofit: Retrofit): CoinomatService {
         return retrofit.create(CoinomatService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    internal fun provideDataFeedService(@Named("DataFeedRetrofit") retrofit: Retrofit): DataFeedService {
-        return retrofit.create(DataFeedService::class.java)
     }
 
     @Named("timeout")
