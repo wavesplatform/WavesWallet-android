@@ -20,8 +20,6 @@ open class BaseDataManager @Inject constructor() {
     @Inject
     lateinit var matcherService: MatcherService
     @Inject
-    lateinit var dataFeedService: DataFeedService
-    @Inject
     lateinit var preferencesHelper: PreferencesHelper
     @Inject
     lateinit var prefsUtil: PrefsUtil

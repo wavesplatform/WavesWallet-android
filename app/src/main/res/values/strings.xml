@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common_50_percent">50%</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_10_percent">10%</string>
-    <string name="new_account_account_name_validation_min_length_error">Minimum 2 characters</string>
+    <string name="address_book_address_validation_already_use_error">Already in use</string>
+    <string name="address_book_address_validation_required_error">Address is required</string>
+    <string name="address_book_name_validation_already_use_error">Already in use</string>
+    <string name="address_book_name_validation_required_error">Name is required</string>
+    <string name="address_book_name_validation_max_length_error">24 characters maximum</string>
+    <string name="address_book_name_validation_min_length_error">Minimum 2 characters</string>
     <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
     <string name="about_fill_payment_info">CNM — your WAVES address. \nIf you don’t do it, we can’t credit your account.</string>
     <string name="about_redirection_message">After you go through the verification you will receive an email with further instructions</string>
@@ -27,7 +29,7 @@
     <string name="addresses_and_keys_you_do_not_have">You do not have</string>
     <string name="addresses_and_keys_your_address">Your address</string>
     <string name="alias_dialog_about_alias">About Alias</string>
-    <string name="alias_dialog_create_alias">Create new alias</string>
+    <string name="alias_dialog_create_alias">Create a new alias</string>
     <string name="alias_dialog_description_1">An Alias is a nickname for your address. You can use an Alias instead of an address to make transactions.</string>
     <string name="alias_dialog_description_2">Your Alias must be between 4 and 30 characters long, and must contain only lowercase Latin letters, digits and symbols (@, -, _ etc)</string>
     <string name="alias_dialog_fee">Transaction Fee 0.001 Waves</string>
@@ -39,9 +41,9 @@
     <string name="asset_details_available_balance">Available balance</string>
     <string name="asset_details_coming_soon">Coming soon</string>
     <string name="asset_details_cryptocurrency">Cryptocurrency</string>
-    <string name="asset_details_error_perfom_transaction">You can not perform transactions with this asset</string>
     <string name="asset_details_decimal">Decimal points</string>
     <string name="asset_details_description">Description</string>
+    <string name="asset_details_error_perfom_transaction">You can not perform transactions with this asset</string>
     <string name="asset_details_flat_money">Fiat Money</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">In order</string>
@@ -146,26 +148,14 @@
     <string name="choose_account_deleted">Deleted</string>
     <string name="choose_account_empty_state">Nothing Here… \nYou do not have saved accounts</string>
     <string name="choose_account_yes">Delete</string>
-    <string name="choose_language_brazilian">Português do Brasil</string>
-    <string name="choose_language_china">中文(简体)</string>
     <string name="choose_language_confirm">Confirm</string>
     <string name="choose_language_continue">Continue</string>
-    <string name="choose_language_danish">Dansk</string>
-    <string name="choose_language_english">English</string>
-    <string name="choose_language_german">Deutsch</string>
-    <string name="choose_language_hindi">हिन्दी</string>
-    <string name="choose_language_indonesian">Indonesia</string>
-    <string name="choose_language_japan">日本語</string>
-    <string name="choose_language_korea">한국어</string>
-    <string name="choose_language_nederlands">Nederlands</string>
-    <string name="choose_language_polish">Polszczyzna</string>
-    <string name="choose_language_portuguese">Português</string>
-    <string name="choose_language_russia">Русский</string>
-    <string name="choose_language_spain">Español</string>
-    <string name="choose_language_turkey">Türkçe</string>
     <string name="coinomat_success_subtitle">After payment has been made your balance will be updated</string>
     <string name="coinomat_success_title">You have been redirected to «Indacoin»</string>
     <string name="common_100_percent">Use total balance</string>
+    <string name="common_10_percent">10%</string>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
     <string name="common_action_close">Close</string>
     <string name="common_action_information">Information</string>
     <string name="common_copied">Copied!</string>
@@ -332,9 +322,9 @@
     <string name="history_type_token_reissue">Token Reissue </string>
     <string name="history_type_unrecognised">Unrecognised Transaction</string>
     <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
-    <string name="import_account_login_at_site">Log in to your Waves Client via your PC or Mac</string>
+    <string name="import_account_login_at_site">Log in to your Waves Client via web or Mac, PC</string>
     <string name="import_account_scan_pairing_code">Scan pairing code</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code">Settings — Security — Pairing code</string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Settings — General — Export account</string>
     <string name="import_account_tab_manually">Manually</string>
     <string name="import_account_tab_scan">Scan</string>
     <string name="import_account_toolbar_title">Import account</string>
@@ -379,11 +369,12 @@
     <string name="network_spam_filter">Spam filter</string>
     <string name="network_spam_url_validation_bad_url">Bad url</string>
     <string name="network_spam_url_validation_url_empty">Url is required</string>
-    <string name="network_switch_off_spam_filtering">Show SPAM</string>
+    <string name="network_switch_show_spam">Show spam</string>
     <string name="network_toolbar_title">Network</string>
     <string name="new_account_account_name_hint">Account name</string>
     <string name="new_account_account_name_validation_already_exist_error">Account name already use</string>
     <string name="new_account_account_name_validation_length_error">20 characters maximum</string>
+    <string name="new_account_account_name_validation_min_length_error">Minimum 2 characters</string>
     <string name="new_account_account_name_validation_required_error">Name is required</string>
     <string name="new_account_avatar_description">You cannot change it later</string>
     <string name="new_account_avatar_error">Please select avatar</string>
@@ -632,12 +623,4 @@
     <string name="your_asset_activity_greater_zero">With balance</string>
     <string name="your_assets_empty_state">Nothing Here… \nYou do not have assets with funds</string>
     <string name="your_assets_toolbar_title">Your assets</string>
-
-    <string name="address_book_name_validation_min_length_error">Minimum 2 characters</string>
-    <string name="address_book_name_validation_max_length_error">24 characters maximum</string>
-    <string name="address_book_name_validation_required_error">Name is required</string>
-    <string name="address_book_name_validation_already_use_error">Already in use</string>
-
-    <string name="address_book_address_validation_required_error">Address is required</string>
-    <string name="address_book_address_validation_already_use_error">Already in use</string>
 </resources>

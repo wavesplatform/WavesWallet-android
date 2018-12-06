@@ -50,6 +50,7 @@ import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.Order
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
@@ -663,4 +664,13 @@ fun findMyOrder(first: Order, second: Order, address: String): Order {
             second
         }
     }
+}
+
+fun AssetInfo.getTicker() : String {
+
+    if (this.id.isWavesId()) {
+        return Constants.wavesAssetInfo.name
+    }
+
+    return this.ticker ?: this.name
 }

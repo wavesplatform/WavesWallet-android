@@ -12,11 +12,12 @@ import javax.inject.Inject
 @InjectViewState
 class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSortingView>() {
     var needToUpdate: Boolean = false
+    var visibilityConfigurationActive = false
 
     fun loadAssets() {
         runAsync {
             queryAllAsync<AssetBalance> {
-                val favoriteList = it.filter({ it.isFavorite }).toMutableList()
+                val favoriteList = it.filter({ it.isFavorite }).sortedBy { it.position }.sortedByDescending({ it.isFavorite }).toMutableList()
                 val notFavoriteList = it.filter({ !it.isFavorite && !it.isSpam }).sortedBy { it.position }.toMutableList()
 
                 runOnUiThread {

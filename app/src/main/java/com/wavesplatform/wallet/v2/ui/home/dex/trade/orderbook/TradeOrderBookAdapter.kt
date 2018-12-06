@@ -7,16 +7,11 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.util.stripZeros
-import kotlinx.android.synthetic.main.recycle_item_orderbook.view.*
 import pers.victor.ext.findColor
-import pers.victor.ext.setWidth
 import javax.inject.Inject
-import android.widget.RelativeLayout
-import com.wavesplatform.wallet.v2.util.clearBalance
 
 
 class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder>(null) {
@@ -34,9 +29,9 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
                 val item = item as LastPriceItem
                 val percent = "%.2f".format(item.spreadPercent)
                 helper.setImageResource(R.id.image_graph,
-                        if (item.lastTrade?.getType() == OrderType.BUY) R.drawable.ic_chartarrow_success_400
+                        if (item.lastTrade?.getMyOrder()?.getType() == OrderType.BUY) R.drawable.ic_chartarrow_success_400
                         else R.drawable.ic_chartarrow_error_500)
-                        .setText(R.id.text_price_value, item.lastTrade?.price?.stripZeros())
+                        .setText(R.id.text_price_value, item.lastTrade?.price?.toString()?.stripZeros())
                         .setText(R.id.text_percent_value, mContext.getString(R.string.orderbook_spread_percent, percent))
             }
             ASK_TYPE -> {

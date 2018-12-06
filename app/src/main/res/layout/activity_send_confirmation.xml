@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@drawable/img_brand"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"
@@ -28,238 +29,240 @@
         app:cardCornerRadius="2dp"
         app:cardElevation="3dp">
 
-        <RelativeLayout
-            android:id="@+id/relative_content"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="16dp">
-
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                app:srcCompat="@drawable/ic_send" />
+            android:scrollbars="none"
+            android:fillViewport="true">
 
             <LinearLayout
-                android:id="@+id/linear_sum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/image_send"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="14dp"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_sum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    tools:text="-00000000.00000000" />
-
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_tag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="4dp"
-                    android:background="@drawable/asset_price_border"
-                    android:paddingStart="4dp"
-                    android:paddingTop="2dp"
-                    android:paddingEnd="4dp"
-                    android:paddingBottom="2dp"
-                    android:textColor="@color/info500"
-                    android:textSize="14sp"
-                    tools:text="TAG" />
-
-            </LinearLayout>
-
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_sum_in_dollar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/linear_sum"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/disabled500"
-                android:textSize="12sp"
-                android:visibility="gone"
-                tools:text="≈ 00 000.00 US Dollar" />
-
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_line_1"
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_below="@+id/text_sum_in_dollar"
-                android:layout_marginBottom="14dp"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/shape_dashed_line"
-                android:layerType="software" />
-
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_sent_to_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/image_line_1"
-                android:layout_marginBottom="6dp"
-                android:text="@string/send_confirmation_sent_to"
-                android:textColor="@color/basic500"
-                android:textSize="14sp" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_sent_to_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_sent_to_title"
-                android:textColor="@color/disabled900"
-                android:textSize="14sp"
-                tools:text="Mr. Big Mike" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_sent_to_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_sent_to_name"
-                android:layout_marginTop="1dp"
-                android:textColor="@color/basic700"
-                android:textSize="12sp"
-                tools:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0" />
-
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_line_2"
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_below="@+id/text_sent_to_address"
-                android:layout_marginBottom="14dp"
-                android:layout_marginTop="14dp"
-                android:background="@drawable/shape_dashed_line"
-                android:layerType="software" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_fee_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/image_line_2"
-                android:layout_marginBottom="6dp"
-                android:text="@string/send_confirmation_fee"
-                android:textColor="@color/basic500"
-                android:textSize="14sp" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_fee_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_fee_title"
-                android:textColor="@color/disabled900"
-                android:textSize="14sp"
-                tools:text="0.001 Waves" />
-
-            <LinearLayout
-                android:id="@+id/gateway_commission_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_fee_value"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_margin="16dp">
 
                 <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    app:srcCompat="@drawable/ic_send" />
+
+                <LinearLayout
+                    android:id="@+id/linear_sum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_sum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:text="-00000000.00000000" />
+
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="4dp"
+                        android:background="@drawable/asset_price_border"
+                        android:paddingStart="4dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="4dp"
+                        android:paddingBottom="2dp"
+                        android:textColor="@color/info500"
+                        android:textSize="14sp"
+                        tools:text="TAG" />
+
+                </LinearLayout>
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_sum_in_dollar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/disabled500"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    tools:text="≈ 00 000.00 US Dollar" />
+
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_line_1"
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:layout_marginTop="14dp"
                     android:layout_marginBottom="14dp"
+                    android:layout_marginTop="24dp"
                     android:background="@drawable/shape_dashed_line"
                     android:layerType="software" />
 
+
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_gateway_fee_title"
+                    android:id="@+id/text_sent_to_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="@string/send_confirmation_gateway_fee"
+                    android:text="@string/send_confirmation_sent_to"
                     android:textColor="@color/basic500"
                     android:textSize="14sp" />
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_gateway_fee_value"
+                    android:id="@+id/text_sent_to_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/disabled900"
+                    android:textSize="14sp"
+                    tools:text="Mr. Big Mike" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_sent_to_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:textColor="@color/basic700"
+                    android:textSize="12sp"
+                    tools:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0" />
+
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_line_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginBottom="14dp"
+                    android:layout_marginTop="14dp"
+                    android:background="@drawable/shape_dashed_line"
+                    android:layerType="software" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_fee_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:text="@string/send_confirmation_fee"
+                    android:textColor="@color/basic500"
+                    android:textSize="14sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_fee_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/disabled900"
                     android:textSize="14sp"
                     tools:text="0.001 Waves" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/attachment_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/gateway_commission_layout"
-                android:layout_marginTop="14dp"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_line_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    android:layout_marginBottom="14dp"
-                    android:background="@drawable/shape_dashed_line"
-                    android:layerType="software" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_description_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="@string/send_confirmation_description"
-                    android:textColor="@color/basic500"
-                    android:textSize="14sp" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_description_error"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="@string/send_confirmation_the_description_is_too_long"
-                    android:textColor="@color/error500"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
-
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/edit_optional_message"
+                <LinearLayout
+                    android:id="@+id/gateway_commission_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginRight="-4dp"
-                    android:backgroundTint="@color/accent50"
-                    android:hint="@string/send_confirmation_write_an_optional_message"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:maxLength="140"
-                    android:paddingBottom="20dp"
-                    android:singleLine="true"
-                    android:textColorHint="@color/basic500" />
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="14dp"
+                        android:background="@drawable/shape_dashed_line"
+                        android:layerType="software" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_gateway_fee_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:text="@string/send_confirmation_gateway_fee"
+                        android:textColor="@color/basic500"
+                        android:textSize="14sp" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_gateway_fee_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/disabled900"
+                        android:textSize="14sp"
+                        tools:text="0.001 Waves" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/attachment_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/image_line_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:layout_marginBottom="14dp"
+                        android:background="@drawable/shape_dashed_line"
+                        android:layerType="software" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_description_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:text="@string/send_confirmation_description"
+                        android:textColor="@color/basic500"
+                        android:textSize="14sp" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_description_error"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:text="@string/send_confirmation_the_description_is_too_long"
+                        android:textColor="@color/error500"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/edit_optional_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-4dp"
+                        android:layout_marginRight="-4dp"
+                        android:backgroundTint="@color/accent50"
+                        android:hint="@string/send_confirmation_write_an_optional_message"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:maxLength="140"
+                        android:paddingBottom="20dp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/basic500" />
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/button_confirm"
+                        style="@style/WavesButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/send_confirmation_confirm" />
+
+                </FrameLayout>
 
             </LinearLayout>
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/button_confirm"
-                style="@style/WavesButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="8dp"
-                android:text="@string/send_confirmation_confirm" />
-
-        </RelativeLayout>
+        </ScrollView>
 
     </android.support.v7.widget.CardView>
 

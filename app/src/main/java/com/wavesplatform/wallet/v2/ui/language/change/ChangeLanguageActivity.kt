@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.activity_change_language.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import java.util.*
 import javax.inject.Inject
 
 
@@ -97,7 +96,7 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
             val item = adapter.getItem(presenter.currentLanguagePosition)
             item.notNull {
                 presenter.saveLanguage(it.language.code)
-                setLanguage(Locale(it.language.code))
+                setLanguage(Language.getLocale(it.language.code))
                 launchActivity<MainActivity>(clear = true)
             }
         }

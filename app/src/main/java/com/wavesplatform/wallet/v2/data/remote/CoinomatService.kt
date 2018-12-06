@@ -38,4 +38,9 @@ interface CoinomatService {
     fun getXRate(@Query("f") from: String?,
                  @Query("t") to: String?,
                  @Query("lang") lang: String?): Observable<XRate>
+
+
+    companion object {
+        const val GATEWAY_ADDRESS = "3PAs2qSeUAfgqSKS8LpZPKGYEjJKcud9Djr"
+    }
 }

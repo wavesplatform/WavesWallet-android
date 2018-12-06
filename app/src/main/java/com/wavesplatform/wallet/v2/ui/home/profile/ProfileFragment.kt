@@ -215,7 +215,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
     private fun initFingerPrintControl() {
         if (FingerprintAuthDialogFragment.isAvailable(context!!)) {
             fingerprint_switch.setOnCheckedChangeListener(null)
-            fingerprint_switch.isChecked = App.getAccessManager().isUseFingerPrint()
+            val guid = App.getAccessManager().getLoggedInGuid()
+            fingerprint_switch.isChecked = App.getAccessManager().isUseFingerPrint(guid)
             fingerprint_switch.setOnCheckedChangeListener { _, enable ->
                 launchActivity<EnterPassCodeActivity>(
                         requestCode = REQUEST_ENTER_PASS_CODE_FOR_FINGERPRINT) {
@@ -303,7 +304,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun setFingerprint(guid: String, passCode: String) {
-        if (App.getAccessManager().isUseFingerPrint()) {
+        if (App.getAccessManager().isUseFingerPrint(guid)) {
             App.getAccessManager().setUseFingerPrint(false)
         } else {
             val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
@@ -313,7 +314,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint() {
                             App.getAccessManager().setUseFingerPrint(
-                                    !App.getAccessManager().isUseFingerPrint())
+                                    !App.getAccessManager().isUseFingerPrint(guid))
                             initFingerPrintControl()
                         }
 

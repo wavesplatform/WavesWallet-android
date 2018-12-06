@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
@@ -116,7 +115,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="@color/basic500"
-        android:text="@string/network_switch_off_spam_filtering"
+        android:text="@string/network_switch_show_spam"
         />
 
         <android.support.v7.widget.SwitchCompat

@@ -2,14 +2,13 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.R.id.*
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
@@ -19,13 +18,11 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActiv
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.makeTextHalfBold
-import com.wavesplatform.wallet.v2.util.showError
-import com.wavesplatform.wallet.v2.util.stripZeros
+import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send_confirmation.*
 import pers.victor.ext.*
+import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import javax.inject.Inject
 
 
@@ -81,7 +78,12 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             text_sum.makeTextHalfBold()
         }
 
-        text_tag.text = presenter.selectedAsset!!.getName()
+        val ticker = presenter.assetInfo?.getTicker()
+        if (ticker.isNullOrBlank()) {
+            text_tag.text = presenter.selectedAsset!!.getName()
+        } else {
+            text_tag.text = ticker
+        }
         text_sent_to_address.text = presenter.recipient
         presenter.getAddressName(presenter.recipient!!)
         text_fee_value.text = "${Constants.WAVES_FEE / 100_000_000F} ${Constants.CUSTOM_FEE_ASSET_NAME}"
@@ -100,10 +102,23 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             }
         }
 
-        button_confirm.click {
-            showTransactionProcessing()
-            presenter.confirmSend()
+        edit_optional_message.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboard()
+                goNext()
+                true
+            } else {
+                false
+            }
         }
+
+        button_confirm.click { goNext() }
+    }
+
+    private fun goNext() {
+        showTransactionProcessing()
+        presenter.confirmSend()
+
     }
 
     override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {

@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -12,7 +13,6 @@ import kotlinx.android.synthetic.main.activity_tutorial.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.findColor
-import java.util.*
 import javax.inject.Inject
 
 
@@ -31,7 +31,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
     override fun askPassCode() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setLanguage(Locale(intent.getStringExtra(BUNDLE_LANG)))
+        setLanguage(Language.getLocale(intent.getStringExtra(BUNDLE_LANG)))
         super.onCreate(savedInstanceState)
     }
 

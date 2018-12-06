@@ -89,17 +89,18 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
         barEntries = ArrayList()
         val fromTimestamp = to!! - 100L * currentTimeFrame.toLong() * 1000 * 60
 
-        addSubscription(dataFeedManager.loadCandlesOnInterval(watchMarket, currentTimeFrame, fromTimestamp, to)
+        addSubscription(apiDataManager.loadCandles(watchMarket, currentTimeFrame, fromTimestamp, to)
                 .flatMap { candles ->
                     chartModel.candleList = candles
                     Observable.fromIterable(candles)
                 }
-                .filter { candle -> java.lang.Double.valueOf(candle.volume) > 0 }
+                .filter { candle -> candle.volume != null }
+                .filter { candle -> candle.volume!! > 0 }
                 .map { candle ->
-                    val e = CandleEntry((candle.timestamp!! / (1000 * 60 * currentTimeFrame)).toFloat(), java.lang.Float.valueOf(candle.high)!!, java.lang.Float.valueOf(candle.low)!!, java.lang.Float.valueOf(candle.open)!!, java.lang.Float.valueOf(candle.close)!!)
+                    val e = CandleEntry((candle.time!! / (1000 * 60 * currentTimeFrame)).toFloat(), candle.high!!.toFloat(), candle.low!!.toFloat(), candle.openValue!!.toFloat(), candle.close!!.toFloat())
                     entries.add(e)
 
-                    barEntries.add(BarEntry((candle.timestamp!! / (1000 * 60 * currentTimeFrame)).toFloat(), java.lang.Float.valueOf(candle.volume)!!))
+                    barEntries.add(BarEntry((candle.time!! / (1000 * 60 * currentTimeFrame)).toFloat(), candle.volume!!.toFloat()))
 
                     candle
                 }
@@ -117,7 +118,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
 
     fun refreshCandles() {
         val to = Date().time
-        addSubscription(dataFeedManager.loadCandlesOnInterval(
+        addSubscription(apiDataManager.loadCandles(
                 watchMarket,
                 currentTimeFrame, prevToDate, to)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -125,9 +126,11 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
                     val ces = ArrayList<CandleEntry>()
                     val bes = ArrayList<BarEntry>()
                     for (candle in candles) {
-                        if (java.lang.Float.valueOf(candle.volume) > 0) {
-                            ces.add(CandleEntry((candle.timestamp!! / (1000 * 60 * currentTimeFrame)).toFloat(), java.lang.Float.valueOf(candle.high)!!, java.lang.Float.valueOf(candle.low)!!, java.lang.Float.valueOf(candle.open)!!, java.lang.Float.valueOf(candle.close)!!))
-                            bes.add(BarEntry((candle.timestamp!! / (1000 * 60 * currentTimeFrame)).toFloat(), java.lang.Float.valueOf(candle.volume)!!))
+                        if (candle.volume != null) {
+                            if (candle.volume!! > 0) {
+                                ces.add(CandleEntry((candle.time!! / (1000 * 60 * currentTimeFrame)).toFloat(), candle.high!!.toFloat(), candle.low!!.toFloat(), candle.openValue!!.toFloat(), candle.close!!.toFloat()))
+                                bes.add(BarEntry((candle.time!! / (1000 * 60 * currentTimeFrame)).toFloat(), candle.volume!!.toFloat()))
+                            }
                         }
                     }
                     prevToDate = to
@@ -138,7 +141,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     }
 
     fun getTradesByPair() {
-        addSubscription(dataFeedManager.getLastTradeByPair(watchMarket)
+        addSubscription(apiDataManager.getLastTradeByPair(watchMarket)
                 .map { it.firstOrNull() }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ tradesMarket ->

@@ -10,13 +10,11 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
-import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.isNetworkConnection
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
@@ -40,6 +38,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
 
     override fun configLayoutRes() = R.layout.activity_enter_passcode
 
+    override fun askPassCode() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.null_animation, R.anim.null_animation)
@@ -72,7 +71,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                     }
 
                     override fun onFingerprintClicked() {
-                        if (App.getAccessManager().isUseFingerPrint()) {
+                        if (App.getAccessManager().isUseFingerPrint(guid)) {
                             showFingerPrint()
                         }
                     }
@@ -112,12 +111,6 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         if (EnterPassCodePresenter.overMaxWrongPassCodes(guid)) {
             startUsePasswordScreen()
         }
-    }
-
-    private fun clearAndLogout() {
-        App.getAccessManager().setLastLoggedInGuid("")
-        App.getAccessManager().resetWallet()
-        launchActivity<WelcomeActivity>(clear = true)
     }
 
     private fun startUsePasswordScreen() {
@@ -194,8 +187,6 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
             overridePendingTransition(R.anim.null_animation, R.anim.slide_out_down)
         }
     }
-
-    override fun askPassCode() = false
 
     private fun showRequestPasswordDialog() {
         val alertDialog = AlertDialog.Builder(this).create()

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common_50_percent">50%</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_10_percent">10%</string>
-    <string name="new_account_account_name_validation_min_length_error">Ten minste 2 karakters</string>
     <string name="about_fill_payment_details">U moet de volgende informatie bij de betalingsdetails invoeren:</string>
     <string name="about_fill_payment_info">CNM — Uw WAVES adres. \nAls u dit niet invoert kunnen we uw account niet crediteren.</string>
     <string name="about_redirection_message">Na de verificatie ontvangt u een email met verdere instructies.</string>
@@ -14,7 +10,13 @@
     <string name="add_address_name">Naam</string>
     <string name="add_address_toolbar_title">Voeg toe</string>
     <string name="address_book_add">Voeg toe</string>
+    <string name="address_book_address_validation_already_use_error">Al in gebruik</string>
+    <string name="address_book_address_validation_required_error">Adres is nodig</string>
     <string name="address_book_empty_state">Niks hier… \nU kunt een nieuw adres aanmaken</string>
+    <string name="address_book_name_validation_already_use_error">Al in gebruik</string>
+    <string name="address_book_name_validation_max_length_error">Maximaal 20 karakters</string>
+    <string name="address_book_name_validation_min_length_error">Ten minste 2 karakters</string>
+    <string name="address_book_name_validation_required_error">Naam is vereist</string>
     <string name="address_book_search">Zoeken</string>
     <string name="address_book_success_deleted">Adres verwijderd</string>
     <string name="address_book_toolbar_title">Adresboek</string>
@@ -39,9 +41,9 @@
     <string name="asset_details_available_balance">Beschikbaar saldo</string>
     <string name="asset_details_coming_soon">Komt binnenkort</string>
     <string name="asset_details_cryptocurrency">Cryptovaluta</string>
-    <string name="asset_details_error_perfom_transaction">U kunt geen transacties met deze asset doen</string>
     <string name="asset_details_decimal">Decimaalpunten</string>
     <string name="asset_details_description">Beschrijving</string>
+    <string name="asset_details_error_perfom_transaction">U kunt geen transacties met deze asset doen</string>
     <string name="asset_details_flat_money">Fiat geld</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">In orders</string>
@@ -146,26 +148,14 @@
     <string name="choose_account_deleted">Verwijderd</string>
     <string name="choose_account_empty_state">Niks hier… \nU heeft geen opgeslagen accounts</string>
     <string name="choose_account_yes">Verwijder</string>
-    <string name="choose_language_brazilian">Português do Brasil</string>
-    <string name="choose_language_china">中文(简体)</string>
     <string name="choose_language_confirm">Bevestig</string>
     <string name="choose_language_continue">Ga door</string>
-    <string name="choose_language_danish">Dansk</string>
-    <string name="choose_language_english">English</string>
-    <string name="choose_language_german">Deutsch</string>
-    <string name="choose_language_hindi">हिन्दी</string>
-    <string name="choose_language_indonesian">Indonesia</string>
-    <string name="choose_language_japan">日本語</string>
-    <string name="choose_language_korea">한국어</string>
-    <string name="choose_language_nederlands">Nederlands</string>
-    <string name="choose_language_polish">Polszczyzna</string>
-    <string name="choose_language_portuguese">Português</string>
-    <string name="choose_language_russia">Русский</string>
-    <string name="choose_language_spain">Español</string>
-    <string name="choose_language_turkey">Türkçe</string>
     <string name="coinomat_success_subtitle">Na de betaling wordt uw saldo geüpdatet</string>
     <string name="coinomat_success_title">U wordt doorgestuurd naar «Indacoin»</string>
     <string name="common_100_percent">Gebruik de totale balans</string>
+    <string name="common_10_percent">10%</string>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
     <string name="common_action_close">Sluiten</string>
     <string name="common_action_information">Informatie</string>
     <string name="common_copied">Gekopieerd!</string>
@@ -334,7 +324,7 @@
     <string name="import_account_click_show_pairing">Klik op «Show Pairing Code» om een ​​QR-code te tonen</string>
     <string name="import_account_login_at_site">Login uw Waves Client via uw PC of Mac</string>
     <string name="import_account_scan_pairing_code">Koppelingscode scannen</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code">Instellingen — Beveiliging — Koppelingscode</string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Instellingen — Algemeen — Apparaat Pairing</string>
     <string name="import_account_tab_manually">Handmatig</string>
     <string name="import_account_tab_scan">Scannen</string>
     <string name="import_account_toolbar_title">Account importeren</string>
@@ -379,11 +369,12 @@
     <string name="network_spam_filter">Spamfilter</string>
     <string name="network_spam_url_validation_bad_url">Verkeerde URL</string>
     <string name="network_spam_url_validation_url_empty">URL is vereist</string>
-    <string name="network_switch_off_spam_filtering">Show SPAM</string>
+    <string name="network_switch_show_spam">Show spam</string>
     <string name="network_toolbar_title">Netwerk</string>
     <string name="new_account_account_name_hint">Accountnaam</string>
     <string name="new_account_account_name_validation_already_exist_error">Accountnaam al in gebruik</string>
     <string name="new_account_account_name_validation_length_error">Maximaal 20 karakters</string>
+    <string name="new_account_account_name_validation_min_length_error">Ten minste 2 karakters</string>
     <string name="new_account_account_name_validation_required_error">Naam is vereist</string>
     <string name="new_account_avatar_description">U kunt dit later niet wijzigen</string>
     <string name="new_account_avatar_error">Selecteer een avatar</string>

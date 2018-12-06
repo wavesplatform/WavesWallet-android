@@ -9,10 +9,9 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
+import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
-import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.fragment_trade_last_trades.*
@@ -22,7 +21,6 @@ import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
-import java.util.*
 import javax.inject.Inject
 
 
@@ -112,7 +110,7 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
     }
 
 
-    override fun afterSuccessLoadLastTrades(data: List<LastTrade>) {
+    override fun afterSuccessLoadLastTrades(data: List<LastTradesResponse.Data.ExchangeTransaction>) {
         progress_bar.hide()
         swipe_container.isRefreshing = false
         error_layout.gone()

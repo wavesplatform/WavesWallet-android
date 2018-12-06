@@ -30,6 +30,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
+import com.wavesplatform.wallet.v2.data.remote.CoinomatService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
@@ -208,7 +209,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 val assetBalance = queryFirst<AssetBalance> {
                     equalTo("assetId", transaction.assetId ?: "")
                 }
-                if (assetBalance != null && (!assetBalance.isGateway
+                if (assetBalance != null && (nonGateway(assetBalance, transaction)
                                 || assetBalance.isWaves() || assetBalance.isFiatMoney)) {
                     val resendBtn = inflater?.inflate(R.layout.resend_btn, historyContainer, false)
                     resendBtn!!.findViewById<View>(R.id.button_send_again).click {
@@ -437,6 +438,10 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         }
         historyContainer?.addView(bottomBtns)
     }
+
+    private fun nonGateway(assetBalance: AssetBalance, transaction: Transaction) =
+            !assetBalance.isGateway || (assetBalance.isGateway
+                    && !transaction.recipientAddress.equals(CoinomatService.GATEWAY_ADDRESS))
 
     private fun resolveExistOrNoAddress(textViewName: TextView?, textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
         val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }

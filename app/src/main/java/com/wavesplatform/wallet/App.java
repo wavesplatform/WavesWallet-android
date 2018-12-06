@@ -35,6 +35,7 @@ import io.github.kbiakov.codeview.classifier.CodeProcessor;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.realm.Realm;
 import pers.victor.ext.Ext;
+import timber.log.Timber;
 
 public class App extends DaggerApplication {
 
@@ -69,6 +70,10 @@ public class App extends DaggerApplication {
 
         AppUtil appUtil = new AppUtil(this);
         accessManager = new AccessManager(mPrefsUtil, appUtil, authHelper);
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
 
         // sessions handlers
         ProcessLifecycleOwner.get().getLifecycle().addObserver(new AppLifecycleObserver());

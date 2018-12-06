@@ -22,7 +22,7 @@ android {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 409
+        versionCode 410
         versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -74,31 +74,28 @@ android {
             signingConfig signingConfigs.config
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher", appIconRound: "@mipmap/ic_launcher_round"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
-            buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
+            buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
             buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/"'
             buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
-            buildConfigField 'String', 'DATA_FEED_URL', '"https://marketdata.wavesplatform.com/api/"'
         }
         dev {
             applicationIdSuffix ".dev"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev", appIconRound: "@mipmap/ic_launcher_dev_round"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
-            buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
+            buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
             buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/"'
             buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
-            buildConfigField 'String', 'DATA_FEED_URL', '"https://marketdata.wavesplatform.com/api/"'
         }
         devTest {
             applicationIdSuffix ".test"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test", appIconRound: "@mipmap/ic_launcher_test_round"]
             buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
-            buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/v0/"'
+            buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/"'
             buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
             buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/"'
             buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
-            buildConfigField 'String', 'DATA_FEED_URL', '"https://marketdata.wavesplatform.com/api/"'
         }
     }
     compileOptions {
@@ -287,7 +284,6 @@ dependencies {
     implementation 'com.pddstudio:encrypted-preferences:1.3.0'
 
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
-    implementation 'com.github.simonpercic:oklog3:2.3.0'
     implementation('com.github.ihsanbal:LoggingInterceptor:2.0.2') {
         exclude group: 'org.json', module: 'json'
     }
@@ -296,8 +292,6 @@ dependencies {
 
     implementation "com.jakewharton.timber:timber:$timberVersion"
     implementation 'com.novoda:simple-chrome-custom-tabs:0.1.6'
-
-
 
     implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'

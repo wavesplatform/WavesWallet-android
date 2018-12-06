@@ -2,11 +2,10 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 
 import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.wallet.R.color.s
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade
+import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
@@ -33,9 +32,9 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                         .retry(3)
                         .flatMap {
                             return@flatMap Observable.zip(matcherDataManager.loadOrderBook(watchMarket),
-                                    dataFeedManager.getLastTradeByPair(watchMarket)
+                                    apiDataManager.getLastTradeByPair(watchMarket)
                                             .map { it.firstOrNull() },
-                                    BiFunction { orderBook: OrderBook, lastPrice: LastTrade? ->
+                                    BiFunction { orderBook: OrderBook, lastPrice: LastTradesResponse.Data.ExchangeTransaction? ->
                                         return@BiFunction Pair(orderBook, lastPrice)
                                     })
                         }

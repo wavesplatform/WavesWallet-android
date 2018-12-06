@@ -31,6 +31,8 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     override fun configLayoutRes() = R.layout.activity_create_passcode
 
+    override fun askPassCode() = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
@@ -71,8 +73,6 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
         moveToCreateStep()
     }
 
-    override fun askPassCode() = false
-
     private fun saveAccount(passCode: String) {
         if (intent.extras == null) {
             ToastCustom.makeText(this@CreatePassCodeActivity,
@@ -95,7 +95,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                 putExtra(CreatePassCodeActivity.KEY_INTENT_GUID, guid)
                 putExtra(CreatePassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
             }
-        } else if (App.getAccessManager().isUseFingerPrint()) {
+        } else if (App.getAccessManager().isUseFingerPrint(guid)) {
             val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
             fingerprintDialog.isCancelable = false
             fingerprintDialog.show(supportFragmentManager, "fingerprintDialog")
