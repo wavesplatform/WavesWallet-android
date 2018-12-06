@@ -31,6 +31,8 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     override fun configLayoutRes() = R.layout.activity_create_passcode
 
+    override fun askPassCode() = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
@@ -70,8 +72,6 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
         })
         moveToCreateStep()
     }
-
-    override fun askPassCode() = false
 
     private fun saveAccount(passCode: String) {
         if (intent.extras == null) {

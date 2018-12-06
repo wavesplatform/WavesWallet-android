@@ -31,6 +31,7 @@ class ImportAccountActivity : BaseActivity(), ImportAccountView {
 
     override fun configLayoutRes() = R.layout.activity_import_account
 
+    override fun askPassCode() = false
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)

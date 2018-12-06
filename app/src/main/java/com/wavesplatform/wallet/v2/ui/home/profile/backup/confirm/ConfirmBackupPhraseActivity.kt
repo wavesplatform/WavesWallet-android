@@ -34,6 +34,8 @@ class ConfirmBackupPhraseActivity : BaseActivity(), ConfirmBackupPhraseView {
 
     override fun configLayoutRes(): Int = R.layout.activity_confirm_backup_pharse
 
+    override fun askPassCode() = App.getAccessManager().getWallet() != null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
