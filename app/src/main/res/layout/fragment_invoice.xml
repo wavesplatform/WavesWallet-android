@@ -63,7 +63,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_toLeftOf="@+id/image_change"
-                    android:background="@color/white"
                     android:clickable="true"
                     android:padding="8dp"
                     android:visibility="gone">
