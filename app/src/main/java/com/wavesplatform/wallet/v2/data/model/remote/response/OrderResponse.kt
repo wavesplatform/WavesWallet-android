@@ -3,8 +3,6 @@ package com.wavesplatform.wallet.v2.data.model.remote.response
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade.Companion.API_BUY_TYPE
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastTrade.Companion.API_SELL_TYPE
 
 class OrderResponse {
 
