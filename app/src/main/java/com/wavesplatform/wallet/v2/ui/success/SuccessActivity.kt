@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.success
 
 import android.os.Bundle
-import android.view.WindowManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -32,10 +31,8 @@ class SuccessActivity : BaseActivity(), SuccessView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         intent.extras.notNull {
-            val title = it.getString(KEY_INTENT_TITLE, "")
-            val subtitle = it.getString(KEY_INTENT_SUBTITLE, "")
-            text_title.text = title
-            text_subtitle.text = subtitle
+            text_title.text = it.getString(KEY_INTENT_TITLE, "")
+            text_subtitle.text = it.getString(KEY_INTENT_SUBTITLE, "")
             button_ok.click {
                 launchActivity<MainActivity>(clear = true)
             }

@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_invoice.*
+import kotlinx.android.synthetic.main.layout_asset_card.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
@@ -109,7 +110,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             View.GONE
         }
 
-        edit_asset.gone()
+        text_asset.gone()
         container_asset.visiable()
 
         button_continue.isEnabled = presenter.assetBalance != null
@@ -135,7 +136,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
 
     private fun assetChangeEnable(enable: Boolean) {
         if (enable) {
-            edit_asset.click {
+            text_asset.click {
                 launchAssets()
             }
             container_asset.click {
@@ -147,7 +148,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
                     activity!!, R.color.white))
         } else {
-            edit_asset.click {
+            text_asset.click {
 
             }
             container_asset.click {
