@@ -11,7 +11,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
@@ -98,7 +97,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         image_asset_icon.setAsset(assetBalance)
         text_asset_name.text = assetBalance.getName()
         text_asset_value.text = assetBalance.getDisplayAvailableBalance()
-        image_down_arrow.visibility = if (assetBalance.isGateway) {
+        image_down_arrow.visibility = if (assetBalance.isGateway && !assetBalance.isWaves()) {
             View.VISIBLE
         } else {
             View.GONE
