@@ -43,9 +43,9 @@ class ChangeLanguageBottomSheetFragment @Inject constructor() : BaseBottomSheetD
             val languageItemByCode = Language.getLanguageItemByCode(preferencesHelper.getLanguage())
             val positionCurrent = adapter.data.indexOf(languageItemByCode)
             if (position == positionCurrent){
-                rootView.button_confirm.invisiable()
+                rootView.frame_button_confirm.invisiable()
             }else{
-                rootView.button_confirm.visiable()
+                rootView.frame_button_confirm.visiable()
             }
 
             if (currentLanguagePosition == -1) {

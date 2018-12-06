@@ -13,7 +13,6 @@
         android:layout_marginEnd="8dp"
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
-        android:layout_marginTop="24dp"
         android:fontFamily="@font/roboto"
         app:titleTextAppearance="@style/Toolbar.Title"
         app:titleTextColor="@color/white" />

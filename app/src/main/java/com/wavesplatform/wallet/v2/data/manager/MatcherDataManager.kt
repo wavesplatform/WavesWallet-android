@@ -28,10 +28,6 @@ import javax.inject.Singleton
 class MatcherDataManager @Inject constructor() : BaseDataManager() {
     var allMarketsList = mutableListOf<MarketResponse>()
 
-    companion object {
-        var OTHER_GROUP = "other"
-    }
-
     fun loadReservedBalances(): Observable<Map<String, Long>> {
         val timestamp = currentTimeMillis
         var signature = ""
@@ -171,5 +167,9 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
             return@Function3 filteredSpamList
         })
+    }
+
+    companion object {
+        var OTHER_GROUP = "other"
     }
 }

@@ -32,11 +32,6 @@ class OrderResponse {
         var priceAsset: String = ""
     }
 
-    companion object {
-        var API_BUY_TYPE = "buy"
-        var API_SELL_TYPE = "sell"
-    }
-
     fun getType(): OrderType {
         return when (type) {
             API_BUY_TYPE -> OrderType.BUY
@@ -53,6 +48,11 @@ class OrderResponse {
             "Filled" -> OrderStatus.Filled
             else -> OrderStatus.Filled
         }
+    }
+
+    companion object {
+        var API_BUY_TYPE = "buy"
+        var API_SELL_TYPE = "sell"
     }
 }
 

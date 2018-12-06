@@ -35,12 +35,6 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
         super.onCreate(savedInstanceState)
     }
 
-    companion object {
-        var BUNDLE_ADDRESS = "address"
-        var BUNDLE_AMOUNT = "amount"
-        var BUNDLE_RECIPIENT_IS_ALIAS = "recipient_is_alias"
-    }
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.confirm_leasing), R.drawable.ic_toolbar_back_white)
 
@@ -101,4 +95,9 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
         button_confirm.isEnabled = networkConnected
     }
 
+    companion object {
+        var BUNDLE_ADDRESS = "address"
+        var BUNDLE_AMOUNT = "amount"
+        var BUNDLE_RECIPIENT_IS_ALIAS = "recipient_is_alias"
+    }
 }

@@ -50,17 +50,6 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     var buttonPositive: Button? = null
     private var isLoading = false
 
-    companion object {
-        fun newInstance(watchMarket: WatchMarket?): TradeChartFragment {
-            val args = Bundle()
-            args.classLoader = WatchMarket::class.java.classLoader
-            args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
-            val fragment = TradeChartFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     @ProvidePresenter
     fun providePresenter(): TradeChartPresenter = presenter
 
@@ -516,5 +505,16 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         bar_chart.onDestroy()
         candle_chart.onDestroy()
         super.onDestroyView()
+    }
+
+    companion object {
+        fun newInstance(watchMarket: WatchMarket?): TradeChartFragment {
+            val args = Bundle()
+            args.classLoader = WatchMarket::class.java.classLoader
+            args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
+            val fragment = TradeChartFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

@@ -14,10 +14,6 @@ import javax.inject.Inject
 
 class AppLifecycleObserver : LifecycleObserver {
 
-    companion object {
-        const val SESSION_LIFE_AFTER_MINIMIZE = 5000L
-    }
-
     var handler: Handler = Handler()
     var resetWalletTask = Runnable {
         App.getAccessManager().resetWallet()
@@ -31,5 +27,9 @@ class AppLifecycleObserver : LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onEnterBackground() {
         handler.postDelayed(resetWalletTask, SESSION_LIFE_AFTER_MINIMIZE)
+    }
+
+    companion object {
+        const val SESSION_LIFE_AFTER_MINIMIZE = 5000L
     }
 }

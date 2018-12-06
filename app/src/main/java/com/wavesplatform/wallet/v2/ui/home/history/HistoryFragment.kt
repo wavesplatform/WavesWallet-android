@@ -31,15 +31,6 @@ class HistoryFragment : BaseFragment(), HistoryView {
 
     override fun configLayoutRes(): Int = R.layout.fragment_history
 
-    companion object {
-        const val BUNDLE_TABS = "tabs"
-        const val BUNDLE_ASSET = "asset"
-
-        fun newInstance(): HistoryFragment {
-            return HistoryFragment()
-        }
-    }
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupUI()
     }
@@ -90,5 +81,14 @@ class HistoryFragment : BaseFragment(), HistoryView {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    companion object {
+        const val BUNDLE_TABS = "tabs"
+        const val BUNDLE_ASSET = "asset"
+
+        fun newInstance(): HistoryFragment {
+            return HistoryFragment()
+        }
     }
 }

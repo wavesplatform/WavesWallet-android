@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
+import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment.Companion.BUNDLE_ASSET
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.ReceiveActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
@@ -43,10 +44,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     private var formatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm")
 
     override fun configLayoutRes() = R.layout.fragment_asset_details_content
-
-    companion object {
-        var BUNDLE_ASSET = "asset"
-    }
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
@@ -236,5 +233,9 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             }
         }
         cardBurnContainer.visiable()
+    }
+
+    companion object {
+        var BUNDLE_ASSET = "asset"
     }
 }

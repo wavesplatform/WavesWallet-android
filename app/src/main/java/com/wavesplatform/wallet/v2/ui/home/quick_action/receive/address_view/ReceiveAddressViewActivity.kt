@@ -54,16 +54,6 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
         image_asset_icon.isOval = true
         image_asset_icon.setAsset(assetBalance)
 
-        val rotation = AnimationUtils.loadAnimation(this, R.anim.rotate)
-        rotation.fillAfter = true
-        image_loader.startAnimation(rotation)
-        runDelayed(2000) {
-            image_loader.clearAnimation()
-            card_progress.gone()
-            card_address_view.visiable()
-            image_close.visiable()
-        }
-
         image_close.click {
             launchActivity<MainActivity>(clear = true)
         }

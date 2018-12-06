@@ -60,19 +60,6 @@ class SendActivity : BaseActivity(), SendView {
 
     override fun configLayoutRes() = R.layout.activity_send
 
-    companion object {
-        const val REQUEST_YOUR_ASSETS = 43
-        const val REQUEST_SCAN_RECEIVE = 44
-        const val REQUEST_SCAN_MONERO = 45
-        const val KEY_INTENT_ASSET_DETAILS = "asset_details"
-        const val KEY_INTENT_REPEAT_TRANSACTION = "repeat_transaction"
-        const val KEY_INTENT_TRANSACTION_ASSET_BALANCE = "transaction_asset_balance"
-        const val KEY_INTENT_TRANSACTION_AMOUNT = "transaction_amount"
-        const val KEY_INTENT_TRANSACTION_ATTACHMENT = "transaction_attachment"
-        const val KEY_INTENT_TRANSACTION_RECIPIENT = "transaction_recipient"
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
@@ -575,5 +562,17 @@ class SendActivity : BaseActivity(), SendView {
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         button_continue.isEnabled = networkConnected
+    }
+
+    companion object {
+        const val REQUEST_YOUR_ASSETS = 43
+        const val REQUEST_SCAN_RECEIVE = 44
+        const val REQUEST_SCAN_MONERO = 45
+        const val KEY_INTENT_ASSET_DETAILS = "asset_details"
+        const val KEY_INTENT_REPEAT_TRANSACTION = "repeat_transaction"
+        const val KEY_INTENT_TRANSACTION_ASSET_BALANCE = "transaction_asset_balance"
+        const val KEY_INTENT_TRANSACTION_AMOUNT = "transaction_amount"
+        const val KEY_INTENT_TRANSACTION_ATTACHMENT = "transaction_attachment"
+        const val KEY_INTENT_TRANSACTION_RECIPIENT = "transaction_recipient"
     }
 }

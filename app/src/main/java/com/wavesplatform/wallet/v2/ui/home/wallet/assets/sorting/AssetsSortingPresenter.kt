@@ -16,7 +16,6 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
 
     fun loadAssets() {
         runAsync {
-
             queryAllAsync<AssetBalance> {
                 val favoriteList = it.filter({ it.isFavorite }).sortedBy { it.position }.sortedByDescending({ it.isFavorite }).toMutableList()
                 val notFavoriteList = it.filter({ !it.isFavorite && !it.isSpam }).sortedBy { it.position }.toMutableList()

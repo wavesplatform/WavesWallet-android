@@ -17,12 +17,6 @@ import javax.inject.Inject
 class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder>(null) {
     var market: MarketResponse = MarketResponse()
 
-    companion object {
-        val LAST_PRICE_TYPE = 1
-        val BID_TYPE = 2
-        val ASK_TYPE = 3
-    }
-
     init {
         addItemType(LAST_PRICE_TYPE, R.layout.recycle_item_orderbook_last_price)
         addItemType(BID_TYPE, R.layout.recycle_item_orderbook)
@@ -62,6 +56,11 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
                         .setText(R.id.text_sum_value, MoneyUtil.getFormattedTotal(item.sum, market.priceAssetDecimals))
             }
         }
+    }
 
+    companion object {
+        const val LAST_PRICE_TYPE = 1
+        const val BID_TYPE = 2
+        const val ASK_TYPE = 3
     }
 }

@@ -23,10 +23,6 @@ class TradeActivity : BaseActivity(), TradeView {
     @ProvidePresenter
     fun providePresenter(): TradePresenter = presenter
 
-    companion object {
-        var BUNDLE_MARKET = "watchMarket"
-    }
-
     override fun configLayoutRes() = R.layout.activity_trade
 
 
@@ -77,4 +73,8 @@ class TradeActivity : BaseActivity(), TradeView {
     }
 
     override fun needToShowNetworkMessage() = true
+
+    companion object {
+        var BUNDLE_MARKET = "watchMarket"
+    }
 }

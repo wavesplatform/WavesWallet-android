@@ -23,8 +23,8 @@ class HistoryItem : MultiItemEntity {
     }
 
     companion object {
-        val TYPE_EMPTY = 0
-        val TYPE_HEADER = 1
-        val TYPE_DATA = 2
+        const val TYPE_EMPTY = 0
+        const val TYPE_HEADER = 1
+        const val TYPE_DATA = 2
     }
 }

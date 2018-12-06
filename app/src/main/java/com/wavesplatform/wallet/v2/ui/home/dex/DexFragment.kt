@@ -21,6 +21,8 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.REQUEST_SORTING
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.util.currentDateAsTimeSpanString
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
@@ -50,16 +52,6 @@ class DexFragment : BaseFragment(), DexView {
 
 
     override fun configLayoutRes(): Int = R.layout.fragment_dex_new
-
-    companion object {
-        const val RESULT_NEED_UPDATE = "need_update"
-        const val REQUEST_SORTING = 121
-        const val REQUEST_SELECT_MARKETS = 122
-
-        fun newInstance(): DexFragment {
-            return DexFragment()
-        }
-    }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         swipe_container.setColorSchemeResources(R.color.submit400)
@@ -236,6 +228,16 @@ class DexFragment : BaseFragment(), DexView {
             addMarketsItem?.icon?.alpha = 255 // 1.0
         } else {
             addMarketsItem?.icon?.alpha = 77 // 0.3
+        }
+    }
+
+    companion object {
+        const val RESULT_NEED_UPDATE = "need_update"
+        const val REQUEST_SORTING = 121
+        const val REQUEST_SELECT_MARKETS = 122
+
+        fun newInstance(): DexFragment {
+            return DexFragment()
         }
     }
 }

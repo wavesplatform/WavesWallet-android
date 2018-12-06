@@ -69,7 +69,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         val nameValidation = Validation(til_name)
                 .and(NotEmptyTrimRule(R.string.address_book_name_validation_required_error))
                 .and(MinTrimRule(2, R.string.address_book_name_validation_min_length_error))
-                .and(MaxRule(20, R.string.address_book_name_validation_max_length_error))
+                .and(MaxRule(24, R.string.address_book_name_validation_max_length_error))
                 .and(AddressBookNameRule(R.string.address_book_name_validation_already_use_error))
 
         edit_address.setDrawableClickListener(object : onDrawableClickListener {

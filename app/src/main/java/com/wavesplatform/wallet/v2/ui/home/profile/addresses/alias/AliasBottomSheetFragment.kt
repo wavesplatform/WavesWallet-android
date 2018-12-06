@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem.Companion.TYPE_EMPTY
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
@@ -46,12 +47,6 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
         }
 
     lateinit var rootView: View
-
-    companion object {
-        var TYPE_EMPTY = 1
-        var TYPE_CONTENT = 2
-        var REQUEST_CREATE_ALIAS = 43
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -127,5 +122,11 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
     }
 
     override fun afterSuccessLoadAliases(ownAliases: List<Alias>) {
+    }
+
+    companion object {
+        var TYPE_EMPTY = 1
+        var TYPE_CONTENT = 2
+        var REQUEST_CREATE_ALIAS = 43
     }
 }

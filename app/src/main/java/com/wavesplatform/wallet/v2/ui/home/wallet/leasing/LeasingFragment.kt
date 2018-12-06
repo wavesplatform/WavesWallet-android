@@ -43,16 +43,6 @@ class LeasingFragment : BaseFragment(), LeasingView {
     lateinit var adapterActiveAdapter: LeasingActiveAdapter
     var changeTabBarVisibilityListener: HistoryTabFragment.ChangeTabBarVisibilityListener? = null
 
-    companion object {
-
-        /**
-         * @return LeasingFragment instance
-         * */
-        fun newInstance(): LeasingFragment {
-            return LeasingFragment()
-        }
-    }
-
     override fun configLayoutRes(): Int = R.layout.fragment_leasing
 
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -206,5 +196,15 @@ class LeasingFragment : BaseFragment(), LeasingView {
 
     override fun afterFailedLoadLeasing() {
         swipe_container.isRefreshing = false
+    }
+
+    companion object {
+
+        /**
+         * @return LeasingFragment instance
+         * */
+        fun newInstance(): LeasingFragment {
+            return LeasingFragment()
+        }
     }
 }
