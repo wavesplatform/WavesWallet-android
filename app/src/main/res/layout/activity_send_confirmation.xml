@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
-        android:layout_marginTop="24dp"
         app:titleTextAppearance="@style/Toolbar.Title"
         app:titleTextColor="@color/white" />
 

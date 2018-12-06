@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@drawable/img_brand"
-    android:orientation="vertical"
-    android:paddingBottom="56dp">
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_view"
@@ -16,7 +15,6 @@
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
         android:fontFamily="@font/roboto"
-        android:layout_marginTop="24dp"
         tools:title="@string/receive_address_view_toolbar"
         app:titleTextAppearance="@style/Toolbar.Title"
         app:titleTextColor="@color/white">
@@ -25,66 +23,22 @@
             android:id="@+id/image_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:padding="16dp"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic_close_white"
-            tools:visibility="visible" />
+            app:srcCompat="@drawable/ic_close_white" />
     </android.support.v7.widget.Toolbar>
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_progress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="24dp"
-        android:visibility="visible"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="2dp"
-        app:cardElevation="0dp"
-        tools:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_loader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:padding="18dp"
-                app:srcCompat="@drawable/ic_loader_24_submit_400" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="24dp"
-                android:text="@string/receive_address_generate"
-                android:textColor="@color/basic500"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_address_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="-2dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="24dp"
-        android:visibility="gone"
+        android:layout_marginTop="16dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="2dp"
-        app:cardElevation="0dp"
-        tools:visibility="visible">
+        app:cardElevation="0dp">
 
         <ScrollView
             android:layout_width="match_parent"
