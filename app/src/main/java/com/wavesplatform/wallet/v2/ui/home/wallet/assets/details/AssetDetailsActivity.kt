@@ -41,12 +41,6 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
     override fun configLayoutRes() = R.layout.activity_asset_details
 
-    companion object {
-        var BUNDLE_ASSET_POSITION = "position"
-        var BUNDLE_ASSET_TYPE = "type"
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
@@ -197,4 +191,9 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     override fun needToShowNetworkMessage() = true
+
+    companion object {
+        var BUNDLE_ASSET_POSITION = "position"
+        var BUNDLE_ASSET_TYPE = "type"
+    }
 }

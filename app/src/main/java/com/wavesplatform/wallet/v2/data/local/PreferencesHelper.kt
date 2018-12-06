@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.data.local
 
 import android.content.Context
+import android.media.MediaFormat.KEY_LANGUAGE
 import com.pddstudio.preferences.encrypted.EncryptedPreferences
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
@@ -16,14 +17,6 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
 
     fun clear() {
         mPref.edit().clear().apply()
-    }
-
-    companion object {
-        const val PREF_FILE_NAME = "android_waves_pref_file"
-        const val KEY_TUTORIAL = "keyTutorial"
-        const val KEY_CURRENT_BLOCKS_HEIGHT = "currentBlocksHeight"
-        const val KEY_LANGUAGE = "keyLanguage"
-        const val KEY_SHOW_SAVE_SEED_WARNING = "key_show_save_seed_warning"
     }
 
     var currentBlocksHeight: Int
@@ -53,5 +46,13 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
 
     fun setShowSaveSeedWarningTime(guid: String, time: Long) {
         mPref.edit().putLong(KEY_SHOW_SAVE_SEED_WARNING + guid, time).apply()
+    }
+
+    companion object {
+        const val PREF_FILE_NAME = "android_waves_pref_file"
+        const val KEY_TUTORIAL = "keyTutorial"
+        const val KEY_CURRENT_BLOCKS_HEIGHT = "currentBlocksHeight"
+        const val KEY_LANGUAGE = "keyLanguage"
+        const val KEY_SHOW_SAVE_SEED_WARNING = "key_show_save_seed_warning"
     }
 }

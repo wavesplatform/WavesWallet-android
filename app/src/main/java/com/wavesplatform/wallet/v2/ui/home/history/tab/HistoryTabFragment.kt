@@ -45,32 +45,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
     override fun configLayoutRes(): Int = R.layout.fragment_history_tab
 
-    companion object {
-
-        const val all = "All"
-        const val send = "Sent"
-        const val received = "Received"
-        const val exchanged = "Exchanged"
-        const val leased = "Leased"
-        const val issued = "Issued"
-
-        const val leasing_all = "Leasing All"
-        const val leasing_active_now = "Active now"
-        const val leasing_canceled = "Canceled"
-
-        const val TYPE = "type"
-
-
-        fun newInstance(type: String, asset: AssetBalance?): HistoryTabFragment {
-            val historyDateItemFragment = HistoryTabFragment()
-            val bundle = Bundle()
-            bundle.putString(TYPE, type)
-            bundle.putParcelable(HistoryFragment.BUNDLE_ASSET, asset)
-            historyDateItemFragment.arguments = bundle
-            return historyDateItemFragment
-        }
-    }
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.ScrollToTopEvent::class.java)
                 .subscribe {
@@ -179,6 +153,32 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
     override fun onShowError(res: Int) {
         swipe_refresh.isRefreshing = false
         showError(res, R.id.nested_scroll_view)
+    }
+
+    companion object {
+
+        const val all = "All"
+        const val send = "Sent"
+        const val received = "Received"
+        const val exchanged = "Exchanged"
+        const val leased = "Leased"
+        const val issued = "Issued"
+
+        const val leasing_all = "Leasing All"
+        const val leasing_active_now = "Active now"
+        const val leasing_canceled = "Canceled"
+
+        const val TYPE = "type"
+
+
+        fun newInstance(type: String, asset: AssetBalance?): HistoryTabFragment {
+            val historyDateItemFragment = HistoryTabFragment()
+            val bundle = Bundle()
+            bundle.putString(TYPE, type)
+            bundle.putParcelable(HistoryFragment.BUNDLE_ASSET, asset)
+            historyDateItemFragment.arguments = bundle
+            return historyDateItemFragment
+        }
     }
 
     interface ChangeTabBarVisibilityListener {

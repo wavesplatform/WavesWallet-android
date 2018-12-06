@@ -35,6 +35,7 @@ import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
+import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -312,6 +313,12 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     protected fun restartApp() {
         App.getAccessManager().restartApp(this)
+    }
+
+    protected fun clearAndLogout() {
+        App.getAccessManager().setLastLoggedInGuid("")
+        App.getAccessManager().resetWallet()
+        launchActivity<WelcomeActivity>(clear = true)
     }
 
     protected abstract fun onViewReady(savedInstanceState: Bundle?)

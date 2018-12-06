@@ -4,7 +4,7 @@
     <string name="address_book_address_validation_required_error">Address is required</string>
     <string name="address_book_name_validation_already_use_error">Already in use</string>
     <string name="address_book_name_validation_required_error">Name is required</string>
-    <string name="address_book_name_validation_max_length_error">20 characters maximum</string>
+    <string name="address_book_name_validation_max_length_error">24 characters maximum</string>
     <string name="address_book_name_validation_min_length_error">Minimum 2 characters</string>
     <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
     <string name="about_fill_payment_info">CNM — your WAVES address. \nIf you don’t do it, we can’t credit your account.</string>

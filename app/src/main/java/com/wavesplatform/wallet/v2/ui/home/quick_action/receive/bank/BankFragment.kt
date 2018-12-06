@@ -32,27 +32,16 @@ class BankFragment : BaseFragment(), BankView {
 
     override fun configLayoutRes(): Int = R.layout.fragment_bank
 
-    companion object {
-
-        var REQUEST_OPEN_REDIRECTION_SCREEN = 1000
-        /**
-         * @return BankFragment instance
-         * */
-        fun newInstance(): BankFragment {
-            return BankFragment()
-        }
-    }
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         val siteClick = object : ClickableSpan() {
             override fun onClick(p0: View?) {
                 SimpleChromeCustomTabs.getInstance()
-                        .withFallback({
+                        .withFallback {
                             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.receive_step_url_link)))
                             startActivity(browserIntent)
-                        }).withIntentCustomizer({
+                        }.withIntentCustomizer {
                             it.withToolbarColor(ContextCompat.getColor(activity!!, R.color.submit400))
-                        })
+                        }
                         .navigateTo(Uri.parse(getString(R.string.receive_step_1_msg_link)), activity!!)
             }
 
@@ -68,11 +57,11 @@ class BankFragment : BaseFragment(), BankView {
         val listOfCountriesClick = object : ClickableSpan() {
             override fun onClick(p0: View?) {
                 SimpleChromeCustomTabs.getInstance()
-                        .withFallback({
+                        .withFallback {
                             //                            TODO CLICK
-                        }).withIntentCustomizer({
+                        }.withIntentCustomizer {
                             it.withToolbarColor(ContextCompat.getColor(activity!!, R.color.submit400))
-                        })
+                        }
                         .navigateTo(Uri.parse(getString(R.string.receive_list_of_countries)), activity!!)
             }
         }
@@ -82,11 +71,11 @@ class BankFragment : BaseFragment(), BankView {
         val contactMsgClick = object : ClickableSpan() {
             override fun onClick(p0: View?) {
                 SimpleChromeCustomTabs.getInstance()
-                        .withFallback({
+                        .withFallback {
                             //                            TODO CLICK
-                        }).withIntentCustomizer({
+                        }.withIntentCustomizer {
                             it.withToolbarColor(ContextCompat.getColor(activity!!, R.color.submit400))
-                        })
+                        }
                         .navigateTo(Uri.parse(getString(R.string.receive_contact_msg_key)), activity!!)
             }
 
@@ -106,9 +95,20 @@ class BankFragment : BaseFragment(), BankView {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_OPEN_REDIRECTION_SCREEN && resultCode == RESULT_OK){
+        if (requestCode == REQUEST_OPEN_REDIRECTION_SCREEN && resultCode == RESULT_OK) {
             container_not_verified.gone()
             container_verified.visiable()
+        }
+    }
+
+    companion object {
+
+        var REQUEST_OPEN_REDIRECTION_SCREEN = 1000
+        /**
+         * @return BankFragment instance
+         * */
+        fun newInstance(): BankFragment {
+            return BankFragment()
         }
     }
 }

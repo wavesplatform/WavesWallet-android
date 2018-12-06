@@ -32,10 +32,6 @@ class ImageProgressBar : LinearLayout {
     private var progressTextResource: String = ""
     private var progressDurationResource: Int = DEFAULT_DURATION
 
-    companion object {
-        const val DEFAULT_DURATION = 750
-    }
-
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
@@ -134,5 +130,9 @@ class ImageProgressBar : LinearLayout {
         visibility = View.VISIBLE
         stopAnimation = false
         animator?.start()
+    }
+
+    companion object {
+        const val DEFAULT_DURATION = 750
     }
 }

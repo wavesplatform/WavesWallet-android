@@ -21,6 +21,8 @@ class BackupInfoActivity : BaseActivity(), BackupInfoView {
     @ProvidePresenter
     fun providePresenter(): BackupInfoPresenter = presenter
 
+    override fun askPassCode() = false
+
     override fun configLayoutRes() = R.layout.activity_backup_info
 
     override fun onCreate(savedInstanceState: Bundle?) {

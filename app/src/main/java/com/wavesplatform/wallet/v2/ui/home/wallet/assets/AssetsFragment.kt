@@ -24,6 +24,8 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
+import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.REQUEST_SORTING
+import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
@@ -58,16 +60,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
     private var headerItemDecoration: PinnedHeaderItemDecoration? = null
     var changeTabBarVisibilityListener: HistoryTabFragment.ChangeTabBarVisibilityListener? = null
-
-    companion object {
-        const val RESULT_NEED_UPDATE = "need_update"
-        const val REQUEST_SORTING = 111
-        const val REQUEST_ASSET_DETAILS = 112
-
-        fun newInstance(): AssetsFragment {
-            return AssetsFragment()
-        }
-    }
 
     override fun configLayoutRes(): Int = R.layout.fragment_assets
 
@@ -277,5 +269,15 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        const val RESULT_NEED_UPDATE = "need_update"
+        const val REQUEST_SORTING = 111
+        const val REQUEST_ASSET_DETAILS = 112
+
+        fun newInstance(): AssetsFragment {
+            return AssetsFragment()
+        }
     }
 }

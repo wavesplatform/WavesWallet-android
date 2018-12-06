@@ -41,17 +41,6 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     @ProvidePresenter
     fun providePresenter(): TradeOrderBookPresenter = presenter
 
-    companion object {
-        fun newInstance(watchMarket: WatchMarket?): TradeOrderBookFragment {
-            val args = Bundle()
-            args.classLoader = WatchMarket::class.java.classLoader
-            args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
-            val fragment = TradeOrderBookFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     override fun configLayoutRes() = R.layout.fragment_trade_orderbook
 
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -228,6 +217,17 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         } else {
             linear_buy.setBackgroundResource(R.drawable.shape_btn_waves_blue_disabled)
             linear_sell.setBackgroundResource(R.drawable.shape_btn_red_disabled)
+        }
+    }
+
+    companion object {
+        fun newInstance(watchMarket: WatchMarket?): TradeOrderBookFragment {
+            val args = Bundle()
+            args.classLoader = WatchMarket::class.java.classLoader
+            args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
+            val fragment = TradeOrderBookFragment()
+            fragment.arguments = args
+            return fragment
         }
     }
 }

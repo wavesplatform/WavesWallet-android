@@ -27,6 +27,8 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
 
     override fun configLayoutRes() = R.layout.activity_secret_phrase
 
+    override fun askPassCode() = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)

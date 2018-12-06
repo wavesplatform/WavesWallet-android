@@ -45,19 +45,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
     @ProvidePresenter
     fun providePresenter(): AddressBookPresenter = presenter
 
-    companion object {
-        var SCREEN_TYPE_NOT_EDITABLE = 998
-        var SCREEN_TYPE_EDITABLE = 999
-        var REQUEST_ADD_ADDRESS = 101
-        var REQUEST_EDIT_ADDRESS = 102
-        var BUNDLE_SCREEN_TYPE = "screen_type"
-        var BUNDLE_ADDRESS_ITEM = "item"
-        var BUNDLE_POSITION = "position"
-        var BUNDLE_TYPE = "type"
-    }
-
     override fun configLayoutRes() = R.layout.activity_address_book
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
@@ -218,9 +206,19 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
+    companion object {
+        var SCREEN_TYPE_NOT_EDITABLE = 998
+        var SCREEN_TYPE_EDITABLE = 999
+        var REQUEST_ADD_ADDRESS = 101
+        var REQUEST_EDIT_ADDRESS = 102
+        var BUNDLE_SCREEN_TYPE = "screen_type"
+        var BUNDLE_ADDRESS_ITEM = "item"
+        var BUNDLE_POSITION = "position"
+        var BUNDLE_TYPE = "type"
+    }
+
     enum class AddressBookScreenType(var type: Int) {
         EDIT(0),
         CHOOSE(1)
     }
-
 }

@@ -39,6 +39,8 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
 
     override fun configLayoutRes(): Int = R.layout.activit_choose_account
 
+    override fun askPassCode() = false
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
