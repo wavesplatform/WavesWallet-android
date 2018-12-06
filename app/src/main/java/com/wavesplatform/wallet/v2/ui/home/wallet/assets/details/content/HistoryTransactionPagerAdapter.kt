@@ -109,8 +109,11 @@ class HistoryTransactionPagerAdapter @Inject constructor(
                     }
 
                     if (showTag) {
-                        layout.text_tag.visiable()
-                        layout.text_tag.text = pairOrder?.assetPair?.priceAssetObject?.name
+                        val ticker = item.data.asset?.getTicker()
+                        if (!ticker.isNullOrBlank()) {
+                            layout.text_tag.text = ticker
+                            layout.text_tag.visiable()
+                        }
                     } else {
                         layout.text_tag.gone()
                         layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${pairOrder?.assetPair?.priceAssetObject?.name}"
@@ -157,8 +160,11 @@ class HistoryTransactionPagerAdapter @Inject constructor(
                 && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
                 && item.data.transactionType() != TransactionType.EXCHANGE_TYPE) {
             if (showTag) {
-                layout.text_tag.visiable()
-                layout.text_tag.text = item.data.asset?.name
+                val ticker = item.data.asset?.getTicker()
+                if (!ticker.isNullOrBlank()) {
+                    layout.text_tag.visiable()
+                    layout.text_tag.text = ticker
+                }
             } else {
                 layout.text_tag.gone()
                 layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${item.data.asset?.name}"
