@@ -27,7 +27,7 @@ enum class Language(@DrawableRes var image: Int,
     GERMAN(R.drawable.ic_flag_18_germany, R.string.choose_language_german, "de"),
     JAPAN(R.drawable.ic_flag_18_japan, R.string.choose_language_japan, "ja"),
     PORTUGUESE(R.drawable.ic_flag_18_portugal, R.string.choose_language_portuguese, "pt"),
-    // BRAZILIAN(R.drawable.ic_flag_18_brazil, R.string.choose_language_brazilian, "pt-rBR"),
+    BRAZILIAN(R.drawable.ic_flag_18_brazil, R.string.choose_language_brazilian, "pt_BR"),
     // POLISH(R.drawable.ic_flag_18_polszczyzna, R.string.choose_language_polish, "pl")
     ;
 
@@ -44,6 +44,15 @@ enum class Language(@DrawableRes var image: Int,
                 }
             }
             return LanguageItem(Language.ENGLISH, false)
+        }
+
+        fun getLocale(code: String): Locale {
+            return if (code.contains("_")) {
+                val locale = code.split("_")
+                Locale(locale[0], locale[1])
+            } else {
+                Locale(code)
+            }
         }
     }
 }

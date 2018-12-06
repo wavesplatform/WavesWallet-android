@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common_50_percent">50%</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_10_percent">10%</string>
-    <string name="new_account_account_name_validation_min_length_error">Минимум 2 символа</string>
     <string name="about_fill_payment_details">Вы ДОЛЖНЫ заполнить данные платежа следующей информацией:</string>
     <string name="about_fill_payment_info">CNM — ваш WAVES адрес. \nЕсли вы этого не сделаете, мы не можем кредитовать ваш аккаунт.</string>
     <string name="about_redirection_message">После того, как вы пройдете проверку, вы получите электронное письмо с дальнейшими инструкциями</string>
@@ -14,7 +10,13 @@
     <string name="add_address_name">Имя</string>
     <string name="add_address_toolbar_title">Добавить</string>
     <string name="address_book_add">Добавить</string>
+    <string name="address_book_address_validation_already_use_error">Уже в используется</string>
+    <string name="address_book_address_validation_required_error">Требуется адрес</string>
     <string name="address_book_empty_state">Пока ничего нет… \nВы сохранить адрес</string>
+    <string name="address_book_name_validation_already_use_error">Уже в используется</string>
+    <string name="address_book_name_validation_max_length_error">Максимум 20</string>
+    <string name="address_book_name_validation_min_length_error">Минимум 2 символа</string>
+    <string name="address_book_name_validation_required_error">Требуется имя</string>
     <string name="address_book_search">Поиск</string>
     <string name="address_book_success_deleted">Адрес удален</string>
     <string name="address_book_toolbar_title">Адресная книга</string>
@@ -28,7 +30,7 @@
     <string name="addresses_and_keys_your_address">Ваш адрес</string>
     <string name="alias_dialog_about_alias">Об алиасах</string>
     <string name="alias_dialog_create_alias">Создать алиас</string>
-    <string name="alias_dialog_description_1">Алиас — это короткое название вашего адреса. Вы можете использовать алиса так же, как адрес при совершении транзакции.</string>
+    <string name="alias_dialog_description_1">Алиас — это короткое название вашего адреса. Вы можете использовать алиас так же, как адрес при совершении транзакции.</string>
     <string name="alias_dialog_description_2">Алиас должен содержать не менее 4 и не более 30 символов. Используйте только строчные латинские буквы, цифры и символы (@, -, _ и т.д.)</string>
     <string name="alias_dialog_fee">Комиссия 0.001 WAVES</string>
     <string name="alias_dialog_you_dont_have">У вас нет алиасов</string>
@@ -39,9 +41,9 @@
     <string name="asset_details_available_balance">Доступный баланс</string>
     <string name="asset_details_coming_soon">Скоро</string>
     <string name="asset_details_cryptocurrency">Криптовалюта</string>
-    <string name="asset_details_error_perfom_transaction">Вы не можете совершать транзакции с этим ассетом</string>
     <string name="asset_details_decimal">Знаков после запятой</string>
     <string name="asset_details_description">Описание</string>
+    <string name="asset_details_error_perfom_transaction">Вы не можете совершать транзакции с этим ассетом</string>
     <string name="asset_details_flat_money">Фиатные деньги</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">В ордерах</string>
@@ -146,26 +148,14 @@
     <string name="choose_account_deleted">Удален</string>
     <string name="choose_account_empty_state">Пока ничего нет… \nВы не сохраняли аккаунты</string>
     <string name="choose_account_yes">Удалить</string>
-    <string name="choose_language_brazilian">Português do Brasil</string>
-    <string name="choose_language_china">中文(简体)</string>
     <string name="choose_language_confirm">Подтвердить</string>
     <string name="choose_language_continue">Продолжить</string>
-    <string name="choose_language_danish">Dansk</string>
-    <string name="choose_language_english">English</string>
-    <string name="choose_language_german">Deutsch</string>
-    <string name="choose_language_hindi">हिन्दी</string>
-    <string name="choose_language_indonesian">Indonesia</string>
-    <string name="choose_language_japan">日本語</string>
-    <string name="choose_language_korea">한국어</string>
-    <string name="choose_language_nederlands">Nederlands</string>
-    <string name="choose_language_polish">Polszczyzna</string>
-    <string name="choose_language_portuguese">Português</string>
-    <string name="choose_language_russia">Русский</string>
-    <string name="choose_language_spain">Español</string>
-    <string name="choose_language_turkey">Türkçe</string>
     <string name="coinomat_success_subtitle">После того, как платеж будет произведен, ваш баланс обновиться</string>
     <string name="coinomat_success_title">Вы перенаправлены на «Indacoin»</string>
     <string name="common_100_percent">Весь баланс</string>
+    <string name="common_10_percent">10%</string>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
     <string name="common_action_close">Закрыть</string>
     <string name="common_action_information">Информация</string>
     <string name="common_copied">Скопировано!</string>
@@ -334,7 +324,7 @@
     <string name="import_account_click_show_pairing">Сканируйте QR-код с помощью камеры</string>
     <string name="import_account_login_at_site">Войдите в Waves клиент через свой PC, Mac</string>
     <string name="import_account_scan_pairing_code">Сканировать QR-код</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code">Настройки — Безопасность — Экспорт аккаунта</string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Настройки — Основные — Экспортировать аккаунт</string>
     <string name="import_account_tab_manually">Вручную</string>
     <string name="import_account_tab_scan">Сканировать</string>
     <string name="import_account_toolbar_title">Импорт аккаунта</string>
@@ -366,7 +356,7 @@
     <string name="my_orders_side_price">Side/Price</string>
     <string name="my_orders_status">Статус</string>
     <string name="my_orders_status_canceled">Отменен</string>
-    <string name="my_orders_status_filled">Заполнен</string>
+    <string name="my_orders_status_filled">Заполнено</string>
     <string name="my_orders_status_open">Открыт</string>
     <string name="my_orders_status_partial_filled">Частично</string>
     <string name="my_orders_time">Время</string>
@@ -379,11 +369,12 @@
     <string name="network_spam_filter">Спам-фильтр</string>
     <string name="network_spam_url_validation_bad_url">Плохой URL</string>
     <string name="network_spam_url_validation_url_empty">Требуется URL</string>
-    <string name="network_switch_off_spam_filtering">Show SPAM</string>
+    <string name="network_switch_show_spam">Show spam</string>
     <string name="network_toolbar_title">Cеть</string>
     <string name="new_account_account_name_hint">Имя аккаунта</string>
     <string name="new_account_account_name_validation_already_exist_error">Имя аккаунта уже используется</string>
     <string name="new_account_account_name_validation_length_error">Максимум 20</string>
+    <string name="new_account_account_name_validation_min_length_error">Минимум 2 символа</string>
     <string name="new_account_account_name_validation_required_error">Требуется имя</string>
     <string name="new_account_avatar_description">Вы не сможете изменить его потом</string>
     <string name="new_account_avatar_error">Выберите аватар</string>
@@ -515,8 +506,8 @@
     <string name="send_confirmation_gateway_fee">Комиссия шлюза</string>
     <string name="send_confirmation_sent_to">Получатель</string>
     <string name="send_confirmation_the_description_is_too_long">Описание слишком длинное</string>
-    <string name="send_confirmation_toolbar_title">Подтверждений</string>
-    <string name="send_confirmation_write_an_optional_message">Написать сообщение (не обязательно)</string>
+    <string name="send_confirmation_toolbar_title">Подтверждение</string>
+    <string name="send_confirmation_write_an_optional_message">Не обязательно</string>
     <string name="send_continue">Продолжить</string>
     <string name="send_error_get_data_from_qr">Ошибка получения данных с QR</string>
     <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">У вас недостаточно средств для отправки транзакции. \nВы должны оплатить комиссию 0.001 WAVES и комиссию шлюза %1$s %2$s.</string>

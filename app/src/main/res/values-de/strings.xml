@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common_50_percent">50%</string>
-    <string name="common_5_percent">5%</string>
-    <string name="common_10_percent">10%</string>
-    <string name="new_account_account_name_validation_min_length_error">Mindestens 2 zeichen</string>
+    <string name="address_book_address_validation_already_use_error">Bereits in Benutzung</string>
+    <string name="address_book_address_validation_required_error">Adresse ist erforderlich</string>
+    <string name="address_book_name_validation_already_use_error">Bereits in Benutzung</string>
+    <string name="address_book_name_validation_required_error">Name ist erforderlich</string>
+    <string name="address_book_name_validation_max_length_error">20 zeichen maximal</string>
+    <string name="address_book_name_validation_min_length_error">Mindestens 2 zeichen</string>
     <string name="about_fill_payment_details">Sie MÜSSEN das Feld mit den Zahlungsinformationen mit folgenden Informationen ausfüllen:</string>
     <string name="about_fill_payment_info">CNM — Ihre WAVES-Adresse. \nWenn Sie Ihren Account nicht angeben, können wir Ihnen nichts überweisen.</string>
     <string name="about_redirection_message">Nach der Überprüfung erhalten Sie eine E-Mail mit weiteren Anweisungen</string>
@@ -39,9 +41,9 @@
     <string name="asset_details_available_balance">Verfügbares Guthaben</string>
     <string name="asset_details_coming_soon">Demnächst</string>
     <string name="asset_details_cryptocurrency">Kryptowährung</string>
-    <string name="asset_details_error_perfom_transaction">Sie können keine Transaktionen mit diesem Asset durchführen</string>
     <string name="asset_details_decimal">Dezimalpunkte</string>
     <string name="asset_details_description">Beschreibung</string>
+    <string name="asset_details_error_perfom_transaction">Sie können keine Transaktionen mit diesem Asset durchführen</string>
     <string name="asset_details_flat_money">Fiat Geld</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">In Ordern</string>
@@ -146,26 +148,14 @@
     <string name="choose_account_deleted">Gelöscht</string>
     <string name="choose_account_empty_state">Sie haben bisher keine Konten gespeichert</string>
     <string name="choose_account_yes">Löschen</string>
-    <string name="choose_language_brazilian">Português do Brasil</string>
-    <string name="choose_language_china">中文(简体)</string>
     <string name="choose_language_confirm">Bestätigen</string>
     <string name="choose_language_continue">Fortsetzen</string>
-    <string name="choose_language_danish">Dansk</string>
-    <string name="choose_language_english">English</string>
-    <string name="choose_language_german">Deutsch</string>
-    <string name="choose_language_hindi">हिन्दी</string>
-    <string name="choose_language_indonesian">Indonesia</string>
-    <string name="choose_language_japan">日本語</string>
-    <string name="choose_language_korea">한국어</string>
-    <string name="choose_language_nederlands">Nederlands</string>
-    <string name="choose_language_polish">Polszczyzna</string>
-    <string name="choose_language_portuguese">Português</string>
-    <string name="choose_language_russia">Русский</string>
-    <string name="choose_language_spain">Español</string>
-    <string name="choose_language_turkey">Türkçe</string>
     <string name="coinomat_success_subtitle">Nach Zahlungseingang wird Ihr Guthaben aktualisiert</string>
     <string name="coinomat_success_title">Sie wurden zu Indacoin weitergeleitet</string>
     <string name="common_100_percent">Gesamtbilanz verwenden</string>
+    <string name="common_10_percent">10%</string>
+    <string name="common_50_percent">50%</string>
+    <string name="common_5_percent">5%</string>
     <string name="common_action_close">Schließen</string>
     <string name="common_action_information">Informationen</string>
     <string name="common_copied">Kopiert!</string>
@@ -211,6 +201,7 @@
     <string name="dex_last_update_value">Letztes Update: %s</string>
     <string name="dex_market_empty">Nichts hier…</string>
     <string name="dex_market_toolbar_title">Märkte</string>
+    <string name="dex_markets_info_dialog_amount_asset">Betrag Asset — %s</string>
     <string name="dex_markets_info_dialog_popular">Beliebt</string>
     <string name="dex_markets_info_dialog_price_asset">Preis Asset — %s</string>
     <string name="dex_markets_list_search">Suche</string>
@@ -226,7 +217,7 @@
     <string name="dex_trade_tab_orderbook">Auftragsbuch</string>
     <string name="dialog_account_first_open_about_backup">Ich verstehe, dass meine Waves nur mit dem Sicherungssatz wiederhergestellt werden können, wenn diese App auf ein anderes Gerät verschoben oder gelöscht wird</string>
     <string name="dialog_account_first_open_about_fund_on_device">Ich verstehe, dass mein Geld auf diesem Gerät sicher aufbewahrt wird und nicht von einem Unternehmen</string>
-    <string name="dialog_account_first_open_about_terms">Ich habe die \nNutzungsbedingungen gelesen, verstanden und bin damit einverstanden</string>
+    <string name="dialog_account_first_open_about_terms">Ich habe die Nutzungsbedingungen gelesen, \nverstanden und bin damit einverstanden</string>
     <string name="dialog_account_first_open_about_terms_key">Nutzungsbedingungen</string>
     <string name="dialog_account_first_open_confirm_and_begin">Bestätigen Sie und beginnen Sie</string>
     <string name="dialog_account_first_open_subtitle">Waves ist anders — es kann nicht von einer Bank oder einem Webdienst sicher gehalten werden</string>
@@ -333,7 +324,7 @@
     <string name="import_account_click_show_pairing">Klicken Sie auf \"Pairing-Code anzeigen\", um einen QR-Code anzuzeigen</string>
     <string name="import_account_login_at_site">Melden Sie sich über Ihren PC oder Mac bei Ihrem Waves-Client an</string>
     <string name="import_account_scan_pairing_code">Scannen Sie den Pairing-Code</string>
-    <string name="import_account_settings_gt_security_gt_pairing_code">Einstellungen — Sicherheit — Pairing Code</string>
+    <string name="import_account_settings_gt_security_gt_pairing_code">Einstellungen — Allgemein — Konto exportieren</string>
     <string name="import_account_tab_manually">Manuell</string>
     <string name="import_account_tab_scan">Scan</string>
     <string name="import_account_toolbar_title">Account importieren</string>
@@ -378,11 +369,12 @@
     <string name="network_spam_filter">Spam Filter</string>
     <string name="network_spam_url_validation_bad_url">Falsche URL</string>
     <string name="network_spam_url_validation_url_empty">URL ist erforderlich</string>
-    <string name="network_switch_off_spam_filtering">Show SPAM</string>
+    <string name="network_switch_show_spam">Show spam</string>
     <string name="network_toolbar_title">Netzwerk</string>
     <string name="new_account_account_name_hint">Accountbezeichnung</string>
     <string name="new_account_account_name_validation_already_exist_error">Accountname bereits verwendet</string>
     <string name="new_account_account_name_validation_length_error">20 zeichen maximal</string>
+    <string name="new_account_account_name_validation_min_length_error">Mindestens 2 zeichen</string>
     <string name="new_account_account_name_validation_required_error">Name ist erforderlich</string>
     <string name="new_account_avatar_description">Sie können es später nicht mehr ändern</string>
     <string name="new_account_avatar_error">Bitte wählen Sie einen Avatar aus</string>
@@ -466,7 +458,7 @@
     <string name="receive_amount_title">Betrag in %1$s</string>
     <string name="receive_asset">Asset</string>
     <string name="receive_card">Karte</string>
-    <string name="receive_contact_msg">Bei Problemen mit der Verifizierung oder Zahlungsabwicklung wenden Sie sich bitte an das Coinomat-Supportteam support@coinomat.com</string>
+    <string name="receive_contact_msg">Bei Problemen mit der Verifizierung oder Zahlungsabwicklung wenden Sie sich bitte an das Coinomat-Supportteam — support@coinomat.com</string>
     <string name="receive_contact_msg_key">support@coinomat.com</string>
     <string name="receive_continue">Fortsetzen</string>
     <string name="receive_cryptocurrency">Kryptowährung</string>

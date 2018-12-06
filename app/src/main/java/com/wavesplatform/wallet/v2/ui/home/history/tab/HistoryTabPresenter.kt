@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.db.TransactionSaver
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
+import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
@@ -146,7 +147,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
     private fun sortAndConfigToUi(it: List<Transaction>): ArrayList<HistoryItem> {
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy",
-                Locale(preferenceHelper.getLanguage()))
+                Language.getLocale(preferenceHelper.getLanguage()))
 
         val sortedList = it
                 .mapTo(mutableListOf()) {

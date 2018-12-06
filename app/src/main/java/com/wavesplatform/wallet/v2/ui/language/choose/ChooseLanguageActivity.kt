@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.activity_choose_language.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.visiable
-import java.util.*
 import javax.inject.Inject
 
 
@@ -102,7 +101,7 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
                     .alpha(0f)
                     .setDuration(250)
                     .withEndAction {
-                        launchActivity<TutorialActivity>(){
+                        launchActivity<TutorialActivity> {
                             putExtra(TutorialActivity.BUNDLE_LANG, preferencesHelper.getLanguage())
                         }
                         overridePendingTransition(0, R.anim.fade_out)
