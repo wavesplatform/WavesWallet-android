@@ -11,7 +11,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
@@ -19,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_invoice.*
+import kotlinx.android.synthetic.main.layout_asset_card.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
@@ -98,7 +98,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         image_asset_icon.setAsset(assetBalance)
         text_asset_name.text = assetBalance.getName()
         text_asset_value.text = assetBalance.getDisplayAvailableBalance()
-        image_down_arrow.visibility = if (assetBalance.isGateway) {
+        image_down_arrow.visibility = if (assetBalance.isGateway && !assetBalance.isWaves()) {
             View.VISIBLE
         } else {
             View.GONE
@@ -110,7 +110,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             View.GONE
         }
 
-        edit_asset.gone()
+        text_asset.gone()
         container_asset.visiable()
 
         button_continue.isEnabled = presenter.assetBalance != null
@@ -136,7 +136,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
 
     private fun assetChangeEnable(enable: Boolean) {
         if (enable) {
-            edit_asset.click {
+            text_asset.click {
                 launchAssets()
             }
             container_asset.click {
@@ -148,7 +148,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
             edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
                     activity!!, R.color.white))
         } else {
-            edit_asset.click {
+            text_asset.click {
 
             }
             container_asset.click {

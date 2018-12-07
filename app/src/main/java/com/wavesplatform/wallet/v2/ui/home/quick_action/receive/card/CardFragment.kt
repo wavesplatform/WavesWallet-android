@@ -3,8 +3,11 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.RadioButton
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -20,6 +23,7 @@ import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_card.*
+import kotlinx.android.synthetic.main.layout_asset_card.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -42,7 +46,6 @@ class CardFragment : BaseFragment(), CardView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.loadWaves()
 
-        edit_asset.isEnabled = false
         button_continue.click {
             if (presenter.isValid()) {
                 launchActivity<SuccessActivity> {
@@ -106,6 +109,21 @@ class CardFragment : BaseFragment(), CardView {
         showError(message, R.id.content)
     }
 
+    private fun assetChangeDisable() {
+        text_asset.click {
+
+        }
+        container_asset.click {
+
+        }
+        image_change.visibility = View.GONE
+        ViewCompat.setElevation(edit_asset_card, 0F)
+        edit_asset_layout.background = ContextCompat.getDrawable(
+                activity!!, R.drawable.shape_rect_bordered_accent50)
+        edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
+                activity!!, R.color.basic50))
+    }
+
     private fun setAssetBalance(assetBalance: AssetBalance?) {
         image_asset_icon.isOval = true
         image_asset_icon.setAsset(assetBalance)
@@ -116,10 +134,17 @@ class CardFragment : BaseFragment(), CardView {
             assetBalance?.isFavorite!!
         }
 
-        edit_asset.gone()
+        image_down_arrow.visibility = if (assetBalance!!.isGateway && !assetBalance.isWaves()) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
+        text_asset.gone()
         container_asset.visiable()
         container_info.visiable()
         button_continue.isEnabled = presenter.asset != null
+        assetChangeDisable()
     }
 
     private fun showDialogFiatChange() {

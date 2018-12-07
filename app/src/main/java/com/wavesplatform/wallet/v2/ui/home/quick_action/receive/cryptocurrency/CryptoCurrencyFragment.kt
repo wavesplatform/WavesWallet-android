@@ -21,6 +21,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
+import kotlinx.android.synthetic.main.layout_asset_card.*
 import pers.victor.ext.*
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -139,7 +140,13 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
             assetBalance?.isFavorite!!
         }
 
-        edit_asset.gone()
+        image_down_arrow.visibility = if (assetBalance!!.isGateway && !assetBalance.isWaves()) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
+        text_asset.gone()
         container_asset.visiable()
 
         presenter.nextStepValidation = true
@@ -157,7 +164,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
 
     private fun assetChangeEnable(enable: Boolean) {
         if (enable) {
-            edit_asset.click { launchAssets() }
+            text_asset.click { launchAssets() }
             container_asset.click { launchAssets() }
             image_change.visibility = View.VISIBLE
             ViewCompat.setElevation(edit_asset_card, dp2px(2).toFloat())
@@ -165,7 +172,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
             edit_asset_card.setCardBackgroundColor(ContextCompat.getColor(
                     activity!!, R.color.white))
         } else {
-            edit_asset.click {
+            text_asset.click {
                 // disable clicks
             }
             container_asset.click {
