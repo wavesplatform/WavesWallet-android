@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.auth.passcode.enter
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -49,10 +50,6 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         setStatusBarColor(R.color.white)
         setNavigationBarColor(R.color.white)
 
-        text_use_acc_password.click {
-            startUsePasswordScreen()
-        }
-
         val isProcessSetFingerprint = intent.hasExtra(KEY_INTENT_PROCESS_SET_FINGERPRINT)
         val isAvailable = FingerprintAuthDialogFragment.isAvailable(this)
         guid = getGuid()
@@ -60,6 +57,15 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         val isLoggedIn = !TextUtils.isEmpty(guid)
         val useFingerprint = (isAvailable && !isProcessSetFingerprint
                 && (isLoggedIn && App.getAccessManager().isGuidUseFingerPrint(guid)))
+
+
+        if (EnterPassCodePresenter.overMaxWrongPassCodes(guid)) {
+            startUsePasswordScreen(true)
+        }
+
+        text_use_acc_password.click {
+            startUsePasswordScreen(false)
+        }
 
         pass_keypad.isFingerprintAvailable(useFingerprint)
 
@@ -89,7 +95,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         }
 
         if (TextUtils.isEmpty(guid)) {
-            finish()
+            exitFromScreen()
         } else {
             if (intent.hasExtra(KEY_INTENT_GUID)) {
                 text_title.text = App.getAccessManager().getWalletName(guid)
@@ -106,20 +112,14 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (EnterPassCodePresenter.overMaxWrongPassCodes(guid)) {
-            startUsePasswordScreen()
-        }
-    }
-
-    private fun startUsePasswordScreen() {
+    private fun startUsePasswordScreen(afterOverAttempts: Boolean) {
         val guid = getGuid()
         if (TextUtils.isEmpty(guid)) {
             restartApp()
         } else {
-            launchActivity<UseAccountPasswordActivity> {
+            launchActivity<UseAccountPasswordActivity>(REQUEST_USE_PASSWORD_CODE) {
                 putExtra(KEY_INTENT_GUID, guid)
+                putExtra(KEY_AFTER_OVER_ATTEMPTS, afterOverAttempts)
             }
         }
     }
@@ -152,8 +152,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         data.putExtra(KEY_INTENT_PASS_CODE, passCode)
         setResult(Constants.RESULT_OK, data)
         App.getAccessManager().setWallet(getGuid(), password)
-        finish()
-        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_down)
+        exitFromScreen()
     }
 
     override fun onFailValidatePassCode(overMaxWrongPassCode: Boolean, errorMessage: String?) {
@@ -183,9 +182,13 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
             exit()
         } else {
             setResult(Constants.RESULT_CANCELED)
-            finish()
-            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_down)
+            exitFromScreen()
         }
+    }
+
+    private fun exitFromScreen() {
+        finish()
+        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_down)
     }
 
     private fun showRequestPasswordDialog() {
@@ -196,7 +199,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                 getString(R.string.enter_passcode_too_many_attempts_dialog_positive_btn_txt)) { dialog, _ ->
             dialog.dismiss()
-            startUsePasswordScreen()
+            startUsePasswordScreen(true)
         }
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.enter_passcode_too_many_attempts_dialog_negative_btn_txt)) { dialog, _ ->
             dialog.dismiss()
@@ -217,11 +220,26 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         return inflate(R.layout.layout_many_attepmts)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_USE_PASSWORD_CODE -> {
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    if (data?.getBooleanExtra(KEY_AFTER_OVER_ATTEMPTS, false) == true) {
+                        clearAndLogout()
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
         const val KEY_INTENT_PASS_CODE = "intent_pass_code"
         const val KEY_INTENT_GUID = "intent_guid"
+        const val KEY_AFTER_OVER_ATTEMPTS = "after_over_attempts"
         const val KEY_INTENT_PROCESS_SET_FINGERPRINT = "intent_process_set_fingerprint"
         const val KEY_INTENT_USE_BACK_FOR_EXIT = "intent_use_back_for_exit"
         const val REQUEST_ENTER_PASS_CODE = 555
+        const val REQUEST_USE_PASSWORD_CODE = 777
     }
 }
