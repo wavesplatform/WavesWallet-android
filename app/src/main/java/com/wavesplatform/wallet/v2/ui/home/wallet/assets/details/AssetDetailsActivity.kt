@@ -101,26 +101,29 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     private fun configureTitleForAssets(position: Int) {
-        if (position >= adapterAvatar.items.size ) {
-            text_asset_description.text = ""
-            return
-        }
+        if (adapterAvatar.items.isNotEmpty()) {
 
-        val item = adapterAvatar.items[position]
-        text_asset_name.text = item.getName()
-
-        text_asset_description.visiable()
-        spam_tag.gone()
-
-        when {
-            item.isWaves() -> text_asset_description.setText(R.string.asset_details_waves_token)
-            item.isFiatMoney -> text_asset_description.setText(R.string.asset_details_flat_money)
-            item.isGateway -> text_asset_description.setText(R.string.asset_details_cryptocurrency)
-            item.isSpam -> {
-                text_asset_description.gone()
-                spam_tag.visiable()
+            if (position >= adapterAvatar.items.size) {
+                text_asset_description.text = ""
+                return
             }
-            else -> text_asset_description.setText(R.string.asset_details_waves_token)
+
+            val item = adapterAvatar.items[position]
+            text_asset_name.text = item.getName()
+
+            text_asset_description.visiable()
+            spam_tag.gone()
+
+            when {
+                item.isWaves() -> text_asset_description.setText(R.string.asset_details_waves_token)
+                item.isFiatMoney -> text_asset_description.setText(R.string.asset_details_flat_money)
+                item.isGateway -> text_asset_description.setText(R.string.asset_details_cryptocurrency)
+                item.isSpam -> {
+                    text_asset_description.gone()
+                    spam_tag.visiable()
+                }
+                else -> text_asset_description.setText(R.string.asset_details_waves_token)
+            }
         }
     }
 
@@ -147,13 +150,15 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     fun showFavorite(currentItem: Int) {
-        if (adapterAvatar.items[currentItem].isSpam) image_favorite.gone()
-        else image_favorite.visiable()
+        if (adapterAvatar.items.isNotEmpty()) {
+            if (adapterAvatar.items[currentItem].isSpam) image_favorite.gone()
+            else image_favorite.visiable()
 
-        if (adapterAvatar.items[view_pager.currentItem].isFavorite) {
-            markAsFavorite()
-        } else {
-            unmarkAsFavorite()
+            if (adapterAvatar.items[view_pager.currentItem].isFavorite) {
+                markAsFavorite()
+            } else {
+                unmarkAsFavorite()
+            }
         }
     }
 

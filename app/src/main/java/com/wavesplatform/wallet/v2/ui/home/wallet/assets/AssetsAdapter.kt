@@ -8,7 +8,6 @@ import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
@@ -83,7 +82,7 @@ class AssetsAdapter @Inject constructor() :
 
                 val item = item as AssetBalance
                 helper.setText(R.id.text_asset_name, item.getName())
-                        .setText(R.id.text_asset_value, MoneyUtil.getScaledText(item.balance, item))
+                        .setText(R.id.text_asset_value, item.getDisplayAvailableBalance())
                         .setGone(R.id.image_favourite, item.isFavorite)
                         .setGone(R.id.text_my_asset, item.issueTransaction?.sender
                                 == App.getAccessManager().getWallet()?.address)
