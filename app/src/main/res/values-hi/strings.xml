@@ -472,7 +472,7 @@
     <string name="receive_fiat_choose_dialog_usd">USD</string>
     <string name="receive_get_verified">सत्यापित करा लें</string>
     <string name="receive_invoice">इनवॉइस</string>
-    <string name="receive_limit">न्यूनतम %1$s है, अधिकतम %2$s</string>
+    <string name="receive_limit">न्यूनतम %1$s %2$s है, अधिकतम %3$s %4$s</string>
     <string name="receive_list_of_countries">योग्य देशों और आईडी की सूची</string>
     <string name="receive_makink_payment">अपने कार्ड से भुगतान करने के लिए आपको व्यापारी की वेबसाइट पर रीडायरेक्ट कर दिया जाएगा</string>
     <string name="receive_minimum_amount">जमा की न्यूनतम राशि %1$s %2$s है</string>

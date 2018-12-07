@@ -515,7 +515,7 @@
     <string name="send_five_percents">5%</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Die Gebühren betragen 1% des überwiesenen Betrags.</string>
     <string name="send_gateway_info_gateway_fee">Die Gateway-Gebühr beträgt %1$s %2$s</string>
-    <string name="send_gateway_info_gateway_limits">Wir haben die Adresse von %1$ erkannt und senden Ihr Geld über das Coinomat-Gateway an diese Adresse. Der Mindestbetrag beträgt %2$s %1$s, der Höchstbetrag ist %3$s %1$s.</string>
+    <string name="send_gateway_info_gateway_limits">Wir haben die Adresse von %1$s erkannt und senden Ihr Geld über das Coinomat-Gateway an diese Adresse. Der Mindestbetrag beträgt %2$s %1$s, der Höchstbetrag ist %3$s %1$s.</string>
     <string name="send_gateway_info_gateway_warning">Überweisen Sie %1$s nicht an einen ICO. Tokens aus diesem Verkauf werden Ihrem Konto nicht gutgeschrieben.</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Wenn Sie verifiziert wurden und US-Dollar eingezahlt haben, können Sie diese auf Ihr Bankkonto zurückzahlen. Ansonsten lassen Sie sich von unserem Partner IDNow.eu verifizieren</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">Der Mindestbetrag beträgt 500 US-Dollar. Bei Fragen senden Sie bitte eine E-Mail an support@coinomat.com</string>
