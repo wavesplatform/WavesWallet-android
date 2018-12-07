@@ -362,6 +362,12 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 preferencesHelper.setShowSaveSeedWarningTime(currentGuid, now)
             }
         }
+
+        if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
+            tab_navigation.getTabAt(PROFILE_SCREEN)?.customView?.findViewById<View>(R.id.view_seed_error)?.visiable()
+        } else {
+            tab_navigation.getTabAt(PROFILE_SCREEN)?.customView?.findViewById<View>(R.id.view_seed_error)?.gone()
+        }
     }
 
     override fun needToShowNetworkMessage() = true
