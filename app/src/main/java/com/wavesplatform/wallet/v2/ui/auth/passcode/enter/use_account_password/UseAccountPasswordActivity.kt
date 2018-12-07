@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -50,7 +51,6 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
     }
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.white)
@@ -141,9 +141,9 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        App.getAccessManager().setLastLoggedInGuid("")
-        App.getAccessManager().resetWallet()
+        setResult(Activity.RESULT_CANCELED, Intent().apply {
+            putExtra(EnterPassCodeActivity.KEY_AFTER_OVER_ATTEMPTS, intent.extras.getBoolean(EnterPassCodeActivity.KEY_AFTER_OVER_ATTEMPTS))
+        })
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
