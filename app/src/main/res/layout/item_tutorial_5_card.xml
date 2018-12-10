@@ -19,18 +19,17 @@
             android:layout_marginTop="?android:actionBarSize"
             android:lineSpacingExtra="10sp"
             android:text="@string/card_tutorial_5_title"
-            android:textColor="@color/disabled500"
+            android:textColor="@color/black"
             android:textSize="14sp"
             app:fontFamily="@font/roboto_bold" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <View
             android:id="@+id/view_dashed"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="1dp"
             android:layout_below="@+id/text_title"
             android:layout_marginTop="14dp"
-            android:layerType="software"
-            android:src="@drawable/shape_dashed_line" />
+            android:background="@color/accent50"/>
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_mailopen"
