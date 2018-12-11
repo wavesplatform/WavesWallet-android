@@ -138,7 +138,12 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     return@map it
                 }
                 .filter {
-                    it.isNotEmpty()
+                    val validNumber = it.toBigDecimalOrNull()
+                    if (validNumber == null) {
+                        presenter.amountValidation = false
+                        makeButtonEnableIfValid()
+                    }
+                    validNumber != null
                 }
                 .map {
                     if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
@@ -196,7 +201,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     return@map it
                 }
                 .filter {
-                    it.isNotEmpty()
+                    val validNumber = it.toBigDecimalOrNull()
+                    validNumber != null
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ isValid ->
@@ -219,7 +225,12 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter {
-                    it.isNotEmpty()
+                    val validNumber = it.toBigDecimalOrNull()
+                    if (validNumber == null) {
+                        presenter.totalPriceValidation = false
+                        makeButtonEnableIfValid()
+                    }
+                    validNumber != null
                 }
                 .map {
                     if (!presenter.humanTotalTyping) {
