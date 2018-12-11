@@ -4,7 +4,7 @@
     <string name="address_book_address_validation_required_error">Alamat diperlukan</string>
     <string name="address_book_name_validation_already_use_error">Telah digunakan</string>
     <string name="address_book_name_validation_required_error">Nama wajib diisi</string>
-    <string name="address_book_name_validation_max_length_error">20 karakter maksimal</string>
+    <string name="address_book_name_validation_max_length_error">24 karakter maksimal</string>
     <string name="address_book_name_validation_min_length_error">Setidaknya 2 karakter</string>
     <string name="about_fill_payment_details">Anda HARUS mengisi bidang detail pembayaran dengan informasi berikut:</string>
     <string name="about_fill_payment_info">CNM — alamat WAVES Anda. \nJika tidak, kami tidak dapat mengkredit akun Anda.</string>
@@ -373,7 +373,7 @@
     <string name="network_toolbar_title">Jaringan</string>
     <string name="new_account_account_name_hint">Nama akun</string>
     <string name="new_account_account_name_validation_already_exist_error">Nama akun sudah digunakan</string>
-    <string name="new_account_account_name_validation_length_error">20 karakter maksimal</string>
+    <string name="new_account_account_name_validation_length_error">24 karakter maksimal</string>
     <string name="new_account_account_name_validation_min_length_error">Setidaknya 2 karakter</string>
     <string name="new_account_account_name_validation_required_error">Nama wajib diisi</string>
     <string name="new_account_avatar_description">Anda tidak dapat mengubahnya nanti</string>

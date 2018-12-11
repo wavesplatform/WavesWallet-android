@@ -14,7 +14,7 @@
     <string name="address_book_address_validation_required_error">Endereço é necessário</string>
     <string name="address_book_empty_state">Ainda não há nada aqui… \nCria o teu novo endereço</string>
     <string name="address_book_name_validation_already_use_error">Em uso</string>
-    <string name="address_book_name_validation_max_length_error">20 caracteres no máximo</string>
+    <string name="address_book_name_validation_max_length_error">24 caracteres no máximo</string>
     <string name="address_book_name_validation_min_length_error">Mínimo de 2 caracteres</string>
     <string name="address_book_name_validation_required_error">Nome é obrigatório</string>
     <string name="address_book_search">Pesquisar</string>
@@ -373,7 +373,7 @@
     <string name="network_toolbar_title">Rede</string>
     <string name="new_account_account_name_hint">Nome da conta</string>
     <string name="new_account_account_name_validation_already_exist_error">O nome da conta já se encontra em uso</string>
-    <string name="new_account_account_name_validation_length_error">20 caracteres no máximo</string>
+    <string name="new_account_account_name_validation_length_error">24 caracteres no máximo</string>
     <string name="new_account_account_name_validation_min_length_error">Mínimo de 2 caracteres</string>
     <string name="new_account_account_name_validation_required_error">É necessário um Nome</string>
     <string name="new_account_avatar_description">Não vais poder mudar mais tarde</string>

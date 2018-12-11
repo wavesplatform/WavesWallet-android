@@ -4,7 +4,7 @@
     <string name="address_book_address_validation_required_error">La dirección es necesaria</string>
     <string name="address_book_name_validation_already_use_error">Ya está en uso</string>
     <string name="address_book_name_validation_required_error">Se requiere el nombre</string>
-    <string name="address_book_name_validation_max_length_error">20 caracteres máximo</string>
+    <string name="address_book_name_validation_max_length_error">24 caracteres máximo</string>
     <string name="address_book_name_validation_min_length_error">Al menos 2 caracteres</string>
     <string name="about_fill_payment_details">Usted DEBE completar las especificaciones de pago con la siguiente información:</string>
     <string name="about_fill_payment_info">CNM — su dirección de WAVES. \nSi no lo hace, no podemos acreditar su cuenta.</string>
@@ -373,7 +373,7 @@
     <string name="network_toolbar_title">Red</string>
     <string name="new_account_account_name_hint">Nombre de la cuenta</string>
     <string name="new_account_account_name_validation_already_exist_error">El nombre de la cuenta ya está en uso</string>
-    <string name="new_account_account_name_validation_length_error">20 caracteres máximo</string>
+    <string name="new_account_account_name_validation_length_error">24 caracteres máximo</string>
     <string name="new_account_account_name_validation_min_length_error">Al menos 2 caracteres</string>
     <string name="new_account_account_name_validation_required_error">Se requiere el nombre</string>
     <string name="new_account_avatar_description">No puedes cambiarlo más tarde</string>

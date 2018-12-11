@@ -4,7 +4,7 @@
     <string name="address_book_address_validation_required_error">Adresse ist erforderlich</string>
     <string name="address_book_name_validation_already_use_error">Bereits in Benutzung</string>
     <string name="address_book_name_validation_required_error">Name ist erforderlich</string>
-    <string name="address_book_name_validation_max_length_error">20 zeichen maximal</string>
+    <string name="address_book_name_validation_max_length_error">24 zeichen maximal</string>
     <string name="address_book_name_validation_min_length_error">Mindestens 2 zeichen</string>
     <string name="about_fill_payment_details">Sie MÜSSEN das Feld mit den Zahlungsinformationen mit folgenden Informationen ausfüllen:</string>
     <string name="about_fill_payment_info">CNM — Ihre WAVES-Adresse. \nWenn Sie Ihren Account nicht angeben, können wir Ihnen nichts überweisen.</string>
@@ -373,7 +373,7 @@
     <string name="network_toolbar_title">Netzwerk</string>
     <string name="new_account_account_name_hint">Accountbezeichnung</string>
     <string name="new_account_account_name_validation_already_exist_error">Accountname bereits verwendet</string>
-    <string name="new_account_account_name_validation_length_error">20 zeichen maximal</string>
+    <string name="new_account_account_name_validation_length_error">24 zeichen maximal</string>
     <string name="new_account_account_name_validation_min_length_error">Mindestens 2 zeichen</string>
     <string name="new_account_account_name_validation_required_error">Name ist erforderlich</string>
     <string name="new_account_avatar_description">Sie können es später nicht mehr ändern</string>

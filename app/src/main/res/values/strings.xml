@@ -373,7 +373,7 @@
     <string name="network_toolbar_title">Network</string>
     <string name="new_account_account_name_hint">Account name</string>
     <string name="new_account_account_name_validation_already_exist_error">Account name already use</string>
-    <string name="new_account_account_name_validation_length_error">20 characters maximum</string>
+    <string name="new_account_account_name_validation_length_error">24 characters maximum</string>
     <string name="new_account_account_name_validation_min_length_error">Minimum 2 characters</string>
     <string name="new_account_account_name_validation_required_error">Name is required</string>
     <string name="new_account_avatar_description">You cannot change it later</string>

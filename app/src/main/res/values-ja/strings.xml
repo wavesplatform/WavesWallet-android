@@ -4,7 +4,7 @@
     <string name="address_book_address_validation_required_error">アドレスは必須です</string>
     <string name="address_book_name_validation_already_use_error">すでに使用されています</string>
     <string name="address_book_name_validation_required_error">名前は必須です</string>
-    <string name="address_book_name_validation_max_length_error">最大：20個のシンボル</string>
+    <string name="address_book_name_validation_max_length_error">最大：24個のシンボル</string>
     <string name="address_book_name_validation_min_length_error">最低2文字以上です</string>
     <string name="about_fill_payment_details">以下の情報を支払詳細欄に記入する必要があります。</string>
     <string name="about_fill_payment_info">CNM — あなたの WAVES アドレス. \nもしそれを実行しないならあなたのアカウントを認証しません。</string>
@@ -373,7 +373,7 @@
     <string name="network_toolbar_title">ネットワーク</string>
     <string name="new_account_account_name_hint">アカウント名</string>
     <string name="new_account_account_name_validation_already_exist_error">このアカウント名は既に使用されています</string>
-    <string name="new_account_account_name_validation_length_error">最大：20個のシンボル</string>
+    <string name="new_account_account_name_validation_length_error">最大：24個のシンボル</string>
     <string name="new_account_account_name_validation_min_length_error">最低2文字以上です</string>
     <string name="new_account_account_name_validation_required_error">名前が必要です</string>
     <string name="new_account_avatar_description">このアバターは固有です。後で変更することはできません。</string>
