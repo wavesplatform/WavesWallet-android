@@ -152,7 +152,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
     override fun onShowError(res: Int) {
         swipe_refresh.isRefreshing = false
-        showError(res, R.id.nested_scroll_view)
     }
 
     companion object {
