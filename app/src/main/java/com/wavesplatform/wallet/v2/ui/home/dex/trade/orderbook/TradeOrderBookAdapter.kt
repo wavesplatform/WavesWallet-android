@@ -31,7 +31,7 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
                 helper.setImageResource(R.id.image_graph,
                         if (item.lastTrade?.getMyOrder()?.getType() == OrderType.BUY) R.drawable.ic_chartarrow_success_400
                         else R.drawable.ic_chartarrow_error_500)
-                        .setText(R.id.text_price_value, item.lastTrade?.price?.toString()?.stripZeros())
+                        .setText(R.id.text_price_value, item.lastTrade?.price?.toBigDecimal()?.toPlainString()?.stripZeros())
                         .setText(R.id.text_percent_value, mContext.getString(R.string.orderbook_spread_percent, percent))
             }
             ASK_TYPE -> {
