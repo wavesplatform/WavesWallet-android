@@ -1,7 +1,5 @@
 # Waves Wallet on Android
-_Old version_
-
-##
+Old version
 
 _Please see the [issues](https://github.com/wavesplatform/WavesWallet-android/issues) section to report any bugs or feature requests and to see the list of known issues_ 🤝😎
 
