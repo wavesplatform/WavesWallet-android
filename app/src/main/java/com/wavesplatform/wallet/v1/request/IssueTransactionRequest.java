@@ -8,9 +8,6 @@ import com.google.common.primitives.Shorts;
 import com.wavesplatform.wallet.v1.crypto.Base58;
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider;
 import com.wavesplatform.wallet.v1.crypto.Hash;
-import com.wavesplatform.wallet.v1.payload.AssetBalance;
-import com.wavesplatform.wallet.v1.payload.IssueTransaction;
-import com.wavesplatform.wallet.v1.util.AddressUtil;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -39,7 +36,7 @@ public class IssueTransactionRequest {
     public IssueTransactionRequest(String senderPublicKey, String name, String description,
                                    long quantity, byte decimals, boolean reissuable, long timestamp) {
         this.senderPublicKey = senderPublicKey;
-        this.nameBytes = name != null ? name.getBytes(org.apache.commons.io.Charsets.UTF_8) : ArrayUtils.EMPTY_BYTE_ARRAY;;
+        this.nameBytes = name != null ? name.getBytes(org.apache.commons.io.Charsets.UTF_8) : ArrayUtils.EMPTY_BYTE_ARRAY;
         this.name = name;
         this.descriptionBytes = description != null ? description.getBytes(org.apache.commons.io.Charsets.UTF_8) : ArrayUtils.EMPTY_BYTE_ARRAY;
         this.description = description != null ? description : "";
@@ -51,7 +48,7 @@ public class IssueTransactionRequest {
         this.id = Base58.encode(Hash.fastHash(toSignBytes()));
     }
 
-    public static byte[] arrayWithSize(byte[] b) {
+    private static byte[] arrayWithSize(byte[] b) {
         return Bytes.concat(Shorts.toByteArray((short) b.length), b);
     }
 
@@ -59,7 +56,7 @@ public class IssueTransactionRequest {
         try {
             byte[] reissuableBytes = reissuable ? new byte[]{1} : new byte[]{0};
 
-            return Bytes.concat(new byte[] {txType},
+            return Bytes.concat(new byte[]{txType},
                     Base58.decode(senderPublicKey),
                     arrayWithSize(nameBytes),
                     arrayWithSize(descriptionBytes),
@@ -74,36 +71,9 @@ public class IssueTransactionRequest {
         }
     }
 
-    public void sign(byte[] privateKey)  {
+    public void sign(byte[] privateKey) {
         if (signature == null) {
             signature = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()));
         }
-    }
-
-    public int getNameSize() {
-        return nameBytes.length;
-    }
-
-    public int getDescriptiontSize() {
-        return descriptionBytes.length;
-    }
-
-    public IssueTransaction createDisplayTransaction() {
-        IssueTransaction tx = new IssueTransaction(3, id,
-                AddressUtil.addressFromPublicKey(senderPublicKey), timestamp, quantity, fee,
-                name, description, quantity, decimals, reissuable);
-        tx.isPending = true;
-        return tx;
-    }
-
-    public AssetBalance createDisplayAsset() {
-        AssetBalance ab = new AssetBalance();
-        ab.assetId = id;
-        ab.reissuable = reissuable;
-        ab.quantity = quantity;
-        ab.balance = quantity;
-        ab.issueTransaction = createDisplayTransaction();
-        ab.isPending = true;
-        return ab;
     }
 }

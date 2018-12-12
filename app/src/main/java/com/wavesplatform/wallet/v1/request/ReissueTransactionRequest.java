@@ -4,12 +4,8 @@ import android.util.Log;
 
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
-import com.google.common.primitives.Shorts;
 import com.wavesplatform.wallet.v1.crypto.Base58;
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider;
-import com.wavesplatform.wallet.v1.crypto.Hash;
-import com.wavesplatform.wallet.v1.payload.ReissueTransaction;
-import com.wavesplatform.wallet.v1.util.AddressUtil;
 
 public class ReissueTransactionRequest {
     public static int MinFee = 100000000;
@@ -34,15 +30,11 @@ public class ReissueTransactionRequest {
         this.timestamp = timestamp;
     }
 
-    public static byte[] arrayWithSize(byte[] b) {
-        return Bytes.concat(Shorts.toByteArray((short) b.length), b);
-    }
-
     public byte[] toSignBytes() {
         try {
             byte[] reissuableBytes = reissuable ? new byte[]{1} : new byte[]{0};
 
-            return Bytes.concat(new byte[] {txType},
+            return Bytes.concat(new byte[]{txType},
                     Base58.decode(senderPublicKey),
                     Base58.decode(assetId),
                     Longs.toByteArray(quantity),
@@ -55,17 +47,9 @@ public class ReissueTransactionRequest {
         }
     }
 
-    public void sign(byte[] privateKey)  {
+    public void sign(byte[] privateKey) {
         if (signature == null) {
             signature = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()));
         }
-    }
-
-    public ReissueTransaction createDisplayTransaction() {
-        ReissueTransaction tx = new ReissueTransaction(3, Base58.encode(Hash.fastHash(toSignBytes())),
-                AddressUtil.addressFromPublicKey(senderPublicKey), assetId, timestamp, quantity, fee,
-                quantity, reissuable);
-        tx.isPending = true;
-        return tx;
     }
 }

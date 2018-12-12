@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import com.wavesplatform.wallet.R;
 
-import java.io.File;
 import java.security.Security;
 
 import javax.inject.Inject;
@@ -15,12 +14,10 @@ public class AppUtil {
 
 
     private Context context;
-    private String receiveQRFileName;
 
     @Inject
     public AppUtil(@com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext Context context) {
         this.context = context;
-        this.receiveQRFileName = context.getExternalCacheDir() + File.separator + "qr.png";
     }
 
 

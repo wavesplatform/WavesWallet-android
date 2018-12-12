@@ -46,5 +46,4 @@ class ConnectionStateMonitor extends ConnectivityManager.NetworkCallback {
                         .sendBroadcastSync(new Intent(NetworkStateReceiver.ACTION_INTENT)))
                 .subscribeOn(AndroidSchedulers.mainThread());
     }
-
 }

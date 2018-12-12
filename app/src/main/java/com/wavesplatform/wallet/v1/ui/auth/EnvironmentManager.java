@@ -4,7 +4,6 @@ import com.wavesplatform.wallet.v1.util.AppUtil;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 
 public class EnvironmentManager {
-    private static final String TAG = EnvironmentManager.class.getSimpleName();
 
     public static final String KEY_ENV_PROD = "env_prod";
     public static final String KEY_ENV_TESTNET = "env_testnet";
@@ -55,7 +54,7 @@ public class EnvironmentManager {
         private String dataFeedUrl;
         private char addressScheme;
 
-        private Environment(String name, String nodeUrl, String matherUrl, String dataFeedUrl,  char addressScheme) {
+        Environment(String name, String nodeUrl, String matherUrl, String dataFeedUrl,  char addressScheme) {
             this.name = name;
             this.nodeUrl = nodeUrl;
             this.dataFeedUrl = dataFeedUrl;

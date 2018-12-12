@@ -1,17 +1,11 @@
 package com.wavesplatform.wallet.v1.util;
 
-import android.text.TextUtils;
-
 import com.google.common.primitives.Bytes;
-import com.wavesplatform.wallet.v1.api.NodeManager;
 import com.wavesplatform.wallet.v1.crypto.Base58;
 import com.wavesplatform.wallet.v1.crypto.Hash;
-import com.wavesplatform.wallet.v1.payload.AssetBalance;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class AddressUtil {
     public static byte AddressVersion = 1;
@@ -44,19 +38,4 @@ public class AddressUtil {
             return "Unknown address";
         }
     }
-
-    public static boolean isWavesUri(String uri) {
-        return uri.startsWith(WAVES_PREFIX);
-    }
-
-    public static String generateReceiveUri(long amount, AssetBalance ab, String attachment) {
-        List<String> params = new ArrayList<>();
-        if (!ab.isWaves()) params.add("asset=" + ab.assetId);
-        if (amount > 0) params.add("amount=" + amount);
-        if (attachment != null && !attachment.isEmpty()) params.add("attachment=" + attachment);
-
-        String paramsText = TextUtils.join("&", params);
-        return WAVES_PREFIX + NodeManager.get().getAddress() + (paramsText.isEmpty() ? "" : "?" + paramsText);
-    }
-
 }
