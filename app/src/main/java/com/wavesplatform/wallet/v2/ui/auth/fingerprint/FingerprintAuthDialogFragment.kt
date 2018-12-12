@@ -9,26 +9,24 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.AppCompatTextView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
 import com.mtramin.rxfingerprint.EncryptionMethod
 import com.mtramin.rxfingerprint.RxFingerprint
 import com.mtramin.rxfingerprint.data.FingerprintResult
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v1.util.RootUtil
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
+import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.fingerprint_dialog.*
 import kotlinx.android.synthetic.main.fingerprint_dialog.view.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
+import timber.log.Timber
 
 
 class FingerprintAuthDialogFragment : DialogFragment() {
@@ -36,11 +34,10 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     private var fingerprintState = FingerprintState.DEFAULT
     private var numberOfAttempts = 0
     private var fingerPrintDialogListener: FingerPrintDialogListener? = null
-    private var authFingerprintDisposable = Disposables.empty()
-    private var fingerprintDisposable = Disposables.empty()
     private var subscriptions = CompositeDisposable()
     private var mode: Int? = CRYPT
     private var handler = Handler()
+    private var guid: String = ""
 
     init {
         setFingerPrintDialogListener(object : FingerPrintDialogListener {})
@@ -72,8 +69,8 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     private fun startScanning() {
         if (RootUtil.isDeviceRooted()) {
             val message = getString(R.string.fingerprint_fatal_error_root)
-            showErrorMessage(message,
-                    "Fingerprint auth Error rooted Device", Throwable(message))
+            showErrorMessage(message, "Fingerprint auth Error rooted Device",
+                    Throwable(message))
             return
         }
 
@@ -98,7 +95,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     private fun crypt() {
-        val guid = arguments?.getString(KEY_INTENT_GUID, "") ?: ""
+        guid = arguments?.getString(KEY_INTENT_GUID, "") ?: ""
         val passCode = arguments?.getString(KEY_INTENT_PASS_CODE, "") ?: ""
         subscriptions.add(RxFingerprint.encrypt(
                 EncryptionMethod.RSA,
@@ -126,7 +123,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     private fun decrypt() {
-        val guid = arguments?.getString(KEY_INTENT_GUID, "") ?: ""
+        guid = arguments?.getString(KEY_INTENT_GUID, "") ?: ""
         subscriptions.add(RxFingerprint.decrypt(EncryptionMethod.RSA, requireActivity(),
                 guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE,
                 App.getAccessManager().getEncryptedPassCode(guid))
@@ -158,20 +155,16 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     private fun showHelpMessage(message: String?) {
-        ToastCustom.makeText(
-                activity,
-                message,
-                Toast.LENGTH_LONG,
-                ToastCustom.TYPE_GENERAL)
+        fingerPrintDialogListener.notNull {
+            it.onShowErrorMessage(message ?: getString(R.string.common_server_error))
+        }
     }
 
     private fun showErrorMessage(message: String?, errMessage: String?, tr: Throwable) {
-        Log.e("ERROR", errMessage, tr)
-        ToastCustom.makeText(
-                activity,
-                message,
-                Toast.LENGTH_LONG,
-                ToastCustom.TYPE_ERROR)
+        Timber.e(tr, errMessage)
+        fingerPrintDialogListener.notNull {
+            it.onShowErrorMessage(message ?: getString(R.string.common_server_error))
+        }
     }
 
     override fun onDestroyView() {
@@ -202,6 +195,9 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         image_fingerprint_state.setImageResource(R.drawable.ic_fingerprint_lock_48_submit_300)
         text_fingerprint_state.setTextColor(findColor(R.color.error500))
         text_fingerprint_state.setText(R.string.fingerprint_dialog_too_many_attempts)
+        fingerPrintDialogListener.notNull {
+            it.onFingerprintLocked(getString(R.string.fingerprint_dialog_too_many_attempts))
+        }
     }
 
     private fun onFingerprintDoNotMatchTryAgain() {
@@ -220,6 +216,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
 
         numberOfAttempts++
         if (numberOfAttempts == AVAILABLE_TIMES) {
+            App.getAccessManager().setUseFingerPrint(guid, false)
             onFingerprintLocked()
         }
     }
@@ -242,6 +239,18 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         }
 
         fun onSuccessRecognizedFingerprint(passCode: String) {
+
+        }
+
+        fun onFingerprintLocked(message: String) {
+
+        }
+
+        fun onShowErrorMessage(message: String) {
+
+        }
+
+        fun onShowMessage(message: String) {
 
         }
     }

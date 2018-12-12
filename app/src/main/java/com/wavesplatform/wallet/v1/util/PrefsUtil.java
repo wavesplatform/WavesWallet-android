@@ -101,6 +101,10 @@ public class PrefsUtil {
         setValueInternal(guid + name, value);
     }
 
+    public void setValue(String guid, String name, Boolean value) {
+        setValueInternal(guid + name, value);
+    }
+
     private void setValueInternal(String name, HashSet<String> value) {
         Editor editor = preferenceManager.edit();
         editor.putStringSet(name, value);

@@ -330,7 +330,7 @@ fun Activity.showError(@StringRes msgId: Int, @IdRes viewId: Int) {
     showMessage(getString(msgId), viewId, R.color.error400)
 }
 
-fun Activity.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
+fun Activity.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = R.color.error400) {
     showMessage(msg, viewId, color)
 }
 

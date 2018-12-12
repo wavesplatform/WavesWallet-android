@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivit
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_use_fingerprint.*
 import pers.victor.ext.click
 import javax.inject.Inject
@@ -19,6 +20,7 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
     @Inject
     @InjectPresenter
     lateinit var presenter: UseFingerprintPresenter
+    private var guid: String = ""
 
     @ProvidePresenter
     fun providePresenter(): UseFingerprintPresenter = presenter
@@ -31,9 +33,9 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        button_use_fingerprint.click { _ ->
+        button_use_fingerprint.click {
             val passCode = intent.extras.getString(CreatePassCodeActivity.KEY_INTENT_PASS_CODE)
-            val guid = intent.extras.getString(CreatePassCodeActivity.KEY_INTENT_GUID)
+            guid = intent.extras.getString(CreatePassCodeActivity.KEY_INTENT_GUID)
 
             val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
             fingerprintDialog.isCancelable = false
@@ -41,8 +43,17 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
             fingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint() {
-                            App.getAccessManager().setUseFingerPrint(true)
+                            App.getAccessManager().setUseFingerPrint(guid, true)
                             launchActivity<MainActivity>(clear = true)
+                        }
+
+                        override fun onFingerprintLocked(message: String) {
+                            onBackPressed()
+                        }
+
+                        override fun onShowErrorMessage(message: String) {
+                            showError(message, R.id.content)
+                            fingerprintDialog.dismiss()
                         }
                     })
         }
@@ -53,7 +64,7 @@ class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
     }
 
     override fun onBackPressed() {
-        App.getAccessManager().setUseFingerPrint(false)
+        App.getAccessManager().setUseFingerPrint(guid, false)
         launchActivity<MainActivity>(clear = true)
     }
 }

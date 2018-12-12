@@ -16,10 +16,7 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
-import com.wavesplatform.wallet.v2.util.isNetworkConnection
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.wallet.v2.util.showError
+import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.activity_enter_passcode.*
 import pers.victor.ext.click
 import pers.victor.ext.inflate
@@ -89,6 +86,20 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint(passCode: String) {
                             validate(passCode)
+                        }
+
+                        override fun onFingerprintLocked(message: String) {
+                            pass_keypad.isFingerprintAvailable(false)
+                        }
+
+                        override fun onShowErrorMessage(message: String) {
+                            showError(message, R.id.content)
+                            fingerprintDialog.dismiss()
+                        }
+
+                        override fun onShowMessage(message: String) {
+                            showMessage(message, R.id.content)
+                            fingerprintDialog.dismiss()
                         }
                     })
             showFingerPrint()

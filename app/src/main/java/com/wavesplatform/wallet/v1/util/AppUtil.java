@@ -2,9 +2,9 @@ package com.wavesplatform.wallet.v1.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.wavesplatform.wallet.R;
-import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom;
 
 import java.io.File;
 import java.security.Security;
@@ -43,7 +43,7 @@ public class AppUtil {
             try {
                 PRNGFixes.apply();
             } catch (Exception e1) {
-                ToastCustom.makeText(context, context.getString(R.string.cannot_launch_app), ToastCustom.LENGTH_LONG, ToastCustom.TYPE_ERROR);
+                Toast.makeText(context, R.string.cannot_launch_app, Toast.LENGTH_LONG).show();
             }
         }
     }
