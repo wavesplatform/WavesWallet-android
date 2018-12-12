@@ -245,12 +245,11 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                         text_limit_price_error.text = getString(R.string.buy_and_sell_required)
                         text_limit_price_error.visiable()
                     }
-                    presenter.wavesBalance.getAvailableBalance().notNull { wavesBalance ->
-                        if (wavesBalance < Constants.WAVES_DEX_FEE) {
-                            linear_fees_error.visiable()
-                        } else {
-                            linear_fees_error.gone()
-                        }
+
+                    if (isValidWavesFee()) {
+                        linear_fees_error.gone()
+                    } else {
+                        linear_fees_error.visiable()
                     }
 
                     if (presenter.humanTotalTyping) {
@@ -384,6 +383,20 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         }
     }
 
+    private fun isValidWavesFee(): Boolean {
+        return if (presenter.wavesBalance.getAvailableBalance() ?: 0 > Constants.WAVES_DEX_FEE) {
+            true
+        } else {
+            if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true && presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
+                edit_amount.text.toString().toBigDecimal() > getWavesDexFee()
+            } else if (presenter.data?.watchMarket?.market?.priceAsset?.isWaves() == true && presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
+                edit_total_price.text.toString().toBigDecimal() > getWavesDexFee()
+            } else {
+                false
+            }
+        }
+    }
+
     private fun makeButtonEnableIfValid() {
         button_confirm.isEnabled = presenter.isAllFieldsValid() && isNetworkConnected()
     }
@@ -398,10 +411,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                         if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true) {
                             if (balance < Constants.WAVES_DEX_FEE) {
                                 balance = 0
-                                linear_fees_error.visiable()
                             } else {
                                 balance -= Constants.WAVES_DEX_FEE
-                                linear_fees_error.gone()
                             }
                         }
                         quickBalanceView.click {
