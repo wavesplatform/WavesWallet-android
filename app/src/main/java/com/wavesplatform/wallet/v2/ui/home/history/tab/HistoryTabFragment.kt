@@ -88,11 +88,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
                 .subscribe {
-                    presenter.totalHeaders = 0
-                    presenter.hashOfTimestamp = hashMapOf()
-                    runAsync {
-                        presenter.loadTransactions()
-                    }
+                    presenter.loadTransactions()
                     swipe_refresh.isRefreshing = false
                 })
 
@@ -107,9 +103,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                     }
                 })
 
-        runAsync {
-            presenter.loadTransactions()
-        }
+        presenter.loadTransactions()
 
         adapter.setEmptyView(R.layout.layout_empty_data)
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
