@@ -3,14 +3,13 @@ package com.wavesplatform.wallet.v2.ui.home.dex.markets
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
-import com.mindorks.editdrawabletext.onDrawableClickListener
+import com.mindorks.editdrawabletext.OnDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
@@ -18,7 +17,6 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.RESULT_NEED_UPDATE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dex_markets.*
-import kotlinx.android.synthetic.main.header_dex_markets_layout.view.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
@@ -56,7 +54,7 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
 
         presenter.getMarkets()
 
-        edit_search.setDrawableClickListener(object : onDrawableClickListener {
+        edit_search.setDrawableClickListener(object : OnDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
                     DrawablePosition.RIGHT -> {

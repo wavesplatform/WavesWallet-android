@@ -4,7 +4,6 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
-import org.fingerlinks.mobile.android.navigator.builder.Builders
 import javax.inject.Inject
 
 @InjectViewState

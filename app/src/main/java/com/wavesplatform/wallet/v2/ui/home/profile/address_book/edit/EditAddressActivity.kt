@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit
 
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -10,10 +9,8 @@ import android.support.v7.app.AlertDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
-import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
-import com.mindorks.editdrawabletext.onDrawableClickListener
-import com.vicpin.krealmextensions.queryAsFlowable
+import com.mindorks.editdrawabletext.OnDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -33,12 +30,9 @@ import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
 import io.github.anderscheow.validator.rules.common.MaxRule
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_edit_address.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
-import pyxis.uzuki.live.richutilskt.utils.toast
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -64,7 +58,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         setupToolbar(toolbar_view, true, getString(R.string.edit_address_toolbar_title), R.drawable.ic_toolbar_back_black)
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
-        presenter.addressBookUser = intent.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
+        presenter.addressBookUser = intent.getParcelableExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
 
         val nameValidation = Validation(til_name)
                 .and(NotEmptyTrimRule(R.string.address_book_name_validation_required_error))
@@ -72,7 +66,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
                 .and(MaxRule(24, R.string.address_book_name_validation_max_length_error))
                 .and(AddressBookNameRule(R.string.address_book_name_validation_already_use_error))
 
-        edit_address.setDrawableClickListener(object : onDrawableClickListener {
+        edit_address.setDrawableClickListener(object : OnDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
                     DrawablePosition.RIGHT -> {
