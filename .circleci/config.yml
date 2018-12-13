@@ -33,7 +33,4 @@ workflows:
   version: 2
   TestCI:
     jobs:
-      - build:
-          filters:
-            branches:
-              only: feature/circle-ci
+      - build
