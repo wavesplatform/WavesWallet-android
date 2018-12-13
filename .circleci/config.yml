@@ -14,11 +14,11 @@ jobs:
 #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
 #         command: sudo chmod +x ./gradlew
       - run:
-          name: Export GOOGLE_SERVICES_DEV_KEY
-          command: echo 'export GOOGLE_SERVICES_DEV_KEY="$GOOGLE_SERVICES_DEV_KEY"' >> $BASH_ENV
-      - run:
           name: Add google-services.json
           command: echo $GOOGLE_SERVICES_DEV_KEY | base64 -di > app/google-services.json
+      - run:
+          name: Show GOOGLE_SERVICES_DEV_KEY
+          command: echo '$GOOGLE_SERVICES_DEV_KEY'
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
