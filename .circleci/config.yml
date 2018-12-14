@@ -25,8 +25,11 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          name: Run assembleDev
-          command: ./gradlew -PciBuild=true assembleDev
+          name: Run clean
+          command: ./gradlew clean
+      - run:
+          name: Run assemble
+          command: ./gradlew assemble
       - store_artifacts:
           path: app/build/reports
           destination: reports
