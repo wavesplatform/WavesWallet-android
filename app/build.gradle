@@ -10,9 +10,9 @@ android {
     signingConfigs {
         config {
             storeFile file("android.jks")
-            storePassword=$System.env.KEYSTORE_PASSWORD
-            keyPassword=$System.env.KEY_PASSWORD
-            keyAlias=$System.env.KEY_ALIAS
+            storePassword="$System.env.KEYSTORE_PASSWORD"
+            keyPassword="$System.env.KEY_PASSWORD"
+            keyAlias="$System.env.KEY_ALIAS"
         }
     }
     compileSdkVersion 28
