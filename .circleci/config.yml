@@ -31,7 +31,7 @@ jobs:
           name: Run assembleDevDebug
           command: ./gradlew assembleDevDebug
       - store_artifacts:
-          path: app/build/reports
+          path: app/build/outputs/apk/dev/debug
           destination: reports
       - store_test_results:
           path: app/build/test-results
