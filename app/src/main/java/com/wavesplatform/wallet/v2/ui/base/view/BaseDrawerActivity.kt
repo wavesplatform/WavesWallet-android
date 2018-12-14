@@ -73,7 +73,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
         slidingRootNav.layout.text_terms.click { openUrlWithIntent(Constants.URL_TERMS) }
         slidingRootNav.layout.text_support.click { openUrlWithChromeTab(Constants.SUPPORT_SITE) }
         slidingRootNav.layout.image_discord.click { openDiscord(Constants.URL_DISCORD) }
-        slidingRootNav.layout.image_facebook.click { openFacebook(Constants.URL_FACEBOOK) }
+        slidingRootNav.layout.image_reddit.click { openReddit(Constants.URL_REDDIT) }
         slidingRootNav.layout.image_github.click { openUrlWithChromeTab(Constants.URL_GITHUB) }
         slidingRootNav.layout.image_telegram.click { openTelegram(Constants.ACC_TELEGRAM) }
         slidingRootNav.layout.image_twitter.click { openTwitter(Constants.ACC_TWITTER) }
@@ -142,6 +142,19 @@ abstract class BaseDrawerActivity : BaseActivity() {
             this.startActivity(intent)
         } catch (e: Exception) {
             openUrlWithChromeTab(Constants.URL_DISCORD)
+        }
+    }
+
+
+    fun openReddit(url: String) {
+        var intent: Intent? = null
+        try {
+            this.packageManager.getPackageInfo("com.reddit.frontpage", 0)
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(intent)
+        } catch (e: Exception) {
+            openUrlWithChromeTab(url)
         }
     }
 
