@@ -34,7 +34,7 @@ jobs:
           name: Run assembleProdRelease
           command: ./gradlew assembleProdRelease
       - store_artifacts:
-          path: app/build/outputs/apk/dev/debug
+          path: app/build/outputs/apk/prod/release
           destination: reports
       - store_test_results:
           path: app/build/test-results
