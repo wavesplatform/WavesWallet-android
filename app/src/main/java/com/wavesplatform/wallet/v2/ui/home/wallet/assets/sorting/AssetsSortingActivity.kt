@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -18,14 +20,11 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
-import kotlinx.android.synthetic.main.activity_assets_sorting.*
-import javax.inject.Inject
-import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
-import android.view.View
 import com.wavesplatform.wallet.v2.util.drag_helper.SimpleItemTouchHelperCallback
+import kotlinx.android.synthetic.main.activity_assets_sorting.*
 import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.*
+import javax.inject.Inject
 
 
 class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
@@ -130,35 +129,26 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         adapter.mDragStartListener = object : ItemDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder, position: Int) {
                 mItemTouchHelper?.startDrag(viewHolder)
-//                if (view_drag_bg.height == 0) {
-//                    view_drag_bg.setHeight(viewHolder.itemView.card_asset.height - dp2px(1))
-//                    view_drag_bg.setWidth(viewHolder.itemView.card_asset.width - dp2px(1))
-//                }
-//
-//                val originalPos = IntArray(2)
-//                viewHolder.itemView.card_asset.getLocationOnScreen(originalPos)
-//                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
-//                view_drag_bg.visiable()
-//
-//                if (adapter.getItem(position)?.asset?.isHidden != true) {
-//                    viewHolder.itemView.card_asset.cardElevation = dp2px(4).toFloat()
-//                }
+                if (view_drag_bg.height == 0) {
+                    view_drag_bg.setHeight(viewHolder.itemView.card_asset.height - dp2px(1))
+                    view_drag_bg.setWidth(viewHolder.itemView.card_asset.width - dp2px(1))
+                }
+
+                val originalPos = IntArray(2)
+                viewHolder.itemView.card_asset.getLocationOnScreen(originalPos)
+                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
+                view_drag_bg.visiable()
             }
 
             override fun onMoved(fromHolder: View?, fromPosition: Int, toHolder: View?, toPosition: Int) {
                 presenter.needToUpdate = true
-//                val originalPos = IntArray(2)
-//                toHolder?.card_asset?.getLocationOnScreen(originalPos)
-//                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
+                val originalPos = IntArray(2)
+                toHolder?.card_asset?.getLocationOnScreen(originalPos)
+                view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
             }
 
-            override fun onEndDrag(viewHolder: RecyclerView.ViewHolder, position: Int) {
-//                if (adapter.getItem(position)?.asset?.isHidden == true) {
-//                    viewHolder.itemView.card_asset.cardElevation = dp2px(0).toFloat()
-//                } else {
-//                    viewHolder.itemView.card_asset.cardElevation = dp2px(2).toFloat()
-//                }
-//                view_drag_bg.gone()
+            override fun onEndDrag() {
+                view_drag_bg.gone()
             }
         }
 

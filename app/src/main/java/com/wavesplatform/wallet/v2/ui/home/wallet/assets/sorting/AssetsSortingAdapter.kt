@@ -7,8 +7,8 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.util.drag_helper.ItemTouchHelperAdapter
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
+import com.wavesplatform.wallet.v2.util.drag_helper.ItemTouchHelperAdapter
 import kotlinx.android.synthetic.main.wallet_asset_sorting_favorite_item.view.*
 import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.dp2px
@@ -29,6 +29,10 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
         notifyItemMoved(fromPosition, toPosition)
         mDragStartListener?.onMoved(recyclerView.layoutManager?.findViewByPosition(fromPosition), fromPosition, recyclerView.layoutManager?.findViewByPosition(toPosition), toPosition)
         return true
+    }
+
+    override fun onDragEnd() {
+        mDragStartListener?.onEndDrag()
     }
 
     init {
@@ -81,9 +85,6 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
                     when (event.action) {
                         MotionEvent.ACTION_DOWN -> {
                             mDragStartListener?.onStartDrag(helper, helper.adapterPosition)
-                        }
-                        MotionEvent.ACTION_UP-> {
-                            mDragStartListener?.onEndDrag(helper, helper.adapterPosition)
                         }
                     }
                     false
