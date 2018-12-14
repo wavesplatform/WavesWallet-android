@@ -9,11 +9,10 @@ apply plugin: 'realm-android'
 android {
     signingConfigs {
         config {
-            keyAlias 'WavesWallet'
-            /*storeFile file("android.jks")
-            storePassword=$KEYSTORE_PASSWORD
-            keyPassword=$KEY_PASSWORD
-            keyAlias=$KEY_ALIAS*/
+            storeFile file("android.jks")
+            storePassword=$System.env.KEYSTORE_PASSWORD
+            keyPassword=$System.env.KEY_PASSWORD
+            keyAlias=$System.env.KEY_ALIAS
         }
     }
     compileSdkVersion 28
@@ -52,7 +51,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled true
             buildConfigField "boolean", "DOGFOOD", "false"
-            // signingConfig signingConfigs.config
+            signingConfig signingConfigs.config
         }
         debug {
             multiDexEnabled false
