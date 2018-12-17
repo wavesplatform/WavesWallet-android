@@ -49,7 +49,6 @@ import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.Order
@@ -63,7 +62,6 @@ import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
-import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -106,14 +104,6 @@ fun Long.currentDateAsTimeSpanString(context: Context): String {
 
 fun String.isWaves(): Boolean {
     return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
-}
-
-fun getWavesDexFee(): BigDecimal {
-    return MoneyUtil.getScaledText(Constants.WAVES_DEX_FEE, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
-}
-
-fun getWavesFee(): BigDecimal {
-    return MoneyUtil.getScaledText(Constants.WAVES_FEE, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
 }
 
 fun String.isWavesId(): Boolean {
@@ -340,7 +330,7 @@ fun Activity.showError(@StringRes msgId: Int, @IdRes viewId: Int) {
     showMessage(getString(msgId), viewId, R.color.error400)
 }
 
-fun Activity.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
+fun Activity.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = R.color.error400) {
     showMessage(msg, viewId, color)
 }
 
@@ -676,7 +666,7 @@ fun findMyOrder(first: Order, second: Order, address: String): Order {
     }
 }
 
-fun AssetInfo.getTicker(): String {
+fun AssetInfo.getTicker() : String {
 
     if (this.id.isWavesId()) {
         return Constants.wavesAssetInfo.name

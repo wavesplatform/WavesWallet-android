@@ -420,9 +420,9 @@
     <string name="profile_general_feedback">Feedback</string>
     <string name="profile_general_feedback_body_extra_app_version">Versão do aplicativo: %1$s(%2$s)</string>
     <string name="profile_general_feedback_body_extra_carrier">Operadora: %s</string>
-    <string name="profile_general_feedback_body_extra_device_model">Modelo do dispositivo:</string>
+    <string name="profile_general_feedback_body_extra_device_model">Modelo do dispositivo: %s</string>
     <string name="profile_general_feedback_body_extra_language">Idioma: %s</string>
-    <string name="profile_general_feedback_body_extra_os_version">Versão do SO:</string>
+    <string name="profile_general_feedback_body_extra_os_version">Versão do SO: %s</string>
     <string name="profile_general_feedback_body_extra_title">---Informações do dispositivo---</string>
     <string name="profile_general_fingerprint">Impressão digital</string>
     <string name="profile_general_language">Idioma</string>

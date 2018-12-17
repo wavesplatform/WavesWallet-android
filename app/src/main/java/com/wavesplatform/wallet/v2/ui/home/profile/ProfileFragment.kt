@@ -233,6 +233,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onResume() {
         super.onResume()
         setCurrentLangFlag()
+        initFingerPrintControl()
         SimpleChromeCustomTabs.getInstance().connectTo(baseActivity)
     }
 
@@ -305,7 +306,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
     private fun setFingerprint(guid: String, passCode: String) {
         if (App.getAccessManager().isUseFingerPrint(guid)) {
-            App.getAccessManager().setUseFingerPrint(false)
+            App.getAccessManager().setUseFingerPrint(guid, false)
         } else {
             val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
             fingerprintDialog.isCancelable = false
@@ -313,7 +314,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
             fingerprintDialog.setFingerPrintDialogListener(
                     object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
                         override fun onSuccessRecognizedFingerprint() {
-                            App.getAccessManager().setUseFingerPrint(
+                            App.getAccessManager().setUseFingerPrint(guid,
                                     !App.getAccessManager().isUseFingerPrint(guid))
                             initFingerPrintControl()
                         }
@@ -321,6 +322,15 @@ class ProfileFragment : BaseFragment(), ProfileView {
                         override fun onCancelButtonClicked(dialog: Dialog, button: AppCompatTextView) {
                             dialog.dismiss()
                             initFingerPrintControl()
+                        }
+
+                        override fun onFingerprintLocked(message: String) {
+                            initFingerPrintControl()
+                        }
+
+                        override fun onShowErrorMessage(message: String) {
+                            showError(message, R.id.content)
+                            fingerprintDialog.dismiss()
                         }
                     })
         }
