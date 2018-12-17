@@ -65,23 +65,27 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun assetsInfoByIds(ids: List<String?>): Observable<List<AssetInfo>> {
-        return apiService.assetsInfoByIds(ids)
-                .map { it ->
-                    val assetsInfo = it.data.mapTo(ArrayList()) { assetInfoData ->
-                        val defaultAsset = Constants.defaultAssets.firstOrNull { it.assetId == assetInfoData.assetInfo.id }
+        if (ids.isEmpty()) {
+            return Observable.just(listOf())
+        } else {
+            return apiService.assetsInfoByIds(ids)
+                    .map { it ->
+                        val assetsInfo = it.data.mapTo(ArrayList()) { assetInfoData ->
+                            val defaultAsset = Constants.defaultAssets.firstOrNull { it.assetId == assetInfoData.assetInfo.id }
 
-                        defaultAsset.notNull { assetBalance ->
-                            assetBalance.getName().notNull {
-                                assetInfoData.assetInfo.name = it
+                            defaultAsset.notNull { assetBalance ->
+                                assetBalance.getName().notNull {
+                                    assetInfoData.assetInfo.name = it
+                                }
+
                             }
 
+                            return@mapTo assetInfoData.assetInfo
                         }
-
-                        return@mapTo assetInfoData.assetInfo
+                        assetsInfo.saveAll()
+                        return@map assetsInfo
                     }
-                    assetsInfo.saveAll()
-                    return@map assetsInfo
-                }
+        }
     }
 
     fun loadLastTradesByPair(watchMarket: WatchMarket?): Observable<ArrayList<LastTradesResponse.Data.ExchangeTransaction>> {

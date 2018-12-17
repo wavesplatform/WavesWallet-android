@@ -17,6 +17,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
+import java.util.ArrayList
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -32,9 +33,8 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                         .retry(3)
                         .flatMap {
                             return@flatMap Observable.zip(matcherDataManager.loadOrderBook(watchMarket),
-                                    apiDataManager.getLastTradeByPair(watchMarket)
-                                            .map { it.firstOrNull() },
-                                    BiFunction { orderBook: OrderBook, lastPrice: LastTradesResponse.Data.ExchangeTransaction? ->
+                                    apiDataManager.getLastTradeByPair(watchMarket),
+                                    BiFunction { orderBook: OrderBook, lastPrice: ArrayList<LastTradesResponse.Data.ExchangeTransaction> ->
                                         return@BiFunction Pair(orderBook, lastPrice)
                                     })
                         }
@@ -46,7 +46,7 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                         .subscribe({ pair ->
                             val result = mutableListOf<MultiItemEntity>()
                             result.addAll(getCalculatedAsks(pair.first.asks).asReversed())
-                            pair.second.notNull {
+                            pair.second.firstOrNull().notNull {
                                 val firstAsk = pair.first.asks.firstOrNull()?.price?.toDouble()
                                 val firstBid = pair.first.bids.firstOrNull()?.price?.toDouble()
                                 if (firstAsk == null && firstBid == null) {

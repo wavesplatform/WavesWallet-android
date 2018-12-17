@@ -19,6 +19,7 @@ import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -35,19 +36,21 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     lateinit var transactionSaver: TransactionSaver
 
     fun loadTransactions() {
-        addSubscription(loadFromDb()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ list ->
-                    if (list.isEmpty()) {
-                        loadLastTransactions()
-                    } else {
-                        viewState.afterSuccessLoadTransaction(list, type)
-                    }
-                }, {
-                    viewState.onShowError(R.string.history_error_receive_data)
-                    it.printStackTrace()
-                }))
+        runAsync {
+            addSubscription(loadFromDb()
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ list ->
+                        if (list.isEmpty()) {
+                            loadLastTransactions()
+                        } else {
+                            viewState.afterSuccessLoadTransaction(list, type)
+                        }
+                    }, {
+                        viewState.onShowError(R.string.history_error_receive_data)
+                        it.printStackTrace()
+                    }))
+        }
     }
 
     private fun loadFromDb(): Single<ArrayList<HistoryItem>> {
@@ -106,12 +109,12 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         }
 
         return singleData.map {
-            // all history
-            allItemsFromDb = it.sortedByDescending { it.timestamp }
-
-            // history only for detailed asset
-            assetBalance.notNull {
-                allItemsFromDb = allItemsFromDb.filter { transaction ->
+            allItemsFromDb = if (assetBalance == null) {
+                // all history
+                it.sortedByDescending { it.timestamp }
+            } else {
+                // history only for detailed asset
+                allItemsFromDb.filter { transaction ->
                     val assetId = assetBalance!!.assetId
                     when {
                         assetId.isWavesId() ->
@@ -146,6 +149,8 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     }
 
     private fun sortAndConfigToUi(it: List<Transaction>): ArrayList<HistoryItem> {
+        init()
+
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy",
                 Language.getLocale(preferenceHelper.getLanguage()))
 
@@ -178,6 +183,11 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         }
 
         return list
+    }
+
+    private fun init() {
+        totalHeaders = 0
+        hashOfTimestamp = hashMapOf()
     }
 
 }

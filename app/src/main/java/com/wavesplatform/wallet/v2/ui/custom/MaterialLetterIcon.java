@@ -47,7 +47,11 @@ public class MaterialLetterIcon extends RoundedImageViewWithBorder {
         mShapeColor = attr.getColor(R.styleable.MaterialLetterIcon_shape_color, Color.RED);
         bold = attr.getBoolean(R.styleable.MaterialLetterIcon_is_bold, false);
         uppercase = attr.getBoolean(R.styleable.MaterialLetterIcon_is_uppercase, false);
-        mTypeface = ResourcesCompat.getFont(getContext(), R.font.roboto);
+        try {
+            mTypeface = ResourcesCompat.getFont(getContext(), R.font.roboto);
+        } catch (Exception e) {
+            mTypeface = Typeface.DEFAULT;
+        }
 
         computeText(attr.getString(R.styleable.MaterialLetterIcon_text));
         attr.recycle();
@@ -94,7 +98,7 @@ public class MaterialLetterIcon extends RoundedImageViewWithBorder {
         mText = mText.substring(0, mLetterCount > mText.length() ? mText.length() : mLetterCount).toUpperCase();
 
         Integer letter = Constants.INSTANCE.getAlphabetColor().get(text.trim().substring(0, 1).toLowerCase());
-        if (letter == null){
+        if (letter == null) {
             mText = getContext().getString(R.string.common_persist);
         }
     }
@@ -105,9 +109,9 @@ public class MaterialLetterIcon extends RoundedImageViewWithBorder {
             return;
         }
         Integer letterColor = Constants.INSTANCE.getAlphabetColor().get(text.trim().substring(0, 1).toLowerCase());
-        if (letterColor != null){
+        if (letterColor != null) {
             setShapeColor(ContextCompat.getColor(getContext(), letterColor));
-        }else {
+        } else {
             setShapeColor(ContextCompat.getColor(getContext(), R.color.persist));
         }
 
@@ -119,9 +123,9 @@ public class MaterialLetterIcon extends RoundedImageViewWithBorder {
 
     public void setAsset(AssetBalance asset) {
         Integer avatar = Constants.INSTANCE.getDefaultAssetsAvatar().get(asset.getAssetId());
-        if (avatar != null){
+        if (avatar != null) {
             setImageResource(avatar);
-        }else {
+        } else {
             computeText(asset.getName());
             computeColor(asset.getName());
             updateDrawable();

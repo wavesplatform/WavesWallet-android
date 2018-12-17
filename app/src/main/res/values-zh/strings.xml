@@ -14,7 +14,7 @@
     <string name="address_book_address_validation_required_error">地址是必需的</string>
     <string name="address_book_empty_state">没有地址信息… \n您可以创建新地址</string>
     <string name="address_book_name_validation_already_use_error">已经在使用</string>
-    <string name="address_book_name_validation_max_length_error">最多20个字符</string>
+    <string name="address_book_name_validation_max_length_error">最多24个字符</string>
     <string name="address_book_name_validation_min_length_error">至少2个字符</string>
     <string name="address_book_name_validation_required_error">名稱是必需的</string>
     <string name="address_book_search">搜索</string>
@@ -373,7 +373,7 @@
     <string name="network_toolbar_title">网络</string>
     <string name="new_account_account_name_hint">用户名</string>
     <string name="new_account_account_name_validation_already_exist_error">帐户名已经使用</string>
-    <string name="new_account_account_name_validation_length_error">最多20个字符</string>
+    <string name="new_account_account_name_validation_length_error">最多24个字符</string>
     <string name="new_account_account_name_validation_min_length_error">至少2个字符</string>
     <string name="new_account_account_name_validation_required_error">需要名称</string>
     <string name="new_account_avatar_description">该操作实施后不能更改</string>

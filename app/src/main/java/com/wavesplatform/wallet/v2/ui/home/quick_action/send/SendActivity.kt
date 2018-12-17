@@ -108,8 +108,8 @@ class SendActivity : BaseActivity(), SendView {
                     horizontal_amount_suggestion.visiable()
                     linear_fees_error.gone()
                 }
-                if (edit_amount.text!!.isNotEmpty()) {
-                    presenter.amount = s.toString().toFloat()
+                if (edit_amount.text?.isNotEmpty() == true) {
+                    presenter.amount = edit_amount.text?.toString()?.toFloatOrNull() ?: 0f
                 }
             }
         }

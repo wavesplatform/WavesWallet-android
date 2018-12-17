@@ -249,7 +249,12 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             when (quickBalanceView.tag) {
                 TOTAL_BALANCE -> {
                     quickBalanceView.click {
-                        edit_amount.setText(MoneyUtil.getScaledText(waves.getAvailableBalance()?.minus(Constants.WAVES_FEE), waves).clearBalance().toBigDecimal().toString())
+                        var balance = if (waves.getAvailableBalance() ?: 0 < Constants.WAVES_DEX_FEE) {
+                            0
+                        } else {
+                            waves.getAvailableBalance()?.minus(Constants.WAVES_FEE)
+                        }
+                        edit_amount.setText(MoneyUtil.getScaledText(balance, waves).clearBalance().toBigDecimal().toString())
                         edit_amount.setSelection(edit_amount.text.length)
                     }
                 }

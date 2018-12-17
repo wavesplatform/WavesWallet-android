@@ -283,16 +283,18 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                             R.string.history_my_dex_intent_sell,
                             myOrder.assetPair?.amountAssetObject!!.name,
                             myOrder.assetPair?.priceAssetObject?.name)
-                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.price,
-                            myOrder.assetPair?.priceAssetObject)} " +
+                    btcPrice?.text = "${MoneyUtil.getScaledPrice(transaction.price,
+                            myOrder?.assetPair?.amountAssetObject?.precision ?: 0,
+                            myOrder?.assetPair?.priceAssetObject?.precision ?: 0)} " +
                             "${myOrder.assetPair?.amountAssetObject?.name}"
                 } else {
                     typeView?.text = getString(
                             R.string.history_my_dex_intent_buy,
                             myOrder.assetPair?.amountAssetObject!!.name,
                             myOrder.assetPair?.priceAssetObject?.name)
-                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.price,
-                            myOrder?.assetPair?.priceAssetObject)} " +
+                    btcPrice?.text = "${MoneyUtil.getScaledPrice(transaction.price,
+                            myOrder?.assetPair?.amountAssetObject?.precision ?: 0,
+                            myOrder?.assetPair?.priceAssetObject?.precision ?: 0)} " +
                             "${myOrder?.assetPair?.priceAssetObject?.name}"
                 }
 

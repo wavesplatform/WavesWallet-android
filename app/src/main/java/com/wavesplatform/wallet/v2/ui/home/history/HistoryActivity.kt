@@ -36,6 +36,7 @@ class HistoryActivity : BaseActivity() {
         openFragment(R.id.frame_fragment_container, fragment)
     }
 
+    override fun needToShowNetworkMessage(): Boolean = true
 
     override fun onBackPressed() {
         finish()

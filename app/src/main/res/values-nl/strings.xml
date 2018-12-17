@@ -14,7 +14,7 @@
     <string name="address_book_address_validation_required_error">Adres is nodig</string>
     <string name="address_book_empty_state">Niks hier… \nU kunt een nieuw adres aanmaken</string>
     <string name="address_book_name_validation_already_use_error">Al in gebruik</string>
-    <string name="address_book_name_validation_max_length_error">Maximaal 20 karakters</string>
+    <string name="address_book_name_validation_max_length_error">Maximaal 24 karakters</string>
     <string name="address_book_name_validation_min_length_error">Ten minste 2 karakters</string>
     <string name="address_book_name_validation_required_error">Naam is vereist</string>
     <string name="address_book_search">Zoeken</string>
@@ -373,7 +373,7 @@
     <string name="network_toolbar_title">Netwerk</string>
     <string name="new_account_account_name_hint">Accountnaam</string>
     <string name="new_account_account_name_validation_already_exist_error">Accountnaam al in gebruik</string>
-    <string name="new_account_account_name_validation_length_error">Maximaal 20 karakters</string>
+    <string name="new_account_account_name_validation_length_error">Maximaal 24 karakters</string>
     <string name="new_account_account_name_validation_min_length_error">Ten minste 2 karakters</string>
     <string name="new_account_account_name_validation_required_error">Naam is vereist</string>
     <string name="new_account_avatar_description">U kunt dit later niet wijzigen</string>

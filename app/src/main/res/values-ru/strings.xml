@@ -14,7 +14,7 @@
     <string name="address_book_address_validation_required_error">Требуется адрес</string>
     <string name="address_book_empty_state">Пока ничего нет… \nВы сохранить адрес</string>
     <string name="address_book_name_validation_already_use_error">Уже в используется</string>
-    <string name="address_book_name_validation_max_length_error">Максимум 20</string>
+    <string name="address_book_name_validation_max_length_error">Максимум 24</string>
     <string name="address_book_name_validation_min_length_error">Минимум 2 символа</string>
     <string name="address_book_name_validation_required_error">Требуется имя</string>
     <string name="address_book_search">Поиск</string>
@@ -373,7 +373,7 @@
     <string name="network_toolbar_title">Cеть</string>
     <string name="new_account_account_name_hint">Имя аккаунта</string>
     <string name="new_account_account_name_validation_already_exist_error">Имя аккаунта уже используется</string>
-    <string name="new_account_account_name_validation_length_error">Максимум 20</string>
+    <string name="new_account_account_name_validation_length_error">Максимум 24</string>
     <string name="new_account_account_name_validation_min_length_error">Минимум 2 символа</string>
     <string name="new_account_account_name_validation_required_error">Требуется имя</string>
     <string name="new_account_avatar_description">Вы не сможете изменить его потом</string>
