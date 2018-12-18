@@ -110,7 +110,7 @@ class CounterHandler private constructor(builder: Builder) {
     private fun doOperation(increment: Boolean) {
         var currentValue = valueView?.text.toString()
 
-        if (currentValue.trim().isEmpty()) currentValue = "0"
+        if (currentValue.trim().isEmpty() || currentValue.trim() == ".") currentValue = "0"
 
         var rang: Int =
                 if (currentValue.contains(".")) currentValue.length - 1
