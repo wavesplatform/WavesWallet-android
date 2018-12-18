@@ -97,15 +97,13 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.SENT_TYPE -> {
                                 item.data.amount.notNull {
                                     view.text_transaction_value.text =
-                                            "-${MoneyUtil.getScaledText(it, item.data.asset)
-                                                    .stripZeros()}"
+                                            "-${getScaledAmount(it, item.data.decimals)}"
                                 }
                             }
                             TransactionType.RECEIVED_TYPE -> {
                                 item.data.amount.notNull {
                                     view.text_transaction_value.text =
-                                            "+${MoneyUtil.getScaledText(it, item.data.asset)
-                                                    .stripZeros()}"
+                                            "+${getScaledAmount(it, item.data.decimals)}"
                                 }
                             }
                             TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE,
@@ -125,27 +123,23 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.CANCELED_LEASING_TYPE -> {
                                 item.data.lease?.amount.notNull {
                                     view.text_transaction_value.text =
-                                            MoneyUtil.getScaledText(it.toLong(), item.data.asset)
-                                                    .stripZeros()
+                                            getScaledAmount(it, item.data.decimals)
                                 }
                             }
                             TransactionType.TOKEN_GENERATION_TYPE -> {
-                                val quantity = MoneyUtil.getScaledText(
-                                        item.data.quantity, item.data.asset)
-                                        .substringBefore(".")
+                                val quantity = getScaledAmount(
+                                        item.data.quantity, item.data.decimals)
                                 view.text_transaction_value.text = quantity
                             }
                             TransactionType.TOKEN_BURN_TYPE -> {
                                 item.data.amount.notNull {
                                     view.text_transaction_value.text =
-                                            "-${MoneyUtil.getScaledText(it, item.data.asset)
-                                                    .stripZeros()}"
+                                            "-${getScaledAmount(it, item.data.decimals)}"
                                 }
                             }
                             TransactionType.TOKEN_REISSUE_TYPE -> {
-                                val quantity = MoneyUtil.getScaledText(
-                                        item.data.quantity, item.data.asset)
-                                        .substringBefore(".")
+                                val quantity = getScaledAmount(
+                                        item.data.quantity, item.data.decimals)
                                 view.text_transaction_value.text = "+$quantity"
                             }
                             TransactionType.SET_SCRIPT_TYPE -> {
@@ -158,8 +152,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                             }
                             else -> {
                                 item.data.amount.notNull {
-                                    view.text_transaction_value.text = MoneyUtil
-                                            .getScaledText(it, item.data.asset).stripZeros()
+                                    view.text_transaction_value.text =
+                                            getScaledAmount(it, item.data.decimals)
                                 }
                             }
                         }
@@ -167,10 +161,8 @@ class HistoryTabItemAdapter @Inject constructor() :
 
                     if (spam) {
                         view.text_tag.gone()
-                        var sumString = MoneyUtil.getScaledText(
-                                item.data.transfers.sumByLong { it.amount }, item.data.asset)
-                                .trim()
-                                .stripZeros()
+                        var sumString = getScaledAmount(
+                                item.data.transfers.sumByLong { it.amount }, item.data.decimals)
                         if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
                             view.text_tag_spam.gone()
                             sumString = sumString + " " + item.data.asset?.name
@@ -254,14 +246,14 @@ class HistoryTabItemAdapter @Inject constructor() :
     private fun setSpamTitle(transaction: Transaction, it: TransactionType, view: AppCompatTextView) {
         if (transaction.transfers.isNotEmpty()) {
             val sum = transaction.transfers.sumByLong { it.amount }
-            val sumString = MoneyUtil.getScaledText(sum, transaction.asset).trim().stripZeros()
+            val sumString = getScaledAmount(sum, transaction.decimals)
             if (!sumString.isEmpty()) {
                 view.text = "$sumString"
             } else {
                 view.text = ""
             }
         } else {
-            view.text = "${MoneyUtil.getScaledText(transaction.amount, transaction.asset)}".stripZeros()
+            view.text = "${getScaledAmount(transaction.amount, transaction.decimals)}"
         }
     }
 }

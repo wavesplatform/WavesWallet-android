@@ -1,7 +1,5 @@
 package com.wavesplatform.wallet.v1.util;
 
-import android.util.SparseArray;
-
 import com.wavesplatform.wallet.v1.payload.AssetBalance;
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo;
 
@@ -10,25 +8,29 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class MoneyUtil {
 
+    public static BigDecimal ONE_M = new BigDecimal(1000000);
+    public static BigDecimal ONE_K = new BigDecimal(1000);
+
     private static MoneyUtil instance = new MoneyUtil();
-
     private static String defaultSeparator;
-
     private final DecimalFormat wavesFormat;
-    private final SparseArray<DecimalFormat> formatsMap = new SparseArray<>();
+    private final List<DecimalFormat> formatsMap;
 
     private MoneyUtil() {
         wavesFormat = createFormatter(8);
+        formatsMap = new ArrayList<>();
         for (int i = 0; i <= 8; ++i) {
-            formatsMap.put(i, createFormatter(i));
+            formatsMap.add(createFormatter(i));
         }
     }
 
-    private DecimalFormat createFormatter(int decimals) {
+    public static DecimalFormat createFormatter(int decimals) {
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         formatter.setMaximumFractionDigits(decimals);
         formatter.setMinimumFractionDigits(decimals);
@@ -44,10 +46,6 @@ public class MoneyUtil {
         return instance;
     }
 
-    public static BigDecimal getMaxScaledAmount(AssetBalance ab) {
-        return BigDecimal.valueOf(ab.issueTransaction.quantity, ab.getDecimals());
-    }
-
     public static String getScaledPrice(long amount, int amountDecimals, int priceDecimals) {
         return get().getFormatter(priceDecimals).format(BigDecimal.valueOf(amount, 8 + priceDecimals - amountDecimals));
     }
@@ -59,18 +57,6 @@ public class MoneyUtil {
         } catch (Exception e) {
             return get().getFormatter(8).format(
                     BigDecimal.valueOf(amount, decimals));
-        }
-    }
-
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        try {
-            BigDecimal bd = new BigDecimal(value);
-            bd = bd.setScale(places, RoundingMode.HALF_UP);
-            return bd.doubleValue();
-        } catch (Exception e) {
-            return 0.0d;
         }
     }
 

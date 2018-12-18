@@ -64,6 +64,7 @@ import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -683,4 +684,23 @@ fun AssetInfo.getTicker(): String {
     }
 
     return this.ticker ?: this.name
+}
+
+fun getScaledAmount(amount: Long, decimals: Int): String {
+    val absAmount = Math.abs(amount)
+    val value = BigDecimal.valueOf(absAmount, decimals)
+    if (amount == 0L) {
+        return "0"
+    }
+
+    val sign = if (amount < 0) "-" else ""
+
+    return sign + when {
+        value >= MoneyUtil.ONE_M -> value.divide(MoneyUtil.ONE_M, 1, RoundingMode.HALF_EVEN)
+                .toPlainString().stripZeros() + "M"
+        value >= MoneyUtil.ONE_K -> value.divide(MoneyUtil.ONE_K, 1, RoundingMode.HALF_EVEN)
+                .toPlainString().stripZeros() + "k"
+        else -> MoneyUtil.createFormatter(decimals).format(BigDecimal.valueOf(absAmount, decimals))
+                .stripZeros() + ""
+    }
 }
