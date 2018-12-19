@@ -491,6 +491,8 @@
     <string name="receive_warning_crypto">Send only %1$s to this deposit address</string>
     <string name="receive_warning_will_send">If you will send less than %1$s %2$s, you will lose that money.</string>
     <string name="receive_will_send_other_currency">Sending any other currency to this address may result in the loss of your deposit.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Please do not deposit ETH form smart contracts! Do not deposit ERC20 tokens! Only Ethereum is allowed.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can\'t refund them. You will lose that money.</string>
     <string name="secret_phrase_back_up_now">Back Up Now</string>
     <string name="secret_phrase_do_it_later">Do it later</string>
     <string name="secret_phrase_no_backup_no_money">No Backup, No Money</string>

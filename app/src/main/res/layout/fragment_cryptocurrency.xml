@@ -96,7 +96,7 @@
                     android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/warning_crypto"
+                        android:id="@+id/warning_crypto_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="4sp"
@@ -106,6 +106,7 @@
                         tools:text="@string/receive_warning_crypto" />
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/warning_crypto_subtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"

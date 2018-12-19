@@ -491,6 +491,8 @@
     <string name="receive_warning_crypto">只发送 %1$s 到此存款地址</string>
     <string name="receive_warning_will_send">如果您发送的金额少于 %1$s %2$s, 您将会损失这笔钱。</string>
     <string name="receive_will_send_other_currency">将任何其他货币发送到此地址可能会导致您的存款损失。</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Please do not deposit ETH form smart contracts! Do not deposit ERC20 tokens! Only Ethereum is allowed.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can\'t refund them. You will lose that money.</string>
     <string name="secret_phrase_back_up_now">立即备份</string>
     <string name="secret_phrase_do_it_later">以后再做</string>
     <string name="secret_phrase_no_backup_no_money">不做备份，将失去资金</string>

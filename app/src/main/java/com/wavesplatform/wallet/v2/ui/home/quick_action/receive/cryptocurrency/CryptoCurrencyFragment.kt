@@ -12,6 +12,7 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -116,7 +117,14 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         warning?.text = getString(R.string.receive_warning_will_send,
                 min,
                 tunnel.tunnel?.currencyFrom)
-        warning_crypto?.text = getString(R.string.receive_warning_crypto, tunnel.tunnel?.currencyFrom)
+        if (Constants.ETHEREUM_ASSET_ID == presenter.assetBalance!!.assetId) {
+            warning_crypto_title.text = getString(R.string.receive_gateway_info_gateway_warning_eth_title)
+            warning_crypto_subtitle.text = getString(R.string.receive_gateway_info_gateway_warning_eth_subtitle)
+        } else {
+            warning_crypto_title.text = getString(R.string.receive_warning_crypto, tunnel.tunnel?.currencyFrom)
+            warning_crypto_subtitle.text = getString(R.string.receive_will_send_other_currency)
+        }
+
         presenter.nextStepValidation = true
         needMakeButtonEnable()
         container_info?.visiable()

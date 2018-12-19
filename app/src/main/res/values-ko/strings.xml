@@ -491,6 +491,8 @@
     <string name="receive_warning_crypto">본 입금 주소로는 %1$s 만 전송하세요</string>
     <string name="receive_warning_will_send">%1$s %2$s 미만의 자산을 보내면 귀하는 해당 자산을 잃게 됩니다.</string>
     <string name="receive_will_send_other_currency">해당 주소로 다른 화폐 및 코인을 보내면 귀하의 자산을 잃을 수 있습니다.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Please do not deposit ETH form smart contracts! Do not deposit ERC20 tokens! Only Ethereum is allowed.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can\'t refund them. You will lose that money.</string>
     <string name="secret_phrase_back_up_now">즉시 백업합니다</string>
     <string name="secret_phrase_do_it_later">다음에 백업합니다</string>
     <string name="secret_phrase_no_backup_no_money">백업을 하지 않으면 자산을 잃을 수 있습니다</string>

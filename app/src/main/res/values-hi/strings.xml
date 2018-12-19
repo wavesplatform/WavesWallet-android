@@ -491,6 +491,8 @@
     <string name="receive_warning_crypto">इस जमा पते पर केवल %1$s भेजें</string>
     <string name="receive_warning_will_send">यदि आप %1$s %2$s से कम भेजेंगे, तो आप वह पैसा खो देंगे।</string>
     <string name="receive_will_send_other_currency">इस पते पर किसी अन्य मुद्रा को भेजने से आपके जमा की हानि हो सकती है।</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Please do not deposit ETH form smart contracts! Do not deposit ERC20 tokens! Only Ethereum is allowed.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can\'t refund them. You will lose that money.</string>
     <string name="secret_phrase_back_up_now">बैकअप बना देना इस वक़्त</string>
     <string name="secret_phrase_do_it_later">इसे बाद में करें</string>
     <string name="secret_phrase_no_backup_no_money">कोई बैकअप नहीं, पैसा नहीं</string>

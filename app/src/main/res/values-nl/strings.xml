@@ -491,6 +491,8 @@
     <string name="receive_warning_crypto">Verzend slechts %1$s naar dit stortingsadres</string>
     <string name="receive_warning_will_send">Als u minder dan %1$s %2$s stuurt, verliest u dat geld.</string>
     <string name="receive_will_send_other_currency">Het verzenden van een andere valuta naar dit adres kan resulteren in het verlies van uw storting.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Please do not deposit ETH form smart contracts! Do not deposit ERC20 tokens! Only Ethereum is allowed.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can\'t refund them. You will lose that money.</string>
     <string name="secret_phrase_back_up_now">Nu backuppen</string>
     <string name="secret_phrase_do_it_later">Doe het later</string>
     <string name="secret_phrase_no_backup_no_money">Geen back-up, geen geld</string>

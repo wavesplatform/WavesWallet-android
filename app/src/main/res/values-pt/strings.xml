@@ -106,7 +106,7 @@
     <string name="buy_and_sell_success_the_order_is_created">Ordem criada</string>
     <string name="buy_and_sell_success_time">Hora</string>
     <string name="buy_and_sell_total_in">Total em %1$s</string>
-    <string name="buy_and_sell_user_total_balance">Usar a totalidade do saldo disponível</string>
+    <string name="buy_and_sell_user_total_balance">Máximo disponível</string>
     <string name="buy_btn_txt">Comprar %s</string>
     <string name="cannot_launch_app">A Carteira Waves não pode ser executada neste dispositivo.</string>
     <string name="card_tutorial_3_description_anonim">A tua conta não está ligada a nenhum endereço de email ou a qualquer outro elemento que possa ser usado na tua identificação. A utilização da Carteira Waves é totalmente anónima.</string>
@@ -152,7 +152,7 @@
     <string name="choose_language_continue">Continuar</string>
     <string name="coinomat_success_subtitle">O teu saldo é atualizado depois de efetuado o pagamento</string>
     <string name="coinomat_success_title">Vamos redirecionar-te para a «Indacoin»</string>
-    <string name="common_100_percent">Usar a totalidade do saldo disponível</string>
+    <string name="common_100_percent">Máximo disponível</string>
     <string name="common_10_percent">10%</string>
     <string name="common_50_percent">50%</string>
     <string name="common_5_percent">5%</string>
@@ -244,7 +244,7 @@
     <string name="enter_passcode_too_many_attempts_dialog_title">Foi atingido o número máximo de tentativas</string>
     <string name="enter_passcode_use_account_password">Usa a tua password para entrar</string>
     <string name="enter_seed_manually_continue">Continuar</string>
-    <string name="enter_seed_manually_hint_your_seed">Introduz as tuas palavras de recuperação</string>
+    <string name="enter_seed_manually_hint_your_seed">A SEED da tua conta</string>
     <string name="enter_seed_manually_validation_required_seed_error">Introduz o conjunto das palavras de recuperação</string>
     <string name="enter_seed_manually_validation_seed_exists_error">Esta SEED já está em uso</string>
     <string name="enter_seed_manually_validation_seed_is_invalid_error">Essa SEED não é válida</string>
@@ -436,7 +436,7 @@
     <string name="profile_general_support_wavesplatform">Suporte</string>
     <string name="profile_language_toolbar_title">Idioma</string>
     <string name="profile_save_seed_warning_subtitle">A única forma de recuperares a carteira é guardares as palavras de recuperação de forma segura</string>
-    <string name="profile_save_seed_warning_title">Guarda uma cópia de segurança das palavras de recuperação (SEED)</string>
+    <string name="profile_save_seed_warning_title">Faz um backup da tua SEED</string>
     <string name="profile_toolbar_title">Perfil</string>
     <string name="qr_scanner_cancel">Cancelar</string>
     <string name="qr_scanner_flash_off">Flash da Câmara desligado</string>
@@ -491,6 +491,8 @@
     <string name="receive_warning_crypto">Envia apenas %1$s para este endereço</string>
     <string name="receive_warning_will_send">Se enviares menos que %1$s %2$s resultará na perda dos fundos.</string>
     <string name="receive_will_send_other_currency">Enviar dinheiro noutra divisa que não a autorizada para este endereço resultará na perda dos fundos.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Please do not deposit ETH form smart contracts! Do not deposit ERC20 tokens! Only Ethereum is allowed.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can\'t refund them. You will lose that money.</string>
     <string name="secret_phrase_back_up_now">Faz uma cópia de segurança agora</string>
     <string name="secret_phrase_do_it_later">Fazer mais tarde</string>
     <string name="secret_phrase_no_backup_no_money">Não fazer uma Cópia de Segurança pode significar a perda total dos fundos</string>
@@ -535,7 +537,7 @@
     <string name="send_toolbar_title">Enviar</string>
     <string name="send_transaction_error_check_asset">Verifica o Ativo</string>
     <string name="send_transaction_fee_0_001_waves">Taxa de transação de 0.001 WAVES</string>
-    <string name="send_use_total_balance">Usar a totalidade do saldo disponível</string>
+    <string name="send_use_total_balance">Máximo disponível</string>
     <string name="start_leasing_0_100">0.1</string>
     <string name="start_leasing_0_100000">0.001</string>
     <string name="start_leasing_0_500000">0.005</string>
@@ -546,7 +548,7 @@
     <string name="start_leasing_note_address">Endereço do Nó…</string>
     <string name="start_leasing_toolbar">Iniciar concessão</string>
     <string name="start_leasing_transaction_fee_0_001_waves">Taxa de Transação de 0.001 WAVES</string>
-    <string name="start_leasing_use_total_balance">Usar a totalidade do saldo disponível</string>
+    <string name="start_leasing_use_total_balance">Máximo disponível</string>
     <string name="start_leasing_validation_address_is_invalid_error">O endereço não é válido</string>
     <string name="start_leasing_validation_amount_insufficient_error">Fundos insuficientes</string>
     <string name="start_leasing_validation_is_required_error">Não preenchido</string>
