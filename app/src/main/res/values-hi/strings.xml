@@ -44,7 +44,7 @@
     <string name="asset_details_decimal">डेसीमल पॉइंट्स</string>
     <string name="asset_details_description">विवरण</string>
     <string name="asset_details_error_perfom_transaction">आप इस संपत्ति के साथ लेनदेन नहीं कर सकते हैं</string>
-    <string name="asset_details_flat_money">फिएट पैसे</string>
+    <string name="asset_details_fiat_money">फिएट पैसे</string>
     <string name="asset_details_id">आईडी</string>
     <string name="asset_details_in_order">क्रम में</string>
     <string name="asset_details_issue_date">जारी करने की तिथि</string>
@@ -70,7 +70,7 @@
     <string name="backup_info_button">मै समझता हुँ</string>
     <string name="backup_info_subtitle">वेव्स प्लेटफार्म आपको पिछले महीने में घोटाले और फ़िशिंग हमलों की बढ़ी हुई आवृत्ति के बारे में चेतावनी देना चाहता है। धोखाधड़ी अपने संस्करणों में अपने मैलवेयर छुपा रहे हैं और उपयोगकर्ताओं को लुभाने के लिए बोनस और छूट का वादा कर रहे हैं।\n\nकृपया सावधान रहें और कभी भी इन क्लाइंट में अपने सीडों को इनपुट न करें, क्योंकि आपके खाते से समझौता किया जाएगा और आप अपने सभी फंड खो सकते हैं।\n\nआपको केवल आधिकारिक वेव्स क्लाइंट का उपयोग करना चाहिए।</string>
     <string name="backup_info_title">देखभाल के साथ अपने बैकअप वाक्यांश का रखना!</string>
-    <string name="backup_pharse">बैकप फ्रेज</string>
+    <string name="backup_phrase">बैकप फ्रेज</string>
     <string name="backup_wrriten_down">मैंने इसे लिखा है</string>
     <string name="buy_and_sell_0_001_waves">0.003 वेव्स</string>
     <string name="buy_and_sell_10">10%</string>

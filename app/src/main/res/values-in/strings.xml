@@ -44,7 +44,7 @@
     <string name="asset_details_decimal">Poin desimal</string>
     <string name="asset_details_description">Deskripsi</string>
     <string name="asset_details_error_perfom_transaction">Anda tidak dapat melakukan transaksi dengan aset ini</string>
-    <string name="asset_details_flat_money">Uang Fiat</string>
+    <string name="asset_details_fiat_money">Uang Fiat</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">Dalam urutan</string>
     <string name="asset_details_issue_date">Tanggal rilis</string>
@@ -70,7 +70,7 @@
     <string name="backup_info_button">saya mengerti</string>
     <string name="backup_info_subtitle">Waves Platform ingin memperingatkan Anda tentang peningkatan frekuensi serangan scam dan phishing selama sebulan terakhir. Penipu menyembunyikan malware mereka dalam versi mereka sendiri dari klien Waves dan menjanjikan bonus dan diskon untuk memikat pengguna. \n\nHarap berhati-hati dan jangan pernah memasukkan SEED Anda ke \'klien\' ini, karena akun Anda akan dikompromikan dan Anda akan kehilangan semua dana Anda. \n\nAnda HANYA HARUS menggunakan klien Waves resmi.</string>
     <string name="backup_info_title">Perlakukan frase cadangan Anda dengan hati-hati!</string>
-    <string name="backup_pharse">Frase cadangan</string>
+    <string name="backup_phrase">Frase cadangan</string>
     <string name="backup_wrriten_down">Saya telah menuliskannya</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
     <string name="buy_and_sell_10">10%</string>

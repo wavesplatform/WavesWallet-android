@@ -44,7 +44,7 @@
     <string name="asset_details_decimal">소수점</string>
     <string name="asset_details_description">설명</string>
     <string name="asset_details_error_perfom_transaction">해당 자산으로 트랜잭션을 할 수 없습니다</string>
-    <string name="asset_details_flat_money">명목 화폐</string>
+    <string name="asset_details_fiat_money">명목 화폐</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">대기 주문</string>
     <string name="asset_details_issue_date">발행일</string>
@@ -70,7 +70,7 @@
     <string name="backup_info_button">이해했습니다</string>
     <string name="backup_info_subtitle">Waves Platform은 지난 몇 달간 사기 및 피싱 공격의 빈도가 증가한 것에 대해 경고드리고 싶습니다. 사기범들은 악성코드를 가짜 Waves 클라이언트에 숨기고 보너스와 할인으로 조장하여 사용자들을 유인합니다. \n\n이를 실행하면 귀하의 계정이 해킹되어 모든 자금을 잃게 되므로 절대 SEED를 가짜 \'클라이언트\'에 입력하지 마십시오. \n\n공식 Waves 클라이언트만 사용하세요.</string>
     <string name="backup_info_title">백업 구절을 매우 신중히 다루세요!</string>
-    <string name="backup_pharse">백업 구절</string>
+    <string name="backup_phrase">백업 구절</string>
     <string name="backup_wrriten_down">메모했습니다</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
     <string name="buy_and_sell_10">10%</string>

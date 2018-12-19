@@ -44,7 +44,7 @@
     <string name="asset_details_decimal">Знаков после запятой</string>
     <string name="asset_details_description">Описание</string>
     <string name="asset_details_error_perfom_transaction">Вы не можете совершать транзакции с этим ассетом</string>
-    <string name="asset_details_flat_money">Фиатные деньги</string>
+    <string name="asset_details_fiat_money">Фиатные деньги</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">В ордерах</string>
     <string name="asset_details_issue_date">Дата выпуска</string>
@@ -70,7 +70,7 @@
     <string name="backup_info_button">Я понимаю</string>
     <string name="backup_info_subtitle">Платформа Waves предупреждает вас об участившихся случаях мошенничества и фишинга за последний месяц. Мошенники скрывают своё вредоносное ПО в своих версиях клиента Waves и предлагают многообещающие бонусы и скидки для привлечения пользователей. \n\nБудьте осторожны и никогда не вводите свой СИД в таких «клиентах», потому что ваша учетная запись будет скомпрометирована, и вы потеряете все свои деньги. \n\nПользуйтесь ТОЛЬКО официальным клиентом Waves.</string>
     <string name="backup_info_title">Осторожно используйте секретную фразу!</string>
-    <string name="backup_pharse">Секретная фраза</string>
+    <string name="backup_phrase">Секретная фраза</string>
     <string name="backup_wrriten_down">Я всё записал</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
     <string name="buy_and_sell_10">10%</string>

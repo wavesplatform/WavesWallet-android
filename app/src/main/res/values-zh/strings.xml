@@ -44,7 +44,7 @@
     <string name="asset_details_decimal">小数点</string>
     <string name="asset_details_description">描述</string>
     <string name="asset_details_error_perfom_transaction">您无法使用此资产执行交易</string>
-    <string name="asset_details_flat_money">法币</string>
+    <string name="asset_details_fiat_money">法币</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">已生产订单</string>
     <string name="asset_details_issue_date">生成日期</string>
@@ -70,7 +70,7 @@
     <string name="backup_info_button">我明白</string>
     <string name="backup_info_subtitle">Waves 平台希望警告您上个月以来诈骗和网络钓鱼攻击的频率增加。欺诈者将他们的恶意软件隐藏在他们自己的Waves客户端版本中，并承诺奖励和折扣以吸引用户。 \n\n请小心，不要将SEED输入这些“客户”端，因为您的帐户将受到损害，您将失去所有资金。 \n\n您应该只使用官方Waves客户端。</string>
     <string name="backup_info_title">小心保存您的备用短语！</string>
-    <string name="backup_pharse">备份短语</string>
+    <string name="backup_phrase">备份短语</string>
     <string name="backup_wrriten_down">我已经把它写下来了</string>
     <string name="buy_and_sell_0_001_waves">0.003waves币</string>
     <string name="buy_and_sell_10">10%</string>

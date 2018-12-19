@@ -44,7 +44,7 @@
     <string name="asset_details_decimal">Decimales</string>
     <string name="asset_details_description">Descripción</string>
     <string name="asset_details_error_perfom_transaction">No puede realizar transacciones con este activo</string>
-    <string name="asset_details_flat_money">Dinero Fiat</string>
+    <string name="asset_details_fiat_money">Dinero Fiat</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">En orden</string>
     <string name="asset_details_issue_date">Fecha de emisión</string>
@@ -70,7 +70,7 @@
     <string name="backup_info_button">Entiendo</string>
     <string name="backup_info_subtitle">Waves Platform quiere advertirte sobre el incremento de ataques de estafa y suplantación de identidad durante el último mes. Los estafadores ocultan su malware en sus propias versiones del cliente Waves y prometen bonificaciones y descuentos para atraer a los usuarios. \n\nPor favor, ten cuidado y nunca introduzcas tu frase de respaldo (SEED) en estos \'clientes\', porque tu cuenta puede ser comprometida y perder todos tus fondos. \n\nDeberías confiar SOLO en el cliente oficial de Waves.</string>
     <string name="backup_info_title">¡Trata tu frase de recuperación con cuidado!</string>
-    <string name="backup_pharse">Farse de respaldo</string>
+    <string name="backup_phrase">Farse de respaldo</string>
     <string name="backup_wrriten_down">Lo he escrito</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
     <string name="buy_and_sell_10">10%</string>

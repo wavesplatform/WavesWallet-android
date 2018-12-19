@@ -44,7 +44,7 @@
     <string name="asset_details_decimal">Dezimalpunkte</string>
     <string name="asset_details_description">Beschreibung</string>
     <string name="asset_details_error_perfom_transaction">Sie können keine Transaktionen mit diesem Asset durchführen</string>
-    <string name="asset_details_flat_money">Fiat Geld</string>
+    <string name="asset_details_fiat_money">Fiat Geld</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">In Ordern</string>
     <string name="asset_details_issue_date">Ausgabedatum</string>
@@ -70,7 +70,7 @@
     <string name="backup_info_button">ich verstehe</string>
     <string name="backup_info_subtitle">Waves Platform möchte Sie über die erhöhte Häufigkeit von Betrugs- und Phishing-Angriffen im letzten Monat warnen. Betrüger verstecken ihre Malware in ihren eigenen Versionen des Waves-Clients und versprechen Boni und Rabatte, um Nutzer anzulocken. \n\nBitte seien Sie vorsichtig und geben Sie Ihren SEED niemals in diese \'Clients\' ein, da Ihr Konto dadurch gefährdet wird und Sie Ihr gesamtes Geld verlieren. \n\nSie sollten NUR den offiziellen Waves-Client verwenden.</string>
     <string name="backup_info_title">Behandeln Sie Ihren Backup-Satz sorgfältig!</string>
-    <string name="backup_pharse">Backup-Phrase</string>
+    <string name="backup_phrase">Backup-Phrase</string>
     <string name="backup_wrriten_down">Ich habe es aufgeschrieben</string>
     <string name="buy_and_sell_0_001_waves">0,003 Waves</string>
     <string name="buy_and_sell_10">10%</string>
