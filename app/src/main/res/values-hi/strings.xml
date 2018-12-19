@@ -521,7 +521,8 @@
     <string name="send_gateway_info_gateway_warning">आईसीओ में %1$s न निकालना । हम उस खाते से टोकन आपके खाते को क्रेडिट नहीं करेंगे।</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">यदि आप सत्यापित हैं और यूएस डॉलर जमा कर चुके हैं, तो आप इन डॉलर को अपने बैंक खाते में वापस ले सकते हैं। अन्यथा, हमारे साथी IDNow.eu द्वारा सत्यापित करें</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">न्यूनतम राशि 500 ​​अमेरिकी डॉलर है। यदि आपके कोई प्रश्न हैं, तो कृपया support@coinomat.com पर एक ईमेल भेजें</string>
-    <string name="send_monero_payment_id">मोनरो पेमेंट आईडी</string>
+    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
+    <string name="send_gateway_error_subtitle">Try again later</string><string name="send_monero_payment_id">मोनरो पेमेंट आईडी</string>
     <string name="send_monero_payment_id_hint">पेस्ट करें या अपनी पेमेंट आईडी टाइप करें</string>
     <string name="send_progress_sending">भेजा जा रहा है…</string>
     <string name="send_recipient">प्राप्त करने वाला</string>

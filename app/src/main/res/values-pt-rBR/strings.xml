@@ -521,7 +521,8 @@
     <string name="send_gateway_info_gateway_warning">Não saque %1$s para uma ICO. Não creditaremos sua conta com tokens dessa venda.</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Se você foi verificado e depositou dólares americanos, poderá sacar esses dólares de volta para sua conta bancária. Caso contrário, faça a verificação com o nosso parceiro IDNow.eu</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">O valor mínimo é de 500 dólares americanos. Se você tiver alguma dúvida, basta enviar um email para support@coinomat.com</string>
-    <string name="send_monero_payment_id">ID de Pagamento de Monero</string>
+    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
+    <string name="send_gateway_error_subtitle">Try again later</string><string name="send_monero_payment_id">ID de Pagamento de Monero</string>
     <string name="send_monero_payment_id_hint">Cole ou digite seu ID de pagamento</string>
     <string name="send_progress_sending">Enviando…</string>
     <string name="send_recipient">Destinatário</string>

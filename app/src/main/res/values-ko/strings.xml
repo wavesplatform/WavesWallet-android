@@ -521,7 +521,8 @@
     <string name="send_gateway_info_gateway_warning">ICO로 %1$s 를 출금하지 마세요. 해당 판매의 토큰을 귀하의 계정에 크레딧 하지 않을 것입니다.</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">인증을 완료하고 미국 달러를 입금했다면 해당 달러를 귀하의 은행 계좌로 출금할 수 있습니다. 그렇지 않은 경우 우리의 파트너사인 IDNow.eu에서 인증을 받으세요.</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">최소 수량은 500 US 달러입니다. 질문이 있으시면 support@coinomat.com으로 이메일을 보내주세요.</string>
-    <string name="send_monero_payment_id">Monero Payment ID</string>
+    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
+    <string name="send_gateway_error_subtitle">Try again later</string><string name="send_monero_payment_id">Monero Payment ID</string>
     <string name="send_monero_payment_id_hint">귀하의 Payment ID를 붙여넣거나 입력하세요</string>
     <string name="send_progress_sending">보내는 중…</string>
     <string name="send_recipient">수신자</string>

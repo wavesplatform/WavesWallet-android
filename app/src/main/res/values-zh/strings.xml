@@ -521,7 +521,8 @@
     <string name="send_gateway_info_gateway_warning">不要将 %1$s 提取给ICO。我们不支持您的帐户存入该ICO的代币。</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">如果您已经过验证并已存入美元，则可以将这些美元退回到您的银行帐户。否则，请通过我们的合作伙伴IDNow.eu进行验证</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">最低金额为500美元。如果您有任何疑问，请发送电子邮件至support@coinomat.com</string>
-    <string name="send_monero_payment_id">Monero付款ID</string>
+    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
+    <string name="send_gateway_error_subtitle">Try again later</string><string name="send_monero_payment_id">Monero付款ID</string>
     <string name="send_monero_payment_id_hint">粘贴或输入您的付款ID</string>
     <string name="send_progress_sending">发送中</string>
     <string name="send_recipient">接收者</string>

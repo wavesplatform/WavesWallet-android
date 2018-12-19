@@ -521,7 +521,8 @@
     <string name="send_gateway_info_gateway_warning">%1$s をICOの為に引き出さないで下さい。そのセールに関するトークンを私達は入金しません。</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">すでに認証を取得し米ドルの入金を行っている場合は、そのドルを引き出してあなたの銀行口座に戻すことができます。まだの場合は、私たちのパートナーであるIDNow.euの認証を取得してください。</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">最低入金額は500米ドルです。なにかご不明な点がございましたら、support@coinomat.com までお問い合わせください</string>
-    <string name="send_monero_payment_id">Monero支払ID</string>
+    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
+    <string name="send_gateway_error_subtitle">Try again later</string><string name="send_monero_payment_id">Monero支払ID</string>
     <string name="send_monero_payment_id_hint">支払IDを貼り付けまたは入力してください</string>
     <string name="send_progress_sending">送信中…</string>
     <string name="send_recipient">送信先</string>

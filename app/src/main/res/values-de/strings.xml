@@ -521,7 +521,8 @@
     <string name="send_gateway_info_gateway_warning">Überweisen Sie %1$s nicht an einen ICO. Tokens aus diesem Verkauf werden Ihrem Konto nicht gutgeschrieben.</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Wenn Sie verifiziert wurden und US-Dollar eingezahlt haben, können Sie diese auf Ihr Bankkonto zurückzahlen. Ansonsten lassen Sie sich von unserem Partner IDNow.eu verifizieren</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">Der Mindestbetrag beträgt 500 US-Dollar. Bei Fragen senden Sie bitte eine E-Mail an support@coinomat.com</string>
-    <string name="send_monero_payment_id">Monero Payment ID</string>
+    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
+    <string name="send_gateway_error_subtitle">Try again later</string><string name="send_monero_payment_id">Monero Payment ID</string>
     <string name="send_monero_payment_id_hint">Fügen Sie Ihre Zahlungs-ID ein oder geben Sie sie ein</string>
     <string name="send_progress_sending">Senden von…</string>
     <string name="send_recipient">Empfänger</string>

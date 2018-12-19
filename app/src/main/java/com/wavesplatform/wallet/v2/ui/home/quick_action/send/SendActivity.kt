@@ -286,8 +286,15 @@ class SendActivity : BaseActivity(), SendView {
 
     override fun showXRateError() {
         skeletonView!!.hide()
-        relative_gateway_fee.gone()
-        onShowError(R.string.receive_error_network)
+        gateway_fee.text = getString(R.string.send_gateway_error_title)
+        gateway_limits.text = getString(R.string.send_gateway_error_subtitle)
+        relative_do_not_withdraw.gone()
+        monero_layout.gone()
+        text_amount_title.gone()
+        amount_card.gone()
+        horizontal_amount_suggestion.gone()
+        linear_fees_error.gone()
+        button_continue.isEnabled = false
     }
 
     private fun checkRecipient(recipient: String) {
@@ -333,6 +340,9 @@ class SendActivity : BaseActivity(), SendView {
             horizontal_recipient_suggestion.visiable()
             relative_gateway_fee.gone()
             monero_layout.gone()
+            text_amount_title.visiable()
+            amount_card.visiable()
+            button_continue.isEnabled = true
         }
     }
 
@@ -480,11 +490,16 @@ class SendActivity : BaseActivity(), SendView {
             container_asset.visiable()
 
             checkRecipient(edit_address.text.toString())
+
+            text_amount_title.visiable()
+            amount_card.visiable()
+            button_continue.isEnabled = true
         }
     }
 
     private fun loadGatewayXRate(assetId: String) {
         if (AssetBalance.isGateway(assetId)) {
+            relative_do_not_withdraw.visiable()
             relative_gateway_fee.visiable()
             if (skeletonView == null) {
                 skeletonView = Skeleton.bind(relative_gateway_fee)

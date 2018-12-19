@@ -10,7 +10,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -107,14 +106,14 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
                 || tunnel.tunnel?.currencyFrom.isNullOrEmpty()) {
             presenter.nextStepValidation = false
             needMakeButtonEnable()
-            onShowError(App.getAppContext().getString(R.string.receive_error_network))
+            onGatewayError()
             return
         }
 
         val min = BigDecimal(tunnel.tunnel?.inMin).toPlainString()
-        limits?.text = getString(R.string.receive_minimum_amount,
+        attention_title?.text = getString(R.string.receive_minimum_amount,
                 min, tunnel.tunnel?.currencyFrom)
-        warning?.text = getString(R.string.receive_warning_will_send,
+        attention_subtitle?.text = getString(R.string.receive_warning_will_send,
                 min,
                 tunnel.tunnel?.currencyFrom)
         if (Constants.ETHEREUM_ASSET_ID == presenter.assetBalance!!.assetId) {
@@ -127,13 +126,24 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
 
         presenter.nextStepValidation = true
         needMakeButtonEnable()
+
+        warning_layout.visiable()
         container_info?.visiable()
+        button_continue.isEnabled = true
     }
 
     override fun onShowError(message: String) {
         skeletonView!!.hide()
         container_info.gone()
         showError(message, R.id.root)
+    }
+
+    override fun onGatewayError() {
+        skeletonView!!.hide()
+        attention_title.text = getString(R.string.send_gateway_error_title)
+        attention_subtitle.text = getString(R.string.send_gateway_error_subtitle)
+        warning_layout.gone()
+        button_continue.isEnabled = false
     }
 
     private fun setAssetBalance(assetBalance: AssetBalance?) {
