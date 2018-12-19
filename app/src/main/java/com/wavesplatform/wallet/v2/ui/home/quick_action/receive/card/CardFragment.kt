@@ -93,7 +93,9 @@ class CardFragment : BaseFragment(), CardView {
     }
 
     override fun showRate(rate: String?) {
-        text_amount_in_dollar.text = "≈ $rate WAVES"
+        rate.notNull {
+            text_amount_in_dollar.text = "≈ ${String.format("%.8f", it.toDouble())} WAVES"
+        }
     }
 
     override fun showLimits(min: String?, max: String?, fiat: String?) {
