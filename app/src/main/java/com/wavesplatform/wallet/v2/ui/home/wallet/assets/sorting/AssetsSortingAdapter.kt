@@ -50,7 +50,6 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
                 helper.setText(R.id.text_asset_name, item.getName())
                         .addOnClickListener(R.id.image_favorite)
                         .setVisible(R.id.text_my_asset, item.issueTransaction?.sender == App.getAccessManager().getWallet()?.address)
-                        .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
 
                 if (item.isWaves()) {
                     helper.itemView.image_blocked.visiable()
@@ -78,7 +77,6 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
                             onHiddenChangeListener?.onHiddenStateChanged(item, isChecked)
                         }
                         .setGone(R.id.switch_visible, item.configureVisibleState)
-                        .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
                         .setGone(R.id.image_drag, !item.configureVisibleState)
 
                 helper.itemView.image_drag.setOnTouchListener { v, event ->

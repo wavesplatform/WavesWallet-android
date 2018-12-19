@@ -86,7 +86,6 @@ class AssetsAdapter @Inject constructor() :
                         .setGone(R.id.image_favourite, item.isFavorite)
                         .setGone(R.id.text_my_asset, item.issueTransaction?.sender
                                 == App.getAccessManager().getWallet()?.address)
-                        .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
                         .setGone(R.id.text_tag_spam, item.isSpam)
 
                 helper.itemView.image_asset_icon.isOval = true

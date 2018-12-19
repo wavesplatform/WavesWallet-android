@@ -96,7 +96,6 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
 
         if (intent.getBooleanExtra(InvoiceFragment.INVOICE_SCREEN, false)) {
             container_invoice_link.visiable()
-            image_down_arrow.gone()
 
             toolbar_view.title = getString(R.string.receive_address_waves_address,
                     assetBalance?.getName() ?: "")
