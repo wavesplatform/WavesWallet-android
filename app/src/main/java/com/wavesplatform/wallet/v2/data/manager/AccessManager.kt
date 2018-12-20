@@ -350,8 +350,8 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         return prefs.getValue(PrefsUtil.KEY_SKIP_BACKUP, true)
     }
 
-    fun setUseFingerPrint(use: Boolean) {
-        prefs.setValue(PrefsUtil.KEY_USE_FINGERPRINT, use)
+    fun setUseFingerPrint(guid: String, use: Boolean) {
+        prefs.setValue(guid, PrefsUtil.KEY_USE_FINGERPRINT, use)
     }
 
     fun isGuidUseFingerPrint(guid: String): Boolean {

@@ -1,12 +1,17 @@
 package com.wavesplatform.util;
 
 import com.wavesplatform.wallet.v1.util.AddressUtil;
+import com.wavesplatform.wallet.v1.util.MoneyUtil;
+import com.wavesplatform.wallet.v2.data.Constants;
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
+import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction;
 
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.net.URI;
 
+import static com.wavesplatform.wallet.v2.util.ExtensionsKt.getScaledAmount;
 import static org.junit.Assert.assertEquals;
 
 public class AddressUtilTest {

@@ -3,11 +3,11 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v7.widget.AppCompatTextView
+import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.customviews.ToastCustom
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -75,10 +75,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     private fun saveAccount(passCode: String) {
         if (intent.extras == null) {
-            ToastCustom.makeText(this@CreatePassCodeActivity,
-                    getString(R.string.create_pin_failed),
-                    ToastCustom.LENGTH_SHORT,
-                    ToastCustom.TYPE_ERROR)
+            Toast.makeText(this, R.string.create_pin_failed, Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -106,8 +103,17 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                         }
 
                         override fun onCancelButtonClicked(dialog: Dialog, button: AppCompatTextView) {
-                            App.getAccessManager().setUseFingerPrint(false)
+                            App.getAccessManager().setUseFingerPrint(guid, false)
                             launchActivity<MainActivity>(clear = true)
+                        }
+
+                        override fun onFingerprintLocked(message: String) {
+                            launchActivity<MainActivity>(clear = true)
+                        }
+
+                        override fun onShowErrorMessage(message: String) {
+                            showError(message, R.id.content)
+                            fingerprintDialog.dismiss()
                         }
                     })
         } else if (intent.hasExtra(KEY_INTENT_GUID)) {

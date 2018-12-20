@@ -70,7 +70,7 @@ class CardFragment : BaseFragment(), CardView {
             showDialogFiatChange()
         }
 
-        skeletonScreen = Skeleton.bind(limits)
+        skeletonScreen = Skeleton.bind(attention_title)
                 .color(R.color.basic50)
                 .load(R.layout.item_skeleton_limits)
                 .show()
@@ -93,20 +93,30 @@ class CardFragment : BaseFragment(), CardView {
     }
 
     override fun showRate(rate: String?) {
-        text_amount_in_dollar.text = "≈ $rate WAVES"
+        rate.notNull {
+            text_amount_in_dollar.text = "≈ ${String.format("%.8f", it.toDouble())} WAVES"
+        }
     }
 
     override fun showLimits(min: String?, max: String?, fiat: String?) {
         val currency = getCurrency(fiat)
         skeletonScreen!!.hide()
         if (min != null && max != null) {
-            limits.text = getString(R.string.receive_limit, min, currency, max, currency)
+            attention_title.text = getString(R.string.receive_limit, min, currency, max, currency)
+            button_continue.isEnabled = true
         }
     }
 
     override fun showError(message: String) {
         skeletonScreen!!.hide()
         showError(message, R.id.content)
+    }
+
+    override fun onGatewayError() {
+        skeletonScreen!!.hide()
+        attention_title.text = getString(R.string.send_gateway_error_title)
+        attention_subtitle.text = getString(R.string.send_gateway_error_subtitle)
+        button_continue.isEnabled = false
     }
 
     private fun assetChangeDisable() {
