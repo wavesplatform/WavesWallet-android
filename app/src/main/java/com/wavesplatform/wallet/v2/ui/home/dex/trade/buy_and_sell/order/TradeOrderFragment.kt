@@ -147,8 +147,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 }
                 .map {
                     if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
-                        val isValid = it.toBigDecimal() <= MoneyUtil.getScaledText(presenter.currentAmountBalance
-                                ?: 0, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                        val isValid = it.toBigDecimal() <= MoneyUtil.getScaledText((presenter.currentAmountBalance
+                                ?: 0) - Constants.WAVES_DEX_FEE, presenter.data?.watchMarket?.market?.amountAssetDecimals
                                 ?: 0).clearBalance().toBigDecimal()
                         presenter.amountValidation = isValid
 
