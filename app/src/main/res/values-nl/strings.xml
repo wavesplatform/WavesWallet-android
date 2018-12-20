@@ -342,7 +342,7 @@
     <string name="leasing_history_toolbar_title">Transacties</string>
     <string name="left_drawer_description">Blijf op de hoogte van het laatste nieuws en artikelen en kom alles te weten over evenementen die plaatsvinden op het Waves Platform</string>
     <string name="left_drawer_join_the_waves_community">Word lid van de Waves community</string>
-    <string name="left_drawer_site">wavescommunity.com</string>
+    <string name="left_drawer_site">forum.wavesplatform.com</string>
     <string name="left_drawer_support">Ondersteuning Wavesplatform</string>
     <string name="left_drawer_terms_and_conditions">Voorwaarden</string>
     <string name="left_drawer_whitepaper">Whitepaper</string>
@@ -470,6 +470,8 @@
     <string name="receive_fiat_choose_dialog_ok">Ok</string>
     <string name="receive_fiat_choose_dialog_title">Kies Valuta</string>
     <string name="receive_fiat_choose_dialog_usd">USD</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Controleer of uw wallet of exchange smart-contracts gebruikt om ETH the withdrawen. Wij accepteren zulke transacties niet en kunnen dit niet terug betalen. U raakt op deze manier uw geld kwijt.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Verstuur geen ETH vanuit smart contracts naar dit adres. Stort geen ERC20 tokens! Alleen Ethereum is toegestaan.</string>
     <string name="receive_get_verified">Word geverifieerd</string>
     <string name="receive_invoice">Factuur</string>
     <string name="receive_limit">Het minimum is %1$s %2$s het maximum is %3$s %4$s</string>
@@ -491,8 +493,6 @@
     <string name="receive_warning_crypto">Verzend slechts %1$s naar dit stortingsadres</string>
     <string name="receive_warning_will_send">Als u minder dan %1$s %2$s stuurt, verliest u dat geld.</string>
     <string name="receive_will_send_other_currency">Het verzenden van een andere valuta naar dit adres kan resulteren in het verlies van uw storting.</string>
-    <string name="receive_gateway_info_gateway_warning_eth_title">Please do not deposit ETH form smart contracts! Do not deposit ERC20 tokens! Only Ethereum is allowed.</string>
-    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can\'t refund them. You will lose that money.</string>
     <string name="secret_phrase_back_up_now">Nu backuppen</string>
     <string name="secret_phrase_do_it_later">Doe het later</string>
     <string name="secret_phrase_no_backup_no_money">Geen back-up, geen geld</string>
@@ -515,14 +515,15 @@
     <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">U heeft niet genoeg geld om de vereiste transactiekosten te betalen. \nU moet 0.001 WAVES transactiekosten en %1$s %2$s gatewaykosten betalen.</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
+    <string name="send_gateway_error_subtitle">Try again later</string>
+    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">De kosten zijn 1% van het overgedragen bedrag.</string>
     <string name="send_gateway_info_gateway_fee">De gateway kosten zijn %1$s %2$s</string>
     <string name="send_gateway_info_gateway_limits">We hebben %1$s adres gevonden en sturen uw geld via de Coinomat-gateway naar dat adres. Minimumbedrag is %2$s %1$s, maximumbedrag is %3$s %1$s.</string>
     <string name="send_gateway_info_gateway_warning">Neem geen %1$s op naar een ICO. We zullen uw account niet crediteren met tokens van die verkoop.</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Als u bent geverifieerd en US dollars heeft gestort, kunt u deze dollars terugboeken naar uw bankrekening. Anders moet u worden geverifieerd door onze partner IDNow.eu</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">Het minimumbedrag is 500 US dollar. Als je vragen hebt, stuur dan een e-mail naar support@coinomat.com</string>
-    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
-    <string name="send_gateway_error_subtitle">Try again later</string><string name="send_monero_payment_id">Monero Betalings ID</string>
+    <string name="send_monero_payment_id">Monero Betalings ID</string>
     <string name="send_monero_payment_id_hint">Plak of typ uw betalings ID</string>
     <string name="send_progress_sending">Bezig met verzenden…</string>
     <string name="send_recipient">Ontvanger</string>

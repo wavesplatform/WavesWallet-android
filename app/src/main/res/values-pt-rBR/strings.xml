@@ -342,7 +342,7 @@
     <string name="leasing_history_toolbar_title">Transações</string>
     <string name="left_drawer_description">Acompanhe as últimas notícias e artigos e descubra tudo sobre os eventos que acontecem na Plataforma Waves</string>
     <string name="left_drawer_join_the_waves_community">Faça parte da Comunidade Waves</string>
-    <string name="left_drawer_site">wavescommunity.com</string>
+    <string name="left_drawer_site">forum.wavesplatform.com</string>
     <string name="left_drawer_support">Suporte da Plataforma Waves</string>
     <string name="left_drawer_terms_and_conditions">Termos e condições</string>
     <string name="left_drawer_whitepaper">Whitepaper</string>
@@ -470,6 +470,8 @@
     <string name="receive_fiat_choose_dialog_ok">Ok</string>
     <string name="receive_fiat_choose_dialog_title">Escolha uma moeda</string>
     <string name="receive_fiat_choose_dialog_usd">USD</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Verifique se a sua carteira ou exchange usa smart contracts para transferir ETH. Nós não aceitamos essas transações e você perderá esse dinheiro, pois não podemos reembolsar.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Por favor, não deposite ETH através de smart contracts! Não deposite tokens ERC20! Apenas Ethereum é permitido.</string>
     <string name="receive_get_verified">Verificar</string>
     <string name="receive_invoice">Fatura</string>
     <string name="receive_limit">O mínimo é %1$s %2$s e o máximo é %3$s %4$s</string>
@@ -491,8 +493,6 @@
     <string name="receive_warning_crypto">Envie apenas %1$s para este endereço de depósito</string>
     <string name="receive_warning_will_send">Se você enviar menos de %1$s %2$s, você perderá esse dinheiro.</string>
     <string name="receive_will_send_other_currency">Enviar qualquer outra moeda para este endereço pode resultar na perda do seu depósito.</string>
-    <string name="receive_gateway_info_gateway_warning_eth_title">Please do not deposit ETH form smart contracts! Do not deposit ERC20 tokens! Only Ethereum is allowed.</string>
-    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can\'t refund them. You will lose that money.</string>
     <string name="secret_phrase_back_up_now">Fazer o backup agora</string>
     <string name="secret_phrase_do_it_later">Fazer isso depois</string>
     <string name="secret_phrase_no_backup_no_money">Sem Backup, Sem Dinheiro</string>
@@ -515,14 +515,15 @@
     <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">Você não tem saldo suficiente para pagar as taxas exigidas. \nVocê deve pagar uma taxa de transação de 0.001 WAVES e %1$s %2$s pela taxa do gateway.</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
+    <string name="send_gateway_error_subtitle">Tente mais tarde</string>
+    <string name="send_gateway_error_title">O serviço da Coinomat está temporariamente indisponível</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">As taxas são de 1% do valor transferido.</string>
     <string name="send_gateway_info_gateway_fee">A taxa do gateway é %1$s %2$s</string>
     <string name="send_gateway_info_gateway_limits">Identificamos o endereço %1$s e enviaremos seu dinheiro através do gateway Coinomat para esse endereço. A quantidade mínima é %2$s %1$s e a quantidade máxima é %3$s %1$s.</string>
     <string name="send_gateway_info_gateway_warning">Não saque %1$s para uma ICO. Não creditaremos sua conta com tokens dessa venda.</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">Se você foi verificado e depositou dólares americanos, poderá sacar esses dólares de volta para sua conta bancária. Caso contrário, faça a verificação com o nosso parceiro IDNow.eu</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">O valor mínimo é de 500 dólares americanos. Se você tiver alguma dúvida, basta enviar um email para support@coinomat.com</string>
-    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
-    <string name="send_gateway_error_subtitle">Try again later</string><string name="send_monero_payment_id">ID de Pagamento de Monero</string>
+    <string name="send_monero_payment_id">ID de Pagamento de Monero</string>
     <string name="send_monero_payment_id_hint">Cole ou digite seu ID de pagamento</string>
     <string name="send_progress_sending">Enviando…</string>
     <string name="send_recipient">Destinatário</string>
