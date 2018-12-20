@@ -171,7 +171,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                             if (xRate == null) {
                                 viewState.showXRateError()
                             } else {
-                                viewState.showXRate(xRate, currencyTo!!)
+                                viewState.showXRate(xRate, currencyTo)
                             }
                         }
                     }, {

@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="address_book_address_validation_already_use_error">पहले से ही उपयोग में</string>
-    <string name="address_book_address_validation_required_error">पता आवश्यक है</string>
-    <string name="address_book_name_validation_already_use_error">पहले से ही उपयोग में</string>
-    <string name="address_book_name_validation_required_error">नाम आवश्यक है</string>
-    <string name="address_book_name_validation_max_length_error">अधिकतम 24 अक्षर</string>
-    <string name="address_book_name_validation_min_length_error">कम से कम 2 अक्षर</string>
     <string name="about_fill_payment_details">आपको निम्नलिखित जानकारी के साथ भुगतान विवरण फ़ील्ड भरना होगा:</string>
     <string name="about_fill_payment_info">सीएनएम — आपके वेव्स पता \nअगर आप नहीं करते हैं तो हम आपके खाते को क्रेडिट नहीं कर सकते हैं।</string>
     <string name="about_redirection_message">सत्यापन के माध्यम से जाने के बाद आपको आगे के निर्देशों के साथ एक ईमेल प्राप्त होगा</string>
@@ -16,7 +10,13 @@
     <string name="add_address_name">नाम</string>
     <string name="add_address_toolbar_title">जोड़ना</string>
     <string name="address_book_add">जोड़ना</string>
+    <string name="address_book_address_validation_already_use_error">पहले से ही उपयोग में</string>
+    <string name="address_book_address_validation_required_error">पता आवश्यक है</string>
     <string name="address_book_empty_state">यहां कुछ नहीं है…\nआप नया पता बना सकते हैं</string>
+    <string name="address_book_name_validation_already_use_error">पहले से ही उपयोग में</string>
+    <string name="address_book_name_validation_max_length_error">अधिकतम 24 अक्षर</string>
+    <string name="address_book_name_validation_min_length_error">कम से कम 2 अक्षर</string>
+    <string name="address_book_name_validation_required_error">नाम आवश्यक है</string>
     <string name="address_book_search">खोज</string>
     <string name="address_book_success_deleted">पता मिटा दिया</string>
     <string name="address_book_toolbar_title">पता पुस्तिक</string>
@@ -44,7 +44,7 @@
     <string name="asset_details_decimal">डेसीमल पॉइंट्स</string>
     <string name="asset_details_description">विवरण</string>
     <string name="asset_details_error_perfom_transaction">आप इस संपत्ति के साथ लेनदेन नहीं कर सकते हैं</string>
-    <string name="asset_details_flat_money">फिएट पैसे</string>
+    <string name="asset_details_fiat_money">फिएट पैसे</string>
     <string name="asset_details_id">आईडी</string>
     <string name="asset_details_in_order">क्रम में</string>
     <string name="asset_details_issue_date">जारी करने की तिथि</string>
@@ -70,7 +70,7 @@
     <string name="backup_info_button">मै समझता हुँ</string>
     <string name="backup_info_subtitle">वेव्स प्लेटफार्म आपको पिछले महीने में घोटाले और फ़िशिंग हमलों की बढ़ी हुई आवृत्ति के बारे में चेतावनी देना चाहता है। धोखाधड़ी अपने संस्करणों में अपने मैलवेयर छुपा रहे हैं और उपयोगकर्ताओं को लुभाने के लिए बोनस और छूट का वादा कर रहे हैं।\n\nकृपया सावधान रहें और कभी भी इन क्लाइंट में अपने सीडों को इनपुट न करें, क्योंकि आपके खाते से समझौता किया जाएगा और आप अपने सभी फंड खो सकते हैं।\n\nआपको केवल आधिकारिक वेव्स क्लाइंट का उपयोग करना चाहिए।</string>
     <string name="backup_info_title">देखभाल के साथ अपने बैकअप वाक्यांश का रखना!</string>
-    <string name="backup_pharse">बैकप फ्रेज</string>
+    <string name="backup_phrase">बैकप फ्रेज</string>
     <string name="backup_wrriten_down">मैंने इसे लिखा है</string>
     <string name="buy_and_sell_0_001_waves">0.003 वेव्स</string>
     <string name="buy_and_sell_10">10%</string>
@@ -342,7 +342,7 @@
     <string name="leasing_history_toolbar_title">लेन-देन</string>
     <string name="left_drawer_description">नवीनतम समाचार और लेखों के साथ बने रहें, और वेव्स प्लेटफ़ॉर्म पर होने वाली घटनाओं के बारे में सभी जानें</string>
     <string name="left_drawer_join_the_waves_community">वेव्स समुदाय में शामिल हों</string>
-    <string name="left_drawer_site">wavescommunity.com</string>
+    <string name="left_drawer_site">forum.wavesplatform.com</string>
     <string name="left_drawer_support">सपोर्ट वेव्स प्लेटफोर्म</string>
     <string name="left_drawer_terms_and_conditions">नियम और शर्तें</string>
     <string name="left_drawer_whitepaper">वाइट पेपर</string>
@@ -470,6 +470,8 @@
     <string name="receive_fiat_choose_dialog_ok">ठीक</string>
     <string name="receive_fiat_choose_dialog_title">क्रिप्टोकरेन्सी</string>
     <string name="receive_fiat_choose_dialog_usd">USD</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">क करें किया क्या आपका वॉलेट या एक्सचेंज, ETH निकासी के लिए स्मार्ट-कॉन्ट्रैक्ट का उपयोग करता है। हम ऐसे लेनेदेन स्वीकार नहीं करते हैं और उनको रिफंड नहीं कर सकते हैं। आपको उस धन की हानि हो जाएगी।</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">कृपया स्मार्ट-कॉन्ट्रैक्ट से ETH जमा ना करें! ERC20 टोकन जमा ना करें! केवल Ethereum अनुमत है।</string>
     <string name="receive_get_verified">सत्यापित करा लें</string>
     <string name="receive_invoice">इनवॉइस</string>
     <string name="receive_limit">न्यूनतम %1$s %2$s है, अधिकतम %3$s %4$s</string>
@@ -513,6 +515,8 @@
     <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">आवश्यक शुल्क का भुगतान करने के लिए आपके पास पर्याप्त धनराशि नहीं है।\nआपको 0.001 WAVES लेनदेन शुल्क और %1$s %2$s गेटवे शुल्क का भुगतान करना होगा।</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
+    <string name="send_gateway_error_subtitle">나중에 다시 시도하세요</string>
+    <string name="send_gateway_error_title">Coinomat 서비스를 일시적으로 사용할 수 없습니다</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">फ़ीस स्थानांतरित राशि से 1% है।</string>
     <string name="send_gateway_info_gateway_fee">%1$s %2$s गेटवे फ़ीस है</string>
     <string name="send_gateway_info_gateway_limits">हमने %1$s पता पता लगाया है और उस पते पर कोइनोमाट गेटवे के माध्यम से आपका पैसा भेज देगा। न्यूनतम राशि %2$s %1$s है, अधिकतम राशि %3$s %1$s है।</string>
@@ -521,7 +525,7 @@
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">न्यूनतम राशि 500 ​​अमेरिकी डॉलर है। यदि आपके कोई प्रश्न हैं, तो कृपया support@coinomat.com पर एक ईमेल भेजें</string>
     <string name="send_monero_payment_id">मोनरो पेमेंट आईडी</string>
     <string name="send_monero_payment_id_hint">पेस्ट करें या अपनी पेमेंट आईडी टाइप करें</string>
-    <string name="send_progress_sending">भेजा जा रहा है…</string>
+    <string name="send_progress_sending">भेजा जा रहा है...</string>
     <string name="send_recipient">प्राप्त करने वाला</string>
     <string name="send_recipient_address_hint">प्राप्तकर्ता का पता…</string>
     <string name="send_recipient_the_address_is_not_valid">पता मान्य नहीं है</string>

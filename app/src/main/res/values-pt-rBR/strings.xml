@@ -44,7 +44,7 @@
     <string name="asset_details_decimal">Casas decimais</string>
     <string name="asset_details_description">Descrição</string>
     <string name="asset_details_error_perfom_transaction">Você não pode realizar transações com este ativo</string>
-    <string name="asset_details_flat_money">Moeda Fiat</string>
+    <string name="asset_details_fiat_money">Moeda Fiat</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">Em ordem</string>
     <string name="asset_details_issue_date">Data de emissão</string>
@@ -70,7 +70,7 @@
     <string name="backup_info_button">Eu entendi</string>
     <string name="backup_info_subtitle">A Plataforma Waves gostaria de avisá-lo sobre o aumento da frequência de ataques de fraude e phishing nos últimos meses. Os golpistas escondem seu malware em suas próprias versões da Waves client e prometem bônus e descontos para atrair usuários. \n\nPor favor, tenha cuidado e nunca insira seu SEED nesses \'clients\', pois sua conta será comprometida e você perderá todos os seus fundos. \n\nVocê deve usar APENAS o client oficial da Waves.</string>
     <string name="backup_info_title">Mantenha segura sua frase de backup!</string>
-    <string name="backup_pharse">Frase de backup</string>
+    <string name="backup_phrase">Frase de backup</string>
     <string name="backup_wrriten_down">Eu escrevi isso</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
     <string name="buy_and_sell_10">10%</string>
@@ -342,7 +342,7 @@
     <string name="leasing_history_toolbar_title">Transações</string>
     <string name="left_drawer_description">Acompanhe as últimas notícias e artigos e descubra tudo sobre os eventos que acontecem na Plataforma Waves</string>
     <string name="left_drawer_join_the_waves_community">Faça parte da Comunidade Waves</string>
-    <string name="left_drawer_site">wavescommunity.com</string>
+    <string name="left_drawer_site">forum.wavesplatform.com</string>
     <string name="left_drawer_support">Suporte da Plataforma Waves</string>
     <string name="left_drawer_terms_and_conditions">Termos e condições</string>
     <string name="left_drawer_whitepaper">Whitepaper</string>
@@ -420,9 +420,9 @@
     <string name="profile_general_feedback">Feedback</string>
     <string name="profile_general_feedback_body_extra_app_version">Versão do aplicativo: %1$s(%2$s)</string>
     <string name="profile_general_feedback_body_extra_carrier">Operadora: %s</string>
-    <string name="profile_general_feedback_body_extra_device_model">Modelo do dispositivo:</string>
+    <string name="profile_general_feedback_body_extra_device_model">Modelo do dispositivo: %s</string>
     <string name="profile_general_feedback_body_extra_language">Idioma: %s</string>
-    <string name="profile_general_feedback_body_extra_os_version">Versão do SO:</string>
+    <string name="profile_general_feedback_body_extra_os_version">Versão do SO: %s</string>
     <string name="profile_general_feedback_body_extra_title">---Informações do dispositivo---</string>
     <string name="profile_general_fingerprint">Impressão digital</string>
     <string name="profile_general_language">Idioma</string>
@@ -470,6 +470,8 @@
     <string name="receive_fiat_choose_dialog_ok">Ok</string>
     <string name="receive_fiat_choose_dialog_title">Escolha uma moeda</string>
     <string name="receive_fiat_choose_dialog_usd">USD</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Verifique se a sua carteira ou exchange usa smart contracts para transferir ETH. Nós não aceitamos essas transações e você perderá esse dinheiro, pois não podemos reembolsar.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Por favor, não deposite ETH através de smart contracts! Não deposite tokens ERC20! Apenas Ethereum é permitido.</string>
     <string name="receive_get_verified">Verificar</string>
     <string name="receive_invoice">Fatura</string>
     <string name="receive_limit">O mínimo é %1$s %2$s e o máximo é %3$s %4$s</string>
@@ -513,6 +515,8 @@
     <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">Você não tem saldo suficiente para pagar as taxas exigidas. \nVocê deve pagar uma taxa de transação de 0.001 WAVES e %1$s %2$s pela taxa do gateway.</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
+    <string name="send_gateway_error_subtitle">Tente mais tarde</string>
+    <string name="send_gateway_error_title">O serviço da Coinomat está temporariamente indisponível</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">As taxas são de 1% do valor transferido.</string>
     <string name="send_gateway_info_gateway_fee">A taxa do gateway é %1$s %2$s</string>
     <string name="send_gateway_info_gateway_limits">Identificamos o endereço %1$s e enviaremos seu dinheiro através do gateway Coinomat para esse endereço. A quantidade mínima é %2$s %1$s e a quantidade máxima é %3$s %1$s.</string>

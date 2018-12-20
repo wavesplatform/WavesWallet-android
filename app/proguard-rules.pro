@@ -147,11 +147,13 @@
 -keep class com.wavesplatform.wallet.v1.data.access.** {*;}
 -keepclassmembers class com.wavesplatform.wallet.v1.data.access.** {*;}
 
-# MeiZuFingerprint
+
+# fingerprintidentify
+-ignorewarnings
+# fingerprintidentify MeiZuFingerprint
 -dontwarn com.fingerprints.service.**
 -keep class com.fingerprints.service.** { *; }
-
-# SmsungFingerprint
+# fingerprintidentify SmsungFingerprint
 -dontwarn com.samsung.android.sdk.**
 -keep class com.samsung.android.sdk.** { *; }
 
@@ -233,6 +235,10 @@
 -dontwarn sun.security.**
 -keep class sun.security.** { *;}
 -dontwarn okhttp3.**
+-dontwarn javax.annotation.**
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+-dontwarn org.codehaus.mojo.animal_sniffer.*
+-dontwarn okhttp3.internal.platform.ConscryptPlatform
 
 # Rxjava rules
 -dontwarn rx.internal.util.**
@@ -263,6 +269,17 @@
 -keepclasseswithmembernames class retrofit2.OkHttpCall { *; }
 
 -dontwarn com.google.errorprone.annotations.*
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+   long producerIndex;
+   long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+-dontnote rx.internal.util.PlatformDependent
 
 # Retrofit rules
 -dontwarn retrofit.**
@@ -362,10 +379,18 @@
 -dontwarn javax.inject.**
 -dontwarn sun.misc.Unsafe
 
-# Guava 19.0
+# Guava
 -dontwarn java.lang.ClassValue
 -dontwarn com.google.j2objc.annotations.Weak
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontoptimize
+-dontobfuscate
+-dontwarn sun.misc.Unsafe
+-dontwarn com.google.common.collect.MinMaxPriorityQueue
+
+-keepclasseswithmembers public class * {
+    public static void main(java.lang.String[]);
+}
 
 # AppsFlyer
 -dontwarn com.android.installreferrer
@@ -375,7 +400,28 @@
 -dontwarn afu.org.checkerframework.checker.**
 -dontnote com.samsung.android.sdk.**
 
+# Crashlytics
 -keep public class * extends java.lang.Exception
 -printmapping mapping.txt
 -keep class com.crashlytics.** { *; }
 -dontwarn com.crashlytics.**
+
+# ReactiveNetwork
+-dontwarn com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+-dontwarn io.reactivex.functions.Function
+-dontwarn rx.internal.util.**
+-dontwarn sun.misc.Unsafe
+
+# BaseRecyclerViewAdapterHelper
+-keep class com.chad.library.adapter.** { *; }
+-keep public class * extends com.chad.library.adapter.base.BaseQuickAdapter
+-keep public class * extends com.chad.library.adapter.base.BaseViewHolder
+-keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder { <init>(...); }
+
+# Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}

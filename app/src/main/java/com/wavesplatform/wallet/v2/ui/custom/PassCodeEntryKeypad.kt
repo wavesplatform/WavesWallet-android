@@ -12,7 +12,9 @@ import android.widget.LinearLayout
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import kotlinx.android.synthetic.main.pass_code_entry_keyboard_layout.view.*
+import pers.victor.ext.invisiable
 import pers.victor.ext.vibrator
+import pers.victor.ext.visiable
 import pers.victor.ext.visiableIf
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 
@@ -124,7 +126,11 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
 
     fun isFingerprintAvailable(enable: Boolean) {
         isFingerprintAvailable = enable
-        button_fingerprint.visiableIf { isFingerprintAvailable }
+        if (isFingerprintAvailable) {
+            button_fingerprint.visiable()
+        } else {
+            button_fingerprint.invisiable()
+        }
     }
 
     override fun onClick(v: View) {

@@ -44,7 +44,7 @@
     <string name="asset_details_decimal">Знаков после запятой</string>
     <string name="asset_details_description">Описание</string>
     <string name="asset_details_error_perfom_transaction">Вы не можете совершать транзакции с этим ассетом</string>
-    <string name="asset_details_flat_money">Фиатные деньги</string>
+    <string name="asset_details_fiat_money">Фиатные деньги</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">В ордерах</string>
     <string name="asset_details_issue_date">Дата выпуска</string>
@@ -70,7 +70,7 @@
     <string name="backup_info_button">Я понимаю</string>
     <string name="backup_info_subtitle">Платформа Waves предупреждает вас об участившихся случаях мошенничества и фишинга за последний месяц. Мошенники скрывают своё вредоносное ПО в своих версиях клиента Waves и предлагают многообещающие бонусы и скидки для привлечения пользователей. \n\nБудьте осторожны и никогда не вводите свой СИД в таких «клиентах», потому что ваша учетная запись будет скомпрометирована, и вы потеряете все свои деньги. \n\nПользуйтесь ТОЛЬКО официальным клиентом Waves.</string>
     <string name="backup_info_title">Осторожно используйте секретную фразу!</string>
-    <string name="backup_pharse">Секретная фраза</string>
+    <string name="backup_phrase">Секретная фраза</string>
     <string name="backup_wrriten_down">Я всё записал</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
     <string name="buy_and_sell_10">10%</string>
@@ -322,7 +322,7 @@
     <string name="history_type_token_reissue">Перевыпуск токена</string>
     <string name="history_type_unrecognised">Неопознанная транзакция</string>
     <string name="import_account_click_show_pairing">Сканируйте QR-код с помощью камеры</string>
-    <string name="import_account_login_at_site">Войдите в Waves клиент через свой PC, Mac</string>
+    <string name="import_account_login_at_site">Войдите в Waves клиент через PC или Mac</string>
     <string name="import_account_scan_pairing_code">Сканировать QR-код</string>
     <string name="import_account_settings_gt_security_gt_pairing_code">Настройки — Основные — Экспортировать аккаунт</string>
     <string name="import_account_tab_manually">Вручную</string>
@@ -342,7 +342,7 @@
     <string name="leasing_history_toolbar_title">Транзакции</string>
     <string name="left_drawer_description">Следите за последними новостями и статьями и узнавайте о событиях, происходящих на платформе Waves</string>
     <string name="left_drawer_join_the_waves_community">Присоединяйтесь к сообществу Waves</string>
-    <string name="left_drawer_site">wavescommunity.com</string>
+    <string name="left_drawer_site">forum.wavesplatform.com</string>
     <string name="left_drawer_support">Поддержка Wavesplatform</string>
     <string name="left_drawer_terms_and_conditions">Условия и положения</string>
     <string name="left_drawer_whitepaper">Whitepaper</string>
@@ -470,6 +470,8 @@
     <string name="receive_fiat_choose_dialog_ok">Хорошо</string>
     <string name="receive_fiat_choose_dialog_title">Выберите валюту</string>
     <string name="receive_fiat_choose_dialog_usd">USD</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Проверьте, не использует ли ваш кошелёк или биржа смарт-контракты для отправки ETH. Мы не принимаем такие переводы и не можем возместить их. Вы потеряете эти деньги.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Не отправляйте ETH со смарт-контрактов! Не отправляйте ERC20-токены! Только Ethereum.</string>
     <string name="receive_get_verified">Пройти проверку</string>
     <string name="receive_invoice">Внутри сети</string>
     <string name="receive_limit">Минимум %1$s %2$s, максимум %3$s %4$s</string>
@@ -513,6 +515,8 @@
     <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">У вас недостаточно средств для отправки транзакции. \nВы должны оплатить комиссию 0.001 WAVES и комиссию шлюза %1$s %2$s.</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
+    <string name="send_gateway_error_subtitle">Попробуйте, пожалуйста, позже</string>
+    <string name="send_gateway_error_title">Сервис Coinomat временно недоступен</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Комиссия составляет 1% от суммы перевода.</string>
     <string name="send_gateway_info_gateway_fee">Комиссия шлюза — %1$s %2$s</string>
     <string name="send_gateway_info_gateway_limits">Введенный адрес определен как %1$s, ваши средства будут отправлены на него через шлюз Coinomat. Минимальная сумма перевода — %2$s %1$s, максимальная — %3$s %1$s.</string>

@@ -46,7 +46,7 @@ class BackupPhraseActivity : BaseActivity(), BackupPhraseView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view,  true,
-                getString(R.string.backup_pharse), R.drawable.ic_toolbar_back_black)
+                getString(R.string.backup_phrase), R.drawable.ic_toolbar_back_black)
 
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)) {
             setSeed(intent.extras.getString(NewAccountActivity.KEY_INTENT_SEED, ""))
