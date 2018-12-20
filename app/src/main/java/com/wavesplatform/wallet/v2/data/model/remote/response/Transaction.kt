@@ -3,8 +3,10 @@ package com.wavesplatform.wallet.v2.data.model.remote.response
 import com.google.common.base.Optional
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.clearAlias
 import com.wavesplatform.wallet.v2.util.findMyOrder
 import com.wavesplatform.wallet.v2.util.stripZeros
@@ -187,7 +189,7 @@ open class Transaction(
                 " (${transaction.feeAssetId})"
             }
             return "Transaction ID: ${transaction.id}\n" +
-                    "Type: ${transaction.type} (${getNameBy(transaction.type)})\n" +
+                    type(transaction) +
                     "Date: ${transaction.timestamp.date("MM/dd/yyyy HH:mm")}\n" +
                     "Sender: ${transaction.sender}\n" +
                     recipient(transaction) +
@@ -197,12 +199,27 @@ open class Transaction(
                     attachment(transaction)
         }
 
+        private fun type(transaction: Transaction) =
+                "Type: ${transaction.type} (${getNameBy(transaction.type).toLowerCase()}" +
+                        if (transaction.type == EXCHANGE) {
+                            if (findMyOrder(transaction.order1!!,
+                                            transaction.order2!!,
+                                            App.getAccessManager().getWallet()?.address!!)
+                                                    .orderType == Constants.SELL_ORDER_TYPE) {
+                                "-sell)\n"
+                            } else {
+                                "-buy)\n"
+                            }
+                        } else {
+                            ")\n"
+                        }
+
         private fun recipient(transaction: Transaction): String {
-            return (if (transaction.recipient.isNullOrEmpty()) {
+            return if (transaction.recipient.isNullOrEmpty()) {
                 ""
             } else {
                 "Recipient: ${transaction.recipient.clearAlias()}\n"
-            })
+            }
         }
 
         private fun fee(transaction: Transaction, feeAssetId: String): String {
@@ -219,12 +236,17 @@ open class Transaction(
         }
 
         private fun amount(transaction: Transaction): String {
+            val amountAsset = if (transaction.type == EXCHANGE) {
+                transaction.order1?.assetPair?.amountAssetObject
+            } else {
+                transaction.asset
+            }
             return "Amount: ${MoneyUtil.getScaledText(transaction.amount, transaction.asset)
-                    .stripZeros()} ${transaction.asset?.name}" +
-                    if (transaction.asset?.id.isNullOrEmpty()) {
+                    .stripZeros()} ${amountAsset?.name}" +
+                    if (amountAsset?.id.isNullOrEmpty()) {
                         "\n"
                     } else {
-                        " (${transaction.asset?.id})\n"
+                        " (${amountAsset?.id})\n"
                     }
         }
 
