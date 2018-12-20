@@ -23,10 +23,10 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="2dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="5dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/asset_item_radius"
                 app:cardElevation="2dp">
@@ -35,10 +35,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingBottom="24dp"
-                    android:paddingEnd="16dp"
                     android:paddingStart="16dp"
-                    android:paddingTop="24dp">
+                    android:paddingTop="24dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="24dp">
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_asset_name"
@@ -71,10 +71,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="4dp"
                             android:background="@drawable/asset_price_border"
-                            android:paddingBottom="2dp"
-                            android:paddingEnd="4dp"
                             android:paddingStart="4dp"
                             android:paddingTop="2dp"
+                            android:paddingEnd="4dp"
+                            android:paddingBottom="2dp"
                             android:text="$ 00.00"
                             android:textColor="@color/info500"
                             android:textSize="12sp"
@@ -93,74 +93,85 @@
                         android:progressDrawable="@drawable/leasign_progress" />
 
 
-                    <RelativeLayout
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/linear_details_balances"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp">
+                        android:orientation="vertical">
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/text_leased"
-                            android:layout_width="wrap_content"
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="0.00000000"
-                            android:textColor="@color/disabled900" />
+                            android:layout_marginTop="24dp">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/text_leased"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="0.00000000"
+                                android:textColor="@color/disabled900" />
 
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
+                            <android.support.v7.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_gravity="center_vertical"
+                                android:drawableRight="@drawable/circle_shape_submit300"
+                                android:drawablePadding="8dp"
+                                android:gravity="center"
+                                android:text="@string/wallet_leasing_leased"
+                                android:textColor="@color/disabled500" />
+                        </RelativeLayout>
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/view_line_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="14dp"
+                            android:layerType="software"
+                            android:src="@drawable/shape_dashed_line" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_gravity="center_vertical"
-                            android:drawablePadding="8dp"
-                            android:drawableRight="@drawable/circle_shape_submit300"
-                            android:gravity="center"
-                            android:text="@string/wallet_leasing_leased"
-                            android:textColor="@color/disabled500" />
-                    </RelativeLayout>
+                            android:layout_marginTop="14dp">
 
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/view_line_3"
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="14dp"
-                        android:layerType="software"
-                        android:src="@drawable/shape_dashed_line" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/text_total"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="0.00000000"
-                            android:textColor="@color/disabled900" />
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/text_total"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="0.00000000"
+                                android:textColor="@color/disabled900" />
 
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_gravity="center_vertical"
-                            android:drawablePadding="8dp"
-                            android:drawableRight="@drawable/circle_shape_info50"
-                            android:gravity="center"
-                            android:text="@string/wallet_leasing_total"
-                            android:textColor="@color/disabled500" />
-                    </RelativeLayout>
+                            <android.support.v7.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_gravity="center_vertical"
+                                android:drawableRight="@drawable/circle_shape_info50"
+                                android:drawablePadding="8dp"
+                                android:gravity="center"
+                                android:text="@string/wallet_leasing_total"
+                                android:textColor="@color/disabled500" />
+                        </RelativeLayout>
 
 
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/view_line_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="14dp"
-                        android:layerType="software"
-                        android:src="@drawable/shape_dashed_line" />
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/view_line_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="14dp"
+                            android:layerType="software"
+                            android:src="@drawable/shape_dashed_line" />
+
+                    </LinearLayout>
+
 
                     <Button
                         android:id="@+id/button_start_lease"
@@ -180,10 +191,10 @@
                 android:id="@+id/card_view_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="2dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="5dp"
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
                 app:cardBackgroundColor="@color/white"
@@ -215,10 +226,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
-                    android:paddingBottom="8dp"
-                    android:paddingEnd="16dp"
                     android:paddingStart="16dp"
-                    android:paddingTop="8dp">
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp">
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_active_leasing"
@@ -265,10 +276,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:clickable="true"
-                android:paddingBottom="8dp"
-                android:paddingEnd="16dp"
                 android:paddingStart="16dp"
-                android:paddingTop="8dp">
+                android:paddingTop="8dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_hidden_assets"
@@ -317,8 +328,8 @@
                         android:id="@+id/view_line_4"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:layout_marginBottom="14dp"
                         android:layout_marginTop="14dp"
+                        android:layout_marginBottom="14dp"
                         android:layerType="software"
                         android:src="@drawable/shape_dashed_line" />
 
@@ -337,8 +348,8 @@
                         android:id="@+id/view_line_5"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:layout_marginBottom="14dp"
                         android:layout_marginTop="14dp"
+                        android:layout_marginBottom="14dp"
                         android:layerType="software"
                         android:src="@drawable/shape_dashed_line" />
 

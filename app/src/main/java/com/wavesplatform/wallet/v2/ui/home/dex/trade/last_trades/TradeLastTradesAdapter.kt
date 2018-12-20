@@ -7,8 +7,10 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
+import com.wavesplatform.wallet.v2.util.clearBalance
 import com.wavesplatform.wallet.v2.util.stripZeros
 import pyxis.uzuki.live.richutilskt.utils.asDateString
+import java.math.BigDecimal
 import java.text.ParsePosition
 import javax.inject.Inject
 
@@ -20,9 +22,9 @@ class TradeLastTradesAdapter @Inject constructor() : BaseQuickAdapter<LastTrades
 
         helper
                 .setText(R.id.text_time_value, ISO8601Utils.parse(item.timestamp, ParsePosition(0)).asDateString("HH:mm:ss"))
-                .setText(R.id.text_price_value, item.price?.toBigDecimal()?.toPlainString()?.stripZeros())
+                .setText(R.id.text_price_value, item.price?.toBigDecimal()?.toPlainString())
                 .setText(R.id.text_amount_value, item.amount.toString())
-                .setText(R.id.text_sum_value, MoneyUtil.getFormattedTotal(sum, market.priceAssetDecimals))
+                .setText(R.id.text_sum_value, BigDecimal(MoneyUtil.getFormattedTotal(sum, market.priceAssetDecimals).clearBalance()).toPlainString())
                 .setTextColor(R.id.text_price_value, item.getMyOrder().getType().color)
     }
 }

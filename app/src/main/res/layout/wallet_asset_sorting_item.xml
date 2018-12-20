@@ -44,17 +44,6 @@
             app:text_size="16"
             android:src="@drawable/asset_gray_icon"/>
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/image_down_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="-4dp"
-            android:layout_toEndOf="@id/image_favorite"
-            android:layout_marginStart="-4dp"
-            android:layout_alignBottom="@+id/image_asset_icon"
-            app:srcCompat="@drawable/ic_circle_down_arrow" />
-
-
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_asset_name"
             android:layout_width="wrap_content"

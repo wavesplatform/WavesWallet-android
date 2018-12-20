@@ -144,12 +144,6 @@ class CardFragment : BaseFragment(), CardView {
             assetBalance?.isFavorite!!
         }
 
-        image_down_arrow.visibility = if (assetBalance!!.isGateway && !assetBalance.isWaves()) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-
         text_asset.gone()
         container_asset.visiable()
         container_info.visiable()

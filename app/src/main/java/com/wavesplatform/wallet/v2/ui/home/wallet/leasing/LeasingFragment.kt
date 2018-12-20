@@ -156,6 +156,12 @@ class LeasingFragment : BaseFragment(), LeasingView {
     }
 
     override fun showBalances(wavesAsset: AssetBalance) {
+        if (wavesAsset.balance ?: 0 > 0) {
+            linear_details_balances.visiable()
+        } else {
+            linear_details_balances.gone()
+        }
+
         swipe_container.isRefreshing = false
         text_available_balance.text = wavesAsset.getDisplayAvailableBalance()
         text_available_balance.makeTextHalfBold()

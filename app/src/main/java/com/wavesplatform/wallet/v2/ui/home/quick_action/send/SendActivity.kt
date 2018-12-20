@@ -480,12 +480,6 @@ class SendActivity : BaseActivity(), SendView {
                 it.isFavorite
             }
 
-            image_down_arrow.visibility = if (it.isGateway && !it.isWaves()) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
-
             text_asset.gone()
             container_asset.visiable()
 
