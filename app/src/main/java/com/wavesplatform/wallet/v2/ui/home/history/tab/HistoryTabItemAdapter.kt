@@ -72,6 +72,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                         equalTo("assetId", item.data.assetId)
                     }
 
+                    val decimals = item.data.asset?.precision ?: 8
+
                     view.image_transaction.setImageDrawable(item.data.transactionType()?.icon())
 
                     val showTag = Constants.defaultAssets.any {
@@ -97,18 +99,28 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.SENT_TYPE -> {
                                 item.data.amount.notNull {
                                     view.text_transaction_value.text =
-                                            "-${getScaledAmount(it, item.data.decimals)}"
+                                            "-${getScaledAmount(it, decimals)}"
                                 }
                             }
                             TransactionType.RECEIVED_TYPE -> {
                                 item.data.amount.notNull {
                                     view.text_transaction_value.text =
-                                            "+${getScaledAmount(it, item.data.decimals)}"
+                                            "+${getScaledAmount(it, decimals)}"
                                 }
                             }
                             TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE,
                             TransactionType.MASS_RECEIVE_TYPE -> {
-                                setSpamTitle(item.data, it, view.text_transaction_value)
+                                if (item.data.transfers.isNotEmpty()) {
+                                    val sum = item.data.transfers.sumByLong { it.amount }
+                                    val sumString = getScaledAmount(sum, item.data.decimals)
+                                    if (!sumString.isEmpty()) {
+                                        view.text_transaction_value.text = "$sumString"
+                                    } else {
+                                        view.text_transaction_value.text = ""
+                                    }
+                                } else {
+                                    view.text_transaction_value.text = "${getScaledAmount(item.data.amount, decimals)}"
+                                }
                             }
                             TransactionType.CREATE_ALIAS_TYPE -> {
                                 view.text_transaction_value.text = item.data.alias
@@ -123,23 +135,23 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.CANCELED_LEASING_TYPE -> {
                                 item.data.lease?.amount.notNull {
                                     view.text_transaction_value.text =
-                                            getScaledAmount(it, item.data.decimals)
+                                            getScaledAmount(it, decimals)
                                 }
                             }
                             TransactionType.TOKEN_GENERATION_TYPE -> {
                                 val quantity = getScaledAmount(
-                                        item.data.quantity, item.data.decimals)
+                                        item.data.quantity, decimals)
                                 view.text_transaction_value.text = quantity
                             }
                             TransactionType.TOKEN_BURN_TYPE -> {
                                 item.data.amount.notNull {
                                     view.text_transaction_value.text =
-                                            "-${getScaledAmount(it, item.data.decimals)}"
+                                            "-${getScaledAmount(it, decimals)}"
                                 }
                             }
                             TransactionType.TOKEN_REISSUE_TYPE -> {
                                 val quantity = getScaledAmount(
-                                        item.data.quantity, item.data.decimals)
+                                        item.data.quantity, decimals)
                                 view.text_transaction_value.text = "+$quantity"
                             }
                             TransactionType.SET_SCRIPT_TYPE -> {
@@ -153,7 +165,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                             else -> {
                                 item.data.amount.notNull {
                                     view.text_transaction_value.text =
-                                            getScaledAmount(it, item.data.decimals)
+                                            getScaledAmount(it, decimals)
                                 }
                             }
                         }
@@ -162,7 +174,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                     if (spam) {
                         view.text_tag.gone()
                         var sumString = getScaledAmount(
-                                item.data.transfers.sumByLong { it.amount }, item.data.decimals)
+                                item.data.transfers.sumByLong { it.amount }, decimals)
                         if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
                             view.text_tag_spam.gone()
                             sumString = sumString + " " + item.data.asset?.name
@@ -241,19 +253,5 @@ class HistoryTabItemAdapter @Inject constructor() :
         }
 
         view.text_transaction_value.text = directionSign + amountValue + assetName
-    }
-
-    private fun setSpamTitle(transaction: Transaction, it: TransactionType, view: AppCompatTextView) {
-        if (transaction.transfers.isNotEmpty()) {
-            val sum = transaction.transfers.sumByLong { it.amount }
-            val sumString = getScaledAmount(sum, transaction.decimals)
-            if (!sumString.isEmpty()) {
-                view.text = "$sumString"
-            } else {
-                view.text = ""
-            }
-        } else {
-            view.text = "${getScaledAmount(transaction.amount, transaction.decimals)}"
-        }
     }
 }
