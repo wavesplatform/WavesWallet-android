@@ -183,7 +183,7 @@
     <string name="confirm_leasing_okay">Okay</string>
     <string name="confirm_leasing_progress">Loading…</string>
     <string name="confirm_leasing_result_value">You have leased %1$s %2$s</string>
-    <string name="confirm_leasing_success">Your transaction is on way!</string>
+    <string name="confirm_leasing_success">Your transaction is on the way!</string>
     <string name="confirm_node_address">Node address</string>
     <string name="confirmaton_cancel_leasing_button_txt">Cancel leasing</string>
     <string name="confirmaton_cancel_leasing_fee_hint">Fee</string>
