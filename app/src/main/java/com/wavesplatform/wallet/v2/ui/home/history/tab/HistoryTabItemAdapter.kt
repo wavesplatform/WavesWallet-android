@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import android.annotation.SuppressLint
-import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
@@ -108,18 +107,20 @@ class HistoryTabItemAdapter @Inject constructor() :
                                             "+${getScaledAmount(it, decimals)}"
                                 }
                             }
-                            TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE,
+                            TransactionType.MASS_SPAM_RECEIVE_TYPE,
+                            TransactionType.MASS_SEND_TYPE,
                             TransactionType.MASS_RECEIVE_TYPE -> {
                                 if (item.data.transfers.isNotEmpty()) {
-                                    val sum = item.data.transfers.sumByLong { it.amount }
-                                    val sumString = getScaledAmount(sum, item.data.decimals)
-                                    if (!sumString.isEmpty()) {
-                                        view.text_transaction_value.text = "$sumString"
-                                    } else {
+                                    val sumString = getScaledAmount(
+                                            item.data.transfers.sumByLong { it.amount }, decimals)
+                                    if (sumString.isEmpty()) {
                                         view.text_transaction_value.text = ""
+                                    } else {
+                                        view.text_transaction_value.text = sumString
                                     }
                                 } else {
-                                    view.text_transaction_value.text = "${getScaledAmount(item.data.amount, decimals)}"
+                                    view.text_transaction_value.text =
+                                            getScaledAmount(item.data.amount, decimals)
                                 }
                             }
                             TransactionType.CREATE_ALIAS_TYPE -> {
@@ -172,16 +173,24 @@ class HistoryTabItemAdapter @Inject constructor() :
                     }
 
                     if (spam) {
-                        view.text_tag.gone()
-                        var sumString = getScaledAmount(
-                                item.data.transfers.sumByLong { it.amount }, decimals)
+                        if (item.data.transfers.isNotEmpty()) {
+                            val sumString = getScaledAmount(
+                                    item.data.transfers.sumByLong { it.amount }, decimals)
+                            if (sumString.isEmpty()) {
+                                view.text_transaction_value.text = ""
+                            } else {
+                                view.text_transaction_value.text = sumString
+                            }
+                        } else {
+                            view.text_transaction_value.text =
+                                    getScaledAmount(item.data.amount, decimals)
+                        }
                         if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
                             view.text_tag_spam.gone()
-                            sumString = sumString + " " + item.data.asset?.name
                         } else {
                             view.text_tag_spam.visiable()
                         }
-                        view.text_transaction_value.text = "$sumString"
+                        view.text_tag.gone()
                     } else {
                         if (item.data.transactionType() != TransactionType.CREATE_ALIAS_TYPE
                                 && item.data.transactionType() != TransactionType.DATA_TYPE

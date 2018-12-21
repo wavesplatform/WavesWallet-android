@@ -608,7 +608,7 @@
     <string name="wallet_toolbar_title">Carteira</string>
     <string name="welcome_blockchain_description">Faz parte deste maravilhoso mundo criptográfico. Só tu é que controlas os teus ativos.</string>
     <string name="welcome_blockchain_title">Começa a usar Blockchain</string>
-    <string name="welcome_create_import_description">através de um código de emparelhamento ou através da introdução manual</string>
+    <string name="welcome_create_import_description">via QR-code ou manualmente</string>
     <string name="welcome_create_import_title">Importar conta</string>
     <string name="welcome_create_new_acc">Criar uma conta nova</string>
     <string name="welcome_create_sign_in_description">para a uma conta guardada</string>

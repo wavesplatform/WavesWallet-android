@@ -51,20 +51,17 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                             "+${MoneyUtil.getScaledText(it, transaction.asset).stripZeros()}"
                 }
             }
-            TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE,
+            TransactionType.MASS_SPAM_RECEIVE_TYPE,
+            TransactionType.MASS_SEND_TYPE,
             TransactionType.MASS_RECEIVE_TYPE -> {
-                if (transaction.transfers.isNotEmpty()) {
-                    val sum = transaction.transfers.sumByLong { it.amount }
-                    if (transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE ||
-                            transaction.transactionType() == TransactionType.MASS_RECEIVE_TYPE) {
-                        layout.text_amount_or_title.text =
-                                "+${MoneyUtil.getScaledText(sum, transaction.asset).stripZeros()}"
-                    } else {
-                        layout.text_amount_or_title.text =
-                                "-${MoneyUtil.getScaledText(sum, transaction.asset).stripZeros()}"
-                    }
+                var sign = "-"
+                if (transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE ||
+                        transaction.transactionType() == TransactionType.MASS_RECEIVE_TYPE) {
+                    sign = "+"
                 }
-
+                layout.text_amount_or_title.text = "$sign${MoneyUtil.getScaledText(
+                        transaction.transfers.sumByLong { it.amount }, transaction.asset)
+                        .stripZeros()}"
             }
             TransactionType.CREATE_ALIAS_TYPE -> {
                 layout.text_amount_or_title.text = transaction.alias
@@ -103,12 +100,11 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
             TransactionType.TOKEN_REISSUE_TYPE -> {
                 val quantity = MoneyUtil.getScaledText(transaction.quantity, transaction.asset)
                         .substringBefore(".")
-                layout.text_amount_or_title.text = "+${quantity}"
+                layout.text_amount_or_title.text = "+$quantity"
             }
             else -> {
                 transaction.amount.notNull {
-                    layout.text_amount_or_title.text =
-                            MoneyUtil.getScaledText(it, transaction.asset).stripZeros()
+                    layout.text_amount_or_title.text = MoneyUtil.getScaledText(it, transaction.asset)
                 }
             }
         }
@@ -126,23 +122,14 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 }
             } else {
                 layout.text_tag.gone()
-                layout.text_amount_or_title.text = "${layout.text_amount_or_title.text}" +
+                layout.text_amount_or_title.text =
+                        "${layout.text_amount_or_title.text}" +
                         " ${transaction.asset?.name}"
             }
         }
 
         if (queryFirst<SpamAsset> { equalTo("assetId", transaction.assetId) } != null) {
-            if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-                layout.text_tag_spam.gone()
-            } else {
-                layout.text_tag_spam.visiable()
-            }
-            layout.text_tag.gone()
-            val sumString = MoneyUtil.getScaledText(
-                    transaction.transfers.sumByLong { it.amount }, transaction.asset)
-                    .trim()
-                    .stripZeros()
-            layout.text_amount_or_title.text = "$sumString ${transaction.asset?.name}"
+            setSpamAmount(transaction, layout)
         }
 
 
@@ -150,6 +137,29 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
 
         collection.addView(layout)
         return layout
+    }
+
+    private fun setSpamAmount(transaction: Transaction, layout: ViewGroup) {
+        if (transaction.transfers.isNotEmpty()) {
+            val sumString = MoneyUtil.getScaledText(
+                    transaction.transfers.sumByLong { it.amount },
+                    transaction.asset)
+            if (sumString.isEmpty()) {
+                layout.text_amount_or_title.text = "${transaction.asset?.name}"
+            } else {
+                layout.text_amount_or_title.text = "$sumString ${transaction.asset?.name}"
+            }
+        } else {
+            layout.text_amount_or_title.text =
+                    "${MoneyUtil.getScaledText(transaction.amount, transaction.asset)}" +
+                    " ${transaction.asset?.name}"
+        }
+        if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
+            layout.text_tag_spam.gone()
+        } else {
+            layout.text_tag_spam.visiable()
+        }
+        layout.text_tag.gone()
     }
 
     private fun setExchangeItem(transaction: Transaction, view: View) {

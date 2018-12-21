@@ -406,7 +406,7 @@
     <string name="orderbook_sum_title">Soma %s</string>
     <string name="profile_general_addresses_and_keys">Endereços, chaves</string>
     <string name="profile_general_addresses_book">Lista de endereços</string>
-    <string name="profile_general_backup_phrase">Frase de backup</string>
+    <string name="profile_general_backup_phrase">Backup SEED</string>
     <string name="profile_general_change_passcode">Alterar senha</string>
     <string name="profile_general_change_password">Alterar senha</string>
     <string name="profile_general_current_height">Bloco atual</string>
@@ -608,7 +608,7 @@
     <string name="wallet_toolbar_title">Carteira</string>
     <string name="welcome_blockchain_description">Faça parte de uma das áreas que mais crescem no mundo da criptografia. Somente você tem acesso aos seus ativos.</string>
     <string name="welcome_blockchain_title">Bem-vindo ao Blockchain</string>
-    <string name="welcome_create_import_description">via código de emparelhamento ou manualmente</string>
+    <string name="welcome_create_import_description">via QR-code ou manualmente</string>
     <string name="welcome_create_import_title">Importar conta</string>
     <string name="welcome_create_new_acc">Criar uma nova conta</string>
     <string name="welcome_create_sign_in_description">para uma conta salva</string>
