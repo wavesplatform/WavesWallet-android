@@ -38,7 +38,7 @@
                 android:layout_width="64dp"
                 android:layout_height="10dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/skeleton_text_basic_100_round_7"
+                android:background="@drawable/skeleton_basic_100_round_7"
                 app:layout_constraintEnd_toEndOf="parent" />
 
 
@@ -48,7 +48,7 @@
                 android:layout_height="12dp"
                 android:layout_below="@+id/view_title_skeleton"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/skeleton_text_basic_100_round_10" />
+                android:background="@drawable/skeleton_basic_100_round_10" />
 
             <View
                 android:id="@+id/view_tag_skeleton"
@@ -58,7 +58,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@+id/view_amount_skeleton"
-                android:background="@drawable/skeleton_text_basic_100_round_10" />
+                android:background="@drawable/skeleton_basic_100_round_10" />
 
 
         </RelativeLayout>

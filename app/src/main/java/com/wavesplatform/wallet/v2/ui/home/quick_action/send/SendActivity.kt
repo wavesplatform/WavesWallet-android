@@ -250,7 +250,13 @@ class SendActivity : BaseActivity(), SendView {
                 presenter.amount = BigDecimal.ZERO
             }
         } else {
-            edit_amount.setText(MoneyUtil.getScaledText(amount, assetBalance).clearBalance())
+            val total = if (assetBalance.assetId.isWavesId()) {
+                amount - Constants.WAVES_FEE
+            } else {
+                amount
+            }
+
+            edit_amount.setText(MoneyUtil.getScaledText(total, assetBalance).clearBalance())
         }
     }
 

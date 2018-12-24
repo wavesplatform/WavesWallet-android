@@ -35,6 +35,8 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
         if (item.assetId == currentAssetId) {
             currentAssetIdCheckbox = helper.itemView.checkbox_choose
             helper.itemView.checkbox_choose.isChecked = true
+        } else {
+            helper.itemView.checkbox_choose.isChecked = false
         }
     }
 

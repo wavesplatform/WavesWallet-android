@@ -27,7 +27,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
-                android:background="@drawable/skeleton_text_basic_100_round_7"
+                android:background="@drawable/skeleton_basic_100_round_7"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -37,7 +37,7 @@
                 android:layout_height="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="48dp"
-                android:background="@drawable/skeleton_text_basic_100_round_7"
+                android:background="@drawable/skeleton_basic_100_round_7"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -68,7 +68,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
-                android:background="@drawable/skeleton_text_basic_100_round_7"
+                android:background="@drawable/skeleton_basic_100_round_7"
                 android:layout_marginEnd="88dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +79,7 @@
                 android:layout_height="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="48dp"
-                android:background="@drawable/skeleton_text_basic_100_round_7"
+                android:background="@drawable/skeleton_basic_100_round_7"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
