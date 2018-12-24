@@ -54,7 +54,8 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
     companion object {
 
         fun isAssetIdInExchange(transaction: Transaction, assetId: String) =
-                (transaction.order1?.assetPair?.amountAssetObject?.id == assetId
+                transaction.transactionType() == TransactionType.EXCHANGE_TYPE
+                        && (transaction.order1?.assetPair?.amountAssetObject?.id == assetId
                         || transaction.order1?.assetPair?.priceAssetObject?.id == assetId)
 
         private fun isNotSpam(transaction: Transaction) =
