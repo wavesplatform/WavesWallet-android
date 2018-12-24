@@ -107,11 +107,12 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
             }
         }
 
-        return singleData.map {
+        return singleData.map { transitions ->
             allItemsFromDb = if (assetBalance == null) {
-                it.sortedByDescending { transaction -> transaction.timestamp }
+                transitions.sortedByDescending { transaction -> transaction.timestamp }
             } else {
-                filterDetailed(it, assetBalance!!.assetId)
+                filterDetailed(transitions, assetBalance!!.assetId)
+                        .sortedByDescending { transaction -> transaction.timestamp }
             }
             return@map sortAndConfigToUi(allItemsFromDb)
         }

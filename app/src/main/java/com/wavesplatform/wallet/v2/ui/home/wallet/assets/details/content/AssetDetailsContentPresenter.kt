@@ -23,21 +23,14 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
         runAsync {
             addSubscription(queryAllAsSingle<Transaction>().toObservable()
                     .map {
-                        return@map it
+                        return@map it.filter { transaction ->
+                                    isNotSpam(transaction)
+                                            && (assetId.isWavesId() && transaction.assetId.isNullOrEmpty())
+                                            || AssetDetailsContentPresenter.isAssetIdInExchange(
+                                            transaction, assetId)
+                                            || transaction.assetId == assetId
+                                }
                                 .sortedByDescending { it.timestamp }
-                                .filter { transaction ->
-                                    return@filter isNotSpam(transaction)
-                                }
-                                .filter { transaction ->
-                                    when {
-                                        assetId.isWavesId() ->
-                                            return@filter transaction.assetId.isNullOrEmpty()
-                                        isAssetIdInExchange(transaction, assetId) ->
-                                            return@filter true
-                                        else ->
-                                            return@filter transaction.assetId == assetId
-                                    }
-                                }
                                 .mapTo(ArrayList()) { HistoryItem(HistoryItem.TYPE_DATA, it) }
                                 .take(10)
                                 .toMutableList()
