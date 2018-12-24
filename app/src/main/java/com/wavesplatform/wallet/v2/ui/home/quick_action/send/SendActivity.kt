@@ -92,7 +92,7 @@ class SendActivity : BaseActivity(), SendView {
                 edit_address.setText(recipientAddress)
                 edit_amount.setText(amount)
                 presenter.attachment = attachment
-                presenter.amount = amount.toFloat()
+                presenter.amount = BigDecimal(amount)
             }
             else -> assetEnable(true)
         }
@@ -109,7 +109,7 @@ class SendActivity : BaseActivity(), SendView {
                     linear_fees_error.gone()
                 }
                 if (edit_amount.text?.isNotEmpty() == true) {
-                    presenter.amount = edit_amount.text?.toString()?.toFloatOrNull() ?: 0f
+                    presenter.amount = BigDecimal(edit_amount.text?.toString() ?: "0")
                 }
             }
         }
@@ -199,8 +199,8 @@ class SendActivity : BaseActivity(), SendView {
         launchActivity<SendConfirmationActivity> {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
             putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)
-            putExtra(KEY_INTENT_SELECTED_AMOUNT, presenter.amount)
-            putExtra(KEY_INTENT_GATEWAY_COMMISSION, presenter.gatewayCommission.toFloat())
+            putExtra(KEY_INTENT_SELECTED_AMOUNT, presenter.amount.toPlainString())
+            putExtra(KEY_INTENT_GATEWAY_COMMISSION, presenter.gatewayCommission.toPlainString())
             if (!presenter.attachment.isNullOrEmpty()) {
                 putExtra(KEY_INTENT_ATTACHMENT, presenter.attachment)
             }
@@ -234,7 +234,7 @@ class SendActivity : BaseActivity(), SendView {
                         R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
                         presenter.gatewayCommission.toPlainString(),
                         assetBalance.getName() ?: "")
-                presenter.amount = 0F
+                presenter.amount = BigDecimal.ZERO
             }
         } else if (presenter.type == SendPresenter.Type.WAVES
                 && assetBalance.assetId.isWavesId()) {
@@ -247,7 +247,7 @@ class SendActivity : BaseActivity(), SendView {
                 edit_amount.setText("")
                 horizontal_amount_suggestion.gone()
                 text_amount_error.visiable()
-                presenter.amount = 0F
+                presenter.amount = BigDecimal.ZERO
             }
         } else {
             edit_amount.setText(MoneyUtil.getScaledText(amount, assetBalance).clearBalance())

@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.util.clearAlias
 import com.wavesplatform.wallet.v2.util.makeAsAlias
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
+import java.math.BigDecimal
 import javax.inject.Inject
 
 @InjectViewState
@@ -29,13 +30,13 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     lateinit var coinomatManager: CoinomatManager
 
     var recipient: String? = ""
-    var amount: Float = 0F
+    var amount: BigDecimal = BigDecimal.ZERO
     var attachment: String = ""
     var selectedAsset: AssetBalance? = null
     var assetInfo: AssetInfo? = null
     var moneroPaymentId: String? = null
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
-    var gatewayCommission: Float = 0F
+    var gatewayCommission: BigDecimal = BigDecimal.ZERO
 
 
     fun confirmSend() {
@@ -108,7 +109,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 selectedAsset!!.assetId,
                 App.getAccessManager().getWallet()!!.publicKeyStr,
                 recipient!!,
-                MoneyUtil.getUnscaledValue(totalAmount.toString(), selectedAsset),
+                MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
                 System.currentTimeMillis(),
                 Constants.WAVES_FEE,
                 attachment)
