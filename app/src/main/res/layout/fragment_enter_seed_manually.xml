@@ -51,7 +51,7 @@
                     android:layout_toEndOf="@+id/image_asset"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="14dp"
-                    android:background="@drawable/skeleton_text_basic_100"
+                    android:background="@drawable/skeleton_basic_100_round_4"
                     android:visibility="gone" />
 
                 <android.support.v7.widget.AppCompatTextView
