@@ -1,8 +1,5 @@
 package com.wavesplatform.wallet.v1.util;
 
-import android.util.SparseArray;
-
-import com.wavesplatform.wallet.v1.payload.AssetBalance;
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo;
 
 import java.math.BigDecimal;
