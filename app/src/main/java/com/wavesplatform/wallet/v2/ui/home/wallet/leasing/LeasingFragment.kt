@@ -9,6 +9,9 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ethanhua.skeleton.RecyclerViewSkeletonScreen
+import com.ethanhua.skeleton.Skeleton
+import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Events
@@ -42,6 +45,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
     @Inject
     lateinit var adapterActiveAdapter: LeasingActiveAdapter
     var changeTabBarVisibilityListener: HistoryTabFragment.ChangeTabBarVisibilityListener? = null
+    private var skeletonScreen: ViewSkeletonScreen? = null
 
     override fun configLayoutRes(): Int = R.layout.fragment_leasing
 
@@ -69,8 +73,6 @@ class LeasingFragment : BaseFragment(), LeasingView {
         swipe_container.setOnRefreshListener {
             presenter.getActiveLeasing()
         }
-
-        presenter.getActiveLeasing()
 
         card_view_history.click {
             launchActivity<HistoryActivity> {
@@ -137,6 +139,14 @@ class LeasingFragment : BaseFragment(), LeasingView {
             bottomSheetFragment.configureData(historyItem, position, ArrayList(adapter.data) as ArrayList<Transaction>)
             bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
         }
+
+        skeletonScreen = Skeleton.bind(root)
+                .shimmer(true)
+                .color(R.color.basic100)
+                .load(R.layout.skeleton_leasing_layout)
+                .show()
+
+        presenter.getActiveLeasing()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -156,6 +166,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
     }
 
     override fun showBalances(wavesAsset: AssetBalance) {
+        skeletonScreen?.hide()
         if (wavesAsset.balance ?: 0 > 0) {
             linear_details_balances.visiable()
         } else {
@@ -185,6 +196,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
     }
 
     override fun showActiveLeasingTransaction(transactions: List<Transaction>) {
+        skeletonScreen?.hide()
         swipe_container.isRefreshing = false
         if (transactions.isEmpty()) {
             linear_active_leasing.gone()
