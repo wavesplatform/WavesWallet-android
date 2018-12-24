@@ -36,7 +36,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@+id/image_transaction"
-            android:text="Started Leasing"
+            tools:text="Started Leasing"
             android:textColor="@color/disabled500"
             android:textSize="12sp" />
 
@@ -50,7 +50,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:layout_toEndOf="@+id/image_transaction"
-            android:text="1.99800118"
+            tools:text="1.99800118"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -68,7 +68,7 @@
             android:paddingEnd="4dp"
             android:paddingStart="4dp"
             android:paddingTop="2dp"
-            android:text="WAVES"
+            tools:text="WAVES"
             android:textColor="@color/info500"
             android:textSize="12sp"
             android:visibility="gone"

@@ -241,7 +241,12 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 val textLeasingToAddress = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_leasing_to_address)
                 val imageAddressAction = startLeaseView?.findViewById<AppCompatImageView>(R.id.image_address_action)
 
-                textLeasingToAddress?.text = transaction.recipientAddress
+                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
+                if (nodeLeasingRecipient.isNullOrEmpty()) {
+                    textLeasingToAddress?.text = transaction.recipient.clearAlias()
+                } else {
+                    textLeasingToAddress?.text = nodeLeasingRecipient
+                }
 
                 resolveExistOrNoAddress(textLeasingToName, textLeasingToAddress, imageAddressAction)
 
@@ -309,14 +314,20 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 }
                 historyContainer?.addView(baseInfoLayout)
             }
-            TransactionType.CANCELED_LEASING_TYPE, TransactionType.INCOMING_LEASING_TYPE -> {
+            TransactionType.CANCELED_LEASING_TYPE,
+            TransactionType.INCOMING_LEASING_TYPE -> {
                 val receiveView = inflater?.inflate(R.layout.fragment_bottom_sheet_cancel_or_incoming_leasing_layout, historyContainer, false)
 
                 val textCancelLeasingFromName = receiveView?.findViewById<AppCompatTextView>(R.id.text_cancel_leasing_from_name)
                 val textCancelLeasingFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_cancel_leasing_from_address)
                 val imageAddressAction = receiveView?.findViewById<AppCompatImageView>(R.id.image_address_action)
 
-                textCancelLeasingFromAddress?.text = transaction.sender
+                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
+                if (nodeLeasingRecipient.isNullOrEmpty()) {
+                    textCancelLeasingFromAddress?.text = transaction.recipient.clearAlias()
+                } else {
+                    textCancelLeasingFromAddress?.text = nodeLeasingRecipient
+                }
 
                 if (transaction.status == LeasingStatus.ACTIVE.status) {
                     status?.text = getString(R.string.history_details_active_now)

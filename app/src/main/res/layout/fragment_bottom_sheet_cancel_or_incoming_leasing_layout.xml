@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -26,7 +27,7 @@
             android:visibility="gone"
             android:layout_below="@+id/text_received_from_hint"
             android:layout_marginTop="6dp"
-            android:text="Mr. Big Mike"
+            tools:text="Mr. Big Mike"
             android:textColor="@color/disabled900" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -39,7 +40,7 @@
             android:textSize="14sp"
             android:layout_toStartOf="@+id/image_address_action"
             android:singleLine="true"
-            android:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"
+            tools:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"
             android:textColor="@color/disabled900" />
 
         <android.support.v7.widget.AppCompatImageView
