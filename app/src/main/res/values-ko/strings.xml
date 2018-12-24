@@ -14,7 +14,7 @@
     <string name="address_book_address_validation_required_error">주소가 필요합니다</string>
     <string name="address_book_empty_state">아무것도 없습니다… \n신규 주소를 생성할 수 있습니다</string>
     <string name="address_book_name_validation_already_use_error">이미 사용 중입니다</string>
-    <string name="address_book_name_validation_max_length_error">최대 20자</string>
+    <string name="address_book_name_validation_max_length_error">최대 24자</string>
     <string name="address_book_name_validation_min_length_error">최소 2자</string>
     <string name="address_book_name_validation_required_error">이름이 필요합니다</string>
     <string name="address_book_search">검색</string>
@@ -44,7 +44,7 @@
     <string name="asset_details_decimal">소수점</string>
     <string name="asset_details_description">설명</string>
     <string name="asset_details_error_perfom_transaction">해당 자산으로 트랜잭션을 할 수 없습니다</string>
-    <string name="asset_details_flat_money">명목 화폐</string>
+    <string name="asset_details_fiat_money">명목 화폐</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">대기 주문</string>
     <string name="asset_details_issue_date">발행일</string>
@@ -70,7 +70,7 @@
     <string name="backup_info_button">이해했습니다</string>
     <string name="backup_info_subtitle">Waves Platform은 지난 몇 달간 사기 및 피싱 공격의 빈도가 증가한 것에 대해 경고드리고 싶습니다. 사기범들은 악성코드를 가짜 Waves 클라이언트에 숨기고 보너스와 할인으로 조장하여 사용자들을 유인합니다. \n\n이를 실행하면 귀하의 계정이 해킹되어 모든 자금을 잃게 되므로 절대 SEED를 가짜 \'클라이언트\'에 입력하지 마십시오. \n\n공식 Waves 클라이언트만 사용하세요.</string>
     <string name="backup_info_title">백업 구절을 매우 신중히 다루세요!</string>
-    <string name="backup_pharse">백업 구절</string>
+    <string name="backup_phrase">백업 구절</string>
     <string name="backup_wrriten_down">메모했습니다</string>
     <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
     <string name="buy_and_sell_10">10%</string>
@@ -342,7 +342,7 @@
     <string name="leasing_history_toolbar_title">트랜잭션</string>
     <string name="left_drawer_description">최신 뉴스 및 기사를 확인하고 Waves Platform에서 업데이트하는 이벤트에 대해 알아보세요</string>
     <string name="left_drawer_join_the_waves_community">Waves 커뮤니티에 참여</string>
-    <string name="left_drawer_site">wavescommunity.com</string>
+    <string name="left_drawer_site">forum.wavesplatform.com</string>
     <string name="left_drawer_support">Wavesplatform 지원센터</string>
     <string name="left_drawer_terms_and_conditions">이용 약관</string>
     <string name="left_drawer_whitepaper">백서</string>
@@ -373,7 +373,7 @@
     <string name="network_toolbar_title">네트워크</string>
     <string name="new_account_account_name_hint">계정 이름</string>
     <string name="new_account_account_name_validation_already_exist_error">이미 존재하는 계정 이름입니다</string>
-    <string name="new_account_account_name_validation_length_error">최대 20자</string>
+    <string name="new_account_account_name_validation_length_error">최대 24자</string>
     <string name="new_account_account_name_validation_min_length_error">최소 2자</string>
     <string name="new_account_account_name_validation_required_error">이름이 필요합니다</string>
     <string name="new_account_avatar_description">향후 변경할 수 없습니다</string>
@@ -470,6 +470,8 @@
     <string name="receive_fiat_choose_dialog_ok">확인</string>
     <string name="receive_fiat_choose_dialog_title">화폐 선택</string>
     <string name="receive_fiat_choose_dialog_usd">USD</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">ETH를 출금하려고 하는 지갑 또는 거래소가 Smart-Contracts를 사용하는지 확인하세요. 당사는 해당 트랜잭션을 수신하지 않으며 환불 또한 불가능합니다. 귀하의 자산을 잃게 됩니다.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Smart Contracts에서 ETH를 입금하지 마세요! ERC20 토큰을 입금하지 마세요! Ethereum 입금만 가능합니다.</string>
     <string name="receive_get_verified">인증을 받으세요</string>
     <string name="receive_invoice">인보이스</string>
     <string name="receive_limit">최소 금액은 %1$s %2$s, 최대 금액은 %3$s %4$s</string>
@@ -513,6 +515,8 @@
     <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">수수료를 지불하기 위한 충분한 자금이 없습니다. \nYou must pay 0.001 WAVES transaction fee and %1$s %2$s gateway fee.</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
+    <string name="send_gateway_error_subtitle">나중에 다시 시도하세요</string>
+    <string name="send_gateway_error_title">Coinomat 서비스를 일시적으로 사용할 수 없습니다</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">수수료는 전송하는 금액의 1% 입니다.</string>
     <string name="send_gateway_info_gateway_fee">게이트웨이 수수료는 %1$s %2$s 입니다</string>
     <string name="send_gateway_info_gateway_limits">%1$s 주소를 감지했으며 해당 주소로 Coinomat 게이트웨이를 통해 자산을 송금할 것입니다. 최소 수량은 %2$s %1$s 이며, 최대 수량은 %3$s %1$s 입니다.</string>

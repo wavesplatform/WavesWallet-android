@@ -586,7 +586,7 @@
                 android:layout_marginTop="6dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:text="100,000,000"
+                tools:text="100,000,000"
                 android:textColor="@color/disabled900"
                 android:textSize="14sp" />
 

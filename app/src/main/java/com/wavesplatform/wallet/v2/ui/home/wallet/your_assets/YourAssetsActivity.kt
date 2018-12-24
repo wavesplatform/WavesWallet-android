@@ -32,7 +32,6 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
     @InjectPresenter
     lateinit var presenter: YourAssetsPresenter
 
-
     @Inject
     lateinit var adapter: YourAssetsAdapter
 

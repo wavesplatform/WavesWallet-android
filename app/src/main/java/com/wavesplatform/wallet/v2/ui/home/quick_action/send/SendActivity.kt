@@ -92,7 +92,7 @@ class SendActivity : BaseActivity(), SendView {
                 edit_address.setText(recipientAddress)
                 edit_amount.setText(amount)
                 presenter.attachment = attachment
-                presenter.amount = amount.toFloat()
+                presenter.amount = BigDecimal(amount)
             }
             else -> assetEnable(true)
         }
@@ -108,8 +108,8 @@ class SendActivity : BaseActivity(), SendView {
                     horizontal_amount_suggestion.visiable()
                     linear_fees_error.gone()
                 }
-                if (edit_amount.text!!.isNotEmpty()) {
-                    presenter.amount = s.toString().toFloat()
+                if (edit_amount.text?.isNotEmpty() == true) {
+                    presenter.amount = BigDecimal(edit_amount.text?.toString() ?: "0")
                 }
             }
         }
@@ -199,8 +199,8 @@ class SendActivity : BaseActivity(), SendView {
         launchActivity<SendConfirmationActivity> {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
             putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)
-            putExtra(KEY_INTENT_SELECTED_AMOUNT, presenter.amount)
-            putExtra(KEY_INTENT_GATEWAY_COMMISSION, presenter.gatewayCommission.toFloat())
+            putExtra(KEY_INTENT_SELECTED_AMOUNT, presenter.amount.toPlainString())
+            putExtra(KEY_INTENT_GATEWAY_COMMISSION, presenter.gatewayCommission.toPlainString())
             if (!presenter.attachment.isNullOrEmpty()) {
                 putExtra(KEY_INTENT_ATTACHMENT, presenter.attachment)
             }
@@ -234,7 +234,7 @@ class SendActivity : BaseActivity(), SendView {
                         R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
                         presenter.gatewayCommission.toPlainString(),
                         assetBalance.getName() ?: "")
-                presenter.amount = 0F
+                presenter.amount = BigDecimal.ZERO
             }
         } else if (presenter.type == SendPresenter.Type.WAVES
                 && assetBalance.assetId.isWavesId()) {
@@ -247,10 +247,16 @@ class SendActivity : BaseActivity(), SendView {
                 edit_amount.setText("")
                 horizontal_amount_suggestion.gone()
                 text_amount_error.visiable()
-                presenter.amount = 0F
+                presenter.amount = BigDecimal.ZERO
             }
         } else {
-            edit_amount.setText(MoneyUtil.getScaledText(amount, assetBalance).clearBalance())
+            val total = if (assetBalance.assetId.isWavesId()) {
+                amount - Constants.WAVES_FEE
+            } else {
+                amount
+            }
+
+            edit_amount.setText(MoneyUtil.getScaledText(total, assetBalance).clearBalance())
         }
     }
 
@@ -286,8 +292,15 @@ class SendActivity : BaseActivity(), SendView {
 
     override fun showXRateError() {
         skeletonView!!.hide()
-        relative_gateway_fee.gone()
-        onShowError(R.string.receive_error_network)
+        gateway_fee.text = getString(R.string.send_gateway_error_title)
+        gateway_limits.text = getString(R.string.send_gateway_error_subtitle)
+        relative_do_not_withdraw.gone()
+        monero_layout.gone()
+        text_amount_title.gone()
+        amount_card.gone()
+        horizontal_amount_suggestion.gone()
+        linear_fees_error.gone()
+        button_continue.isEnabled = false
     }
 
     private fun checkRecipient(recipient: String) {
@@ -333,6 +346,9 @@ class SendActivity : BaseActivity(), SendView {
             horizontal_recipient_suggestion.visiable()
             relative_gateway_fee.gone()
             monero_layout.gone()
+            text_amount_title.visiable()
+            amount_card.visiable()
+            button_continue.isEnabled = true
         }
     }
 
@@ -470,21 +486,20 @@ class SendActivity : BaseActivity(), SendView {
                 it.isFavorite
             }
 
-            image_down_arrow.visibility = if (it.isGateway && !it.isWaves()) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
-
             text_asset.gone()
             container_asset.visiable()
 
             checkRecipient(edit_address.text.toString())
+
+            text_amount_title.visiable()
+            amount_card.visiable()
+            button_continue.isEnabled = true
         }
     }
 
     private fun loadGatewayXRate(assetId: String) {
         if (AssetBalance.isGateway(assetId)) {
+            relative_do_not_withdraw.visiable()
             relative_gateway_fee.visiable()
             if (skeletonView == null) {
                 skeletonView = Skeleton.bind(relative_gateway_fee)

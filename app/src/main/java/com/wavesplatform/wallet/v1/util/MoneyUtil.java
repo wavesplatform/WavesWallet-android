@@ -2,29 +2,37 @@ package com.wavesplatform.wallet.v1.util;
 
 import android.util.SparseArray;
 
+import com.wavesplatform.wallet.v1.payload.AssetBalance;
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class MoneyUtil {
 
+    public static BigDecimal ONE_M = new BigDecimal(1000000);
+    public static BigDecimal ONE_K = new BigDecimal(1000);
+
     private static MoneyUtil instance = new MoneyUtil();
 
+    private static String defaultSeparator;
     private final DecimalFormat wavesFormat;
-    private final SparseArray<DecimalFormat> formatsMap = new SparseArray<>();
+    private final List<DecimalFormat> formatsMap;
 
     private MoneyUtil() {
         wavesFormat = createFormatter(8);
+        formatsMap = new ArrayList<>();
         for (int i = 0; i <= 8; ++i) {
-            formatsMap.put(i, createFormatter(i));
+            formatsMap.add(createFormatter(i));
         }
     }
 
-    private DecimalFormat createFormatter(int decimals) {
+    public static DecimalFormat createFormatter(int decimals) {
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         formatter.setMaximumFractionDigits(decimals);
         formatter.setMinimumFractionDigits(decimals);

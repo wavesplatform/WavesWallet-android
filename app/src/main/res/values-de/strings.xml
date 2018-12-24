@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="address_book_address_validation_already_use_error">Bereits in Benutzung</string>
-    <string name="address_book_address_validation_required_error">Adresse ist erforderlich</string>
-    <string name="address_book_name_validation_already_use_error">Bereits in Benutzung</string>
-    <string name="address_book_name_validation_required_error">Name ist erforderlich</string>
-    <string name="address_book_name_validation_max_length_error">20 zeichen maximal</string>
-    <string name="address_book_name_validation_min_length_error">Mindestens 2 zeichen</string>
     <string name="about_fill_payment_details">Sie MÜSSEN das Feld mit den Zahlungsinformationen mit folgenden Informationen ausfüllen:</string>
     <string name="about_fill_payment_info">CNM — Ihre WAVES-Adresse. \nWenn Sie Ihren Account nicht angeben, können wir Ihnen nichts überweisen.</string>
     <string name="about_redirection_message">Nach der Überprüfung erhalten Sie eine E-Mail mit weiteren Anweisungen</string>
@@ -16,7 +10,13 @@
     <string name="add_address_name">Name</string>
     <string name="add_address_toolbar_title">Hinzufügen</string>
     <string name="address_book_add">Hinzufügen</string>
+    <string name="address_book_address_validation_already_use_error">Bereits in Benutzung</string>
+    <string name="address_book_address_validation_required_error">Adresse ist erforderlich</string>
     <string name="address_book_empty_state">Nichts hier… \nSie können eine neue Adresse erstellen</string>
+    <string name="address_book_name_validation_already_use_error">Bereits in Benutzung</string>
+    <string name="address_book_name_validation_max_length_error">24 zeichen maximal</string>
+    <string name="address_book_name_validation_min_length_error">Mindestens 2 zeichen</string>
+    <string name="address_book_name_validation_required_error">Name ist erforderlich</string>
     <string name="address_book_search">Suche</string>
     <string name="address_book_success_deleted">Konto gelöscht</string>
     <string name="address_book_toolbar_title">Adressbuch</string>
@@ -44,7 +44,7 @@
     <string name="asset_details_decimal">Dezimalpunkte</string>
     <string name="asset_details_description">Beschreibung</string>
     <string name="asset_details_error_perfom_transaction">Sie können keine Transaktionen mit diesem Asset durchführen</string>
-    <string name="asset_details_flat_money">Fiat Geld</string>
+    <string name="asset_details_fiat_money">Fiat Geld</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">In Ordern</string>
     <string name="asset_details_issue_date">Ausgabedatum</string>
@@ -70,7 +70,7 @@
     <string name="backup_info_button">ich verstehe</string>
     <string name="backup_info_subtitle">Waves Platform möchte Sie über die erhöhte Häufigkeit von Betrugs- und Phishing-Angriffen im letzten Monat warnen. Betrüger verstecken ihre Malware in ihren eigenen Versionen des Waves-Clients und versprechen Boni und Rabatte, um Nutzer anzulocken. \n\nBitte seien Sie vorsichtig und geben Sie Ihren SEED niemals in diese \'Clients\' ein, da Ihr Konto dadurch gefährdet wird und Sie Ihr gesamtes Geld verlieren. \n\nSie sollten NUR den offiziellen Waves-Client verwenden.</string>
     <string name="backup_info_title">Behandeln Sie Ihren Backup-Satz sorgfältig!</string>
-    <string name="backup_pharse">Backup-Phrase</string>
+    <string name="backup_phrase">Backup-Phrase</string>
     <string name="backup_wrriten_down">Ich habe es aufgeschrieben</string>
     <string name="buy_and_sell_0_001_waves">0,003 Waves</string>
     <string name="buy_and_sell_10">10%</string>
@@ -342,7 +342,7 @@
     <string name="leasing_history_toolbar_title">Transaktionen</string>
     <string name="left_drawer_description">Informieren Sie sich über die neuesten Nachrichten und Artikel und informieren Sie sich über Ereignisse auf der Waves-Plattform</string>
     <string name="left_drawer_join_the_waves_community">Treten Sie der Waves Community bei</string>
-    <string name="left_drawer_site">wavescommunity.com</string>
+    <string name="left_drawer_site">forum.wavesplatform.com</string>
     <string name="left_drawer_support">Unterstützen Sie Wavesplatform</string>
     <string name="left_drawer_terms_and_conditions">Geschäftsbedingungen</string>
     <string name="left_drawer_whitepaper">Whitepaper</string>
@@ -373,7 +373,7 @@
     <string name="network_toolbar_title">Netzwerk</string>
     <string name="new_account_account_name_hint">Accountbezeichnung</string>
     <string name="new_account_account_name_validation_already_exist_error">Accountname bereits verwendet</string>
-    <string name="new_account_account_name_validation_length_error">20 zeichen maximal</string>
+    <string name="new_account_account_name_validation_length_error">24 zeichen maximal</string>
     <string name="new_account_account_name_validation_min_length_error">Mindestens 2 zeichen</string>
     <string name="new_account_account_name_validation_required_error">Name ist erforderlich</string>
     <string name="new_account_avatar_description">Sie können es später nicht mehr ändern</string>
@@ -470,6 +470,8 @@
     <string name="receive_fiat_choose_dialog_ok">Ok</string>
     <string name="receive_fiat_choose_dialog_title">Währung wählen</string>
     <string name="receive_fiat_choose_dialog_usd">USD</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can\’t refund them. You will lose that money.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Please do not deposit ETH form smart contracts! Do not deposit ERC20 tokens! Only Ethereum is allowed.</string>
     <string name="receive_get_verified">Verifiziert werden</string>
     <string name="receive_invoice">Rechnung</string>
     <string name="receive_limit">Das Minimum ist %1$s %2$s, das Maximum ist %3$s %4$s</string>
@@ -513,6 +515,8 @@
     <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">Sie haben nicht genug Geld, um die erforderlichen Gebühren zu zahlen. \nSie müssen 0.001 WAVES-Transaktionsgebühr und %1$s %2$s Gateway-Gebühr zahlen.</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
+    <string name="send_gateway_error_subtitle">Try again later</string>
+    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Die Gebühren betragen 1% des überwiesenen Betrags.</string>
     <string name="send_gateway_info_gateway_fee">Die Gateway-Gebühr beträgt %1$s %2$s</string>
     <string name="send_gateway_info_gateway_limits">Wir haben die Adresse von %1$s erkannt und senden Ihr Geld über das Coinomat-Gateway an diese Adresse. Der Mindestbetrag beträgt %2$s %1$s, der Höchstbetrag ist %3$s %1$s.</string>

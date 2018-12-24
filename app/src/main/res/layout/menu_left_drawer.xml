@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:id="@+id/linear_drawer"
     android:orientation="vertical"
-    android:paddingBottom="24dp"
-    android:paddingTop="24dp">
+    android:paddingTop="24dp"
+    android:paddingBottom="24dp">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_logo"
         android:layout_width="wrap_content"
-        android:paddingStart="24dp"
-        android:paddingEnd="48dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
         app:srcCompat="@drawable/text_logo" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="24dp"
-        android:paddingEnd="48dp"
         android:layout_marginTop="14dp"
         android:lineSpacingExtra="4sp"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp"
         android:text="@string/left_drawer_description"
         android:textColor="@color/basic500"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text_site"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
         android:paddingStart="24dp"
         android:paddingEnd="48dp"
-        android:layout_marginTop="14dp"
         android:text="@string/left_drawer_site"
         android:textColor="@color/black"
         android:textSize="16sp" />
@@ -112,46 +112,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
+        android:lineSpacingExtra="4sp"
         android:paddingStart="24dp"
         android:paddingEnd="48dp"
-        android:lineSpacingExtra="4sp"
         android:text="@string/left_drawer_join_the_waves_community"
         android:textColor="@color/basic500"
         android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:paddingStart="24dp"
-        android:paddingEnd="48dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingStart="24dp"
+        android:paddingEnd="48dp">
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_github"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="14dp"
-            android:clickable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
             app:srcCompat="@drawable/ic_s_github_28" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_telegram"
             android:layout_width="wrap_content"
-            android:layout_marginEnd="14dp"
             android:layout_height="wrap_content"
-            android:clickable="true"
+            android:layout_marginEnd="14dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
             app:srcCompat="@drawable/ic_s_telegram_28" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_discord"
             android:layout_width="wrap_content"
-            android:layout_marginEnd="14dp"
             android:layout_height="wrap_content"
-            android:clickable="true"
+            android:layout_marginEnd="14dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
             app:srcCompat="@drawable/ic_s_discord_28" />
 
         <android.support.v7.widget.AppCompatImageView
@@ -159,17 +159,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="14dp"
-            android:clickable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
             app:srcCompat="@drawable/ic_s_twitter_28" />
 
         <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/image_facebook"
+            android:id="@+id/image_reddit"
             android:layout_width="wrap_content"
-            android:clickable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_s_facebook_28" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_s_reddit_28" />
 
     </LinearLayout>
 

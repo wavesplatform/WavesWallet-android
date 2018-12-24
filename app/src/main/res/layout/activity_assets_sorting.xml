@@ -3,16 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/basic50">
-
-    <View
-        android:id="@+id/view_drag_bg"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/shape_rect_outline_checked"
-        android:visibility="gone" />
+    android:background="@color/basic50"
+    android:descendantFocusability="blocksDescendants">
 
 
     <android.support.design.widget.AppBarLayout
@@ -33,65 +25,29 @@
             app:titleTextAppearance="@style/Toolbar.Title" />
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
+    <View
+        android:id="@+id/view_drag_bg"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/shape_rect_outline_checked"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_assets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/appbar_layout"
-        android:fillViewport="true"
-        android:overScrollMode="never">
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="24dp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <LinearLayout
-                android:id="@+id/linear_recycles"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:descendantFocusability="blocksDescendants"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycle_favorite_assets"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:overScrollMode="never" />
-
-                <View
-                    android:id="@+id/view_divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
-                    android:background="@color/accent100"
-                    android:visibility="gone" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycle_assets"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:overScrollMode="never"
-                    android:paddingBottom="24dp" />
-
-            </LinearLayout>
-
-            <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                app:progress_image="@drawable/ic_loader_24_submit_400" />
-
-
-        </RelativeLayout>
-
-
-    </android.support.v4.widget.NestedScrollView>
+    <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:progress_image="@drawable/ic_loader_24_submit_400" />
 
 </RelativeLayout>

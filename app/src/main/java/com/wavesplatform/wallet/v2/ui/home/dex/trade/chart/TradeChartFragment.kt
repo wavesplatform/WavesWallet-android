@@ -76,6 +76,13 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             showTimeFrameDialog()
         }
 
+        image_refresh.click {
+            linear_charts.gone()
+            progress_bar.show()
+
+            presenter.loadCandles(Date().time, true)
+            presenter.getTradesByPair()
+        }
 
         button_retry.click {
             error_layout.gone()

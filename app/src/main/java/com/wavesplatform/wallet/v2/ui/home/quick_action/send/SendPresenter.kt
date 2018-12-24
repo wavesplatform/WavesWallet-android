@@ -29,7 +29,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     var selectedAsset: AssetBalance? = null
     var recipient: String? = ""
-    var amount: Float = 0F
+    var amount: BigDecimal = BigDecimal.ZERO
     var attachment: String? = ""
     var moneroPaymentId: String? = null
     var recipientAssetId: String? = null
@@ -78,7 +78,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 selectedAsset!!.assetId,
                 App.getAccessManager().getWallet()!!.publicKeyStr,
                 recipient ?: "",
-                MoneyUtil.getUnscaledValue(amount.toString(), selectedAsset),
+                MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
                 System.currentTimeMillis(),
                 Constants.WAVES_FEE,
                 "")
@@ -121,12 +121,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     private fun isGatewayAmountError(): Boolean {
         if (type == Type.GATEWAY && selectedAsset != null && gatewayMax.toFloat() > 0) {
-            val totalAmount = BigDecimal(amount.toDouble()).plus(gatewayCommission).toFloat()
+            val totalAmount = amount + gatewayCommission
             val balance = BigDecimal.valueOf(selectedAsset!!.balance ?: 0,
-                    selectedAsset!!.getDecimals()).toFloat()
+                    selectedAsset!!.getDecimals())
             return !(balance >= totalAmount
-                    && totalAmount >= gatewayMin.toFloat()
-                    && totalAmount <= gatewayMax.toFloat())
+                    && totalAmount >= gatewayMin
+                    && totalAmount <= gatewayMax)
         }
         return false
     }
@@ -171,7 +171,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                             if (xRate == null) {
                                 viewState.showXRateError()
                             } else {
-                                viewState.showXRate(xRate, currencyTo!!)
+                                viewState.showXRate(xRate, currencyTo)
                             }
                         }
                     }, {

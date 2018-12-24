@@ -33,7 +33,7 @@ class TradeActivity : BaseActivity(), TradeView {
     }
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.watchMarket = intent.getParcelableExtra<WatchMarket>(BUNDLE_MARKET)
+        presenter.watchMarket = intent.getParcelableExtra(BUNDLE_MARKET)
 
         setupToolbar(toolbar_view, true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
 

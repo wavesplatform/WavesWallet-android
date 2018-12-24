@@ -49,8 +49,7 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
                             viewState.onShowTunnel(tunnel)
                         }
                     }, {
-                        viewState.onShowError(App.getAppContext()
-                                .getString(R.string.receive_error_network))
+                        viewState.onGatewayError()
                         it.printStackTrace()
                     }))
         }
