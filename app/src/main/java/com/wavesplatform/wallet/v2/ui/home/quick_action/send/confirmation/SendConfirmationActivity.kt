@@ -23,6 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send_confirmation.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
+import java.math.BigDecimal
 import javax.inject.Inject
 
 
@@ -55,24 +56,23 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
 
         presenter.selectedAsset = intent!!.extras!!.getParcelable(KEY_INTENT_SELECTED_ASSET)
         presenter.recipient = intent!!.extras!!.getString(KEY_INTENT_SELECTED_RECIPIENT)
-        presenter.amount = intent!!.extras!!.getFloat(KEY_INTENT_SELECTED_AMOUNT)
+        presenter.amount = BigDecimal(intent!!.extras!!.getString(KEY_INTENT_SELECTED_AMOUNT))
         presenter.moneroPaymentId = intent!!.extras!!.getString(KEY_INTENT_MONERO_PAYMENT_ID)
         presenter.assetInfo = queryFirst { equalTo("id", presenter.selectedAsset!!.assetId) }
         presenter.type = intent!!.extras!!.getSerializable(KEY_INTENT_TYPE) as SendPresenter.Type
 
         if (presenter.type == SendPresenter.Type.GATEWAY) {
-            presenter.gatewayCommission = intent!!.extras!!.getFloat(KEY_INTENT_GATEWAY_COMMISSION)
+            presenter.gatewayCommission = BigDecimal(
+                    intent!!.extras!!.getString(KEY_INTENT_GATEWAY_COMMISSION))
             text_sum.text = "-${(presenter.amount + presenter.gatewayCommission)
-                    .toBigDecimal()
                     .toPlainString()
                     .stripZeros()}"
             text_sum.makeTextHalfBold()
-            text_gateway_fee_value.text = "${presenter.gatewayCommission}" +
+            text_gateway_fee_value.text = "${presenter.gatewayCommission.toPlainString().stripZeros()}" +
                     " ${presenter.selectedAsset!!.getName()}"
             gateway_commission_layout.visiable()
         } else {
             text_sum.text = "-${(presenter.amount)
-                    .toBigDecimal()
                     .toPlainString()
                     .stripZeros()}"
             text_sum.makeTextHalfBold()
