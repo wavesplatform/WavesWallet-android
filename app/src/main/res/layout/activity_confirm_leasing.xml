@@ -56,7 +56,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="1.99800118"
+                    tools:text="1.99800118"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -72,7 +72,7 @@
                     android:paddingEnd="4dp"
                     android:paddingStart="4dp"
                     android:paddingTop="2dp"
-                    android:text="WAVES"
+                    tools:text="WAVES"
                     android:textColor="@color/info500"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="4dp"
-                android:text="≈≈ 0 US Dollar"
+                android:text="≈ 0 US Dollar"
                 android:textColor="@color/disabled500"
                 android:textSize="12sp"
                 android:visibility="gone" />
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="address"
+                tools:text="address"
                 android:textColor="@color/disabled900" />
 
             <android.support.v7.widget.AppCompatImageView

@@ -15,7 +15,6 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentPresenter
 import com.wavesplatform.wallet.v2.util.isWavesId
-import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -108,27 +107,22 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
             }
         }
 
-        return singleData.map {
+        return singleData.map { transitions ->
             allItemsFromDb = if (assetBalance == null) {
-                // all history
-                it.sortedByDescending { it.timestamp }
+                transitions.sortedByDescending { transaction -> transaction.timestamp }
             } else {
-                // history only for detailed asset
-                allItemsFromDb.filter { transaction ->
-                    val assetId = assetBalance!!.assetId
-                    when {
-                        assetId.isWavesId() ->
-                            return@filter transaction.assetId.isNullOrEmpty()
-                        AssetDetailsContentPresenter.isAssetIdInExchange(
-                                transaction, assetId) ->
-                            return@filter true
-                        else ->
-                            return@filter transaction.assetId == assetId
-                    }
-                }
+                filterDetailed(transitions, assetBalance!!.assetId)
+                        .sortedByDescending { transaction -> transaction.timestamp }
             }
-
             return@map sortAndConfigToUi(allItemsFromDb)
+        }
+    }
+
+    private fun filterDetailed(transactions: List<Transaction>, assetId: String): List<Transaction> {
+        return transactions.filter { transaction ->
+            assetId.isWavesId() && transaction.assetId.isNullOrEmpty()
+                    || AssetDetailsContentPresenter.isAssetIdInExchange(transaction, assetId)
+                    || transaction.assetId == assetId
         }
     }
 
