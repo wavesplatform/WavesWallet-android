@@ -14,9 +14,7 @@ import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
-import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment.Companion.REQUEST_SCAN_QR_CODE
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -28,7 +26,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_start_leasing.*
 import pers.victor.ext.*
-import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -54,7 +51,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         setupToolbar(toolbar_view, true, getString(R.string.start_leasing_toolbar), R.drawable.ic_toolbar_back_black)
 
 
-        presenter.wavesAsset = intent.getParcelableExtra(BUNDLE_WAVES)
+        presenter.wavesAssetBalance = intent.getLongExtra(BUNDLE_WAVES, 0L)
 
         text_choose_from_address.click {
             launchActivity<AddressBookActivity>(requestCode = REQUEST_CHOOSE_ADDRESS) {
@@ -174,9 +171,9 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }
                 .map {
                     if (it.toDouble() != 0.0) {
-                        val feeValue = MoneyUtil.getScaledText(Constants.WAVES_FEE, presenter.wavesAsset).toBigDecimal()
+                        val feeValue = MoneyUtil.getScaledText(Constants.WAVES_FEE, Constants.wavesAssetInfo).toBigDecimal()
                         val currentValueWithFee = it.toBigDecimal() + feeValue
-                        val isValid = currentValueWithFee <= presenter.wavesAsset?.getDisplayAvailableBalance()?.toBigDecimal() && currentValueWithFee > feeValue
+                        val isValid = currentValueWithFee <= MoneyUtil.getScaledText(presenter.wavesAssetBalance, Constants.wavesAssetInfo).clearBalance().toBigDecimal() && currentValueWithFee > feeValue
                         presenter.amountValidation = isValid
 
                         if (isValid) {
@@ -200,7 +197,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     it.printStackTrace()
                 }))
 
-        presenter.wavesAsset.notNull {
+        presenter.wavesAssetBalance.notNull {
             afterSuccessLoadWavesBalance(it)
         }
     }
@@ -241,27 +238,27 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         }
     }
 
-    override fun afterSuccessLoadWavesBalance(waves: AssetBalance) {
-        text_asset_value.text = waves.getDisplayAvailableBalance()
+    override fun afterSuccessLoadWavesBalance(waves: Long) {
+        text_asset_value.text = MoneyUtil.getScaledText(waves, Constants.wavesAssetInfo)
 
         linear_quick_balance.children.forEach { children ->
             val quickBalanceView = children as AppCompatTextView
             when (quickBalanceView.tag) {
                 TOTAL_BALANCE -> {
                     quickBalanceView.click {
-                        var balance = if (waves.getAvailableBalance() ?: 0 < Constants.WAVES_DEX_FEE) {
+                        val balance = if (waves < Constants.WAVES_DEX_FEE) {
                             0
                         } else {
-                            waves.getAvailableBalance()?.minus(Constants.WAVES_FEE)
+                            waves.minus(Constants.WAVES_FEE)
                         }
-                        edit_amount.setText(MoneyUtil.getScaledText(balance, waves).clearBalance().toBigDecimal().toString())
+                        edit_amount.setText(MoneyUtil.getScaledText(balance, Constants.wavesAssetInfo).clearBalance().toBigDecimal().toString())
                         edit_amount.setSelection(edit_amount.text.length)
                     }
                 }
                 else -> {
-                    val percentBalance = (waves.getAvailableBalance()?.times((quickBalanceView.tag.toString().toDouble().div(100))))?.toLong()
+                    val percentBalance = (waves.times((quickBalanceView.tag.toString().toDouble().div(100)))).toLong()
                     quickBalanceView.click {
-                        edit_amount.setText(MoneyUtil.getScaledText(percentBalance, waves))
+                        edit_amount.setText(MoneyUtil.getScaledText(percentBalance, Constants.wavesAssetInfo).clearBalance().toBigDecimal().toString())
                         edit_amount.setSelection(edit_amount.text.length)
                     }
                 }
@@ -286,7 +283,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         var REQUEST_LEASING_CONFIRMATION = 59
         var REQUEST_CANCEL_LEASING_CONFIRMATION = 60
         var REQUEST_SCAN_QR_CODE = 52
-        var BUNDLE_WAVES = "waves"
+        var BUNDLE_WAVES = "waves_balance"
         var TOTAL_BALANCE = "100"
     }
 }
