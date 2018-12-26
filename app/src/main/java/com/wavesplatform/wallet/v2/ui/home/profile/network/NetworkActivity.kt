@@ -56,12 +56,11 @@ class NetworkActivity : BaseActivity(), NetworkView {
             on { s, start, before, count ->
                 val spamUrlValidation = Validation(til_spam_filter)
                         .and(NotEmptyTrimRule(R.string.network_spam_url_validation_url_empty))
-                        .and(NotEqualRule((prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM)), " "))
                         .and(UrlRule(R.string.network_spam_url_validation_bad_url))
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
-                                presenter.spamUrlFieldValid = true
+                                presenter.spamUrlFieldValid = prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM) != edit_spam_filter.text.toString()
                                 isFieldsValid()
                             }
 
@@ -69,13 +68,14 @@ class NetworkActivity : BaseActivity(), NetworkView {
                                 presenter.spamUrlFieldValid = false
                                 isFieldsValid()
                             }
-                        }, spamUrlValidation
-                        )
+                        }, spamUrlValidation)
             }
         }
 
         button_set_default.click {
-            edit_spam_filter.setText(Constants.URL_SPAM)
+            if (edit_spam_filter.text.toString() != Constants.URL_SPAM) {
+                edit_spam_filter.setText(Constants.URL_SPAM)
+            }
             switch_spam_filter.isChecked = false
         }
 
