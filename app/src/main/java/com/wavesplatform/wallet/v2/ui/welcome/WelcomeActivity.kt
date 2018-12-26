@@ -141,7 +141,11 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     }
 
     override fun onBackPressed() {
-        exit()
+        if (slidingRootNav.isMenuOpened) {
+            slidingRootNav.closeMenu(true)
+        } else {
+            exit()
+        }
     }
 
     companion object {
