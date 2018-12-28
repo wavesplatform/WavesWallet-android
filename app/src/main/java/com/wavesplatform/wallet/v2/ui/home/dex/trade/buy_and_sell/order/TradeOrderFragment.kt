@@ -425,7 +425,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                         val percentBalance = (balance.times((quickBalanceView.tag.toString().toDouble().div(100)))).toLong()
                         quickBalanceView.click {
                             edit_amount.setText(MoneyUtil.getScaledText(percentBalance, presenter.data?.watchMarket?.market?.amountAssetDecimals
-                                    ?: 0))
+                                    ?: 0).clearBalance())
                             edit_amount.setSelection(edit_amount.text?.length ?: 0)
                         }
                     }
