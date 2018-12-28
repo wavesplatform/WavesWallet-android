@@ -49,12 +49,11 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
                         assets.addAll(it.first)
                         assets.addAll(it.second)
 
-                        val filteredSpamAssets = if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-                            assets
-                        } else {
+                        val filteredSpamAssets = if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, false)) {
                             assets.filter { !it.isSpam }.toMutableList()
+                        } else {
+                            assets
                         }
-
                         runOnUiThread {
                             viewState.showAssets(filteredSpamAssets)
                         }
