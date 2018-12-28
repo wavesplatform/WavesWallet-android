@@ -369,7 +369,7 @@
     <string name="network_spam_filter">Spam Filtresi</string>
     <string name="network_spam_url_validation_bad_url">Hatalı URL</string>
     <string name="network_spam_url_validation_url_empty">URL gerekli</string>
-    <string name="network_switch_show_spam">Show spam</string>
+    <string name="network_switch_off_spam_filtering">Spam filtresi</string>
     <string name="network_toolbar_title">Ağ</string>
     <string name="new_account_account_name_hint">Hesap adı</string>
     <string name="new_account_account_name_validation_already_exist_error">Hesap adı zaten kullanımda</string>
