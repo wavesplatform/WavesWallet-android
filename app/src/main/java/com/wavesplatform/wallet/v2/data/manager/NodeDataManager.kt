@@ -133,6 +133,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     val assetBalance = queryFirst<AssetBalance> { equalTo("assetId", id) }
                     if (assetBalance?.isGateway == false) {
                         assetBalance.delete { equalTo("assetId", id) }
+                    } else {
+                        assetBalance?.balance = 0
+                        assetBalance?.save()
                     }
                 }
             }
