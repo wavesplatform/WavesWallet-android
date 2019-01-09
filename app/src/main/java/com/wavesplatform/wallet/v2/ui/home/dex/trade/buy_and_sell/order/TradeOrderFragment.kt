@@ -302,21 +302,24 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
         text_bid.click {
             presenter.data?.bidPrice.notNull { price ->
-                edit_limit_price.setText(MoneyUtil.getScaledText(price, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                edit_limit_price.setText(MoneyUtil.getScaledPrice(price, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                        ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros())
             }
         }
 
         text_ask.click {
             presenter.data?.askPrice.notNull { price ->
-                edit_limit_price.setText(MoneyUtil.getScaledText(price, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                edit_limit_price.setText(MoneyUtil.getScaledPrice(price, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                        ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros())
             }
         }
 
         text_last.click {
             presenter.data?.lastPrice.notNull { price ->
-                edit_limit_price.setText(MoneyUtil.getScaledText(price, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                edit_limit_price.setText(MoneyUtil.getScaledPrice(price, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                        ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros())
             }
         }
