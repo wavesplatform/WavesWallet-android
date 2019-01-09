@@ -148,7 +148,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 .map {
                     if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
                         val isValid = it.toBigDecimal() <= MoneyUtil.getScaledText((presenter.currentAmountBalance
-                                ?: 0) - Constants.WAVES_DEX_FEE, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                                ?: 0) - getFeeIfNeed(), presenter.data?.watchMarket?.market?.amountAssetDecimals
                                 ?: 0).clearBalance().toBigDecimal()
                         presenter.amountValidation = isValid
 
@@ -302,21 +302,24 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
         text_bid.click {
             presenter.data?.bidPrice.notNull { price ->
-                edit_limit_price.setText(MoneyUtil.getScaledText(price, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                edit_limit_price.setText(MoneyUtil.getScaledPrice(price, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                        ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros())
             }
         }
 
         text_ask.click {
             presenter.data?.askPrice.notNull { price ->
-                edit_limit_price.setText(MoneyUtil.getScaledText(price, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                edit_limit_price.setText(MoneyUtil.getScaledPrice(price, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                        ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros())
             }
         }
 
         text_last.click {
             presenter.data?.lastPrice.notNull { price ->
-                edit_limit_price.setText(MoneyUtil.getScaledText(price, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                edit_limit_price.setText(MoneyUtil.getScaledPrice(price, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                        ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros())
             }
         }
@@ -380,6 +383,14 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
         button_confirm.click {
             presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
+        }
+    }
+
+    private fun getFeeIfNeed(): Long {
+        return if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true) {
+            Constants.WAVES_DEX_FEE
+        } else {
+            0L
         }
     }
 
