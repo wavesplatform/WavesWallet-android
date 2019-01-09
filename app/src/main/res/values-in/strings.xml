@@ -369,7 +369,7 @@
     <string name="network_spam_filter">Filter spam</string>
     <string name="network_spam_url_validation_bad_url">Url buruk</string>
     <string name="network_spam_url_validation_url_empty">Url wajib diisi</string>
-    <string name="network_switch_show_spam">Show spam</string>
+    <string name="network_switch_off_spam_filtering">Pemfilteran spam</string>
     <string name="network_toolbar_title">Jaringan</string>
     <string name="new_account_account_name_hint">Nama akun</string>
     <string name="new_account_account_name_validation_already_exist_error">Nama akun sudah digunakan</string>

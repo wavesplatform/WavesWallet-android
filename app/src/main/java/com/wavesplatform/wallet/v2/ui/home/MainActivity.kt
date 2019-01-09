@@ -390,8 +390,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        exit()
+        if (slidingRootNav.isMenuOpened) {
+            slidingRootNav.closeMenu(true)
+        } else {
+            exit()
+        }
     }
 
     companion object {

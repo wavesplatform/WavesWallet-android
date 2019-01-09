@@ -185,10 +185,10 @@ class HistoryTabItemAdapter @Inject constructor() :
                             view.text_transaction_value.text =
                                     getScaledAmount(item.data.amount, decimals)
                         }
-                        if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-                            view.text_tag_spam.gone()
-                        } else {
+                        if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, false)) {
                             view.text_tag_spam.visiable()
+                        } else {
+                            view.text_tag_spam.gone()
                         }
                         view.text_tag.gone()
                     } else {
