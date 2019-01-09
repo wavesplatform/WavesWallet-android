@@ -108,7 +108,7 @@ class SendActivity : BaseActivity(), SendView {
                     horizontal_amount_suggestion.visiable()
                     linear_fees_error.gone()
                 }
-                if (edit_amount.text?.isNotEmpty() == true) {
+                if (edit_amount.text?.toString()?.isNotBlank() == true) {
                     presenter.amount = BigDecimal(edit_amount.text?.toString() ?: "0")
                 }
             }
