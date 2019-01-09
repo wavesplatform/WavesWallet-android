@@ -154,8 +154,8 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                     "${MoneyUtil.getScaledText(transaction.amount, transaction.asset)}" +
                     " ${transaction.asset?.name}"
         }
-        if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-            layout.text_tag_spam.gone()
+        if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
+            layout.text_tag_spam.visiable()
         } else {
             layout.text_tag_spam.visiable()
         }

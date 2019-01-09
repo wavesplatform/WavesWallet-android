@@ -30,10 +30,10 @@ class SpamDataManager @Inject constructor() : BaseDataManager() {
 
                     return@map spam
                 }.map { spamListFromDb ->
-                    if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-                        return@map arrayListOf<SpamAsset>()
-                    } else {
+                    if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, false)) {
                         return@map spamListFromDb
+                    } else {
+                        return@map arrayListOf<SpamAsset>()
                     }
                 }
     }

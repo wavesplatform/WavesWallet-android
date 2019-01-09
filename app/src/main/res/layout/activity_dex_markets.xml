@@ -54,7 +54,6 @@
                     android:drawableStart="@drawable/ic_search_24_basic_500"
                     android:fitsSystemWindows="true"
                     android:hint="@string/dex_markets_list_search"
-                    android:longClickable="false"
                     android:padding="8dp"
                     android:singleLine="true"
                     android:textColor="@color/black"

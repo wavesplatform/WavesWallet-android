@@ -21,7 +21,7 @@ import pers.victor.ext.*
 
 abstract class BaseDrawerActivity : BaseActivity() {
 
-    private lateinit var slidingRootNav: SlidingRootNav
+    lateinit var slidingRootNav: SlidingRootNav
     private var view: View? = null
     private var drawerIcon = findDrawable(R.drawable.ic_toolbar_menu)
 
@@ -97,10 +97,10 @@ abstract class BaseDrawerActivity : BaseActivity() {
     }
 
     fun openUrlWithIntent(url: String) {
-        if (isNetworkConnected()){
+        if (isNetworkConnected()) {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(browserIntent)
-        }else{
+        } else {
             showNetworkError()
         }
     }

@@ -115,7 +115,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="@color/basic500"
-        android:text="@string/network_switch_show_spam"
+        android:text="@string/network_switch_off_spam_filtering"
         />
 
         <android.support.v7.widget.SwitchCompat
