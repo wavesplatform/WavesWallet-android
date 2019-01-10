@@ -40,6 +40,9 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         recycle_language.layoutManager = LinearLayoutManager(this)
+        val logo = layoutInflater
+                .inflate(R.layout.view_splash_text_logo, null)
+        adapter.setHeaderView(logo)
         recycle_language.adapter = adapter
 
         adapter.setNewData(presenter.getLanguages())
@@ -81,12 +84,15 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
     private fun enterAnimation() {
         image_logo.post {
             image_logo.animate()
-                    .translationY(-(image_logo.y - dp2px(80)))
+                    .translationYBy(- image_logo.top.toFloat() )
                     .setDuration(500)
                     .withEndAction {
+                        /*image_logo.animate()
+                                .alpha(0f)
+                                .setDuration(500)
+                                .start()*/
                         recycle_language.animate()
                                 .alpha(1f)
-                                .translationY(0f)
                                 .setDuration(500)
                                 .start()
                     }

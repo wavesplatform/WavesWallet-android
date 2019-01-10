@@ -1,70 +1,42 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relative_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/white">
 
-    <RelativeLayout
-        android:id="@+id/relative_root"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_language"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="false"
+        android:overScrollMode="never"
+        android:alpha="0"
+        android:paddingBottom="64dp" />
 
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:overScrollMode="never">
+    <FrameLayout
+        android:id="@+id/frame_button_continue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="@drawable/gradient_language_block"
+        android:visibility="gone">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:descendantFocusability="beforeDescendants"
-                android:focusable="true"
-                android:focusableInTouchMode="true">
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    app:srcCompat="@drawable/text_logo" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycle_language"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="24dp"
-                    android:layout_marginTop="160dp"
-                    android:alpha="0"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:overScrollMode="never"
-                    android:paddingBottom="64dp"
-                    android:translationY="-40dp" />
-
-            </RelativeLayout>
-
-        </android.support.v4.widget.NestedScrollView>
-
-        <FrameLayout
-            android:id="@+id/frame_button_continue"
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/button_continue"
+            style="@style/WavesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:visibility="gone"
-            android:background="@drawable/gradient_language_block">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/choose_language_confirm" />
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/button_continue"
-                style="@style/WavesButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:text="@string/choose_language_confirm"
-               />
-        </FrameLayout>
-    </RelativeLayout>
+    </FrameLayout>
+
+    <include
+        android:id="@+id/image_logo"
+        layout="@layout/view_splash_text_logo" />
+
 </FrameLayout>
