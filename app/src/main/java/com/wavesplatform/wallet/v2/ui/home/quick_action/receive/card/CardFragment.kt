@@ -93,8 +93,10 @@ class CardFragment : BaseFragment(), CardView {
     }
 
     override fun showRate(rate: String?) {
-        rate.notNull {
-            text_amount_in_dollar.text = "≈ ${String.format("%.8f", it.toDouble())} WAVES"
+        if (rate.isNullOrEmpty()) {
+            text_amount_in_dollar.text = ""
+        } else {
+            text_amount_in_dollar.text = "≈ ${String.format("%.8f", rate.toDouble())} WAVES"
         }
     }
 
