@@ -32,6 +32,10 @@ class AssetDetailsAvatarPagerAdapter @Inject constructor(@ApplicationContext var
         return 1f
     }
 
+    override fun getItemPosition(`object`: Any): Int {
+        return PagerAdapter.POSITION_NONE
+    }
+
     override fun getCount(): Int {
         return items.size
     }
