@@ -2,15 +2,20 @@
     android:id="@+id/relative_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     android:background="@color/white">
+
+    <include
+        android:id="@+id/image_logo"
+        android:layout_gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/view_splash_text_logo" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_language"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:nestedScrollingEnabled="false"
         android:overScrollMode="never"
         android:alpha="0"
         android:paddingBottom="64dp" />
@@ -34,9 +39,5 @@
             android:text="@string/choose_language_confirm" />
 
     </FrameLayout>
-
-    <include
-        android:id="@+id/image_logo"
-        layout="@layout/view_splash_text_logo" />
 
 </FrameLayout>

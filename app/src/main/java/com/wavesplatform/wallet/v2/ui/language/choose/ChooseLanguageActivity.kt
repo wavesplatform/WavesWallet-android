@@ -6,6 +6,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.language.LanguageAdapter
@@ -73,7 +74,7 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
 
         button_continue.click {
             val item = adapter.getItem(presenter.currentLanguagePosition)
-            item.notNull { langItem->
+            item.notNull { langItem ->
                 presenter.saveLanguage(langItem.language.code)
             }
             exitAnimation()
@@ -84,16 +85,14 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
     private fun enterAnimation() {
         image_logo.post {
             image_logo.animate()
-                    .translationYBy(- image_logo.top.toFloat() )
+                    .translationY(- image_logo.y
+                            + ViewUtils.convertDpToPixel(12f, this))
                     .setDuration(500)
                     .withEndAction {
-                        /*image_logo.animate()
-                                .alpha(0f)
-                                .setDuration(500)
-                                .start()*/
                         recycle_language.animate()
                                 .alpha(1f)
-                                .setDuration(500)
+                                .setDuration(50)
+                                .withEndAction { image_logo.alpha = 0f }
                                 .start()
                     }
                     .start()
