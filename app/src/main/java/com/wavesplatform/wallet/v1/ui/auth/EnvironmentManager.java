@@ -7,7 +7,7 @@ public class EnvironmentManager {
     private static final String TAG = EnvironmentManager.class.getSimpleName();
 
     public static final String KEY_ENV_PROD = "env_prod";
-    public static final String KEY_ENV_TESTNET = "env_testnet";
+    private static final String KEY_ENV_TESTNET = "env_testnet";
 
     private static EnvironmentManager instance;
 
@@ -16,7 +16,7 @@ public class EnvironmentManager {
     private PrefsUtil prefsUtil;
     private AppUtil appUtil;
 
-    public EnvironmentManager(PrefsUtil prefsUtil, AppUtil appUtil) {
+    private EnvironmentManager(PrefsUtil prefsUtil, AppUtil appUtil) {
         this.prefsUtil = prefsUtil;
         this.appUtil = appUtil;
         String storedEnv = prefsUtil.getEnvironment();
@@ -29,10 +29,6 @@ public class EnvironmentManager {
 
     public static EnvironmentManager get() {
         return instance;
-    }
-
-    public boolean shouldShowDebugMenu() {
-        return current != Environment.PRODUCTION;
     }
 
     public Environment current() {
@@ -51,21 +47,12 @@ public class EnvironmentManager {
 
         private String name;
         private String nodeUrl;
-        private String matherUrl;
-        private String dataFeedUrl;
-        private char addressScheme;
 
-        private Environment(String name, String nodeUrl, String matherUrl, String dataFeedUrl,  char addressScheme) {
+        Environment(String name, String nodeUrl, String matherUrl, String dataFeedUrl, char addressScheme) {
             this.name = name;
             this.nodeUrl = nodeUrl;
-            this.dataFeedUrl = dataFeedUrl;
-            this.matherUrl = matherUrl;
-            this.addressScheme = addressScheme;
         }
 
-        public String getMatherUrl() {
-            return matherUrl;
-        }
         public String getName() {
             return name;
         }
@@ -74,16 +61,8 @@ public class EnvironmentManager {
             return nodeUrl;
         }
 
-        public String getDataFeedUrl() {
-            return dataFeedUrl;
-        }
-
-        public char getAddressScheme() {
-            return addressScheme;
-        }
-
         public static Environment fromString(String text) {
-            if(text != null) {
+            if (text != null) {
                 Environment[] all = values();
 
                 for (Environment anAll : all) {
@@ -92,10 +71,7 @@ public class EnvironmentManager {
                     }
                 }
             }
-
             return null;
         }
-
     }
-
 }

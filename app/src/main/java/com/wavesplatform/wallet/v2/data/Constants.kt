@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.data
 
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
@@ -33,7 +34,7 @@ object Constants {
     const val WAVES_DEX_FEE = 300000L
     const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
     const val VERSION = 2
-    const val ADDRESS_SCHEME = 'W'
+    const val ADDRESS_SCHEME = BuildConfig.ADDRESS_SCHEME.get(0)
 
     const val SELL_ORDER_TYPE = "sell"
     const val BUY_ORDER_TYPE = "buy"
@@ -66,18 +67,17 @@ object Constants {
     const val RESULT_OK = 200
     const val RESULT_OK_NO_RESULT = 204
 
-    const val WAVES_ASSET_ID = ""
-    const val MONERO_ASSET_ID = "5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3"
-    const val BITCOIN_ASSET_ID = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS"
-    const val ETHEREUM_ASSET_ID = "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu"
-    const val BITCOINCASH_ASSET_ID = "zMFqXuoyrn5w17PFurTqxB7GsS71fp9dfk6XFwxbPCy"
-    const val LIGHTCOIN_ASSET_ID = "HZk1mbfuJpmxU1Fs4AX5MWLVYtctsNcg6e2C6VKqK8zk"
-    const val ZEC_ASSET_ID = "BrjUWjndUanm5VsJkbUip8VRYy6LWJePtxya3FNv4TQa"
-    const val DASH_ASSET_ID = "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H"
-
-    const val WUSD = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck"
-    const val WEUR = "Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU"
-    const val WTRY = "2mX5DzVKWrAJw8iwdJnV2qtoeVG9h5nTDpTqC1wb1WEN"
+    const val WAVES_ASSET_ID = BuildConfig.WAVES_ASSET_ID
+    const val MONERO_ASSET_ID = BuildConfig.MONERO_ASSET_ID
+    const val BITCOIN_ASSET_ID = BuildConfig.BITCOIN_ASSET_ID
+    const val ETHEREUM_ASSET_ID = BuildConfig.ETHEREUM_ASSET_ID
+    const val BITCOINCASH_ASSET_ID = BuildConfig.BITCOINCASH_ASSET_ID
+    const val LIGHTCOIN_ASSET_ID = BuildConfig.LIGHTCOIN_ASSET_ID
+    const val ZEC_ASSET_ID = BuildConfig.ZEC_ASSET_ID
+    const val DASH_ASSET_ID = BuildConfig.DASH_ASSET_ID
+    const val WUSD_ASSET_ID = BuildConfig.WUSD_ASSET_ID
+    const val WEUR_ASSET_ID = BuildConfig.WEUR_ASSET_ID
+    const val WTRY_ASSET_ID = BuildConfig.WTRY_ASSET_ID
 
     val alphabetColor = hashMapOf(
             Pair("a", R.color.a),
@@ -120,12 +120,12 @@ object Constants {
             AssetBalance(WAVES_ASSET_ID, quantity = 10000000000000000L, isFavorite = true, issueTransaction = IssueTransaction(name = "WAVES", decimals = 8, quantity = 10000000000000000L, timestamp = 1460419200000L), isGateway = true),
             AssetBalance(BITCOIN_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = BITCOIN_ASSET_ID, id = BITCOIN_ASSET_ID, name = "Bitcoin", decimals = 8, quantity = 2100000000000000, timestamp = 1480698060000L), isGateway = true),
             AssetBalance(ETHEREUM_ASSET_ID, quantity = 10000000000000000, issueTransaction = IssueTransaction(assetId = ETHEREUM_ASSET_ID, id = ETHEREUM_ASSET_ID, name = "Ethereum", decimals = 8, quantity = 10000000000000000, timestamp = 1500385140000L), isGateway = true),
-            AssetBalance(WUSD, quantity = 100000000000, issueTransaction = IssueTransaction(assetId = WUSD, id = WUSD, name = "US Dollar", decimals = 2, quantity = 100000000000, timestamp = 1480431300000L), isFiatMoney = true, isGateway = true),
-            AssetBalance(WEUR, quantity = 100000000000, issueTransaction = IssueTransaction(assetId = WEUR, id = WEUR, name = "Euro", decimals = 2, quantity = 10000000000, timestamp = 1480432200000L), isFiatMoney = true, isGateway = true),
+            AssetBalance(WUSD_ASSET_ID, quantity = 100000000000, issueTransaction = IssueTransaction(assetId = WUSD_ASSET_ID, id = WUSD_ASSET_ID, name = "US Dollar", decimals = 2, quantity = 100000000000, timestamp = 1480431300000L), isFiatMoney = true, isGateway = true),
+            AssetBalance(WEUR_ASSET_ID, quantity = 100000000000, issueTransaction = IssueTransaction(assetId = WEUR_ASSET_ID, id = WEUR_ASSET_ID, name = "Euro", decimals = 2, quantity = 10000000000, timestamp = 1480432200000L), isFiatMoney = true, isGateway = true),
             AssetBalance(LIGHTCOIN_ASSET_ID, quantity = 8400000000000000, issueTransaction = IssueTransaction(assetId = LIGHTCOIN_ASSET_ID, id = LIGHTCOIN_ASSET_ID, name = "Litecoin", decimals = 8, quantity = 8400000000000000, timestamp = 1505472180000L), isGateway = true),
             AssetBalance(ZEC_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = ZEC_ASSET_ID, id = ZEC_ASSET_ID, name = "Zcash", decimals = 8, quantity = 2100000000000000, timestamp = 1507039380000L), isGateway = true),
             AssetBalance(BITCOINCASH_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = BITCOINCASH_ASSET_ID, id = BITCOINCASH_ASSET_ID, name = "Bitcoin Cash", decimals = 8, quantity = 2100000000000000, timestamp = 1501678320000L), isGateway = true),
-            AssetBalance(WTRY, quantity = 100000000, issueTransaction = IssueTransaction(assetId = WTRY, id = WTRY, name = "TRY", decimals = 2, quantity = 100000000, timestamp = 1512411060000L), isFiatMoney = true, isGateway = true),
+            AssetBalance(WTRY_ASSET_ID, quantity = 100000000, issueTransaction = IssueTransaction(assetId = WTRY_ASSET_ID, id = WTRY_ASSET_ID, name = "TRY", decimals = 2, quantity = 100000000, timestamp = 1512411060000L), isFiatMoney = true, isGateway = true),
             AssetBalance(DASH_ASSET_ID, quantity = 1890000000000000, issueTransaction = IssueTransaction(assetId = DASH_ASSET_ID, id = DASH_ASSET_ID, name = "DASH", decimals = 8, quantity = 1890000000000000, timestamp = 1524430860000L), isGateway = true),
             AssetBalance(MONERO_ASSET_ID, quantity = 1603984700000000, issueTransaction = IssueTransaction(assetId = MONERO_ASSET_ID, id = MONERO_ASSET_ID, name = "Monero", decimals = 8, quantity = 1603984700000000, timestamp = 1526572200000L), isGateway = true))
 
@@ -133,9 +133,9 @@ object Constants {
             Pair(WAVES_ASSET_ID, R.drawable.logo_waves_48),
             Pair(BITCOIN_ASSET_ID, R.drawable.logo_bitcoin_48),
             Pair(ETHEREUM_ASSET_ID, R.drawable.logo_ethereum_48),
-            Pair(WUSD, R.drawable.logo_usd_48),
-            Pair(WEUR, R.drawable.logo_euro_48),
-            Pair(WTRY, R.drawable.logo_lira_48),
+            Pair(WUSD_ASSET_ID, R.drawable.logo_usd_48),
+            Pair(WEUR_ASSET_ID, R.drawable.logo_euro_48),
+            Pair(WTRY_ASSET_ID, R.drawable.logo_lira_48),
             Pair(LIGHTCOIN_ASSET_ID, R.drawable.logo_ltc_48),
             Pair(MONERO_ASSET_ID, R.drawable.logo_monero_48),
             Pair(BITCOINCASH_ASSET_ID, R.drawable.logo_bitcoincash_48),
@@ -161,9 +161,9 @@ object Constants {
             DASH_ASSET_ID)
 
     val defaultFiat = arrayOf(
-            WEUR,
-            WUSD,
-            WTRY)
+            WEUR_ASSET_ID,
+            WUSD_ASSET_ID,
+            WTRY_ASSET_ID)
 
     val ENABLE_VIEW = 1f
     val DISABLE_VIEW = 0.3f

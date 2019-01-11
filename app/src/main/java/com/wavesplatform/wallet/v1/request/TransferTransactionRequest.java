@@ -8,8 +8,8 @@ import com.wavesplatform.wallet.v1.crypto.Base58;
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider;
 import com.wavesplatform.wallet.v1.crypto.Hash;
 import com.wavesplatform.wallet.v1.payload.TransferTransaction;
-import com.wavesplatform.wallet.v1.util.AddressUtil;
 import com.wavesplatform.wallet.v1.util.SignUtil;
+import com.wavesplatform.wallet.v2.util.AddressUtil;
 
 public class TransferTransactionRequest {
     public static int SignatureLength = 64;
