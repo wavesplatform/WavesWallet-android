@@ -50,10 +50,10 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
                     return@map spam
                 }.map { spamListFromDb ->
-                    if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-                        return@map arrayListOf<SpamAsset>()
-                    } else {
+                    if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
                         return@map spamListFromDb
+                    } else {
+                        return@map arrayListOf<SpamAsset>()
                     }
                 }
     }
@@ -133,6 +133,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     val assetBalance = queryFirst<AssetBalance> { equalTo("assetId", id) }
                     if (assetBalance?.isGateway == false) {
                         assetBalance.delete { equalTo("assetId", id) }
+                    } else {
+                        assetBalance?.balance = 0
+                        assetBalance?.save()
                     }
                 }
             }

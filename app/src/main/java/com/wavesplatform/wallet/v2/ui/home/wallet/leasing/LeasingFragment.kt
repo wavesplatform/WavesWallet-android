@@ -190,7 +190,9 @@ class LeasingFragment : BaseFragment(), LeasingView {
 
         button_start_lease.click {
             launchActivity<StartLeasingActivity> {
-                putExtra(StartLeasingActivity.BUNDLE_WAVES, wavesAsset)
+                val bundle = Bundle()
+                bundle.putLong(StartLeasingActivity.BUNDLE_WAVES, wavesAsset.getAvailableBalance() ?: 0)
+                putExtras(bundle)
             }
         }
     }
