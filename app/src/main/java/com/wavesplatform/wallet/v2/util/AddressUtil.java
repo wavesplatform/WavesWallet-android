@@ -3,7 +3,7 @@ package com.wavesplatform.wallet.v2.util;
 import com.google.common.primitives.Bytes;
 import com.wavesplatform.wallet.v1.crypto.Base58;
 import com.wavesplatform.wallet.v1.crypto.Hash;
-import com.wavesplatform.wallet.v2.data.Constants;
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 
 import java.util.Arrays;
 
@@ -20,7 +20,8 @@ public class AddressUtil {
 
     public static String addressFromPublicKey(byte[] publicKey) {
         byte[] publicKeyHash = Arrays.copyOf(Hash.secureHash(publicKey), HashLength);
-        byte[] withoutChecksum = Bytes.concat(new byte[] {AddressVersion, Constants.ADDRESS_SCHEME}, publicKeyHash);
+        byte[] withoutChecksum = Bytes.concat(new byte[] {AddressVersion,
+                (byte) EnvironmentManager.get().current().getNetCode()}, publicKeyHash);
         return Base58.encode(Bytes.concat(withoutChecksum, calcCheckSum(withoutChecksum)));
     }
 
@@ -28,7 +29,8 @@ public class AddressUtil {
         try {
             byte[] bytes = Base58.decode(publicKey);
             byte[] publicKeyHash = Arrays.copyOf(Hash.secureHash(bytes), HashLength);
-            byte[] withoutChecksum = Bytes.concat(new byte[] {AddressVersion, Constants.ADDRESS_SCHEME}, publicKeyHash);
+            byte[] withoutChecksum = Bytes.concat(new byte[] {AddressVersion,
+                    (byte) EnvironmentManager.get().current().getNetCode()}, publicKeyHash);
             return Base58.encode(Bytes.concat(withoutChecksum, calcCheckSum(withoutChecksum)));
         } catch (Exception e) {
             return "Unknown address";

@@ -69,6 +69,7 @@ public class App extends DaggerApplication {
         RxJavaPlugins.setErrorHandler(throwable -> Log.e(RX_ERROR_TAG, throwable.getMessage(), throwable));
 
         AppUtil appUtil = new AppUtil(this);
+        EnvironmentManager.init(new PrefsUtil(this), appUtil);
         accessManager = new AccessManager(mPrefsUtil, appUtil, authHelper);
 
         if (BuildConfig.DEBUG) {
@@ -81,8 +82,6 @@ public class App extends DaggerApplication {
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         BroadcastReceiver mReceiver = new ScreenReceiver();
         registerReceiver(mReceiver, filter);
-
-        EnvironmentManager.init(new PrefsUtil(this), appUtil);
 
         // Apply PRNG fixes on app start if needed
         appUtil.applyPRNGFixes();

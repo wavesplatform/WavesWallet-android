@@ -92,23 +92,25 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
         if (BuildConfig.DEBUG) {
             button_switch_net.visiable()
-            val newNetName = when (prefsUtil.getGlobalValue(PrefsUtil.KEY_CURRENT_NET, "prod")) {
-                "prod" -> {
+            val newEnvironment = when (prefsUtil.getGlobalValue(
+                    PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, EnvironmentManager.KEY_ENV_PROD)) {
+                EnvironmentManager.KEY_ENV_PROD -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_test)
-                    "test"
+                    EnvironmentManager.Environment.TEST
                 }
-                "test" -> {
+                EnvironmentManager.KEY_ENV_TEST_NET -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_prod)
-                    "prod"
+                    EnvironmentManager.Environment.PRODUCTION
                 }
                 else -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_test)
-                    "test"
+                    EnvironmentManager.Environment.TEST
                 }
             }
             button_switch_net.click {
-                prefsUtil.setGlobalValue(PrefsUtil.KEY_CURRENT_NET, newNetName)
-                EnvironmentManager.Environment.restartApp(this)
+                button_switch_net.isEnabled = false
+                // todo need delay
+                EnvironmentManager.get().setCurrent(this, newEnvironment)
             }
         }
     }

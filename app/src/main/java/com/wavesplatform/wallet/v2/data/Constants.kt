@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data
 
-import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
@@ -10,7 +10,9 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 object Constants {
 
     // Production
-    const val URL_SPAM = "https://raw.githubusercontent.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv"
+    const val URL_COINOMAT = "https://coinomat.com/api/"
+    const val URL_SPAM = "https://raw.githubusercontent.com/wavesplatform/waves-community/master/"
+    const val URL_SPAM_FILE = "https://raw.githubusercontent.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv"
     const val URL_WAVES_FORUM = "https://forum.wavesplatform.com/"
     const val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
     const val URL_WHITEPAPER = "https://wavesplatform.com/files/whitepaper_v0.pdf"
@@ -20,7 +22,6 @@ object Constants {
     const val URL_FACEBOOK = "https://www.facebook.com/wavesplatform"
     const val URL_DISCORD = "https://discordapp.com/invite/cnFmDyA"
     const val URL_REDDIT = "https://www.reddit.com/r/Wavesplatform/"
-
     const val URL_GLOBAL_CONFIGURATION = "https://raw.githubusercontent.com/wavesplatform/waves-client-config/master/environment_mainnet.json"
 
     const val ACC_TWITTER = "wavesplatform"
@@ -33,8 +34,6 @@ object Constants {
     const val WAVES_FEE = 100000L
     const val WAVES_DEX_FEE = 300000L
     const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
-    const val VERSION = 2
-    const val ADDRESS_SCHEME = BuildConfig.ADDRESS_SCHEME.get(0)
 
     const val SELL_ORDER_TYPE = "sell"
     const val BUY_ORDER_TYPE = "buy"
@@ -67,17 +66,20 @@ object Constants {
     const val RESULT_OK = 200
     const val RESULT_OK_NO_RESULT = 204
 
-    const val WAVES_ASSET_ID = BuildConfig.WAVES_ASSET_ID
-    const val MONERO_ASSET_ID = BuildConfig.MONERO_ASSET_ID
-    const val BITCOIN_ASSET_ID = BuildConfig.BITCOIN_ASSET_ID
-    const val ETHEREUM_ASSET_ID = BuildConfig.ETHEREUM_ASSET_ID
-    const val BITCOINCASH_ASSET_ID = BuildConfig.BITCOINCASH_ASSET_ID
-    const val LIGHTCOIN_ASSET_ID = BuildConfig.LIGHTCOIN_ASSET_ID
-    const val ZEC_ASSET_ID = BuildConfig.ZEC_ASSET_ID
-    const val DASH_ASSET_ID = BuildConfig.DASH_ASSET_ID
-    const val WUSD_ASSET_ID = BuildConfig.WUSD_ASSET_ID
-    const val WEUR_ASSET_ID = BuildConfig.WEUR_ASSET_ID
-    const val WTRY_ASSET_ID = BuildConfig.WTRY_ASSET_ID
+    const val VERSION = 2
+    val ADDRESS_SCHEME = EnvironmentManager.get().current().netCode
+
+    private const val WAVES_ASSET_ID = ""
+    val MONERO_ASSET_ID = EnvironmentManager.get().current().moneroAssetId!!
+    val BITCOIN_ASSET_ID = EnvironmentManager.get().current().bitcoinAssetId!!
+    val ETHEREUM_ASSET_ID = EnvironmentManager.get().current().ethereumAssetId!!
+    val BITCOINCASH_ASSET_ID = EnvironmentManager.get().current().bitcoincashAssetId!!
+    val LIGHTCOIN_ASSET_ID = EnvironmentManager.get().current().lightcoinAssetId!!
+    val ZEC_ASSET_ID = EnvironmentManager.get().current().zecAssetId!!
+    val DASH_ASSET_ID = EnvironmentManager.get().current().dashAssetId!!
+    val WUSD_ASSET_ID = EnvironmentManager.get().current().wusdAssetId!!
+    val WEUR_ASSET_ID = EnvironmentManager.get().current().weurAssetId!!
+    val WTRY_ASSET_ID = EnvironmentManager.get().current().wtryAssetId!!
 
     val alphabetColor = hashMapOf(
             Pair("a", R.color.a),
