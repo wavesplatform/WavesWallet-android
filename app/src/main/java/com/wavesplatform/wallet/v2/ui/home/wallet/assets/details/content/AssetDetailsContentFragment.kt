@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -17,10 +18,10 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
-import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment.Companion.BUNDLE_ASSET
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.ReceiveActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
@@ -51,7 +52,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.assetBalance = arguments?.getParcelable(BUNDLE_ASSET)
 
-        historyAdapter = HistoryTransactionPagerAdapter(requireActivity(), childFragmentManager)
+        historyAdapter = HistoryTransactionPagerAdapter(childFragmentManager)
 
         view_pager_transaction_history.adapter = historyAdapter
         view_pager_transaction_history.offscreenPageLimit = 3
@@ -89,14 +90,14 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
         fillInformation(presenter.assetBalance)
 
-        skeletonScreen = Skeleton.bind(frame_last_transactions)
-                .shimmer(true)
-                .color(R.color.basic100)
-                .load(R.layout.item_skeleton_wallet)
-                .show()
-
         presenter.assetBalance.notNull {
-            presenter.loadLastTransactionsFor(it.assetId)
+            skeletonScreen = Skeleton.bind(frame_last_transactions)
+                    .shimmer(true)
+                    .color(R.color.basic100)
+                    .load(R.layout.item_skeleton_wallet)
+                    .show()
+
+            presenter.loadLastTransactionsFor(it.assetId, (activity as AssetDetailsActivity).getAllTransactions())
         }
     }
 
@@ -245,9 +246,12 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         view.alpha = Constants.DISABLE_VIEW
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
+        historyAdapter.items = emptyList()
+        view_pager_transaction_history.adapter = null
         skeletonScreen?.hide()
-        super.onDestroy()
+        skeletonScreen = null
+        super.onDestroyView()
     }
 
     companion object {

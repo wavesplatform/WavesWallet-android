@@ -14,6 +14,7 @@ import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.ui.welcome.AlphaScalePageTransformer
@@ -33,6 +34,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
     @Inject
     lateinit var adapterAvatar: AssetDetailsAvatarPagerAdapter
+    lateinit var assetDetailsContentPageAdapter: AssetDetailsContentPageAdapter
 
     lateinit var menu: Menu
     private var skeletonScreen: ViewSkeletonScreen? = null
@@ -152,8 +154,10 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
             showFavorite(view_pager.currentItem)
 
             // configure contents pager
-            view_pager_content.adapter = AssetDetailsContentPageAdapter(supportFragmentManager,
-                    ArrayList(sortedToFirstFavoriteList))
+            assetDetailsContentPageAdapter = AssetDetailsContentPageAdapter(supportFragmentManager,
+                    sortedToFirstFavoriteList)
+
+            view_pager_content.adapter = assetDetailsContentPageAdapter
             view_pager_content.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0),
                     false)
         }
@@ -182,6 +186,10 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         }
     }
 
+    fun getAllTransactions(): List<Transaction> {
+        return presenter.allTransaction
+    }
+
     private fun unmarkAsFavorite() {
         val item = adapterAvatar.items[view_pager.currentItem]
         item.isFavorite = false
@@ -198,7 +206,10 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     override fun onDestroy() {
+        assetDetailsContentPageAdapter.assets = emptyList()
+        adapterAvatar.items = emptyList()
         skeletonScreen?.hide()
+        skeletonScreen = null
         super.onDestroy()
     }
 
