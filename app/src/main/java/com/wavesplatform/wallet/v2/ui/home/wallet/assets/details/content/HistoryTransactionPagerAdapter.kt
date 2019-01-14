@@ -25,9 +25,8 @@ import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
-class HistoryTransactionPagerAdapter @Inject constructor(
-        @ApplicationContext var mContext: Context,
-        var fragmentManager: FragmentManager?) : PagerAdapter() {
+class HistoryTransactionPagerAdapter constructor(var mContext: Context,
+                                                 var fragmentManager: FragmentManager?) : PagerAdapter() {
     var items: MutableList<HistoryItem> = arrayListOf()
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {

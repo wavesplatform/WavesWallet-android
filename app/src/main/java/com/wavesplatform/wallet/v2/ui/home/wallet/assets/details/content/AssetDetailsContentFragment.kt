@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.ethanhua.skeleton.Skeleton
+import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
@@ -42,45 +44,14 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     lateinit var historyAdapter: HistoryTransactionPagerAdapter
     private var formatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm")
+    private var skeletonScreen: ViewSkeletonScreen? = null
 
     override fun configLayoutRes() = R.layout.fragment_asset_details_content
-
-    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
-        super.onNetworkConnectionChanged(networkConnected)
-        if (networkConnected) {
-            enableView(send)
-            enableView(receive)
-            enableView(exchange)
-            enableView(card_burn_container)
-            enableView(spam_card_burn_container)
-            card_burn_container.isClickable = true
-            spam_card_burn_container.isClickable = true
-        } else {
-            disableView(send)
-            disableView(receive)
-            disableView(exchange)
-            disableView(card_burn_container)
-            disableView(spam_card_burn_container)
-            card_burn_container.isClickable = false
-            spam_card_burn_container.isClickable = false
-        }
-    }
-
-    private fun enableView(view: View) {
-        view.isClickable = true
-        view.alpha = Constants.ENABLE_VIEW
-    }
-
-    private fun disableView(view: View) {
-        view.isClickable = false
-        view.alpha = Constants.DISABLE_VIEW
-    }
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.assetBalance = arguments?.getParcelable(BUNDLE_ASSET)
 
-        historyAdapter = HistoryTransactionPagerAdapter(app, childFragmentManager)
+        historyAdapter = HistoryTransactionPagerAdapter(requireActivity(), childFragmentManager)
 
         view_pager_transaction_history.adapter = historyAdapter
         view_pager_transaction_history.offscreenPageLimit = 3
@@ -116,8 +87,13 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             }
         }
 
-
         fillInformation(presenter.assetBalance)
+
+        skeletonScreen = Skeleton.bind(frame_last_transactions)
+                .shimmer(true)
+                .color(R.color.basic100)
+                .load(R.layout.item_skeleton_wallet)
+                .show()
 
         presenter.assetBalance.notNull {
             presenter.loadLastTransactionsFor(it.assetId)
@@ -125,6 +101,8 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     }
 
     override fun showLastTransactions(data: MutableList<HistoryItem>) {
+        skeletonScreen?.hide()
+
         if (data.isNotEmpty()) {
             // configure clickable card
             card_transaction.setCardBackgroundColor(findColor(R.color.white))
@@ -233,6 +211,43 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             }
         }
         cardBurnContainer.visiable()
+    }
+
+
+    override fun onNetworkConnectionChanged(networkConnected: Boolean) {
+        super.onNetworkConnectionChanged(networkConnected)
+        if (networkConnected) {
+            enableView(send)
+            enableView(receive)
+            enableView(exchange)
+            enableView(card_burn_container)
+            enableView(spam_card_burn_container)
+            card_burn_container.isClickable = true
+            spam_card_burn_container.isClickable = true
+        } else {
+            disableView(send)
+            disableView(receive)
+            disableView(exchange)
+            disableView(card_burn_container)
+            disableView(spam_card_burn_container)
+            card_burn_container.isClickable = false
+            spam_card_burn_container.isClickable = false
+        }
+    }
+
+    private fun enableView(view: View) {
+        view.isClickable = true
+        view.alpha = Constants.ENABLE_VIEW
+    }
+
+    private fun disableView(view: View) {
+        view.isClickable = false
+        view.alpha = Constants.DISABLE_VIEW
+    }
+
+    override fun onDestroy() {
+        skeletonScreen?.hide()
+        super.onDestroy()
     }
 
     companion object {
