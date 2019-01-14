@@ -41,6 +41,7 @@ public class PrefsUtil {
     public static final String KEY_LAST_UPDATE_DEX_INFO = "last_update_dex_info";
 
     public static final String KEY_GLOBAL_NODE_COOKIES = "node_cookies";
+    public static final String KEY_CURRENT_NET = "current_net";
 
     private SharedPreferences preferenceManager;
 

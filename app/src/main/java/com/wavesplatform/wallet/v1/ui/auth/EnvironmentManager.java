@@ -1,7 +1,13 @@
 package com.wavesplatform.wallet.v1.ui.auth;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+
 import com.wavesplatform.wallet.v1.util.AppUtil;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
+import com.wavesplatform.wallet.v2.ui.splash.SplashActivity;
 
 public class EnvironmentManager {
     private static final String TAG = EnvironmentManager.class.getSimpleName();
@@ -72,6 +78,16 @@ public class EnvironmentManager {
                 }
             }
             return null;
+        }
+
+        public static void restartApp(Context context) {
+            Intent intent = new Intent(context, SplashActivity.class);
+            int pendingIntentId = 123456;
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    context, pendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+            System.exit(0);
         }
     }
 }

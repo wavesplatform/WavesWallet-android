@@ -7,7 +7,10 @@ import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.asksira.loopingviewpager.LoopingViewPager
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
@@ -19,6 +22,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_welcome.*
 import pers.victor.ext.click
+import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
 
@@ -85,6 +89,28 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             override fun onIndicatorPageChange(newIndicatorPosition: Int) {
             }
         })
+
+        if (BuildConfig.DEBUG) {
+            button_switch_net.visiable()
+            val newNetName = when (prefsUtil.getGlobalValue(PrefsUtil.KEY_CURRENT_NET, "prod")) {
+                "prod" -> {
+                    button_switch_net.text = getString(R.string.welcome_switch_to_test)
+                    "test"
+                }
+                "test" -> {
+                    button_switch_net.text = getString(R.string.welcome_switch_to_prod)
+                    "prod"
+                }
+                else -> {
+                    button_switch_net.text = getString(R.string.welcome_switch_to_test)
+                    "test"
+                }
+            }
+            button_switch_net.click {
+                prefsUtil.setGlobalValue(PrefsUtil.KEY_CURRENT_NET, newNetName)
+                EnvironmentManager.Environment.restartApp(this)
+            }
+        }
     }
 
     private fun populateList(): ArrayList<WelcomeItem> {
