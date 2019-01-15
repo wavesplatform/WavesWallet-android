@@ -4,8 +4,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 
-import com.wavesplatform.wallet.v1.util.AppUtil;
+import com.wavesplatform.wallet.App;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 
 public class EnvironmentManager {
@@ -16,18 +17,16 @@ public class EnvironmentManager {
     private static EnvironmentManager instance;
 
     private Environment current;
-
     private PrefsUtil prefsUtil;
-    private AppUtil appUtil;
+    private Handler handler = new Handler();
 
-    private EnvironmentManager(PrefsUtil prefsUtil, AppUtil appUtil) {
-        this.prefsUtil = prefsUtil;
-        this.appUtil = appUtil;
-        this.current = Environment.fromString(prefsUtil.getEnvironment());
+    private EnvironmentManager(Context context) {
+        this.prefsUtil = new PrefsUtil(context);
+        this.current = Environment.find(prefsUtil.getEnvironment());
     }
 
-    public static void init(PrefsUtil prefsUtil, AppUtil appUtil) {
-        instance = new EnvironmentManager(prefsUtil, appUtil);
+    public static void init(Context context) {
+        instance = new EnvironmentManager(context);
     }
 
     public static EnvironmentManager get() {
@@ -38,19 +37,18 @@ public class EnvironmentManager {
         return current;
     }
 
-    public void setCurrent(Context context, Environment current) {
+    public void setCurrent(Environment current) {
         prefsUtil.setGlobalValue(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.getName());
-        restartApp(context);
-        // appUtil.restartApp();
+        handler.postDelayed(EnvironmentManager::restartApp, 500);
     }
 
-    private static void restartApp(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+    private static void restartApp() {
+        PackageManager packageManager = App.getAppContext().getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(App.getAppContext().getPackageName());
         assert intent != null;
         ComponentName componentName = intent.getComponent();
         Intent mainIntent = Intent.makeRestartActivityTask(componentName);
-        context.startActivity(mainIntent);
+        App.getAppContext().startActivity(mainIntent);
         System.exit(0);
     }
 
@@ -100,14 +98,14 @@ public class EnvironmentManager {
         private String lightcoinAssetId;
         private String zecAssetId;
         private String dashAssetId;
-        private String wusdAssetId;
-        private String weurAssetId;
-        private String wtryAssetId;
+        private String wUsdAssetId;
+        private String wEurAssetId;
+        private String wTryAssetId;
 
         Environment(String name, String nodes, String api, String matcher, char netCode,
                     String moneroAssetId, String bitcoinAssetId, String ethereumAssetId,
                     String bitcoincashAssetId, String lightcoinAssetId, String zecAssetId,
-                    String dashAssetId, String wusdAssetId, String weurAssetId, String wtryAssetId) {
+                    String dashAssetId, String wUsdAssetId, String wEurAssetId, String wTryAssetId) {
             this.name = name;
             this.nodes = nodes;
             this.api = api;
@@ -120,9 +118,9 @@ public class EnvironmentManager {
             this.lightcoinAssetId = lightcoinAssetId;
             this.zecAssetId = zecAssetId;
             this.dashAssetId = dashAssetId;
-            this.wusdAssetId = wusdAssetId;
-            this.weurAssetId = weurAssetId;
-            this.wtryAssetId = wtryAssetId;
+            this.wUsdAssetId = wUsdAssetId;
+            this.wEurAssetId = wEurAssetId;
+            this.wTryAssetId = wTryAssetId;
         }
 
         public String getName() {
@@ -173,23 +171,21 @@ public class EnvironmentManager {
             return dashAssetId;
         }
 
-        public String getWusdAssetId() {
-            return wusdAssetId;
+        public String getWUsdAssetId() {
+            return wUsdAssetId;
         }
 
-        public String getWeurAssetId() {
-            return weurAssetId;
+        public String getWEurAssetId() {
+            return wEurAssetId;
         }
 
-        public String getWtryAssetId() {
-            return wtryAssetId;
+        public String getWTryAssetId() {
+            return wTryAssetId;
         }
 
-        public static Environment fromString(String text) {
+        public static Environment find(String text) {
             if (text != null) {
-                Environment[] all = values();
-
-                for (Environment anAll : all) {
+                for (Environment anAll : values()) {
                     if (text.equalsIgnoreCase(anAll.getName())) {
                         return anAll;
                     }

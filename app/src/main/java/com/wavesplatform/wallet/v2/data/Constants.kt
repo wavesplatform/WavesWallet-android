@@ -69,7 +69,7 @@ object Constants {
     const val VERSION = 2
     val ADDRESS_SCHEME = EnvironmentManager.get().current().netCode
 
-    private const val WAVES_ASSET_ID = ""
+    val WAVES_ASSET_ID = ""
     val MONERO_ASSET_ID = EnvironmentManager.get().current().moneroAssetId!!
     val BITCOIN_ASSET_ID = EnvironmentManager.get().current().bitcoinAssetId!!
     val ETHEREUM_ASSET_ID = EnvironmentManager.get().current().ethereumAssetId!!
@@ -77,9 +77,9 @@ object Constants {
     val LIGHTCOIN_ASSET_ID = EnvironmentManager.get().current().lightcoinAssetId!!
     val ZEC_ASSET_ID = EnvironmentManager.get().current().zecAssetId!!
     val DASH_ASSET_ID = EnvironmentManager.get().current().dashAssetId!!
-    val WUSD_ASSET_ID = EnvironmentManager.get().current().wusdAssetId!!
-    val WEUR_ASSET_ID = EnvironmentManager.get().current().weurAssetId!!
-    val WTRY_ASSET_ID = EnvironmentManager.get().current().wtryAssetId!!
+    val WUSD_ASSET_ID = EnvironmentManager.get().current().wUsdAssetId!!
+    val WEUR_ASSET_ID = EnvironmentManager.get().current().wEurAssetId!!
+    val WTRY_ASSET_ID = EnvironmentManager.get().current().wTryAssetId!!
 
     val alphabetColor = hashMapOf(
             Pair("a", R.color.a),

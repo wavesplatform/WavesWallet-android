@@ -89,7 +89,10 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             override fun onIndicatorPageChange(newIndicatorPosition: Int) {
             }
         })
+        setEnvButton()
+    }
 
+    private fun setEnvButton() {
         if (BuildConfig.DEBUG) {
             button_switch_net.visiable()
             val newEnvironment = when (prefsUtil.getGlobalValue(
@@ -109,8 +112,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             }
             button_switch_net.click {
                 button_switch_net.isEnabled = false
-                // todo need delay
-                EnvironmentManager.get().setCurrent(this, newEnvironment)
+                EnvironmentManager.get().setCurrent(newEnvironment)
             }
         }
     }
