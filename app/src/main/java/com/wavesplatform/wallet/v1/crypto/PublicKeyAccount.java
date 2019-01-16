@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v1.crypto;
 
-import com.wavesplatform.wallet.v1.util.AddressUtil;
+import com.wavesplatform.wallet.v2.util.AddressUtil;
 
 public class PublicKeyAccount {
     public static class InvalidPublicKey extends Exception {}

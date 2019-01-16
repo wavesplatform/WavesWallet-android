@@ -18,7 +18,6 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
-import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v1.util.ViewUtils

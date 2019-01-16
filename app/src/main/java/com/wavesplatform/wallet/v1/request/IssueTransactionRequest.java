@@ -10,7 +10,7 @@ import com.wavesplatform.wallet.v1.crypto.CryptoProvider;
 import com.wavesplatform.wallet.v1.crypto.Hash;
 import com.wavesplatform.wallet.v1.payload.AssetBalance;
 import com.wavesplatform.wallet.v1.payload.IssueTransaction;
-import com.wavesplatform.wallet.v1.util.AddressUtil;
+import com.wavesplatform.wallet.v2.util.AddressUtil;
 
 import org.apache.commons.lang3.ArrayUtils;
 
