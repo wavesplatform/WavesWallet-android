@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome_switch_to_test" translatable="false">Switch to Test</string>
+    <string name="welcome_switch_to_prod" translatable="false">Switch to Prod</string>
+</resources>

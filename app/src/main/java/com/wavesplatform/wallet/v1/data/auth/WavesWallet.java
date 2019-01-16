@@ -3,7 +3,7 @@ package com.wavesplatform.wallet.v1.data.auth;
 import com.wavesplatform.wallet.v1.crypto.AESUtil;
 import com.wavesplatform.wallet.v1.crypto.Base58;
 import com.wavesplatform.wallet.v1.crypto.PrivateKeyAccount;
-import com.wavesplatform.wallet.v1.util.AddressUtil;
+import com.wavesplatform.wallet.v2.util.AddressUtil;
 
 import org.apache.commons.io.Charsets;
 

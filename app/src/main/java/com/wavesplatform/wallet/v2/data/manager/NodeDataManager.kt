@@ -35,7 +35,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     var transactions: List<Transaction> = ArrayList()
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
-        return spamService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM))
+        return spamService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM_FILE))
                 .map {
                     val scanner = Scanner(it)
                     val spam = arrayListOf<SpamAsset>()
