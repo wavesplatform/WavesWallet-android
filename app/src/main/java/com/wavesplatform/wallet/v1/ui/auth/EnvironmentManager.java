@@ -6,13 +6,26 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 
+import com.google.gson.Gson;
 import com.wavesplatform.wallet.App;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
+import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class EnvironmentManager {
 
-    public static final String KEY_ENV_PROD = "env_prod";
+    public static final String KEY_ENV_MAIN_NET = "env_prod";
     public static final String KEY_ENV_TEST_NET = "env_testnet";
+    private static final String URL_CONFIG_MAIN_NET = "https://raw.githubusercontent.com/" +
+            "wavesplatform/waves-client-config/master/environment_mainnet.json";
+    private static final String URL_CONFIG_TEST_NET = "https://raw.githubusercontent.com/" +
+            "wavesplatform/waves-client-config/master/environment_testnet.json";
+    private static final String JSON_FILENAME_MAIN_NET = "environment_mainnet.json";
+    private static final String JSON_FILENAME_TEST_NET = "environment_testnet.json";
 
     private static EnvironmentManager instance;
 
@@ -42,6 +55,30 @@ public class EnvironmentManager {
         handler.postDelayed(EnvironmentManager::restartApp, 500);
     }
 
+    public static String findAssetId(@NotNull String gatewayId) {
+        return get().current().findAssetId(gatewayId).getAssetId();
+    }
+
+    public static byte getNetCode() {
+        return get().current().getNetCode();
+    }
+
+    private static GlobalConfiguration getConfiguration(String fileName) {
+        String json;
+        try {
+            InputStream is = App.getAppContext().getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return new Gson().fromJson(json, GlobalConfiguration.class);
+    }
+
     private static void restartApp() {
         PackageManager packageManager = App.getAppContext().getPackageManager();
         Intent intent = packageManager.getLaunchIntentForPackage(App.getAppContext().getPackageName());
@@ -54,139 +91,48 @@ public class EnvironmentManager {
 
     public enum Environment {
 
-        PRODUCTION(KEY_ENV_PROD,
-                "https://nodes.wavesplatform.com/",
-                "https://api.wavesplatform.com/",
-                "https://matcher.wavesplatform.com/",
-                'W',
-                "5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3",
-                "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS",
-                "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu",
-                "zMFqXuoyrn5w17PFurTqxB7GsS71fp9dfk6XFwxbPCy",
-                "HZk1mbfuJpmxU1Fs4AX5MWLVYtctsNcg6e2C6VKqK8zk",
-                "BrjUWjndUanm5VsJkbUip8VRYy6LWJePtxya3FNv4TQa",
-                "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H",
-                "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck",
-                "Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU",
-                "2mX5DzVKWrAJw8iwdJnV2qtoeVG9h5nTDpTqC1wb1WEN"),
-
-        TEST(KEY_ENV_TEST_NET,
-                "https://pool.testnet.wavesnodes.com/",
-                "https://api.testnet.wavesplatform.com/",
-                "https://matcher.testnet.wavesnodes.com/",
-                'T',
-                "8oPbSCKFHkXBy1hCGSg9pJkSARE7zhTQTLpc8KZwdtr7",
-                "DWgwcZTMhSvnyYCoWLRUXXSH1RSkzThXLJhww9gwkqdn",
-                "BrmjyAWT5jjr3Wpsiyivyvg5vDuzoX2s93WgiexXetB3",
-                "8HT8tXwrXAYqwm8XrZ2hywWWTUAXxobHB5DakVC1y6jn",
-                "BNdAstuFogzSyN2rY3beJbnBYwYcu7RzTHFjW88g8roK",
-                "CFg2KQfkUgUVM2jFCMC5Xh8T8zrebvPc4HjHPfAugU1S",
-                "DGgBtwVoXKAKKvV2ayUpSoPzTJxt7jo9KiXMJRzTH2ET",
-                "D6N2rAqWN6ZCWnCeNFWLGqqjS6nJLeK4m19XiuhdDenr",
-                "AsuWyM9MUUsMmWkK7jS48L3ky6gA1pxx7QtEYPbfLjAJ",
-                "7itsmgdmomeTXvZzaaxqF3346h4FhciRoWceEw9asNV3");
+        MAIN_NET(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, JSON_FILENAME_MAIN_NET),
+        TEST_NET(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, JSON_FILENAME_TEST_NET);
 
         private String name;
-        private String nodes;
-        private String api;
-        private String matcher;
-        private char netCode;
-        private String moneroAssetId;
-        private String bitcoinAssetId;
-        private String ethereumAssetId;
-        private String bitcoincashAssetId;
-        private String lightcoinAssetId;
-        private String zecAssetId;
-        private String dashAssetId;
-        private String wUsdAssetId;
-        private String wEurAssetId;
-        private String wTryAssetId;
+        private String url;
+        private GlobalConfiguration configuration;
 
-        Environment(String name, String nodes, String api, String matcher, char netCode,
-                    String moneroAssetId, String bitcoinAssetId, String ethereumAssetId,
-                    String bitcoincashAssetId, String lightcoinAssetId, String zecAssetId,
-                    String dashAssetId, String wUsdAssetId, String wEurAssetId, String wTryAssetId) {
+        Environment(String name, String url, String json) {
             this.name = name;
-            this.nodes = nodes;
-            this.api = api;
-            this.matcher = matcher;
-            this.netCode = netCode;
-            this.moneroAssetId = moneroAssetId;
-            this.bitcoinAssetId = bitcoinAssetId;
-            this.ethereumAssetId = ethereumAssetId;
-            this.bitcoincashAssetId = bitcoincashAssetId;
-            this.lightcoinAssetId = lightcoinAssetId;
-            this.zecAssetId = zecAssetId;
-            this.dashAssetId = dashAssetId;
-            this.wUsdAssetId = wUsdAssetId;
-            this.wEurAssetId = wEurAssetId;
-            this.wTryAssetId = wTryAssetId;
+            this.url = url;
+            this.configuration = getConfiguration(json);
         }
 
         public String getName() {
             return name;
         }
 
-        public String getNodes() {
-            return nodes;
+        public String getUrl() {
+            return url;
         }
 
-        public String getApi() {
-            return api;
+        public GlobalConfiguration getGlobalConfiguration() {
+            return configuration;
         }
 
-        public String getMatcher() {
-            return matcher;
+        public byte getNetCode() {
+            return (byte) configuration.getScheme().charAt(0);
         }
 
-        public char getNetCode() {
-            return netCode;
+        public GlobalConfiguration.GeneralAssetId findAssetId(String gatewayId) {
+            for (GlobalConfiguration.GeneralAssetId assetId : configuration.getGeneralAssetIds()) {
+                if (assetId.getGatewayId().equals(gatewayId)) {
+                    return assetId;
+                }
+            }
+            return null;
         }
 
-        public String getMoneroAssetId() {
-            return moneroAssetId;
-        }
-
-        public String getBitcoinAssetId() {
-            return bitcoinAssetId;
-        }
-
-        public String getEthereumAssetId() {
-            return ethereumAssetId;
-        }
-
-        public String getBitcoincashAssetId() {
-            return bitcoincashAssetId;
-        }
-
-        public String getLightcoinAssetId() {
-            return lightcoinAssetId;
-        }
-
-        public String getZecAssetId() {
-            return zecAssetId;
-        }
-
-        public String getDashAssetId() {
-            return dashAssetId;
-        }
-
-        public String getWUsdAssetId() {
-            return wUsdAssetId;
-        }
-
-        public String getWEurAssetId() {
-            return wEurAssetId;
-        }
-
-        public String getWTryAssetId() {
-            return wTryAssetId;
-        }
-
-        public static Environment find(String text) {
-            if (text != null) {
+        public static Environment find(String name) {
+            if (name != null) {
                 for (Environment anAll : values()) {
-                    if (text.equalsIgnoreCase(anAll.getName())) {
+                    if (name.equalsIgnoreCase(anAll.getName())) {
                         return anAll;
                     }
                 }

@@ -6,6 +6,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -136,7 +137,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             return
         }
 
-        val currencyFrom = "${Constants.ADDRESS_SCHEME}$currencyTo"
+        val currencyFrom = "${EnvironmentManager.getNetCode().toChar()}$currencyTo"
 
         runAsync {
             val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY

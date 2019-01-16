@@ -10,6 +10,7 @@ import javax.inject.Inject
  */
 
 class TransactionUtil @Inject constructor() {
+
     fun getTransactionType(transaction: Transaction): Int =
             if (transaction.type == 4 && transaction.sender != App.getAccessManager().getWallet()?.address && transaction.asset?.isSpam == true) Constants.ID_SPAM_RECEIVE_TYPE
             else if (transaction.type == 11 && transaction.sender != App.getAccessManager().getWallet()?.address && transaction.asset?.isSpam == true) Constants.ID_MASS_SPAM_RECEIVE_TYPE
@@ -30,4 +31,10 @@ class TransactionUtil @Inject constructor() {
             else if (transaction.type == 13) Constants.ID_SET_SCRIPT_TYPE
             else if (transaction.type == 14) Constants.ID_SET_SPONSORSHIP_TYPE
             else Constants.ID_UNRECOGNISED_TYPE
+
+    companion object {
+        fun getCommission(type: Int): Long {
+            return 0L
+        }
+    }
 }

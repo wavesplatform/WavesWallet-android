@@ -8,6 +8,7 @@ import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.Hash
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
@@ -243,7 +244,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             val addressBytes = Base58.decode(address)
 
             if (addressBytes[0] != 1.toByte()
-                    || addressBytes[1] != Constants.ADDRESS_SCHEME.toByte()) {
+                    || addressBytes[1] != EnvironmentManager.getNetCode()) {
                 return false
             }
 
