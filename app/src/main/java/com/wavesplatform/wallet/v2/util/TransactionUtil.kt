@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.util
 
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import javax.inject.Inject
 
@@ -33,8 +34,141 @@ class TransactionUtil @Inject constructor() {
             else Constants.ID_UNRECOGNISED_TYPE
 
     companion object {
-        fun getCommission(type: Int): Long {
-            return 0L
+
+        fun getCommission(type: Int, commission: GlobalTransactionCommission,
+                          smartAccount: Boolean, smartAsset: Boolean,
+                          transfersCount: Int,
+                          bytesCount: Int,
+                          smartPriceAsset: Boolean, smartAmountAsset: Boolean): Long {
+
+            val feeRules = when (type) {
+                Transaction.ISSUE -> commission.calculateFeeRules.issue
+                Transaction.REISSUE -> commission.calculateFeeRules.reissue
+                Transaction.EXCHANGE -> commission.calculateFeeRules.exchange
+                Transaction.MASS_TRANSFER -> commission.calculateFeeRules.massTransfer
+                Transaction.DATA -> commission.calculateFeeRules.data
+                Transaction.SET_SCRIPT -> commission.calculateFeeRules.script
+                Transaction.SPONSOR_FEE -> commission.calculateFeeRules.sponsor
+                Transaction.ASSET_SCRIPT -> commission.calculateFeeRules.assetScript
+                else -> commission.calculateFeeRules.default
+            }
+
+            return when (type) {
+                Transaction.TRANSFER -> {
+                    var total = feeRules.fee
+                    if (smartAccount) {
+                        total += commission.smartAccountExtraFee
+                    }
+                    if (smartAsset) {
+                        total += commission.smartAssetExtraFee
+                    }
+                    total
+                }
+                Transaction.ISSUE -> {
+                    var total = feeRules.fee
+                    if (smartAccount) {
+                        total += commission.smartAccountExtraFee
+                    }
+                    total
+                }
+                Transaction.REISSUE -> {
+                    var total = feeRules.fee
+                    if (smartAccount) {
+                        total += commission.smartAccountExtraFee
+                    }
+                    if (smartAsset) {
+                        total += commission.smartAssetExtraFee
+                    }
+                    total
+                }
+                Transaction.EXCHANGE -> {
+                    var total = feeRules.fee
+                    if (smartPriceAsset) {
+                        total += commission.smartAssetExtraFee
+                    }
+                    if (smartAmountAsset) {
+                        total += commission.smartAssetExtraFee
+                    }
+                    total
+                }
+                Transaction.BURN -> {
+                    var total = feeRules.fee
+                    if (smartAccount) {
+                        total += commission.smartAccountExtraFee
+                    }
+                    if (smartAsset) {
+                        total += commission.smartAssetExtraFee
+                    }
+                    total
+                }
+                Transaction.LEASE -> {
+                    var total = feeRules.fee
+                    if (smartAccount) {
+                        total += commission.smartAccountExtraFee
+                    }
+                    total
+                }
+                Transaction.LEASE_CANCEL -> {
+                    var total = feeRules.fee
+                    if (smartAccount) {
+                        total += commission.smartAccountExtraFee
+                    }
+                    total
+                }
+                Transaction.CREATE_ALIAS -> {
+                    var total = feeRules.fee
+                    if (smartAccount) {
+                        total += commission.smartAccountExtraFee
+                    }
+                    total
+                }
+                Transaction.MASS_TRANSFER -> {
+                    var total = feeRules.fee
+                    if (smartAccount) {
+                        total += commission.smartAccountExtraFee
+                    }
+                    if (smartAsset) {
+                        total += commission.smartAssetExtraFee
+                    }
+
+                    var transfersPrice = (transfersCount * feeRules.pricePerTransfer!!).toDouble()
+                    val minPriceStep = feeRules.minPriceStep.toDouble()
+                    if (transfersPrice.rem(minPriceStep) != 0.0) {
+                        transfersPrice = Math.ceil((transfersPrice / minPriceStep)) * minPriceStep
+                    }
+                    (transfersPrice + total).toLong()
+                }
+                Transaction.DATA -> {
+                    var total = 0.0
+                    total += Math.floor(1 + (bytesCount.toDouble() - 1) / 1024) * feeRules.fee
+                    if (smartAccount) {
+                        total += commission.smartAccountExtraFee
+                    }
+                    total.toLong()
+                }
+                Transaction.SET_SCRIPT -> {
+                    var total = feeRules.fee
+                    if (smartAccount) {
+                        total += commission.smartAccountExtraFee
+                    }
+                    total
+                }
+                Transaction.SPONSOR_FEE -> {
+                    var total = feeRules.fee
+                    if (smartAccount) {
+                        total += commission.smartAccountExtraFee
+                    }
+                    total
+                }
+                Transaction.ASSET_SCRIPT -> {
+                    var total = feeRules.fee
+                    if (smartAccount) {
+                        total += commission.smartAccountExtraFee
+                    }
+                    total
+                }
+                else -> commission.calculateFeeRules.default.fee
+            }
         }
     }
 }
