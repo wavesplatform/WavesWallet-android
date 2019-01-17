@@ -169,30 +169,54 @@ public class CommissionTest {
         params.setTransfersCount(3);
         assertEquals(1100000L, Companion.countCommission(commission, params));
 
-        /*params = new GlobalTransactionCommission.Params();
+        params = new GlobalTransactionCommission.Params();
         params.setTransactionType(Transaction.DATA);
         params.setSmartAccount(false);
         params.setSmartAsset(true);
-        params.setTransfersCount(3);
-        assertEquals(100000L, Companion.countCommission(commission, params));
-
+        params.setBytesCount(1025);
+        assertEquals(200000L, Companion.countCommission(commission, params));
 
         params = new GlobalTransactionCommission.Params();
         params.setTransactionType(Transaction.DATA);
         params.setSmartAccount(true);
         params.setSmartAsset(true);
-        params.setTransfersCount(3);
-        assertEquals(500000L, Companion.countCommission(commission, params));*/
+        params.setBytesCount(2049);
+        assertEquals(700000L, Companion.countCommission(commission, params));
 
-    }
-
-    @Test
-    public void checkCommissions2() {
-        GlobalTransactionCommission commission = new GlobalTransactionCommission();
-        GlobalTransactionCommission.Params params = new GlobalTransactionCommission.Params();
-        params.setTransactionType(Transaction.TRANSFER);
+        params = new GlobalTransactionCommission.Params();
+        params.setTransactionType(Transaction.SET_SCRIPT);
         params.setSmartAccount(false);
-        params.setSmartAsset(false);
-        assertEquals(100000, Companion.countCommission(commission, params));
+        params.setSmartAsset(true);
+        assertEquals(1000000L, Companion.countCommission(commission, params));
+
+        params = new GlobalTransactionCommission.Params();
+        params.setTransactionType(Transaction.SET_SCRIPT);
+        params.setSmartAccount(true);
+        params.setSmartAsset(true);
+        assertEquals(1400000L, Companion.countCommission(commission, params));
+
+        params = new GlobalTransactionCommission.Params();
+        params.setTransactionType(Transaction.SPONSOR_FEE);
+        params.setSmartAccount(false);
+        params.setSmartAsset(true);
+        assertEquals(100000000L, Companion.countCommission(commission, params));
+
+        params = new GlobalTransactionCommission.Params();
+        params.setTransactionType(Transaction.SPONSOR_FEE);
+        params.setSmartAccount(true);
+        params.setSmartAsset(true);
+        assertEquals(100400000L, Companion.countCommission(commission, params));
+
+        params = new GlobalTransactionCommission.Params();
+        params.setTransactionType(Transaction.ASSET_SCRIPT);
+        params.setSmartAccount(false);
+        params.setSmartAsset(true);
+        assertEquals(100000000L, Companion.countCommission(commission, params));
+
+        params = new GlobalTransactionCommission.Params();
+        params.setTransactionType(Transaction.ASSET_SCRIPT);
+        params.setSmartAccount(true);
+        params.setSmartAsset(true);
+        assertEquals(100400000L, Companion.countCommission(commission, params));
     }
 }
