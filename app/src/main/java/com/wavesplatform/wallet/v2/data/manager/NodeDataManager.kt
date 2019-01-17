@@ -285,4 +285,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
+    fun scriptInfo(): Observable<ScriptInfoResponse> {
+        return nodeService.scriptInfo(getAddress())
+    }
+
 }
