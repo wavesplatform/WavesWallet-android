@@ -31,4 +31,10 @@ data class GlobalTransactionCommission(
             @SerializedName("fee") var fee: Long = 100000,
             @SerializedName("price_per_transfer") var pricePerTransfer: Long? = null,
             @SerializedName("price_per_kb") var pricePerKb: Long? = null)
+
+    class Params(var transactionType: Int? = null,
+                 var smartAccount: Boolean? = null, var smartAsset: Boolean? = null,
+                 var transfersCount: Int? = null,
+                 var bytesCount: Int? = null,
+                 var smartPriceAsset: Boolean? = null, var smartAmountAsset: Boolean? = null)
 }

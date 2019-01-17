@@ -35,11 +35,10 @@ class TransactionUtil @Inject constructor() {
 
     companion object {
 
-        fun getCommission(type: Int, commission: GlobalTransactionCommission,
-                          smartAccount: Boolean, smartAsset: Boolean,
-                          transfersCount: Int,
-                          bytesCount: Int,
-                          smartPriceAsset: Boolean, smartAmountAsset: Boolean): Long {
+        fun countCommission(commission: GlobalTransactionCommission,
+                            params: GlobalTransactionCommission.Params): Long {
+
+            val type = params.transactionType!!
 
             val feeRules = when (type) {
                 Transaction.ISSUE -> commission.calculateFeeRules.issue
@@ -54,121 +53,79 @@ class TransactionUtil @Inject constructor() {
             }
 
             return when (type) {
-                Transaction.TRANSFER -> {
-                    var total = feeRules.fee
-                    if (smartAccount) {
-                        total += commission.smartAccountExtraFee
-                    }
-                    if (smartAsset) {
-                        total += commission.smartAssetExtraFee
-                    }
-                    total
-                }
-                Transaction.ISSUE -> {
-                    var total = feeRules.fee
-                    if (smartAccount) {
-                        total += commission.smartAccountExtraFee
-                    }
-                    total
-                }
-                Transaction.REISSUE -> {
-                    var total = feeRules.fee
-                    if (smartAccount) {
-                        total += commission.smartAccountExtraFee
-                    }
-                    if (smartAsset) {
-                        total += commission.smartAssetExtraFee
-                    }
-                    total
-                }
-                Transaction.EXCHANGE -> {
-                    var total = feeRules.fee
-                    if (smartPriceAsset) {
-                        total += commission.smartAssetExtraFee
-                    }
-                    if (smartAmountAsset) {
-                        total += commission.smartAssetExtraFee
-                    }
-                    total
-                }
-                Transaction.BURN -> {
-                    var total = feeRules.fee
-                    if (smartAccount) {
-                        total += commission.smartAccountExtraFee
-                    }
-                    if (smartAsset) {
-                        total += commission.smartAssetExtraFee
-                    }
-                    total
-                }
-                Transaction.LEASE -> {
-                    var total = feeRules.fee
-                    if (smartAccount) {
-                        total += commission.smartAccountExtraFee
-                    }
-                    total
-                }
-                Transaction.LEASE_CANCEL -> {
-                    var total = feeRules.fee
-                    if (smartAccount) {
-                        total += commission.smartAccountExtraFee
-                    }
-                    total
-                }
-                Transaction.CREATE_ALIAS -> {
-                    var total = feeRules.fee
-                    if (smartAccount) {
-                        total += commission.smartAccountExtraFee
-                    }
-                    total
-                }
-                Transaction.MASS_TRANSFER -> {
-                    var total = feeRules.fee
-                    if (smartAccount) {
-                        total += commission.smartAccountExtraFee
-                    }
-                    if (smartAsset) {
-                        total += commission.smartAssetExtraFee
-                    }
-
-                    var transfersPrice = (transfersCount * feeRules.pricePerTransfer!!).toDouble()
-                    val minPriceStep = feeRules.minPriceStep.toDouble()
-                    if (transfersPrice.rem(minPriceStep) != 0.0) {
-                        transfersPrice = Math.ceil((transfersPrice / minPriceStep)) * minPriceStep
-                    }
-                    (transfersPrice + total).toLong()
-                }
+                Transaction.ISSUE,
+                Transaction.REISSUE,
+                Transaction.LEASE,
+                Transaction.LEASE_CANCEL,
+                Transaction.CREATE_ALIAS,
+                Transaction.SET_SCRIPT,
+                Transaction.SPONSOR_FEE,
+                Transaction.ASSET_SCRIPT ->
+                    getAccountCommission(feeRules, params, commission)
+                Transaction.TRANSFER,
+                Transaction.BURN ->
+                    getAssetAccountCommission(feeRules, params, commission)
+                Transaction.EXCHANGE ->
+                    getExchangeCommission(feeRules, params, commission)
+                Transaction.MASS_TRANSFER ->
+                    getMassTransferCommission(feeRules, params, commission)
                 Transaction.DATA -> {
-                    var total = 0.0
-                    total += Math.floor(1 + (bytesCount.toDouble() - 1) / 1024) * feeRules.fee
-                    if (smartAccount) {
-                        total += commission.smartAccountExtraFee
-                    }
-                    total.toLong()
-                }
-                Transaction.SET_SCRIPT -> {
-                    var total = feeRules.fee
-                    if (smartAccount) {
-                        total += commission.smartAccountExtraFee
-                    }
-                    total
-                }
-                Transaction.SPONSOR_FEE -> {
-                    var total = feeRules.fee
-                    if (smartAccount) {
-                        total += commission.smartAccountExtraFee
-                    }
-                    total
-                }
-                Transaction.ASSET_SCRIPT -> {
-                    var total = feeRules.fee
-                    if (smartAccount) {
-                        total += commission.smartAccountExtraFee
-                    }
-                    total
+                    getDataCommission(params, feeRules, commission)
                 }
                 else -> commission.calculateFeeRules.default.fee
             }
+        }
+
+        private fun getDataCommission(params: GlobalTransactionCommission.Params, feeRules: GlobalTransactionCommission.FeeRules, commission: GlobalTransactionCommission): Long {
+            var total = 0.0
+            total += Math.floor(1 + (params.bytesCount!!.toDouble() - 1) / 1024) * feeRules.fee
+            if (params.smartAccount!!) {
+                total += commission.smartAccountExtraFee
+            }
+            return total.toLong()
+        }
+
+        private fun getMassTransferCommission(feeRules: GlobalTransactionCommission.FeeRules, params: GlobalTransactionCommission.Params, commission: GlobalTransactionCommission): Long {
+            val total = getAssetAccountCommission(feeRules, params, commission)
+            var transfersPrice = (params.transfersCount!! * feeRules.pricePerTransfer!!).toDouble()
+            val minPriceStep = feeRules.minPriceStep.toDouble()
+            if (transfersPrice.rem(minPriceStep) != 0.0) {
+                transfersPrice = Math.ceil((transfersPrice / minPriceStep)) * minPriceStep
+            }
+            return (transfersPrice + total).toLong()
+        }
+
+        private fun getExchangeCommission(feeRules: GlobalTransactionCommission.FeeRules, params: GlobalTransactionCommission.Params, commission: GlobalTransactionCommission): Long {
+            var total = feeRules.fee
+            if (params.smartPriceAsset!!) {
+                total += commission.smartAssetExtraFee
+            }
+            if (params.smartAmountAsset!!) {
+                total += commission.smartAssetExtraFee
+            }
+            return total
+        }
+
+        private fun getAccountCommission(feeRules: GlobalTransactionCommission.FeeRules, params: GlobalTransactionCommission.Params, commission: GlobalTransactionCommission): Long {
+            var total = feeRules.fee
+            if (params.smartAccount!!) {
+                total += commission.smartAccountExtraFee
+            }
+            return total
+        }
+
+        private fun getAssetAccountCommission(
+                feeRules: GlobalTransactionCommission.FeeRules,
+                params: GlobalTransactionCommission.Params,
+                commission: GlobalTransactionCommission): Long {
+            var total = feeRules.fee
+            if (params.smartAccount!!) {
+                total += commission.smartAccountExtraFee
+            }
+            if (params.smartAsset!!) {
+                total += commission.smartAssetExtraFee
+            }
+            return total
         }
     }
 }
