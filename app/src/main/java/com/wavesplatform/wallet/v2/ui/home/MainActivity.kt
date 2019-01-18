@@ -86,7 +86,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun onResume() {
         super.onResume()
         showBackUpSeedWarning()
-        presenter.getGlobalConfiguration()
     }
 
     private fun showFirstOpenAlert(firstOpen: Boolean) {
