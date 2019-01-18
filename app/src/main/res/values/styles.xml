@@ -164,4 +164,9 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="DialogBackgroundTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
 </resources>

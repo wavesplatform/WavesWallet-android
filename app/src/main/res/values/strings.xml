@@ -627,4 +627,7 @@
     <string name="your_asset_activity_greater_zero">With balance</string>
     <string name="your_assets_empty_state">Nothing Here… \nYou do not have assets with funds</string>
     <string name="your_assets_toolbar_title">Your assets</string>
+    <string name="scripted_account_error_dialog_title">A script is installed on your account</string>
+    <string name="scripted_account_error_dialog_description">To work with a scripted account, use the Waves Client</string>
+    <string name="scripted_account_error_dialog_btn_txt">Okay</string>
 </resources>
