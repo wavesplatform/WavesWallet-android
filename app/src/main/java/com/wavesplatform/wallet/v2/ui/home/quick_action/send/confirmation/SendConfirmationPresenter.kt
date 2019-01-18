@@ -6,6 +6,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -37,6 +38,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var moneroPaymentId: String? = null
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
+    var blockchainCommission = 0L
 
 
     fun confirmSend() {
@@ -78,7 +80,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                         tx.recipient = tx.recipient.clearAlias()
                         saveLastSentAddress(tx.recipient)
                         viewState.onShowTransactionSuccess(tx)
-                    }, { _ ->
+                    }, {
                         viewState.onShowError(R.string.transaction_failed)
                     }))
         }
@@ -111,7 +113,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 recipient!!,
                 MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
                 System.currentTimeMillis(),
-                Constants.WAVES_FEE,
+                blockchainCommission,
                 attachment)
     }
 
@@ -136,7 +138,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             return
         }
 
-        val currencyFrom = "${Constants.ADDRESS_SCHEME}$currencyTo"
+        val currencyFrom = "${EnvironmentManager.getNetCode().toChar()}$currencyTo"
 
         runAsync {
             val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY

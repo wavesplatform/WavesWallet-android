@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v2.data.remote
 
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -20,7 +20,12 @@ interface ApiService {
     fun assetsInfoByIds(@Query("ids") ids: List<String?>): Observable<AssetsInfoResponse>
 
     @GET
-    fun loadGlobalConfiguration(@Url url: String = Constants.URL_GLOBAL_CONFIGURATION): Observable<GlobalConfiguration>
+    fun loadGlobalConfiguration(@Url url: String = EnvironmentManager.get().current().url)
+            : Observable<GlobalConfiguration>
+
+    @GET
+    fun loadGlobalCommission(@Url url: String = EnvironmentManager.URL_COMMISSION_MAIN_NET)
+            : Observable<GlobalTransactionCommission>
 
     @GET("v0/pairs/{amountAsset}/{priceAsset}")
     fun loadDexPairInfo(@Path("amountAsset") amountAsset: String?, @Path("priceAsset") priceAsset: String?): Observable<PairResponse>

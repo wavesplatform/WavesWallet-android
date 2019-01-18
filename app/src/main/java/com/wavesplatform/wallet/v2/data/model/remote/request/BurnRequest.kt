@@ -7,13 +7,14 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import pers.victor.ext.currentTimeMillis
 
 data class BurnRequest(
         @SerializedName("assetId") val assetId: String = "",
-        @SerializedName("chainId") val chainId: Byte = Constants.ADDRESS_SCHEME.toByte(),
+        @SerializedName("chainId") val chainId: Byte = EnvironmentManager.getNetCode(),
         @SerializedName("fee") var fee: Long = Constants.WAVES_FEE,
         @SerializedName("quantity") var quantity: Long = 1,
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",

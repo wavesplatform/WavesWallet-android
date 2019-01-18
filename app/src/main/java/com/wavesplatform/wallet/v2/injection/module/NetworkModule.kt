@@ -8,7 +8,9 @@ import com.google.gson.GsonBuilder
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.wallet.BuildConfig
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.remote.*
@@ -48,10 +50,12 @@ class NetworkModule {
     internal fun receivedCookiesInterceptor(prefsUtil: PrefsUtil): Interceptor {
         return Interceptor { chain ->
             val originalResponse = chain.proceed(chain.request())
-            if (originalResponse.request().url().url().toString().contains(BuildConfig.NODE_URL)
+            if (originalResponse.request().url().url().toString()
+                            .contains(EnvironmentManager.get().current().globalConfiguration.servers.nodeUrl)
                     && originalResponse.headers("Set-Cookie").isNotEmpty()
                     && prefsUtil.getGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES).isEmpty()) {
-                val cookies = originalResponse.headers("Set-Cookie").toHashSet()
+                val cookies = originalResponse.headers("Set-Cookie")
+                        .toHashSet()
                 prefsUtil.setGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES, cookies)
             }
             originalResponse
@@ -64,7 +68,8 @@ class NetworkModule {
     internal fun addCookiesInterceptor(prefsUtil: PrefsUtil): Interceptor {
         return Interceptor { chain ->
             val cookies = prefsUtil.getGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES)
-            if (cookies.isNotEmpty() && chain.request().url().url().toString().contains(BuildConfig.NODE_URL)) {
+            if (cookies.isNotEmpty() && chain.request().url().url().toString()
+                            .contains(EnvironmentManager.get().current().globalConfiguration.servers.nodeUrl)) {
                 val builder = chain.request().newBuilder()
                 cookies.forEach {
                     builder.addHeader("Cookie", it)
@@ -118,7 +123,7 @@ class NetworkModule {
     @Provides
     internal fun provideNodeRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(BuildConfig.NODE_URL)
+                .baseUrl(EnvironmentManager.get().current().globalConfiguration.servers.nodeUrl)
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -133,7 +138,7 @@ class NetworkModule {
     @Provides
     internal fun provideMatcherRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(BuildConfig.MATCHER_URL)
+                .baseUrl(EnvironmentManager.get().current().globalConfiguration.servers.matcherUrl)
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -148,7 +153,7 @@ class NetworkModule {
     @Provides
     internal fun provideSpamRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(BuildConfig.SPAM_URL)
+                .baseUrl(Constants.URL_SPAM)
                 .client(httpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
@@ -164,7 +169,7 @@ class NetworkModule {
     @Provides
     internal fun provideCoinomatRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(BuildConfig.COINOMAT_URL)
+                .baseUrl(Constants.URL_COINOMAT)
                 .client(httpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
@@ -181,7 +186,7 @@ class NetworkModule {
     @Provides
     internal fun provideApiRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(BuildConfig.API_URL)
+                .baseUrl(EnvironmentManager.get().current().globalConfiguration.servers.dataUrl)
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))

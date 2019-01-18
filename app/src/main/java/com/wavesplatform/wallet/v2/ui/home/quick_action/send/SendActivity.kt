@@ -18,8 +18,8 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
-import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v1.util.MoneyUtil.getWavesStripZeros
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
@@ -31,6 +31,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActiv
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_BLOCKCHAIN_COMMISSION
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_GATEWAY_COMMISSION
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_MONERO_PAYMENT_ID
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_AMOUNT
@@ -42,6 +43,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.activity_send.*
 import kotlinx.android.synthetic.main.layout_asset_card.*
+import kotlinx.android.synthetic.main.view_commission.*
 import pers.victor.ext.*
 import java.math.BigDecimal
 import java.net.URI
@@ -211,6 +213,7 @@ class SendActivity : BaseActivity(), SendView {
             }
             putExtra(KEY_INTENT_MONERO_PAYMENT_ID, presenter.moneroPaymentId)
             putExtra(KEY_INTENT_TYPE, presenter.type)
+            putExtra(KEY_INTENT_BLOCKCHAIN_COMMISSION, presenter.fee)
         }
     }
 
@@ -317,12 +320,14 @@ class SendActivity : BaseActivity(), SendView {
                     presenter.recipientAssetId = ""
                     presenter.checkAlias(recipient)
                     relative_gateway_fee.gone()
+                    presenter.loadCommission(presenter.recipient, presenter.selectedAsset?.assetId)
                 }
                 SendPresenter.isWavesAddress(recipient) -> {
                     presenter.recipientAssetId = ""
                     presenter.type = SendPresenter.Type.WAVES
                     setRecipientValid(true)
                     relative_gateway_fee.gone()
+                    presenter.loadCommission(presenter.recipient, presenter.selectedAsset?.assetId)
                 }
                 else -> {
                     presenter.recipientAssetId = SendPresenter.getAssetId(recipient)
@@ -335,6 +340,8 @@ class SendActivity : BaseActivity(), SendView {
                             setRecipientValid(true)
                             checkMonero(presenter.recipientAssetId)
                             loadGatewayXRate(presenter.recipientAssetId!!)
+                            presenter.loadCommission(
+                                    presenter.recipient, presenter.selectedAsset?.assetId)
                         } else {
                             setRecipientValid(false)
                         }
@@ -386,6 +393,26 @@ class SendActivity : BaseActivity(), SendView {
             text_recipient_error.visiable()
             relative_gateway_fee.gone()
         }
+    }
+
+    override fun showCommissionLoading() {
+        progress_bar_fee_transaction.visiable()
+        text_fee_transaction.gone()
+        button_continue.isEnabled = false
+    }
+
+    override fun showCommissionSuccess(unscaledAmount: Long) {
+        text_fee_transaction.text = getWavesStripZeros(unscaledAmount)
+        progress_bar_fee_transaction.gone()
+        text_fee_transaction.visiable()
+        button_continue.isEnabled = presenter.validateTransfer() == 0
+    }
+
+    override fun showCommissionError() {
+        text_fee_transaction.text = "-"
+        showError(R.string.send_error_commission_receiving, R.id.root)
+        progress_bar_fee_transaction.gone()
+        text_fee_transaction.visiable()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -499,6 +526,8 @@ class SendActivity : BaseActivity(), SendView {
             text_amount_title.visiable()
             amount_card.visiable()
             button_continue.isEnabled = true
+
+            presenter.loadCommission(presenter.recipient, presenter.selectedAsset?.assetId)
         }
     }
 

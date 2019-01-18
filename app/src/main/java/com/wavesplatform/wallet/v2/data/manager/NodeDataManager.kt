@@ -35,7 +35,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     var transactions: List<Transaction> = ArrayList()
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
-        return spamService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM))
+        return spamService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM_FILE))
                 .map {
                     val scanner = Scanner(it)
                     val spam = arrayListOf<SpamAsset>()
@@ -285,4 +285,11 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
+    fun scriptAddressInfo(address: String): Observable<ScriptInfo> {
+        return nodeService.scriptAddressInfo(address)
+    }
+
+    fun scriptAssetInfo(assetId: String): Observable<AssetsDetails> {
+        return nodeService.scriptAssetInfo(assetId)
+    }
 }

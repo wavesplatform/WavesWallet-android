@@ -1,21 +1,19 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
-import android.content.Context
 import android.support.v4.view.PagerAdapter
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import kotlinx.android.synthetic.main.item_asset_details_avatar.view.*
+import pers.victor.ext.inflate
 import javax.inject.Inject
 
-class AssetDetailsAvatarPagerAdapter @Inject constructor(@ApplicationContext var mContext: Context) : PagerAdapter() {
+class AssetDetailsAvatarPagerAdapter @Inject constructor() : PagerAdapter() {
     var items: List<AssetBalance> = arrayListOf()
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
-        val layout = LayoutInflater.from(mContext).inflate(R.layout.item_asset_details_avatar, collection, false) as ViewGroup
+        val layout = inflate(R.layout.item_asset_details_avatar, collection, false) as ViewGroup
 
         layout.image_welcome_photo.isOval = true
         layout.image_welcome_photo.setAsset(items[position])
@@ -30,6 +28,10 @@ class AssetDetailsAvatarPagerAdapter @Inject constructor(@ApplicationContext var
 
     override fun getPageWidth(position: Int): Float {
         return 1f
+    }
+
+    override fun getItemPosition(`object`: Any): Int {
+        return PagerAdapter.POSITION_NONE
     }
 
     override fun getCount(): Int {

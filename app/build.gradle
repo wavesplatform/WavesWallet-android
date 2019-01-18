@@ -31,16 +31,6 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         archivesBaseName = "waves-wallet-$versionName"
-        // URLs for Staging, Dev and TestNet Support
-        buildConfigField "String", "DEV_BASE_SERVER", devBaseServer
-        buildConfigField "String", "STAGING_BASE_SERVER", stagingBaseServer
-        buildConfigField "String", "TESTNET_BASE_SERVER", testnetBaseServer
-        buildConfigField "String", "DEV_API_SERVER", devApiServer
-        buildConfigField "String", "STAGING_API_SERVER", stagingApiServer
-        buildConfigField "String", "TESTNET_API_SERVER", testnetApiServer
-        buildConfigField "String", "DEV_WEBSOCKET", devWebsocket
-        buildConfigField "String", "STAGING_WEBSOCKET", stagingWebsocket
-        buildConfigField "String", "TESTNET_WEBSOCKET", testnetWebsocket
     }
     buildTypes {
         release {
@@ -50,12 +40,10 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled true
-            buildConfigField "boolean", "DOGFOOD", "false"
             signingConfig signingConfigs.config
         }
         debug {
             multiDexEnabled false
-            buildConfigField "boolean", "DOGFOOD", "false"
         }
     }
 
@@ -66,7 +54,6 @@ android {
         def date = new Date()
         def formattedDate = date.format('dd-MM-yy')
         def newApkName = appName + SEP + buildType + SEP + version + SEP + formattedDate + ".apk"
-
         variant.outputs.all { output ->
             outputFileName = newApkName
         }
@@ -77,29 +64,14 @@ android {
         prod {
             signingConfig signingConfigs.config
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher", appIconRound: "@mipmap/ic_launcher_round"]
-            buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
-            buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/"'
-            buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
-            buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/"'
-            buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
         }
         dev {
             applicationIdSuffix ".dev"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev", appIconRound: "@mipmap/ic_launcher_dev_round"]
-            buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
-            buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/"'
-            buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
-            buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/"'
-            buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
         }
         devTest {
             applicationIdSuffix ".test"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test", appIconRound: "@mipmap/ic_launcher_test_round"]
-            buildConfigField 'String', 'NODE_URL', '"https://nodes.wavesplatform.com/"'
-            buildConfigField 'String', 'API_URL', '"https://api.wavesplatform.com/"'
-            buildConfigField 'String', 'SPAM_URL', '"https://raw.githubusercontent.com/wavesplatform/waves-community/master/"'
-            buildConfigField 'String', 'COINOMAT_URL', '"https://coinomat.com/api/"'
-            buildConfigField 'String', 'MATCHER_URL', '"https://matcher.wavesplatform.com/"'
         }
     }
     compileOptions {
@@ -122,7 +94,7 @@ android {
 
     dexOptions {
         preDexLibraries = false
-        javaMaxHeapSize "4g" // 2g should be also OK
+        javaMaxHeapSize "4g"
     }
 
     androidExtensions {
@@ -257,9 +229,9 @@ dependencies {
 
     implementation 'com.intuit.sdp:sdp-android:1.0.5'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
 
     implementation 'com.ethanhua:skeleton:1.1.1'
     implementation 'io.supercharge:shimmerlayout:2.1.0'
@@ -318,7 +290,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'com.google.android:flexbox:1.0.0'
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.7@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.8@aar') {
         transitive = true
     }
 }

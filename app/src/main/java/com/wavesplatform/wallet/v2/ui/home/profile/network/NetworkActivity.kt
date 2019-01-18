@@ -42,7 +42,7 @@ class NetworkActivity : BaseActivity(), NetworkView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.network_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        edit_spam_filter.setText(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM))
+        edit_spam_filter.setText(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM_FILE))
 
         switch_spam_filter.isChecked = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
         switch_spam_filter.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -58,7 +58,7 @@ class NetworkActivity : BaseActivity(), NetworkView {
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
-                                presenter.spamUrlFieldValid = prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM) != edit_spam_filter.text.toString()
+                                presenter.spamUrlFieldValid = prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM_FILE) != edit_spam_filter.text.toString()
                                 isFieldsValid()
                             }
 
@@ -71,8 +71,8 @@ class NetworkActivity : BaseActivity(), NetworkView {
         }
 
         button_set_default.click {
-            if (edit_spam_filter.text.toString() != Constants.URL_SPAM) {
-                edit_spam_filter.setText(Constants.URL_SPAM)
+            if (edit_spam_filter.text.toString() != Constants.URL_SPAM_FILE) {
+                edit_spam_filter.setText(Constants.URL_SPAM_FILE)
             }
             switch_spam_filter.isChecked = true
         }
