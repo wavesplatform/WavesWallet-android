@@ -73,7 +73,7 @@ class HistoryTabItemAdapter @Inject constructor() :
 
                     val decimals = item.data.asset?.precision ?: 8
 
-                    view.image_transaction.setImageDrawable(item.data.transactionType()?.icon())
+                    view.image_transaction.setImageDrawable(item.data.transactionType().icon())
 
                     val showTag = Constants.defaultAssets.any {
                         it.assetId == item.data.assetId || item.data.assetId.isNullOrEmpty()
