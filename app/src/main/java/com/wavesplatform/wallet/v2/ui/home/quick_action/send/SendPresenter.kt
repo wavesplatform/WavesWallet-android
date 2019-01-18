@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
 import com.wavesplatform.wallet.v2.util.isValidAddress
 import io.reactivex.Observable
@@ -218,41 +219,34 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             return
         }
 
-        runOnUiThread {
-            viewState.showCommissionLoading()
-        }
+        viewState.showCommissionLoading()
 
-        runAsync {
-            addSubscription(Observable.zip(
-                    matcherDataManager.getGlobalCommission(),
-                    nodeDataManager.scriptAddressInfo(address!!),
-                    nodeDataManager.scriptAssetInfo(assetId!!),
-                    Function3 { t1: GlobalTransactionCommission,
-                                t2: ScriptInfo,
-                                t3: AssetsDetails ->
-                        return@Function3 Triple(t1, t2, t3)
-                    })
-                    .debounce(500, TimeUnit.MILLISECONDS)
-                    .subscribe({ triple ->
-                        val commission = triple.first
-                        val scriptInfo = triple.second
-                        val assetsDetails = triple.third
-                        val params = GlobalTransactionCommission.Params()
-                        params.transactionType = Transaction.TRANSFER
-                        params.smartAccount = scriptInfo.extraFee != 0L
-                        params.smartAsset = assetsDetails.scripted
-                        fee = countCommission(commission, params)
-                        runOnUiThread {
-                            viewState.showCommissionSuccess(fee)
-                        }
-                    }, {
-                        it.printStackTrace()
-                        fee = 0L
-                        runOnUiThread {
-                            viewState.showCommissionError()
-                        }
-                    }))
-        }
+        addSubscription(Observable.zip(
+                matcherDataManager.getGlobalCommission(),
+                nodeDataManager.scriptAddressInfo(address!!),
+                nodeDataManager.scriptAssetInfo(assetId!!),
+                Function3 { t1: GlobalTransactionCommission,
+                            t2: ScriptInfo,
+                            t3: AssetsDetails ->
+                    return@Function3 Triple(t1, t2, t3)
+                })
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({ triple ->
+                    val commission = triple.first
+                    val scriptInfo = triple.second
+                    val assetsDetails = triple.third
+                    val params = GlobalTransactionCommission.Params()
+                    params.transactionType = Transaction.TRANSFER
+                    params.smartAccount = scriptInfo.extraFee != 0L
+                    params.smartAsset = assetsDetails.scripted
+                    fee = countCommission(commission, params)
+                    viewState.showCommissionSuccess(fee)
+                }, {
+                    it.printStackTrace()
+                    fee = 0L
+                    viewState.showCommissionError()
+                }))
     }
 
     companion object {

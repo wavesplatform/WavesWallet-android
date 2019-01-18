@@ -320,12 +320,14 @@ class SendActivity : BaseActivity(), SendView {
                     presenter.recipientAssetId = ""
                     presenter.checkAlias(recipient)
                     relative_gateway_fee.gone()
+                    presenter.loadCommission(presenter.recipient, presenter.selectedAsset?.assetId)
                 }
                 SendPresenter.isWavesAddress(recipient) -> {
                     presenter.recipientAssetId = ""
                     presenter.type = SendPresenter.Type.WAVES
                     setRecipientValid(true)
                     relative_gateway_fee.gone()
+                    presenter.loadCommission(presenter.recipient, presenter.selectedAsset?.assetId)
                 }
                 else -> {
                     presenter.recipientAssetId = SendPresenter.getAssetId(recipient)
@@ -338,14 +340,14 @@ class SendActivity : BaseActivity(), SendView {
                             setRecipientValid(true)
                             checkMonero(presenter.recipientAssetId)
                             loadGatewayXRate(presenter.recipientAssetId!!)
+                            presenter.loadCommission(
+                                    presenter.recipient, presenter.selectedAsset?.assetId)
                         } else {
                             setRecipientValid(false)
                         }
                     }
                 }
             }
-
-            presenter.loadCommission(presenter.recipient, presenter.selectedAsset?.assetId)
 
             image_view_recipient_action.setImageResource(R.drawable.ic_deladdress_24_error_400)
             image_view_recipient_action.tag = R.drawable.ic_deladdress_24_error_400
