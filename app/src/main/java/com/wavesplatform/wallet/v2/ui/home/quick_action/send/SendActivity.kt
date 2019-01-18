@@ -31,6 +31,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActiv
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_BLOCKCHAIN_COMMISSION
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_GATEWAY_COMMISSION
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_MONERO_PAYMENT_ID
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_AMOUNT
@@ -212,6 +213,7 @@ class SendActivity : BaseActivity(), SendView {
             }
             putExtra(KEY_INTENT_MONERO_PAYMENT_ID, presenter.moneroPaymentId)
             putExtra(KEY_INTENT_TYPE, presenter.type)
+            putExtra(KEY_INTENT_BLOCKCHAIN_COMMISSION, presenter.fee)
         }
     }
 
@@ -394,16 +396,17 @@ class SendActivity : BaseActivity(), SendView {
     override fun showCommissionLoading() {
         progress_bar_fee_transaction.visiable()
         text_fee_transaction.gone()
+        button_continue.isEnabled = false
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
         text_fee_transaction.text = getWavesStripZeros(unscaledAmount)
         progress_bar_fee_transaction.gone()
         text_fee_transaction.visiable()
+        button_continue.isEnabled = presenter.validateTransfer() == 0
     }
 
     override fun showCommissionError() {
-        button_continue.isEnabled = false
         text_fee_transaction.text = "-"
         showError(R.string.send_error_commission_receiving, R.id.root)
         progress_bar_fee_transaction.gone()

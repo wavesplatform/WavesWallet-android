@@ -96,7 +96,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         viewState.onShowPaymentDetails(details)
     }
 
-    private fun validateTransfer(): Int {
+    fun validateTransfer(): Int {
         if (selectedAsset == null) {
             return R.string.send_transaction_error_check_asset
         } else if (isRecipientValid() != true) {
@@ -247,6 +247,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                         }
                     }, {
                         it.printStackTrace()
+                        fee = 0L
                         runOnUiThread {
                             viewState.showCommissionError()
                         }

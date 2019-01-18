@@ -38,6 +38,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var moneroPaymentId: String? = null
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
+    var blockchainCommission = 0L
 
 
     fun confirmSend() {
@@ -79,7 +80,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                         tx.recipient = tx.recipient.clearAlias()
                         saveLastSentAddress(tx.recipient)
                         viewState.onShowTransactionSuccess(tx)
-                    }, { _ ->
+                    }, {
                         viewState.onShowError(R.string.transaction_failed)
                     }))
         }
@@ -112,7 +113,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 recipient!!,
                 MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
                 System.currentTimeMillis(),
-                Constants.WAVES_FEE,
+                blockchainCommission,
                 attachment)
     }
 
