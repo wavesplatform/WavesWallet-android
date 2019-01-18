@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.isWavesId
 import com.wavesplatform.wallet.v2.util.transactionType
+import io.reactivex.Observable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
@@ -19,17 +20,16 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
 
     var assetBalance: AssetBalance? = null
 
-    fun loadLastTransactionsFor(assetId: String) {
+    fun loadLastTransactionsFor(assetId: String, allTransactions: List<Transaction>) {
         runAsync {
-            addSubscription(queryAllAsSingle<Transaction>().toObservable()
+            addSubscription(Observable.just(allTransactions)
                     .map {
                         return@map it.filter { transaction ->
-                                    isNotSpam(transaction)
-                                            && (assetId.isWavesId() && transaction.assetId.isNullOrEmpty())
-                                            || AssetDetailsContentPresenter.isAssetIdInExchange(
-                                            transaction, assetId)
-                                            || transaction.assetId == assetId
-                                }
+                            isNotSpam(transaction)
+                                    && (assetId.isWavesId() && transaction.assetId.isNullOrEmpty())
+                                    || AssetDetailsContentPresenter.isAssetIdInExchange(transaction, assetId)
+                                    || transaction.assetId == assetId
+                        }
                                 .sortedByDescending { it.timestamp }
                                 .mapTo(ArrayList()) { HistoryItem(HistoryItem.TYPE_DATA, it) }
                                 .take(10)
@@ -52,7 +52,6 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
 
 
     companion object {
-
         fun isAssetIdInExchange(transaction: Transaction, assetId: String) =
                 transaction.transactionType() == TransactionType.EXCHANGE_TYPE
                         && (transaction.order1?.assetPair?.amountAssetObject?.id == assetId

@@ -1,9 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
-import android.content.Context
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.PagerAdapter
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.vicpin.krealmextensions.queryFirst
@@ -15,23 +13,17 @@ import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.assets_detailed_history_item.view.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import java.util.*
-import javax.inject.Inject
 
-class HistoryTransactionPagerAdapter @Inject constructor(
-        @ApplicationContext var mContext: Context,
-        var fragmentManager: FragmentManager?) : PagerAdapter() {
-    var items: MutableList<HistoryItem> = arrayListOf()
+class HistoryTransactionPagerAdapter constructor(var fragmentManager: FragmentManager?) : PagerAdapter() {
+    var items: List<HistoryItem> = arrayListOf()
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
-        val layout = LayoutInflater.from(mContext).inflate(R.layout.assets_detailed_history_item, collection, false)
+        val layout = inflate(R.layout.assets_detailed_history_item, collection, false)
         val item = items[position]
 
         layout.card_transaction.click {
@@ -57,9 +49,9 @@ class HistoryTransactionPagerAdapter @Inject constructor(
         item.data.transactionType().notNull {
             try {
                 layout.text_transaction_name.text =
-                        mContext.getString(it.title)
+                        app.getString(it.title)
             } catch (e: MissingFormatArgumentException) {
-                layout.text_transaction_name.text = mContext.getString(it.title)
+                layout.text_transaction_name.text = app.getString(it.title)
             }
 
             val decimals = item.data.asset?.precision ?: 8
@@ -98,7 +90,7 @@ class HistoryTransactionPagerAdapter @Inject constructor(
                     setExchangeItem(item.data, layout)
                 }
                 TransactionType.DATA_TYPE -> {
-                    layout.text_transaction_value.text = mContext.getString(R.string.history_data_type_title)
+                    layout.text_transaction_value.text = app.getString(R.string.history_data_type_title)
                 }
                 TransactionType.CANCELED_LEASING_TYPE -> {
                     item.data.lease?.amount.notNull {
@@ -200,7 +192,7 @@ class HistoryTransactionPagerAdapter @Inject constructor(
             directionSign = "+"
         }
 
-        view.text_transaction_name.text = mContext.getString(
+        view.text_transaction_name.text = app.getString(
                 directionStringResId,
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)

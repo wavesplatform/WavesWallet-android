@@ -8,18 +8,18 @@ import android.support.v4.view.ViewPager
 import android.view.Menu
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.ethanhua.skeleton.Skeleton
+import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.ui.welcome.AlphaScalePageTransformer
 import kotlinx.android.synthetic.main.activity_asset_details.*
-import pers.victor.ext.click
-import pers.victor.ext.dp2px
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import javax.inject.Inject
 
 
@@ -34,8 +34,10 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
     @Inject
     lateinit var adapterAvatar: AssetDetailsAvatarPagerAdapter
+    lateinit var assetDetailsContentPageAdapter: AssetDetailsContentPageAdapter
 
     lateinit var menu: Menu
+    private var skeletonScreen: ViewSkeletonScreen? = null
 
     override fun configLayoutRes() = R.layout.activity_asset_details
 
@@ -95,6 +97,12 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
             changeFavorite()
         }
 
+        skeletonScreen = Skeleton.bind(frame_skeleton)
+                .shimmer(true)
+                .color(R.color.basic100)
+                .load(R.layout.skeleton_detailed_asset_layout)
+                .show()
+
         presenter.loadAssets(intent.getIntExtra(BUNDLE_ASSET_TYPE, 0))
     }
 
@@ -135,16 +143,24 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
                 view_pager.fakeDragBy(0f)
                 view_pager.endFakeDrag()
             }
+
+            skeletonScreen?.hide()
+
+            app_bar_layout.setBackgroundColor(findColor(R.color.basic50))
+
+            linear_top_content.visiable()
+
+            configureTitleForAssets(view_pager.currentItem)
+            showFavorite(view_pager.currentItem)
+
+            // configure contents pager
+            assetDetailsContentPageAdapter = AssetDetailsContentPageAdapter(supportFragmentManager,
+                    sortedToFirstFavoriteList)
+
+            view_pager_content.adapter = assetDetailsContentPageAdapter
+            view_pager_content.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0),
+                    false)
         }
-
-        // configure contents pager
-        view_pager_content.adapter = AssetDetailsContentPageAdapter(supportFragmentManager,
-                ArrayList(sortedToFirstFavoriteList))
-        view_pager_content.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0),
-                false)
-
-        configureTitleForAssets(view_pager.currentItem)
-        showFavorite(view_pager.currentItem)
     }
 
     fun showFavorite(currentItem: Int) {
@@ -170,6 +186,10 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         }
     }
 
+    fun getAllTransactions(): List<Transaction> {
+        return presenter.allTransaction
+    }
+
     private fun unmarkAsFavorite() {
         val item = adapterAvatar.items[view_pager.currentItem]
         item.isFavorite = false
@@ -183,6 +203,14 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         item.isHidden = false
         item.save()
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_on))
+    }
+
+    override fun onDestroy() {
+        assetDetailsContentPageAdapter.assets = emptyList()
+        adapterAvatar.items = emptyList()
+        skeletonScreen?.hide()
+        skeletonScreen = null
+        super.onDestroy()
     }
 
     override fun onBackPressed() {

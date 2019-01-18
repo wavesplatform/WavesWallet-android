@@ -116,12 +116,12 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                 val data = adapter?.data as ArrayList<HistoryItem>
                 val allItems = data.asSequence()
                         .filter {
-                            it.header.isEmpty()
+                            it.itemType == HistoryItem.TYPE_DATA
                         }
                         .map { it.data }
                         .toList()
 
-                var sectionSize = 0
+                var sectionSize = 1 // 1 because first is empty view
                 for (i in 0..position) {
                     if (data[i].header.isNotEmpty()) sectionSize++
                 }
