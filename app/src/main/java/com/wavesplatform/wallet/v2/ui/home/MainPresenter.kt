@@ -88,14 +88,4 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
                     })
         }
     }
-
-    fun getGlobalConfiguration() {
-        addSubscription(matcherDataManager.getGlobalConfiguration()
-                .subscribe({ data_ ->
-
-                }, { err ->
-
-                })
-        )
-    }
 }
