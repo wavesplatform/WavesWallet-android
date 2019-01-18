@@ -287,6 +287,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     fun scriptInfo(): Observable<ScriptInfoResponse> {
         return nodeService.scriptInfo(getAddress())
+                .doOnNext {
+                    prefsUtil.setValue(PrefsUtil.KEY_SCRIPTED_ACCOUNT, it.extraFee > 0)
+                }
     }
 
 }
