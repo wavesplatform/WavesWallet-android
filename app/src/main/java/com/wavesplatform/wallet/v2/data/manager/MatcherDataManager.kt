@@ -146,6 +146,10 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return apiService.loadGlobalConfiguration()
     }
 
+    fun getGlobalCommission(): Observable<GlobalTransactionCommission> {
+        return apiService.loadGlobalCommission()
+    }
+
     private fun filterMarketsBySpamAndSelect(markets: List<MarketResponse>): Observable<MutableList<MarketResponse>> {
         return Observable.zip(Observable.just(markets), queryAllAsSingle<SpamAsset>().toObservable()
                 .map {

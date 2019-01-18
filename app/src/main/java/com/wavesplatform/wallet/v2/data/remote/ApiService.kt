@@ -20,8 +20,12 @@ interface ApiService {
     fun assetsInfoByIds(@Query("ids") ids: List<String?>): Observable<AssetsInfoResponse>
 
     @GET
-    fun loadGlobalConfiguration(@Url url: String = EnvironmentManager.get().current()
-            .url): Observable<GlobalConfiguration>
+    fun loadGlobalConfiguration(@Url url: String = EnvironmentManager.get().current().url)
+            : Observable<GlobalConfiguration>
+
+    @GET
+    fun loadGlobalCommission(@Url url: String = EnvironmentManager.URL_COMMISSION_MAIN_NET)
+            : Observable<GlobalTransactionCommission>
 
     @GET("v0/pairs/{amountAsset}/{priceAsset}")
     fun loadDexPairInfo(@Path("amountAsset") amountAsset: String?, @Path("priceAsset") priceAsset: String?): Observable<PairResponse>

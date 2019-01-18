@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
+import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
@@ -13,13 +14,16 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
 import com.wavesplatform.wallet.v2.util.isValidAddress
+import io.reactivex.Observable
+import io.reactivex.functions.Function3
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.math.BigDecimal
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @InjectViewState
@@ -38,6 +42,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
     var gatewayMin: BigDecimal = BigDecimal.ZERO
     var gatewayMax: BigDecimal = BigDecimal.ZERO
+    var fee = 0L
 
     fun sendClicked() {
         val res = validateTransfer()
@@ -81,7 +86,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 recipient ?: "",
                 MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
                 System.currentTimeMillis(),
-                Constants.WAVES_FEE,
+                fee,
                 "")
     }
 
@@ -206,6 +211,47 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
 
         return false
+    }
+
+    fun loadCommission(address: String?, assetId: String?) {
+        if (TextUtils.isEmpty(address) || TextUtils.isEmpty(assetId)) {
+            return
+        }
+
+        runOnUiThread {
+            viewState.showCommissionLoading()
+        }
+
+        runAsync {
+            addSubscription(Observable.zip(
+                    matcherDataManager.getGlobalCommission(),
+                    nodeDataManager.scriptAddressInfo(address!!),
+                    nodeDataManager.scriptAssetInfo(assetId!!),
+                    Function3 { t1: GlobalTransactionCommission,
+                                t2: ScriptInfo,
+                                t3: AssetsDetails ->
+                        return@Function3 Triple(t1, t2, t3)
+                    })
+                    .debounce(500, TimeUnit.MILLISECONDS)
+                    .subscribe({ triple ->
+                        val commission = triple.first
+                        val scriptInfo = triple.second
+                        val assetsDetails = triple.third
+                        val params = GlobalTransactionCommission.Params()
+                        params.transactionType = Transaction.TRANSFER
+                        params.smartAccount = scriptInfo.extraFee != 0L
+                        params.smartAsset = assetsDetails.scripted
+                        fee = countCommission(commission, params)
+                        runOnUiThread {
+                            viewState.showCommissionSuccess(fee)
+                        }
+                    }, {
+                        it.printStackTrace()
+                        runOnUiThread {
+                            viewState.showCommissionError()
+                        }
+                    }))
+        }
     }
 
     companion object {
