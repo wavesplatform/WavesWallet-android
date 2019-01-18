@@ -221,6 +221,6 @@ public class PrefsUtil {
     }
 
     public String getEnvironment() {
-        return getGlobalValue(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, EnvironmentManager.KEY_ENV_PROD);
+        return getGlobalValue(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, EnvironmentManager.KEY_ENV_MAIN_NET);
     }
 }

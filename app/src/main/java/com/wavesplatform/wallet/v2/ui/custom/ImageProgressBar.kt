@@ -31,6 +31,7 @@ class ImageProgressBar : LinearLayout {
     private var progressImageResource: Drawable? = findDrawable(R.drawable.ic_loader_24_submit_400)
     private var progressTextResource: String = ""
     private var progressDurationResource: Int = DEFAULT_DURATION
+    private var textProgressVisibility: Boolean = true
 
     constructor(context: Context) : super(context)
 
@@ -61,6 +62,8 @@ class ImageProgressBar : LinearLayout {
             progressTextColorResource = typedArray.getColorStateList(
                     R.styleable.ImageProgressBar_progress_text_color)
                     ?: findColorStateList(R.color.disabled500)
+            textProgressVisibility = typedArray.getBoolean(
+                    R.styleable.ImageProgressBar_progress_text_visibility, true)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -88,7 +91,9 @@ class ImageProgressBar : LinearLayout {
 
         //  add views to layout
         this.addView(imageProgress)
-        this.addView(textProgress)
+        if (textProgressVisibility) {
+            this.addView(textProgress)
+        }
 
         // configure animation and start
         animator = ObjectAnimator.ofFloat(imageProgress,

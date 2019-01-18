@@ -316,10 +316,10 @@
                 android:layout_marginBottom="24dp"
                 android:clipToPadding="true"
                 android:translationZ="1dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="2dp"
-                android:visibility="gone"
                 tools:visibility="visible">
 
                 <RelativeLayout
@@ -398,7 +398,7 @@
                     android:textColor="@color/error500"
                     android:textSize="12sp"
                     android:visibility="gone"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible" />
 
             </RelativeLayout>
 
@@ -562,22 +562,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="32dp"
+                android:layout_marginRight="16dp"
                 android:clickable="true"
                 android:text="@string/send_continue"
                 android:textStyle="bold" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_free_transaction"
-                android:layout_width="wrap_content"
+            <include
+                layout="@layout/view_commission"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="14dp"
-                android:layout_marginBottom="34dp"
-                android:text="@string/send_transaction_fee_0_001_waves"
-                android:textColor="@color/disabled500"
-                android:textSize="12sp" />
+                android:layout_margin="16dp" />
+
+
         </LinearLayout>
 
 

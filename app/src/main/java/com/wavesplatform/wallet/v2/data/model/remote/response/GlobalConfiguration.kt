@@ -17,7 +17,6 @@ data class GlobalConfiguration(
             @SerializedName("matcherUrl") var matcherUrl: String = ""
     )
 
-
     data class GeneralAssetId(
             @SerializedName("assetId") var assetId: String = "",
             @SerializedName("displayName") var displayName: String = "",

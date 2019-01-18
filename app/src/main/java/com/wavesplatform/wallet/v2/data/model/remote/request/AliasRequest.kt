@@ -6,6 +6,7 @@ import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.arrayWithSize
 import java.nio.charset.Charset
@@ -26,8 +27,9 @@ data class AliasRequest(
             Bytes.concat(byteArrayOf(type.toByte()),
                     Base58.decode(senderPublicKey),
                     Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                            byteArrayOf(Constants.ADDRESS_SCHEME.toByte()),
-                            alias?.toByteArray(Charset.forName("UTF-8"))?.arrayWithSize()).arrayWithSize(),
+                            byteArrayOf(EnvironmentManager.getNetCode()),
+                            alias?.toByteArray(Charset.forName("UTF-8"))?.arrayWithSize())
+                            .arrayWithSize(),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp))
         } catch (e: Exception) {

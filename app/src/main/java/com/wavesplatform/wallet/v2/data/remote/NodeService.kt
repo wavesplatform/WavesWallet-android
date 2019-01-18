@@ -61,6 +61,9 @@ interface NodeService {
     fun burn(@Body burnRequest: BurnRequest): Observable<BurnRequest>
 
     @GET("addresses/scriptInfo/{address}")
-    fun scriptInfo(@Path("address") address: String?): Observable<ScriptInfoResponse>
+    fun scriptAddressInfo(@Path("address") address: String): Observable<ScriptInfo>
+
+    @GET("/assets/details/{assetId}")
+    fun scriptAssetInfo(@Path("assetId") assetId: String): Observable<AssetsDetails>
 
 }

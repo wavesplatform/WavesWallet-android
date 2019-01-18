@@ -96,18 +96,18 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         if (BuildConfig.DEBUG) {
             button_switch_net.visiable()
             val newEnvironment = when (prefsUtil.getGlobalValue(
-                    PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, EnvironmentManager.KEY_ENV_PROD)) {
-                EnvironmentManager.KEY_ENV_PROD -> {
+                    PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, EnvironmentManager.KEY_ENV_MAIN_NET)) {
+                EnvironmentManager.KEY_ENV_MAIN_NET -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_test)
-                    EnvironmentManager.Environment.TEST
+                    EnvironmentManager.Environment.TEST_NET
                 }
                 EnvironmentManager.KEY_ENV_TEST_NET -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_prod)
-                    EnvironmentManager.Environment.PRODUCTION
+                    EnvironmentManager.Environment.MAIN_NET
                 }
                 else -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_test)
-                    EnvironmentManager.Environment.TEST
+                    EnvironmentManager.Environment.TEST_NET
                 }
             }
             button_switch_net.click {
