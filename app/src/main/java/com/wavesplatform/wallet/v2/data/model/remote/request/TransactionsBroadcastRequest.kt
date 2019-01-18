@@ -6,6 +6,7 @@ import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.SignUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.arrayWithSize
@@ -60,7 +61,7 @@ class TransactionsBroadcastRequest(
     private fun getRecipientBytes(recipient: String): ByteArray {
         return if (recipient.length <= 30) {
             Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                    byteArrayOf(Constants.ADDRESS_SCHEME.toByte()),
+                    byteArrayOf(EnvironmentManager.getNetCode()),
                     recipient.clearAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
         } else {
             Base58.decode(recipient)

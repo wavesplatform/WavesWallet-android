@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.util
 
 import com.wavesplatform.wallet.v1.crypto.Base58
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.AddressUtil.calcCheckSum
 import java.util.*
 
@@ -16,7 +16,7 @@ fun String?.isValidAddress(): Boolean {
         val bytes = Base58.decode(this)
         if (bytes.size == AddressLength
                 && bytes[0] == AddressVersion
-                && bytes[1] == Constants.ADDRESS_SCHEME.toByte()) {
+                && bytes[1] == EnvironmentManager.getNetCode()) {
             val checkSum = Arrays.copyOfRange(bytes, bytes.size - ChecksumLength, bytes.size)
             val checkSumGenerated = calcCheckSum(Arrays.copyOf(bytes, bytes.size - ChecksumLength))
             Arrays.equals(checkSum, checkSumGenerated)
@@ -29,7 +29,7 @@ fun String?.isValidAddress(): Boolean {
 }
 
 fun String.makeAsAlias(): String {
-    return "alias:${Constants.ADDRESS_SCHEME}:$this"
+    return "alias:${EnvironmentManager.getNetCode().toChar()}:$this"
 }
 
 fun String.clearAlias(): String {

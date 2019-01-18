@@ -237,7 +237,7 @@
         style="@style/WavesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/text_free_transaction"
+        android:layout_above="@+id/text_fee_transaction"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:enabled="false"
@@ -246,7 +246,7 @@
         android:textStyle="bold" />
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/text_free_transaction"
+        android:id="@+id/text_fee_transaction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

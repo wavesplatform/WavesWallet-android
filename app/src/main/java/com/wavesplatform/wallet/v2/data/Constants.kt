@@ -22,7 +22,6 @@ object Constants {
     const val URL_FACEBOOK = "https://www.facebook.com/wavesplatform"
     const val URL_DISCORD = "https://discordapp.com/invite/cnFmDyA"
     const val URL_REDDIT = "https://www.reddit.com/r/Wavesplatform/"
-    const val URL_GLOBAL_CONFIGURATION = "https://raw.githubusercontent.com/wavesplatform/waves-client-config/master/environment_mainnet.json"
 
     const val ACC_TWITTER = "wavesplatform"
     const val ACC_TELEGRAM = "wavesnews"
@@ -67,19 +66,17 @@ object Constants {
     const val RESULT_OK_NO_RESULT = 204
 
     const val VERSION = 2
-    val ADDRESS_SCHEME = EnvironmentManager.get().current().netCode
-
     val WAVES_ASSET_ID = ""
-    val MONERO_ASSET_ID = EnvironmentManager.get().current().moneroAssetId!!
-    val BITCOIN_ASSET_ID = EnvironmentManager.get().current().bitcoinAssetId!!
-    val ETHEREUM_ASSET_ID = EnvironmentManager.get().current().ethereumAssetId!!
-    val BITCOINCASH_ASSET_ID = EnvironmentManager.get().current().bitcoincashAssetId!!
-    val LIGHTCOIN_ASSET_ID = EnvironmentManager.get().current().lightcoinAssetId!!
-    val ZEC_ASSET_ID = EnvironmentManager.get().current().zecAssetId!!
-    val DASH_ASSET_ID = EnvironmentManager.get().current().dashAssetId!!
-    val WUSD_ASSET_ID = EnvironmentManager.get().current().wUsdAssetId!!
-    val WEUR_ASSET_ID = EnvironmentManager.get().current().wEurAssetId!!
-    val WTRY_ASSET_ID = EnvironmentManager.get().current().wTryAssetId!!
+    val MONERO_ASSET_ID = EnvironmentManager.findAssetId("XMR")
+    val BITCOIN_ASSET_ID = EnvironmentManager.findAssetId("BTC")
+    val ETHEREUM_ASSET_ID = EnvironmentManager.findAssetId("ETH")
+    val BITCOINCASH_ASSET_ID = EnvironmentManager.findAssetId("BCH")
+    val LIGHTCOIN_ASSET_ID = EnvironmentManager.findAssetId("LTC")
+    val ZEC_ASSET_ID = EnvironmentManager.findAssetId("ZEC")
+    val DASH_ASSET_ID = EnvironmentManager.findAssetId("DASH")
+    val WUSD_ASSET_ID = EnvironmentManager.findAssetId("USD")
+    val WEUR_ASSET_ID = EnvironmentManager.findAssetId("EUR")
+    val WTRY_ASSET_ID = EnvironmentManager.findAssetId("TRY")
 
     val alphabetColor = hashMapOf(
             Pair("a", R.color.a),
