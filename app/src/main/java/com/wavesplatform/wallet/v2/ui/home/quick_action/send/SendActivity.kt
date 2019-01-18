@@ -19,7 +19,6 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v1.util.MoneyUtil.getWavesStripZeros
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
@@ -402,7 +401,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
-        text_fee_transaction.text = getWavesStripZeros(unscaledAmount)
+        text_fee_transaction.text = MoneyUtil.getScaledText(unscaledAmount, 8)
         progress_bar_fee_transaction.gone()
         text_fee_transaction.visiable()
         button_continue.isEnabled = presenter.validateTransfer() == 0

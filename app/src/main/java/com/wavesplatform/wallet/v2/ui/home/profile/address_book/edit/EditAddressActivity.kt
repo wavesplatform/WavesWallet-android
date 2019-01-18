@@ -10,7 +10,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.mindorks.editdrawabletext.DrawablePosition
-import com.mindorks.editdrawabletext.onDrawableClickListener
+import com.mindorks.editdrawabletext.OnDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.rules.AddressBookAddressRule
