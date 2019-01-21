@@ -17,14 +17,15 @@ data class AliasRequest(
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
         @SerializedName("fee") var fee: Long = 0,
         @SerializedName("timestamp") var timestamp: Long = 0,
-        @SerializedName("signature") var signature: String? = null,
+        @SerializedName("version") var version: Int = Constants.VERSION,
+        @SerializedName("proofs") var proofs: MutableList<String?>? = null,
         @SerializedName("alias") var alias: String? = ""
-
 ) {
 
     fun toSignBytes(): ByteArray {
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
+                    byteArrayOf(Constants.VERSION.toByte()),
                     Base58.decode(senderPublicKey),
                     Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
                             byteArrayOf(EnvironmentManager.getNetCode()),
@@ -40,7 +41,7 @@ data class AliasRequest(
     }
 
     fun sign(privateKey: ByteArray) {
-        signature = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()))
+        proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytes())))
     }
 
 }
