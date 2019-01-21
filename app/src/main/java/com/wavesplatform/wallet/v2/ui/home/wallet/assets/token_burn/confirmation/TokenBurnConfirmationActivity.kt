@@ -1,16 +1,18 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation
 
 import android.os.Bundle
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.BurnRequest
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.KEY_INTENT_AMOUNT
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.KEY_INTENT_ASSET_BALANCE
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.KEY_INTENT_BLOCKCHAIN_FEE
+import com.wavesplatform.wallet.v2.util.getScaledAmount
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.showError
@@ -43,6 +45,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         setupToolbar(toolbar_view, true, getString(R.string.token_burn_confirmation_toolbar_title), R.drawable.ic_toolbar_back_white)
 
         presenter.assetBalance = intent.getParcelableExtra(KEY_INTENT_ASSET_BALANCE)
+        presenter.fee = intent.getLongExtra(KEY_INTENT_BLOCKCHAIN_FEE, 0L)
         val stringAmount = intent.getStringExtra(KEY_INTENT_AMOUNT)
         presenter.amount = stringAmount.toDouble()
 
@@ -55,6 +58,9 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
             getString(R.string.token_burn_confirmationt_not_reissuable)
         }
         text_description.text = presenter.assetBalance!!.getDescription()
+
+        text_fee_value.text = "${getScaledAmount(presenter.fee, 8)} " +
+                "${Constants.CUSTOM_FEE_ASSET_NAME}"
 
         button_confirm.click {
             presenter.burn()
