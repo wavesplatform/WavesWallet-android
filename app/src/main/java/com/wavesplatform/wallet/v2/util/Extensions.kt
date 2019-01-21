@@ -51,10 +51,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
-import com.wavesplatform.wallet.v2.data.model.remote.response.Order
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
+import com.wavesplatform.wallet.v2.data.exception.RetrofitException
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
@@ -672,6 +670,18 @@ fun findMyOrder(first: Order, second: Order, address: String): Order {
             second
         }
     }
+}
+
+fun Throwable.errorBody(): ErrorResponse? {
+    return if (this is RetrofitException) {
+        this.getErrorBodyAs(ErrorResponse::class.java)
+    } else {
+        null
+    }
+}
+
+fun ErrorResponse.isSmartError(): Boolean {
+    return this.error in 305..307 || this.error == 112 // TODO: Delete 112
 }
 
 fun AssetInfo.getTicker(): String {
