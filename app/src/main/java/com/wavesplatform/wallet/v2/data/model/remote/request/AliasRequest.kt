@@ -8,12 +8,13 @@ import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.util.arrayWithSize
 import java.nio.charset.Charset
 
 
 data class AliasRequest(
-        @SerializedName("type") val type: Int = 10,
+        @SerializedName("type") val type: Int = Transaction.CREATE_ALIAS,
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
         @SerializedName("fee") var fee: Long = 0,
         @SerializedName("timestamp") var timestamp: Long = 0,
