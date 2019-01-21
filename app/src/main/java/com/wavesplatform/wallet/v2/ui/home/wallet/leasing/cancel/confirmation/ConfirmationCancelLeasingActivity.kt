@@ -2,16 +2,15 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.util.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
-import com.wavesplatform.wallet.v2.util.stripZeros
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_confirm_cancel_leasing.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -45,7 +44,6 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
 
         text_leasing_value.text = presenter.amount
         text_leasing_value.makeTextHalfBold()
-        text_free_value.text = "${MoneyUtil.getScaledText(Constants.WAVES_FEE, 8).stripZeros()} ${Constants.wavesAssetInfo.name}"
         text_tx_value.text = presenter.transactionId
 
         text_leasing_result_value.text = getString(R.string.confirm_cancel_leasing_result_value)
@@ -69,6 +67,8 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
             setResult(Activity.RESULT_OK)
             onBackPressed()
         }
+
+        presenter.loadCommission(presenter.address)
     }
 
     override fun onBackPressed() {
@@ -93,6 +93,27 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         button_confirm.isEnabled = networkConnected
+    }
+
+    override fun showCommissionLoading() {
+        button_okay.isEnabled = false
+        progress_bar_fee_transaction.visiable()
+        text_fee_value.gone()
+    }
+
+    override fun showCommissionSuccess(unscaledAmount: Long) {
+        text_fee_value.text = "${getScaledAmount(unscaledAmount, 8)} ${Constants.wavesAssetInfo.name}"
+        button_okay.isEnabled = true
+        progress_bar_fee_transaction.gone()
+        text_fee_value.visiable()
+    }
+
+    override fun showCommissionError() {
+        text_fee_value.text = "-"
+        button_okay.isEnabled = false
+        progress_bar_fee_transaction.gone()
+        text_fee_value.visiable()
+        showError(R.string.common_error_commission_receiving, R.id.root)
     }
 
     companion object {
