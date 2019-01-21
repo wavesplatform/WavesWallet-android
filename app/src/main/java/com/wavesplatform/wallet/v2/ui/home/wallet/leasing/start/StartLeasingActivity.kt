@@ -72,6 +72,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 putExtra(ConfirmationStartLeasingActivity.BUNDLE_ADDRESS, edit_address.text.toString())
                 putExtra(ConfirmationStartLeasingActivity.BUNDLE_AMOUNT, edit_amount.text.toString())
                 putExtra(ConfirmationStartLeasingActivity.BUNDLE_RECIPIENT_IS_ALIAS, presenter.recipientIsAlias)
+                putExtra(ConfirmationStartLeasingActivity.BUNDLE_BLOCKCHAIN_COMMISSION, presenter.fee)
             }
         }
 
