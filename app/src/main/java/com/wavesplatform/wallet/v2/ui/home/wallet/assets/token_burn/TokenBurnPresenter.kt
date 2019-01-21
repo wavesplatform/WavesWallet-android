@@ -31,17 +31,19 @@ class TokenBurnPresenter @Inject constructor() : BasePresenter<TokenBurnView>() 
     }
 
     fun loadCommission(assetId: String?) {
-        if (TextUtils.isEmpty(assetId)) {
-            return
-        }
-
         viewState.showCommissionLoading()
+
+        val assetDetailsObserver = if (TextUtils.isEmpty(assetId)) {
+            Observable.just(AssetsDetails(assetId = "WAVES", scripted = false))
+        } else {
+            nodeDataManager.scriptAssetInfo(assetId!!)
+        }
 
         addSubscription(Observable.zip(
                 matcherDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(
                         App.getAccessManager().getWallet()?.address ?: ""),
-                nodeDataManager.scriptAssetInfo(assetId!!),
+                assetDetailsObserver,
                 Function3 { t1: GlobalTransactionCommission,
                             t2: ScriptInfo,
                             t3: AssetsDetails ->

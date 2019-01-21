@@ -215,16 +215,22 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     fun loadCommission(address: String?, assetId: String?) {
-        if (TextUtils.isEmpty(address) || TextUtils.isEmpty(assetId)) {
+        if (TextUtils.isEmpty(address)) {
             return
         }
 
         viewState.showCommissionLoading()
 
+        val assetDetailsObserver = if (TextUtils.isEmpty(assetId)) {
+            Observable.just(AssetsDetails(assetId = "WAVES", scripted = false))
+        } else {
+            nodeDataManager.scriptAssetInfo(assetId!!)
+        }
+
         addSubscription(Observable.zip(
                 matcherDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(address!!),
-                nodeDataManager.scriptAssetInfo(assetId!!),
+                assetDetailsObserver,
                 Function3 { t1: GlobalTransactionCommission,
                             t2: ScriptInfo,
                             t3: AssetsDetails ->
