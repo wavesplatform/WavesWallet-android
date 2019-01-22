@@ -113,10 +113,6 @@ fun getWavesDexFee(): BigDecimal {
     return MoneyUtil.getScaledText(Constants.WAVES_DEX_FEE, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
 }
 
-fun getWavesFee(): BigDecimal {
-    return MoneyUtil.getScaledText(Constants.WAVES_FEE, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
-}
-
 fun String.isWavesId(): Boolean {
     return this.toLowerCase() == Constants.wavesAssetInfo.id
 }

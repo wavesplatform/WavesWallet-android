@@ -104,7 +104,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
                 .map {
                     if (it.first) {
                         presenter.wavesBalance.getAvailableBalance().notNull { wavesBalance ->
-                            if (wavesBalance < Constants.WAVES_FEE) {
+                            if (wavesBalance < presenter.fee) {
                                 presenter.quantityValidation = false
                                 linear_fees_error.visiable()
                             } else {

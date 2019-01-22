@@ -36,7 +36,6 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
     fun loadCommission(callback: OnCommissionGetListener) {
         callback.showCommissionLoading()
         fee = 0L
-
         addSubscription(Observable.zip(
                 matcherDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(
@@ -67,5 +66,4 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
         fun showCommissionSuccess(unscaledAmount: Long)
         fun showCommissionError()
     }
-
 }

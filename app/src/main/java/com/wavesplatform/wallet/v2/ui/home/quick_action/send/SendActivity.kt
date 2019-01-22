@@ -246,7 +246,7 @@ class SendActivity : BaseActivity(), SendView {
             }
         } else if (presenter.type == SendPresenter.Type.WAVES
                 && assetBalance.assetId.isWavesId()) {
-            val total = BigDecimal.valueOf(amount - Constants.WAVES_FEE,
+            val total = BigDecimal.valueOf(amount - presenter.fee,
                     assetBalance.getDecimals())
             if (total.toFloat() > 0) {
                 edit_amount.setText(total.toString().stripZeros())
@@ -259,7 +259,7 @@ class SendActivity : BaseActivity(), SendView {
             }
         } else {
             val total = if (assetBalance.assetId.isWavesId()) {
-                amount - Constants.WAVES_FEE
+                amount - presenter.fee
             } else {
                 amount
             }

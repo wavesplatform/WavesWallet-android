@@ -117,7 +117,9 @@ class TransactionUtil @Inject constructor() {
             }
         }
 
-        private fun getDataCommission(params: GlobalTransactionCommission.Params, feeRules: GlobalTransactionCommission.FeeRules, commission: GlobalTransactionCommission): Long {
+        private fun getDataCommission(params: GlobalTransactionCommission.Params,
+                                      feeRules: GlobalTransactionCommission.FeeRules,
+                                      commission: GlobalTransactionCommission): Long {
             var total = 0.0
             total += Math.floor(1 + (params.bytesCount!!.toDouble() - 1) / 1024) * feeRules.fee
             if (params.smartAccount!!) {
@@ -126,7 +128,9 @@ class TransactionUtil @Inject constructor() {
             return total.toLong()
         }
 
-        private fun getMassTransferCommission(feeRules: GlobalTransactionCommission.FeeRules, params: GlobalTransactionCommission.Params, commission: GlobalTransactionCommission): Long {
+        private fun getMassTransferCommission(feeRules: GlobalTransactionCommission.FeeRules,
+                                              params: GlobalTransactionCommission.Params,
+                                              commission: GlobalTransactionCommission): Long {
             val total = getAssetAccountCommission(feeRules, params, commission)
             var transfersPrice = (params.transfersCount!! * feeRules.pricePerTransfer!!).toDouble()
             val minPriceStep = feeRules.minPriceStep.toDouble()
@@ -136,7 +140,9 @@ class TransactionUtil @Inject constructor() {
             return (transfersPrice + total).toLong()
         }
 
-        private fun getExchangeCommission(feeRules: GlobalTransactionCommission.FeeRules, params: GlobalTransactionCommission.Params, commission: GlobalTransactionCommission): Long {
+        private fun getExchangeCommission(feeRules: GlobalTransactionCommission.FeeRules,
+                                          params: GlobalTransactionCommission.Params,
+                                          commission: GlobalTransactionCommission): Long {
             var total = feeRules.fee
             if (params.smartPriceAsset!!) {
                 total += commission.smartAssetExtraFee
@@ -147,7 +153,9 @@ class TransactionUtil @Inject constructor() {
             return total
         }
 
-        private fun getAccountCommission(feeRules: GlobalTransactionCommission.FeeRules, params: GlobalTransactionCommission.Params, commission: GlobalTransactionCommission): Long {
+        private fun getAccountCommission(feeRules: GlobalTransactionCommission.FeeRules,
+                                         params: GlobalTransactionCommission.Params,
+                                         commission: GlobalTransactionCommission): Long {
             var total = feeRules.fee
             if (params.smartAccount!!) {
                 total += commission.smartAccountExtraFee

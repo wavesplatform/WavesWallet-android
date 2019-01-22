@@ -37,7 +37,7 @@ data class BurnRequest(
                     Base58.decode(App.getAccessManager().getWallet()!!.publicKeyStr),
                     Base58.decode(assetId),
                     Longs.toByteArray(quantity),
-                    Longs.toByteArray(Constants.WAVES_FEE),
+                    Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp))
         } catch (e: Exception) {
             Log.e("BurnRequest", "Couldn't create toSignBytes", e)

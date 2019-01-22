@@ -455,13 +455,32 @@
                     android:textColor="@color/basic500"
                     android:textSize="14sp" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_fee_value"
+                <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/buy_and_sell_0_001_waves"
-                    android:textColor="@color/disabled900" />
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_fee_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:visibility="invisible"
+                        android:text="@string/buy_and_sell_0_001_waves"
+                        android:textColor="@color/disabled900"
+                        tools:visibility="visible"/>
+
+                    <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
+                        android:id="@+id/progress_bar_fee_transaction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="gone"
+                        app:progress_image="@drawable/ic_loader_24_submit_400"
+                        app:progress_text_visibility="false"/>
+
+                </FrameLayout>
+
+
 
 
             </LinearLayout>

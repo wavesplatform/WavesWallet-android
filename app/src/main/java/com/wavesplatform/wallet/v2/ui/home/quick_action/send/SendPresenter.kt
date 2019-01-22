@@ -221,16 +221,10 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
         viewState.showCommissionLoading()
         fee = 0L
-        val assetDetailsObserver = if (TextUtils.isEmpty(assetId)) {
-            Observable.just(AssetsDetails(assetId = "WAVES", scripted = false))
-        } else {
-            nodeDataManager.scriptAssetInfo(assetId!!)
-        }
-
         addSubscription(Observable.zip(
                 matcherDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(address!!),
-                assetDetailsObserver,
+                nodeDataManager.scriptAssetInfo(assetId),
                 Function3 { t1: GlobalTransactionCommission,
                             t2: ScriptInfo,
                             t3: AssetsDetails ->

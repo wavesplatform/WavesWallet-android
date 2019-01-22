@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn
 
-import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
@@ -33,17 +32,11 @@ class TokenBurnPresenter @Inject constructor() : BasePresenter<TokenBurnView>() 
     fun loadCommission(assetId: String?) {
         viewState.showCommissionLoading()
         fee = 0L
-        val assetDetailsObserver = if (TextUtils.isEmpty(assetId)) {
-            Observable.just(AssetsDetails(assetId = "WAVES", scripted = false))
-        } else {
-            nodeDataManager.scriptAssetInfo(assetId!!)
-        }
-
         addSubscription(Observable.zip(
                 matcherDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(
                         App.getAccessManager().getWallet()?.address ?: ""),
-                assetDetailsObserver,
+                nodeDataManager.scriptAssetInfo(assetId),
                 Function3 { t1: GlobalTransactionCommission,
                             t2: ScriptInfo,
                             t3: AssetsDetails ->
