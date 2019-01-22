@@ -9,8 +9,8 @@ class RealmMigrations : RealmMigration {
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         if (oldVersion < 1L) {
             val userSchema = realm.schema.get("Transaction")
-            userSchema!!.addField("script", String.javaClass)
-            userSchema!!.addField("minSponsoredAssetFee", String.javaClass)
+            userSchema!!.addField("script", String::class.java)
+            userSchema!!.addField("minSponsoredAssetFee", String::class.java)
         }
     }
 }
