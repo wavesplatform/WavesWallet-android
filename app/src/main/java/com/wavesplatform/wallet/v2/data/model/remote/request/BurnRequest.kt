@@ -20,12 +20,10 @@ data class BurnRequest(
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
         @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,
         @SerializedName("type") val type: Int = Transaction.BURN,
-        @SerializedName("version") val version: Int = Constants.VERSION) {
-
-    @SerializedName("proofs")
-    var proofs = arrayOf("")
-    @SerializedName("id")
-    var id: String? = null
+        @SerializedName("version") val version: Int = Constants.VERSION,
+        @SerializedName("proofs") var proofs: MutableList<String?>? = null,
+        @SerializedName("id") var id: String? = null
+) {
 
 
     fun toSignBytes(): ByteArray {
@@ -47,7 +45,7 @@ data class BurnRequest(
     }
 
     fun sign(privateKey: ByteArray) {
-        proofs[0] = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()))
+        proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytes())))
     }
 
 }

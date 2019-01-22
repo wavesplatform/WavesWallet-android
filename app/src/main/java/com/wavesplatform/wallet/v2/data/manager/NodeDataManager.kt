@@ -194,7 +194,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         }
         return nodeService.cancelLeasing(cancelLeasingRequest)
                 .map {
-                    val first = queryFirst<Transaction> { equalTo("id", cancelLeasingRequest.txId) }
+                    val first = queryFirst<Transaction> { equalTo("id", cancelLeasingRequest.leaseId) }
                     first?.status = LeasingStatus.CANCELED.status
                     first?.save()
                     return@map it
