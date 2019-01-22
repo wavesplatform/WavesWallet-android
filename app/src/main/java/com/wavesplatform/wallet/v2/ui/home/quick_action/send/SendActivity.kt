@@ -38,6 +38,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendCo
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ASSET
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_RECIPIENT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_TYPE
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.REQUEST_BURN_CONFIRM
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
@@ -203,7 +204,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun onShowPaymentDetails(details: PaymentConfirmationDetails) {
-        launchActivity<SendConfirmationActivity> {
+        launchActivity<SendConfirmationActivity>(REQUEST_SEND) {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
             putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)
             putExtra(KEY_INTENT_SELECTED_AMOUNT, presenter.amount.toPlainString())
@@ -448,6 +449,14 @@ class SendActivity : BaseActivity(), SendView {
                     setAsset(data?.getParcelableExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM))
                 }
             }
+
+            REQUEST_SEND -> {
+                when (resultCode) {
+                    Constants.RESULT_SMART_ERROR -> {
+                        showAlertAboutScriptedAccount()
+                    }
+                }
+            }
         }
     }
 
@@ -622,6 +631,7 @@ class SendActivity : BaseActivity(), SendView {
         const val REQUEST_YOUR_ASSETS = 43
         const val REQUEST_SCAN_RECEIVE = 44
         const val REQUEST_SCAN_MONERO = 45
+        const val REQUEST_SEND = 46
         const val KEY_INTENT_ASSET_DETAILS = "asset_details"
         const val KEY_INTENT_REPEAT_TRANSACTION = "repeat_transaction"
         const val KEY_INTENT_TRANSACTION_ASSET_BALANCE = "transaction_asset_balance"

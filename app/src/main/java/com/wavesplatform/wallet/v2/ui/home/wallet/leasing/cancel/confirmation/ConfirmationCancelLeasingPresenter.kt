@@ -11,6 +11,8 @@ import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import com.wavesplatform.wallet.v2.util.errorBody
+import com.wavesplatform.wallet.v2.util.isSmartError
 import javax.inject.Inject
 
 @InjectViewState
@@ -34,6 +36,10 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
                     viewState.failedCancelLeasing()
                     viewState.showProgressBar(false)
                     it.printStackTrace()
+
+                    if (it.errorBody()?.isSmartError() == true) {
+                        viewState.failedCancelLeasingCauseSmart()
+                    }
                 }))
     }
 

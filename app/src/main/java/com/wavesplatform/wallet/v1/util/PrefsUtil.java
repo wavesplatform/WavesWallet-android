@@ -37,6 +37,7 @@ public class PrefsUtil {
     public static final String KEY_ENABLE_SPAM_FILTER = "enable_spam_filter";
     public static final String KEY_SPAM_URL = "spam_url";
     public static final String KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS = "key_need_update_transaction_after_change_spam_settings";
+    public static final String KEY_SCRIPTED_ACCOUNT = "scripted_account";
 
     public static final String KEY_LAST_UPDATE_DEX_INFO = "last_update_dex_info";
 

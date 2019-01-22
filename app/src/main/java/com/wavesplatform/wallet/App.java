@@ -54,9 +54,10 @@ public class App extends DaggerApplication {
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
         }
+        LeakCanary.install(this);
+
         Analytics.appsFlyerInit(this);
         FirebaseApp.initializeApp(this);
-        LeakCanary.install(this);
         Fabric.with(this, new Crashlytics());
         sContext = this;
         BlockCanary.install(this, new AppBlockCanaryContext()).start();

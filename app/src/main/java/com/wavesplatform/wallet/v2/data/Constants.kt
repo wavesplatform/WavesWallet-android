@@ -64,6 +64,7 @@ object Constants {
     const val RESULT_CANCELED = 404
     const val RESULT_OK = 200
     const val RESULT_OK_NO_RESULT = 204
+    const val RESULT_SMART_ERROR = 307
 
     const val VERSION = 2
     val WAVES_ASSET_ID = ""

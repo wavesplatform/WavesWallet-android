@@ -12,6 +12,7 @@ import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showAlertAboutScriptedAccount
 import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -85,12 +86,12 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                 }
                 .filter { it.first }
                 .map {
-                    if (presenter.wavesBalance.getAvailableBalance() ?: 0 < presenter.fee){
+                    if (presenter.wavesBalance.getAvailableBalance() ?: 0 < presenter.fee) {
                         presenter.aliasValidation = false
                         makeButtonEnableIfValid()
-                        til_new_alias_symbol.error =  getString(R.string.buy_and_sell_not_enough, presenter.wavesBalance.getName())
+                        til_new_alias_symbol.error = getString(R.string.buy_and_sell_not_enough, presenter.wavesBalance.getName())
                         return@map ""
-                    }else{
+                    } else {
                         return@map it.second
                     }
                 }
@@ -127,14 +128,17 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
 
     override fun onBackPressed() {
         setResult(Constants.RESULT_CANCELED)
-        finish()
-        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        exitFromActivity()
     }
 
     override fun successCreateAlias(alias: Alias) {
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_ALIAS, alias)
         })
+        exitFromActivity()
+    }
+
+    private fun exitFromActivity() {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
@@ -143,6 +147,10 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         message.notNull {
             showError(it, R.id.root)
         }
+    }
+
+    override fun failedCreateAliasCauseSmart() {
+        showAlertAboutScriptedAccount()
     }
 
     override fun needToShowNetworkMessage() = true

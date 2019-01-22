@@ -92,11 +92,16 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
-    override fun onShowError(errorMessageRes: Int) {
+    override fun onShowError(errorMessageRes: String) {
         completeBurnProcessing()
         toolbar_view.visiable()
         card_content.visiable()
         showError(errorMessageRes, R.id.root)
+    }
+
+    override fun failedTokenBurnCauseSmart() {
+        setResult(Constants.RESULT_SMART_ERROR)
+        onBackPressed()
     }
 
     private fun completeBurnProcessing() {

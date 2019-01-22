@@ -159,8 +159,13 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_BURN_CONFIRM -> {
-                if (resultCode == Constants.RESULT_OK) {
-                    finish()
+                when (resultCode) {
+                    Constants.RESULT_OK ->{
+                        finish()
+                    }
+                    Constants.RESULT_SMART_ERROR ->{
+                        showAlertAboutScriptedAccount()
+                    }
                 }
             }
         }

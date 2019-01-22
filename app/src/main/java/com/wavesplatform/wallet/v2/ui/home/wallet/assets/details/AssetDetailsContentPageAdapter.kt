@@ -6,16 +6,15 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentFragment
-import pyxis.uzuki.live.richutilskt.utils.put
 
-class AssetDetailsContentPageAdapter(fm: FragmentManager?, var assets: ArrayList<AssetBalance>) : FragmentStatePagerAdapter(fm) {
+class AssetDetailsContentPageAdapter(fm: FragmentManager?, var assets: List<AssetBalance>) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
-           return AssetDetailsContentFragment().apply {
-               val bundle = Bundle()
-               bundle.put(AssetDetailsContentFragment.BUNDLE_ASSET, assets[position])
-               arguments = bundle
-           }
+        val bundle = Bundle()
+        val assetDetailsContentFragment = AssetDetailsContentFragment()
+        bundle.putParcelable(AssetDetailsContentFragment.BUNDLE_ASSET, assets[position])
+        assetDetailsContentFragment.arguments = bundle
+        return assetDetailsContentFragment
     }
 
     override fun getCount(): Int = assets.size

@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.text.*
@@ -31,6 +32,8 @@ import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
 import android.view.View
 import android.view.ViewGroup
+import android.util.TypedValue
+import android.view.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -48,14 +51,9 @@ import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
-import com.wavesplatform.wallet.v2.data.model.remote.response.Order
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import pers.victor.ext.activityManager
-import pers.victor.ext.app
-import pers.victor.ext.clipboardManager
-import pers.victor.ext.findColor
+import com.wavesplatform.wallet.v2.data.exception.RetrofitException
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.io.File
@@ -645,6 +643,18 @@ fun findMyOrder(first: Order, second: Order, address: String): Order {
     }
 }
 
+fun Throwable.errorBody(): ErrorResponse? {
+    return if (this is RetrofitException) {
+        this.getErrorBodyAs(ErrorResponse::class.java)
+    } else {
+        null
+    }
+}
+
+fun ErrorResponse.isSmartError(): Boolean {
+    return this.error in 305..307 || this.error == 112 // TODO: Delete 112
+}
+
 fun AssetInfo.getTicker(): String {
 
     if (this.id.isWavesId()) {
@@ -671,4 +681,27 @@ fun getScaledAmount(amount: Long, decimals: Int): String {
         else -> MoneyUtil.createFormatter(decimals).format(BigDecimal.valueOf(absAmount, decimals))
                 .stripZeros() + ""
     }
+}
+
+fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { }) {
+    val alertDialogBuilder = AlertDialog.Builder(this, R.style.DialogBackgroundTheme).create()
+
+    fun getAlertView(): View {
+        val view = inflate(R.layout.dialog_account_scripted_error_layout)
+
+        view.findViewById<AppCompatButton>(R.id.button_confirm).click {
+            alertDialogBuilder.dismiss()
+            buttonOnClickListener.invoke()
+        }
+
+        return view
+    }
+
+    alertDialogBuilder.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    val wmlp = alertDialogBuilder.window.attributes
+    wmlp.gravity = Gravity.BOTTOM
+
+    alertDialogBuilder.setCancelable(false)
+    alertDialogBuilder.setView(getAlertView())
+    alertDialogBuilder.show()
 }

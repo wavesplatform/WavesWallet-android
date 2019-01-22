@@ -288,6 +288,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     fun scriptAddressInfo(address: String): Observable<ScriptInfo> {
         return nodeService.scriptAddressInfo(address)
+                .doOnNext {
+                    prefsUtil.setValue(PrefsUtil.KEY_SCRIPTED_ACCOUNT, it.extraFee != 0L)
+                }
     }
 
     fun scriptAssetInfo(assetId: String?): Observable<AssetsDetails> {
@@ -297,4 +300,5 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
             nodeService.scriptAssetInfo(assetId!!)
         }
     }
+
 }
