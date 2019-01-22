@@ -17,7 +17,7 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
     var transactionId: String = ""
 
     fun cancelLeasing() {
-        cancelLeasingRequest.txId = transactionId
+        cancelLeasingRequest.leaseId = transactionId
         addSubscription(nodeDataManager.cancelLeasing(cancelLeasingRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({

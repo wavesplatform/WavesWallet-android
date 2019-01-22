@@ -65,6 +65,10 @@ public class EnvironmentManager {
         return get().current().getNetCode();
     }
 
+    public static GlobalConfiguration getGlobalConfiguration() {
+        return get().current().getGlobalConfiguration();
+    }
+
     private static GlobalConfiguration getConfiguration(String fileName) {
         String json;
         try {
