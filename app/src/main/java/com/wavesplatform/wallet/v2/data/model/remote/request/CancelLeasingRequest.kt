@@ -12,8 +12,9 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 
 data class CancelLeasingRequest(
         @SerializedName("type") val type: Int = Transaction.LEASE_CANCEL,
+        @SerializedName("chainId") var scheme: Int? = EnvironmentManager.getNetCode().toInt(),
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
-        @SerializedName("txId") var txId: String = "",
+        @SerializedName("leaseId") var leaseId: String = "",
         @SerializedName("timestamp") var timestamp: Long = 0,
         @SerializedName("fee") var fee: Long = 0,
         @SerializedName("version") var version: Int = Constants.VERSION,
@@ -28,7 +29,7 @@ data class CancelLeasingRequest(
                     Base58.decode(senderPublicKey),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp),
-                    Base58.decode(txId)
+                    Base58.decode(leaseId)
             )
         } catch (e: Exception) {
             Log.e("CancelLeasingRequest", "Couldn't create toSignBytes", e)
