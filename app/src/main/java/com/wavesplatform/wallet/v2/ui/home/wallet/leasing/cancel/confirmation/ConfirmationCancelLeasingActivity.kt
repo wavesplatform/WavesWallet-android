@@ -88,6 +88,11 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
         card_leasing_preview_info.visiable()
     }
 
+    override fun failedCancelLeasingCauseSmart() {
+        setResult(Constants.RESULT_SMART_ERROR)
+        onBackPressed()
+    }
+
     override fun needToShowNetworkMessage() = true
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {

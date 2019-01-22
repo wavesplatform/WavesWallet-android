@@ -9,6 +9,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.stripZeros
@@ -87,6 +88,10 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
         card_leasing_preview_info.visiable()
     }
 
+    override fun failedStartLeasingCauseSmart() {
+        setResult(RESULT_SMART_ERROR)
+        onBackPressed()
+    }
 
     override fun needToShowNetworkMessage() = true
 

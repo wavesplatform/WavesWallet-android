@@ -11,10 +11,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity.Companion.QUICK_ACTION_SCREEN
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.clearBalance
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_token_burn.*
 import pers.victor.ext.click
@@ -158,8 +155,13 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_BURN_CONFIRM -> {
-                if (resultCode == Constants.RESULT_OK) {
-                    finish()
+                when (resultCode) {
+                    Constants.RESULT_OK ->{
+                        finish()
+                    }
+                    Constants.RESULT_SMART_ERROR ->{
+                        showAlertAboutScriptedAccount()
+                    }
                 }
             }
         }

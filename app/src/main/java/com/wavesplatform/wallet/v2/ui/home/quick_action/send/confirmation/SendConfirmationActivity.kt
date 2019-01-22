@@ -117,6 +117,11 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         button_confirm.click { goNext() }
     }
 
+    override fun failedSendCauseSmart() {
+        setResult(Constants.RESULT_SMART_ERROR)
+        onBackPressed()
+    }
+
     private fun goNext() {
         showTransactionProcessing()
         presenter.confirmSend()
