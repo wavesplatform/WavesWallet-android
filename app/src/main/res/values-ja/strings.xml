@@ -628,10 +628,7 @@
     <string name="your_assets_empty_state">何もありません…\n残高がある資産がありません</string>
     <string name="your_assets_toolbar_title">あなたの資産</string>
     <string name="common_error_commission_receiving">Commission receiving error</string>
-    <string name="common_transaction_fee_in_waves">Transaction Fee</string>
     <string name="common_waves_asset_name">WAVES</string>
-    <string name="common_load_more_status_failed">Load more failed</string>
-    <string name="common_load_more_status_end">No more data</string>
+    <string name="common_transaction_fee">Transaction Fee</string>
     <string name="history_type_receive_sponsorship">Received Sponsorship</string>
-    <string name="history_type_spam_self_transfer">Self-transfer</string>
 </resources>

@@ -169,7 +169,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     fun createAlias(createAliasRequest: AliasRequest): Observable<Alias> {
         createAliasRequest.senderPublicKey = getPublicKeyStr()
-        createAliasRequest.fee = Constants.WAVES_FEE
         createAliasRequest.timestamp = currentTimeMillis
         App.getAccessManager().getWallet()?.privateKey.notNull {
             createAliasRequest.sign(it)

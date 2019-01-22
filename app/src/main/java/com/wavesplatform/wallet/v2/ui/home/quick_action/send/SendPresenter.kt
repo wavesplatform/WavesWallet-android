@@ -220,7 +220,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
 
         viewState.showCommissionLoading()
-
+        fee = 0L
         val assetDetailsObserver = if (TextUtils.isEmpty(assetId)) {
             Observable.just(AssetsDetails(assetId = "WAVES", scripted = false))
         } else {

@@ -32,7 +32,7 @@ class StartLeasingPresenter @Inject constructor() : BasePresenter<StartLeasingVi
         }
 
         viewState.showCommissionLoading()
-
+        fee = 0L
         addSubscription(Observable.zip(
                 matcherDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(address!!),

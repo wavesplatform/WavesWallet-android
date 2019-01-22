@@ -42,7 +42,7 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
         }
 
         viewState.showCommissionLoading()
-
+        fee = 0L
         addSubscription(Observable.zip(
                 matcherDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(address!!),

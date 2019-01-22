@@ -108,7 +108,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         presenter.loadWavesBalance()
     }
 
-    fun makeButtonEnableIfValid() {
+    private fun makeButtonEnableIfValid() {
         button_create_alias.isEnabled = presenter.aliasValidation && isNetworkConnected()
     }
 

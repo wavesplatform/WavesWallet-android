@@ -32,7 +32,7 @@ class TokenBurnPresenter @Inject constructor() : BasePresenter<TokenBurnView>() 
 
     fun loadCommission(assetId: String?) {
         viewState.showCommissionLoading()
-
+        fee = 0L
         val assetDetailsObserver = if (TextUtils.isEmpty(assetId)) {
             Observable.just(AssetsDetails(assetId = "WAVES", scripted = false))
         } else {
