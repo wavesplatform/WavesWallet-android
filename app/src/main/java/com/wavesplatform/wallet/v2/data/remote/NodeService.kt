@@ -51,10 +51,10 @@ interface NodeService {
     @GET("leasing/active/{address}")
     fun activeLeasing(@Path("address") address: String?): Observable<List<Transaction>>
 
-    @POST("leasing/broadcast/lease")
+    @POST("transactions/broadcast")
     fun createLeasing(@Body createLeasingRequest: CreateLeasingRequest): Observable<Transaction>
 
-    @POST("leasing/broadcast/cancel")
+    @POST("transactions/broadcast")
     fun cancelLeasing(@Body cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction>
 
     @POST("transactions/broadcast")
