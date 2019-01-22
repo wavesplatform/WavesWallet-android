@@ -568,11 +568,20 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         }
 
         if (requestCode == StartLeasingActivity.REQUEST_CANCEL_LEASING_CONFIRMATION) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    rxEventBus.post(Events.UpdateListOfActiveTransaction(selectedItemPosition))
+                    dismiss()
+                }
+                Constants.RESULT_SMART_ERROR -> {
+                    activity?.showAlertAboutScriptedAccount()
+                }
+            }
             if (resultCode == Activity.RESULT_OK) {
-                rxEventBus.post(Events.UpdateListOfActiveTransaction(selectedItemPosition))
-                dismiss()
+
             }
         }
+
     }
 
     fun configureData(selectedItem: Transaction, selectedPosition: Int, allItems: List<Transaction>) {

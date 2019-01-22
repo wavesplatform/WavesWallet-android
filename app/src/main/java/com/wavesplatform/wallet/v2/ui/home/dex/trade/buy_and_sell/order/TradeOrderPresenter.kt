@@ -1,18 +1,17 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.remote.request.OrderRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.ErrorResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.clearBalance
+import com.wavesplatform.wallet.v2.util.errorBody
 import com.wavesplatform.wallet.v2.util.isWaves
 import pers.victor.ext.currentTimeMillis
 import java.math.RoundingMode
@@ -93,11 +92,10 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                     viewState.showProgressBar(false)
                     viewState.successPlaceOrder()
                 }, {
-                    viewState.showProgressBar(false)
                     it.printStackTrace()
-                    if (it is RetrofitException) {
-                        val response = it.getErrorBodyAs(ErrorResponse::class.java)
-                        viewState.afterFailedPlaceOrder(response?.message)
+                    viewState.showProgressBar(false)
+                    it.errorBody()?.let {
+                        viewState.afterFailedPlaceOrder(it.message)
                     }
                 }))
     }

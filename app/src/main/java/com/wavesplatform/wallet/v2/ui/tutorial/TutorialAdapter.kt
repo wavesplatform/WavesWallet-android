@@ -28,6 +28,7 @@ class TutorialAdapter @Inject constructor(@ApplicationContext var mContext: Cont
         }
 
         val scrollView = view.findViewById<ScrollView>(R.id.scroll_root)
+        // TODO: rewrite to nested scroll and fix leak
         scrollView.notNull {
             scrollView.viewTreeObserver.addOnScrollChangedListener {
                 if (!scrollView.canScrollVertically(1)) {

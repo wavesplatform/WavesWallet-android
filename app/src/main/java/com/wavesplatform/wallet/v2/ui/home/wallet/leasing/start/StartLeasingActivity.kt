@@ -230,8 +230,13 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }
             }
             REQUEST_LEASING_CONFIRMATION -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    finish()
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        finish()
+                    }
+                    Constants.RESULT_SMART_ERROR -> {
+                        showAlertAboutScriptedAccount()
+                    }
                 }
             }
         }

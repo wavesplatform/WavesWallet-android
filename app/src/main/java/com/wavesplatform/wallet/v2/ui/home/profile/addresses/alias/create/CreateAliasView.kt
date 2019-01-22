@@ -8,4 +8,5 @@ interface CreateAliasView : BaseMvpView{
     fun aliasIsNotAvailable()
     fun successCreateAlias(alias: Alias)
     fun failedCreateAlias(message: String?)
+    fun failedCreateAliasCauseSmart()
 }

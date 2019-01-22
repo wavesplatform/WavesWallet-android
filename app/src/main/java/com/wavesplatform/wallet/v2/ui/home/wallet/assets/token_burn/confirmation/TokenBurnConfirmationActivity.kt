@@ -1,11 +1,11 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation
 
 import android.os.Bundle
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.request.BurnRequest
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -86,11 +86,16 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
-    override fun onShowError(errorMessageRes: Int) {
+    override fun onShowError(errorMessageRes: String) {
         completeBurnProcessing()
         toolbar_view.visiable()
         card_content.visiable()
         showError(errorMessageRes, R.id.root)
+    }
+
+    override fun failedTokenBurnCauseSmart() {
+        setResult(Constants.RESULT_SMART_ERROR)
+        onBackPressed()
     }
 
     private fun completeBurnProcessing() {
