@@ -4,10 +4,10 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.wallet.v1.db.TransactionSaver
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.database.TransactionSaver
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.RxUtil
 import dagger.android.AndroidInjection
