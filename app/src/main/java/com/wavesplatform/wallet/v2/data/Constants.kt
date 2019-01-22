@@ -30,8 +30,6 @@ object Constants {
     const val SUPPORT_SITE = "https://support.wavesplatform.com/"
     const val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
 
-    const val WAVES_FEE = 100000L
-    const val WAVES_DEX_FEE = 300000L
     const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
 
     const val SELL_ORDER_TYPE = "sell"

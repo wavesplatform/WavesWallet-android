@@ -15,7 +15,7 @@ import pers.victor.ext.currentTimeMillis
 data class BurnRequest(
         @SerializedName("assetId") val assetId: String = "",
         @SerializedName("chainId") val chainId: Byte = EnvironmentManager.getNetCode(),
-        @SerializedName("fee") var fee: Long = Constants.WAVES_FEE,
+        @SerializedName("fee") var fee: Long = 100000L,
         @SerializedName("quantity") var quantity: Long = 1,
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
         @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,

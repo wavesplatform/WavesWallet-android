@@ -394,22 +394,22 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
     private fun getFeeIfNeed(): Long {
         return if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true) {
-            Constants.WAVES_DEX_FEE
+            presenter.fee
         } else {
             0L
         }
     }
 
     private fun isValidWavesFee(): Boolean {
-        return if (presenter.wavesBalance.getAvailableBalance() ?: 0 > Constants.WAVES_DEX_FEE) {
+        return if (presenter.wavesBalance.getAvailableBalance() ?: 0 > presenter.fee) {
             true
         } else {
             if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true
                     && presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
-                edit_amount.text.toString().toBigDecimal() > getWavesDexFee()
+                edit_amount.text.toString().toBigDecimal() > getWavesDexFee(presenter.fee)
             } else if (presenter.data?.watchMarket?.market?.priceAsset?.isWaves() == true
                     && presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
-                edit_total_price.text.toString().toBigDecimal() > getWavesDexFee()
+                edit_total_price.text.toString().toBigDecimal() > getWavesDexFee(presenter.fee)
             } else {
                 false
             }
@@ -428,10 +428,10 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 when (quickBalanceView.tag) {
                     TOTAL_BALANCE -> {
                         if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true) {
-                            if (balance < Constants.WAVES_DEX_FEE) {
+                            if (balance < presenter.fee) {
                                 balance = 0
                             } else {
-                                balance -= Constants.WAVES_DEX_FEE
+                                balance -= presenter.fee
                             }
                         }
                         quickBalanceView.click {
