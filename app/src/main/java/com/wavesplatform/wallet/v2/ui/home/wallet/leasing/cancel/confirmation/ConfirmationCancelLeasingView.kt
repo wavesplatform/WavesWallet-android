@@ -6,4 +6,7 @@ interface ConfirmationCancelLeasingView : BaseMvpView{
     fun successCancelLeasing()
     fun failedCancelLeasing()
     fun failedCancelLeasingCauseSmart()
+    fun showCommissionLoading()
+    fun showCommissionSuccess(unscaledAmount: Long)
+    fun showCommissionError()
 }

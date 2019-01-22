@@ -17,6 +17,7 @@ class ConfirmationStartLeasingPresenter @Inject constructor() : BasePresenter<Co
     var recipientIsAlias = false
     var address: String = ""
     var amount: String = ""
+    var fee = 0L
 
 
     fun startLeasing() {
@@ -27,7 +28,7 @@ class ConfirmationStartLeasingPresenter @Inject constructor() : BasePresenter<Co
         }
         createLeasingRequest.amount = MoneyUtil.getUnscaledValue(amount, 8)
 
-        addSubscription(nodeDataManager.startLeasing(createLeasingRequest, recipientIsAlias)
+        addSubscription(nodeDataManager.startLeasing(createLeasingRequest, recipientIsAlias, fee)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     viewState.successStartLeasing()

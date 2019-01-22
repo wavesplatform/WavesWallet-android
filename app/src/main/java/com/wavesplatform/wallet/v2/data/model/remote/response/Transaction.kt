@@ -119,6 +119,10 @@ open class Transaction(
         var data: RealmList<Data> = RealmList(),
         @SerializedName("isPending")
         var isPending: Boolean = false,
+        @SerializedName("script")
+        var script: String? = "",
+        @SerializedName("minSponsoredAssetFee")
+        var minSponsoredAssetFee: String? = "",
         var transactionTypeId: Int = 0,
         var asset: AssetInfo? = AssetInfo()
 ) : RealmModel {
@@ -158,8 +162,8 @@ open class Transaction(
         const val CREATE_ALIAS = 10
         const val MASS_TRANSFER = 11
         const val DATA = 12
-        const val SET_SCRIPT = 13
-        const val SPONSOR_FEE = 14
+        const val SCRIPT = 13
+        const val SPONSORSHIP = 14
         const val ASSET_SCRIPT = 15
 
         private fun getNameBy(type: Int): String {
@@ -176,8 +180,8 @@ open class Transaction(
                 CREATE_ALIAS -> "Create Alias"
                 MASS_TRANSFER -> "Mass Transfer"
                 DATA -> "Data"
-                SET_SCRIPT -> "Set Script"
-                SPONSOR_FEE -> "Sponsor Fee"
+                SCRIPT -> "Script"
+                SPONSORSHIP -> "SponsorShip"
                 ASSET_SCRIPT -> "Asset Script"
                 else -> ""
             }
@@ -207,9 +211,9 @@ open class Transaction(
                                             transaction.order2!!,
                                             App.getAccessManager().getWallet()?.address!!)
                                                     .orderType == Constants.SELL_ORDER_TYPE) {
-                                "-sell)\n"
+                                "-${Constants.SELL_ORDER_TYPE})\n"
                             } else {
-                                "-buy)\n"
+                                "-${Constants.BUY_ORDER_TYPE})\n"
                             }
                         } else {
                             ")\n"

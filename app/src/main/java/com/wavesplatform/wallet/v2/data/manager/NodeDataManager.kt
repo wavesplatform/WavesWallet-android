@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.data.manager
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ProcessLifecycleOwner
+import android.text.TextUtils
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -169,7 +170,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     fun createAlias(createAliasRequest: AliasRequest): Observable<Alias> {
         createAliasRequest.senderPublicKey = getPublicKeyStr()
-        createAliasRequest.fee = Constants.WAVES_FEE
         createAliasRequest.timestamp = currentTimeMillis
         App.getAccessManager().getWallet()?.privateKey.notNull {
             createAliasRequest.sign(it)
@@ -187,7 +187,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     fun cancelLeasing(cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction> {
         cancelLeasingRequest.senderPublicKey = getPublicKeyStr()
-        cancelLeasingRequest.fee = Constants.WAVES_FEE
         cancelLeasingRequest.timestamp = currentTimeMillis
 
         App.getAccessManager().getWallet()?.privateKey.notNull {
@@ -205,9 +204,11 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun startLeasing(createLeasingRequest: CreateLeasingRequest, recipientIsAlias: Boolean): Observable<Transaction> {
+    fun startLeasing(createLeasingRequest: CreateLeasingRequest,
+                     recipientIsAlias: Boolean,
+                     fee: Long): Observable<Transaction> {
         createLeasingRequest.senderPublicKey = getPublicKeyStr()
-        createLeasingRequest.fee = Constants.WAVES_FEE
+        createLeasingRequest.fee = fee
         createLeasingRequest.timestamp = currentTimeMillis
 
         App.getAccessManager().getWallet()?.privateKey.notNull {
@@ -292,8 +293,12 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun scriptAssetInfo(assetId: String): Observable<AssetsDetails> {
-        return nodeService.scriptAssetInfo(assetId)
+    fun scriptAssetInfo(assetId: String?): Observable<AssetsDetails> {
+        return if (TextUtils.isEmpty(assetId) || assetId == "WAVES") {
+            Observable.just(AssetsDetails(assetId = "WAVES", scripted = false))
+        } else {
+            nodeService.scriptAssetInfo(assetId!!)
+        }
     }
 
 }

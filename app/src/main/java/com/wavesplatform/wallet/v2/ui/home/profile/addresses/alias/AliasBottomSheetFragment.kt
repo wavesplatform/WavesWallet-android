@@ -9,19 +9,22 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.local.HistoryItem.Companion.TYPE_EMPTY
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showError
 import com.wavesplatform.wallet.v2.util.showSuccess
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_empty_layout.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_layout.view.*
-import pers.victor.ext.app
+import kotlinx.android.synthetic.main.view_commission.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import javax.inject.Inject
 
 
@@ -92,8 +95,31 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
                 }
             }
         }
-
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.loadCommission(object : AliasPresenter.OnCommissionGetListener {
+
+            override fun showCommissionLoading() {
+                progress_bar_fee_transaction.visiable()
+                text_fee_transaction.gone()
+            }
+
+            override fun showCommissionSuccess(unscaledAmount: Long) {
+                text_fee_transaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
+                progress_bar_fee_transaction.gone()
+                text_fee_transaction.visiable()
+            }
+
+            override fun showCommissionError() {
+                text_fee_transaction.text = "-"
+                showError(R.string.common_error_commission_receiving, R.id.root)
+                progress_bar_fee_transaction.gone()
+                text_fee_transaction.visiable()
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

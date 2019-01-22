@@ -30,14 +30,12 @@ object Constants {
     const val SUPPORT_SITE = "https://support.wavesplatform.com/"
     const val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
 
-    const val WAVES_FEE = 100000L
-    const val WAVES_DEX_FEE = 300000L
     const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
 
     const val SELL_ORDER_TYPE = "sell"
     const val BUY_ORDER_TYPE = "buy"
 
-    // Transaction types
+    // Transaction view types non Transaction block-chain type
     const val ID_RECEIVED_TYPE = 0
     const val ID_SENT_TYPE = 1
     const val ID_STARTED_LEASING_TYPE = 2
@@ -55,10 +53,12 @@ object Constants {
     const val ID_SPAM_RECEIVE_TYPE = 14
     const val ID_MASS_SPAM_RECEIVE_TYPE = 15
     const val ID_DATA_TYPE = 16
-    const val ID_SET_SCRIPT_TYPE = 17
-    const val ID_CANCEL_SCRIPT_TYPE = 18
-    const val ID_SET_SPONSORSHIP_TYPE = 19
-    const val ID_CANCEL_SPONSORSHIP_TYPE = 20
+    const val ID_SPAM_SELF_TRANSFER = 17
+    const val ID_SET_SCRIPT_TYPE = 18
+    const val ID_CANCEL_SCRIPT_TYPE = 19
+    const val ID_RECEIVE_SPONSORSHIP_TYPE = 20
+    const val ID_SET_SPONSORSHIP_TYPE = 21
+    const val ID_CANCEL_SPONSORSHIP_TYPE = 22
 
     // Custom Result code
     const val RESULT_CANCELED = 404

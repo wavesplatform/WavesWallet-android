@@ -30,10 +30,11 @@ import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.view.View
+import android.view.ViewGroup
 import android.util.TypedValue
 import android.view.*
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -48,7 +49,6 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
@@ -56,7 +56,6 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
-import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -104,44 +103,16 @@ fun String.isWaves(): Boolean {
     return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
 }
 
-fun getWavesDexFee(): BigDecimal {
-    return MoneyUtil.getScaledText(Constants.WAVES_DEX_FEE, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
-}
-
-fun getWavesFee(): BigDecimal {
-    return MoneyUtil.getScaledText(Constants.WAVES_FEE, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
+fun getWavesDexFee(fee: Long): BigDecimal {
+    return MoneyUtil.getScaledText(fee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
 }
 
 fun String.isWavesId(): Boolean {
     return this.toLowerCase() == Constants.wavesAssetInfo.id
 }
 
-fun getActionBarHeight(): Int {
-    val tv = TypedValue()
-    return if (app.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-        TypedValue.complexToDimensionPixelSize(tv.data, app.resources.displayMetrics);
-    } else {
-        0
-    }
-}
-
-fun EditText.applySpaceFilter() {
-    this.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
-        source.toString().filterNot { it.isWhitespace() }
-    })
-}
-
-fun Context.notAvailable() {
-    toast(getString(R.string.common_msg_in_development))
-}
-
 fun ByteArray.arrayWithSize(): ByteArray {
     return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
-}
-
-fun String.arrayOption(): ByteArray {
-    return if (this.isEmpty()) byteArrayOf(0)
-    else Bytes.concat(byteArrayOf(1), Base58.decode(this))
 }
 
 fun String.clearBalance(): String {

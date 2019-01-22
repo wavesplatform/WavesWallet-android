@@ -6,18 +6,19 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.MainActivity.Companion.QUICK_ACTION_SCREEN
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_token_burn.*
+import kotlinx.android.synthetic.main.view_commission.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
+import pers.victor.ext.isNetworkConnected
 import pers.victor.ext.visiable
-import pers.victor.ext.*
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -103,7 +104,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
                 .map {
                     if (it.first) {
                         presenter.wavesBalance.getAvailableBalance().notNull { wavesBalance ->
-                            if (wavesBalance < Constants.WAVES_FEE) {
+                            if (wavesBalance < presenter.fee) {
                                 presenter.quantityValidation = false
                                 linear_fees_error.visiable()
                             } else {
@@ -123,9 +124,12 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         button_continue.click {
             launchActivity<TokenBurnConfirmationActivity>(REQUEST_BURN_CONFIRM) {
                 putExtra(KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
+                putExtra(KEY_INTENT_BLOCKCHAIN_FEE, presenter.fee)
                 putExtra(KEY_INTENT_AMOUNT, edit_amount.text.toString())
             }
         }
+
+        presenter.loadCommission(presenter.assetBalance.assetId)
     }
 
     override fun needToShowNetworkMessage() = true
@@ -167,9 +171,31 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         }
     }
 
+    override fun showCommissionLoading() {
+        progress_bar_fee_transaction.visiable()
+        text_fee_transaction.gone()
+        button_continue.isEnabled = false
+    }
+
+    override fun showCommissionSuccess(unscaledAmount: Long) {
+        text_fee_transaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
+        progress_bar_fee_transaction.gone()
+        text_fee_transaction.visiable()
+        makeButtonEnableIfValid()
+    }
+
+    override fun showCommissionError() {
+        text_fee_transaction.text = "-"
+        showError(R.string.common_error_commission_receiving, R.id.root)
+        progress_bar_fee_transaction.gone()
+        text_fee_transaction.visiable()
+        makeButtonEnableIfValid()
+    }
+
     companion object {
         const val KEY_INTENT_ASSET_BALANCE = "asset_balance"
         const val KEY_INTENT_AMOUNT = "amount"
+        const val KEY_INTENT_BLOCKCHAIN_FEE = "blockchain_fee"
         const val REQUEST_BURN_CONFIRM = 10001
     }
 }
