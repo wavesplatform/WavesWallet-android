@@ -305,7 +305,7 @@
     <string name="history_type_canceled_leasing">Aluguel Cancelado</string>
     <string name="history_type_create_alias">Criar Alias</string>
     <string name="history_type_data">Transação de dados</string>
-    <string name="history_type_exchange">%s %s</string>
+    <string name="history_type_exchange">Exchange transaction</string>
     <string name="history_type_incoming_leasing">Rendimentos do Aluguel</string>
     <string name="history_type_mass_receive">Recebimentos em massa</string>
     <string name="history_type_mass_send">Envios em massa</string>

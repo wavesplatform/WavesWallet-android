@@ -65,8 +65,6 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         presenter.getMatcherKey()
         presenter.getBalanceFromAssetPair()
         presenter.loadWavesBalance()
-        presenter.loadCommission(presenter.data?.watchMarket?.market?.priceAsset,
-                presenter.data?.watchMarket?.market?.amountAsset)
 
         CounterHandler.Builder()
                 .valueView(edit_amount)
@@ -390,6 +388,9 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         button_confirm.click {
             presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
         }
+
+        presenter.loadCommission(presenter.data?.watchMarket?.market?.priceAsset,
+                presenter.data?.watchMarket?.market?.amountAsset)
     }
 
     private fun getFeeIfNeed(): Long {

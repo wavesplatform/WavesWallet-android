@@ -101,7 +101,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     if (isValid) {
                         text_address_error.text = ""
                         text_address_error.gone()
-                        presenter.loadCommission(it)
                     } else {
                         text_address_error.text = getString(R.string.start_leasing_validation_address_is_invalid_error)
                         text_address_error.visiable()
@@ -202,6 +201,8 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         presenter.wavesAssetBalance.notNull {
             afterSuccessLoadWavesBalance(it)
         }
+
+        presenter.loadCommission()
     }
 
 
