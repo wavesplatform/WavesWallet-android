@@ -120,8 +120,16 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
                             market.popular = it.first[market.amountAsset] != null && it.first[market.priceAsset] != null
 
-                            market.amountAssetDecimals = market.amountAssetInfo.decimals
-                            market.priceAssetDecimals = market.priceAssetInfo.decimals
+                            market.amountAssetDecimals = if (market.amountAssetInfo == null) {
+                                8
+                            } else {
+                                market.amountAssetInfo.decimals
+                            }
+                            market.priceAssetDecimals = if (market.priceAssetInfo == null) {
+                                8
+                            } else {
+                                market.priceAssetInfo.decimals
+                            }
 
                             val group = hashGroup[market.amountAsset]
                             if (group != null) {
