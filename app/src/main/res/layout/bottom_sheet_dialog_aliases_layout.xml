@@ -135,15 +135,13 @@
                     android:layout_marginTop="24dp"
                     android:text="@string/alias_dialog_create_alias" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
+                <include
+                    android:id="@+id/view_commission"
+                    layout="@layout/view_commission"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="14dp"
-                    android:text="@string/alias_dialog_fee"
-                    android:textColor="@color/basic500"
-                    android:textSize="12sp" />
+                    android:layout_marginTop="16dp"/>
+
             </LinearLayout>
 
         </net.cachapa.expandablelayout.ExpandableLayout>

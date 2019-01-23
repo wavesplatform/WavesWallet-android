@@ -15,7 +15,7 @@ import pers.victor.ext.currentTimeMillis
 data class BurnRequest(
         @SerializedName("assetId") val assetId: String = "",
         @SerializedName("chainId") val chainId: Byte = EnvironmentManager.getNetCode(),
-        @SerializedName("fee") var fee: Long = Constants.WAVES_FEE,
+        @SerializedName("fee") var fee: Long = 100000L,
         @SerializedName("quantity") var quantity: Long = 1,
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
         @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,
@@ -35,7 +35,7 @@ data class BurnRequest(
                     Base58.decode(App.getAccessManager().getWallet()!!.publicKeyStr),
                     Base58.decode(assetId),
                     Longs.toByteArray(quantity),
-                    Longs.toByteArray(Constants.WAVES_FEE),
+                    Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp))
         } catch (e: Exception) {
             Log.e("BurnRequest", "Couldn't create toSignBytes", e)

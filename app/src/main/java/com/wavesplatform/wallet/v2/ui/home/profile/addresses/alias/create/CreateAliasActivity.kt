@@ -86,7 +86,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                 }
                 .filter { it.first }
                 .map {
-                    if (presenter.wavesBalance.getAvailableBalance() ?: 0 < Constants.WAVES_FEE) {
+                    if (presenter.wavesBalance.getAvailableBalance() ?: 0 < presenter.fee) {
                         presenter.aliasValidation = false
                         makeButtonEnableIfValid()
                         til_new_alias_symbol.error = getString(R.string.buy_and_sell_not_enough, presenter.wavesBalance.getName())
@@ -109,7 +109,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         presenter.loadWavesBalance()
     }
 
-    fun makeButtonEnableIfValid() {
+    private fun makeButtonEnableIfValid() {
         button_create_alias.isEnabled = presenter.aliasValidation && isNetworkConnected()
     }
 

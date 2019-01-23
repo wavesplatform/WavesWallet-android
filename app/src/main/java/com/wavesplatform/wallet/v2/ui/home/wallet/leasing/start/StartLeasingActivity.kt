@@ -24,6 +24,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_start_leasing.*
+import kotlinx.android.synthetic.main.view_commission.*
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -71,6 +72,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 putExtra(ConfirmationStartLeasingActivity.BUNDLE_ADDRESS, edit_address.text.toString())
                 putExtra(ConfirmationStartLeasingActivity.BUNDLE_AMOUNT, edit_amount.text.toString())
                 putExtra(ConfirmationStartLeasingActivity.BUNDLE_RECIPIENT_IS_ALIAS, presenter.recipientIsAlias)
+                putExtra(ConfirmationStartLeasingActivity.BUNDLE_BLOCKCHAIN_COMMISSION, presenter.fee)
             }
         }
 
@@ -99,6 +101,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     if (isValid) {
                         text_address_error.text = ""
                         text_address_error.gone()
+                        presenter.loadCommission(it)
                     } else {
                         text_address_error.text = getString(R.string.start_leasing_validation_address_is_invalid_error)
                         text_address_error.visiable()
@@ -170,7 +173,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }
                 .map {
                     if (it.toDouble() != 0.0) {
-                        val feeValue = MoneyUtil.getScaledText(Constants.WAVES_FEE, Constants.wavesAssetInfo).toBigDecimal()
+                        val feeValue = MoneyUtil.getScaledText(presenter.fee, Constants.wavesAssetInfo).toBigDecimal()
                         val currentValueWithFee = it.toBigDecimal() + feeValue
                         val isValid = currentValueWithFee <= MoneyUtil.getScaledText(presenter.wavesAssetBalance, Constants.wavesAssetInfo).clearBalance().toBigDecimal() && currentValueWithFee > feeValue
                         presenter.amountValidation = isValid
@@ -202,8 +205,9 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
     }
 
 
-    fun makeButtonEnableIfValid() {
-        button_continue.isEnabled = presenter.isAllFieldsValid() && isNetworkConnected()
+    private fun makeButtonEnableIfValid() {
+        val valid = presenter.isAllFieldsValid() && isNetworkConnected()
+        button_continue.isEnabled = valid
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -250,10 +254,10 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             when (quickBalanceView.tag) {
                 TOTAL_BALANCE -> {
                     quickBalanceView.click {
-                        val balance = if (waves < Constants.WAVES_DEX_FEE) {
+                        val balance = if (waves < presenter.fee) {
                             0
                         } else {
-                            waves.minus(Constants.WAVES_FEE)
+                            waves.minus(presenter.fee)
                         }
                         edit_amount.setText(MoneyUtil.getScaledText(balance, Constants.wavesAssetInfo).clearBalance().toBigDecimal().toString())
                         edit_amount.setSelection(edit_amount.text.length)
@@ -280,6 +284,27 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         button_continue.isEnabled = presenter.isAllFieldsValid() && networkConnected
+    }
+
+    override fun showCommissionLoading() {
+        progress_bar_fee_transaction.visiable()
+        text_fee_transaction.gone()
+        button_continue.isEnabled = false
+    }
+
+    override fun showCommissionSuccess(unscaledAmount: Long) {
+        text_fee_transaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
+        progress_bar_fee_transaction.gone()
+        text_fee_transaction.visiable()
+        makeButtonEnableIfValid()
+    }
+
+    override fun showCommissionError() {
+        text_fee_transaction.text = "-"
+        showError(R.string.common_error_commission_receiving, R.id.root)
+        progress_bar_fee_transaction.gone()
+        text_fee_transaction.visiable()
+        makeButtonEnableIfValid()
     }
 
     companion object {

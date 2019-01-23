@@ -6,8 +6,6 @@ import com.google.common.primitives.Bytes
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.util.SignUtil
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook.TradeOrderBookAdapter
-import com.wavesplatform.wallet.v2.util.arrayOption
-
 
 data class OrderBook(
         @SerializedName("timestamp") var timestamp: Long = 0,
