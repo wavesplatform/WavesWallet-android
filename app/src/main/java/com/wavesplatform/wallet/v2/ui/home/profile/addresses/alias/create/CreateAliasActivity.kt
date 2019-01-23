@@ -70,6 +70,8 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
             }
         }
 
+        presenter.fee = intent.getLongExtra(BUNDLE_BLOCKCHAIN_COMMISSION, 0L)
+
         eventSubscriptions.add(RxTextView.textChanges(edit_new_alias_symbol)
                 .skipInitialValue()
                 .map {
@@ -161,6 +163,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     }
 
     companion object {
-        var RESULT_ALIAS = "alias"
+        const val RESULT_ALIAS = "alias"
+        const val BUNDLE_BLOCKCHAIN_COMMISSION = "blockchain_commission"
     }
 }

@@ -305,7 +305,7 @@
     <string name="history_type_canceled_leasing">Concessão cancelada</string>
     <string name="history_type_create_alias">Criar pseudónimo</string>
     <string name="history_type_data">Transação de Dados</string>
-    <string name="history_type_exchange">%s %s</string>
+    <string name="history_type_exchange">Exchange transaction</string>
     <string name="history_type_incoming_leasing">Concessão Recebida</string>
     <string name="history_type_mass_receive">Recebido</string>
     <string name="history_type_mass_send">Enviado</string>

@@ -58,7 +58,9 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
                 rootView = inflater.inflate(R.layout.bottom_sheet_dialog_aliases_empty_layout, container, false)
 
                 rootView.button_create_alias.click {
-                    launchActivity<CreateAliasActivity>(REQUEST_CREATE_ALIAS) { }
+                    launchActivity<CreateAliasActivity>(REQUEST_CREATE_ALIAS) {
+                        putExtra(CreateAliasActivity.BUNDLE_BLOCKCHAIN_COMMISSION, presenter.fee)
+                    }
                 }
             }
             TYPE_CONTENT -> {
@@ -87,7 +89,9 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
                 }
 
                 rootView.button_create_alias_content.click {
-                    launchActivity<CreateAliasActivity>(REQUEST_CREATE_ALIAS) { }
+                    launchActivity<CreateAliasActivity>(REQUEST_CREATE_ALIAS) {
+                        putExtra(CreateAliasActivity.BUNDLE_BLOCKCHAIN_COMMISSION,  presenter.fee)
+                    }
                 }
 
                 presenter.loadAliases {

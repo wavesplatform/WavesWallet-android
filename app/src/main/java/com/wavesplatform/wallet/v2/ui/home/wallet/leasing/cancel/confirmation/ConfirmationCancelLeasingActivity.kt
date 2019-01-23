@@ -68,7 +68,7 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
             onBackPressed()
         }
 
-        presenter.loadCommission(presenter.address)
+        presenter.loadCommission()
     }
 
     override fun onBackPressed() {

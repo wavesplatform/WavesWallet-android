@@ -305,7 +305,7 @@
     <string name="history_type_canceled_leasing">Отменен лизинг</string>
     <string name="history_type_create_alias">Создание алиаса</string>
     <string name="history_type_data">Дата транзакция</string>
-    <string name="history_type_exchange">%s %s</string>
+    <string name="history_type_exchange">Exchange transaction</string>
     <string name="history_type_incoming_leasing">Входящий лизинг</string>
     <string name="history_type_mass_receive">Массовое получение</string>
     <string name="history_type_mass_send">Массовая отправка</string>
