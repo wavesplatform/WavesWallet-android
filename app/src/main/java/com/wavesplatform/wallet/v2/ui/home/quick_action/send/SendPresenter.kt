@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
-import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
@@ -24,7 +23,6 @@ import io.reactivex.functions.Function3
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.math.BigDecimal
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @InjectViewState
@@ -214,23 +212,18 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return false
     }
 
-    fun loadCommission(address: String?, assetId: String?) {
-        if (TextUtils.isEmpty(address)) {
-            return
-        }
-
+    fun loadCommission(assetId: String?) {
         viewState.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
                 matcherDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(address!!),
+                nodeDataManager.scriptAddressInfo(App.getAccessManager().getWallet()?.address!!),
                 nodeDataManager.scriptAssetInfo(assetId),
                 Function3 { t1: GlobalTransactionCommission,
                             t2: ScriptInfo,
                             t3: AssetsDetails ->
                     return@Function3 Triple(t1, t2, t3)
                 })
-                .debounce(300, TimeUnit.MILLISECONDS)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ triple ->
                     val commission = triple.first

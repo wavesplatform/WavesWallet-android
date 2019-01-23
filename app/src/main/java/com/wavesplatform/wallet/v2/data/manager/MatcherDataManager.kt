@@ -142,10 +142,6 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         }
     }
 
-    fun getGlobalConfiguration(): Observable<GlobalConfiguration> {
-        return apiService.loadGlobalConfiguration()
-    }
-
     fun getGlobalCommission(): Observable<GlobalTransactionCommission> {
         return apiService.loadGlobalCommission()
     }

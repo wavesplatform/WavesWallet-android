@@ -305,7 +305,7 @@
     <string name="history_type_canceled_leasing">取消租赁</string>
     <string name="history_type_create_alias">创建别名</string>
     <string name="history_type_data">数据传输</string>
-    <string name="history_type_exchange">%s %s</string>
+    <string name="history_type_exchange">Exchange transaction</string>
     <string name="history_type_incoming_leasing">租赁收益</string>
     <string name="history_type_mass_receive">大额收入</string>
     <string name="history_type_mass_send">大额发送</string>

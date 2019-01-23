@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start
 
-import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
 import com.wavesplatform.wallet.v2.data.model.remote.response.ScriptInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
@@ -10,7 +10,6 @@ import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @InjectViewState
@@ -26,21 +25,16 @@ class StartLeasingPresenter @Inject constructor() : BasePresenter<StartLeasingVi
         return nodeAddressValidation && amountValidation && fee > 0L
     }
 
-    fun loadCommission(address: String?) {
-        if (TextUtils.isEmpty(address)) {
-            return
-        }
-
+    fun loadCommission() {
         viewState.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
                 matcherDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(address!!),
+                nodeDataManager.scriptAddressInfo(App.getAccessManager().getWallet()?.address!!),
                 BiFunction { t1: GlobalTransactionCommission,
                             t2: ScriptInfo ->
                     return@BiFunction Pair(t1, t2)
                 })
-                .debounce(300, TimeUnit.MILLISECONDS)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ triple ->
                     val commission = triple.first
