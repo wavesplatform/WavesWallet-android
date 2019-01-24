@@ -564,7 +564,6 @@
     <string name="token_burn_confirmation_type">Tipe</string>
     <string name="token_burn_confirmation_you_have_burned">Anda telah membakar %1$s %2$s</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">Transaksi Anda sedang dalam perjalanan!</string>
-    <string name="token_burn_confirmationt_description">Token Resmi Robot Pengambilan Kencan. www.choosee.site Choosee menggunakan data besar dan kecerdasan buatan untuk memfasilitasi kencan. Membuat manusia manusia kembali.</string>
     <string name="token_burn_confirmationt_not_reissuable">Tidak dapat diterbitkan kembali</string>
     <string name="token_burn_confirmationt_reissuable">Dapat diterbitkan kembali</string>
     <string name="token_burn_continue_btn">Terus</string>

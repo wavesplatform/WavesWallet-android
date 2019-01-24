@@ -564,7 +564,6 @@
     <string name="token_burn_confirmation_type">Type</string>
     <string name="token_burn_confirmation_you_have_burned">U hebt %1$s %2$s geburned</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">Uw transactie is onderweg!</string>
-    <string name="token_burn_confirmationt_description">De officiële token van de Dating Beslissing Robot. www.choosee.site Choosee gebruikt big data en kunstmatige intelligentie om het daten te vergemakkelijken. Mensen weer mens te maken.</string>
     <string name="token_burn_confirmationt_not_reissuable">Niet heruitgeefbaar</string>
     <string name="token_burn_confirmationt_reissuable">Heruitgeefbaar</string>
     <string name="token_burn_continue_btn">Doorgaan</string>

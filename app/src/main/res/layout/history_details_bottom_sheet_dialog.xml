@@ -50,7 +50,6 @@
             android:layout_height="1dp"
             android:background="@color/accent50" />
 
-
         <LinearLayout
             android:id="@+id/main_container"
             android:layout_width="match_parent"

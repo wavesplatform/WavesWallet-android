@@ -564,7 +564,6 @@
     <string name="token_burn_confirmation_type">Typ</string>
     <string name="token_burn_confirmation_you_have_burned">Sie haben %1$s %2$s geburnt</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">Ihre Transaktion ist unterwegs!</string>
-    <string name="token_burn_confirmationt_description">Das offizielle Token des Datierungs-Entscheidungsroboters. www.choosee.site Choosee verwendet Big Data und künstliche Intelligenz, um die Datierung zu erleichtern. Menschen wieder menschlich machen.</string>
     <string name="token_burn_confirmationt_not_reissuable">Nicht erweiterbar</string>
     <string name="token_burn_confirmationt_reissuable">Erweiterbar</string>
     <string name="token_burn_continue_btn">Fortsetzen</string>

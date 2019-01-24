@@ -564,7 +564,6 @@
     <string name="token_burn_confirmation_type">प्रकार</string>
     <string name="token_burn_confirmation_you_have_burned">आपने %1$s %2$s जला दिया है</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">आपका लेनदेन किया जा रहा है!</string>
-    <string name="token_burn_confirmationt_description">डेटिंग निर्णय रोबोट के आधिकारिक टोकन। www.choosee.site चूसी डेटिंग को सुविधाजनक बनाने के लिए बिग डेटा और आर्टिफीसियल इंटेलिजेंस का उपयोग करता है। इंसानों को फिर से मनुष्य बनाना</string>
     <string name="token_burn_confirmationt_not_reissuable">पुनर्निर्गमनीय नहीं कर सकते हैं</string>
     <string name="token_burn_confirmationt_reissuable">पुनर्निर्गमनीय</string>
     <string name="token_burn_continue_btn">जारी रहना</string>

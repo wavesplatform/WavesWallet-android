@@ -564,7 +564,6 @@
     <string name="token_burn_confirmation_type">Tip</string>
     <string name="token_burn_confirmation_you_have_burned">%1$s %2$s Yaktınız</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">Transferiniz yolda!</string>
-    <string name="token_burn_confirmationt_description">İnsanları tekrar insan yapın :) Flört için yapay zekadan ve büyük veriden faydalanın. Resmi flört karar verme kripto parası. www.choosee.site</string>
     <string name="token_burn_confirmationt_not_reissuable">Tekrar oluşturulamaz</string>
     <string name="token_burn_confirmationt_reissuable">Tekrar oluşturulabilir</string>
     <string name="token_burn_continue_btn">Devam</string>

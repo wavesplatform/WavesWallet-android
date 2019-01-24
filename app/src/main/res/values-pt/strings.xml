@@ -564,7 +564,6 @@
     <string name="token_burn_confirmation_type">Tipo</string>
     <string name="token_burn_confirmation_you_have_burned">Destruíste %1$s %2$s</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">A tua transação está a caminho!</string>
-    <string name="token_burn_confirmationt_description">Token oficial do The Dating Decision Robot. www.choosee.site A Choosee usa big data e inteligência artificial para melhorar a experiência dos encontros românticos. Queremos humanizar as pessoas novamente.</string>
     <string name="token_burn_confirmationt_not_reissuable">Não reutilizável</string>
     <string name="token_burn_confirmationt_reissuable">Reutilizável</string>
     <string name="token_burn_continue_btn">Continuar</string>

@@ -112,6 +112,17 @@ class HistoryTransactionPagerAdapter constructor(var fragmentManager: FragmentMa
                 TransactionType.TOKEN_REISSUE_TYPE -> {
                     layout.text_transaction_value.text = "+${item.data.amount}"
                 }
+                TransactionType.SET_SCRIPT_TYPE,
+                TransactionType.CANCEL_SCRIPT_TYPE,
+                TransactionType.SET_SPONSORSHIP_TYPE,
+                TransactionType.CANCEL_SPONSORSHIP_TYPE,
+                TransactionType.ASSET_SCRIPT_TYPE -> {
+                    layout.text_transaction_value.text =
+                            layout.context.getString(R.string.history_data_type_title)
+                    layout.text_transaction_name.text = layout.context.getString(
+                            item.data.transactionType().title)
+                    layout.text_tag.gone()
+                }
                 else -> {
                     item.data.amount.notNull {
                         layout.text_transaction_value.text =
@@ -125,7 +136,12 @@ class HistoryTransactionPagerAdapter constructor(var fragmentManager: FragmentMa
                 && item.data.transactionType() != TransactionType.DATA_TYPE
                 && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
                 && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
-                && item.data.transactionType() != TransactionType.EXCHANGE_TYPE) {
+                && item.data.transactionType() != TransactionType.EXCHANGE_TYPE
+                && item.data.transactionType() != TransactionType.SET_SCRIPT_TYPE
+                && item.data.transactionType() != TransactionType.CANCEL_SCRIPT_TYPE
+                && item.data.transactionType() != TransactionType.SET_SPONSORSHIP_TYPE
+                && item.data.transactionType() != TransactionType.CANCEL_SPONSORSHIP_TYPE
+                && item.data.transactionType() != TransactionType.ASSET_SCRIPT_TYPE) {
             if (showTag) {
                 val ticker = item.data.asset?.getTicker()
                 if (!ticker.isNullOrBlank()) {

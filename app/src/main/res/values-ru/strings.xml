@@ -564,7 +564,6 @@
     <string name="token_burn_confirmation_type">Тип</string>
     <string name="token_burn_confirmation_you_have_burned">Вы сожгли %1$s %2$s</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">Ваша транзакция уже в пути!</string>
-    <string name="token_burn_confirmationt_description">The Official Token of The Dating Decision Robot. www.choosee.site Choosee uses big data and artificial intelligence to facilitate dating. Making humans human again.</string>
     <string name="token_burn_confirmationt_not_reissuable">Не перевыпускаемый</string>
     <string name="token_burn_confirmationt_reissuable">Перевыпускаемый</string>
     <string name="token_burn_continue_btn">Продолжить</string>

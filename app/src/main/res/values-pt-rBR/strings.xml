@@ -564,7 +564,6 @@
     <string name="token_burn_confirmation_type">Tipo</string>
     <string name="token_burn_confirmation_you_have_burned">Você queimou %1$s %2$s</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">Sua transação está a caminho!</string>
-    <string name="token_burn_confirmationt_description">O Token Oficial do Robô Dating Decision. www.choosee.site Através de big data e inteligência artificial, ele ajuda na paquera e torna as pessoas humanas novamente.</string>
     <string name="token_burn_confirmationt_not_reissuable">Não reemissível</string>
     <string name="token_burn_confirmationt_reissuable">Reemissível</string>
     <string name="token_burn_continue_btn">Continuar</string>

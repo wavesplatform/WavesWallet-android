@@ -106,7 +106,7 @@
                         android:paddingEnd="12dp"
                         android:paddingBottom="10dp"
                         android:textColor="@color/basic500"
-                        tools:text="@string/token_burn_confirmationt_description" />
+                        tools:text="The Official Token of The Dating Decision Robot. www.choosee.site Choosee uses big data and artificial intelligence to facilitate dating. Making humans human again." />
 
 
                     <android.support.v7.widget.AppCompatTextView
