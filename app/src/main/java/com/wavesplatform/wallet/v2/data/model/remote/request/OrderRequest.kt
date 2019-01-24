@@ -6,6 +6,7 @@ import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import pers.victor.ext.currentTimeMillis
@@ -21,12 +22,13 @@ data class OrderRequest(
         @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,
         @SerializedName("expiration") var expiration: Long = 0L,
         @SerializedName("matcherFee") var matcherFee: Long = 300000,
-        @SerializedName("signature") var signature: String? = null
-) {
+        @SerializedName("version") var version: Int = Constants.VERSION,
+        @SerializedName("proofs") var proofs: MutableList<String?>? = null) {
 
     fun toSignBytes(): ByteArray {
         return try {
             Bytes.concat(
+                    byteArrayOf(Constants.VERSION.toByte()),
                     Base58.decode(senderPublicKey),
                     Base58.decode(matcherPublicKey),
                     assetPair.toBytes(),
@@ -44,7 +46,7 @@ data class OrderRequest(
     }
 
     fun sign(privateKey: ByteArray) {
-            signature = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()))
+        proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytes())))
     }
 
 }
