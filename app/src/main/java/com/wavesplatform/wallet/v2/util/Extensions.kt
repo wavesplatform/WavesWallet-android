@@ -176,9 +176,16 @@ fun AlertDialog.makeStyled() {
     val titleTextView = this.findViewById<TextView>(R.id.alertTitle)
     val buttonPositive = this.findViewById<Button>(android.R.id.button1)
     val buttonNegative = this.findViewById<Button>(android.R.id.button2)
-    buttonPositive?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
-    buttonNegative?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
-    titleTextView?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+
+    try {
+        buttonPositive?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+        buttonNegative?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+        titleTextView?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+    } catch (e: Throwable) {
+        buttonPositive?.typeface = Typeface.DEFAULT
+        buttonNegative?.typeface = Typeface.DEFAULT
+        titleTextView?.typeface = Typeface.DEFAULT
+    }
 
     buttonPositive?.setTextColor(findColor(R.color.submit300))
     buttonNegative?.setTextColor(findColor(R.color.submit300))
@@ -623,7 +630,7 @@ fun TextView.makeTextHalfBold() {
     this.text = str.append(" $textAfter")
 }
 
-fun findMyOrder(first: Order, second: Order, address: String): Order {
+fun findMyOrder(first: Order, second: Order, address: String?): Order {
     return if (first.sender == second.sender) {
         if (first.timestamp > second.timestamp) {
             first
