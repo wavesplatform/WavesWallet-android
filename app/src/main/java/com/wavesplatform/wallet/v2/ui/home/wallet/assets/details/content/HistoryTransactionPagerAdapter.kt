@@ -164,7 +164,12 @@ class HistoryTransactionPagerAdapter constructor(var fragmentManager: FragmentMa
                 && item.data.transactionType() != TransactionType.DATA_TYPE
                 && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
                 && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
-                && item.data.transactionType() != TransactionType.EXCHANGE_TYPE) {
+                && item.data.transactionType() != TransactionType.EXCHANGE_TYPE
+                && item.data.transactionType() != TransactionType.SET_SCRIPT_TYPE
+                && item.data.transactionType() != TransactionType.CANCEL_SCRIPT_TYPE
+                && item.data.transactionType() != TransactionType.SET_SPONSORSHIP_TYPE
+                && item.data.transactionType() != TransactionType.CANCEL_SPONSORSHIP_TYPE
+                && item.data.transactionType() != TransactionType.ASSET_SCRIPT_TYPE) {
             if (showTag) {
                 val ticker = item.data.asset?.getTicker()
                 if (!ticker.isNullOrBlank()) {
