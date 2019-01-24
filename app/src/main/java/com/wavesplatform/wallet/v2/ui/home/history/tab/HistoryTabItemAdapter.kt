@@ -155,34 +155,10 @@ class HistoryTabItemAdapter @Inject constructor() :
                                         item.data.quantity, decimals)
                                 view.text_transaction_value.text = "+$quantity"
                             }
-                            TransactionType.SET_SCRIPT_TYPE -> {
-                                view.text_transaction_name.text =
-                                        mContext.getString(R.string.history_data_type_title)
-                                view.text_transaction_value.text = mContext.getString(
-                                        item.data.transactionType().title)
-                                view.text_tag.gone()
-                            }
-                            TransactionType.CANCEL_SCRIPT_TYPE -> {
-                                view.text_transaction_name.text =
-                                        mContext.getString(R.string.history_data_type_title)
-                                view.text_transaction_value.text = mContext.getString(
-                                        item.data.transactionType().title)
-                                view.text_tag.gone()
-                            }
-                            TransactionType.SET_SPONSORSHIP_TYPE -> {
-                                view.text_transaction_name.text =
-                                        mContext.getString(R.string.history_data_type_title)
-                                view.text_transaction_value.text = mContext.getString(
-                                        item.data.transactionType().title)
-                                view.text_tag.gone()
-                            }
-                            TransactionType.CANCEL_SPONSORSHIP_TYPE -> {
-                                view.text_transaction_name.text =
-                                        mContext.getString(R.string.history_data_type_title)
-                                view.text_transaction_value.text = mContext.getString(
-                                        item.data.transactionType().title)
-                                view.text_tag.gone()
-                            }
+                            TransactionType.SET_SCRIPT_TYPE,
+                            TransactionType.CANCEL_SCRIPT_TYPE,
+                            TransactionType.SET_SPONSORSHIP_TYPE,
+                            TransactionType.CANCEL_SPONSORSHIP_TYPE,
                             TransactionType.ASSET_SCRIPT_TYPE -> {
                                 view.text_transaction_name.text =
                                         mContext.getString(R.string.history_data_type_title)

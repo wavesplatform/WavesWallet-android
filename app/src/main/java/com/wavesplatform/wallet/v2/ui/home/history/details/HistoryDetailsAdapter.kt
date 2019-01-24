@@ -102,38 +102,10 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                         .substringBefore(".")
                 layout.text_amount_or_title.text = "+$quantity"
             }
-            TransactionType.SET_SCRIPT_TYPE -> {
-                layout.text_amount_value_in_dollar.text =
-                        layout.context.getString(R.string.history_data_type_title)
-                layout.text_amount_value_in_dollar.visiable()
-                layout.text_amount_or_title.text = layout.context.getString(
-                        transaction.transactionType().title)
-                layout.text_tag.gone()
-            }
-            TransactionType.CANCEL_SCRIPT_TYPE -> {
-                layout.text_amount_value_in_dollar.text =
-                        layout.context.getString(R.string.history_data_type_title)
-                layout.text_amount_value_in_dollar.visiable()
-                layout.text_amount_or_title.text = layout.context.getString(
-                        transaction.transactionType().title)
-                layout.text_tag.gone()
-            }
-            TransactionType.SET_SPONSORSHIP_TYPE -> {
-                layout.text_amount_value_in_dollar.text =
-                        layout.context.getString(R.string.history_data_type_title)
-                layout.text_amount_value_in_dollar.visiable()
-                layout.text_amount_or_title.text = layout.context.getString(
-                        transaction.transactionType().title)
-                layout.text_tag.gone()
-            }
-            TransactionType.CANCEL_SPONSORSHIP_TYPE -> {
-                layout.text_amount_value_in_dollar.text =
-                        layout.context.getString(R.string.history_data_type_title)
-                layout.text_amount_value_in_dollar.visiable()
-                layout.text_amount_or_title.text = layout.context.getString(
-                        transaction.transactionType().title)
-                layout.text_tag.gone()
-            }
+            TransactionType.SET_SCRIPT_TYPE,
+            TransactionType.CANCEL_SCRIPT_TYPE,
+            TransactionType.SET_SPONSORSHIP_TYPE,
+            TransactionType.CANCEL_SPONSORSHIP_TYPE,
             TransactionType.ASSET_SCRIPT_TYPE -> {
                 layout.text_amount_value_in_dollar.text =
                         layout.context.getString(R.string.history_data_type_title)

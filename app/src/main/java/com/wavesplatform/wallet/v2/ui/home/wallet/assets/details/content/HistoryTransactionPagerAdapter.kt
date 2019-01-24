@@ -112,41 +112,13 @@ class HistoryTransactionPagerAdapter constructor(var fragmentManager: FragmentMa
                 TransactionType.TOKEN_REISSUE_TYPE -> {
                     layout.text_transaction_value.text = "+${item.data.amount}"
                 }
-                TransactionType.SET_SCRIPT_TYPE -> {
-                    layout.text_transaction_value.text =
-                            layout.context.getString(R.string.history_data_type_title)
-                    layout.text_transaction_name.text = layout.context.getString(
-                            item.data.transactionType().title)
-                    layout.text_tag.gone()
-                }
-                TransactionType.CANCEL_SCRIPT_TYPE -> {
-                    layout.text_transaction_value.text =
-                            layout.context.getString(R.string.history_data_type_title)
-                    layout.text_transaction_value.visiable()
-                    layout.text_transaction_name.text = layout.context.getString(
-                            item.data.transactionType().title)
-                    layout.text_tag.gone()
-                }
-                TransactionType.SET_SPONSORSHIP_TYPE -> {
-                    layout.text_transaction_value.text =
-                            layout.context.getString(R.string.history_data_type_title)
-                    layout.text_transaction_value.visiable()
-                    layout.text_transaction_name.text = layout.context.getString(
-                            item.data.transactionType().title)
-                    layout.text_tag.gone()
-                }
-                TransactionType.CANCEL_SPONSORSHIP_TYPE -> {
-                    layout.text_transaction_value.text =
-                            layout.context.getString(R.string.history_data_type_title)
-                    layout.text_transaction_value.visiable()
-                    layout.text_transaction_name.text = layout.context.getString(
-                            item.data.transactionType().title)
-                    layout.text_tag.gone()
-                }
+                TransactionType.SET_SCRIPT_TYPE,
+                TransactionType.CANCEL_SCRIPT_TYPE,
+                TransactionType.SET_SPONSORSHIP_TYPE,
+                TransactionType.CANCEL_SPONSORSHIP_TYPE,
                 TransactionType.ASSET_SCRIPT_TYPE -> {
                     layout.text_transaction_value.text =
                             layout.context.getString(R.string.history_data_type_title)
-                    layout.text_transaction_value.visiable()
                     layout.text_transaction_name.text = layout.context.getString(
                             item.data.transactionType().title)
                     layout.text_tag.gone()
