@@ -221,7 +221,7 @@ class HistoryTabItemAdapter @Inject constructor() :
         val myOrder = findMyOrder(
                 transaction.order1!!,
                 transaction.order2!!,
-                App.getAccessManager().getWallet()?.address!!)
+                App.getAccessManager().getWallet()?.address)
         val secondOrder = if (myOrder.id == transaction.order1!!.id) {
             transaction.order2!!
         } else {

@@ -630,7 +630,7 @@ fun TextView.makeTextHalfBold() {
     this.text = str.append(" $textAfter")
 }
 
-fun findMyOrder(first: Order, second: Order, address: String): Order {
+fun findMyOrder(first: Order, second: Order, address: String?): Order {
     return if (first.sender == second.sender) {
         if (first.timestamp > second.timestamp) {
             first
