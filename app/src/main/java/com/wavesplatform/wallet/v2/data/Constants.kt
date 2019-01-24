@@ -59,6 +59,7 @@ object Constants {
     const val ID_RECEIVE_SPONSORSHIP_TYPE = 20
     const val ID_SET_SPONSORSHIP_TYPE = 21
     const val ID_CANCEL_SPONSORSHIP_TYPE = 22
+    const val ID_ASSET_SCRIPT_TYPE = 23
 
     // Custom Result code
     const val RESULT_CANCELED = 404

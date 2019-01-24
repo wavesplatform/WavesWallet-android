@@ -102,6 +102,46 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                         .substringBefore(".")
                 layout.text_amount_or_title.text = "+$quantity"
             }
+            TransactionType.SET_SCRIPT_TYPE -> {
+                layout.text_amount_value_in_dollar.text =
+                        layout.context.getString(R.string.history_data_type_title)
+                layout.text_amount_value_in_dollar.visiable()
+                layout.text_amount_or_title.text = layout.context.getString(
+                        transaction.transactionType().title)
+                layout.text_tag.gone()
+            }
+            TransactionType.CANCEL_SCRIPT_TYPE -> {
+                layout.text_amount_value_in_dollar.text =
+                        layout.context.getString(R.string.history_data_type_title)
+                layout.text_amount_value_in_dollar.visiable()
+                layout.text_amount_or_title.text = layout.context.getString(
+                        transaction.transactionType().title)
+                layout.text_tag.gone()
+            }
+            TransactionType.SET_SPONSORSHIP_TYPE -> {
+                layout.text_amount_value_in_dollar.text =
+                        layout.context.getString(R.string.history_data_type_title)
+                layout.text_amount_value_in_dollar.visiable()
+                layout.text_amount_or_title.text = layout.context.getString(
+                        transaction.transactionType().title)
+                layout.text_tag.gone()
+            }
+            TransactionType.CANCEL_SPONSORSHIP_TYPE -> {
+                layout.text_amount_value_in_dollar.text =
+                        layout.context.getString(R.string.history_data_type_title)
+                layout.text_amount_value_in_dollar.visiable()
+                layout.text_amount_or_title.text = layout.context.getString(
+                        transaction.transactionType().title)
+                layout.text_tag.gone()
+            }
+            TransactionType.ASSET_SCRIPT_TYPE -> {
+                layout.text_amount_value_in_dollar.text =
+                        layout.context.getString(R.string.history_data_type_title)
+                layout.text_amount_value_in_dollar.visiable()
+                layout.text_amount_or_title.text = layout.context.getString(
+                        transaction.transactionType().title)
+                layout.text_tag.gone()
+            }
             else -> {
                 transaction.amount.notNull {
                     layout.text_amount_or_title.text = MoneyUtil.getScaledText(it, transaction.asset)
@@ -113,7 +153,12 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 && transaction.transactionType() != TransactionType.DATA_TYPE
                 && transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
                 && transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
-                && transaction.transactionType() != TransactionType.EXCHANGE_TYPE) {
+                && transaction.transactionType() != TransactionType.EXCHANGE_TYPE
+                && transaction.transactionType() != TransactionType.SET_SCRIPT_TYPE
+                && transaction.transactionType() != TransactionType.CANCEL_SCRIPT_TYPE
+                && transaction.transactionType() != TransactionType.SET_SPONSORSHIP_TYPE
+                && transaction.transactionType() != TransactionType.CANCEL_SPONSORSHIP_TYPE
+                && transaction.transactionType() != TransactionType.ASSET_SCRIPT_TYPE) {
             if (showTag) {
                 val ticker = transaction.asset?.getTicker()
                 if (!ticker.isNullOrBlank()) {
@@ -126,14 +171,13 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                         "${layout.text_amount_or_title.text}" +
                         " ${transaction.asset?.name}"
             }
+
+            layout.text_amount_or_title.makeTextHalfBold()
         }
 
         if (queryFirst<SpamAsset> { equalTo("assetId", transaction.assetId) } != null) {
             setSpamAmount(transaction, layout)
         }
-
-
-        layout.text_amount_or_title.makeTextHalfBold()
 
         collection.addView(layout)
         return layout

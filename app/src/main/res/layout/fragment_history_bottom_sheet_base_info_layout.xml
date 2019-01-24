@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -12,6 +13,17 @@
         android:paddingBottom="16dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/view_line_1"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginBottom="14dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/shape_dashed_line"
+            android:visibility="gone"
+            android:layerType="software"
+            tools:visibility="visible"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -30,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_fee_hint"
                 android:layout_marginTop="5dp"
-                android:text="0.00000001 NodeTX2"
+                tools:text="0.00000001 NodeTX2"
                 android:textColor="@color/disabled900" />
         </RelativeLayout>
 

@@ -156,12 +156,39 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 view.text_transaction_value.text = "+$quantity"
                             }
                             TransactionType.SET_SCRIPT_TYPE -> {
-                                view.text_transaction_name.text = mContext.getString(
+                                view.text_transaction_name.text =
+                                        mContext.getString(R.string.history_data_type_title)
+                                view.text_transaction_value.text = mContext.getString(
                                         item.data.transactionType().title)
+                                view.text_tag.gone()
                             }
                             TransactionType.CANCEL_SCRIPT_TYPE -> {
-                                view.text_transaction_name.text = mContext.getString(
+                                view.text_transaction_name.text =
+                                        mContext.getString(R.string.history_data_type_title)
+                                view.text_transaction_value.text = mContext.getString(
                                         item.data.transactionType().title)
+                                view.text_tag.gone()
+                            }
+                            TransactionType.SET_SPONSORSHIP_TYPE -> {
+                                view.text_transaction_name.text =
+                                        mContext.getString(R.string.history_data_type_title)
+                                view.text_transaction_value.text = mContext.getString(
+                                        item.data.transactionType().title)
+                                view.text_tag.gone()
+                            }
+                            TransactionType.CANCEL_SPONSORSHIP_TYPE -> {
+                                view.text_transaction_name.text =
+                                        mContext.getString(R.string.history_data_type_title)
+                                view.text_transaction_value.text = mContext.getString(
+                                        item.data.transactionType().title)
+                                view.text_tag.gone()
+                            }
+                            TransactionType.ASSET_SCRIPT_TYPE -> {
+                                view.text_transaction_name.text =
+                                        mContext.getString(R.string.history_data_type_title)
+                                view.text_transaction_value.text = mContext.getString(
+                                        item.data.transactionType().title)
+                                view.text_tag.gone()
                             }
                             else -> {
                                 item.data.amount.notNull {
@@ -196,7 +223,12 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 && item.data.transactionType() != TransactionType.DATA_TYPE
                                 && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
                                 && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
-                                && item.data.transactionType() != TransactionType.EXCHANGE_TYPE) {
+                                && item.data.transactionType() != TransactionType.EXCHANGE_TYPE
+                                && item.data.transactionType() != TransactionType.SET_SCRIPT_TYPE
+                                && item.data.transactionType() != TransactionType.CANCEL_SCRIPT_TYPE
+                                && item.data.transactionType() != TransactionType.SET_SPONSORSHIP_TYPE
+                                && item.data.transactionType() != TransactionType.CANCEL_SPONSORSHIP_TYPE
+                                && item.data.transactionType() != TransactionType.ASSET_SCRIPT_TYPE) {
                             if (showTag) {
                                 val ticker = item.data.asset?.getTicker()
                                 if (!ticker.isNullOrBlank()) {
@@ -208,10 +240,9 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 view.text_transaction_value.text =
                                         "${view.text_transaction_value.text} ${item.data.asset?.name}"
                             }
+                            view.text_transaction_value.makeTextHalfBold()
                         }
                     }
-
-                    view.text_transaction_value.makeTextHalfBold()
                 }
             }
         }
