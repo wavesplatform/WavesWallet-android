@@ -117,33 +117,33 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
                 min,
                 tunnel.tunnel?.currencyFrom)
         if (Constants.ETHEREUM_ASSET_ID == presenter.assetBalance!!.assetId) {
-            warning_crypto_title.text = getString(R.string.receive_gateway_info_gateway_warning_eth_title)
-            warning_crypto_subtitle.text = getString(R.string.receive_gateway_info_gateway_warning_eth_subtitle)
+            warning_crypto_title?.text = getString(R.string.receive_gateway_info_gateway_warning_eth_title)
+            warning_crypto_subtitle?.text = getString(R.string.receive_gateway_info_gateway_warning_eth_subtitle)
         } else {
-            warning_crypto_title.text = getString(R.string.receive_warning_crypto, tunnel.tunnel?.currencyFrom)
-            warning_crypto_subtitle.text = getString(R.string.receive_will_send_other_currency)
+            warning_crypto_title?.text = getString(R.string.receive_warning_crypto, tunnel.tunnel?.currencyFrom)
+            warning_crypto_subtitle?.text = getString(R.string.receive_will_send_other_currency)
         }
 
         presenter.nextStepValidation = true
         needMakeButtonEnable()
 
-        warning_layout.visiable()
+        warning_layout?.visiable()
         container_info?.visiable()
         button_continue.isEnabled = true
     }
 
     override fun onShowError(message: String) {
-        skeletonView!!.hide()
-        container_info.gone()
+        skeletonView?.hide()
+        container_info?.gone()
         showError(message, R.id.root)
     }
 
     override fun onGatewayError() {
         skeletonView!!.hide()
-        attention_title.text = getString(R.string.send_gateway_error_title)
-        attention_subtitle.text = getString(R.string.send_gateway_error_subtitle)
-        warning_layout.gone()
-        button_continue.isEnabled = false
+        attention_title?.text = getString(R.string.send_gateway_error_title)
+        attention_subtitle?.text = getString(R.string.send_gateway_error_subtitle)
+        warning_layout?.gone()
+        button_continue?.isEnabled = false
     }
 
     private fun setAssetBalance(assetBalance: AssetBalance?) {

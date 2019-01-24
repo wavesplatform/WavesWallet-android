@@ -19,29 +19,6 @@ import javax.inject.Inject
 
 class SplashActivity : BaseActivity(), SplashView {
 
-    override fun onNotLoggedIn() {
-        if (preferencesHelper.isTutorialPassed()) {
-            if (TextUtils.isEmpty(App.getAccessManager().getLastLoggedInGuid())) {
-                launchActivity<WelcomeActivity>()
-                overridePendingTransition(R.anim.null_animation, R.anim.fade_out)
-            } else {
-                launchActivity<MainActivity>(clear = true)
-            }
-        } else {
-            launchActivity<ChooseLanguageActivity>()
-            overridePendingTransition(R.anim.null_animation, R.anim.fade_out)
-        }
-    }
-
-    override fun onStartMainActivity(publicKey: String) {
-        if (preferencesHelper.isTutorialPassed()) {
-            launchActivity<MainActivity>(clear = true)
-        } else {
-            launchActivity<ChooseLanguageActivity>()
-            overridePendingTransition(R.anim.null_animation, R.anim.fade_out)
-        }
-    }
-
     @Inject
     @InjectPresenter
     lateinit var presenter: SplashPresenter
@@ -65,6 +42,29 @@ class SplashActivity : BaseActivity(), SplashView {
         } else {
             presenter.storeIncomingURI(intent)
             presenter.resolveNextAction()
+        }
+    }
+
+    override fun onNotLoggedIn() {
+        if (preferencesHelper.isTutorialPassed()) {
+            if (TextUtils.isEmpty(App.getAccessManager().getLastLoggedInGuid())) {
+                launchActivity<WelcomeActivity>()
+                overridePendingTransition(R.anim.null_animation, R.anim.fade_out)
+            } else {
+                launchActivity<MainActivity>(clear = true)
+            }
+        } else {
+            launchActivity<ChooseLanguageActivity>()
+            overridePendingTransition(R.anim.null_animation, R.anim.fade_out)
+        }
+    }
+
+    override fun onStartMainActivity(publicKey: String) {
+        if (preferencesHelper.isTutorialPassed()) {
+            launchActivity<MainActivity>(clear = true)
+        } else {
+            launchActivity<ChooseLanguageActivity>()
+            overridePendingTransition(R.anim.null_animation, R.anim.fade_out)
         }
     }
 

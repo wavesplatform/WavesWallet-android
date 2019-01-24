@@ -139,7 +139,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         adapterAvatar.notifyDataSetChanged()
         view_pager.setCurrentItem(intent.getIntExtra(BUNDLE_ASSET_POSITION, 0), false)
         view_pager.post {
-            if (view_pager.beginFakeDrag() && adapterAvatar.count != 0) {
+            if (view_pager.beginFakeDrag() && view_pager.adapter?.count != 0) {
                 view_pager.fakeDragBy(0f)
                 view_pager.endFakeDrag()
             }

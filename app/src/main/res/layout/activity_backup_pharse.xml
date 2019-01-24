@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -9,10 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:background="@android:color/transparent"
+        android:background="@color/white"
         android:fitsSystemWindows="true"
-        android:fontFamily="@font/roboto"
-        app:titleTextAppearance="@style/Toolbar.Title" />
+        app:titleTextAppearance="@style/Toolbar.Title"
+        app:titleTextColor="@color/black" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,8 +38,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            android:background="@color/basic50"
-            android:foreground="@drawable/shape_rect_outline_gray"
+            android:background="@drawable/shape_rect_outline_gray_basic50"
             android:padding="7dp"
             app:alignContent="center"
             app:alignItems="center"

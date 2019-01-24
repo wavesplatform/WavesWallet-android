@@ -16,4 +16,14 @@ class RealmMigrations : RealmMigration {
             }
         }
     }
+
+    override fun hashCode(): Int {
+        return RealmMigrations::class.java.hashCode()
+    }
+
+    override fun equals(any: Any?): Boolean {
+        return if (any == null) {
+            false
+        } else any is RealmMigrations
+    }
 }
