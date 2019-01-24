@@ -5,6 +5,7 @@ import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.ScrollView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
@@ -15,6 +16,8 @@ import javax.inject.Inject
 class TutorialAdapter @Inject constructor(@ApplicationContext var mContext: Context) : PagerAdapter() {
     var items: ArrayList<Int> = arrayListOf()
     var listener: EndOfScrollListener? = null
+    var scrollView: ScrollView? = null
+    var scrollListener: ViewTreeObserver.OnScrollChangedListener? = null
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
         val inflater = LayoutInflater.from(mContext)
@@ -27,16 +30,16 @@ class TutorialAdapter @Inject constructor(@ApplicationContext var mContext: Cont
             else -> inflater.inflate(R.layout.item_tutorial_1_card, null, false)
         }
 
-        val scrollView = view.findViewById<ScrollView>(R.id.scroll_root)
-        // TODO: rewrite to nested scroll and fix leak
-        scrollView.notNull {
-            scrollView.viewTreeObserver.addOnScrollChangedListener {
-                if (!scrollView.canScrollVertically(1)) {
+        scrollView = view.findViewById<ScrollView>(R.id.scroll_root)
+        scrollView?.let {
+            scrollListener = ViewTreeObserver.OnScrollChangedListener {
+                if (!it.canScrollVertically(1)) {
                     listener?.onEndOfScroll(position)
                 } else {
                     listener?.onNotEndOfScroll(position)
                 }
             }
+            it.viewTreeObserver.addOnScrollChangedListener(scrollListener)
         }
 
         collection.addView(view)
@@ -44,6 +47,8 @@ class TutorialAdapter @Inject constructor(@ApplicationContext var mContext: Cont
     }
 
     override fun destroyItem(collection: ViewGroup, position: Int, view: Any) {
+        scrollView?.viewTreeObserver?.removeOnScrollChangedListener(scrollListener)
+
         collection.removeView(view as View)
     }
 
