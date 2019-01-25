@@ -295,8 +295,10 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 }))
 
 
-        horizontal_limit_price_suggestion.goneIf { presenter.data?.lastPrice == null
-                && presenter.data?.askPrice == null && presenter.data?.bidPrice == null }
+        horizontal_limit_price_suggestion.goneIf {
+            presenter.data?.lastPrice == null
+                    && presenter.data?.askPrice == null && presenter.data?.bidPrice == null
+        }
         text_bid.goneIf { presenter.data?.bidPrice == null }
         text_ask.goneIf { presenter.data?.askPrice == null }
         text_last.goneIf { presenter.data?.lastPrice == null }
@@ -305,7 +307,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             presenter.data?.bidPrice.notNull { price ->
                 edit_limit_price.setText(MoneyUtil.getScaledPrice(price,
                         presenter.data?.watchMarket?.market?.amountAssetDecimals
-                        ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                                ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros())
             }
         }
@@ -314,7 +316,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             presenter.data?.askPrice.notNull { price ->
                 edit_limit_price.setText(MoneyUtil.getScaledPrice(price,
                         presenter.data?.watchMarket?.market?.amountAssetDecimals
-                        ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                                ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros())
             }
         }
@@ -323,7 +325,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             presenter.data?.lastPrice.notNull { price ->
                 edit_limit_price.setText(MoneyUtil.getScaledPrice(price,
                         presenter.data?.watchMarket?.market?.amountAssetDecimals
-                        ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                                ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros())
             }
         }
@@ -438,7 +440,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                         quickBalanceView.click {
                             edit_amount.setText((MoneyUtil.getScaledText(balance,
                                     presenter.data?.watchMarket?.market?.amountAssetDecimals
-                                    ?: 0)).clearBalance())
+                                            ?: 0)).clearBalance())
                             edit_amount.setSelection(edit_amount.text?.length ?: 0)
                         }
                     }
@@ -448,7 +450,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                         quickBalanceView.click {
                             edit_amount.setText(MoneyUtil.getScaledText(percentBalance,
                                     presenter.data?.watchMarket?.market?.amountAssetDecimals
-                                    ?: 0).clearBalance())
+                                            ?: 0).clearBalance())
                             edit_amount.setSelection(edit_amount.text?.length ?: 0)
                         }
                     }
@@ -477,21 +479,26 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     }
 
     override fun showCommissionLoading() {
-        progress_bar_fee_transaction.visiable()
+        progress_bar_fee_transaction.show()
         text_fee_value.gone()
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
         text_fee_value.text = "${getScaledAmount(unscaledAmount, 8)} " +
                 "${Constants.wavesAssetInfo.name}"
-        progress_bar_fee_transaction.gone()
+        progress_bar_fee_transaction.hide()
         text_fee_value.visiable()
     }
 
     override fun showCommissionError() {
         text_fee_value.text = "-"
-        progress_bar_fee_transaction.gone()
+        progress_bar_fee_transaction.hide()
         showError(R.string.common_error_commission_receiving, R.id.root)
         text_fee_value.visiable()
+    }
+
+    override fun onDestroyView() {
+        progress_bar_fee_transaction.hide()
+        super.onDestroyView()
     }
 }

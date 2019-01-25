@@ -659,7 +659,7 @@ fun Throwable.errorBody(): ErrorResponse? {
 }
 
 fun ErrorResponse.isSmartError(): Boolean {
-    return this.error in 305..307 || this.error == 112 // TODO: Delete 112
+    return this.error in 305..307
 }
 
 fun AssetInfo.getTicker(): String {

@@ -33,12 +33,13 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
                     viewState.successCancelLeasing()
                     viewState.showProgressBar(false)
                 }, {
-                    viewState.failedCancelLeasing()
                     viewState.showProgressBar(false)
                     it.printStackTrace()
 
                     if (it.errorBody()?.isSmartError() == true) {
                         viewState.failedCancelLeasingCauseSmart()
+                    } else {
+                        viewState.failedCancelLeasing(it.errorBody()?.message)
                     }
                 }))
     }
