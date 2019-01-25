@@ -37,7 +37,6 @@ import timber.log.Timber;
 
 public class App extends DaggerApplication {
 
-    private static final String RX_ERROR_TAG = "RxJava Error";
     @Inject
     PrefsUtil mPrefsUtil;
     @Inject

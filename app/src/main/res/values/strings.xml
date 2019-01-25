@@ -513,7 +513,7 @@
     <string name="send_confirmation_write_an_optional_message">Write an optional message</string>
     <string name="send_continue">Continue</string>
     <string name="send_error_get_data_from_qr">Error get data from QR</string>
-    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">You don’t have enough funds to pay the required fees. \nYou must pay 0.001 WAVES transaction fee and %1$s %2$s gateway fee.</string>
+    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">You don’t have enough funds to pay the required fees. \nYou must pay %1$s transaction fee and %2$s %3$s gateway fee.</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
     <string name="send_gateway_error_subtitle">Try again later</string>

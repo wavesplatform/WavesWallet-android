@@ -512,7 +512,7 @@
     <string name="send_confirmation_write_an_optional_message">Не обязательно</string>
     <string name="send_continue">Продолжить</string>
     <string name="send_error_get_data_from_qr">Ошибка получения данных с QR</string>
-    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">У вас недостаточно средств для отправки транзакции. \nВы должны оплатить комиссию 0.001 WAVES и комиссию шлюза %1$s %2$s.</string>
+    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">У вас недостаточно средств для отправки транзакции. \nВы должны оплатить комиссию %1$s и комиссию шлюза %2$s %3$s.</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
     <string name="send_gateway_error_subtitle">Попробуйте, пожалуйста, позже</string>
