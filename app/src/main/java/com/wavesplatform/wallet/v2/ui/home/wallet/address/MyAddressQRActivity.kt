@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AliasBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showSuccess
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_my_address_qr.*
 import pers.victor.ext.click
@@ -112,6 +113,12 @@ class MyAddressQRActivity : BaseActivity(), MyAddressQrView {
                 bottomSheetFragment.type = AliasBottomSheetFragment.TYPE_CONTENT
             }
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+            bottomSheetFragment.onCreateAliasListener = object : AliasBottomSheetFragment.OnCreateAliasListener {
+                override fun onSuccess() {
+                    bottomSheetFragment.dismiss()
+                    showSuccess(getString(R.string.new_alias_success_create), R.id.root)
+                }
+            }
         }
     }
 
