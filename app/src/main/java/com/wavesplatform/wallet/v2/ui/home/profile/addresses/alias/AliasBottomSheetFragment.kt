@@ -14,6 +14,7 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
+import com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
@@ -50,7 +51,7 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
         }
 
     lateinit var rootView: View
-    lateinit var progressBarFee: View
+    lateinit var progressBarFee: ImageProgressBar
     lateinit var feeTransaction: TextView
     lateinit var buttonCreateAlias: View
 
@@ -104,7 +105,7 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
                 }
             }
         }
-        progressBarFee = rootView.findViewById<View>(R.id.progress_bar_fee_transaction)
+        progressBarFee = rootView.findViewById<ImageProgressBar>(R.id.progress_bar_fee_transaction)
         feeTransaction = rootView.findViewById(R.id.text_fee_transaction)
         return rootView
     }
@@ -114,7 +115,7 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
         presenter.loadCommission(object : AliasPresenter.OnCommissionGetListener {
 
             override fun showCommissionLoading() {
-                progressBarFee.visiable()
+                progressBarFee.show()
                 feeTransaction.gone()
                 buttonCreateAlias.isEnabled = false
             }
