@@ -161,6 +161,7 @@
     <string name="common_copied">Kopiert!</string>
     <string name="common_copied_to_clipboard">In die Zwischenablage kopiert</string>
     <string name="common_dash">–</string>
+    <string name="common_error_commission_receiving">Fehler bei der Kommission</string>
     <string name="common_feedback_title">Feedback abschicken</string>
     <string name="common_k_quantity">%sk</string>
     <string name="common_kk_quantity">%skk</string>
@@ -172,6 +173,7 @@
     <string name="common_or">oder</string>
     <string name="common_persist"><![CDATA[&#x26;]]></string>
     <string name="common_server_error">Etwas ist schief gelaufen</string>
+    <string name="common_transaction_fee">Transaktionsgebühr</string>
     <string name="confirm_backup">Bestätigen Sie die Sicherung</string>
     <string name="confirm_backup_confirm">Bestätigen</string>
     <string name="confirm_backup_error">Falsche Order, nochmal versuchen</string>
@@ -305,12 +307,13 @@
     <string name="history_type_canceled_leasing">Annulliertes Leasing</string>
     <string name="history_type_create_alias">Erstellen Sie einen Alias</string>
     <string name="history_type_data">Datentransaktion</string>
-    <string name="history_type_exchange">Exchange transaction</string>
+    <string name="history_type_exchange">Exchange-Transaktion</string>
     <string name="history_type_incoming_leasing">Einkommendes Leasing</string>
     <string name="history_type_mass_receive">Masstransfer Transkation erhalten</string>
     <string name="history_type_mass_send">Masstransfer Transaktion senden</string>
     <string name="history_type_mass_spam_receive">Erhalten</string>
     <string name="history_type_receive">Erhalten</string>
+    <string name="history_type_receive_sponsorship">Erhaltenes Sponsoring</string>
     <string name="history_type_self_transfer">Selbstübertragung</string>
     <string name="history_type_sent">Gesendet</string>
     <string name="history_type_set_script">Skripttransaktion einstellen</string>
@@ -470,8 +473,8 @@
     <string name="receive_fiat_choose_dialog_ok">Ok</string>
     <string name="receive_fiat_choose_dialog_title">Währung wählen</string>
     <string name="receive_fiat_choose_dialog_usd">USD</string>
-    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can\’t refund them. You will lose that money.</string>
-    <string name="receive_gateway_info_gateway_warning_eth_title">Please do not deposit ETH form smart contracts! Do not deposit ERC20 tokens! Only Ethereum is allowed.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Prüfen Sie, ob Sie Smart-Kontrakte überweisen oder tauschen, um die ETH abzubuchen. Wir akzeptieren solche Transaktionen nicht und können sie nicht erstatten. Sie werden Ihr Geld ggfs. verlieren.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Bitte überweisen Sie keine ETH-Form-Verträge. Zahlen Sie keine ERC20-Token ein! Nur Ethereum ist erlaubt.</string>
     <string name="receive_get_verified">Verifiziert werden</string>
     <string name="receive_invoice">Rechnung</string>
     <string name="receive_limit">Das Minimum ist %1$s %2$s, das Maximum ist %3$s %4$s</string>
@@ -493,6 +496,9 @@
     <string name="receive_warning_crypto">Senden Sie nur %1$s an diese Einzahlungsadresse</string>
     <string name="receive_warning_will_send">Wenn Sie weniger als %1$s %2$s senden, verlieren Sie dieses Geld.</string>
     <string name="receive_will_send_other_currency">Das Senden einer anderen Währung an diese Adresse kann zum Verlust Ihrer Einzahlung führen.</string>
+    <string name="scripted_account_error_dialog_btn_txt">Okay</string>
+    <string name="scripted_account_error_dialog_description">Verwenden Sie den Waves-Client, um mit einem geskripteten Account / Asset zu arbeiten</string>
+    <string name="scripted_account_error_dialog_title">In Ihrem Account oder Asset ist ein Skript installiert</string>
     <string name="secret_phrase_back_up_now">Jetzt sichern</string>
     <string name="secret_phrase_do_it_later">Machen Sie es später</string>
     <string name="secret_phrase_no_backup_no_money">Keine Sicherung, kein Geld</string>
@@ -512,11 +518,11 @@
     <string name="send_confirmation_write_an_optional_message">Schreiben Sie eine optionale Nachricht</string>
     <string name="send_continue">Fortsetzen</string>
     <string name="send_error_get_data_from_qr">Fehler beim Abrufen von Daten des QR Codes</string>
-    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">You don’t have enough funds to pay the required fees. \nYou must pay %1$s transaction fee and %2$s %3$s gateway fee.</string>
+    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">Sie haben nicht genug Geld, um die erforderlichen Gebühren zu zahlen. \nSie müssen %1$s transaktionsgebühr und %2$s %3$s Gateway-Gebühr zahlen.</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
-    <string name="send_gateway_error_subtitle">Try again later</string>
-    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
+    <string name="send_gateway_error_subtitle">Versuchen Sie es später noch einmal</string>
+    <string name="send_gateway_error_title">Der Coinomat Service vorübergehend nicht verfügbar</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">Die Gebühren betragen 1% des überwiesenen Betrags.</string>
     <string name="send_gateway_info_gateway_fee">Die Gateway-Gebühr beträgt %1$s %2$s</string>
     <string name="send_gateway_info_gateway_limits">Wir haben die Adresse von %1$s erkannt und senden Ihr Geld über das Coinomat-Gateway an diese Adresse. Der Mindestbetrag beträgt %2$s %1$s, der Höchstbetrag ist %3$s %1$s.</string>
@@ -626,8 +632,5 @@
     <string name="your_asset_activity_greater_zero">Mit Guthaben</string>
     <string name="your_assets_empty_state">Sie haben keine Guthaben</string>
     <string name="your_assets_toolbar_title">Ihr Guthaben</string>
-    <string name="common_error_commission_receiving">Commission receiving error</string>
     <string name="common_waves_asset_name">WAVES</string>
-    <string name="common_transaction_fee">Transaction Fee</string>
-    <string name="history_type_receive_sponsorship">Received Sponsorship</string>
 </resources>

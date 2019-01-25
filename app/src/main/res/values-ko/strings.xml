@@ -630,4 +630,7 @@
     <string name="common_waves_asset_name">WAVES</string>
     <string name="common_transaction_fee">Transaction Fee</string>
     <string name="history_type_receive_sponsorship">Received Sponsorship</string>
+    <string name="scripted_account_error_dialog_btn_txt">Okay</string>
+    <string name="scripted_account_error_dialog_description">To work with a scripted account/asset, use the Waves Client</string>
+    <string name="scripted_account_error_dialog_title">A script is installed on your account or asset</string>
 </resources>
