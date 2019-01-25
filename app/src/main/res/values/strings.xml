@@ -300,6 +300,7 @@
     <string name="history_sorting_period">Period</string>
     <string name="history_sorting_week">Week</string>
     <string name="history_toolbar_title">History</string>
+    <string name="history_type_asset_script">Asset script transaction</string>
     <string name="history_type_cancel_script">Cancel script transaction</string>
     <string name="history_type_cancel_sponsorship">Cancel sponsorship transaction</string>
     <string name="history_type_canceled_leasing">Canceled Leasing</string>
@@ -564,7 +565,6 @@
     <string name="token_burn_confirmation_type">Type</string>
     <string name="token_burn_confirmation_you_have_burned">You have burned %1$s %2$s</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">Your transaction is on the way!</string>
-    <string name="token_burn_confirmationt_description">The Official Token of The Dating Decision Robot. www.choosee.site Choosee uses big data and artificial intelligence to facilitate dating. Making humans human again.</string>
     <string name="token_burn_confirmationt_not_reissuable">Not Reissuable</string>
     <string name="token_burn_confirmationt_reissuable">Reissuable</string>
     <string name="token_burn_continue_btn">Continue</string>

@@ -52,6 +52,8 @@ enum class TransactionType(var id: Int,
             R.string.history_type_set_script),
     CANCEL_SCRIPT_TYPE(Constants.ID_CANCEL_SCRIPT_TYPE, R.drawable.ic_t_setscript_cancel_48,
             R.string.history_type_cancel_script),
+    ASSET_SCRIPT_TYPE(Constants.ID_ASSET_SCRIPT_TYPE, R.drawable.ic_t_setassetscript_48,
+            R.string.history_type_asset_script),
     UNRECOGNISED_TYPE(Constants.ID_UNRECOGNISED_TYPE, R.drawable.ic_t_undefined_48,
             R.string.history_type_unrecognised);
 

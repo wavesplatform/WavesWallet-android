@@ -69,8 +69,9 @@ class TransactionUtil @Inject constructor() {
                 } else {
                     Constants.ID_SET_SPONSORSHIP_TYPE
                 }
-            }
-            else {
+            } else if (transaction.type == Transaction.ASSET_SCRIPT) {
+                Constants.ID_ASSET_SCRIPT_TYPE
+            } else {
                 Constants.ID_UNRECOGNISED_TYPE
             }
 

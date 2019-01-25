@@ -231,8 +231,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                     }
                     historyContainer?.addView(resendBtn)
                 }
-
-
             }
             TransactionType.STARTED_LEASING_TYPE -> {
                 val startLeaseView = inflater?.inflate(R.layout.fragment_bottom_sheet_start_lease_layout, historyContainer, false)
@@ -423,30 +421,69 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 historyContainer?.addView(button)
             }
             TransactionType.DATA_TYPE -> {
-                val dataView = inflater?.inflate(R.layout.fragment_bottom_sheet_data_layout, historyContainer, false)
-                val codeView = dataView?.findViewById<CodeView>(R.id.code_view)
-                val imageCopyData = dataView?.findViewById<AppCompatImageView>(R.id.image_copy_data)
-
-                val customTheme = ColorThemeData(SyntaxColors(android.R.color.transparent, R.color.submit300, android.R.color.transparent, android.R.color.transparent, R.color.basic700,
-                        android.R.color.transparent, R.color.basic700, android.R.color.transparent, android.R.color.transparent, android.R.color.transparent, android.R.color.transparent),
-                        R.color.basic50, android.R.color.transparent, android.R.color.transparent, R.color.basic50)
-
-
-                codeView?.setCode(gson.toJson(transaction.data))
-                codeView?.getOptions()?.withTheme(customTheme)
-
-                eventSubscriptions.add(RxView.clicks(imageCopyData!!)
-                        .throttleFirst(1500, TimeUnit.MILLISECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe {
-                            imageCopyData.copyToClipboard(gson.toJson(transaction.data))
-                        })
-
-                historyContainer?.addView(dataView)
+                setCodeView(historyContainer, transaction)
+                historyContainer?.addView(baseInfoLayout)
+            }
+            TransactionType.SET_SCRIPT_TYPE -> {
+                setCodeView(historyContainer, transaction)
+                baseInfoLayout?.findViewById<View>(R.id.view_line_1)?.visiable()
+                historyContainer?.addView(baseInfoLayout)
+            }
+            TransactionType.CANCEL_SCRIPT_TYPE -> {
+                baseInfoLayout?.setMargins(top = dp2px(16))
+                historyContainer?.addView(baseInfoLayout)
+            }
+            TransactionType.SET_SPONSORSHIP_TYPE -> {
+                val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout,
+                        historyContainer, false)
+                val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
+                textIdValue?.text = transaction.assetId
+                historyContainer?.addView(tokenView)
+                baseInfoLayout?.findViewById<View>(R.id.view_line_1)?.visiable()
+                historyContainer?.addView(baseInfoLayout)
+            }
+            TransactionType.CANCEL_SPONSORSHIP_TYPE -> {
+                val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout,
+                        historyContainer, false)
+                val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
+                textIdValue?.text = transaction.assetId
+                historyContainer?.addView(tokenView)
+                baseInfoLayout?.findViewById<View>(R.id.view_line_1)?.visiable()
+                historyContainer?.addView(baseInfoLayout)
+            }
+            TransactionType.ASSET_SCRIPT_TYPE -> {
+                baseInfoLayout?.setMargins(top = dp2px(16))
                 historyContainer?.addView(baseInfoLayout)
             }
         }
         historyContainer?.addView(bottomBtns)
+    }
+
+    private fun setCodeView(historyContainer: LinearLayout?, transaction: Transaction) {
+        val dataView = inflater?.inflate(R.layout.fragment_bottom_sheet_data_layout,
+                historyContainer, false)
+        val codeView = dataView?.findViewById<CodeView>(R.id.code_view)
+        val imageCopyData = dataView?.findViewById<AppCompatImageView>(R.id.image_copy_data)
+
+        val customTheme = ColorThemeData(SyntaxColors(
+                android.R.color.transparent, R.color.submit300, android.R.color.transparent,
+                android.R.color.transparent, R.color.basic700, android.R.color.transparent,
+                R.color.basic700, android.R.color.transparent, android.R.color.transparent,
+                android.R.color.transparent, android.R.color.transparent),
+                R.color.basic50, android.R.color.transparent, android.R.color.transparent,
+                R.color.basic50)
+
+        codeView?.setCode(gson.toJson(transaction.script))
+        codeView?.getOptions()?.withTheme(customTheme)
+
+        eventSubscriptions.add(RxView.clicks(imageCopyData!!)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    imageCopyData.copyToClipboard(gson.toJson(transaction.data))
+                })
+
+        historyContainer?.addView(dataView)
     }
 
     private fun nonGateway(assetBalance: AssetBalance, transaction: Transaction) =

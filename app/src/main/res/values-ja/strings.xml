@@ -564,7 +564,6 @@
     <string name="token_burn_confirmation_type">タイプ</string>
     <string name="token_burn_confirmation_you_have_burned">%1$s %2$s をバーンしました</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">トランザクションを処理中です！</string>
-    <string name="token_burn_confirmationt_description">The Dating Decision Robot. (www.choosee.site) の公式トークンです。Chooseeはビッグデータと人工知能を用いてデートマッチングを行います。人間を再度、人間にします。</string>
     <string name="token_burn_confirmationt_not_reissuable">再発行不可</string>
     <string name="token_burn_confirmationt_reissuable">再発行可</string>
     <string name="token_burn_continue_btn">続ける</string>

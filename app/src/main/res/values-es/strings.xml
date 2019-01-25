@@ -564,7 +564,6 @@
     <string name="token_burn_confirmation_type">Tipo</string>
     <string name="token_burn_confirmation_you_have_burned">Haya quemado %1$s %2$s</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">Su transacción está en camino!</string>
-    <string name="token_burn_confirmationt_description">El token oficial del robot de decisión de los datos. www.choosee.site Utilice big data e inteligencia artificial para facilitar los datos. </string>
     <string name="token_burn_confirmationt_not_reissuable">No re-emitible</string>
     <string name="token_burn_confirmationt_reissuable">Re-emitible</string>
     <string name="token_burn_continue_btn">Continuar</string>

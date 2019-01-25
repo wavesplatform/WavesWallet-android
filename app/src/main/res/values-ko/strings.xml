@@ -564,7 +564,6 @@
     <string name="token_burn_confirmation_type">유형</string>
     <string name="token_burn_confirmation_you_have_burned">%1$s %2$s 을 소각했습니다.</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">트랜잭션을 진행 중입니다!</string>
-    <string name="token_burn_confirmationt_description">데이팅 결정 로봇의 공식 토큰입니다. www.choosee.site Choosee는 데이트를 용이하게 하기 위해 빅데이터와 인공 지능을 사용합니다. 인간을 다시 인간으로 만들기 위함.</string>
     <string name="token_burn_confirmationt_not_reissuable">재발행 불가</string>
     <string name="token_burn_confirmationt_reissuable">재발행 가능</string>
     <string name="token_burn_continue_btn">계속</string>

@@ -564,7 +564,6 @@
     <string name="token_burn_confirmation_type">类型</string>
     <string name="token_burn_confirmation_you_have_burned">你已经焚毁了 %1$s %2$s</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">您的交易正在进行中!</string>
-    <string name="token_burn_confirmationt_description">约会决策机器人的官方代币。 www.choosee.site Choosee使用大数据和人工智能来优化约会。让你重获生活。</string>
     <string name="token_burn_confirmationt_not_reissuable">不可再发行</string>
     <string name="token_burn_confirmationt_reissuable">可再发现</string>
     <string name="token_burn_continue_btn">继续</string>

@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/image_flag"
-        tools:text="MkSuckMydickmMak1593x1GrfYmFdsf83skS11" />
+        tools:text="pjoqwfjohf2wopjfqopqfoqfwlqfwjnfwkjnlqwfl" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_edit"
