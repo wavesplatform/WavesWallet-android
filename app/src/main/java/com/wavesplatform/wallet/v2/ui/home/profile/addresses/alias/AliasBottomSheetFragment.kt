@@ -95,7 +95,7 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
 
                 buttonCreateAlias.click {
                     launchActivity<CreateAliasActivity>(REQUEST_CREATE_ALIAS) {
-                        putExtra(CreateAliasActivity.BUNDLE_BLOCKCHAIN_COMMISSION,  presenter.fee)
+                        putExtra(CreateAliasActivity.BUNDLE_BLOCKCHAIN_COMMISSION, presenter.fee)
                     }
                 }
 
@@ -121,7 +121,7 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
 
             override fun showCommissionSuccess(unscaledAmount: Long) {
                 feeTransaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
-                progressBarFee.gone()
+                progressBarFee.hide()
                 feeTransaction.visiable()
                 buttonCreateAlias.isEnabled = true
             }
@@ -129,10 +129,15 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
             override fun showCommissionError() {
                 feeTransaction.text = "-"
                 showError(R.string.common_error_commission_receiving, R.id.root)
-                progressBarFee.gone()
+                progressBarFee.hide()
                 feeTransaction.visiable()
             }
         })
+    }
+
+    override fun onDestroyView() {
+        progressBarFee.hide()
+        super.onDestroyView()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

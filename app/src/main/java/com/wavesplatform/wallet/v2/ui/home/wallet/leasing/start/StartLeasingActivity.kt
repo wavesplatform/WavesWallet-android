@@ -288,14 +288,14 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
     }
 
     override fun showCommissionLoading() {
-        progress_bar_fee_transaction.visiable()
+        progress_bar_fee_transaction.show()
         text_fee_transaction.gone()
         button_continue.isEnabled = false
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
         text_fee_transaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
-        progress_bar_fee_transaction.gone()
+        progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
         makeButtonEnableIfValid()
     }
@@ -303,9 +303,14 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
     override fun showCommissionError() {
         text_fee_transaction.text = "-"
         showError(R.string.common_error_commission_receiving, R.id.root)
-        progress_bar_fee_transaction.gone()
+        progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
         makeButtonEnableIfValid()
+    }
+
+    override fun onDestroy() {
+        progress_bar_fee_transaction.hide()
+        super.onDestroy()
     }
 
     companion object {
