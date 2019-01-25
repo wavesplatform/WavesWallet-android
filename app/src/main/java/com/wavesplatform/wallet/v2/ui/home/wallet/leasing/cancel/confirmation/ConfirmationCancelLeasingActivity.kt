@@ -59,7 +59,6 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
             val rotation = AnimationUtils.loadAnimation(this, R.anim.rotate)
             rotation.fillAfter = true
             image_loader.startAnimation(rotation)
-
             presenter.cancelLeasing()
         }
 
@@ -82,10 +81,14 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
         card_success.visiable()
     }
 
-    override fun failedCancelLeasing() {
+    override fun failedCancelLeasing(message: String?) {
         image_loader.clearAnimation()
         card_progress.gone()
         card_leasing_preview_info.visiable()
+
+        message?.let {
+            showError(message, R.id.root)
+        }
     }
 
     override fun failedCancelLeasingCauseSmart() {

@@ -11,6 +11,7 @@ import com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_confirm_leasing.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -82,10 +83,14 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
         card_success.visiable()
     }
 
-    override fun failedStartLeasing() {
+    override fun failedStartLeasing(message: String?) {
         image_loader.clearAnimation()
         card_progress.gone()
         card_leasing_preview_info.visiable()
+
+        message?.let {
+            showError(message, R.id.root)
+        }
     }
 
     override fun failedStartLeasingCauseSmart() {
