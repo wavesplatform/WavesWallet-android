@@ -10,10 +10,10 @@
     <string name="add_address_name">Имя</string>
     <string name="add_address_toolbar_title">Добавить</string>
     <string name="address_book_add">Добавить</string>
-    <string name="address_book_address_validation_already_use_error">Уже в используется</string>
+    <string name="address_book_address_validation_already_use_error">Уже используется</string>
     <string name="address_book_address_validation_required_error">Требуется адрес</string>
     <string name="address_book_empty_state">Пока ничего нет… \nВы сохранить адрес</string>
-    <string name="address_book_name_validation_already_use_error">Уже в используется</string>
+    <string name="address_book_name_validation_already_use_error">Уже используется</string>
     <string name="address_book_name_validation_max_length_error">Максимум 24</string>
     <string name="address_book_name_validation_min_length_error">Минимум 2 символа</string>
     <string name="address_book_name_validation_required_error">Требуется имя</string>
@@ -385,7 +385,7 @@
     <string name="new_account_create_password_hint">Создайте пароль</string>
     <string name="new_account_create_password_validation_length_error">Минимум 8 символов</string>
     <string name="new_account_toolbar_title">Новый аккаунт</string>
-    <string name="new_alias_already_use_validation_error">Уже в используется</string>
+    <string name="new_alias_already_use_validation_error">Уже используется</string>
     <string name="new_alias_create">Создать</string>
     <string name="new_alias_invalid_char_validation_error">Неправильный символ</string>
     <string name="new_alias_max_validation_error">Максимум 30</string>
