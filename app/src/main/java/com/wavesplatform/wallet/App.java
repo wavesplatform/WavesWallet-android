@@ -30,7 +30,6 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
 import io.fabric.sdk.android.Fabric;
-import io.github.kbiakov.codeview.classifier.CodeProcessor;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.realm.Realm;
 import pers.victor.ext.Ext;
@@ -61,7 +60,6 @@ public class App extends DaggerApplication {
         Fabric.with(this, new Crashlytics());
         sContext = this;
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
-        CodeProcessor.init(this);
 
         Realm.init(this);
         Ext.INSTANCE.setCtx(this);
