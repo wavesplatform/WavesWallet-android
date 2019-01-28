@@ -30,10 +30,10 @@ import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.util.TypedValue
-import android.view.*
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -48,8 +48,10 @@ import com.bumptech.glide.request.target.Target
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
@@ -711,4 +713,17 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
     alertDialogBuilder.setCancelable(false)
     alertDialogBuilder.setView(getAlertView())
     alertDialogBuilder.show()
+}
+
+fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
+    return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, false)
+            && (null != queryFirst<SpamAsset> {
+        equalTo("assetId", assetId)
+    }))
+}
+
+fun isShowTicker(assetId: String?): Boolean {
+    return Constants.defaultAssets.any {
+        it.assetId == assetId || assetId.isNullOrEmpty()
+    }
 }

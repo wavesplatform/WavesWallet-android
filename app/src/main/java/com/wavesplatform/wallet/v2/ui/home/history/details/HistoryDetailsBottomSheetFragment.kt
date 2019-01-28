@@ -175,7 +175,11 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         historyContainer?.removeAllViews()
 
         when (transaction.transactionType()) {
-            TransactionType.RECEIVED_TYPE, TransactionType.MASS_RECEIVE_TYPE, TransactionType.SPAM_RECEIVE_TYPE, TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.UNRECOGNISED_TYPE -> {
+            TransactionType.RECEIVED_TYPE,
+            TransactionType.MASS_RECEIVE_TYPE,
+            TransactionType.SPAM_RECEIVE_TYPE,
+            TransactionType.MASS_SPAM_RECEIVE_TYPE,
+            TransactionType.UNRECOGNISED_TYPE -> {
                 val receiveView = inflater?.inflate(R.layout.fragment_bottom_sheet_receive_layout, historyContainer, false)
                 val receivedFromName = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_name)
                 val receivedFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_address)
