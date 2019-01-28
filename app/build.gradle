@@ -209,7 +209,6 @@ dependencies {
 
     // Fingerprint authentication
     implementation 'com.mtramin:rxfingerprint:2.2.1'
-    implementation 'com.github.kbiakov:CodeView-android:1.3.1'
 
     implementation 'ren.yale.android:retrofitcachelibrx2:1.0.7'
     implementation 'com.akexorcist:localizationactivity:1.2.2'

@@ -162,7 +162,7 @@ open class Transaction(
         const val CREATE_ALIAS = 10
         const val MASS_TRANSFER = 11
         const val DATA = 12
-        const val SCRIPT = 13
+        const val ADDRESS_SCRIPT = 13
         const val SPONSORSHIP = 14
         const val ASSET_SCRIPT = 15
 
@@ -180,7 +180,7 @@ open class Transaction(
                 CREATE_ALIAS -> "Create Alias"
                 MASS_TRANSFER -> "Mass Transfer"
                 DATA -> "Data"
-                SCRIPT -> "Script"
+                ADDRESS_SCRIPT -> "Script"
                 SPONSORSHIP -> "SponsorShip"
                 ASSET_SCRIPT -> "Asset Script"
                 else -> ""

@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
@@ -134,6 +135,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     }
 
     override fun successCreateAlias(alias: Alias) {
+        alias.save()
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_ALIAS, alias)
         })
