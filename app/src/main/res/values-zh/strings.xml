@@ -32,7 +32,6 @@
     <string name="alias_dialog_create_alias">创建新别名</string>
     <string name="alias_dialog_description_1">别名是您地址的昵称。您可以使用别名代替地址来进行交易。</string>
     <string name="alias_dialog_description_2">您的别名长度必须介于4到30个字符之间，且必须只包含小写拉丁字母，数字和符号（@， - ，_等）</string>
-    <string name="alias_dialog_fee">交易费0.001WAVES币</string>
     <string name="alias_dialog_you_dont_have">你没有别名</string>
     <string name="alias_dialog_you_have">你有 %s</string>
     <string name="alias_dialog_your_aliases">你的别名</string>
@@ -72,7 +71,6 @@
     <string name="backup_info_title">小心保存您的备用短语！</string>
     <string name="backup_phrase">备份短语</string>
     <string name="backup_wrriten_down">我已经把它写下来了</string>
-    <string name="buy_and_sell_0_001_waves">0.003waves币</string>
     <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_1_day">1天</string>
     <string name="buy_and_sell_1_hour">1小时</string>
@@ -173,8 +171,7 @@
     <string name="common_or">或者</string>
     <string name="common_persist"><![CDATA[&#x26;]]></string>
     <string name="common_server_error">有问题</string>
-    <string name="common_transaction_fee">交易费用
-</string>
+    <string name="common_transaction_fee">交易费用</string>
     <string name="confirm_backup">确认备份</string>
     <string name="confirm_backup_confirm">确认</string>
     <string name="confirm_backup_error">订单错误，请再试一次</string>
@@ -303,7 +300,7 @@
     <string name="history_sorting_period">时期</string>
     <string name="history_sorting_week">周</string>
     <string name="history_toolbar_title">历史</string>
-    <string name="history_type_cancel_script">取消脚本传输</string>
+    <string name="history_type_cancel_address_script">取消脚本传输</string>
     <string name="history_type_cancel_sponsorship">取消赞助传输</string>
     <string name="history_type_canceled_leasing">取消租赁</string>
     <string name="history_type_create_alias">创建别名</string>
@@ -317,7 +314,7 @@
     <string name="history_type_receive_sponsorship">获得赞助</string>
     <string name="history_type_self_transfer">自动转账</string>
     <string name="history_type_sent">已发送</string>
-    <string name="history_type_set_script">设置脚本交易</string>
+    <string name="history_type_set_address_script">设置脚本交易</string>
     <string name="history_type_set_sponsorship">设置赞助交易</string>
     <string name="history_type_spam_receive">已收到</string>
     <string name="history_type_started_leasing">开始租赁</string>
@@ -325,6 +322,7 @@
     <string name="history_type_token_generation">代币产生</string>
     <string name="history_type_token_reissue">代币再发行</string>
     <string name="history_type_unrecognised">无法识别的交易</string>
+    <string name="history_type_update_asset_script">设置资产脚本</string>
     <string name="import_account_click_show_pairing">单击《显示配对代码》，显示QR二维码</string>
     <string name="import_account_login_at_site">通过PC或Mac登录Waves客户端</string>
     <string name="import_account_scan_pairing_code">扫描配对码</string>
@@ -462,8 +460,7 @@
     <string name="receive_amount_title">金额为 %1$s</string>
     <string name="receive_asset">资产</string>
     <string name="receive_card">卡</string>
-    <string name="receive_contact_msg">如果验证或付款处理有问题，请联系Coinomat支持团队 —
- support@coinomat.com</string>
+    <string name="receive_contact_msg">如果验证或付款处理有问题，请联系Coinomat支持团队 — support@coinomat.com</string>
     <string name="receive_contact_msg_key">support@coinomat.com</string>
     <string name="receive_continue">继续</string>
     <string name="receive_cryptocurrency">数字货币</string>
@@ -500,8 +497,7 @@
     <string name="receive_will_send_other_currency">将任何其他货币发送到此地址可能会导致您的存款损失。</string>
     <string name="scripted_account_error_dialog_btn_txt">好的</string>
     <string name="scripted_account_error_dialog_description">如要使用脚本帐户/资产，请使用Waves客户端</string>
-    <string name="scripted_account_error_dialog_title">您的帐户或资产上已安装脚本
-</string>
+    <string name="scripted_account_error_dialog_title">您的帐户或资产上已安装脚本</string>
     <string name="secret_phrase_back_up_now">立即备份</string>
     <string name="secret_phrase_do_it_later">以后再做</string>
     <string name="secret_phrase_no_backup_no_money">不做备份，将失去资金</string>
@@ -547,18 +543,13 @@
     <string name="send_to_same_address_warning">无法发送到同一地址。</string>
     <string name="send_toolbar_title">发送</string>
     <string name="send_transaction_error_check_asset">检查资产</string>
-    <string name="send_transaction_fee_0_001_waves">交易费0.001WAVES币</string>
     <string name="send_use_total_balance">使用全部余额</string>
-    <string name="start_leasing_0_100">0.1</string>
-    <string name="start_leasing_0_100000">0.001</string>
-    <string name="start_leasing_0_500000">0.005</string>
     <string name="start_leasing_amount">总量</string>
     <string name="start_leasing_balance">余额</string>
     <string name="start_leasing_choose_from_address">从地址簿中选择</string>
     <string name="start_leasing_generator">发生器</string>
     <string name="start_leasing_note_address">节点地址…</string>
     <string name="start_leasing_toolbar">开始租赁</string>
-    <string name="start_leasing_transaction_fee_0_001_waves">交易费0.001WAVES币</string>
     <string name="start_leasing_use_total_balance">使用全部余额</string>
     <string name="start_leasing_validation_address_is_invalid_error">地址无效</string>
     <string name="start_leasing_validation_amount_insufficient_error">不充足的资金</string>
@@ -578,7 +569,6 @@
     <string name="token_burn_continue_btn">继续</string>
     <string name="token_burn_quantity_of_tokens_to_be_burned_hint">焚毁的代币数量</string>
     <string name="token_burn_toolbar_title">代币焚毁</string>
-    <string name="token_burn_transaction_fee_0_001_waves">交易费0.001WAVES币</string>
     <string name="token_burn_validation_amount_insufficient_error">资金不足</string>
     <string name="token_burn_validation_is_required_error">没有填写</string>
     <string name="transaction_failed">交易失败</string>
@@ -635,5 +625,4 @@
     <string name="your_asset_activity_greater_zero">余额</string>
     <string name="your_assets_empty_state">没有内容… \n你没有资金</string>
     <string name="your_assets_toolbar_title">你的资产</string>
-    <string name="common_waves_asset_name">WAVES</string>
 </resources>
