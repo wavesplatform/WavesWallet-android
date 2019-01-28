@@ -4,7 +4,7 @@
     <string name="about_fill_payment_info">CNM — あなたの WAVES アドレス. \nもしそれを実行しないならあなたのアカウントを認証しません。</string>
     <string name="about_redirection_message">検証を完了すると、以降の手順を記載したメールが届きます。</string>
     <string name="about_redirection_okay">OK</string>
-    <string name="about_redirection_title">あなたは«IDNow»\n認証にリダイレクトされました</string>
+    <string name="about_redirection_title">あなたは«IDNow» \n認証にリダイレクトされました</string>
     <string name="add_address_address">アドレス</string>
     <string name="add_address_btn_txt">保存する</string>
     <string name="add_address_name">名前</string>
@@ -12,7 +12,7 @@
     <string name="address_book_add">追加する</string>
     <string name="address_book_address_validation_already_use_error">すでに使用されています</string>
     <string name="address_book_address_validation_required_error">アドレスは必須です</string>
-    <string name="address_book_empty_state">何もありません…\n新しいアドレスを作成できます</string>
+    <string name="address_book_empty_state">何もありません… \n新しいアドレスを作成できます</string>
     <string name="address_book_name_validation_already_use_error">すでに使用されています</string>
     <string name="address_book_name_validation_max_length_error">最大：24個のシンボル</string>
     <string name="address_book_name_validation_min_length_error">最低2文字以上です</string>
@@ -68,7 +68,7 @@
     <string name="backup_hint_2">これらの15単語を慎重に書き留めるかコピーしてください</string>
     <string name="backup_hint_3">次の画面でこのフレーズを確認します</string>
     <string name="backup_info_button">了解しました</string>
-    <string name="backup_info_subtitle">Wavesプラットフォームはこの1ヶ月で増加している詐欺行為とフィッシング攻撃の警告をいたします。詐欺師は独自のWavesクライアントにマルウェアを隠し、ユーザを誘い込むために配当や割引することを約束しています。\n \n 決してこれらの\'クライアント\'にあなたのシードを入力しないよう注意してください。あなたのアカウントに対して詐欺師がアクセスすることを許すとあなたの資産を全て失ってしまいます。\n\n公式なWavesクライアントのみを利用して下さい。</string>
+    <string name="backup_info_subtitle">Wavesプラットフォームはこの1ヶ月で増加している詐欺行為とフィッシング攻撃の警告をいたします。詐欺師は独自のWavesクライアントにマルウェアを隠し、ユーザを誘い込むために配当や割引することを約束しています。\n\n決してこれらの\'クライアント\'にあなたのシードを入力しないよう注意してください。あなたのアカウントに対して詐欺師がアクセスすることを許すとあなたの資産を全て失ってしまいます。\n\n公式なWavesクライアントのみを利用して下さい。</string>
     <string name="backup_info_title">バックアップフレーズは安全な方法で管理してください！</string>
     <string name="backup_phrase">バックアップフレーズ</string>
     <string name="backup_wrriten_down">書き留めました</string>
@@ -146,7 +146,7 @@
     <string name="choose_account_delete_msg">このアカウントを本当に削除してもよろしいですか？</string>
     <string name="choose_account_delete_title">アカウントを削除しますか？</string>
     <string name="choose_account_deleted">削除されました</string>
-    <string name="choose_account_empty_state">何もありません…\n保存されたアカウントがありません</string>
+    <string name="choose_account_empty_state">何もありません… \n保存されたアカウントがありません</string>
     <string name="choose_account_yes">削除する</string>
     <string name="choose_language_confirm">確定する</string>
     <string name="choose_language_continue">続ける</string>
@@ -161,6 +161,7 @@
     <string name="common_copied">コピーされました！</string>
     <string name="common_copied_to_clipboard">クリップボードにコピーされました</string>
     <string name="common_dash">-</string>
+    <string name="common_error_commission_receiving">コミッション受取エラー</string>
     <string name="common_feedback_title">フィードバックを送信する</string>
     <string name="common_k_quantity">%sk</string>
     <string name="common_kk_quantity">%skkk</string>
@@ -172,6 +173,7 @@
     <string name="common_or">もしくは</string>
     <string name="common_persist"><![CDATA[&#x26;]]></string>
     <string name="common_server_error">何かが間違っていた</string>
+    <string name="common_transaction_fee">トランザクション手数料</string>
     <string name="confirm_backup">バックアップを確認</string>
     <string name="confirm_backup_confirm">確定する</string>
     <string name="confirm_backup_error">順番が間違っています。やり直してください。</string>
@@ -217,7 +219,7 @@
     <string name="dex_trade_tab_orderbook">オーダーブック</string>
     <string name="dialog_account_first_open_about_backup">このアプリが別のデバイスに移動または削除された場合、バックアップフレーズでのみアカウントを復元できることを理解しています</string>
     <string name="dialog_account_first_open_about_fund_on_device">Wavesや企業のサーバーではなく、このデバイス上であなたの資産が保管されることを理解しています</string>
-    <string name="dialog_account_first_open_about_terms">規約を読み、内容を理解し、同意いたします\n利用規約</string>
+    <string name="dialog_account_first_open_about_terms">規約を読み、内容を理解し、同意いたします \n利用規約</string>
     <string name="dialog_account_first_open_about_terms_key">利用規約</string>
     <string name="dialog_account_first_open_confirm_and_begin">同意して利用する</string>
     <string name="dialog_account_first_open_subtitle">銀行やWebサービスとは異なり、Wavesはあなたの資産を保管しません</string>
@@ -282,7 +284,7 @@
     <string name="history_details_show_all">全てを表示する (%1$s)</string>
     <string name="history_details_timestamp">タイムスタンプ</string>
     <string name="history_details_unconfirmed">未承認</string>
-    <string name="history_empty">何もありません…\nトランザクションがありません</string>
+    <string name="history_empty">何もありません… \nトランザクションがありません</string>
     <string name="history_error_receive_data">不正なデータです。再度試してください。</string>
     <string name="history_exchanged">トレード済</string>
     <string name="history_issued">発行済</string>
@@ -305,18 +307,19 @@
     <string name="history_type_canceled_leasing">キャンセル済のリース</string>
     <string name="history_type_create_alias">エイリアスを作成する</string>
     <string name="history_type_data">データ</string>
-    <string name="history_type_exchange">Exchange transaction</string>
+    <string name="history_type_exchange">取引所でのトランザクション</string>
     <string name="history_type_incoming_leasing">受信したリース</string>
     <string name="history_type_mass_receive">受信</string>
     <string name="history_type_mass_send">送信</string>
     <string name="history_type_mass_spam_receive">受信</string>
     <string name="history_type_receive">受信</string>
+    <string name="history_type_receive_sponsorship">スポンサーシップの受領</string>
     <string name="history_type_self_transfer">セルフ転送</string>
     <string name="history_type_sent">送信</string>
     <string name="history_type_set_script">スクリプトトランザクションをセットする</string>
     <string name="history_type_set_sponsorship">スポンサートランザクションをセットする</string>
     <string name="history_type_spam_receive">受信</string>
-    <string name="history_type_started_leasing">リース中</string>
+    <string name="history_type_started_leasing">開始されたリース</string>
     <string name="history_type_token_burn">トークンバーン</string>
     <string name="history_type_token_generation">トークン生成</string>
     <string name="history_type_token_reissue">トークンの再発行</string>
@@ -335,7 +338,7 @@
     <string name="invalid_amount">無効な金額</string>
     <string name="invalid_monero_payment_id">無効な支払ID</string>
     <string name="last_trades_amount">取引量</string>
-    <string name="last_trades_empty">何もありません…\n取引履歴がありません</string>
+    <string name="last_trades_empty">何もありません… \n取引履歴がありません</string>
     <string name="last_trades_price">価格</string>
     <string name="last_trades_sum">合計</string>
     <string name="last_trades_time">時間</string>
@@ -351,7 +354,7 @@
     <string name="my_orders_amount">取引量</string>
     <string name="my_orders_amount_sum">数量/合計</string>
     <string name="my_orders_date_time">日時</string>
-    <string name="my_orders_empty">何もありません…\n注文がありません</string>
+    <string name="my_orders_empty">何もありません… \n注文がありません</string>
     <string name="my_orders_price">価格</string>
     <string name="my_orders_side_price">執行タイプ/価格</string>
     <string name="my_orders_status">ステータス</string>
@@ -383,7 +386,7 @@
     <string name="new_account_confirm_password_validation_match_error">入力されたパスワードが一致しません</string>
     <string name="new_account_continue">確定する</string>
     <string name="new_account_create_password_hint">パスワードを作成する</string>
-    <string name="new_account_create_password_validation_length_error">最低9文字以上です</string>
+    <string name="new_account_create_password_validation_length_error">最低8文字以上です</string>
     <string name="new_account_toolbar_title">新しいアカウントを作成</string>
     <string name="new_alias_already_use_validation_error">すでに使用されています</string>
     <string name="new_alias_create">エイリアスを作成する</string>
@@ -398,7 +401,7 @@
     <string name="no_internet_title">インターネットへの接続がありません</string>
     <string name="ok_cap">OK</string>
     <string name="orderbook_amount_title">%s の取引量</string>
-    <string name="orderbook_empty">何もありません…\nオーダーブックは空です</string>
+    <string name="orderbook_empty">何もありません… \nオーダーブックは空です</string>
     <string name="orderbook_last_price">最終価格</string>
     <string name="orderbook_loading">オーダーブックを読み込み中…</string>
     <string name="orderbook_price_title">%s の価格</string>
@@ -470,8 +473,8 @@
     <string name="receive_fiat_choose_dialog_ok">OK</string>
     <string name="receive_fiat_choose_dialog_title">通貨を選択して下さい</string>
     <string name="receive_fiat_choose_dialog_usd">米ドル</string>
-    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can\’t refund them. You will lose that money.</string>
-    <string name="receive_gateway_info_gateway_warning_eth_title">Please do not deposit ETH form smart contracts! Do not deposit ERC20 tokens! Only Ethereum is allowed.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">あなたが利用する取引所が引出のためにスマートコントラクトを利用しているか確認してください。私たちはそのようなトランザクションに対応しておらず、返金をすることができません。あなたのお金が失われます。</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">ETHをスマートコントラクトからデポジットしないでください。ERCトークンをデポジットしないでください。Ethereumのみ対応しています。</string>
     <string name="receive_get_verified">認証する</string>
     <string name="receive_invoice">請求</string>
     <string name="receive_limit">最小額は %1$s %2$s です。最大額は %3$s %4$s です。</string>
@@ -488,11 +491,14 @@
     <string name="receive_step_2_msg">検証を通過すると、以降の手順を記載したメールが届きます</string>
     <string name="receive_step_url_link">https://www.idnow.eu/</string>
     <string name="receive_toolbar">受取る</string>
-    <string name="receive_use_same_waves_address">KYCやAML要求に使用したものと同じWavesアドレスを使用する必要があります。誤って入力したり、異なるWavesアドレスを入力した場合、私たちはあなたのアカウントに入金することができません。</string>
+    <string name="receive_use_same_waves_address">KYCやAML要求に使用したものと同じWavesアドレスを使用する必要があります。誤って入力したり、異なるWavesアドレスを入力した場合、私たちはあなたのアカウントにデポジットすることができません。</string>
     <string name="receive_verified">あなたのアカウントは認証されています</string>
     <string name="receive_warning_crypto">このデポジットアドレスに %1$s を送信する</string>
     <string name="receive_warning_will_send">%1$s %2$s 以下の数量を送信すると、その通貨を失います。</string>
     <string name="receive_will_send_other_currency">このアドレスに他の通貨を送信すると、あなたのデポジットを失うことがあります。</string>
+    <string name="scripted_account_error_dialog_btn_txt">OK</string>
+    <string name="scripted_account_error_dialog_description">スクリプトによるアカウント/アセットを利用する場合、Wavesクライアントをご利用ください</string>
+    <string name="scripted_account_error_dialog_title">スクリプトはあなたのアカウント/アセットにインストールされました</string>
     <string name="secret_phrase_back_up_now">今すぐバックアップする</string>
     <string name="secret_phrase_do_it_later">あとで</string>
     <string name="secret_phrase_no_backup_no_money">あなたの資産を守るために必ずバックアップを！</string>
@@ -512,15 +518,15 @@
     <string name="send_confirmation_write_an_optional_message">任意のメッセージを書き込んでください</string>
     <string name="send_continue">続ける</string>
     <string name="send_error_get_data_from_qr">不正なデータをQRコードから読み取りました</string>
-    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">必要な手数料を支払うための資金が足りません。\nあなたは0.001WAVESをトランザクション手数料として、%1$s %2$s をゲートウェイ手数料として支払う必要があります。</string>
+    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">必要な手数料を支払うための資金が足りません。\nあなたは %1$s をトランザクション手数料として、%2$s %3$s をゲートウェイ手数料として支払う必要があります。</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
-    <string name="send_gateway_error_subtitle">Try again later</string>
-    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
+    <string name="send_gateway_error_subtitle">再度お試しください</string>
+    <string name="send_gateway_error_title">Coinomatのサービスは一時的にご利用いただけません</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">手数料は送信される金額の1%です</string>
     <string name="send_gateway_info_gateway_fee">ゲートウェイの手数料は %1$s %2$s です</string>
     <string name="send_gateway_info_gateway_limits">私たちは、%1$s のアドレスを検出し、そのアドレスにCoinomatゲートウェイを経由してあなたのお金を送信します。最少額は %2$s %1$s、最大額は %3$s %1$sです。</string>
-    <string name="send_gateway_info_gateway_warning">%1$s をICOの為に引き出さないで下さい。そのセールに関するトークンを私達は入金しません。</string>
+    <string name="send_gateway_info_gateway_warning">%1$s をICOの為に引き出さないで下さい。そのセールに関するトークンを私達はデポジットしません。</string>
     <string name="send_gateway_info_if_you_have_been_verified_and_have_deposited_us_dollars_you_can_withdraw_these_dollars_back_to_your_bank_account_otherwise_get_verified_by_our_partner_idnow_eu">すでに認証を取得し米ドルの入金を行っている場合は、そのドルを引き出してあなたの銀行口座に戻すことができます。まだの場合は、私たちのパートナーであるIDNow.euの認証を取得してください。</string>
     <string name="send_gateway_info_the_minimum_amount_is_500_us_dollar_if_you_have_any_questions_please_just_send_an_email_to_support_coinomat_com">最低入金額は500米ドルです。なにかご不明な点がございましたら、support@coinomat.com までお問い合わせください</string>
     <string name="send_monero_payment_id">Monero支払ID</string>
@@ -624,10 +630,7 @@
     <string name="your_address_your_qr_code">あなたのQRコード</string>
     <string name="your_asset_activity_all">すべて</string>
     <string name="your_asset_activity_greater_zero">残高ゼロを非表示</string>
-    <string name="your_assets_empty_state">何もありません…\n残高がある資産がありません</string>
+    <string name="your_assets_empty_state">何もありません… \n残高がある資産がありません</string>
     <string name="your_assets_toolbar_title">あなたの資産</string>
-    <string name="common_error_commission_receiving">Commission receiving error</string>
     <string name="common_waves_asset_name">WAVES</string>
-    <string name="common_transaction_fee">Transaction Fee</string>
-    <string name="history_type_receive_sponsorship">Received Sponsorship</string>
 </resources>

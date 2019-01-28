@@ -40,9 +40,6 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
-import io.github.kbiakov.codeview.CodeView
-import io.github.kbiakov.codeview.highlight.ColorThemeData
-import io.github.kbiakov.codeview.highlight.SyntaxColors
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
 import pers.victor.ext.*
@@ -337,7 +334,9 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 historyContainer?.addView(commentBlock)
                 historyContainer?.addView(baseInfoLayout)
             }
-            TransactionType.TOKEN_GENERATION_TYPE, TransactionType.TOKEN_BURN_TYPE, TransactionType.TOKEN_REISSUE_TYPE -> {
+            TransactionType.TOKEN_GENERATION_TYPE,
+            TransactionType.TOKEN_BURN_TYPE,
+            TransactionType.TOKEN_REISSUE_TYPE -> {
                 val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout, historyContainer, false)
                 val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
                 val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
@@ -414,24 +413,10 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                         addressContainer?.addView(addressView)
                     }
                 }
-
                 historyContainer?.addView(massSendLayout)
                 historyContainer?.addView(commentBlock)
                 historyContainer?.addView(baseInfoLayout)
                 historyContainer?.addView(button)
-            }
-            TransactionType.DATA_TYPE -> {
-                setCodeView(historyContainer, transaction)
-                historyContainer?.addView(baseInfoLayout)
-            }
-            TransactionType.SET_SCRIPT_TYPE -> {
-                setCodeView(historyContainer, transaction)
-                baseInfoLayout?.findViewById<View>(R.id.view_line_1)?.visiable()
-                historyContainer?.addView(baseInfoLayout)
-            }
-            TransactionType.CANCEL_SCRIPT_TYPE -> {
-                baseInfoLayout?.setMargins(top = dp2px(16))
-                historyContainer?.addView(baseInfoLayout)
             }
             TransactionType.SET_SPONSORSHIP_TYPE -> {
                 val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout,
@@ -451,39 +436,12 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 baseInfoLayout?.findViewById<View>(R.id.view_line_1)?.visiable()
                 historyContainer?.addView(baseInfoLayout)
             }
-            TransactionType.ASSET_SCRIPT_TYPE -> {
+            else -> {
                 baseInfoLayout?.setMargins(top = dp2px(16))
                 historyContainer?.addView(baseInfoLayout)
             }
         }
         historyContainer?.addView(bottomBtns)
-    }
-
-    private fun setCodeView(historyContainer: LinearLayout?, transaction: Transaction) {
-        val dataView = inflater?.inflate(R.layout.fragment_bottom_sheet_data_layout,
-                historyContainer, false)
-        val codeView = dataView?.findViewById<CodeView>(R.id.code_view)
-        val imageCopyData = dataView?.findViewById<AppCompatImageView>(R.id.image_copy_data)
-
-        val customTheme = ColorThemeData(SyntaxColors(
-                android.R.color.transparent, R.color.submit300, android.R.color.transparent,
-                android.R.color.transparent, R.color.basic700, android.R.color.transparent,
-                R.color.basic700, android.R.color.transparent, android.R.color.transparent,
-                android.R.color.transparent, android.R.color.transparent),
-                R.color.basic50, android.R.color.transparent, android.R.color.transparent,
-                R.color.basic50)
-
-        codeView?.setCode(gson.toJson(transaction.script))
-        codeView?.getOptions()?.withTheme(customTheme)
-
-        eventSubscriptions.add(RxView.clicks(imageCopyData!!)
-                .throttleFirst(1500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    imageCopyData.copyToClipboard(gson.toJson(transaction.data))
-                })
-
-        historyContainer?.addView(dataView)
     }
 
     private fun nonGateway(assetBalance: AssetBalance, transaction: Transaction) =

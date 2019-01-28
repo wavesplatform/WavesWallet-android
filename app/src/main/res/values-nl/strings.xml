@@ -161,6 +161,7 @@
     <string name="common_copied">Gekopieerd!</string>
     <string name="common_copied_to_clipboard">Gekopieerd naar klembord</string>
     <string name="common_dash">–</string>
+    <string name="common_error_commission_receiving">Commissie ontvang error</string>
     <string name="common_feedback_title">Verstuur feedback</string>
     <string name="common_k_quantity">%sk</string>
     <string name="common_kk_quantity">%skk</string>
@@ -172,6 +173,7 @@
     <string name="common_or">of</string>
     <string name="common_persist"><![CDATA[&#x26;]]></string>
     <string name="common_server_error">Er is iets fout gegaan</string>
+    <string name="common_transaction_fee">Transactiekosten</string>
     <string name="confirm_backup">Bevestig backup</string>
     <string name="confirm_backup_confirm">Bevestig</string>
     <string name="confirm_backup_error">Verkeerde volgorde, probeer opnieuw</string>
@@ -305,12 +307,13 @@
     <string name="history_type_canceled_leasing">Geannuleerde lease</string>
     <string name="history_type_create_alias">Maak alias</string>
     <string name="history_type_data">Data transactie</string>
-    <string name="history_type_exchange">Exchange transaction</string>
+    <string name="history_type_exchange">Exchange transactie</string>
     <string name="history_type_incoming_leasing">Inkomende lease</string>
     <string name="history_type_mass_receive">Massa ontvangen</string>
     <string name="history_type_mass_send">Massa verstuurd</string>
     <string name="history_type_mass_spam_receive">Ontvangen</string>
     <string name="history_type_receive">Ontvangen</string>
+    <string name="history_type_receive_sponsorship">Ontvangen Sponsoring</string>
     <string name="history_type_self_transfer">Zelfoverdracht</string>
     <string name="history_type_sent">Verzonden</string>
     <string name="history_type_set_script">Configureer script transactie</string>
@@ -351,7 +354,7 @@
     <string name="my_orders_amount">Bedrag</string>
     <string name="my_orders_amount_sum">Hoeveelheid/Totaal</string>
     <string name="my_orders_date_time">Datum</string>
-    <string name="my_orders_empty">Niets hier.. \nU heeft geen orders</string>
+    <string name="my_orders_empty">Niets hier… \nU heeft geen orders</string>
     <string name="my_orders_price">Prijs</string>
     <string name="my_orders_side_price">Side/Prijs</string>
     <string name="my_orders_status">Status</string>
@@ -493,6 +496,9 @@
     <string name="receive_warning_crypto">Verzend slechts %1$s naar dit stortingsadres</string>
     <string name="receive_warning_will_send">Als u minder dan %1$s %2$s stuurt, verliest u dat geld.</string>
     <string name="receive_will_send_other_currency">Het verzenden van een andere valuta naar dit adres kan resulteren in het verlies van uw storting.</string>
+    <string name="scripted_account_error_dialog_btn_txt">Oké</string>
+    <string name="scripted_account_error_dialog_description">Om een scripted account/asset te gebruiken, gebruik Waves client</string>
+    <string name="scripted_account_error_dialog_title">Een script is geconfigureerd op uw account of asset</string>
     <string name="secret_phrase_back_up_now">Nu backuppen</string>
     <string name="secret_phrase_do_it_later">Doe het later</string>
     <string name="secret_phrase_no_backup_no_money">Geen back-up, geen geld</string>
@@ -512,11 +518,11 @@
     <string name="send_confirmation_write_an_optional_message">Schrijf een optioneel bericht</string>
     <string name="send_continue">Doorgaan</string>
     <string name="send_error_get_data_from_qr">Foutmelding tijdens het verkrijgen van data uit QR</string>
-    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">U heeft niet genoeg geld om de vereiste transactiekosten te betalen. \nU moet 0.001 WAVES transactiekosten en %1$s %2$s gatewaykosten betalen.</string>
+    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">U heeft niet genoeg geld om de vereiste transactiekosten te betalen. \nU moet %1$s transactiekosten en %2$s %3$s gatewaykosten betalen.</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
-    <string name="send_gateway_error_subtitle">Try again later</string>
-    <string name="send_gateway_error_title">Service Coinomat temporarily unavailable</string>
+    <string name="send_gateway_error_subtitle">Probeer later opnieuw</string>
+    <string name="send_gateway_error_title">Coinomat Service tijdelijk niet beschikbaar</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">De kosten zijn 1% van het overgedragen bedrag.</string>
     <string name="send_gateway_info_gateway_fee">De gateway kosten zijn %1$s %2$s</string>
     <string name="send_gateway_info_gateway_limits">We hebben %1$s adres gevonden en sturen uw geld via de Coinomat-gateway naar dat adres. Minimumbedrag is %2$s %1$s, maximumbedrag is %3$s %1$s.</string>
@@ -626,8 +632,5 @@
     <string name="your_asset_activity_greater_zero">Met saldo</string>
     <string name="your_assets_empty_state">Niets hier… \nU heeft geen assets met funds</string>
     <string name="your_assets_toolbar_title">Uw assets</string>
-    <string name="common_error_commission_receiving">Commission receiving error</string>
     <string name="common_waves_asset_name">WAVES</string>
-    <string name="common_transaction_fee">Transaction Fee</string>
-    <string name="history_type_receive_sponsorship">Received Sponsorship</string>
 </resources>
