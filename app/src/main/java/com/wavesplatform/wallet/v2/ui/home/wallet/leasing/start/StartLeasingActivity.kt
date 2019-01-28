@@ -76,6 +76,8 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             }
         }
 
+        edit_amount.applyFilterStartWithDot()
+
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
                 .skipInitialValue()
                 .map(CharSequence::toString)

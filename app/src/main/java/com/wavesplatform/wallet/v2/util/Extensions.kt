@@ -35,6 +35,7 @@ import android.view.ViewGroup
 import android.util.TypedValue
 import android.view.*
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -62,10 +63,21 @@ import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 
+val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
+    if (dest.isNullOrEmpty() && source.startsWith(".")){
+        return@InputFilter "0."
+    }
+    null
+}
 
 /**
  * Created by anonymous on 13.09.17.
  */
+
+fun EditText.applyFilterStartWithDot(){
+    this.filters = arrayOf(filterStartWithDot)
+}
+
 fun Context.isNetworkConnection(): Boolean {
     val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val activeNetwork = cm.activeNetworkInfo

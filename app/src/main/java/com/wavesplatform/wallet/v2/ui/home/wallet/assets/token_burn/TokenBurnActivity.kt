@@ -59,6 +59,8 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
             edit_amount.setText(presenter.assetBalance.getDisplayAvailableBalance().clearBalance())
         }
 
+        edit_amount.applyFilterStartWithDot()
+
         eventSubscriptions.add(RxTextView.textChanges(edit_amount)
                 .skipInitialValue()
                 .map(CharSequence::toString)
