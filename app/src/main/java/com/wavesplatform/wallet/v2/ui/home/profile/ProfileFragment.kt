@@ -130,7 +130,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             root_scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 onElevationAppBarChangeListener.notNull {
-                    onElevationAppBarChangeListener?.onChange(scrollY == 0)
+                    presenter.hideShadow = scrollY == 0
+                    onElevationAppBarChangeListener?.onChange(presenter.hideShadow)
                 }
             }
         }
@@ -192,7 +193,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun formatDeviceInfo(): String? {
-        return  "\n\n" +
+        return "\n\n" +
                 "${getString(R.string.profile_general_feedback_body_extra_title)}\n" +
                 "${getString(R.string.profile_general_feedback_body_extra_os_version, Build.VERSION.RELEASE)}\n" +
                 "${getString(R.string.profile_general_feedback_body_extra_app_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toString())}\n" +
@@ -227,6 +228,13 @@ class ProfileFragment : BaseFragment(), ProfileView {
             }
         } else {
             card_fingerprint.visibility = View.GONE
+        }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            applyElevation()
         }
     }
 
@@ -338,6 +346,12 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
     fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
         this.onElevationAppBarChangeListener = listener
+    }
+
+    private fun applyElevation() {
+        onElevationAppBarChangeListener?.let {
+            onElevationAppBarChangeListener?.onChange(presenter.hideShadow)
+        }
     }
 
     companion object {

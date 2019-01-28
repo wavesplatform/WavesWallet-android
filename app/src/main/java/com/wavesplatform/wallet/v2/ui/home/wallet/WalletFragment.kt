@@ -67,23 +67,24 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
         stl_wallet.currentTab = 0
         appbar_layout.addOnOffsetChangedListener(
                 AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
-            onElevationAppBarChangeListener.notNull {
-                onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
-                viewpager_wallet.setPagingEnabled(verticalOffset == 0)
-            }
-        })
+                    onElevationAppBarChangeListener.notNull {
+                        presenter.hideShadow = verticalOffset == 0
+                        onElevationAppBarChangeListener?.onChange(presenter.hideShadow)
+                        viewpager_wallet.setPagingEnabled(presenter.hideShadow)
+                    }
+                })
     }
 
     override fun changeTabBarVisibility(show: Boolean, onlyExpand: Boolean) {
         if (show) {
             appbar_layout.setExpanded(true, false)
-            if (!onlyExpand){
+            if (!onlyExpand) {
                 appbar_layout.visiable()
             }
         } else {
             if (appbar_layout.visibility != View.GONE) {
                 appbar_layout.setExpanded(false, false)
-                if (!onlyExpand){
+                if (!onlyExpand) {
                     runDelayed(100) {
                         appbar_layout.gone()
                     }
@@ -92,4 +93,16 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
         }
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            applyElevation()
+        }
+    }
+
+    private fun applyElevation() {
+        onElevationAppBarChangeListener?.let {
+            onElevationAppBarChangeListener?.onChange(presenter.hideShadow)
+        }
+    }
 }
