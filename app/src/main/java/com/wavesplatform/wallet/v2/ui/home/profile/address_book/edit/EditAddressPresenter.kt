@@ -25,10 +25,16 @@ class EditAddressPresenter @Inject constructor() : BasePresenter<EditAddressView
 
     fun editAddress(address: String, name: String) {
         val oldAddress = queryFirst<AddressBookUser> { equalTo("address", addressBookUser?.address) }
-        oldAddress?.address = address
-        oldAddress?.name = name
-        oldAddress?.save()
-        viewState.successEditAddress(oldAddress)
+        if (addressBookUser?.address == address) {
+            oldAddress?.name = name
+            oldAddress?.save()
+            viewState.successEditAddress(oldAddress)
+        } else {
+            delete<AddressBookUser> { equalTo("address", addressBookUser?.address) }
+            val addressBookUser = AddressBookUser(address, name)
+            addressBookUser.save()
+            viewState.successEditAddress(addressBookUser)
+        }
     }
 
 }
