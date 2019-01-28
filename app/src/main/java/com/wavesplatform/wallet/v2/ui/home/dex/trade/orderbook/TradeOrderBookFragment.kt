@@ -55,6 +55,12 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
                     }
                 })
 
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.OrderBookTabClickEvent::class.java)
+                .subscribe {
+                    presenter.clearSubscriptions()
+                    presenter.loadOrderBook()
+                })
+
         presenter.watchMarket?.market.notNull {
             adapter.market = it
 
@@ -62,7 +68,6 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
             text_price_title.text = getString(R.string.orderbook_price_title, it.priceAssetShortName)
             text_sum_title.text = getString(R.string.orderbook_sum_title, it.priceAssetShortName)
         }
-
 
         orderBookLinearLayoutManager = LinearLayoutManager(baseActivity)
         recycle_orderbook.layoutManager = orderBookLinearLayoutManager
@@ -229,5 +234,9 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
             fragment.arguments = args
             return fragment
         }
+    }
+
+    interface OnSelectedOrderbookTabListener {
+        fun onSelected()
     }
 }

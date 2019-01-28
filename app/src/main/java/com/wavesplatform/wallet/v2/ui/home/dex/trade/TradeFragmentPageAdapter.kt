@@ -9,23 +9,15 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades.TradeLastTrades
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.TradeMyOrdersFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook.TradeOrderBookFragment
 
-class TradeFragmentPageAdapter(fm: FragmentManager?, private var titles: Array<String>, var watchMarket: WatchMarket?) : FragmentStatePagerAdapter(fm) {
-
-    private var fragments = arrayListOf<Fragment>(
-            TradeOrderBookFragment.newInstance(watchMarket),
-            TradeChartFragment.newInstance(watchMarket),
-            TradeLastTradesFragment.newInstance(watchMarket),
-            TradeMyOrdersFragment.newInstance(watchMarket)
-            )
-
+class TradeFragmentPageAdapter(fm: FragmentManager?, private var pages: ArrayList<Pair<Fragment, String>>) : FragmentStatePagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
-       return fragments[position]
+        return pages[position].first
     }
 
-    override fun getCount(): Int = titles.size
+    override fun getCount(): Int = pages.size
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return titles[position]
+        return pages[position].second
     }
 }
 
