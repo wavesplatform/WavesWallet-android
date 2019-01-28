@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
+import android.graphics.Typeface
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.PagerAdapter
 import android.view.View
@@ -112,16 +113,17 @@ class HistoryTransactionPagerAdapter constructor(var fragmentManager: FragmentMa
                 TransactionType.TOKEN_REISSUE_TYPE -> {
                     layout.text_transaction_value.text = "+${item.data.amount}"
                 }
-                TransactionType.SET_SCRIPT_TYPE,
-                TransactionType.CANCEL_SCRIPT_TYPE,
+                TransactionType.SET_ADDRESS_SCRIPT_TYPE,
+                TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
                 TransactionType.SET_SPONSORSHIP_TYPE,
                 TransactionType.CANCEL_SPONSORSHIP_TYPE,
-                TransactionType.ASSET_SCRIPT_TYPE -> {
+                TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                     layout.text_transaction_value.text =
                             layout.context.getString(R.string.history_data_type_title)
                     layout.text_transaction_name.text = layout.context.getString(
                             item.data.transactionType().title)
                     layout.text_tag.gone()
+                    layout.text_transaction_name.setTypeface(null, Typeface.BOLD)
                 }
                 else -> {
                     item.data.amount.notNull {
@@ -137,11 +139,11 @@ class HistoryTransactionPagerAdapter constructor(var fragmentManager: FragmentMa
                 && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
                 && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
                 && item.data.transactionType() != TransactionType.EXCHANGE_TYPE
-                && item.data.transactionType() != TransactionType.SET_SCRIPT_TYPE
-                && item.data.transactionType() != TransactionType.CANCEL_SCRIPT_TYPE
+                && item.data.transactionType() != TransactionType.SET_ADDRESS_SCRIPT_TYPE
+                && item.data.transactionType() != TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE
                 && item.data.transactionType() != TransactionType.SET_SPONSORSHIP_TYPE
                 && item.data.transactionType() != TransactionType.CANCEL_SPONSORSHIP_TYPE
-                && item.data.transactionType() != TransactionType.ASSET_SCRIPT_TYPE) {
+                && item.data.transactionType() != TransactionType.UPDATE_ASSET_SCRIPT_TYPE) {
             if (showTag) {
                 val ticker = item.data.asset?.getTicker()
                 if (!ticker.isNullOrBlank()) {

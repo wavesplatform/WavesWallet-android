@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import android.annotation.SuppressLint
+import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
@@ -155,16 +156,17 @@ class HistoryTabItemAdapter @Inject constructor() :
                                         item.data.quantity, decimals)
                                 view.text_transaction_value.text = "+$quantity"
                             }
-                            TransactionType.SET_SCRIPT_TYPE,
-                            TransactionType.CANCEL_SCRIPT_TYPE,
+                            TransactionType.SET_ADDRESS_SCRIPT_TYPE,
+                            TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
                             TransactionType.SET_SPONSORSHIP_TYPE,
                             TransactionType.CANCEL_SPONSORSHIP_TYPE,
-                            TransactionType.ASSET_SCRIPT_TYPE -> {
+                            TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                                 view.text_transaction_name.text =
                                         mContext.getString(R.string.history_data_type_title)
                                 view.text_transaction_value.text = mContext.getString(
                                         item.data.transactionType().title)
                                 view.text_tag.gone()
+                                view.text_transaction_value.setTypeface(null, Typeface.BOLD)
                             }
                             else -> {
                                 item.data.amount.notNull {
@@ -200,11 +202,11 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
                                 && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
                                 && item.data.transactionType() != TransactionType.EXCHANGE_TYPE
-                                && item.data.transactionType() != TransactionType.SET_SCRIPT_TYPE
-                                && item.data.transactionType() != TransactionType.CANCEL_SCRIPT_TYPE
+                                && item.data.transactionType() != TransactionType.SET_ADDRESS_SCRIPT_TYPE
+                                && item.data.transactionType() != TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE
                                 && item.data.transactionType() != TransactionType.SET_SPONSORSHIP_TYPE
                                 && item.data.transactionType() != TransactionType.CANCEL_SPONSORSHIP_TYPE
-                                && item.data.transactionType() != TransactionType.ASSET_SCRIPT_TYPE) {
+                                && item.data.transactionType() != TransactionType.UPDATE_ASSET_SCRIPT_TYPE) {
                             if (showTag) {
                                 val ticker = item.data.asset?.getTicker()
                                 if (!ticker.isNullOrBlank()) {

@@ -465,7 +465,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:visibility="invisible"
-                        android:text="@string/buy_and_sell_0_001_waves"
+                        tools:text="0.003 Waves"
                         android:textColor="@color/disabled900"
                         tools:visibility="visible"/>
 

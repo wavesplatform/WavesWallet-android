@@ -57,11 +57,11 @@ class TransactionUtil @Inject constructor() {
                 Constants.ID_MASS_RECEIVE_TYPE
             } else if (transaction.type == Transaction.DATA) {
                 Constants.ID_DATA_TYPE
-            } else if (transaction.type == Transaction.SCRIPT) {
+            } else if (transaction.type == Transaction.ADDRESS_SCRIPT) {
                 if (transaction.script == null) {
-                    Constants.ID_CANCEL_SCRIPT_TYPE
+                    Constants.ID_CANCEL_ADDRESS_SCRIPT_TYPE
                 } else {
-                    Constants.ID_SET_SCRIPT_TYPE
+                    Constants.ID_SET_ADDRESS_SCRIPT_TYPE
                 }
             } else if (transaction.type == Transaction.SPONSORSHIP) {
                 if (transaction.minSponsoredAssetFee == null) {
@@ -70,7 +70,7 @@ class TransactionUtil @Inject constructor() {
                     Constants.ID_SET_SPONSORSHIP_TYPE
                 }
             } else if (transaction.type == Transaction.ASSET_SCRIPT) {
-                Constants.ID_ASSET_SCRIPT_TYPE
+                Constants.ID_UPDATE_ASSET_SCRIPT_TYPE
             } else {
                 Constants.ID_UNRECOGNISED_TYPE
             }
@@ -88,7 +88,7 @@ class TransactionUtil @Inject constructor() {
                 Transaction.EXCHANGE -> commission.calculateFeeRules.exchange
                 Transaction.MASS_TRANSFER -> commission.calculateFeeRules.massTransfer
                 Transaction.DATA -> commission.calculateFeeRules.data
-                Transaction.SCRIPT -> commission.calculateFeeRules.script
+                Transaction.ADDRESS_SCRIPT -> commission.calculateFeeRules.script
                 Transaction.SPONSORSHIP -> commission.calculateFeeRules.sponsor
                 Transaction.ASSET_SCRIPT -> commission.calculateFeeRules.assetScript
                 else -> commission.calculateFeeRules.default
@@ -100,7 +100,7 @@ class TransactionUtil @Inject constructor() {
                 Transaction.LEASE,
                 Transaction.LEASE_CANCEL,
                 Transaction.CREATE_ALIAS,
-                Transaction.SCRIPT,
+                Transaction.ADDRESS_SCRIPT,
                 Transaction.SPONSORSHIP,
                 Transaction.ASSET_SCRIPT ->
                     getAccountCommission(feeRules, params, commission)
