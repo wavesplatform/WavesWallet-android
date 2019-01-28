@@ -1,9 +1,12 @@
 package com.wavesplatform.wallet.v2.util
 
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import javax.inject.Inject
 
 /**
@@ -76,6 +79,44 @@ class TransactionUtil @Inject constructor() {
             }
 
     companion object {
+
+        fun getTransactionAmount(transaction: Transaction, decimals: Int = 8, round: Boolean = true): String {
+
+            var sign = "-"
+            if (transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE ||
+                    transaction.transactionType() == TransactionType.MASS_RECEIVE_TYPE) {
+                sign = "+"
+            }
+
+            return sign + if (transaction.transfers.isNotEmpty()) {
+                val sumString = if (round) {
+                    getScaledAmount(transaction.transfers.sumByLong { it.amount }, decimals)
+                } else {
+                    MoneyUtil.getScaledText(transaction.transfers.sumByLong { it.amount }, transaction.asset)
+                }
+                if (sumString.isEmpty()) {
+                    ""
+                } else {
+                    sumString
+                }
+            } else {
+                if (round) {
+                    getScaledAmount(transaction.amount, decimals)
+                } else {
+                    MoneyUtil.getScaledText(transaction.amount, transaction.asset)
+                }
+            }
+        }
+
+        fun getScaledText(amount: Long, assetInfo: AssetInfo?): String {
+            val afterDot = MoneyUtil.getScaledText(amount, assetInfo)
+                    .substringAfter(".").clearBalance().toLong()
+            return if (afterDot == 0L) {
+                MoneyUtil.getScaledText(amount, assetInfo).substringBefore(".")
+            } else {
+                MoneyUtil.getScaledText(amount, assetInfo)
+            }
+        }
 
         fun countCommission(commission: GlobalTransactionCommission,
                             params: GlobalTransactionCommission.Params): Long {

@@ -64,5 +64,15 @@ enum class TransactionType(var id: Int,
             }
             return TransactionType.UNRECOGNISED_TYPE
         }
+
+        fun isZeroTransferTransaction(type: TransactionType): Boolean {
+            return (type != TransactionType.CREATE_ALIAS_TYPE
+                    && type != TransactionType.DATA_TYPE
+                    && type != TransactionType.SET_ADDRESS_SCRIPT_TYPE
+                    && type != TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE
+                    && type != TransactionType.SET_SPONSORSHIP_TYPE
+                    && type != TransactionType.CANCEL_SPONSORSHIP_TYPE
+                    && type != TransactionType.UPDATE_ASSET_SCRIPT_TYPE)
+        }
     }
 }
