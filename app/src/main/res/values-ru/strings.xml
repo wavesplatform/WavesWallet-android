@@ -322,7 +322,7 @@
     <string name="history_type_token_generation">Выпуск токена</string>
     <string name="history_type_token_reissue">Перевыпуск токена</string>
     <string name="history_type_unrecognised">Неопознанная транзакция</string>
-    <string name="history_type_update_asset_script">Установка скрипт ассета</string>
+    <string name="history_type_update_asset_script">Установка скрипта ассета</string>
     <string name="import_account_click_show_pairing">Сканируйте QR-код с помощью камеры</string>
     <string name="import_account_login_at_site">Войдите в Waves клиент через PC или Mac</string>
     <string name="import_account_scan_pairing_code">Сканировать QR-код</string>

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
@@ -15,7 +14,6 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getScaledText
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import kotlinx.android.synthetic.main.assets_detailed_history_item.view.*
 import pers.victor.ext.*
@@ -53,17 +51,18 @@ class HistoryTransactionPagerAdapter constructor(
                     .getString(it.title)
 
             // todo reuse this code and HistoryTabItemAdapter and HistoryDetailsAdapter
+            val decimals = item.data.asset?.precision ?: 8
             when (it) {
                 TransactionType.SENT_TYPE -> {
                     item.data.amount.notNull {
                         layout.text_transaction_value.text =
-                                "-${MoneyUtil.getScaledText(it, item.data.asset)}"
+                                "-${getScaledAmount(it, decimals)}"
                     }
                 }
                 TransactionType.RECEIVED_TYPE -> {
                     item.data.amount.notNull {
                         layout.text_transaction_value.text =
-                                "+${MoneyUtil.getScaledText(it, item.data.asset)}"
+                                "+${getScaledAmount(it, decimals)}"
                     }
                 }
                 TransactionType.MASS_SPAM_RECEIVE_TYPE,
@@ -82,19 +81,17 @@ class HistoryTransactionPagerAdapter constructor(
                 }
                 TransactionType.CANCELED_LEASING_TYPE -> {
                     item.data.lease?.amount.notNull {
-                        layout.text_transaction_value.text = MoneyUtil.getScaledText(
-                                it, item.data.asset)
+                        layout.text_transaction_value.text = getScaledAmount(it, decimals)
                     }
                 }
                 TransactionType.TOKEN_BURN_TYPE -> {
                     item.data.amount.notNull {
-                        layout.text_transaction_value.text = "-" + getScaledText(it, item.data.asset)
+                        layout.text_transaction_value.text = "-" + getScaledAmount(it, decimals)
                     }
                 }
                 TransactionType.TOKEN_GENERATION_TYPE,
                 TransactionType.TOKEN_REISSUE_TYPE -> {
-                    val quantity = MoneyUtil.getScaledText(item.data.quantity, item.data.asset)
-                            .substringBefore(".")
+                    val quantity = getScaledAmount(item.data.quantity, decimals)
                     layout.text_transaction_value.text = quantity
                 }
                 TransactionType.DATA_TYPE,
@@ -111,7 +108,7 @@ class HistoryTransactionPagerAdapter constructor(
                 }
                 else -> {
                     item.data.amount.notNull {
-                        layout.text_transaction_value.text = MoneyUtil.getScaledText(it, item.data.asset)
+                        layout.text_transaction_value.text = getScaledAmount(it, decimals)
                     }
                 }
             }
@@ -171,7 +168,8 @@ class HistoryTransactionPagerAdapter constructor(
         val directionStringResId: Int
         val directionSign: String
         val amountAsset = myOrder.assetPair?.amountAssetObject!!
-        val amountValue = MoneyUtil.getScaledText(transaction.amount, amountAsset).stripZeros()
+        val amountValue = getScaledAmount(transaction.amount,
+                transaction.asset?.precision ?: 8)
 
         if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell
