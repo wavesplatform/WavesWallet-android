@@ -68,6 +68,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                 helper.itemView.notNull { view ->
                     view.text_tag.gone()
                     view.text_tag_spam.gone()
+                    view.text_transaction_value.setTypeface(null, Typeface.NORMAL)
                     val decimals = item.data.asset?.precision ?: 8
 
                     item.data.transactionType().notNull {
@@ -135,10 +136,10 @@ class HistoryTabItemAdapter @Inject constructor() :
                         }
                     }
 
-                    if (isSpamConsidered(item.data.assetId, prefsUtil)) {
-                        view.text_tag_spam.visiable()
-                    } else {
-                        if (TransactionType.isZeroTransferTransaction(item.data.transactionType())) {
+                    if (!TransactionType.isZeroTransferOrExchange(item.data.transactionType())) {
+                        if (isSpamConsidered(item.data.assetId, prefsUtil)) {
+                            view.text_tag_spam.visiable()
+                        } else {
                             if (isShowTicker(item.data.assetId)) {
                                 val ticker = item.data.asset?.getTicker()
                                 if (!ticker.isNullOrBlank()) {
@@ -149,9 +150,9 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 view.text_transaction_value.text =
                                         "${view.text_transaction_value.text} ${item.data.asset?.name}"
                             }
-                            view.text_transaction_value.makeTextHalfBold()
                         }
                     }
+                    view.text_transaction_value.makeTextHalfBold()
                 }
             }
         }

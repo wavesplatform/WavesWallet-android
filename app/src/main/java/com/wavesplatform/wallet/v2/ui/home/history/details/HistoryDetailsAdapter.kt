@@ -101,10 +101,10 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
             }
         }
 
-        if (isSpamConsidered(transaction.assetId, prefsUtil)) {
-            setSpamAmount(transaction, layout)
-        } else {
-            if (TransactionType.isZeroTransferTransaction(transaction.transactionType())) {
+        if (!TransactionType.isZeroTransferOrExchange(transaction.transactionType())) {
+            if (isSpamConsidered(transaction.assetId, prefsUtil)) {
+                layout.text_tag_spam.visiable()
+            } else {
                 if (isShowTicker(transaction.assetId)) {
                     val ticker = transaction.asset?.getTicker()
                     if (!ticker.isNullOrBlank()) {
@@ -112,40 +112,14 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                         layout.text_tag.visiable()
                     }
                 } else {
-                    layout.text_tag.gone()
-                    layout.text_title.text =
-                            "${layout.text_title.text}" +
-                            " ${transaction.asset?.name}"
+                    layout.text_title.text = "${layout.text_title.text} ${transaction.asset?.name}"
                 }
-                layout.text_title.makeTextHalfBold()
             }
         }
+        layout.text_title.makeTextHalfBold()
 
         collection.addView(layout)
         return layout
-    }
-
-    private fun setSpamAmount(transaction: Transaction, layout: ViewGroup) {
-        if (transaction.transfers.isNotEmpty()) {
-            val sumString = MoneyUtil.getScaledText(
-                    transaction.transfers.sumByLong { it.amount },
-                    transaction.asset)
-            if (sumString.isEmpty()) {
-                layout.text_title.text = "${transaction.asset?.name}"
-            } else {
-                layout.text_title.text = "$sumString ${transaction.asset?.name}"
-            }
-        } else {
-            layout.text_title.text =
-                    "${MoneyUtil.getScaledText(transaction.amount, transaction.asset)}" +
-                    " ${transaction.asset?.name}"
-        }
-        if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
-            layout.text_tag_spam.visiable()
-        } else {
-            layout.text_tag_spam.visiable()
-        }
-        layout.text_tag.gone()
     }
 
     private fun setExchangeItem(transaction: Transaction, view: View) {
@@ -172,8 +146,7 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
         }
 
         view.text_subtitle.visiable()
-        view.text_subtitle.text =
-                directionSignPrice + priceValue + " " + priceAsset.name
+        view.text_subtitle.text = directionSignPrice + priceValue + " " + priceAsset.name
 
         val amountAssetTicker = if (amountAsset.name == "WAVES") {
             "WAVES"

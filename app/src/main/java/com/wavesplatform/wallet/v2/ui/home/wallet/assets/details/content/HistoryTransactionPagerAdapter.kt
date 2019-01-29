@@ -45,11 +45,14 @@ class HistoryTransactionPagerAdapter constructor(
 
         layout.text_tag.gone()
         layout.text_tag_spam.gone()
+        layout.text_transaction_value.setTypeface(null, Typeface.NORMAL)
 
         item.data.transactionType().notNull {
             layout.image_transaction.setImageDrawable(it.icon())
             layout.text_transaction_name.text = layout.text_transaction_name.context
                     .getString(it.title)
+
+            // todo reuse this code and HistoryTabItemAdapter and HistoryDetailsAdapter
             when (it) {
                 TransactionType.SENT_TYPE -> {
                     item.data.amount.notNull {
@@ -74,6 +77,7 @@ class HistoryTransactionPagerAdapter constructor(
                     layout.text_transaction_value.setTypeface(null, Typeface.BOLD)
                 }
                 TransactionType.EXCHANGE_TYPE -> {
+                    // todo reuse this method with HistoryTabItemAdapter and HistoryDetailsAdapter
                     setExchangeItem(item.data, layout)
                 }
                 TransactionType.CANCELED_LEASING_TYPE -> {
@@ -113,10 +117,11 @@ class HistoryTransactionPagerAdapter constructor(
             }
         }
 
-        if (isSpamConsidered(item.data.assetId, prefsUtil)) {
-            layout.text_tag_spam.visiable()
-        } else {
-            if (TransactionType.isZeroTransferTransaction(item.data.transactionType())) {
+        // todo reuse this code and HistoryTabItemAdapter and HistoryDetailsAdapter
+        if (!TransactionType.isZeroTransferOrExchange(item.data.transactionType())) {
+            if (isSpamConsidered(item.data.assetId, prefsUtil)) {
+                layout.text_tag_spam.visiable()
+            } else {
                 if (isShowTicker(item.data.assetId)) {
                     val ticker = item.data.asset?.getTicker()
                     if (!ticker.isNullOrBlank()) {
@@ -124,14 +129,12 @@ class HistoryTransactionPagerAdapter constructor(
                         layout.text_tag.visiable()
                     }
                 } else {
-                    layout.text_tag.gone()
                     layout.text_transaction_value.text =
-                            "${layout.text_transaction_value.text}" +
-                            " ${item.data.asset?.name}"
+                            "${layout.text_transaction_value.text} ${item.data.asset?.name}"
                 }
-                layout.text_transaction_value.makeTextHalfBold()
             }
         }
+        layout.text_transaction_value.makeTextHalfBold()
 
 
         collection.addView(layout)
@@ -158,7 +161,7 @@ class HistoryTransactionPagerAdapter constructor(
         val myOrder = findMyOrder(
                 transaction.order1!!,
                 transaction.order2!!,
-                App.getAccessManager().getWallet()?.address!!)
+                App.getAccessManager().getWallet()?.address)
         val secondOrder = if (myOrder.id == transaction.order1!!.id) {
             transaction.order2!!
         } else {
