@@ -9,7 +9,6 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
@@ -172,7 +171,8 @@ class HistoryTabItemAdapter @Inject constructor() :
         val directionStringResId: Int
         val directionSign: String
         val amountAsset = myOrder.assetPair?.amountAssetObject!!
-        val amountValue = MoneyUtil.getScaledText(transaction.amount, amountAsset).stripZeros()
+        val amountValue = getScaledAmount(transaction.amount,
+                transaction.asset?.precision ?: 8)
 
         if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell
