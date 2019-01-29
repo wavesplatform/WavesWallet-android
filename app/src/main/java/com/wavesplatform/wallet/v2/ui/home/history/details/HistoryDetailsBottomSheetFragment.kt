@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -175,7 +176,11 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         historyContainer?.removeAllViews()
 
         when (transaction.transactionType()) {
-            TransactionType.RECEIVED_TYPE, TransactionType.MASS_RECEIVE_TYPE, TransactionType.SPAM_RECEIVE_TYPE, TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.UNRECOGNISED_TYPE -> {
+            TransactionType.RECEIVED_TYPE,
+            TransactionType.MASS_RECEIVE_TYPE,
+            TransactionType.SPAM_RECEIVE_TYPE,
+            TransactionType.MASS_SPAM_RECEIVE_TYPE,
+            TransactionType.UNRECOGNISED_TYPE -> {
                 val receiveView = inflater?.inflate(R.layout.fragment_bottom_sheet_receive_layout, historyContainer, false)
                 val receivedFromName = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_name)
                 val receivedFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_address)
@@ -375,7 +380,11 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                     val imageAddressAction = addressView?.findViewById<AppCompatImageView>(R.id.image_address_action)
                     val viewDivider = addressView?.findViewById<AppCompatImageView>(R.id.view_divider)
 
-                    textSentAddress?.text = transfer.recipientAddress
+                    var recipient = transfer.recipient.clearAlias()
+                    if (TextUtils.isEmpty(recipient)) {
+                        recipient = transfer.recipientAddress ?: ""
+                    }
+                    textSentAddress?.text = recipient
                     textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset)
 
                     resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)

@@ -23,7 +23,7 @@
         android:orientation="horizontal">
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/text_amount_or_title"
+            android:id="@+id/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -51,14 +51,13 @@
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/text_amount_value_in_dollar"
+        android:id="@+id/text_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
         android:textColor="@color/disabled500"
         android:textSize="12sp"
-        android:visibility="gone"
         tools:text="≈ 00 000.00 US Dollar"
         tools:visibility="visible" />
 

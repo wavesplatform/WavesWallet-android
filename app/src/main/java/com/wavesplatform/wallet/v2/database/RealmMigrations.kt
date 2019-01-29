@@ -9,6 +9,7 @@ class RealmMigrations : RealmMigration {
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         if (oldVersion < 1L) {
+            realm.where("Transaction").findAll().deleteAllFromRealm()
             val schema = realm.schema.get("Transaction")
             schema.notNull {
                 it.addField("script", String::class.java)

@@ -7,22 +7,19 @@ import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
-import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import kotlinx.android.synthetic.main.recycle_item_history.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import java.util.*
 import javax.inject.Inject
 
 
@@ -68,33 +65,14 @@ class HistoryTabItemAdapter @Inject constructor() :
                 }
 
                 helper.itemView.notNull { view ->
-                    val spam = null != queryFirst<SpamAsset> {
-                        equalTo("assetId", item.data.assetId)
-                    }
-
+                    view.text_tag.gone()
+                    view.text_tag_spam.gone()
+                    view.text_transaction_value.setTypeface(null, Typeface.NORMAL)
                     val decimals = item.data.asset?.precision ?: 8
 
-                    view.image_transaction.setImageDrawable(item.data.transactionType().icon())
-
-                    val showTag = Constants.defaultAssets.any {
-                        it.assetId == item.data.assetId || item.data.assetId.isNullOrEmpty()
-                    }
-
-                    view.text_tag_spam.gone()
-
                     item.data.transactionType().notNull {
-                        try {
-                            val name = if (spam) {
-                                ""
-                            } else {
-                                item.data.asset?.name
-                            }
-                            view.text_transaction_name.text = String.format(
-                                    mContext.getString(it.title), name).trim()
-                        } catch (e: MissingFormatArgumentException) {
-                            view.text_transaction_name.text = mContext.getString(it.title)
-                        }
-
+                        view.image_transaction.setImageDrawable(it.icon())
+                        view.text_transaction_name.text = mContext.getString(it.title)
                         when (it) {
                             TransactionType.SENT_TYPE -> {
                                 item.data.amount.notNull {
@@ -109,41 +87,22 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 }
                             }
                             TransactionType.MASS_SPAM_RECEIVE_TYPE,
-                            TransactionType.MASS_SEND_TYPE,
-                            TransactionType.MASS_RECEIVE_TYPE -> {
-                                if (item.data.transfers.isNotEmpty()) {
-                                    val sumString = getScaledAmount(
-                                            item.data.transfers.sumByLong { it.amount }, decimals)
-                                    if (sumString.isEmpty()) {
-                                        view.text_transaction_value.text = ""
-                                    } else {
-                                        view.text_transaction_value.text = sumString
-                                    }
-                                } else {
-                                    view.text_transaction_value.text =
-                                            getScaledAmount(item.data.amount, decimals)
-                                }
+                            TransactionType.MASS_RECEIVE_TYPE,
+                            TransactionType.MASS_SEND_TYPE -> {
+                                view.text_transaction_value.text = getTransactionAmount(
+                                        transaction = item.data, decimals = decimals)
                             }
                             TransactionType.CREATE_ALIAS_TYPE -> {
                                 view.text_transaction_value.text = item.data.alias
+                                view.text_transaction_value.setTypeface(null, Typeface.BOLD)
                             }
                             TransactionType.EXCHANGE_TYPE -> {
                                 setExchangeItem(item.data, view)
                             }
-                            TransactionType.DATA_TYPE -> {
-                                view.text_transaction_value.text = mContext
-                                        .getString(R.string.history_data_type_title)
-                            }
                             TransactionType.CANCELED_LEASING_TYPE -> {
                                 item.data.lease?.amount.notNull {
-                                    view.text_transaction_value.text =
-                                            getScaledAmount(it, decimals)
+                                    view.text_transaction_value.text = getScaledAmount(it, decimals)
                                 }
-                            }
-                            TransactionType.TOKEN_GENERATION_TYPE -> {
-                                val quantity = getScaledAmount(
-                                        item.data.quantity, decimals)
-                                view.text_transaction_value.text = quantity
                             }
                             TransactionType.TOKEN_BURN_TYPE -> {
                                 item.data.amount.notNull {
@@ -151,11 +110,12 @@ class HistoryTabItemAdapter @Inject constructor() :
                                             "-${getScaledAmount(it, decimals)}"
                                 }
                             }
+                            TransactionType.TOKEN_GENERATION_TYPE,
                             TransactionType.TOKEN_REISSUE_TYPE -> {
-                                val quantity = getScaledAmount(
-                                        item.data.quantity, decimals)
+                                val quantity = getScaledAmount(item.data.quantity, decimals)
                                 view.text_transaction_value.text = "+$quantity"
                             }
+                            TransactionType.DATA_TYPE,
                             TransactionType.SET_ADDRESS_SCRIPT_TYPE,
                             TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
                             TransactionType.SET_SPONSORSHIP_TYPE,
@@ -165,62 +125,33 @@ class HistoryTabItemAdapter @Inject constructor() :
                                         mContext.getString(R.string.history_data_type_title)
                                 view.text_transaction_value.text = mContext.getString(
                                         item.data.transactionType().title)
-                                view.text_tag.gone()
                                 view.text_transaction_value.setTypeface(null, Typeface.BOLD)
                             }
                             else -> {
                                 item.data.amount.notNull {
-                                    view.text_transaction_value.text =
-                                            getScaledAmount(it, decimals)
+                                    view.text_transaction_value.text = getScaledAmount(it, decimals)
                                 }
                             }
                         }
                     }
 
-                    if (spam) {
-                        if (item.data.transfers.isNotEmpty()) {
-                            val sumString = getScaledAmount(
-                                    item.data.transfers.sumByLong { it.amount }, decimals)
-                            if (sumString.isEmpty()) {
-                                view.text_transaction_value.text = ""
-                            } else {
-                                view.text_transaction_value.text = sumString
-                            }
-                        } else {
-                            view.text_transaction_value.text =
-                                    getScaledAmount(item.data.amount, decimals)
-                        }
-                        if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, false)) {
+                    if (!TransactionType.isZeroTransferOrExchange(item.data.transactionType())) {
+                        if (isSpamConsidered(item.data.assetId, prefsUtil)) {
                             view.text_tag_spam.visiable()
                         } else {
-                            view.text_tag_spam.gone()
-                        }
-                        view.text_tag.gone()
-                    } else {
-                        if (item.data.transactionType() != TransactionType.CREATE_ALIAS_TYPE
-                                && item.data.transactionType() != TransactionType.DATA_TYPE
-                                && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
-                                && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
-                                && item.data.transactionType() != TransactionType.EXCHANGE_TYPE
-                                && item.data.transactionType() != TransactionType.SET_ADDRESS_SCRIPT_TYPE
-                                && item.data.transactionType() != TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE
-                                && item.data.transactionType() != TransactionType.SET_SPONSORSHIP_TYPE
-                                && item.data.transactionType() != TransactionType.CANCEL_SPONSORSHIP_TYPE
-                                && item.data.transactionType() != TransactionType.UPDATE_ASSET_SCRIPT_TYPE) {
-                            if (showTag) {
+                            if (isShowTicker(item.data.assetId)) {
                                 val ticker = item.data.asset?.getTicker()
                                 if (!ticker.isNullOrBlank()) {
                                     view.text_tag.text = ticker
                                     view.text_tag.visiable()
                                 }
                             } else {
-                                view.text_tag.gone()
                                 view.text_transaction_value.text =
                                         "${view.text_transaction_value.text} ${item.data.asset?.name}"
                             }
-                            view.text_transaction_value.makeTextHalfBold()
                         }
                     }
+                    view.text_transaction_value.makeTextHalfBold()
                 }
             }
         }
@@ -240,7 +171,8 @@ class HistoryTabItemAdapter @Inject constructor() :
         val directionStringResId: Int
         val directionSign: String
         val amountAsset = myOrder.assetPair?.amountAssetObject!!
-        val amountValue = MoneyUtil.getScaledText(transaction.amount, amountAsset).stripZeros()
+        val amountValue = getScaledAmount(transaction.amount,
+                transaction.asset?.precision ?: 8)
 
         if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell
@@ -262,7 +194,6 @@ class HistoryTabItemAdapter @Inject constructor() :
         }
 
         val assetName = if (amountAssetTicker.isNullOrEmpty()) {
-            view.text_tag.gone()
             " ${amountAsset.name}"
         } else {
             view.text_tag.visiable()
