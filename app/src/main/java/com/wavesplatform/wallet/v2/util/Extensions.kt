@@ -716,7 +716,7 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
 }
 
 fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
-    return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, false)
+    return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
             && (null != queryFirst<SpamAsset> {
         equalTo("assetId", assetId)
     }))
