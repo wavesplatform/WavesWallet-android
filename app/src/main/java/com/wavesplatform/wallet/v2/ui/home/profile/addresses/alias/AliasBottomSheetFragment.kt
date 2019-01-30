@@ -121,7 +121,7 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
             }
 
             override fun showCommissionSuccess(unscaledAmount: Long) {
-                feeTransaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
+                feeTransaction.text = MoneyUtil.getScaledText(unscaledAmount, 8)
                 progressBarFee.hide()
                 feeTransaction.visiable()
                 buttonCreateAlias.isEnabled = true
