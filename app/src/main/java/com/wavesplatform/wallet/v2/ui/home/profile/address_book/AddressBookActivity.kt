@@ -126,8 +126,9 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                 if (resultCode == Constants.RESULT_OK) {
                     val item = data?.getParcelableExtra<AddressBookUser>(BUNDLE_ADDRESS_ITEM)
                     item.notNull {
-                        adapter.addData(it)
                         adapter.allData.add(it)
+                        adapter.allData.sortBy { it.name }
+                        adapter.setNewData(adapter.allData)
                         configureSearchVisibility()
                     }
                 }
@@ -139,8 +140,9 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                     position.notNull { position ->
                         if (position != -1) {
                             item.notNull {
-                                adapter.setData(position, it)
                                 adapter.allData.add(position, it)
+                                adapter.allData.sortBy { it.name }
+                                adapter.setNewData(adapter.allData)
                             }
                         }
                     }

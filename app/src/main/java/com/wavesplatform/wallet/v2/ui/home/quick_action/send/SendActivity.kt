@@ -37,7 +37,6 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendCo
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ASSET
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_RECIPIENT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_TYPE
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.REQUEST_BURN_CONFIRM
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
@@ -104,6 +103,8 @@ class SendActivity : BaseActivity(), SendView {
                     checkRecipient(it.toString())
                 })
 
+        edit_amount.applyFilterStartWithDot()
+
         edit_amount.addTextChangedListener {
             on { s, _, _, _ ->
                 if (s.isNotEmpty()) {
@@ -158,6 +159,7 @@ class SendActivity : BaseActivity(), SendView {
         text_5_percent.click { setPercent(0.05) }
 
         setRecipientSuggestions()
+        commission_card.gone()
     }
 
     private fun setRecipientSuggestions() {
@@ -240,6 +242,7 @@ class SendActivity : BaseActivity(), SendView {
                 horizontal_amount_suggestion.gone()
                 text_amount_fee_error.text = getString(
                         R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
+                        "${getScaledAmount(presenter.fee, 8)} ${Constants.wavesAssetInfo.name}",
                         presenter.gatewayCommission.toPlainString(),
                         assetBalance.getName() ?: "")
                 presenter.amount = BigDecimal.ZERO
@@ -320,14 +323,12 @@ class SendActivity : BaseActivity(), SendView {
                     presenter.recipientAssetId = ""
                     presenter.checkAlias(recipient)
                     relative_gateway_fee.gone()
-                    presenter.loadCommission(presenter.recipient, presenter.selectedAsset?.assetId)
                 }
                 SendPresenter.isWavesAddress(recipient) -> {
                     presenter.recipientAssetId = ""
                     presenter.type = SendPresenter.Type.WAVES
                     setRecipientValid(true)
                     relative_gateway_fee.gone()
-                    presenter.loadCommission(presenter.recipient, presenter.selectedAsset?.assetId)
                 }
                 else -> {
                     presenter.recipientAssetId = SendPresenter.getAssetId(recipient)
@@ -340,8 +341,6 @@ class SendActivity : BaseActivity(), SendView {
                             setRecipientValid(true)
                             checkMonero(presenter.recipientAssetId)
                             loadGatewayXRate(presenter.recipientAssetId!!)
-                            presenter.loadCommission(
-                                    presenter.recipient, presenter.selectedAsset?.assetId)
                         } else {
                             setRecipientValid(false)
                         }
@@ -396,22 +395,21 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun showCommissionLoading() {
-        progress_bar_fee_transaction.visiable()
+        progress_bar_fee_transaction.show()
         text_fee_transaction.gone()
-        button_continue.isEnabled = false
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
-        text_fee_transaction.text = MoneyUtil.getScaledText(unscaledAmount, 8)
-        progress_bar_fee_transaction.gone()
+        commission_card.visiable()
+        text_fee_transaction.text = getWavesStripZeros(unscaledAmount)
+        progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
-        button_continue.isEnabled = presenter.validateTransfer() == 0
     }
 
     override fun showCommissionError() {
         text_fee_transaction.text = "-"
         showError(R.string.common_error_commission_receiving, R.id.root)
-        progress_bar_fee_transaction.gone()
+        progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
     }
 
@@ -535,7 +533,7 @@ class SendActivity : BaseActivity(), SendView {
             amount_card.visiable()
             button_continue.isEnabled = true
 
-            presenter.loadCommission(presenter.recipient, presenter.selectedAsset?.assetId)
+            presenter.loadCommission(presenter.selectedAsset?.assetId)
         }
     }
 
@@ -612,6 +610,11 @@ class SendActivity : BaseActivity(), SendView {
                 putExtra(YourAssetsActivity.BUNDLE_ASSET_ID, it.assetId)
             }
         }
+    }
+
+    override fun onDestroy() {
+        progress_bar_fee_transaction.hide()
+        super.onDestroy()
     }
 
     override fun onBackPressed() {

@@ -112,8 +112,9 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                         }
 
                         override fun onShowErrorMessage(message: String) {
-                            showError(message, R.id.content)
-                            fingerprintDialog.dismiss()
+                            Toast.makeText(this@CreatePassCodeActivity, message,
+                                    Toast.LENGTH_SHORT).show()
+                            launchActivity<MainActivity>(clear = true)
                         }
                     })
         } else if (intent.hasExtra(KEY_INTENT_GUID)) {

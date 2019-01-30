@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -13,14 +14,12 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
+import com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
-import com.wavesplatform.wallet.v2.util.showSuccess
-import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_empty_layout.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_layout.view.*
-import kotlinx.android.synthetic.main.view_commission.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
@@ -40,6 +39,8 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
     @ProvidePresenter
     fun providePresenter(): AliasPresenter = presenter
 
+    var onCreateAliasListener: OnCreateAliasListener? = null
+
     var type = TYPE_EMPTY
         set(value) {
             field = value
@@ -50,15 +51,20 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
         }
 
     lateinit var rootView: View
+    lateinit var progressBarFee: ImageProgressBar
+    lateinit var feeTransaction: TextView
+    lateinit var buttonCreateAlias: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         when (type) {
             TYPE_EMPTY -> {
                 rootView = inflater.inflate(R.layout.bottom_sheet_dialog_aliases_empty_layout, container, false)
-
-                rootView.button_create_alias.click {
-                    launchActivity<CreateAliasActivity>(REQUEST_CREATE_ALIAS) { }
+                buttonCreateAlias = rootView.findViewById<View>(R.id.button_create_alias)
+                buttonCreateAlias.click {
+                    launchActivity<CreateAliasActivity>(REQUEST_CREATE_ALIAS) {
+                        putExtra(CreateAliasActivity.BUNDLE_BLOCKCHAIN_COMMISSION, presenter.fee)
+                    }
                 }
             }
             TYPE_CONTENT -> {
@@ -68,6 +74,8 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
                 rootView.recycle_aliases.layoutManager = LinearLayoutManager(this.context)
                 rootView.recycle_aliases.isNestedScrollingEnabled = false
                 rootView.recycle_aliases.adapter = adapter
+
+                buttonCreateAlias = rootView.findViewById<View>(R.id.button_create_alias)
 
 
                 rootView.relative_about_alias.click {
@@ -86,8 +94,10 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
                     }
                 }
 
-                rootView.button_create_alias_content.click {
-                    launchActivity<CreateAliasActivity>(REQUEST_CREATE_ALIAS) { }
+                buttonCreateAlias.click {
+                    launchActivity<CreateAliasActivity>(REQUEST_CREATE_ALIAS) {
+                        putExtra(CreateAliasActivity.BUNDLE_BLOCKCHAIN_COMMISSION, presenter.fee)
+                    }
                 }
 
                 presenter.loadAliases {
@@ -95,6 +105,8 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
                 }
             }
         }
+        progressBarFee = rootView.findViewById<ImageProgressBar>(R.id.progress_bar_fee_transaction)
+        feeTransaction = rootView.findViewById(R.id.text_fee_transaction)
         return rootView
     }
 
@@ -103,51 +115,53 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
         presenter.loadCommission(object : AliasPresenter.OnCommissionGetListener {
 
             override fun showCommissionLoading() {
-                progress_bar_fee_transaction.visiable()
-                text_fee_transaction.gone()
+                progressBarFee.show()
+                feeTransaction.gone()
+                buttonCreateAlias.isEnabled = false
             }
 
             override fun showCommissionSuccess(unscaledAmount: Long) {
-                text_fee_transaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
-                progress_bar_fee_transaction.gone()
-                text_fee_transaction.visiable()
+                feeTransaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
+                progressBarFee.hide()
+                feeTransaction.visiable()
+                buttonCreateAlias.isEnabled = true
             }
 
             override fun showCommissionError() {
-                text_fee_transaction.text = "-"
+                feeTransaction.text = "-"
                 showError(R.string.common_error_commission_receiving, R.id.root)
-                progress_bar_fee_transaction.gone()
-                text_fee_transaction.visiable()
+                progressBarFee.hide()
+                feeTransaction.visiable()
             }
         })
+    }
+
+    override fun onDestroyView() {
+        progressBarFee.hide()
+        super.onDestroyView()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CREATE_ALIAS && resultCode == Constants.RESULT_OK) {
-            when (type) {
-                TYPE_EMPTY -> {
-                    dismiss()
-                    val bottomSheetFragment = AliasBottomSheetFragment()
-                    bottomSheetFragment.type = AliasBottomSheetFragment.TYPE_CONTENT
-                    bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
-                    showSuccess(getString(R.string.new_alias_success_create), R.id.root)
-                }
-                TYPE_CONTENT -> {
-                    val aliasModel = data?.getParcelableExtra<Alias>(CreateAliasActivity.RESULT_ALIAS)
-                    aliasModel.notNull {
-                        adapter.addData(it)
-                    }
+            val aliasModel = data?.getParcelableExtra<Alias>(CreateAliasActivity.RESULT_ALIAS)
+            aliasModel.notNull {
+                onCreateAliasListener.notNull { listener ->
+                    listener.onSuccess()
                 }
             }
         }
     }
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
-        rootView.button_create_alias_content.isEnabled = networkConnected
+        buttonCreateAlias.isEnabled = networkConnected
     }
 
     override fun afterSuccessLoadAliases(ownAliases: List<Alias>) {
+    }
+
+    interface OnCreateAliasListener {
+        fun onSuccess()
     }
 
     companion object {

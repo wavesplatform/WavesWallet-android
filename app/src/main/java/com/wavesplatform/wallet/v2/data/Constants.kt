@@ -11,8 +11,8 @@ object Constants {
 
     // Production
     const val URL_COINOMAT = "https://coinomat.com/api/"
-    const val URL_SPAM = "https://raw.githubusercontent.com/wavesplatform/waves-community/master/"
-    const val URL_SPAM_FILE = "https://raw.githubusercontent.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv"
+    const val URL_SPAM = "https://github-proxy.wvservices.com/wavesplatform/waves-community/master/"
+    const val URL_SPAM_FILE = "https://github-proxy.wvservices.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv"
     const val URL_WAVES_FORUM = "https://forum.wavesplatform.com/"
     const val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
     const val URL_WHITEPAPER = "https://wavesplatform.com/files/whitepaper_v0.pdf"
@@ -54,11 +54,12 @@ object Constants {
     const val ID_MASS_SPAM_RECEIVE_TYPE = 15
     const val ID_DATA_TYPE = 16
     const val ID_SPAM_SELF_TRANSFER = 17
-    const val ID_SET_SCRIPT_TYPE = 18
-    const val ID_CANCEL_SCRIPT_TYPE = 19
+    const val ID_SET_ADDRESS_SCRIPT_TYPE = 18
+    const val ID_CANCEL_ADDRESS_SCRIPT_TYPE = 19
     const val ID_RECEIVE_SPONSORSHIP_TYPE = 20
     const val ID_SET_SPONSORSHIP_TYPE = 21
     const val ID_CANCEL_SPONSORSHIP_TYPE = 22
+    const val ID_UPDATE_ASSET_SCRIPT_TYPE = 23
 
     // Custom Result code
     const val RESULT_CANCELED = 404

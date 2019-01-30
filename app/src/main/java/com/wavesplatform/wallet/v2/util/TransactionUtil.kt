@@ -1,9 +1,12 @@
 package com.wavesplatform.wallet.v2.util
 
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import javax.inject.Inject
 
 /**
@@ -57,11 +60,11 @@ class TransactionUtil @Inject constructor() {
                 Constants.ID_MASS_RECEIVE_TYPE
             } else if (transaction.type == Transaction.DATA) {
                 Constants.ID_DATA_TYPE
-            } else if (transaction.type == Transaction.SCRIPT) {
+            } else if (transaction.type == Transaction.ADDRESS_SCRIPT) {
                 if (transaction.script == null) {
-                    Constants.ID_CANCEL_SCRIPT_TYPE
+                    Constants.ID_CANCEL_ADDRESS_SCRIPT_TYPE
                 } else {
-                    Constants.ID_SET_SCRIPT_TYPE
+                    Constants.ID_SET_ADDRESS_SCRIPT_TYPE
                 }
             } else if (transaction.type == Transaction.SPONSORSHIP) {
                 if (transaction.minSponsoredAssetFee == null) {
@@ -69,12 +72,51 @@ class TransactionUtil @Inject constructor() {
                 } else {
                     Constants.ID_SET_SPONSORSHIP_TYPE
                 }
-            }
-            else {
+            } else if (transaction.type == Transaction.ASSET_SCRIPT) {
+                Constants.ID_UPDATE_ASSET_SCRIPT_TYPE
+            } else {
                 Constants.ID_UNRECOGNISED_TYPE
             }
 
     companion object {
+
+        fun getTransactionAmount(transaction: Transaction, decimals: Int = 8, round: Boolean = true): String {
+
+            var sign = "-"
+            if (transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE ||
+                    transaction.transactionType() == TransactionType.MASS_RECEIVE_TYPE) {
+                sign = "+"
+            }
+
+            return sign + if (transaction.transfers.isNotEmpty()) {
+                val sumString = if (round) {
+                    getScaledAmount(transaction.transfers.sumByLong { it.amount }, decimals)
+                } else {
+                    MoneyUtil.getScaledText(transaction.transfers.sumByLong { it.amount }, transaction.asset)
+                }
+                if (sumString.isEmpty()) {
+                    ""
+                } else {
+                    sumString
+                }
+            } else {
+                if (round) {
+                    getScaledAmount(transaction.amount, decimals)
+                } else {
+                    MoneyUtil.getScaledText(transaction.amount, transaction.asset)
+                }
+            }
+        }
+
+        fun getScaledText(amount: Long, assetInfo: AssetInfo?): String {
+            val afterDot = MoneyUtil.getScaledText(amount, assetInfo)
+                    .substringAfter(".").clearBalance().toLong()
+            return if (afterDot == 0L) {
+                MoneyUtil.getScaledText(amount, assetInfo).substringBefore(".")
+            } else {
+                MoneyUtil.getScaledText(amount, assetInfo)
+            }
+        }
 
         fun countCommission(commission: GlobalTransactionCommission,
                             params: GlobalTransactionCommission.Params): Long {
@@ -87,7 +129,7 @@ class TransactionUtil @Inject constructor() {
                 Transaction.EXCHANGE -> commission.calculateFeeRules.exchange
                 Transaction.MASS_TRANSFER -> commission.calculateFeeRules.massTransfer
                 Transaction.DATA -> commission.calculateFeeRules.data
-                Transaction.SCRIPT -> commission.calculateFeeRules.script
+                Transaction.ADDRESS_SCRIPT -> commission.calculateFeeRules.script
                 Transaction.SPONSORSHIP -> commission.calculateFeeRules.sponsor
                 Transaction.ASSET_SCRIPT -> commission.calculateFeeRules.assetScript
                 else -> commission.calculateFeeRules.default
@@ -99,7 +141,7 @@ class TransactionUtil @Inject constructor() {
                 Transaction.LEASE,
                 Transaction.LEASE_CANCEL,
                 Transaction.CREATE_ALIAS,
-                Transaction.SCRIPT,
+                Transaction.ADDRESS_SCRIPT,
                 Transaction.SPONSORSHIP,
                 Transaction.ASSET_SCRIPT ->
                     getAccountCommission(feeRules, params, commission)

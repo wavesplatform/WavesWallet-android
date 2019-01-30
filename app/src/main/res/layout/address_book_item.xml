@@ -6,12 +6,10 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:paddingBottom="14dp"
+    android:paddingBottom="10dp"
     android:paddingEnd="16dp"
     android:paddingStart="16dp"
-    android:paddingTop="14dp">
-
-
+    android:paddingTop="10dp">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text_name"
@@ -30,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/image_flag"
-        tools:text="MkSuckMydickmMak1593x1GrfYmFdsf83skS11" />
+        tools:text="pjoqwfjohf2wopjfqopqfoqfwlqfwjnfwkjnlqwfl" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_edit"

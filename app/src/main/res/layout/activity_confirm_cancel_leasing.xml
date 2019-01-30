@@ -1,10 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:animateLayoutChanges="true"
-    android:id="@+id/root"
     android:background="@drawable/img_brand">
 
     <android.support.v7.widget.Toolbar
@@ -22,11 +22,11 @@
         android:id="@+id/card_leasing_preview_info"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="-2dp"
         android:layout_below="@+id/toolbar_view"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="-2dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="2dp"
         app:cardElevation="0dp">
@@ -57,9 +57,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    tools:text="1.99800118"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="1.99800118" />
 
 
                 <android.support.v7.widget.AppCompatTextView
@@ -69,10 +69,10 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="4dp"
                     android:background="@drawable/asset_price_border"
-                    android:paddingBottom="2dp"
-                    android:paddingEnd="4dp"
                     android:paddingStart="4dp"
                     android:paddingTop="2dp"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="2dp"
                     android:text="WAVES"
                     android:textColor="@color/info500"
                     android:textSize="12sp" />
@@ -92,8 +92,8 @@
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginBottom="14dp"
                 android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
                 android:background="@drawable/shape_dashed_line"
                 android:layerType="software" />
 
@@ -108,14 +108,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                tools:text="address"
-                android:textColor="@color/disabled900" />
+                android:textColor="@color/disabled900"
+                tools:text="address" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:layout_marginBottom="14dp"
                 android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
                 android:background="@drawable/shape_dashed_line"
                 android:layerType="software" />
 
@@ -136,7 +136,7 @@
                     android:layout_gravity="center_horizontal"
                     android:visibility="gone"
                     app:progress_image="@drawable/ic_loader_24_submit_400"
-                    app:progress_text_visibility="false"/>
+                    app:progress_text_visibility="false" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_fee_value"
@@ -145,15 +145,15 @@
                     android:layout_marginTop="6dp"
                     android:text="0.001 Waves"
                     android:textColor="@color/disabled900"
-                    android:visibility="invisible"/>
+                    android:visibility="invisible" />
 
             </FrameLayout>
 
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:layout_marginBottom="14dp"
                 android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
                 android:background="@drawable/shape_dashed_line"
                 android:layerType="software" />
         </LinearLayout>
@@ -161,13 +161,13 @@
         <Button
             android:id="@+id/button_confirm"
             style="@style/WavesButton"
-            android:background="@drawable/selector_btn_red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="24dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/selector_btn_red"
             android:clickable="true"
             android:text="@string/confirmaton_cancel_leasing_button_txt"
             android:textStyle="bold" />
@@ -175,47 +175,48 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        android:visibility="gone"
         android:id="@+id/card_progress"
-        android:layout_below="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_view"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:visibility="gone"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="2dp"
         app:cardElevation="0dp">
 
         <RelativeLayout
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_centerHorizontal="true"
-                android:padding="28dp"
-                android:layout_marginTop="20dp"
-                app:srcCompat="@drawable/ic_loader_24_submit_400"
+            <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
                 android:id="@+id/image_loader"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:padding="28dp"
+                app:progress_image="@drawable/ic_loader_24_submit_400"
+                app:progress_text_visibility="false" />
+
 
             <android.support.v7.widget.AppCompatTextView
-                android:textSize="16sp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="24dp"
-                android:textColor="@color/basic500"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/confirm_leasing_progress"
-                android:layout_marginBottom="20dp"
                 android:layout_below="@+id/image_loader"
-                />
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/confirm_leasing_progress"
+                android:textColor="@color/basic500"
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
@@ -227,8 +228,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar_view"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
         android:visibility="gone"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="2dp"
@@ -263,9 +264,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                tools:text="You have leased 0.00000006 WAVES"
                 android:textColor="@color/disabled500"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:text="You have leased 0.00000006 WAVES" />
 
             <Button
                 android:id="@+id/button_okay"
@@ -273,10 +274,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="24dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="44dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="24dp"
                 android:clickable="true"
                 android:text="@string/confirm_leasing_okay"
                 android:textStyle="bold" />

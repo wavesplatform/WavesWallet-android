@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -52,7 +51,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.assetBalance = arguments?.getParcelable(BUNDLE_ASSET)
 
-        historyAdapter = HistoryTransactionPagerAdapter(childFragmentManager)
+        historyAdapter = HistoryTransactionPagerAdapter(childFragmentManager, presenter.prefsUtil)
 
         view_pager_transaction_history.adapter = historyAdapter
         view_pager_transaction_history.offscreenPageLimit = 3

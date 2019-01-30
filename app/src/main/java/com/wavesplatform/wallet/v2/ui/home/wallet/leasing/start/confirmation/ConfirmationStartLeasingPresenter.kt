@@ -37,10 +37,11 @@ class ConfirmationStartLeasingPresenter @Inject constructor() : BasePresenter<Co
                     it.printStackTrace()
 
                     viewState.showProgressBar(false)
-                    viewState.failedStartLeasing()
 
                     if (it.errorBody()?.isSmartError() == true) {
                         viewState.failedStartLeasingCauseSmart()
+                    } else {
+                        viewState.failedStartLeasing(it.errorBody()?.message)
                     }
                 }))
     }

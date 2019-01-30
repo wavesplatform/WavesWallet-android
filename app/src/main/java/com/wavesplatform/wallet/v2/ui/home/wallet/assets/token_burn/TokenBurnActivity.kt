@@ -59,6 +59,8 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
             edit_amount.setText(presenter.assetBalance.getDisplayAvailableBalance().clearBalance())
         }
 
+        edit_amount.applyFilterStartWithDot()
+
         eventSubscriptions.add(RxTextView.textChanges(edit_amount)
                 .skipInitialValue()
                 .map(CharSequence::toString)
@@ -172,14 +174,14 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
     }
 
     override fun showCommissionLoading() {
-        progress_bar_fee_transaction.visiable()
+        progress_bar_fee_transaction.show()
         text_fee_transaction.gone()
         button_continue.isEnabled = false
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
         text_fee_transaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
-        progress_bar_fee_transaction.gone()
+        progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
         makeButtonEnableIfValid()
     }
@@ -187,9 +189,14 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
     override fun showCommissionError() {
         text_fee_transaction.text = "-"
         showError(R.string.common_error_commission_receiving, R.id.root)
-        progress_bar_fee_transaction.gone()
+        progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
         makeButtonEnableIfValid()
+    }
+
+    override fun onDestroy() {
+        progress_bar_fee_transaction.hide()
+        super.onDestroy()
     }
 
     companion object {

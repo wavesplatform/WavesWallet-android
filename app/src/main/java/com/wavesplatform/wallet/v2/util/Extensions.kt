@@ -30,11 +30,12 @@ import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.util.TypedValue
-import android.view.*
+import android.view.Window
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -48,8 +49,10 @@ import com.bumptech.glide.request.target.Target
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
@@ -62,10 +65,21 @@ import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 
+val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
+    if (dest.isNullOrEmpty() && source.startsWith(".")){
+        return@InputFilter "0."
+    }
+    null
+}
 
 /**
  * Created by anonymous on 13.09.17.
  */
+
+fun EditText.applyFilterStartWithDot(){
+    this.filters = arrayOf(filterStartWithDot)
+}
+
 fun Context.isNetworkConnection(): Boolean {
     val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val activeNetwork = cm.activeNetworkInfo
@@ -176,9 +190,16 @@ fun AlertDialog.makeStyled() {
     val titleTextView = this.findViewById<TextView>(R.id.alertTitle)
     val buttonPositive = this.findViewById<Button>(android.R.id.button1)
     val buttonNegative = this.findViewById<Button>(android.R.id.button2)
-    buttonPositive?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
-    buttonNegative?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
-    titleTextView?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+
+    try {
+        buttonPositive?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+        buttonNegative?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+        titleTextView?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+    } catch (e: Throwable) {
+        buttonPositive?.typeface = Typeface.DEFAULT
+        buttonNegative?.typeface = Typeface.DEFAULT
+        titleTextView?.typeface = Typeface.DEFAULT
+    }
 
     buttonPositive?.setTextColor(findColor(R.color.submit300))
     buttonNegative?.setTextColor(findColor(R.color.submit300))
@@ -623,7 +644,7 @@ fun TextView.makeTextHalfBold() {
     this.text = str.append(" $textAfter")
 }
 
-fun findMyOrder(first: Order, second: Order, address: String): Order {
+fun findMyOrder(first: Order, second: Order, address: String?): Order {
     return if (first.sender == second.sender) {
         if (first.timestamp > second.timestamp) {
             first
@@ -652,7 +673,7 @@ fun Throwable.errorBody(): ErrorResponse? {
 }
 
 fun ErrorResponse.isSmartError(): Boolean {
-    return this.error in 305..307 || this.error == 112 // TODO: Delete 112
+    return this.error in 305..307
 }
 
 fun AssetInfo.getTicker(): String {
@@ -704,4 +725,17 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
     alertDialogBuilder.setCancelable(false)
     alertDialogBuilder.setView(getAlertView())
     alertDialogBuilder.show()
+}
+
+fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
+    return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+            && (null != queryFirst<SpamAsset> {
+        equalTo("assetId", assetId)
+    }))
+}
+
+fun isShowTicker(assetId: String?): Boolean {
+    return Constants.defaultAssets.any {
+        it.assetId == assetId || assetId.isNullOrEmpty()
+    }
 }

@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.RESULT_NEED_UPDATE
+import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_dex_markets.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
@@ -117,6 +118,11 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
         }
 
         adapter.emptyView = getEmptyView()
+    }
+
+    override fun afterFailGetMarkets() {
+        progress_bar.hide()
+        showError(R.string.common_server_error, R.id.root)
     }
 
     private fun getEmptyView(): View {

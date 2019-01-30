@@ -48,19 +48,33 @@ enum class TransactionType(var id: Int,
             R.string.history_type_cancel_sponsorship),
     RECEIVE_SPONSORSHIP_TYPE(Constants.ID_RECEIVE_SPONSORSHIP_TYPE, R.drawable.ic_t_sponsored_plus_48,
             R.string.history_type_receive_sponsorship),
-    SET_SCRIPT_TYPE(Constants.ID_SET_SCRIPT_TYPE, R.drawable.ic_t_setscript_48,
-            R.string.history_type_set_script),
-    CANCEL_SCRIPT_TYPE(Constants.ID_CANCEL_SCRIPT_TYPE, R.drawable.ic_t_setscript_cancel_48,
-            R.string.history_type_cancel_script),
+    SET_ADDRESS_SCRIPT_TYPE(Constants.ID_SET_ADDRESS_SCRIPT_TYPE, R.drawable.ic_t_setscript_48,
+            R.string.history_type_set_address_script),
+    CANCEL_ADDRESS_SCRIPT_TYPE(Constants.ID_CANCEL_ADDRESS_SCRIPT_TYPE, R.drawable.ic_t_setscript_cancel_48,
+            R.string.history_type_cancel_address_script),
+    UPDATE_ASSET_SCRIPT_TYPE(Constants.ID_UPDATE_ASSET_SCRIPT_TYPE, R.drawable.ic_t_setassetscript_48,
+            R.string.history_type_update_asset_script),
     UNRECOGNISED_TYPE(Constants.ID_UNRECOGNISED_TYPE, R.drawable.ic_t_undefined_48,
             R.string.history_type_unrecognised);
 
     companion object {
+
         fun getTypeById(id: Int): TransactionType {
             TransactionType.values().forEach {
                 if (it.id == id) return it
             }
             return TransactionType.UNRECOGNISED_TYPE
+        }
+
+        fun isZeroTransferOrExchange(type: TransactionType): Boolean {
+            return (type == TransactionType.CREATE_ALIAS_TYPE
+                    || type == TransactionType.DATA_TYPE
+                    || type == TransactionType.SET_ADDRESS_SCRIPT_TYPE
+                    || type == TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE
+                    || type == TransactionType.SET_SPONSORSHIP_TYPE
+                    || type == TransactionType.CANCEL_SPONSORSHIP_TYPE
+                    || type == TransactionType.UPDATE_ASSET_SCRIPT_TYPE
+                    || type == TransactionType.EXCHANGE_TYPE)
         }
     }
 }

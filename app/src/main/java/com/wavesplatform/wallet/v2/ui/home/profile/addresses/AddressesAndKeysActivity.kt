@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.AliasBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.copyToClipboard
+import com.wavesplatform.wallet.v2.util.showSuccess
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_profile_addresses_and_keys.*
 import pers.victor.ext.click
@@ -86,6 +87,12 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
                 bottomSheetFragment.type = AliasBottomSheetFragment.TYPE_CONTENT
             }
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+            bottomSheetFragment.onCreateAliasListener = object : AliasBottomSheetFragment.OnCreateAliasListener {
+                override fun onSuccess() {
+                    bottomSheetFragment.dismiss()
+                    showSuccess(getString(R.string.new_alias_success_create), R.id.root)
+                }
+            }
         }
     }
 

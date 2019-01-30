@@ -20,11 +20,11 @@ public class EnvironmentManager {
 
     public static final String KEY_ENV_MAIN_NET = "env_prod";
     public static final String KEY_ENV_TEST_NET = "env_testnet";
-    public static final String URL_COMMISSION_MAIN_NET = "https://raw.githubusercontent.com/" +
+    public static final String URL_COMMISSION_MAIN_NET = "https://github-proxy.wvservices.com/" +
             "wavesplatform/waves-client-config/master/fee.json";
-    private static final String URL_CONFIG_MAIN_NET = "https://raw.githubusercontent.com/" +
+    private static final String URL_CONFIG_MAIN_NET = "https://github-proxy.wvservices.com/" +
             "wavesplatform/waves-client-config/master/environment_mainnet.json";
-    private static final String URL_CONFIG_TEST_NET = "https://raw.githubusercontent.com/" +
+    private static final String URL_CONFIG_TEST_NET = "https://github-proxy.wvservices.com/" +
             "wavesplatform/waves-client-config/master/environment_testnet.json";
     private static final String JSON_FILENAME_MAIN_NET = "environment_mainnet.json";
     private static final String JSON_FILENAME_TEST_NET = "environment_testnet.json";
