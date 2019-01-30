@@ -36,7 +36,7 @@ class TokenBurnPresenter @Inject constructor() : BasePresenter<TokenBurnView>() 
                 matcherDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(
                         App.getAccessManager().getWallet()?.address ?: ""),
-                nodeDataManager.scriptAssetInfo(assetId),
+                nodeDataManager.assetDetails(assetId),
                 Function3 { t1: GlobalTransactionCommission,
                             t2: ScriptInfo,
                             t3: AssetsDetails ->

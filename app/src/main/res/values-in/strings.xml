@@ -505,6 +505,7 @@
     <string name="sell_btn_txt">Jual %s</string>
     <string name="send_amount">Jumlah</string>
     <string name="send_amount_error_insufficient_funds">Dana tidak mencukupi</string>
+    <string name="send_spam_error">This is spam asset</string>
     <string name="send_asset">Aset</string>
     <string name="send_choose_from_address_book">Pilih dari buku Alamat</string>
     <string name="send_confirmation_confirm">Konfirmasi</string>
@@ -534,6 +535,7 @@
     <string name="send_recipient">Penerima</string>
     <string name="send_recipient_address_hint">Alamat penerima…</string>
     <string name="send_recipient_the_address_is_not_valid">Alamatnya tidak valid</string>
+    <string name="send_recipient_asset_is_not_valid">The asset is not valid</string>
     <string name="send_select_your_asset">Pilih aset Anda</string>
     <string name="send_success_do_you_want_to_save_this_address">Apakah Anda ingin menyimpan alamat ini?</string>
     <string name="send_success_okay">Ok</string>
