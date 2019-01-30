@@ -68,8 +68,9 @@ class HistoryFragment : BaseFragment(), HistoryView {
         appbar_layout.addOnOffsetChangedListener(
                 AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
                     onElevationAppBarChangeListener.notNull {
-                        onElevationAppBarChangeListener?.onChange(verticalOffset == 0)
-                        viewpager_history.setPagingEnabled(verticalOffset == 0)
+                        presenter.hideShadow = verticalOffset == 0
+                        onElevationAppBarChangeListener?.onChange(presenter.hideShadow)
+                        viewpager_history.setPagingEnabled(presenter.hideShadow)
                     }
                 })
     }
@@ -81,6 +82,20 @@ class HistoryFragment : BaseFragment(), HistoryView {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            applyElevation()
+        }
+    }
+
+    private fun applyElevation() {
+        onElevationAppBarChangeListener?.let {
+            onElevationAppBarChangeListener?.onChange(presenter.hideShadow)
+        }
     }
 
     companion object {
