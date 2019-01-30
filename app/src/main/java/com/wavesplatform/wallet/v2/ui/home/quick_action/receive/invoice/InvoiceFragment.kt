@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
+import com.wavesplatform.wallet.v2.util.applyFilterStartWithDot
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_invoice.*
@@ -104,6 +105,8 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         } else {
             View.GONE
         }
+
+        edit_amount.applyFilterStartWithDot()
 
         text_asset.gone()
         container_asset.visiable()

@@ -105,6 +105,8 @@ class SendActivity : BaseActivity(), SendView {
                     checkRecipient(it.toString())
                 })
 
+        edit_amount.applyFilterStartWithDot()
+
         edit_amount.addTextChangedListener {
             on { s, _, _, _ ->
                 if (s.isNotEmpty()) {

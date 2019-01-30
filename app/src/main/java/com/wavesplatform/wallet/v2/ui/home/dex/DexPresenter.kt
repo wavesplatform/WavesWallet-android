@@ -14,6 +14,7 @@ import javax.inject.Inject
 class DexPresenter @Inject constructor() : BasePresenter<DexView>() {
 
     var pairSubscriptions = CompositeDisposable()
+    var hideShadow: Boolean = true
 
     fun loadActiveMarkets() {
         runAsync {

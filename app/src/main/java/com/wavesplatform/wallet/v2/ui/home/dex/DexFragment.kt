@@ -21,8 +21,6 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketsActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.REQUEST_SORTING
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.util.currentDateAsTimeSpanString
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
@@ -90,7 +88,8 @@ class DexFragment : BaseFragment(), DexView {
 
         recycle_dex.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                onElevationAppBarChangeListener?.onChange(!recycle_dex.canScrollVertically(-1))
+                presenter.hideShadow = !recycle_dex.canScrollVertically(-1)
+                onElevationAppBarChangeListener?.onChange(presenter.hideShadow)
             }
         })
 
@@ -215,6 +214,7 @@ class DexFragment : BaseFragment(), DexView {
         if (hidden) {
             presenter.clearOldPairsSubscriptions()
         } else {
+            applyElevation()
             loadInfoForPairs()
         }
     }
@@ -228,6 +228,12 @@ class DexFragment : BaseFragment(), DexView {
             addMarketsItem?.icon?.alpha = 255 // 1.0
         } else {
             addMarketsItem?.icon?.alpha = 77 // 0.3
+        }
+    }
+
+    private fun applyElevation() {
+        onElevationAppBarChangeListener?.let {
+            onElevationAppBarChangeListener?.onChange(presenter.hideShadow)
         }
     }
 
