@@ -121,8 +121,8 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
         fee = 0L
         addSubscription(Observable.zip(
                 matcherDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAssetInfo(assetIdPrice),
-                nodeDataManager.scriptAssetInfo(assetIdAmount),
+                nodeDataManager.assetDetails(assetIdPrice),
+                nodeDataManager.assetDetails(assetIdAmount),
                 Function3 { t1: GlobalTransactionCommission,
                             t2: AssetsDetails,
                             t3: AssetsDetails ->

@@ -505,6 +505,7 @@
     <string name="sell_btn_txt">Verkaufen %s</string>
     <string name="send_amount">Menge</string>
     <string name="send_amount_error_insufficient_funds">Unzureichende Mittel</string>
+    <string name="send_spam_error">This is spam asset</string>
     <string name="send_asset">Asset</string>
     <string name="send_choose_from_address_book">Wählen Sie aus dem Adressbuch</string>
     <string name="send_confirmation_confirm">Bestätigen</string>
@@ -534,6 +535,7 @@
     <string name="send_recipient">Empfänger</string>
     <string name="send_recipient_address_hint">Empfängeradresse…</string>
     <string name="send_recipient_the_address_is_not_valid">Die Adresse ist nicht gültig</string>
+    <string name="send_recipient_asset_is_not_valid">The asset is not valid</string>
     <string name="send_select_your_asset">Wählen Sie Ihr Asset aus</string>
     <string name="send_success_do_you_want_to_save_this_address">Möchten Sie diese Adresse speichern?</string>
     <string name="send_success_okay">Okay</string>

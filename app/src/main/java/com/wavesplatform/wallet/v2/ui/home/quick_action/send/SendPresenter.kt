@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
+import com.wavesplatform.wallet.v2.util.isSpamConsidered
 import com.wavesplatform.wallet.v2.util.isValidAddress
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
@@ -218,7 +219,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         addSubscription(Observable.zip(
                 matcherDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(App.getAccessManager().getWallet()?.address!!),
-                nodeDataManager.scriptAssetInfo(assetId),
+                nodeDataManager.assetDetails(assetId),
                 Function3 { t1: GlobalTransactionCommission,
                             t2: ScriptInfo,
                             t3: AssetsDetails ->
@@ -240,6 +241,33 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     fee = 0L
                     viewState.showCommissionError()
                 }))
+    }
+
+    fun loadAsset(assetId: String) {
+        addSubscription(
+                nodeDataManager.assetDetails(assetId)
+                        .compose(RxUtil.applyObservableDefaultSchedulers())
+                        .subscribe({ assetsDetails ->
+                            val assetBalance = AssetBalance(
+                                    assetsDetails.assetId,
+                                    quantity = assetsDetails.quantity,
+                                    issueTransaction = IssueTransaction(
+                                            assetId = assetsDetails.assetId,
+                                            id = assetsDetails.assetId,
+                                            name = assetsDetails.name,
+                                            decimals = assetsDetails.decimals,
+                                            quantity = assetsDetails.quantity,
+                                            description = assetsDetails.description,
+                                            reissuable = assetsDetails.reissuable,
+                                            timestamp = assetsDetails.issueTimestamp,
+                                            sender = assetsDetails.issuer))
+                            viewState.showLoadAssetSuccess(assetBalance)
+                            if (isSpamConsidered(assetId, prefsUtil)) {
+                                viewState.onShowError(R.string.send_spam_error)
+                            }
+                        }, {
+                            viewState.showLoadAssetError(R.string.common_server_error)
+                        }))
     }
 
     companion object {
