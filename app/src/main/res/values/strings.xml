@@ -625,4 +625,8 @@
     <string name="your_asset_activity_greater_zero">With balance</string>
     <string name="your_assets_empty_state">Nothing Here… \nYou do not have assets with funds</string>
     <string name="your_assets_toolbar_title">Your assets</string>
+
+    <string name="history_details_status">Status</string>
+    <string name="history_details_view_on_explorer">View on Explorer</string>
+
 </resources>

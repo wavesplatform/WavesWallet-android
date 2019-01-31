@@ -37,8 +37,8 @@ class HistoryTransactionPagerAdapter constructor(
                     .map { it.data }
                     .toList()
 
-            bottomSheetFragment.configureData(item.data, position, allItems)
-            bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
+//            bottomSheetFragment.configureData(item.data, position, allItems)
+//            bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
         }
 
         layout.text_tag.gone()

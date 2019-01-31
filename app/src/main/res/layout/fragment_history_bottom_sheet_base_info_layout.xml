@@ -1,33 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:orientation="vertical">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/view_line_1"
+        style="@style/DashedLine"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="16dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/view_line_1"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_marginBottom="14dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:background="@drawable/shape_dashed_line"
-            android:visibility="gone"
-            android:layerType="software"
-            tools:visibility="visible"/>
+            android:layout_marginBottom="9dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_block_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/history_details_block"
+                android:textColor="@color/basic500" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_block"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/disabled900"
+                tools:text="106060" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_confirmations_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/history_details_confirmations"
+                android:textColor="@color/basic500" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_confirmations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/disabled900"
+                tools:text="0" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_fee_hint"
@@ -36,87 +79,35 @@
                 android:text="@string/history_details_fee"
                 android:textColor="@color/basic500" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_fee"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_fee_hint"
-                android:layout_marginTop="5dp"
-                tools:text="0.00000001 NodeTX2"
-                android:textColor="@color/disabled900" />
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_fee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/disabled900"
+                    tools:text="0.00000001 NodeTX2" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_base_info_tag"
+                    style="@style/TickerTag"
+                    android:layout_marginStart="4dp"
+                    android:visibility="gone"
+                    android:text="@string/common_waves_asset_name"
+                    tools:visibility="visible" />
+            </LinearLayout>
         </RelativeLayout>
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/view_line_2"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_marginBottom="14dp"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/shape_dashed_line"
-            android:layerType="software" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_confirmations_hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/history_details_confirmations"
-                    android:textColor="@color/basic500" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_confirmations"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="0"
-                    android:textColor="@color/disabled900" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_block_hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/history_details_block"
-                    android:textColor="@color/basic500" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_block"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="106060"
-                    android:textColor="@color/disabled900" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/view_line_3"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_marginBottom="14dp"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/shape_dashed_line"
-            android:layerType="software" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_timestamp_hint"
@@ -129,26 +120,44 @@
                 android:id="@+id/text_timestamp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_timestamp_hint"
-                android:layout_marginTop="5dp"
-                android:text="DD.MM.YYYY at 00:00"
-                android:textColor="@color/disabled900" />
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/disabled900"
+                tools:text="DD.MM.YYYY at 00:00" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="14dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_status_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/history_details_status"
+                android:textColor="@color/basic500" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/text_timestamp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:background="@drawable/success400_01_shape"
-                android:paddingBottom="4dp"
                 android:paddingLeft="6dp"
-                android:textSize="12sp"
-                android:paddingRight="6dp"
                 android:paddingTop="4dp"
+                android:paddingRight="6dp"
+                android:paddingBottom="4dp"
                 android:text="@string/history_details_completed"
-                android:textColor="@color/success500" />
-
+                android:textColor="@color/success500"
+                android:textSize="12sp" />
         </RelativeLayout>
+
     </LinearLayout>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/view_line_2"
+        style="@style/DashedLine"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp" />
 </LinearLayout>

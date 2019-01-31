@@ -3,8 +3,8 @@ package com.wavesplatform.wallet.v2.ui.home.history.details
 import android.app.Activity
 import android.content.ClipData
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v4.view.ViewPager
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -24,8 +23,8 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
@@ -41,8 +40,11 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
+import kotlinx.android.synthetic.main.history_details_layout.view.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.concurrent.TimeUnit
@@ -50,10 +52,7 @@ import javax.inject.Inject
 
 
 class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), HistoryDetailsView {
-    var selectedItemPosition: Int = 0
     var selectedItem: Transaction? = null
-    var allItems: List<Transaction>? = ArrayList()
-    var viewPager: ViewPager? = null
     var rootView: View? = null
     var inflater: LayoutInflater? = null
 
@@ -67,6 +66,8 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
     @Inject
     lateinit var gson: Gson
 
+    @Inject
+    lateinit var prefsUtil: PrefsUtil
 
     @ProvidePresenter
     fun providePresenter(): HistoryDetailsPresenter = presenter
@@ -77,21 +78,297 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
         this.inflater = inflater
 
-        rootView = inflater.inflate(R.layout.history_details_bottom_sheet_dialog, container, false)
+        rootView = inflate(R.layout.history_details_bottom_sheet_dialog, container, false)
+        val container = rootView?.findViewById<LinearLayout>(R.id.main_container)
 
-        setupHistoryViewPager(rootView!!)
-
-        rootView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.click {
-            viewPager?.currentItem = viewPager?.currentItem!! - 1
-
-            checkStepIconState()
-        }
-        rootView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.click {
-            viewPager?.currentItem = viewPager?.currentItem!! + 1
-            checkStepIconState()
+        selectedItem?.let {
+            container?.apply {
+                addView(setupHeader(it))
+                addView(setupBody(it))
+                addView(setupTransactionInfo(it))
+                addView(setupFooter(it))
+            }
         }
 
         return rootView
+    }
+
+    private fun setupHeader(transaction: Transaction): View? {
+        val view = inflate(R.layout.history_details_layout)
+
+        view.text_tag.gone()
+        view.text_transaction_value.setTypeface(null, Typeface.NORMAL)
+        val decimals = transaction.asset?.precision ?: 8
+
+        transaction.transactionType().notNull {
+            view.image_transaction_type.setImageDrawable(it.icon())
+            view.text_transaction_name.text = getString(it.title)
+            when (it) {
+                TransactionType.SENT_TYPE -> {
+                    transaction.amount.notNull {
+                        view.text_transaction_value.text =
+                                "-${getScaledAmount(it, decimals)}"
+                    }
+                }
+                TransactionType.RECEIVED_TYPE -> {
+                    transaction.amount.notNull {
+                        view.text_transaction_value.text =
+                                "+${getScaledAmount(it, decimals)}"
+                    }
+                }
+                TransactionType.MASS_SPAM_RECEIVE_TYPE,
+                TransactionType.MASS_RECEIVE_TYPE,
+                TransactionType.MASS_SEND_TYPE -> {
+                    view.text_transaction_value.text = getTransactionAmount(
+                            transaction = transaction, decimals = decimals)
+                }
+                TransactionType.CREATE_ALIAS_TYPE -> {
+                    view.text_transaction_value.text = transaction.alias
+                    view.text_transaction_value.setTypeface(null, Typeface.BOLD)
+                }
+                TransactionType.EXCHANGE_TYPE -> {
+                    setExchangeItem(transaction, view)
+                }
+                TransactionType.CANCELED_LEASING_TYPE -> {
+                    transaction.lease?.amount.notNull {
+                        view.text_transaction_value.text = getScaledAmount(it, decimals)
+                    }
+                }
+                TransactionType.TOKEN_BURN_TYPE -> {
+                    transaction.amount.notNull {
+                        view.text_transaction_value.text =
+                                "-${getScaledAmount(it, decimals)}"
+                    }
+                }
+                TransactionType.TOKEN_GENERATION_TYPE,
+                TransactionType.TOKEN_REISSUE_TYPE -> {
+                    val quantity = getScaledAmount(transaction.quantity, decimals)
+                    view.text_transaction_value.text = "+$quantity"
+                }
+                TransactionType.DATA_TYPE,
+                TransactionType.SET_ADDRESS_SCRIPT_TYPE,
+                TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
+                TransactionType.SET_SPONSORSHIP_TYPE,
+                TransactionType.CANCEL_SPONSORSHIP_TYPE,
+                TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
+                    view.text_transaction_name.text = getString(R.string.history_data_type_title)
+                    view.text_transaction_value.text = getString(transaction.transactionType().title)
+                    view.text_transaction_value.setTypeface(null, Typeface.BOLD)
+                }
+                else -> {
+                    transaction.amount.notNull {
+                        view.text_transaction_value.text = getScaledAmount(it, decimals)
+                    }
+                }
+            }
+        }
+
+        if (!TransactionType.isZeroTransferOrExchange(transaction.transactionType())) {
+            if (isSpamConsidered(transaction.assetId, prefsUtil)) {
+                // nothing
+            } else {
+                if (isShowTicker(transaction.assetId)) {
+                    val ticker = transaction.asset?.getTicker()
+                    if (!ticker.isNullOrBlank()) {
+                        view.text_tag.text = ticker
+                        view.text_tag.visiable()
+                    }
+                } else {
+                    view.text_transaction_name.text = "${view.text_transaction_name.text} ${transaction.asset?.name}"
+                }
+            }
+        }
+        view.text_transaction_value.makeTextHalfBold()
+
+        return view
+    }
+
+    private fun setupBody(transaction: Transaction): View? {
+        return View(activity)
+    }
+
+    private fun setupTransactionInfo(transaction: Transaction): View? {
+        val layout = inflate(R.layout.fragment_history_bottom_sheet_base_info_layout)
+
+        fun showTransactionFee() {
+            if (transaction.feeAssetObject?.name?.isWaves() == true) {
+                layout.text_fee?.text = MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()
+                layout.text_base_info_tag.visiable()
+            } else {
+                layout.text_fee?.text = "${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()} ${transaction.feeAssetObject?.name}"
+                layout.text_base_info_tag.gone()
+            }
+        }
+
+        val confirmations = preferencesHelper.currentBlocksHeight - transaction.height
+        layout.text_confirmations?.text = if (confirmations < 0) {
+            "0"
+        } else {
+            confirmations.toString()
+        }
+        layout.text_block?.text = transaction.height.toString()
+        layout.text_timestamp?.text = transaction.timestamp.date("dd.MM.yyyy HH:mm")
+
+        showTransactionFee()
+
+        if (preferencesHelper.currentBlocksHeight.minus(transaction.height) > 0) {
+            layout.text_status?.setBackgroundResource(R.drawable.success400_01_shape)
+            layout.text_status?.text = getString(R.string.history_details_completed)
+            layout.text_status?.setTextColor(findColor(R.color.success500))
+        } else {
+            layout.text_status?.setBackgroundResource(R.drawable.warning400_01_shape)
+            layout.text_status?.text = getString(R.string.history_details_unconfirmed)
+            layout.text_status?.setTextColor(findColor(R.color.warning600))
+        }
+
+        return layout
+    }
+
+    private fun setupFooter(transaction: Transaction): View? {
+        val view = inflate(R.layout.fragment_history_bottom_sheet_bottom_btns)
+
+        fun changeViewMargin(view: View) {
+            val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            llp.setMargins(dp2px(8), 0, 0, 0)
+            view.layoutParams = llp
+        }
+
+        eventSubscriptions.add(RxView.clicks(view.frame_close)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    dismiss()
+                })
+
+        eventSubscriptions.add(RxView.clicks(view.text_copy_tx_id)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    copyToClipboard(transaction.id, view.text_copy_tx_id, R.string.history_details_copy_tx_id)
+                })
+
+        eventSubscriptions.add(RxView.clicks(view.text_copy_all_data)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    copyToClipboard(Transaction.getInfo(transaction), view.text_copy_all_data,
+                            R.string.history_details_copy_all_data)
+                })
+
+        eventSubscriptions.add(RxView.clicks(view.text_view_on_explorer)
+                .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    // TODO: Open explorer
+                })
+
+        when (transaction.transactionType()) {
+            TransactionType.SENT_TYPE -> {
+                view.text_send_again.visiable()
+
+                changeViewMargin(view.text_view_on_explorer)
+
+                val assetBalance = queryFirst<AssetBalance> {
+                    equalTo("assetId", transaction.assetId ?: "")
+                }
+                if (assetBalance != null && (nonGateway(assetBalance, transaction)
+                                || assetBalance.isWaves() || assetBalance.isFiatMoney)) {
+                    eventSubscriptions.add(RxView.clicks(view.text_send_again)
+                            .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe {
+                                launchActivity<SendActivity> {
+                                    putExtra(SendActivity.KEY_INTENT_REPEAT_TRANSACTION, true)
+                                    putExtra(SendActivity.KEY_INTENT_TRANSACTION_ASSET_BALANCE, assetBalance)
+                                    putExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT,
+                                            MoneyUtil.getScaledText(transaction.amount, transaction.asset)
+                                                    .clearBalance())
+                                    putExtra(SendActivity.KEY_INTENT_TRANSACTION_RECIPIENT,
+                                            transaction.recipientAddress)
+                                    if (!transaction.attachment.isNullOrEmpty()) {
+                                        putExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT,
+                                                String(Base58.decode(transaction.attachment)))
+                                    } else {
+                                        putExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT, "")
+                                    }
+                                }
+                            })
+                }
+            }
+            TransactionType.STARTED_LEASING_TYPE -> {
+                view.text_cancel_leasing.visiable()
+
+                changeViewMargin(view.text_view_on_explorer)
+
+                if (transaction.status == LeasingStatus.ACTIVE.status) {
+                    eventSubscriptions.add(RxView.clicks(view.text_cancel_leasing)
+                            .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe {
+                                launchActivity<ConfirmationCancelLeasingActivity>(
+                                        ConfirmationCancelLeasingActivity.REQUEST_CANCEL_LEASING_CONFIRMATION) {
+                                    putExtra(ConfirmationCancelLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING_TX,
+                                            transaction.id)
+                                    putExtra(ConfirmationCancelLeasingActivity.BUNDLE_ADDRESS, transaction.recipient)
+                                    putExtra(ConfirmationCancelLeasingActivity.BUNDLE_AMOUNT,
+                                            MoneyUtil.getScaledText(transaction.amount, transaction.asset))
+                                }
+                            })
+                }
+            }
+            else -> {
+                view.text_send_again.gone()
+                view.text_cancel_leasing.gone()
+            }
+        }
+        return view
+    }
+
+    private fun setExchangeItem(transaction: Transaction, view: View) {
+        val myOrder = findMyOrder(
+                transaction.order1!!,
+                transaction.order2!!,
+                App.getAccessManager().getWallet()?.address)
+        val secondOrder = if (myOrder.id == transaction.order1!!.id) {
+            transaction.order2!!
+        } else {
+            transaction.order1!!
+        }
+
+        val directionStringResId: Int
+        val directionSign: String
+        val amountAsset = myOrder.assetPair?.amountAssetObject!!
+        val amountValue = getScaledAmount(transaction.amount,
+                transaction.asset?.precision ?: 8)
+
+        if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
+            directionStringResId = R.string.history_my_dex_intent_sell
+            directionSign = "-"
+        } else {
+            directionStringResId = R.string.history_my_dex_intent_buy
+            directionSign = "+"
+        }
+
+        view.text_transaction_name.text = getString(
+                directionStringResId,
+                amountAsset.name,
+                secondOrder.assetPair?.priceAssetObject?.name)
+
+        val amountAssetTicker = if (amountAsset.name == "WAVES") {
+            "WAVES"
+        } else {
+            amountAsset.ticker
+        }
+
+        val assetName = if (amountAssetTicker.isNullOrEmpty()) {
+            " ${amountAsset.name}"
+        } else {
+            view.text_tag.visiable()
+            view.text_tag.text = amountAssetTicker
+            ""
+        }
+
+        view.text_transaction_value.text = directionSign + amountValue + assetName
     }
 
     private fun copyToClipboard(textToCopy: String, view: TextView, btnText: Int) {
@@ -156,22 +433,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
             status?.setTextColor(findColor(R.color.warning600))
         }
 
-
-        /** Add click to copy buttons **/
-        eventSubscriptions.add(RxView.clicks(bottomBtns?.container_copy_tx_id!!)
-                .throttleFirst(1500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    copyToClipboard(transaction.id, bottomBtns.text_copy_tx_id, R.string.history_details_copy_tx_id)
-                })
-
-        eventSubscriptions.add(RxView.clicks(bottomBtns.container_copy_all_data!!)
-                .throttleFirst(1500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    copyToClipboard(Transaction.getInfo(transaction), bottomBtns.text_copy_all_data,
-                            R.string.history_details_copy_all_data)
-                })
 
         historyContainer?.removeAllViews()
 
@@ -515,52 +776,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         }
     }
 
-    private fun setupHistoryViewPager(view: View) {
-        viewPager = view.findViewById(R.id.viewpager_history_item)
-        historyDetailsAdapter.mData = allItems!!
-        viewPager?.adapter = historyDetailsAdapter
-        viewPager?.currentItem = selectedItemPosition
-        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-
-            override fun onPageSelected(position: Int) {
-                val historyItem = historyDetailsAdapter.mData[position]
-                selectedItem = historyItem
-                selectedItemPosition = position
-
-                setupView(historyItem)
-
-                checkStepIconState()
-            }
-        })
-
-        checkStepIconState()
-
-        selectedItem?.let {
-            setupView(it)
-        }
-    }
-
-    private fun checkStepIconState() {
-        if (viewPager?.currentItem == 0 && viewPager?.adapter?.count == 1) {
-            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 0.5F
-            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 0.5F
-        } else if (viewPager?.currentItem == 0) {
-            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 0.5F
-            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 1.0F
-        } else if (viewPager?.currentItem == viewPager?.adapter?.count!! - 1) {
-            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 1.0F
-            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 0.5F
-        } else {
-            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_preview)?.alpha = 1.0F
-            rootView?.findViewById<ImageView>(R.id.image_icon_go_to_next)?.alpha = 1.0F
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AddressBookActivity.REQUEST_EDIT_ADDRESS || requestCode == AddressBookActivity.REQUEST_ADD_ADDRESS) {
@@ -574,7 +789,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         if (requestCode == StartLeasingActivity.REQUEST_CANCEL_LEASING_CONFIRMATION) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
-                    rxEventBus.post(Events.UpdateListOfActiveTransaction(selectedItemPosition))
+//                    rxEventBus.post(Events.UpdateListOfActiveTransaction(selectedItemPosition))
                     dismiss()
                 }
                 Constants.RESULT_SMART_ERROR -> {
@@ -588,9 +803,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
     }
 
-    fun configureData(selectedItem: Transaction, selectedPosition: Int, allItems: List<Transaction>) {
+    fun configureData(selectedItem: Transaction) {
         this.selectedItem = selectedItem
-        this.selectedItemPosition = selectedPosition
-        this.allItems = allItems
     }
 }

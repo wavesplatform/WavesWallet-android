@@ -128,7 +128,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
                 val selectedPositionWithoutHeaders = position - sectionSize
 
-                bottomSheetFragment.configureData(historyItem.data, selectedPositionWithoutHeaders, allItems)
+                bottomSheetFragment.configureData(historyItem.data)
                 bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
             }
         }
