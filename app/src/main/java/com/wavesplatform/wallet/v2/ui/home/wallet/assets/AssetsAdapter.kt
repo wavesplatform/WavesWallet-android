@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.util.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.wallet_asset_item.view.*
@@ -82,11 +83,11 @@ class AssetsAdapter @Inject constructor() :
 
                 val item = item as AssetBalance
                 helper.setText(R.id.text_asset_name, item.getName())
-                        .setText(R.id.text_asset_value, item.getDisplayAvailableBalance())
+                        .setText(R.id.text_asset_value, getScaledAmount(
+                                item.getAvailableBalance() ?: 0L, item.getDecimals()))
                         .setGone(R.id.image_favourite, item.isFavorite)
                         .setGone(R.id.text_my_asset, item.issueTransaction?.sender
                                 == App.getAccessManager().getWallet()?.address)
-                        .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
                         .setGone(R.id.text_tag_spam, item.isSpam)
 
                 helper.itemView.image_asset_icon.isOval = true

@@ -1,12 +1,13 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
 import com.arellomobile.mvp.InjectViewState
-import com.vicpin.krealmextensions.queryAllAsync
+import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.saveAll
+import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.RxUtil
 import pyxis.uzuki.live.richutilskt.utils.runAsync
-import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 @InjectViewState
@@ -16,26 +17,46 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
 
     fun loadAssets() {
         runAsync {
-            queryAllAsync<AssetBalance> {
-                val favoriteList = it.filter({ it.isFavorite }).sortedBy { it.position }.sortedByDescending({ it.isFavorite }).toMutableList()
-                val notFavoriteList = it.filter({ !it.isFavorite && !it.isSpam }).sortedBy { it.position }.toMutableList()
+            addSubscription(queryAllAsSingle<AssetBalance>().toObservable()
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe({
+                        val result = mutableListOf<AssetSortingItem>()
 
-                runOnUiThread {
-                    viewState.showFavoriteAssets(favoriteList)
+                        val favoriteList = it.filter { it.isFavorite }
+                                .sortedBy { it.position }
+                                .sortedByDescending { it.isFavorite }
+                                .mapTo(mutableListOf()) {
+                                    AssetSortingItem(AssetSortingItem.TYPE_FAVORITE, it)
+                                }
+                        val notFavoriteList = it.filter({ !it.isFavorite && !it.isSpam })
+                                .sortedBy { it.position }
+                                .mapTo(mutableListOf()) {
+                                    AssetSortingItem(AssetSortingItem.TYPE_NOT_FAVORITE, it)
+                                }
 
-                    viewState.showNotFavoriteAssets(notFavoriteList)
+                        result.addAll(favoriteList)
+                        if (favoriteList.isNotEmpty() && notFavoriteList.isNotEmpty()) {
+                            result.add(AssetSortingItem(AssetSortingItem.TYPE_LINE))
+                        }
+                        result.addAll(notFavoriteList)
 
-                    viewState.checkIfNeedToShowLine()
-                }
-            }
+                        viewState.showAssets(result)
+                    }, {
+                        it.printStackTrace()
+                    }))
         }
     }
 
-    fun saveSortedPositions(data: List<AssetBalance>) {
-        data.forEachIndexed { index, assetBalance ->
+    fun saveSortedPositions(data: MutableList<AssetSortingItem>) {
+        val list = data
+                .mapTo(mutableListOf()) {
+                    it.asset
+                }
+                .filter { !it.isWaves() }
+        list.forEachIndexed { index, assetBalance ->
             assetBalance.position = index
         }
-        data.saveAll()
+        list.saveAll()
     }
 
 }

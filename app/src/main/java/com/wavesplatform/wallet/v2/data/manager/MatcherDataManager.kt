@@ -20,7 +20,6 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import pers.victor.ext.currentTimeMillis
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -121,8 +120,16 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
                             market.popular = it.first[market.amountAsset] != null && it.first[market.priceAsset] != null
 
-                            market.amountAssetDecimals = market.amountAssetInfo.decimals
-                            market.priceAssetDecimals = market.priceAssetInfo.decimals
+                            market.amountAssetDecimals = if (market.amountAssetInfo == null) {
+                                8
+                            } else {
+                                market.amountAssetInfo.decimals
+                            }
+                            market.priceAssetDecimals = if (market.priceAssetInfo == null) {
+                                8
+                            } else {
+                                market.priceAssetInfo.decimals
+                            }
 
                             val group = hashGroup[market.amountAsset]
                             if (group != null) {
@@ -143,6 +150,10 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         }
     }
 
+    fun getGlobalCommission(): Observable<GlobalTransactionCommission> {
+        return apiService.loadGlobalCommission()
+    }
+
     private fun filterMarketsBySpamAndSelect(markets: List<MarketResponse>): Observable<MutableList<MarketResponse>> {
         return Observable.zip(Observable.just(markets), queryAllAsSingle<SpamAsset>().toObservable()
                 .map {
@@ -155,10 +166,10 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                             return@map map
                         }
                 , Function3 { apiMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAsset>, dbMarkets: Map<String?, MarketResponse> ->
-            val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-                apiMarkets.toMutableList()
-            } else {
+            val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
                 apiMarkets.filter { market -> spamAssets[market.amountAsset] == null && spamAssets[market.priceAsset] == null }
+            } else {
+                apiMarkets.toMutableList()
             }.toMutableList()
 
             filteredSpamList.forEach { market ->

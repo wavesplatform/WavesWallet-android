@@ -2,24 +2,25 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
-import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
+import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
+import com.wavesplatform.wallet.v2.util.drag_helper.SimpleItemTouchHelperCallback
 import kotlinx.android.synthetic.main.activity_assets_sorting.*
 import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.*
@@ -37,9 +38,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
     @Inject
     lateinit var adapter: AssetsSortingAdapter
-
-    @Inject
-    lateinit var adapterFavorites: AssetsFavoriteSortingAdapter
+    private var mItemTouchHelper: ItemTouchHelper? = null
 
     override fun configLayoutRes() = R.layout.activity_assets_sorting
 
@@ -54,18 +53,14 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.wallet_sorting_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        nested_scroll_view.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
-            appbar_layout.isSelected = nested_scroll_view.canScrollVertically(-1)
-        }
+        recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                appbar_layout.isSelected = recycle_assets.canScrollVertically(-1)
+            }
+        })
 
-        recycle_favorite_assets.layoutManager = LinearLayoutManager(this)
-        recycle_favorite_assets.adapter = adapterFavorites
-        recycle_favorite_assets.isNestedScrollingEnabled = false
-        recycle_favorite_assets.itemAnimator = FadeInWithoutDelayAnimator()
-
+        adapter.bindToRecyclerView(recycle_assets)
         recycle_assets.layoutManager = LinearLayoutManager(this)
-        recycle_assets.adapter = adapter
-        recycle_assets.isNestedScrollingEnabled = false
         recycle_assets.itemAnimator = FadeInWithoutDelayAnimator()
 
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
@@ -73,53 +68,50 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 R.id.image_favorite -> {
                     presenter.needToUpdate = true
 
-                    // manage UI
-                    val item = this.adapter.getItem(position) as AssetBalance
+                    val globalItem = this.adapter.getItem(position) as AssetSortingItem
+                    val asset = globalItem.asset
+                    val linePosition = getLinePosition()
 
-                    item.isFavorite = true
-                    item.isHidden = false
+                    when (globalItem.itemType) {
+                        AssetSortingItem.TYPE_FAVORITE -> {
+                            if (!asset.assetId.isEmpty()) {
+                                asset.isFavorite = false
+                                asset.configureVisibleState = presenter.visibilityConfigurationActive
 
-                    // add to favorite list
-                    this.adapterFavorites.addData(item)
+                                // remove from favorite list
+                                this.adapter.data.removeAt(position)
+                                this.adapter.notifyItemRemoved(position)
 
-                    // remove from current list
-                    this.adapter.data.removeAt(position)
-                    this.adapter.notifyItemRemoved(position)
+                                // add to not favorite list
+                                globalItem.type = AssetSortingItem.TYPE_NOT_FAVORITE
+                                globalItem.asset = asset
+                                this.adapter.addData(linePosition, globalItem)
 
-                    // Save to DB
-                    item.save()
+                                // Save to DB
+                                asset.save()
+                            }
+                        }
+                        AssetSortingItem.TYPE_NOT_FAVORITE -> {
+                            asset.isFavorite = true
+                            asset.isHidden = false
 
-                    checkIfNeedToShowLine()
-                }
-            }
-        }
+                            // remove from current list
+                            this.adapter.data.removeAt(position)
+                            this.adapter.notifyItemRemoved(position)
 
-        adapterFavorites.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
-            when (view.id) {
-                R.id.image_favorite -> {
-                    presenter.needToUpdate = true
+                            // add to favorite list
+                            globalItem.type = AssetSortingItem.TYPE_FAVORITE
+                            globalItem.asset = asset
+                            this.adapter.addData(linePosition, globalItem)
 
-                    // manage UI
-                    val item = this.adapterFavorites.getItem(position) as AssetBalance
-                    if (!item.assetId.isNullOrEmpty()) {
-                        item.isFavorite = false
-
-                        // add to not favorite list
-                        item.configureVisibleState = presenter.visibilityConfigurationActive
-                        this.adapter.addData(0, item)
-
-                        // remove from favorite list
-                        this.adapterFavorites.data.removeAt(position)
-                        this.adapterFavorites.notifyItemRemoved(position)
-
-                        // Save to DB
-                        item.save()
-
-                        checkIfNeedToShowLine()
+                            // Save to DB
+                            asset.save()
+                        }
                     }
                 }
             }
         }
+
 
         adapter.onHiddenChangeListener = object : AssetsSortingAdapter.OnHiddenChangeListener {
             override fun onHiddenStateChanged(item: AssetBalance, checked: Boolean) {
@@ -130,14 +122,13 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         }
 
         // configure drag and drop
-        val itemDragAndSwipeCallback = ItemDragAndSwipeCallback(adapter)
-        val itemTouchHelper = ItemTouchHelper(itemDragAndSwipeCallback)
-        itemTouchHelper.attachToRecyclerView(recycle_assets)
+        val callback = SimpleItemTouchHelperCallback(adapter)
+        mItemTouchHelper = ItemTouchHelper(callback)
+        mItemTouchHelper?.attachToRecyclerView(recycle_assets)
 
-        // allow drag and manage background of view
-        adapter.enableDragItem(itemTouchHelper, R.id.image_drag, false)
-        adapter.setOnItemDragListener(object : OnItemDragListener {
-            override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+        adapter.mDragStartListener = object : ItemDragListener {
+            override fun onStartDrag(viewHolder: RecyclerView.ViewHolder, position: Int) {
+                mItemTouchHelper?.startDrag(viewHolder)
                 if (view_drag_bg.height == 0) {
                     view_drag_bg.setHeight(viewHolder.itemView.card_asset.height - dp2px(1))
                     view_drag_bg.setWidth(viewHolder.itemView.card_asset.width - dp2px(1))
@@ -147,44 +138,32 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 viewHolder.itemView.card_asset.getLocationOnScreen(originalPos)
                 view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
                 view_drag_bg.visiable()
-
-                if (adapter.getItem(pos)?.isHidden != true) {
-                    viewHolder.itemView.card_asset.cardElevation = dp2px(4).toFloat()
-                }
             }
 
-            override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int, target: RecyclerView.ViewHolder, to: Int) {
+            override fun onMoved(fromHolder: View?, fromPosition: Int, toHolder: View?, toPosition: Int) {
                 presenter.needToUpdate = true
                 val originalPos = IntArray(2)
-                target.itemView.card_asset.getLocationOnScreen(originalPos)
+                toHolder?.card_asset?.getLocationOnScreen(originalPos)
                 view_drag_bg.y = originalPos[1].toFloat() - getStatusBarHeight()
             }
 
-            override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
-                if (adapter.getItem(pos)?.isHidden == true) {
-                    viewHolder.itemView.card_asset.cardElevation = dp2px(0).toFloat()
-                } else {
-                    viewHolder.itemView.card_asset.cardElevation = dp2px(2).toFloat()
-                }
+            override fun onEndDrag() {
                 view_drag_bg.gone()
             }
-        })
+        }
 
         presenter.loadAssets()
     }
 
-    override fun showFavoriteAssets(favorites: List<AssetBalance>) {
-        adapterFavorites.setNewData(favorites)
-        progress_bar.hide()
-    }
-
-    override fun showNotFavoriteAssets(notFavorites: List<AssetBalance>) {
-        adapter.setNewData(notFavorites)
-    }
-
-    override fun checkIfNeedToShowLine() {
-        if (adapter.data.isEmpty() or adapterFavorites.data.isEmpty()) view_divider.gone()
-        else view_divider.visiable()
+    private fun getLinePosition(): Int {
+        var position = adapter.data.indexOfFirst { it.itemType == AssetSortingItem.TYPE_LINE }
+        if (position == -1) {
+            // add line
+            val line = AssetSortingItem(AssetSortingItem.TYPE_LINE)
+            adapter.addData(line)
+            position = adapter.data.indexOfFirst { it.itemType == AssetSortingItem.TYPE_LINE }
+        }
+        return position
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -198,7 +177,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                     item.title = getString(R.string.wallet_sorting_toolbar_visibility_action)
                 }
                 adapter.data.forEach {
-                    it.configureVisibleState = !it.configureVisibleState
+                    it.asset.configureVisibleState = !it.asset.configureVisibleState
                 }
                 adapter.notifyDataSetChanged()
                 return true
@@ -214,7 +193,6 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
     override fun onBackPressed() {
         presenter.saveSortedPositions(adapter.data)
-        presenter.saveSortedPositions(adapterFavorites.data)
 
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_NEED_UPDATE, presenter.needToUpdate)
@@ -228,4 +206,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         progress_bar.hide()
     }
 
+    override fun showAssets(assets: MutableList<AssetSortingItem>) {
+        adapter.setNewData(assets)
+        progress_bar.hide()
+    }
 }

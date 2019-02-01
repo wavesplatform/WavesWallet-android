@@ -138,12 +138,17 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     return@map it
                 }
                 .filter {
-                    it.isNotEmpty()
+                    val validNumber = it.toBigDecimalOrNull()
+                    if (validNumber == null) {
+                        presenter.amountValidation = false
+                        makeButtonEnableIfValid()
+                    }
+                    validNumber != null
                 }
                 .map {
                     if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
-                        val isValid = it.toBigDecimal() < MoneyUtil.getScaledText(presenter.currentAmountBalance
-                                ?: 0, presenter.data?.watchMarket?.market?.amountAssetDecimals
+                        val isValid = it.toBigDecimal() <= MoneyUtil.getScaledText((presenter.currentAmountBalance
+                                ?: 0) - getFeeIfNeed(), presenter.data?.watchMarket?.market?.amountAssetDecimals
                                 ?: 0).clearBalance().toBigDecimal()
                         presenter.amountValidation = isValid
 
@@ -196,7 +201,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     return@map it
                 }
                 .filter {
-                    it.isNotEmpty()
+                    val validNumber = it.toBigDecimalOrNull()
+                    validNumber != null
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ isValid ->
@@ -219,7 +225,12 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter {
-                    it.isNotEmpty()
+                    val validNumber = it.toBigDecimalOrNull()
+                    if (validNumber == null) {
+                        presenter.totalPriceValidation = false
+                        makeButtonEnableIfValid()
+                    }
+                    validNumber != null
                 }
                 .map {
                     if (!presenter.humanTotalTyping) {
@@ -234,12 +245,11 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                         text_limit_price_error.text = getString(R.string.buy_and_sell_required)
                         text_limit_price_error.visiable()
                     }
-                    presenter.wavesBalance.getAvailableBalance().notNull { wavesBalance ->
-                        if (wavesBalance < Constants.WAVES_DEX_FEE) {
-                            linear_fees_error.visiable()
-                        } else {
-                            linear_fees_error.gone()
-                        }
+
+                    if (isValidWavesFee()) {
+                        linear_fees_error.gone()
+                    } else {
+                        linear_fees_error.visiable()
                     }
 
                     if (presenter.humanTotalTyping) {
@@ -259,7 +269,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 }
                 .map {
                     if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
-                        val isValid = it.toBigDecimal() < MoneyUtil.getScaledText(presenter.currentPriceBalance
+                        val isValid = it.toBigDecimal() <= MoneyUtil.getScaledText(presenter.currentPriceBalance
                                 ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                                 ?: 0).clearBalance().toBigDecimal()
                         presenter.totalPriceValidation = isValid
@@ -285,28 +295,37 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 }))
 
 
-        horizontal_limit_price_suggestion.goneIf { presenter.data?.lastPrice == null && presenter.data?.askPrice == null && presenter.data?.bidPrice == null }
+        horizontal_limit_price_suggestion.goneIf {
+            presenter.data?.lastPrice == null
+                    && presenter.data?.askPrice == null && presenter.data?.bidPrice == null
+        }
         text_bid.goneIf { presenter.data?.bidPrice == null }
         text_ask.goneIf { presenter.data?.askPrice == null }
         text_last.goneIf { presenter.data?.lastPrice == null }
 
         text_bid.click {
             presenter.data?.bidPrice.notNull { price ->
-                edit_limit_price.setText(MoneyUtil.getScaledText(price, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                edit_limit_price.setText(MoneyUtil.getScaledPrice(price,
+                        presenter.data?.watchMarket?.market?.amountAssetDecimals
+                                ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros())
             }
         }
 
         text_ask.click {
             presenter.data?.askPrice.notNull { price ->
-                edit_limit_price.setText(MoneyUtil.getScaledText(price, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                edit_limit_price.setText(MoneyUtil.getScaledPrice(price,
+                        presenter.data?.watchMarket?.market?.amountAssetDecimals
+                                ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros())
             }
         }
 
         text_last.click {
             presenter.data?.lastPrice.notNull { price ->
-                edit_limit_price.setText(MoneyUtil.getScaledText(price, presenter.data?.watchMarket?.market?.priceAssetDecimals
+                edit_limit_price.setText(MoneyUtil.getScaledPrice(price,
+                        presenter.data?.watchMarket?.market?.amountAssetDecimals
+                                ?: 0, presenter.data?.watchMarket?.market?.priceAssetDecimals
                         ?: 0).stripZeros())
             }
         }
@@ -363,13 +382,40 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             alert.show()
             alert.makeStyled()
 
-            buttonPositive = alert?.findViewById<Button>(android.R.id.button1)
+            buttonPositive = alert?.findViewById(android.R.id.button1)
             buttonPositive?.setTextColor(findColor(R.color.basic300))
             buttonPositive?.isClickable = false
         }
 
         button_confirm.click {
             presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
+        }
+
+        presenter.loadCommission(presenter.data?.watchMarket?.market?.priceAsset,
+                presenter.data?.watchMarket?.market?.amountAsset)
+    }
+
+    private fun getFeeIfNeed(): Long {
+        return if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true) {
+            presenter.fee
+        } else {
+            0L
+        }
+    }
+
+    private fun isValidWavesFee(): Boolean {
+        return if (presenter.wavesBalance.getAvailableBalance() ?: 0 > presenter.fee) {
+            true
+        } else {
+            if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true
+                    && presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
+                edit_amount.text.toString().toBigDecimal() > getWavesDexFee(presenter.fee)
+            } else if (presenter.data?.watchMarket?.market?.priceAsset?.isWaves() == true
+                    && presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
+                edit_total_price.text.toString().toBigDecimal() > getWavesDexFee(presenter.fee)
+            } else {
+                false
+            }
         }
     }
 
@@ -385,25 +431,26 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                 when (quickBalanceView.tag) {
                     TOTAL_BALANCE -> {
                         if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true) {
-                            if (balance < Constants.WAVES_DEX_FEE) {
+                            if (balance < presenter.fee) {
                                 balance = 0
-                                linear_fees_error.visiable()
                             } else {
-                                balance -= Constants.WAVES_DEX_FEE
-                                linear_fees_error.gone()
+                                balance -= presenter.fee
                             }
                         }
                         quickBalanceView.click {
-                            edit_amount.setText((MoneyUtil.getScaledText(balance, presenter.data?.watchMarket?.market?.amountAssetDecimals
-                                    ?: 0)).clearBalance())
+                            edit_amount.setText((MoneyUtil.getScaledText(balance,
+                                    presenter.data?.watchMarket?.market?.amountAssetDecimals
+                                            ?: 0)).clearBalance())
                             edit_amount.setSelection(edit_amount.text?.length ?: 0)
                         }
                     }
                     else -> {
-                        val percentBalance = (balance.times((quickBalanceView.tag.toString().toDouble().div(100)))).toLong()
+                        val percentBalance = (balance.times((quickBalanceView.tag.toString().toDouble()
+                                .div(100)))).toLong()
                         quickBalanceView.click {
-                            edit_amount.setText(MoneyUtil.getScaledText(percentBalance, presenter.data?.watchMarket?.market?.amountAssetDecimals
-                                    ?: 0))
+                            edit_amount.setText(MoneyUtil.getScaledText(percentBalance,
+                                    presenter.data?.watchMarket?.market?.amountAssetDecimals
+                                            ?: 0).clearBalance())
                             edit_amount.setSelection(edit_amount.text?.length ?: 0)
                         }
                     }
@@ -429,5 +476,29 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         button_confirm.isEnabled = presenter.isAllFieldsValid() && networkConnected
+    }
+
+    override fun showCommissionLoading() {
+        progress_bar_fee_transaction.show()
+        text_fee_value.gone()
+    }
+
+    override fun showCommissionSuccess(unscaledAmount: Long) {
+        text_fee_value.text = "${getScaledAmount(unscaledAmount, 8)} " +
+                "${Constants.wavesAssetInfo.name}"
+        progress_bar_fee_transaction.hide()
+        text_fee_value.visiable()
+    }
+
+    override fun showCommissionError() {
+        text_fee_value.text = "-"
+        progress_bar_fee_transaction.hide()
+        showError(R.string.common_error_commission_receiving, R.id.root)
+        text_fee_value.visiable()
+    }
+
+    override fun onDestroyView() {
+        progress_bar_fee_transaction.hide()
+        super.onDestroyView()
     }
 }

@@ -69,15 +69,6 @@
                         app:text_number="1"
                         app:text_size="24" />
 
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/image_down_arrow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/image_asset_icon"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginStart="-4dp"
-                        app:srcCompat="@drawable/ic_circle_down_arrow" />
-
                 </RelativeLayout>
 
                 <LinearLayout

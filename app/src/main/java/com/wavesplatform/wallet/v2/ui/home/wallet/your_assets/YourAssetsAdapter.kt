@@ -21,7 +21,6 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
         helper.setText(R.id.text_asset_name, item.getName())
                 .setText(R.id.text_asset_value, item.getDisplayAvailableBalance())
                 .setVisible(R.id.image_favourite, item.isFavorite)
-                .setGone(R.id.image_down_arrow, item.isGateway && !item.isWaves())
         helper.itemView.text_asset_value.visibility =
                 if ((item.getDisplayAvailableBalance()
                                 .clearBalance()
@@ -36,6 +35,8 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
         if (item.assetId == currentAssetId) {
             currentAssetIdCheckbox = helper.itemView.checkbox_choose
             helper.itemView.checkbox_choose.isChecked = true
+        } else {
+            helper.itemView.checkbox_choose.isChecked = false
         }
     }
 

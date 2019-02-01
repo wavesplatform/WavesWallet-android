@@ -130,7 +130,6 @@
                 android:hint="@string/new_account_account_name_hint"
                 android:imeOptions="actionNext"
                 android:inputType="text"
-                android:maxLength="20"
                 android:nextFocusForward="@id/edit_create_password"
                 android:paddingBottom="20dp"
                 android:singleLine="true"

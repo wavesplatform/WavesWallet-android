@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.text.*
@@ -29,11 +30,11 @@ import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
-import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -47,21 +48,19 @@ import com.bumptech.glide.request.target.Target
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
+import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.crypto.Base58
+import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
-import com.wavesplatform.wallet.v2.data.model.remote.response.Order
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import pers.victor.ext.activityManager
-import pers.victor.ext.app
-import pers.victor.ext.clipboardManager
-import pers.victor.ext.findColor
+import com.wavesplatform.wallet.v2.data.exception.RetrofitException
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
-import pyxis.uzuki.live.richutilskt.utils.toast
 import java.io.File
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -106,36 +105,16 @@ fun String.isWaves(): Boolean {
     return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
 }
 
+fun getWavesDexFee(fee: Long): BigDecimal {
+    return MoneyUtil.getScaledText(fee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
+}
+
 fun String.isWavesId(): Boolean {
     return this.toLowerCase() == Constants.wavesAssetInfo.id
 }
 
-fun getActionBarHeight(): Int {
-    val tv = TypedValue()
-    return if (app.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-        TypedValue.complexToDimensionPixelSize(tv.data, app.resources.displayMetrics);
-    } else {
-        0
-    }
-}
-
-fun EditText.applySpaceFilter() {
-    this.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
-        source.toString().filterNot { it.isWhitespace() }
-    })
-}
-
-fun Context.notAvailable() {
-    toast(getString(R.string.common_msg_in_development))
-}
-
 fun ByteArray.arrayWithSize(): ByteArray {
     return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
-}
-
-fun String.arrayOption(): ByteArray {
-    return if (this.isEmpty()) byteArrayOf(0)
-    else Bytes.concat(byteArrayOf(1), Base58.decode(this))
 }
 
 fun String.clearBalance(): String {
@@ -199,9 +178,16 @@ fun AlertDialog.makeStyled() {
     val titleTextView = this.findViewById<TextView>(R.id.alertTitle)
     val buttonPositive = this.findViewById<Button>(android.R.id.button1)
     val buttonNegative = this.findViewById<Button>(android.R.id.button2)
-    buttonPositive?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
-    buttonNegative?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
-    titleTextView?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+
+    try {
+        buttonPositive?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+        buttonNegative?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+        titleTextView?.typeface = ResourcesCompat.getFont(this.context, R.font.roboto_medium)
+    } catch (e: Throwable) {
+        buttonPositive?.typeface = Typeface.DEFAULT
+        buttonNegative?.typeface = Typeface.DEFAULT
+        titleTextView?.typeface = Typeface.DEFAULT
+    }
 
     buttonPositive?.setTextColor(findColor(R.color.submit300))
     buttonNegative?.setTextColor(findColor(R.color.submit300))
@@ -330,7 +316,7 @@ fun Activity.showError(@StringRes msgId: Int, @IdRes viewId: Int) {
     showMessage(getString(msgId), viewId, R.color.error400)
 }
 
-fun Activity.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = null) {
+fun Activity.showError(msg: String, @IdRes viewId: Int, @ColorRes color: Int? = R.color.error400) {
     showMessage(msg, viewId, color)
 }
 
@@ -646,7 +632,7 @@ fun TextView.makeTextHalfBold() {
     this.text = str.append(" $textAfter")
 }
 
-fun findMyOrder(first: Order, second: Order, address: String): Order {
+fun findMyOrder(first: Order, second: Order, address: String?): Order {
     return if (first.sender == second.sender) {
         if (first.timestamp > second.timestamp) {
             first
@@ -666,11 +652,78 @@ fun findMyOrder(first: Order, second: Order, address: String): Order {
     }
 }
 
-fun AssetInfo.getTicker() : String {
+fun Throwable.errorBody(): ErrorResponse? {
+    return if (this is RetrofitException) {
+        this.getErrorBodyAs(ErrorResponse::class.java)
+    } else {
+        null
+    }
+}
+
+fun ErrorResponse.isSmartError(): Boolean {
+    return this.error in 305..307
+}
+
+fun AssetInfo.getTicker(): String {
 
     if (this.id.isWavesId()) {
         return Constants.wavesAssetInfo.name
     }
 
     return this.ticker ?: this.name
+}
+
+fun getScaledAmount(amount: Long, decimals: Int): String {
+    val absAmount = Math.abs(amount)
+    val value = BigDecimal.valueOf(absAmount, decimals)
+    if (amount == 0L) {
+        return "0"
+    }
+
+    val sign = if (amount < 0) "-" else ""
+
+    return sign + when {
+        value >= MoneyUtil.ONE_M -> value.divide(MoneyUtil.ONE_M, 1, RoundingMode.HALF_EVEN)
+                .toPlainString().stripZeros() + "M"
+        value >= MoneyUtil.ONE_K -> value.divide(MoneyUtil.ONE_K, 1, RoundingMode.HALF_EVEN)
+                .toPlainString().stripZeros() + "k"
+        else -> MoneyUtil.createFormatter(decimals).format(BigDecimal.valueOf(absAmount, decimals))
+                .stripZeros() + ""
+    }
+}
+
+fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { }) {
+    val alertDialogBuilder = AlertDialog.Builder(this, R.style.DialogBackgroundTheme).create()
+
+    fun getAlertView(): View {
+        val view = inflate(R.layout.dialog_account_scripted_error_layout)
+
+        view.findViewById<AppCompatButton>(R.id.button_confirm).click {
+            alertDialogBuilder.dismiss()
+            buttonOnClickListener.invoke()
+        }
+
+        return view
+    }
+
+    alertDialogBuilder.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    val wmlp = alertDialogBuilder.window.attributes
+    wmlp.gravity = Gravity.BOTTOM
+
+    alertDialogBuilder.setCancelable(false)
+    alertDialogBuilder.setView(getAlertView())
+    alertDialogBuilder.show()
+}
+
+fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
+    return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+            && (null != queryFirst<SpamAsset> {
+        equalTo("assetId", assetId)
+    }))
+}
+
+fun isShowTicker(assetId: String?): Boolean {
+    return Constants.defaultAssets.any {
+        it.assetId == assetId || assetId.isNullOrEmpty()
+    }
 }

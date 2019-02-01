@@ -5,6 +5,8 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.remote.request.CreateLeasingRequest
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.errorBody
+import com.wavesplatform.wallet.v2.util.isSmartError
 import com.wavesplatform.wallet.v2.util.makeAsAlias
 import javax.inject.Inject
 
@@ -15,6 +17,7 @@ class ConfirmationStartLeasingPresenter @Inject constructor() : BasePresenter<Co
     var recipientIsAlias = false
     var address: String = ""
     var amount: String = ""
+    var fee = 0L
 
 
     fun startLeasing() {
@@ -25,15 +28,21 @@ class ConfirmationStartLeasingPresenter @Inject constructor() : BasePresenter<Co
         }
         createLeasingRequest.amount = MoneyUtil.getUnscaledValue(amount, 8)
 
-        addSubscription(nodeDataManager.startLeasing(createLeasingRequest, recipientIsAlias)
+        addSubscription(nodeDataManager.startLeasing(createLeasingRequest, recipientIsAlias, fee)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     viewState.successStartLeasing()
                     viewState.showProgressBar(false)
                 }, {
-                    viewState.failedStartLeasing()
-                    viewState.showProgressBar(false)
                     it.printStackTrace()
+
+                    viewState.showProgressBar(false)
+
+                    if (it.errorBody()?.isSmartError() == true) {
+                        viewState.failedStartLeasingCauseSmart()
+                    } else {
+                        viewState.failedStartLeasing(it.errorBody()?.message)
+                    }
                 }))
     }
 }

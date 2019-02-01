@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -34,25 +35,21 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
 
         val currencyTo = "W$currencyFrom"
 
-        runAsync {
-            addSubscription(coinomatManager.createTunnel(currencyFrom, currencyTo, address, null)
-                    .flatMap { createTunnel ->
-                        coinomatManager.getTunnel(
-                                createTunnel.tunnelId,
-                                createTunnel.k1,
-                                createTunnel.k2,
-                                lang)
-                    }
-                    .subscribe({ tunnel ->
-                        this.tunnel = tunnel
-                        runOnUiThread {
-                            viewState.onShowTunnel(tunnel)
-                        }
-                    }, {
-                        viewState.onShowError(App.getAppContext()
-                                .getString(R.string.receive_error_network))
-                        it.printStackTrace()
-                    }))
-        }
+        addSubscription(coinomatManager.createTunnel(currencyFrom, currencyTo, address, null)
+                .flatMap { createTunnel ->
+                    coinomatManager.getTunnel(
+                            createTunnel.tunnelId,
+                            createTunnel.k1,
+                            createTunnel.k2,
+                            lang)
+                }
+                .compose(RxUtil.applySchedulersToObservable())
+                .subscribe({ tunnel ->
+                    this.tunnel = tunnel
+                    viewState.onShowTunnel(tunnel)
+                }, {
+                    viewState.onGatewayError()
+                    it.printStackTrace()
+                }))
     }
 }

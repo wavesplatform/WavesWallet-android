@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/blockchain_transfer_blue">
-    <item android:id="@android:id/background">
-        <color android:color="@color/blockchain_pearl_white" />
-    </item>
-</ripple>

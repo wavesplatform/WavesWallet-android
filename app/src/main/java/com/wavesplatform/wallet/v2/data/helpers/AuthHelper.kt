@@ -2,16 +2,16 @@ package com.wavesplatform.wallet.v2.data.helpers
 
 import com.vicpin.krealmextensions.RealmConfigStore
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.wallet.v1.db.DBHelper
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.database.DBHelper
+import com.wavesplatform.wallet.v2.database.RealmMigrations
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.util.MigrationUtil
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import pyxis.uzuki.live.richutilskt.utils.runAsync
-import java.io.File
 import javax.inject.Inject
 
 class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
@@ -23,7 +23,8 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
 
         val config = RealmConfiguration.Builder()
                 .name(String.format("%s.realm", guid))
-                .deleteRealmIfMigrationNeeded()
+                .schemaVersion(1)
+                .migration(RealmMigrations())
                 .build()
 
         Realm.compactRealm(config)

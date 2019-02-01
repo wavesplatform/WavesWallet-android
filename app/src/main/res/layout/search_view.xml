@@ -15,7 +15,6 @@
         android:drawableStart="@drawable/ic_search_24_basic_500"
         android:drawablePadding="8dp"
         android:hint="@string/address_book_search"
-        android:longClickable="false"
         android:padding="8dp"
         android:singleLine="true"
         android:textColor="@color/black"

@@ -6,10 +6,7 @@ import com.wavesplatform.wallet.v1.request.IssueTransactionRequest
 import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.*
-import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalances
-import com.wavesplatform.wallet.v2.data.model.remote.response.Height
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -54,13 +51,19 @@ interface NodeService {
     @GET("leasing/active/{address}")
     fun activeLeasing(@Path("address") address: String?): Observable<List<Transaction>>
 
-    @POST("leasing/broadcast/lease")
+    @POST("transactions/broadcast")
     fun createLeasing(@Body createLeasingRequest: CreateLeasingRequest): Observable<Transaction>
 
-    @POST("leasing/broadcast/cancel")
+    @POST("transactions/broadcast")
     fun cancelLeasing(@Body cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction>
 
     @POST("transactions/broadcast")
     fun burn(@Body burnRequest: BurnRequest): Observable<BurnRequest>
+
+    @GET("addresses/scriptInfo/{address}")
+    fun scriptAddressInfo(@Path("address") address: String): Observable<ScriptInfo>
+
+    @GET("/assets/details/{assetId}")
+    fun scriptAssetInfo(@Path("assetId") assetId: String): Observable<AssetsDetails>
 
 }

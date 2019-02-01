@@ -7,24 +7,23 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import pers.victor.ext.currentTimeMillis
 
 data class BurnRequest(
         @SerializedName("assetId") val assetId: String = "",
-        @SerializedName("chainId") val chainId: Byte = Constants.ADDRESS_SCHEME.toByte(),
-        @SerializedName("fee") var fee: Long = Constants.WAVES_FEE,
+        @SerializedName("chainId") val chainId: Byte = EnvironmentManager.getNetCode(),
+        @SerializedName("fee") var fee: Long = 100000L,
         @SerializedName("quantity") var quantity: Long = 1,
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
         @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,
         @SerializedName("type") val type: Int = Transaction.BURN,
-        @SerializedName("version") val version: Int = Constants.VERSION) {
-
-    @SerializedName("proofs")
-    var proofs = arrayOf("")
-    @SerializedName("id")
-    var id: String? = null
+        @SerializedName("version") val version: Int = Constants.VERSION,
+        @SerializedName("proofs") var proofs: MutableList<String?>? = null,
+        @SerializedName("id") var id: String? = null
+) {
 
 
     fun toSignBytes(): ByteArray {
@@ -36,7 +35,7 @@ data class BurnRequest(
                     Base58.decode(App.getAccessManager().getWallet()!!.publicKeyStr),
                     Base58.decode(assetId),
                     Longs.toByteArray(quantity),
-                    Longs.toByteArray(Constants.WAVES_FEE),
+                    Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp))
         } catch (e: Exception) {
             Log.e("BurnRequest", "Couldn't create toSignBytes", e)
@@ -46,7 +45,7 @@ data class BurnRequest(
     }
 
     fun sign(privateKey: ByteArray) {
-        proofs[0] = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()))
+        proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytes())))
     }
 
 }

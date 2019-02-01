@@ -1,36 +1,30 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
-import android.content.Context
+import android.graphics.Typeface
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.PagerAdapter
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
+import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import kotlinx.android.synthetic.main.assets_detailed_history_item.view.*
-import pers.victor.ext.click
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
-import java.util.*
-import javax.inject.Inject
+import pers.victor.ext.*
 
-class HistoryTransactionPagerAdapter @Inject constructor(
-        @ApplicationContext var mContext: Context,
-        var fragmentManager: FragmentManager?) : PagerAdapter() {
-    var items: MutableList<HistoryItem> = arrayListOf()
+class HistoryTransactionPagerAdapter constructor(
+        var fragmentManager: FragmentManager?, var prefsUtil: PrefsUtil) : PagerAdapter() {
+
+    var items: List<HistoryItem> = arrayListOf()
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
-        val layout = LayoutInflater.from(mContext).inflate(R.layout.assets_detailed_history_item, collection, false)
+        val layout = inflate(R.layout.assets_detailed_history_item, collection, false)
         val item = items[position]
 
         layout.card_transaction.click {
@@ -47,137 +41,96 @@ class HistoryTransactionPagerAdapter @Inject constructor(
             bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
         }
 
-        layout.image_transaction.setImageDrawable(item.data.transactionType()?.icon())
-
-        var showTag = Constants.defaultAssets.any {
-            it.assetId == item.data.assetId || item.data.assetId.isNullOrEmpty()
-        }
+        layout.text_tag.gone()
+        layout.text_tag_spam.gone()
+        layout.text_transaction_value.setTypeface(null, Typeface.NORMAL)
 
         item.data.transactionType().notNull {
-            try {
-                layout.text_transaction_name.text =
-                        mContext.getString(it.title)
-            } catch (e: MissingFormatArgumentException) {
-                layout.text_transaction_name.text = mContext.getString(it.title)
-            }
+            layout.image_transaction.setImageDrawable(it.icon())
+            layout.text_transaction_name.text = layout.text_transaction_name.context
+                    .getString(it.title)
 
+            // todo reuse this code and HistoryTabItemAdapter and HistoryDetailsAdapter
+            val decimals = item.data.asset?.precision ?: 8
             when (it) {
                 TransactionType.SENT_TYPE -> {
                     item.data.amount.notNull {
-                        layout.text_transaction_value.text = "-${MoneyUtil.getScaledText(it, item.data.asset)}"
+                        layout.text_transaction_value.text =
+                                "-${getScaledAmount(it, decimals)}"
                     }
                 }
                 TransactionType.RECEIVED_TYPE -> {
                     item.data.amount.notNull {
-                        layout.text_transaction_value.text = "+${MoneyUtil.getScaledText(it, item.data.asset)}"
+                        layout.text_transaction_value.text =
+                                "+${getScaledAmount(it, decimals)}"
                     }
                 }
-                TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.MASS_SEND_TYPE, TransactionType.MASS_RECEIVE_TYPE -> {
-                    if (item.data.transfers.isNotEmpty()) {
-                        val sum = item.data.transfers.sumByLong { it.amount }
-                        if (it == TransactionType.MASS_SPAM_RECEIVE_TYPE || it == TransactionType.MASS_RECEIVE_TYPE) {
-                            layout.text_transaction_value.text = "+${MoneyUtil.getScaledText(sum.toLong(), item.data?.asset)}"
-                        } else {
-                            layout.text_transaction_value.text = "-${MoneyUtil.getScaledText(sum.toLong(), item.data?.asset)}"
-                        }
-                    }
-
+                TransactionType.MASS_SPAM_RECEIVE_TYPE,
+                TransactionType.MASS_RECEIVE_TYPE,
+                TransactionType.MASS_SEND_TYPE -> {
+                    layout.text_transaction_value.text = getTransactionAmount(
+                            transaction = item.data, round = false)
                 }
                 TransactionType.CREATE_ALIAS_TYPE -> {
                     layout.text_transaction_value.text = item.data.alias
+                    layout.text_transaction_value.setTypeface(null, Typeface.BOLD)
                 }
                 TransactionType.EXCHANGE_TYPE -> {
-                    val myOrder =
-                            if (item.data.order1?.sender == App.getAccessManager().getWallet()?.address) item.data.order1
-                            else item.data.order2
-
-                    val pairOrder =
-                            if (item.data.order1?.sender != App.getAccessManager().getWallet()?.address) item.data.order1
-                            else item.data.order2
-
-
-                    if (myOrder?.orderType == Constants.SELL_ORDER_TYPE) {
-                        layout.text_transaction_name.text = "-${MoneyUtil.getScaledText(item.data.amount, myOrder.assetPair?.amountAssetObject)} ${myOrder.assetPair?.amountAssetObject?.name}"
-                        layout.text_transaction_value.text = "+${MoneyUtil.getScaledText(item.data.amount?.times(item.data.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
-                    } else {
-                        layout.text_transaction_name.text = "+${MoneyUtil.getScaledText(item.data.amount, myOrder?.assetPair?.amountAssetObject)} ${myOrder?.assetPair?.amountAssetObject?.name}"
-                        layout.text_transaction_value.text = "-${MoneyUtil.getScaledText(item.data.amount?.times(item.data.price!!)?.div(100000000), pairOrder?.assetPair?.priceAssetObject)}"
-                    }
-
-                    showTag = Constants.defaultAssets.any {
-                        it.assetId == pairOrder?.assetPair?.priceAssetObject?.id || pairOrder?.assetPair?.priceAssetObject?.id.isNullOrEmpty()
-                    }
-
-                    if (showTag) {
-                        val ticker = item.data.asset?.getTicker()
-                        if (!ticker.isNullOrBlank()) {
-                            layout.text_tag.text = ticker
-                            layout.text_tag.visiable()
-                        }
-                    } else {
-                        layout.text_tag.gone()
-                        layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${pairOrder?.assetPair?.priceAssetObject?.name}"
-                    }
-                }
-                TransactionType.DATA_TYPE -> {
-                    layout.text_transaction_value.text = mContext.getString(R.string.history_data_type_title)
+                    // todo reuse this method with HistoryTabItemAdapter and HistoryDetailsAdapter
+                    setExchangeItem(item.data, layout)
                 }
                 TransactionType.CANCELED_LEASING_TYPE -> {
                     item.data.lease?.amount.notNull {
-                        layout.text_transaction_value.text = MoneyUtil.getScaledText(it.toLong(), item.data.asset)
+                        layout.text_transaction_value.text = getScaledAmount(it, decimals)
                     }
-                }
-                TransactionType.TOKEN_GENERATION_TYPE -> {
-                    val quantity = MoneyUtil.getScaledText(
-                            item.data.quantity, item.data.asset).substringBefore(".")
-                    layout.text_transaction_value.text = quantity
                 }
                 TransactionType.TOKEN_BURN_TYPE -> {
                     item.data.amount.notNull {
-                        val afterDot = MoneyUtil.getScaledText(it, item.data.asset)
-                                .substringAfter(".").clearBalance().toLong()
-                        val amount = if (afterDot == 0L) MoneyUtil.getScaledText(it, item.data.asset)
-                                .substringBefore(".")
-                        else MoneyUtil.getScaledText(it, item.data.asset)
-
-                        layout.text_transaction_value.text = "-$amount"
+                        layout.text_transaction_value.text = "-" + getScaledAmount(it, decimals)
                     }
                 }
+                TransactionType.TOKEN_GENERATION_TYPE,
                 TransactionType.TOKEN_REISSUE_TYPE -> {
-                    layout.text_transaction_value.text = "+${item.data.amount}"
+                    val quantity = getScaledAmount(item.data.quantity, decimals)
+                    layout.text_transaction_value.text = quantity
+                }
+                TransactionType.DATA_TYPE,
+                TransactionType.SET_ADDRESS_SCRIPT_TYPE,
+                TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
+                TransactionType.SET_SPONSORSHIP_TYPE,
+                TransactionType.CANCEL_SPONSORSHIP_TYPE,
+                TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
+                    layout.text_transaction_value.setTypeface(null, Typeface.BOLD)
+                    layout.text_transaction_value.text = layout.text_transaction_name.context
+                            .getString(it.title)
+                    layout.text_transaction_name.text = layout.text_transaction_name.context
+                            .getString(R.string.history_data_type_title)
                 }
                 else -> {
                     item.data.amount.notNull {
-                        layout.text_transaction_value.text = MoneyUtil.getScaledText(it, item.data.asset)
+                        layout.text_transaction_value.text = getScaledAmount(it, decimals)
                     }
                 }
             }
         }
 
-        if (item.data.transactionType() != TransactionType.CREATE_ALIAS_TYPE
-                && item.data.transactionType() != TransactionType.DATA_TYPE
-                && item.data.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
-                && item.data.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
-                && item.data.transactionType() != TransactionType.EXCHANGE_TYPE) {
-            if (showTag) {
-                val ticker = item.data.asset?.getTicker()
-                if (!ticker.isNullOrBlank()) {
-                    layout.text_tag.visiable()
-                    layout.text_tag.text = ticker
-                }
+        // todo reuse this code and HistoryTabItemAdapter and HistoryDetailsAdapter
+        if (!TransactionType.isZeroTransferOrExchange(item.data.transactionType())) {
+            if (isSpamConsidered(item.data.assetId, prefsUtil)) {
+                layout.text_tag_spam.visiable()
             } else {
-                layout.text_tag.gone()
-                layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${item.data.asset?.name}"
+                if (isShowTicker(item.data.assetId)) {
+                    val ticker = item.data.asset?.getTicker()
+                    if (!ticker.isNullOrBlank()) {
+                        layout.text_tag.text = ticker
+                        layout.text_tag.visiable()
+                    }
+                } else {
+                    layout.text_transaction_value.text =
+                            "${layout.text_transaction_value.text} ${item.data.asset?.name}"
+                }
             }
         }
-
-        if (queryFirst<SpamAsset> { equalTo("assetId", item.data.assetId) } != null) {
-            layout.text_tag.gone()
-            layout.text_tag_spam.visiable()
-            layout.text_transaction_value.text = "${item.data.asset?.name}"
-        }
-
-
         layout.text_transaction_value.makeTextHalfBold()
 
 
@@ -199,5 +152,52 @@ class HistoryTransactionPagerAdapter @Inject constructor(
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return view === `object`
+    }
+
+    private fun setExchangeItem(transaction: Transaction, view: View) {
+        val myOrder = findMyOrder(
+                transaction.order1!!,
+                transaction.order2!!,
+                App.getAccessManager().getWallet()?.address)
+        val secondOrder = if (myOrder.id == transaction.order1!!.id) {
+            transaction.order2!!
+        } else {
+            transaction.order1!!
+        }
+
+        val directionStringResId: Int
+        val directionSign: String
+        val amountAsset = myOrder.assetPair?.amountAssetObject!!
+        val amountValue = getScaledAmount(transaction.amount,
+                transaction.asset?.precision ?: 8)
+
+        if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
+            directionStringResId = R.string.history_my_dex_intent_sell
+            directionSign = "-"
+        } else {
+            directionStringResId = R.string.history_my_dex_intent_buy
+            directionSign = "+"
+        }
+
+        view.text_transaction_name.text = app.getString(
+                directionStringResId,
+                amountAsset.name,
+                secondOrder.assetPair?.priceAssetObject?.name)
+
+        val amountAssetTicker = if (amountAsset.name == "WAVES") {
+            "WAVES"
+        } else {
+            amountAsset.ticker
+        }
+
+        val assetName = if (amountAssetTicker.isNullOrEmpty()) {
+            " ${amountAsset.name}"
+        } else {
+            view.text_tag.visiable()
+            view.text_tag.text = amountAssetTicker
+            ""
+        }
+
+        view.text_transaction_value.text = directionSign + amountValue + assetName
     }
 }

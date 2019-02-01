@@ -11,5 +11,8 @@ interface SendView : BaseMvpView {
     fun showXRate(xRate: XRate, ticker: String)
     fun showXRateError()
     fun setRecipientValid(valid: Boolean?)
+    fun showCommissionLoading()
+    fun showCommissionSuccess(unscaledAmount: Long)
+    fun showCommissionError()
 
 }

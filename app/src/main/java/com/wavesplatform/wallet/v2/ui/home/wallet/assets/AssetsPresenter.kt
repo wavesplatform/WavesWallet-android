@@ -66,10 +66,10 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     queryAllAsSingle<AssetBalance>().toObservable(),
                     queryAllAsSingle<SpamAsset>().toObservable()
                             .map { spamListFromDb ->
-                                if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-                                    return@map listOf<SpamAsset>()
-                                } else {
+                                if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, false)) {
                                     return@map spamListFromDb
+                                } else {
+                                    return@map listOf<SpamAsset>()
                                 }
                             },
                     BiFunction { t1: List<AssetBalance>, t2: List<SpamAsset> ->

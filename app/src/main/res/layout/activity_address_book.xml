@@ -30,7 +30,6 @@
         android:background="@drawable/shape_search_address"
         android:paddingStart="8dp"
         android:singleLine="true"
-        android:longClickable="false"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:id="@+id/edit_search"

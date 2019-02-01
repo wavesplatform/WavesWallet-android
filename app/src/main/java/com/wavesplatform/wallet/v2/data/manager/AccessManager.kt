@@ -10,15 +10,15 @@ import com.wavesplatform.wallet.v1.crypto.AESUtil
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v1.data.services.PinStoreService
-import com.wavesplatform.wallet.v1.db.DBHelper
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.AddressUtil
 import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
+import com.wavesplatform.wallet.v2.database.DBHelper
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
+import com.wavesplatform.wallet.v2.util.AddressUtil
 import com.wavesplatform.wallet.v2.util.MigrationUtil
 import com.wavesplatform.wallet.v2.util.deleteRecursive
 import io.reactivex.Completable
@@ -350,8 +350,8 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         return prefs.getValue(PrefsUtil.KEY_SKIP_BACKUP, true)
     }
 
-    fun setUseFingerPrint(use: Boolean) {
-        prefs.setValue(PrefsUtil.KEY_USE_FINGERPRINT, use)
+    fun setUseFingerPrint(guid: String, use: Boolean) {
+        prefs.setValue(guid, PrefsUtil.KEY_USE_FINGERPRINT, use)
     }
 
     fun isGuidUseFingerPrint(guid: String): Boolean {

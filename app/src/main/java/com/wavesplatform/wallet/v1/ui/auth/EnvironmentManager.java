@@ -1,38 +1,51 @@
 package com.wavesplatform.wallet.v1.ui.auth;
 
-import com.wavesplatform.wallet.v1.util.AppUtil;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Handler;
+
+import com.google.gson.Gson;
+import com.wavesplatform.wallet.App;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
+import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class EnvironmentManager {
-    private static final String TAG = EnvironmentManager.class.getSimpleName();
 
-    public static final String KEY_ENV_PROD = "env_prod";
-    public static final String KEY_ENV_TESTNET = "env_testnet";
+    public static final String KEY_ENV_MAIN_NET = "env_prod";
+    public static final String KEY_ENV_TEST_NET = "env_testnet";
+    public static final String URL_COMMISSION_MAIN_NET = "https://raw.githubusercontent.com/" +
+            "wavesplatform/waves-client-config/master/fee.json";
+    private static final String URL_CONFIG_MAIN_NET = "https://raw.githubusercontent.com/" +
+            "wavesplatform/waves-client-config/master/environment_mainnet.json";
+    private static final String URL_CONFIG_TEST_NET = "https://raw.githubusercontent.com/" +
+            "wavesplatform/waves-client-config/master/environment_testnet.json";
+    private static final String JSON_FILENAME_MAIN_NET = "environment_mainnet.json";
+    private static final String JSON_FILENAME_TEST_NET = "environment_testnet.json";
 
     private static EnvironmentManager instance;
 
     private Environment current;
-
     private PrefsUtil prefsUtil;
-    private AppUtil appUtil;
+    private Handler handler = new Handler();
 
-    public EnvironmentManager(PrefsUtil prefsUtil, AppUtil appUtil) {
-        this.prefsUtil = prefsUtil;
-        this.appUtil = appUtil;
-        String storedEnv = prefsUtil.getEnvironment();
-        this.current = Environment.fromString(storedEnv);
+    private EnvironmentManager(Context context) {
+        this.prefsUtil = new PrefsUtil(context);
+        this.current = Environment.find(prefsUtil.getEnvironment());
     }
 
-    public static void init(PrefsUtil prefsUtil, AppUtil appUtil) {
-        instance = new EnvironmentManager(prefsUtil, appUtil);
+    public static void init(Context context) {
+        instance = new EnvironmentManager(context);
     }
 
     public static EnvironmentManager get() {
         return instance;
-    }
-
-    public boolean shouldShowDebugMenu() {
-        return current != Environment.PRODUCTION;
     }
 
     public Environment current() {
@@ -41,61 +54,96 @@ public class EnvironmentManager {
 
     public void setCurrent(Environment current) {
         prefsUtil.setGlobalValue(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.getName());
-        this.current = current;
-        appUtil.restartApp();
+        handler.postDelayed(EnvironmentManager::restartApp, 500);
+    }
+
+    public static String findAssetId(@NotNull String gatewayId) {
+        return get().current().findAssetId(gatewayId).getAssetId();
+    }
+
+    public static byte getNetCode() {
+        return get().current().getNetCode();
+    }
+
+    public static GlobalConfiguration getGlobalConfiguration() {
+        return get().current().getGlobalConfiguration();
+    }
+
+    private static GlobalConfiguration getConfiguration(String fileName) {
+        String json;
+        try {
+            InputStream is = App.getAppContext().getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return new Gson().fromJson(json, GlobalConfiguration.class);
+    }
+
+    private static void restartApp() {
+        PackageManager packageManager = App.getAppContext().getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(App.getAppContext().getPackageName());
+        assert intent != null;
+        ComponentName componentName = intent.getComponent();
+        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+        App.getAppContext().startActivity(mainIntent);
+        System.exit(0);
     }
 
     public enum Environment {
-        PRODUCTION(KEY_ENV_PROD, "https://nodes.wavesplatform.com", "https://matcher.wavesplatform.com/", "https://marketdata.wavesplatform.com/api/", 'W'),
-        TESTNET(KEY_ENV_TESTNET, "http://52.30.47.67:6869", "http://52.30.47.67:6886/", "https://marketdata.wavesplatform.com/api/", 'T');
+
+        MAIN_NET(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, JSON_FILENAME_MAIN_NET),
+        TEST_NET(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, JSON_FILENAME_TEST_NET);
 
         private String name;
-        private String nodeUrl;
-        private String matherUrl;
-        private String dataFeedUrl;
-        private char addressScheme;
+        private String url;
+        private GlobalConfiguration configuration;
 
-        private Environment(String name, String nodeUrl, String matherUrl, String dataFeedUrl,  char addressScheme) {
+        Environment(String name, String url, String json) {
             this.name = name;
-            this.nodeUrl = nodeUrl;
-            this.dataFeedUrl = dataFeedUrl;
-            this.matherUrl = matherUrl;
-            this.addressScheme = addressScheme;
+            this.url = url;
+            this.configuration = getConfiguration(json);
         }
 
-        public String getMatherUrl() {
-            return matherUrl;
-        }
         public String getName() {
             return name;
         }
 
-        public String getNodeUrl() {
-            return nodeUrl;
+        public String getUrl() {
+            return url;
         }
 
-        public String getDataFeedUrl() {
-            return dataFeedUrl;
+        public GlobalConfiguration getGlobalConfiguration() {
+            return configuration;
         }
 
-        public char getAddressScheme() {
-            return addressScheme;
+        public byte getNetCode() {
+            return (byte) configuration.getScheme().charAt(0);
         }
 
-        public static Environment fromString(String text) {
-            if(text != null) {
-                Environment[] all = values();
+        public GlobalConfiguration.GeneralAssetId findAssetId(String gatewayId) {
+            for (GlobalConfiguration.GeneralAssetId assetId : configuration.getGeneralAssetIds()) {
+                if (assetId.getGatewayId().equals(gatewayId)) {
+                    return assetId;
+                }
+            }
+            return null;
+        }
 
-                for (Environment anAll : all) {
-                    if (text.equalsIgnoreCase(anAll.getName())) {
+        public static Environment find(String name) {
+            if (name != null) {
+                for (Environment anAll : values()) {
+                    if (name.equalsIgnoreCase(anAll.getName())) {
                         return anAll;
                     }
                 }
             }
-
             return null;
         }
-
     }
-
 }

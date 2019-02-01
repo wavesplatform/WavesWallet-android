@@ -31,13 +31,13 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
                 helper.setImageResource(R.id.image_graph,
                         if (item.lastTrade?.getMyOrder()?.getType() == OrderType.BUY) R.drawable.ic_chartarrow_success_400
                         else R.drawable.ic_chartarrow_error_500)
-                        .setText(R.id.text_price_value, item.lastTrade?.price?.toString()?.stripZeros())
+                        .setText(R.id.text_price_value, item.lastTrade?.price?.toBigDecimal()?.toPlainString())
                         .setText(R.id.text_percent_value, mContext.getString(R.string.orderbook_spread_percent, percent))
             }
             ASK_TYPE -> {
                 val item = item as OrderBook.Ask
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
-                val priceUIValue = MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals).stripZeros()
+                val priceUIValue = MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals)
                 helper.setTextColor(R.id.text_price_value, findColor(R.color.error400))
                         .setBackgroundColor(R.id.view_bg, findColor(R.color.error100))
                         .setText(R.id.text_amount_value, amountUIValue)
@@ -48,7 +48,7 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
             BID_TYPE -> {
                 val item = item as OrderBook.Bid
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
-                val priceUIValue = MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals).stripZeros()
+                val priceUIValue = MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals)
                 helper.setTextColor(R.id.text_price_value, findColor(R.color.submit400))
                         .setBackgroundColor(R.id.view_bg, findColor(R.color.submit50))
                         .setText(R.id.text_amount_value, amountUIValue)

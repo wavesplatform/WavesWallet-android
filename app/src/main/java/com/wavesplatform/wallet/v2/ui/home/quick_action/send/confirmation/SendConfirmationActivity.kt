@@ -23,6 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send_confirmation.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
+import java.math.BigDecimal
 import javax.inject.Inject
 
 
@@ -55,24 +56,24 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
 
         presenter.selectedAsset = intent!!.extras!!.getParcelable(KEY_INTENT_SELECTED_ASSET)
         presenter.recipient = intent!!.extras!!.getString(KEY_INTENT_SELECTED_RECIPIENT)
-        presenter.amount = intent!!.extras!!.getFloat(KEY_INTENT_SELECTED_AMOUNT)
+        presenter.amount = BigDecimal(intent!!.extras!!.getString(KEY_INTENT_SELECTED_AMOUNT))
         presenter.moneroPaymentId = intent!!.extras!!.getString(KEY_INTENT_MONERO_PAYMENT_ID)
         presenter.assetInfo = queryFirst { equalTo("id", presenter.selectedAsset!!.assetId) }
         presenter.type = intent!!.extras!!.getSerializable(KEY_INTENT_TYPE) as SendPresenter.Type
+        presenter.blockchainCommission = intent!!.extras!!.getLong(KEY_INTENT_BLOCKCHAIN_COMMISSION)
 
         if (presenter.type == SendPresenter.Type.GATEWAY) {
-            presenter.gatewayCommission = intent!!.extras!!.getFloat(KEY_INTENT_GATEWAY_COMMISSION)
+            presenter.gatewayCommission = BigDecimal(
+                    intent!!.extras!!.getString(KEY_INTENT_GATEWAY_COMMISSION))
             text_sum.text = "-${(presenter.amount + presenter.gatewayCommission)
-                    .toBigDecimal()
                     .toPlainString()
                     .stripZeros()}"
             text_sum.makeTextHalfBold()
-            text_gateway_fee_value.text = "${presenter.gatewayCommission}" +
+            text_gateway_fee_value.text = "${presenter.gatewayCommission.toPlainString().stripZeros()}" +
                     " ${presenter.selectedAsset!!.getName()}"
             gateway_commission_layout.visiable()
         } else {
             text_sum.text = "-${(presenter.amount)
-                    .toBigDecimal()
                     .toPlainString()
                     .stripZeros()}"
             text_sum.makeTextHalfBold()
@@ -86,7 +87,8 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         }
         text_sent_to_address.text = presenter.recipient
         presenter.getAddressName(presenter.recipient!!)
-        text_fee_value.text = "${Constants.WAVES_FEE / 100_000_000F} ${Constants.CUSTOM_FEE_ASSET_NAME}"
+        text_fee_value.text = "${getScaledAmount(presenter.blockchainCommission, 8)} " +
+                "${Constants.CUSTOM_FEE_ASSET_NAME}"
 
         if (presenter.type == SendPresenter.Type.GATEWAY) {
             attachment_layout.gone()
@@ -115,10 +117,14 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         button_confirm.click { goNext() }
     }
 
+    override fun failedSendCauseSmart() {
+        setResult(Constants.RESULT_SMART_ERROR)
+        onBackPressed()
+    }
+
     private fun goNext() {
         showTransactionProcessing()
         presenter.confirmSend()
-
     }
 
     override fun onShowTransactionSuccess(signed: TransactionsBroadcastRequest) {
@@ -214,6 +220,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         const val KEY_INTENT_SELECTED_RECIPIENT = "intent_selected_recipient"
         const val KEY_INTENT_SELECTED_AMOUNT = "intent_selected_amount"
         const val KEY_INTENT_GATEWAY_COMMISSION = "intent_gateway_commission"
+        const val KEY_INTENT_BLOCKCHAIN_COMMISSION = "intent_blockchain_commission"
         const val KEY_INTENT_ATTACHMENT = "intent_attachment"
         const val KEY_INTENT_MONERO_PAYMENT_ID = "intent_monero_payment_id"
         const val KEY_INTENT_TYPE = "intent_type"

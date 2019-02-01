@@ -88,11 +88,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
                 .subscribe {
-                    presenter.totalHeaders = 0
-                    presenter.hashOfTimestamp = hashMapOf()
-                    runAsync {
-                        presenter.loadTransactions()
-                    }
+                    presenter.loadTransactions()
                     swipe_refresh.isRefreshing = false
                 })
 
@@ -107,9 +103,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                     }
                 })
 
-        runAsync {
-            presenter.loadTransactions()
-        }
+        presenter.loadTransactions()
 
         adapter.setEmptyView(R.layout.layout_empty_data)
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
@@ -122,12 +116,12 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
                 val data = adapter?.data as ArrayList<HistoryItem>
                 val allItems = data.asSequence()
                         .filter {
-                            it.header.isEmpty()
+                            it.itemType == HistoryItem.TYPE_DATA
                         }
                         .map { it.data }
                         .toList()
 
-                var sectionSize = 0
+                var sectionSize = 1 // 1 because first is empty view
                 for (i in 0..position) {
                     if (data[i].header.isNotEmpty()) sectionSize++
                 }
@@ -152,7 +146,6 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
     override fun onShowError(res: Int) {
         swipe_refresh.isRefreshing = false
-        showError(res, R.id.nested_scroll_view)
     }
 
     companion object {

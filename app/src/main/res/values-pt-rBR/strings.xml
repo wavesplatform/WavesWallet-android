@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_fill_payment_details">Você DEVE preencher o campo detalhes de pagamento com as seguintes informações:</string>
-    <string name="about_fill_payment_info">CNM - seu endereço WAVES. \nSe você não fizer isso, não podemos creditar sua conta.</string>
+    <string name="about_fill_payment_info">CNM — seu endereço WAVES. \nSe você não fizer isso, não podemos creditar sua conta.</string>
     <string name="about_redirection_message">Após a verificação, você receberá um e-mail com instruções adicionais</string>
     <string name="about_redirection_okay">Ok</string>
-    <string name="about_redirection_title">Você foi redirecionado para o «IDNow» para verificação</string>
+    <string name="about_redirection_title">Você foi redirecionado para o «IDNow» \npara verificação</string>
     <string name="add_address_address">Endereço</string>
     <string name="add_address_btn_txt">Salvar</string>
     <string name="add_address_name">Nome</string>
@@ -14,7 +14,7 @@
     <string name="address_book_address_validation_required_error">Endereço é necessário</string>
     <string name="address_book_empty_state">Não há nada aqui… \nVocê pode criar um novo endereço</string>
     <string name="address_book_name_validation_already_use_error">Em uso</string>
-    <string name="address_book_name_validation_max_length_error">Máximo de 20 caracteres</string>
+    <string name="address_book_name_validation_max_length_error">Máximo de 24 caracteres</string>
     <string name="address_book_name_validation_min_length_error">Mínimo de 2 caracteres</string>
     <string name="address_book_name_validation_required_error">Nome é obrigatório</string>
     <string name="address_book_search">Procurar</string>
@@ -32,7 +32,6 @@
     <string name="alias_dialog_create_alias">Criar um novo alias</string>
     <string name="alias_dialog_description_1">O Alias ​​é um apelido para o seu endereço. Você pode usá-lo ao invés do endereço para fazer transações.</string>
     <string name="alias_dialog_description_2">Seu Alias deve ter entre 4 e 30 caracteres e deve conter apenas letras latinas minúsculas, dígitos e símbolos (@, -, _ etc)</string>
-    <string name="alias_dialog_fee">Taxa de Transação 0.001 Waves</string>
     <string name="alias_dialog_you_dont_have">Você ainda não tem Aliases</string>
     <string name="alias_dialog_you_have">Você tem %s</string>
     <string name="alias_dialog_your_aliases">Seus Aliases</string>
@@ -44,7 +43,7 @@
     <string name="asset_details_decimal">Casas decimais</string>
     <string name="asset_details_description">Descrição</string>
     <string name="asset_details_error_perfom_transaction">Você não pode realizar transações com este ativo</string>
-    <string name="asset_details_flat_money">Moeda Fiat</string>
+    <string name="asset_details_fiat_money">Moeda Fiat</string>
     <string name="asset_details_id">ID</string>
     <string name="asset_details_in_order">Em ordem</string>
     <string name="asset_details_issue_date">Data de emissão</string>
@@ -70,9 +69,8 @@
     <string name="backup_info_button">Eu entendi</string>
     <string name="backup_info_subtitle">A Plataforma Waves gostaria de avisá-lo sobre o aumento da frequência de ataques de fraude e phishing nos últimos meses. Os golpistas escondem seu malware em suas próprias versões da Waves client e prometem bônus e descontos para atrair usuários. \n\nPor favor, tenha cuidado e nunca insira seu SEED nesses \'clients\', pois sua conta será comprometida e você perderá todos os seus fundos. \n\nVocê deve usar APENAS o client oficial da Waves.</string>
     <string name="backup_info_title">Mantenha segura sua frase de backup!</string>
-    <string name="backup_pharse">Frase de backup</string>
+    <string name="backup_phrase">Frase de backup</string>
     <string name="backup_wrriten_down">Eu escrevi isso</string>
-    <string name="buy_and_sell_0_001_waves">0.003 Waves</string>
     <string name="buy_and_sell_10">10%</string>
     <string name="buy_and_sell_1_day">1 dia</string>
     <string name="buy_and_sell_1_hour">1 hora</string>
@@ -161,6 +159,7 @@
     <string name="common_copied">Copiado!</string>
     <string name="common_copied_to_clipboard">Copiado para a área de transferência</string>
     <string name="common_dash">–</string>
+    <string name="common_error_commission_receiving">Erro no recebimento de comissão</string>
     <string name="common_feedback_title">Enviar feedback</string>
     <string name="common_k_quantity">%sk</string>
     <string name="common_kk_quantity">%skk</string>
@@ -172,6 +171,7 @@
     <string name="common_or">ou</string>
     <string name="common_persist"><![CDATA[&#x26;]]></string>
     <string name="common_server_error">Algo deu errado</string>
+    <string name="common_transaction_fee">Taxa da transação</string>
     <string name="confirm_backup">Confirme o backup</string>
     <string name="confirm_backup_confirm">Confirmar</string>
     <string name="confirm_backup_error">Ordem errada, tente novamente</string>
@@ -300,20 +300,21 @@
     <string name="history_sorting_period">Período</string>
     <string name="history_sorting_week">Semana</string>
     <string name="history_toolbar_title">Histórico</string>
-    <string name="history_type_cancel_script">Cancelar transação de script</string>
+    <string name="history_type_cancel_address_script">Cancelar transação de script</string>
     <string name="history_type_cancel_sponsorship">Cancelar transação patrocinada</string>
     <string name="history_type_canceled_leasing">Aluguel Cancelado</string>
     <string name="history_type_create_alias">Criar Alias</string>
     <string name="history_type_data">Transação de dados</string>
-    <string name="history_type_exchange">%s %s</string>
+    <string name="history_type_exchange">Exchange transaction</string>
     <string name="history_type_incoming_leasing">Rendimentos do Aluguel</string>
     <string name="history_type_mass_receive">Recebimentos em massa</string>
     <string name="history_type_mass_send">Envios em massa</string>
     <string name="history_type_mass_spam_receive">Recebido</string>
     <string name="history_type_receive">Recebido</string>
+    <string name="history_type_receive_sponsorship">Patrocínio Recebido</string>
     <string name="history_type_self_transfer">Autotransferência</string>
     <string name="history_type_sent">Enviado</string>
-    <string name="history_type_set_script">Definir transação de script</string>
+    <string name="history_type_set_address_script">Definir transação de script</string>
     <string name="history_type_set_sponsorship">Definir transação patrocinada</string>
     <string name="history_type_spam_receive">Recebido</string>
     <string name="history_type_started_leasing">Aluguel Ativado</string>
@@ -321,6 +322,7 @@
     <string name="history_type_token_generation">Criação de Tokens</string>
     <string name="history_type_token_reissue">Reemissão de Tokens</string>
     <string name="history_type_unrecognised">Transação não reconhecida</string>
+    <string name="history_type_update_asset_script">Definir Script do Ativo</string>
     <string name="import_account_click_show_pairing">Clique em \"Mostrar Código de emparelhamento\" para mostrar um QR Code</string>
     <string name="import_account_login_at_site">Faça o login na sua Waves Client através do seu PC ou Mac</string>
     <string name="import_account_scan_pairing_code">Escanear código de pareamento</string>
@@ -342,7 +344,7 @@
     <string name="leasing_history_toolbar_title">Transações</string>
     <string name="left_drawer_description">Acompanhe as últimas notícias e artigos e descubra tudo sobre os eventos que acontecem na Plataforma Waves</string>
     <string name="left_drawer_join_the_waves_community">Faça parte da Comunidade Waves</string>
-    <string name="left_drawer_site">wavescommunity.com</string>
+    <string name="left_drawer_site">forum.wavesplatform.com</string>
     <string name="left_drawer_support">Suporte da Plataforma Waves</string>
     <string name="left_drawer_terms_and_conditions">Termos e condições</string>
     <string name="left_drawer_whitepaper">Whitepaper</string>
@@ -369,11 +371,11 @@
     <string name="network_spam_filter">Filtro de spam</string>
     <string name="network_spam_url_validation_bad_url">Url inválido</string>
     <string name="network_spam_url_validation_url_empty">O url é obrigatório</string>
-    <string name="network_switch_show_spam">Show spam</string>
+    <string name="network_switch_off_spam_filtering">Filtragem de spam</string>
     <string name="network_toolbar_title">Rede</string>
     <string name="new_account_account_name_hint">Nome da conta</string>
     <string name="new_account_account_name_validation_already_exist_error">O nome desta conta já está sendo utilizado</string>
-    <string name="new_account_account_name_validation_length_error">Máximo de 20 caracteres</string>
+    <string name="new_account_account_name_validation_length_error">Máximo de 24 caracteres</string>
     <string name="new_account_account_name_validation_min_length_error">Mínimo de 2 caracteres</string>
     <string name="new_account_account_name_validation_required_error">Nome é obrigatório</string>
     <string name="new_account_avatar_description">Você não poderá alterar isso depois</string>
@@ -420,9 +422,9 @@
     <string name="profile_general_feedback">Feedback</string>
     <string name="profile_general_feedback_body_extra_app_version">Versão do aplicativo: %1$s(%2$s)</string>
     <string name="profile_general_feedback_body_extra_carrier">Operadora: %s</string>
-    <string name="profile_general_feedback_body_extra_device_model">Modelo do dispositivo:</string>
+    <string name="profile_general_feedback_body_extra_device_model">Modelo do dispositivo: %s</string>
     <string name="profile_general_feedback_body_extra_language">Idioma: %s</string>
-    <string name="profile_general_feedback_body_extra_os_version">Versão do SO:</string>
+    <string name="profile_general_feedback_body_extra_os_version">Versão do SO: %s</string>
     <string name="profile_general_feedback_body_extra_title">---Informações do dispositivo---</string>
     <string name="profile_general_fingerprint">Impressão digital</string>
     <string name="profile_general_language">Idioma</string>
@@ -470,6 +472,8 @@
     <string name="receive_fiat_choose_dialog_ok">Ok</string>
     <string name="receive_fiat_choose_dialog_title">Escolha uma moeda</string>
     <string name="receive_fiat_choose_dialog_usd">USD</string>
+    <string name="receive_gateway_info_gateway_warning_eth_subtitle">Verifique se a sua carteira ou exchange usa smart contracts para transferir ETH. Nós não aceitamos essas transações e você perderá esse dinheiro, pois não podemos reembolsar.</string>
+    <string name="receive_gateway_info_gateway_warning_eth_title">Por favor, não deposite ETH através de smart contracts! Não deposite tokens ERC20! Apenas Ethereum é permitido.</string>
     <string name="receive_get_verified">Verificar</string>
     <string name="receive_invoice">Fatura</string>
     <string name="receive_limit">O mínimo é %1$s %2$s e o máximo é %3$s %4$s</string>
@@ -491,6 +495,9 @@
     <string name="receive_warning_crypto">Envie apenas %1$s para este endereço de depósito</string>
     <string name="receive_warning_will_send">Se você enviar menos de %1$s %2$s, você perderá esse dinheiro.</string>
     <string name="receive_will_send_other_currency">Enviar qualquer outra moeda para este endereço pode resultar na perda do seu depósito.</string>
+    <string name="scripted_account_error_dialog_btn_txt">Ok</string>
+    <string name="scripted_account_error_dialog_description">Para executar com uma conta/ativo com script, utilize a Waves Client</string>
+    <string name="scripted_account_error_dialog_title">Um script está instalado em sua conta ou ativo</string>
     <string name="secret_phrase_back_up_now">Fazer o backup agora</string>
     <string name="secret_phrase_do_it_later">Fazer isso depois</string>
     <string name="secret_phrase_no_backup_no_money">Sem Backup, Sem Dinheiro</string>
@@ -510,9 +517,11 @@
     <string name="send_confirmation_write_an_optional_message">Escreva uma mensagem opcional</string>
     <string name="send_continue">Continuar</string>
     <string name="send_error_get_data_from_qr">Erro ao obter dados do QR</string>
-    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">Você não tem saldo suficiente para pagar as taxas exigidas. \nVocê deve pagar uma taxa de transação de 0.001 WAVES e %1$s %2$s pela taxa do gateway.</string>
+    <string name="send_error_you_don_t_have_enough_funds_to_pay_the_required_fees">Você não tem saldo suficiente para pagar as taxas exigidas. \nVocê deve pagar uma taxa de %1$s transação de %2$s %3$s pela taxa do gateway.</string>
     <string name="send_fifty_percents">50%</string>
     <string name="send_five_percents">5%</string>
+    <string name="send_gateway_error_subtitle">Tente mais tarde</string>
+    <string name="send_gateway_error_title">O serviço da Coinomat está temporariamente indisponível</string>
     <string name="send_gateway_info_fees_are_1_from_the_amount_transferred">As taxas são de 1% do valor transferido.</string>
     <string name="send_gateway_info_gateway_fee">A taxa do gateway é %1$s %2$s</string>
     <string name="send_gateway_info_gateway_limits">Identificamos o endereço %1$s e enviaremos seu dinheiro através do gateway Coinomat para esse endereço. A quantidade mínima é %2$s %1$s e a quantidade máxima é %3$s %1$s.</string>
@@ -534,18 +543,13 @@
     <string name="send_to_same_address_warning">Não é possível enviar para o mesmo endereço.</string>
     <string name="send_toolbar_title">Enviar</string>
     <string name="send_transaction_error_check_asset">Verificar ativo</string>
-    <string name="send_transaction_fee_0_001_waves">Taxa de Transação 0.001 WAVES</string>
     <string name="send_use_total_balance">Usar o saldo total</string>
-    <string name="start_leasing_0_100">0.1</string>
-    <string name="start_leasing_0_100000">0.001</string>
-    <string name="start_leasing_0_500000">0.005</string>
     <string name="start_leasing_amount">Quantidade</string>
     <string name="start_leasing_balance">Saldo</string>
     <string name="start_leasing_choose_from_address">Escolher na lista de endereços</string>
     <string name="start_leasing_generator">Gerador</string>
     <string name="start_leasing_note_address">Endereço do node…</string>
     <string name="start_leasing_toolbar">Iniciar o aluguel</string>
-    <string name="start_leasing_transaction_fee_0_001_waves">Taxa de transação 0.001 WAVES</string>
     <string name="start_leasing_use_total_balance">Usar o saldo total</string>
     <string name="start_leasing_validation_address_is_invalid_error">Endereço inválido</string>
     <string name="start_leasing_validation_amount_insufficient_error">Saldo insuficiente</string>
@@ -560,13 +564,11 @@
     <string name="token_burn_confirmation_type">Tipo</string>
     <string name="token_burn_confirmation_you_have_burned">Você queimou %1$s %2$s</string>
     <string name="token_burn_confirmation_your_transaction_is_on_the_way">Sua transação está a caminho!</string>
-    <string name="token_burn_confirmationt_description">O Token Oficial do Robô Dating Decision. www.choosee.site Através de big data e inteligência artificial, ele ajuda na paquera e torna as pessoas humanas novamente.</string>
     <string name="token_burn_confirmationt_not_reissuable">Não reemissível</string>
     <string name="token_burn_confirmationt_reissuable">Reemissível</string>
     <string name="token_burn_continue_btn">Continuar</string>
     <string name="token_burn_quantity_of_tokens_to_be_burned_hint">Quantidade de tokens a serem queimados</string>
     <string name="token_burn_toolbar_title">Queimar Token</string>
-    <string name="token_burn_transaction_fee_0_001_waves">Taxa de transação 0.001 WAVES</string>
     <string name="token_burn_validation_amount_insufficient_error">Saldo insuficiente</string>
     <string name="token_burn_validation_is_required_error">Não preenchido</string>
     <string name="transaction_failed">Falha na transação</string>
@@ -604,7 +606,7 @@
     <string name="wallet_toolbar_title">Carteira</string>
     <string name="welcome_blockchain_description">Faça parte de uma das áreas que mais crescem no mundo da criptografia. Somente você tem acesso aos seus ativos.</string>
     <string name="welcome_blockchain_title">Bem-vindo ao Blockchain</string>
-    <string name="welcome_create_import_description">via código de emparelhamento ou manualmente</string>
+    <string name="welcome_create_import_description">via QR-code ou manualmente</string>
     <string name="welcome_create_import_title">Importar conta</string>
     <string name="welcome_create_new_acc">Criar uma nova conta</string>
     <string name="welcome_create_sign_in_description">para uma conta salva</string>

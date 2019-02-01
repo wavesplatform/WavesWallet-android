@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
@@ -12,6 +13,7 @@ import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.showAlertAboutScriptedAccount
 import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -69,6 +71,8 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
             }
         }
 
+        presenter.fee = intent.getLongExtra(BUNDLE_BLOCKCHAIN_COMMISSION, 0L)
+
         eventSubscriptions.add(RxTextView.textChanges(edit_new_alias_symbol)
                 .skipInitialValue()
                 .map {
@@ -85,12 +89,12 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
                 }
                 .filter { it.first }
                 .map {
-                    if (presenter.wavesBalance.getAvailableBalance() ?: 0 < Constants.WAVES_FEE){
+                    if (presenter.wavesBalance.getAvailableBalance() ?: 0 < presenter.fee) {
                         presenter.aliasValidation = false
                         makeButtonEnableIfValid()
-                        til_new_alias_symbol.error =  getString(R.string.buy_and_sell_not_enough, presenter.wavesBalance.getName())
+                        til_new_alias_symbol.error = getString(R.string.buy_and_sell_not_enough, presenter.wavesBalance.getName())
                         return@map ""
-                    }else{
+                    } else {
                         return@map it.second
                     }
                 }
@@ -108,7 +112,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         presenter.loadWavesBalance()
     }
 
-    fun makeButtonEnableIfValid() {
+    private fun makeButtonEnableIfValid() {
         button_create_alias.isEnabled = presenter.aliasValidation && isNetworkConnected()
     }
 
@@ -127,14 +131,18 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
 
     override fun onBackPressed() {
         setResult(Constants.RESULT_CANCELED)
-        finish()
-        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        exitFromActivity()
     }
 
     override fun successCreateAlias(alias: Alias) {
+        alias.save()
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_ALIAS, alias)
         })
+        exitFromActivity()
+    }
+
+    private fun exitFromActivity() {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
@@ -145,6 +153,10 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         }
     }
 
+    override fun failedCreateAliasCauseSmart() {
+        showAlertAboutScriptedAccount()
+    }
+
     override fun needToShowNetworkMessage() = true
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
@@ -153,6 +165,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     }
 
     companion object {
-        var RESULT_ALIAS = "alias"
+        const val RESULT_ALIAS = "alias"
+        const val BUNDLE_BLOCKCHAIN_COMMISSION = "blockchain_commission"
     }
 }

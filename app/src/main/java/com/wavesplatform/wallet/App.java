@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 
 import com.akexorcist.localizationactivity.core.LocalizationApplicationDelegate;
 import com.crashlytics.android.Crashlytics;
@@ -31,7 +30,6 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
 import io.fabric.sdk.android.Fabric;
-import io.github.kbiakov.codeview.classifier.CodeProcessor;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.realm.Realm;
 import pers.victor.ext.Ext;
@@ -39,7 +37,6 @@ import timber.log.Timber;
 
 public class App extends DaggerApplication {
 
-    private static final String RX_ERROR_TAG = "RxJava Error";
     @Inject
     PrefsUtil mPrefsUtil;
     @Inject
@@ -55,20 +52,21 @@ public class App extends DaggerApplication {
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
         }
+        LeakCanary.install(this);
+
         Analytics.appsFlyerInit(this);
         FirebaseApp.initializeApp(this);
-        LeakCanary.install(this);
         Fabric.with(this, new Crashlytics());
         sContext = this;
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
-        CodeProcessor.init(this);
 
         Realm.init(this);
         Ext.INSTANCE.setCtx(this);
 
-        RxJavaPlugins.setErrorHandler(throwable -> Log.e(RX_ERROR_TAG, throwable.getMessage(), throwable));
+        RxJavaPlugins.setErrorHandler(Timber::e);
 
         AppUtil appUtil = new AppUtil(this);
+        EnvironmentManager.init(this);
         accessManager = new AccessManager(mPrefsUtil, appUtil, authHelper);
 
         if (BuildConfig.DEBUG) {
@@ -81,8 +79,6 @@ public class App extends DaggerApplication {
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         BroadcastReceiver mReceiver = new ScreenReceiver();
         registerReceiver(mReceiver, filter);
-
-        EnvironmentManager.init(new PrefsUtil(this), appUtil);
 
         // Apply PRNG fixes on app start if needed
         appUtil.applyPRNGFixes();

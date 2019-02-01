@@ -8,14 +8,18 @@ import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.Hash
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
 import com.wavesplatform.wallet.v2.util.isValidAddress
+import io.reactivex.Observable
+import io.reactivex.functions.Function3
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.math.BigDecimal
@@ -29,7 +33,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     var selectedAsset: AssetBalance? = null
     var recipient: String? = ""
-    var amount: Float = 0F
+    var amount: BigDecimal = BigDecimal.ZERO
     var attachment: String? = ""
     var moneroPaymentId: String? = null
     var recipientAssetId: String? = null
@@ -37,6 +41,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
     var gatewayMin: BigDecimal = BigDecimal.ZERO
     var gatewayMax: BigDecimal = BigDecimal.ZERO
+    var fee = 0L
 
     fun sendClicked() {
         val res = validateTransfer()
@@ -78,9 +83,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 selectedAsset!!.assetId,
                 App.getAccessManager().getWallet()!!.publicKeyStr,
                 recipient ?: "",
-                MoneyUtil.getUnscaledValue(amount.toString(), selectedAsset),
+                MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
                 System.currentTimeMillis(),
-                Constants.WAVES_FEE,
+                fee,
                 "")
     }
 
@@ -90,7 +95,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         viewState.onShowPaymentDetails(details)
     }
 
-    private fun validateTransfer(): Int {
+    fun validateTransfer(): Int {
         if (selectedAsset == null) {
             return R.string.send_transaction_error_check_asset
         } else if (isRecipientValid() != true) {
@@ -121,12 +126,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     private fun isGatewayAmountError(): Boolean {
         if (type == Type.GATEWAY && selectedAsset != null && gatewayMax.toFloat() > 0) {
-            val totalAmount = BigDecimal(amount.toDouble()).plus(gatewayCommission).toFloat()
+            val totalAmount = amount + gatewayCommission
             val balance = BigDecimal.valueOf(selectedAsset!!.balance ?: 0,
-                    selectedAsset!!.getDecimals()).toFloat()
+                    selectedAsset!!.getDecimals())
             return !(balance >= totalAmount
-                    && totalAmount >= gatewayMin.toFloat()
-                    && totalAmount <= gatewayMax.toFloat())
+                    && totalAmount >= gatewayMin
+                    && totalAmount <= gatewayMax)
         }
         return false
     }
@@ -171,7 +176,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                             if (xRate == null) {
                                 viewState.showXRateError()
                             } else {
-                                viewState.showXRate(xRate, currencyTo!!)
+                                viewState.showXRate(xRate, currencyTo)
                             }
                         }
                     }, {
@@ -205,6 +210,36 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
 
         return false
+    }
+
+    fun loadCommission(assetId: String?) {
+        viewState.showCommissionLoading()
+        fee = 0L
+        addSubscription(Observable.zip(
+                matcherDataManager.getGlobalCommission(),
+                nodeDataManager.scriptAddressInfo(App.getAccessManager().getWallet()?.address!!),
+                nodeDataManager.scriptAssetInfo(assetId),
+                Function3 { t1: GlobalTransactionCommission,
+                            t2: ScriptInfo,
+                            t3: AssetsDetails ->
+                    return@Function3 Triple(t1, t2, t3)
+                })
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({ triple ->
+                    val commission = triple.first
+                    val scriptInfo = triple.second
+                    val assetsDetails = triple.third
+                    val params = GlobalTransactionCommission.Params()
+                    params.transactionType = Transaction.TRANSFER
+                    params.smartAccount = scriptInfo.extraFee != 0L
+                    params.smartAsset = assetsDetails.scripted
+                    fee = countCommission(commission, params)
+                    viewState.showCommissionSuccess(fee)
+                }, {
+                    it.printStackTrace()
+                    fee = 0L
+                    viewState.showCommissionError()
+                }))
     }
 
     companion object {
@@ -243,7 +278,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             val addressBytes = Base58.decode(address)
 
             if (addressBytes[0] != 1.toByte()
-                    || addressBytes[1] != Constants.ADDRESS_SCHEME.toByte()) {
+                    || addressBytes[1] != EnvironmentManager.getNetCode()) {
                 return false
             }
 

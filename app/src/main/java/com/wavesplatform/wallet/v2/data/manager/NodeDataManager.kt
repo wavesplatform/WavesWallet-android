@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.data.manager
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ProcessLifecycleOwner
+import android.text.TextUtils
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -35,7 +36,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     var transactions: List<Transaction> = ArrayList()
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
-        return spamService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM))
+        return spamService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM_FILE))
                 .map {
                     val scanner = Scanner(it)
                     val spam = arrayListOf<SpamAsset>()
@@ -50,10 +51,10 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
                     return@map spam
                 }.map { spamListFromDb ->
-                    if (prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)) {
-                        return@map arrayListOf<SpamAsset>()
-                    } else {
+                    if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
                         return@map spamListFromDb
+                    } else {
+                        return@map arrayListOf<SpamAsset>()
                     }
                 }
     }
@@ -133,6 +134,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     val assetBalance = queryFirst<AssetBalance> { equalTo("assetId", id) }
                     if (assetBalance?.isGateway == false) {
                         assetBalance.delete { equalTo("assetId", id) }
+                    } else {
+                        assetBalance?.balance = 0
+                        assetBalance?.save()
                     }
                 }
             }
@@ -166,7 +170,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     fun createAlias(createAliasRequest: AliasRequest): Observable<Alias> {
         createAliasRequest.senderPublicKey = getPublicKeyStr()
-        createAliasRequest.fee = Constants.WAVES_FEE
         createAliasRequest.timestamp = currentTimeMillis
         App.getAccessManager().getWallet()?.privateKey.notNull {
             createAliasRequest.sign(it)
@@ -184,7 +187,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     fun cancelLeasing(cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction> {
         cancelLeasingRequest.senderPublicKey = getPublicKeyStr()
-        cancelLeasingRequest.fee = Constants.WAVES_FEE
         cancelLeasingRequest.timestamp = currentTimeMillis
 
         App.getAccessManager().getWallet()?.privateKey.notNull {
@@ -192,7 +194,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         }
         return nodeService.cancelLeasing(cancelLeasingRequest)
                 .map {
-                    val first = queryFirst<Transaction> { equalTo("id", cancelLeasingRequest.txId) }
+                    val first = queryFirst<Transaction> { equalTo("id", cancelLeasingRequest.leaseId) }
                     first?.status = LeasingStatus.CANCELED.status
                     first?.save()
                     return@map it
@@ -202,9 +204,11 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun startLeasing(createLeasingRequest: CreateLeasingRequest, recipientIsAlias: Boolean): Observable<Transaction> {
+    fun startLeasing(createLeasingRequest: CreateLeasingRequest,
+                     recipientIsAlias: Boolean,
+                     fee: Long): Observable<Transaction> {
         createLeasingRequest.senderPublicKey = getPublicKeyStr()
-        createLeasingRequest.fee = Constants.WAVES_FEE
+        createLeasingRequest.fee = fee
         createLeasingRequest.timestamp = currentTimeMillis
 
         App.getAccessManager().getWallet()?.privateKey.notNull {
@@ -280,6 +284,21 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
+    }
+
+    fun scriptAddressInfo(address: String): Observable<ScriptInfo> {
+        return nodeService.scriptAddressInfo(address)
+                .doOnNext {
+                    prefsUtil.setValue(PrefsUtil.KEY_SCRIPTED_ACCOUNT, it.extraFee != 0L)
+                }
+    }
+
+    fun scriptAssetInfo(assetId: String?): Observable<AssetsDetails> {
+        return if (TextUtils.isEmpty(assetId) || assetId == "WAVES") {
+            Observable.just(AssetsDetails(assetId = "WAVES", scripted = false))
+        } else {
+            nodeService.scriptAssetInfo(assetId!!)
+        }
     }
 
 }

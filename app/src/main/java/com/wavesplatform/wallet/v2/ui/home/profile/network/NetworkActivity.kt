@@ -10,11 +10,9 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.data.rules.UrlRule
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.ui.home.MainActivity.Companion.QUICK_ACTION_SCREEN
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
-import io.github.anderscheow.validator.rules.common.NotEqualRule
 import kotlinx.android.synthetic.main.activity_network.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.app
@@ -44,11 +42,11 @@ class NetworkActivity : BaseActivity(), NetworkView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.network_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        edit_spam_filter.setText(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM))
+        edit_spam_filter.setText(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM_FILE))
 
-        switch_spam_filter.isChecked = prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false)
+        switch_spam_filter.isChecked = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
         switch_spam_filter.setOnCheckedChangeListener { buttonView, isChecked ->
-            presenter.spamFilterEnableValid = prefsUtil.getValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, false) != isChecked
+            presenter.spamFilterEnableValid = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true) != isChecked
             isFieldsValid()
         }
 
@@ -56,12 +54,11 @@ class NetworkActivity : BaseActivity(), NetworkView {
             on { s, start, before, count ->
                 val spamUrlValidation = Validation(til_spam_filter)
                         .and(NotEmptyTrimRule(R.string.network_spam_url_validation_url_empty))
-                        .and(NotEqualRule((prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM)), " "))
                         .and(UrlRule(R.string.network_spam_url_validation_bad_url))
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
-                                presenter.spamUrlFieldValid = true
+                                presenter.spamUrlFieldValid = prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM_FILE) != edit_spam_filter.text.toString()
                                 isFieldsValid()
                             }
 
@@ -69,14 +66,15 @@ class NetworkActivity : BaseActivity(), NetworkView {
                                 presenter.spamUrlFieldValid = false
                                 isFieldsValid()
                             }
-                        }, spamUrlValidation
-                        )
+                        }, spamUrlValidation)
             }
         }
 
         button_set_default.click {
-            edit_spam_filter.setText(Constants.URL_SPAM)
-            switch_spam_filter.isChecked = false
+            if (edit_spam_filter.text.toString() != Constants.URL_SPAM_FILE) {
+                edit_spam_filter.setText(Constants.URL_SPAM_FILE)
+            }
+            switch_spam_filter.isChecked = true
         }
 
         button_save.click {
@@ -85,7 +83,7 @@ class NetworkActivity : BaseActivity(), NetworkView {
                     presenter.checkValidUrl(edit_spam_filter.text.toString().trim())
                 }
                 presenter.spamFilterEnableValid -> {
-                    prefsUtil.setValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, switch_spam_filter.isChecked)
+                    prefsUtil.setValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, switch_spam_filter.isChecked)
                     mRxEventBus.post(Events.SpamFilterStateChanged())
                     finish()
                 }
@@ -98,7 +96,7 @@ class NetworkActivity : BaseActivity(), NetworkView {
 
     override fun afterSuccessCheckSpamUrl(isValid: Boolean) {
         if (isValid) {
-            prefsUtil.setValue(PrefsUtil.KEY_DISABLE_SPAM_FILTER, switch_spam_filter.isChecked)
+            prefsUtil.setValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, switch_spam_filter.isChecked)
             prefsUtil.setValue(PrefsUtil.KEY_SPAM_URL, edit_spam_filter.text.toString().trim())
             mRxEventBus.post(Events.SpamFilterUrlChanged())
             finish()

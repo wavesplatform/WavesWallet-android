@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:paddingTop="16dp"
     android:orientation="vertical"
     android:paddingBottom="16dp">
@@ -27,6 +28,6 @@
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:paddingTop="10dp"
-        android:text="thanks for the wonderful sex!!!! dude!"
+        tools:text="Some long long long long long long long long text"
         android:textColor="@color/disabled900" />
 </LinearLayout>

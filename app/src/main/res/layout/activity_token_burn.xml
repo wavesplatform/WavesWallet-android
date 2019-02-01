@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -237,7 +238,7 @@
         style="@style/WavesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/text_free_transaction"
+        android:layout_above="@id/view_commission"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:enabled="false"
@@ -245,15 +246,13 @@
         android:text="@string/token_burn_continue_btn"
         android:textStyle="bold" />
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/text_free_transaction"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/view_commission"
+        layout="@layout/view_commission"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="24dp"
-        android:layout_marginTop="14dp"
-        android:text="@string/token_burn_transaction_fee_0_001_waves"
-        android:textColor="@color/disabled500"
-        android:textSize="12sp" />
+        android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>

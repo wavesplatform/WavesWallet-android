@@ -9,4 +9,5 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 interface CryptoCurrencyView : BaseMvpView {
     fun onShowTunnel(tunnel: GetTunnel?)
     fun onShowError(message: String)
+    fun onGatewayError()
 }

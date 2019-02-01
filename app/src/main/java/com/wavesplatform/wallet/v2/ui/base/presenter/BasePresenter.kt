@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.base.presenter
 
+import android.util.Log
 import com.arellomobile.mvp.MvpPresenter
 import com.arellomobile.mvp.MvpView
 import com.wavesplatform.wallet.v1.util.AppUtil
@@ -30,8 +31,8 @@ open class BasePresenter<T : MvpView> @Inject constructor(): MvpPresenter<T>(){
     private val mCompositeDisposable = CompositeDisposable()
 
     override fun onDestroy() {
-        super.onDestroy()
         mCompositeDisposable.clear()
+        super.onDestroy()
     }
 
     open fun addSubscription(subscription: Disposable) {

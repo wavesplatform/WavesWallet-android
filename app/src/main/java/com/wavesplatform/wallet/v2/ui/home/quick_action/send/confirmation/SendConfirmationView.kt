@@ -9,4 +9,5 @@ interface SendConfirmationView : BaseMvpView {
     fun onShowError(res: Int)
     fun showAddressBookUser(name: String)
     fun hideAddressBookUser()
+    fun failedSendCauseSmart()
 }

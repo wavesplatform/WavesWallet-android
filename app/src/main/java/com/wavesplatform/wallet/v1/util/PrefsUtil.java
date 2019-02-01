@@ -34,9 +34,10 @@ public class PrefsUtil {
     public static final String KEY_ACCOUNT_FIRST_OPEN = "key_account_first_open";
 
     public static final String KEY_DEFAULT_ASSETS = "key_default_assets";
-    public static final String KEY_DISABLE_SPAM_FILTER = "disable_spam_filter";
+    public static final String KEY_ENABLE_SPAM_FILTER = "enable_spam_filter";
     public static final String KEY_SPAM_URL = "spam_url";
     public static final String KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS = "key_need_update_transaction_after_change_spam_settings";
+    public static final String KEY_SCRIPTED_ACCOUNT = "scripted_account";
 
     public static final String KEY_LAST_UPDATE_DEX_INFO = "last_update_dex_info";
 
@@ -98,6 +99,10 @@ public class PrefsUtil {
     }
 
     public void setValue(String guid, String name, int value) {
+        setValueInternal(guid + name, value);
+    }
+
+    public void setValue(String guid, String name, Boolean value) {
         setValueInternal(guid + name, value);
     }
 
@@ -216,6 +221,6 @@ public class PrefsUtil {
     }
 
     public String getEnvironment() {
-        return getGlobalValue(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, EnvironmentManager.KEY_ENV_PROD);
+        return getGlobalValue(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, EnvironmentManager.KEY_ENV_MAIN_NET);
     }
 }

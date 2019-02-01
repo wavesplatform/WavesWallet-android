@@ -41,7 +41,6 @@
 
         <activity
             android:name=".v2.ui.splash.SplashActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|locale"
             android:launchMode="singleTask"
             android:noHistory="true"
             android:screenOrientation="portrait"
@@ -52,9 +51,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <data android:scheme="waves" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
@@ -67,7 +64,6 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".v2.ui.language.choose.ChooseLanguageActivity"
-            android:configChanges="orientation|locale"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />

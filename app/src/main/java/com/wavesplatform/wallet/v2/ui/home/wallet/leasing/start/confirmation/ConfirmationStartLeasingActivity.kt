@@ -2,16 +2,17 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.WindowManager
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.util.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
-import com.wavesplatform.wallet.v2.util.stripZeros
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_confirm_leasing.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -41,10 +42,12 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
         presenter.address = intent.getStringExtra(BUNDLE_ADDRESS)
         presenter.amount = intent.getStringExtra(BUNDLE_AMOUNT)
         presenter.recipientIsAlias = intent.getBooleanExtra(BUNDLE_RECIPIENT_IS_ALIAS, false)
+        presenter.fee = intent.getLongExtra(BUNDLE_BLOCKCHAIN_COMMISSION, 0L)
 
         text_leasing_value.text = presenter.amount
         text_leasing_value.makeTextHalfBold()
-        text_free_value.text = "${MoneyUtil.getScaledText(Constants.WAVES_FEE, 8).stripZeros()} ${Constants.wavesAssetInfo.name}"
+        text_free_value.text = "${getScaledAmount(presenter.fee, 8)} ${Constants.wavesAssetInfo.name}"
+
         text_node_address.text = presenter.address
 
         text_leasing_result_value.text = getString(R.string.confirm_leasing_result_value, presenter.amount, Constants.wavesAssetInfo.name)
@@ -57,9 +60,8 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
             card_leasing_preview_info.gone()
 
             card_progress.visiable()
-            val rotation = AnimationUtils.loadAnimation(this, R.anim.rotate)
-            rotation.fillAfter = true
-            image_loader.startAnimation(rotation)
+
+            image_loader.show()
 
             presenter.startLeasing()
         }
@@ -76,17 +78,30 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
     }
 
     override fun successStartLeasing() {
-        image_loader.clearAnimation()
+        image_loader.hide()
         card_progress.gone()
         card_success.visiable()
     }
 
-    override fun failedStartLeasing() {
-        image_loader.clearAnimation()
+    override fun failedStartLeasing(message: String?) {
+        image_loader.hide()
         card_progress.gone()
         card_leasing_preview_info.visiable()
+
+        message?.let {
+            showError(message, R.id.root)
+        }
     }
 
+    override fun onDestroy() {
+        image_loader.hide()
+        super.onDestroy()
+    }
+
+    override fun failedStartLeasingCauseSmart() {
+        setResult(RESULT_SMART_ERROR)
+        onBackPressed()
+    }
 
     override fun needToShowNetworkMessage() = true
 
@@ -99,5 +114,6 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
         var BUNDLE_ADDRESS = "address"
         var BUNDLE_AMOUNT = "amount"
         var BUNDLE_RECIPIENT_IS_ALIAS = "recipient_is_alias"
+        var BUNDLE_BLOCKCHAIN_COMMISSION = "blockchain_commission"
     }
 }

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,9 +41,6 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
-import io.github.kbiakov.codeview.CodeView
-import io.github.kbiakov.codeview.highlight.ColorThemeData
-import io.github.kbiakov.codeview.highlight.SyntaxColors
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
 import pers.victor.ext.*
@@ -178,7 +176,11 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         historyContainer?.removeAllViews()
 
         when (transaction.transactionType()) {
-            TransactionType.RECEIVED_TYPE, TransactionType.MASS_RECEIVE_TYPE, TransactionType.SPAM_RECEIVE_TYPE, TransactionType.MASS_SPAM_RECEIVE_TYPE, TransactionType.UNRECOGNISED_TYPE -> {
+            TransactionType.RECEIVED_TYPE,
+            TransactionType.MASS_RECEIVE_TYPE,
+            TransactionType.SPAM_RECEIVE_TYPE,
+            TransactionType.MASS_SPAM_RECEIVE_TYPE,
+            TransactionType.UNRECOGNISED_TYPE -> {
                 val receiveView = inflater?.inflate(R.layout.fragment_bottom_sheet_receive_layout, historyContainer, false)
                 val receivedFromName = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_name)
                 val receivedFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_address)
@@ -231,8 +233,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                     }
                     historyContainer?.addView(resendBtn)
                 }
-
-
             }
             TransactionType.STARTED_LEASING_TYPE -> {
                 val startLeaseView = inflater?.inflate(R.layout.fragment_bottom_sheet_start_lease_layout, historyContainer, false)
@@ -241,7 +241,12 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 val textLeasingToAddress = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_leasing_to_address)
                 val imageAddressAction = startLeaseView?.findViewById<AppCompatImageView>(R.id.image_address_action)
 
-                textLeasingToAddress?.text = transaction.recipientAddress
+                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
+                if (nodeLeasingRecipient.isNullOrEmpty()) {
+                    textLeasingToAddress?.text = transaction.recipient.clearAlias()
+                } else {
+                    textLeasingToAddress?.text = nodeLeasingRecipient
+                }
 
                 resolveExistOrNoAddress(textLeasingToName, textLeasingToAddress, imageAddressAction)
 
@@ -283,18 +288,17 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                             R.string.history_my_dex_intent_sell,
                             myOrder.assetPair?.amountAssetObject!!.name,
                             myOrder.assetPair?.priceAssetObject?.name)
-                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.price,
-                            myOrder.assetPair?.priceAssetObject)} " +
-                            "${myOrder.assetPair?.amountAssetObject?.name}"
                 } else {
                     typeView?.text = getString(
                             R.string.history_my_dex_intent_buy,
                             myOrder.assetPair?.amountAssetObject!!.name,
                             myOrder.assetPair?.priceAssetObject?.name)
-                    btcPrice?.text = "${MoneyUtil.getScaledText(transaction.price,
-                            myOrder?.assetPair?.priceAssetObject)} " +
-                            "${myOrder?.assetPair?.priceAssetObject?.name}"
                 }
+
+                btcPrice?.text = "${MoneyUtil.getScaledPrice(transaction.price,
+                        myOrder?.assetPair?.amountAssetObject?.precision ?: 0,
+                        myOrder?.assetPair?.priceAssetObject?.precision ?: 0)} " +
+                        "${myOrder?.assetPair?.priceAssetObject?.name}"
 
                 historyContainer?.addView(exchangeView)
                 historyContainer?.addView(commentBlock)
@@ -310,14 +314,20 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 }
                 historyContainer?.addView(baseInfoLayout)
             }
-            TransactionType.CANCELED_LEASING_TYPE, TransactionType.INCOMING_LEASING_TYPE -> {
+            TransactionType.CANCELED_LEASING_TYPE,
+            TransactionType.INCOMING_LEASING_TYPE -> {
                 val receiveView = inflater?.inflate(R.layout.fragment_bottom_sheet_cancel_or_incoming_leasing_layout, historyContainer, false)
 
                 val textCancelLeasingFromName = receiveView?.findViewById<AppCompatTextView>(R.id.text_cancel_leasing_from_name)
                 val textCancelLeasingFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_cancel_leasing_from_address)
                 val imageAddressAction = receiveView?.findViewById<AppCompatImageView>(R.id.image_address_action)
 
-                textCancelLeasingFromAddress?.text = transaction.sender
+                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
+                if (nodeLeasingRecipient.isNullOrEmpty()) {
+                    textCancelLeasingFromAddress?.text = transaction.recipient.clearAlias()
+                } else {
+                    textCancelLeasingFromAddress?.text = nodeLeasingRecipient
+                }
 
                 if (transaction.status == LeasingStatus.ACTIVE.status) {
                     status?.text = getString(R.string.history_details_active_now)
@@ -329,7 +339,9 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 historyContainer?.addView(commentBlock)
                 historyContainer?.addView(baseInfoLayout)
             }
-            TransactionType.TOKEN_GENERATION_TYPE, TransactionType.TOKEN_BURN_TYPE, TransactionType.TOKEN_REISSUE_TYPE -> {
+            TransactionType.TOKEN_GENERATION_TYPE,
+            TransactionType.TOKEN_BURN_TYPE,
+            TransactionType.TOKEN_REISSUE_TYPE -> {
                 val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout, historyContainer, false)
                 val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
                 val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
@@ -368,7 +380,11 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                     val imageAddressAction = addressView?.findViewById<AppCompatImageView>(R.id.image_address_action)
                     val viewDivider = addressView?.findViewById<AppCompatImageView>(R.id.view_divider)
 
-                    textSentAddress?.text = transfer.recipientAddress
+                    var recipient = transfer.recipient.clearAlias()
+                    if (TextUtils.isEmpty(recipient)) {
+                        recipient = transfer.recipientAddress ?: ""
+                    }
+                    textSentAddress?.text = recipient
                     textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset)
 
                     resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
@@ -406,33 +422,31 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                         addressContainer?.addView(addressView)
                     }
                 }
-
                 historyContainer?.addView(massSendLayout)
                 historyContainer?.addView(commentBlock)
                 historyContainer?.addView(baseInfoLayout)
                 historyContainer?.addView(button)
             }
-            TransactionType.DATA_TYPE -> {
-                val dataView = inflater?.inflate(R.layout.fragment_bottom_sheet_data_layout, historyContainer, false)
-                val codeView = dataView?.findViewById<CodeView>(R.id.code_view)
-                val imageCopyData = dataView?.findViewById<AppCompatImageView>(R.id.image_copy_data)
-
-                val customTheme = ColorThemeData(SyntaxColors(android.R.color.transparent, R.color.submit300, android.R.color.transparent, android.R.color.transparent, R.color.basic700,
-                        android.R.color.transparent, R.color.basic700, android.R.color.transparent, android.R.color.transparent, android.R.color.transparent, android.R.color.transparent),
-                        R.color.basic50, android.R.color.transparent, android.R.color.transparent, R.color.basic50)
-
-
-                codeView?.setCode(gson.toJson(transaction.data))
-                codeView?.getOptions()?.withTheme(customTheme)
-
-                eventSubscriptions.add(RxView.clicks(imageCopyData!!)
-                        .throttleFirst(1500, TimeUnit.MILLISECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe {
-                            imageCopyData.copyToClipboard(gson.toJson(transaction.data))
-                        })
-
-                historyContainer?.addView(dataView)
+            TransactionType.SET_SPONSORSHIP_TYPE -> {
+                val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout,
+                        historyContainer, false)
+                val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
+                textIdValue?.text = transaction.assetId
+                historyContainer?.addView(tokenView)
+                baseInfoLayout?.findViewById<View>(R.id.view_line_1)?.visiable()
+                historyContainer?.addView(baseInfoLayout)
+            }
+            TransactionType.CANCEL_SPONSORSHIP_TYPE -> {
+                val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout,
+                        historyContainer, false)
+                val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
+                textIdValue?.text = transaction.assetId
+                historyContainer?.addView(tokenView)
+                baseInfoLayout?.findViewById<View>(R.id.view_line_1)?.visiable()
+                historyContainer?.addView(baseInfoLayout)
+            }
+            else -> {
+                baseInfoLayout?.setMargins(top = dp2px(16))
                 historyContainer?.addView(baseInfoLayout)
             }
         }
@@ -558,11 +572,20 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         }
 
         if (requestCode == StartLeasingActivity.REQUEST_CANCEL_LEASING_CONFIRMATION) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    rxEventBus.post(Events.UpdateListOfActiveTransaction(selectedItemPosition))
+                    dismiss()
+                }
+                Constants.RESULT_SMART_ERROR -> {
+                    activity?.showAlertAboutScriptedAccount()
+                }
+            }
             if (resultCode == Activity.RESULT_OK) {
-                rxEventBus.post(Events.UpdateListOfActiveTransaction(selectedItemPosition))
-                dismiss()
+
             }
         }
+
     }
 
     fun configureData(selectedItem: Transaction, selectedPosition: Int, allItems: List<Transaction>) {

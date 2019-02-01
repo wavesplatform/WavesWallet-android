@@ -9,8 +9,9 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ethanhua.skeleton.Skeleton
+import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -27,7 +28,9 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_leasing.*
-import pers.victor.ext.*
+import pers.victor.ext.click
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class LeasingFragment : BaseFragment(), LeasingView {
@@ -42,6 +45,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
     @Inject
     lateinit var adapterActiveAdapter: LeasingActiveAdapter
     var changeTabBarVisibilityListener: HistoryTabFragment.ChangeTabBarVisibilityListener? = null
+    private var skeletonScreen: ViewSkeletonScreen? = null
 
     override fun configLayoutRes(): Int = R.layout.fragment_leasing
 
@@ -69,8 +73,6 @@ class LeasingFragment : BaseFragment(), LeasingView {
         swipe_container.setOnRefreshListener {
             presenter.getActiveLeasing()
         }
-
-        presenter.getActiveLeasing()
 
         card_view_history.click {
             launchActivity<HistoryActivity> {
@@ -137,6 +139,14 @@ class LeasingFragment : BaseFragment(), LeasingView {
             bottomSheetFragment.configureData(historyItem, position, ArrayList(adapter.data) as ArrayList<Transaction>)
             bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
         }
+
+        skeletonScreen = Skeleton.bind(root)
+                .shimmer(true)
+                .color(R.color.basic100)
+                .load(R.layout.skeleton_leasing_layout)
+                .show()
+
+        presenter.getActiveLeasing()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -156,6 +166,13 @@ class LeasingFragment : BaseFragment(), LeasingView {
     }
 
     override fun showBalances(wavesAsset: AssetBalance) {
+        skeletonScreen?.hide()
+        if (wavesAsset.balance ?: 0 > 0) {
+            linear_details_balances.visiable()
+        } else {
+            linear_details_balances.gone()
+        }
+
         swipe_container.isRefreshing = false
         text_available_balance.text = wavesAsset.getDisplayAvailableBalance()
         text_available_balance.makeTextHalfBold()
@@ -173,12 +190,15 @@ class LeasingFragment : BaseFragment(), LeasingView {
 
         button_start_lease.click {
             launchActivity<StartLeasingActivity> {
-                putExtra(StartLeasingActivity.BUNDLE_WAVES, wavesAsset)
+                val bundle = Bundle()
+                bundle.putLong(StartLeasingActivity.BUNDLE_WAVES, wavesAsset.getAvailableBalance() ?: 0)
+                putExtras(bundle)
             }
         }
     }
 
     override fun showActiveLeasingTransaction(transactions: List<Transaction>) {
+        skeletonScreen?.hide()
         swipe_container.isRefreshing = false
         if (transactions.isEmpty()) {
             linear_active_leasing.gone()

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:elevation="3dp"
+        app:cardCornerRadius="4dp"
+        android:layout_marginBottom="24dp"
+        app:contentPadding="24dp"
+        app:cardBackgroundColor="@color/white">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/ic_t_setscript_48" />
+
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="24dp"
+                android:gravity="center_horizontal"
+                android:text="@string/scripted_account_error_dialog_title"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:fontFamily="@font/roboto_medium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/scripted_account_error_dialog_description"
+                android:textColor="@color/disabled500"
+                android:textSize="12sp" />
+
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/button_confirm"
+                style="@style/WavesButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="44dp"
+                android:text="@string/scripted_account_error_dialog_btn_txt" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</FrameLayout>

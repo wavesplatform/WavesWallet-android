@@ -371,7 +371,7 @@
         style="@style/WavesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/text_free_transaction"
+        android:layout_above="@+id/fee_layout"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:clickable="true"
@@ -379,15 +379,13 @@
         android:text="@string/wallet_leasing_start_lease"
         android:textStyle="bold" />
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/text_free_transaction"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/fee_layout"
+        layout="@layout/view_commission"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="24dp"
-        android:layout_marginTop="14dp"
-        android:text="@string/start_leasing_transaction_fee_0_001_waves"
-        android:textColor="@color/disabled500"
-        android:textSize="12sp" />
+        android:layout_margin="16dp"/>
+
 </RelativeLayout>
