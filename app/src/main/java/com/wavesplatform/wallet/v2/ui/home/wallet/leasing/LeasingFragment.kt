@@ -136,8 +136,8 @@ class LeasingFragment : BaseFragment(), LeasingView {
 
             val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
 
-//            bottomSheetFragment.configureData(historyItem, position, ArrayList(adapter.data) as ArrayList<Transaction>)
-//            bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
+            bottomSheetFragment.configureData(historyItem, position)
+            bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
         }
 
         skeletonScreen = Skeleton.bind(root)

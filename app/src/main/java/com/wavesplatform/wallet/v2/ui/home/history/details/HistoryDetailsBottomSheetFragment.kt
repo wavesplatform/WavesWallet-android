@@ -25,6 +25,7 @@ import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -56,6 +57,7 @@ import javax.inject.Inject
 
 class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), HistoryDetailsView {
     var selectedItem: Transaction? = null
+    var selectedItemPosition: Int = 0
     var rootView: View? = null
     var inflater: LayoutInflater? = null
 
@@ -76,13 +78,18 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
     fun providePresenter(): HistoryDetailsPresenter = presenter
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         this.inflater = inflater
-
         rootView = inflater.inflate(R.layout.history_details_bottom_sheet_dialog, container, false)
+
+        configureView()
+
+        return rootView
+    }
+
+    private fun configureView() {
         val container = rootView?.findViewById<LinearLayout>(R.id.main_container)
+        container?.removeAllViews()
 
         selectedItem?.let {
             container?.apply {
@@ -92,8 +99,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 addView(setupFooter(it))
             }
         }
-
-        return rootView
     }
 
     private fun setupHeader(transaction: Transaction): View? {
@@ -793,10 +798,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         }
     }
 
-    private fun setupView(transaction: Transaction) {
-
-    }
-
     private fun nonGateway(assetBalance: AssetBalance, transaction: Transaction) =
             !assetBalance.isGateway || (assetBalance.isGateway
                     && !transaction.recipientAddress.equals(CoinomatService.GATEWAY_ADDRESS))
@@ -873,7 +874,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         if (requestCode == AddressBookActivity.REQUEST_EDIT_ADDRESS || requestCode == AddressBookActivity.REQUEST_ADD_ADDRESS) {
             if (resultCode == Constants.RESULT_OK || resultCode == Constants.RESULT_OK_NO_RESULT) {
                 selectedItem?.let {
-                    setupView(it)
+                    configureView()
                 }
             }
         }
@@ -881,7 +882,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         if (requestCode == StartLeasingActivity.REQUEST_CANCEL_LEASING_CONFIRMATION) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
-//                    rxEventBus.post(Events.UpdateListOfActiveTransaction(selectedItemPosition))
+                    rxEventBus.post(Events.UpdateListOfActiveTransaction(selectedItemPosition))
                     dismiss()
                 }
                 Constants.RESULT_SMART_ERROR -> {
@@ -905,7 +906,8 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
         super.onPause()
     }
 
-    fun configureData(selectedItem: Transaction) {
+    fun configureData(selectedItem: Transaction, selectedPosition: Int) {
         this.selectedItem = selectedItem
+        this.selectedItemPosition = selectedPosition
     }
 }
