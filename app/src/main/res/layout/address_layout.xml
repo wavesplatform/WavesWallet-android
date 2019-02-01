@@ -53,7 +53,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/linear_address"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="6dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
 
             <LinearLayout
                 android:id="@+id/linear_amount"
@@ -91,12 +93,16 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="24dp"
                 android:layout_toStartOf="@+id/image_address_action"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 app:srcCompat="@drawable/ic_copy_18_black" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/image_address_action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 app:srcCompat="@drawable/ic_add_address_submit_300" />
@@ -109,7 +115,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginLeft="2dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="6dp"
         android:layout_marginRight="2dp"
         android:background="@color/accent50" />
 

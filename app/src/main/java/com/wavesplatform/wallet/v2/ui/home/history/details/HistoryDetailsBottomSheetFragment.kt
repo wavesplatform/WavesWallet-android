@@ -17,6 +17,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.gson.Gson
 import com.jakewharton.rxbinding2.view.RxView
+import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -80,7 +81,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
         this.inflater = inflater
 
-        rootView = inflate(R.layout.history_details_bottom_sheet_dialog, container, false)
+        rootView = inflater.inflate(R.layout.history_details_bottom_sheet_dialog, container, false)
         val container = rootView?.findViewById<LinearLayout>(R.id.main_container)
 
         selectedItem?.let {
@@ -209,11 +210,19 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
             TransactionType.SPAM_RECEIVE_TYPE,
             TransactionType.MASS_SPAM_RECEIVE_TYPE,
             TransactionType.UNRECOGNISED_TYPE -> {
-                val receiveView = inflate(R.layout.fragment_bottom_sheet_receive_layout)
+                val receiveView = inflater?.inflate(R.layout.fragment_bottom_sheet_receive_layout, historyContainer, false)
                 val receivedFromName = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_name)
+                val imageCopy = receiveView?.findViewById<AppCompatImageView>(R.id.image_address_copy)
                 val receivedFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_address)
                 val textAddressAction = receiveView?.findViewById<AppCompatTextView>(R.id.text_address_action)
                 val spamTag = receiveView?.findViewById<SpamTag>(R.id.spam_tag)
+
+                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                        .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            imageCopy.copyToClipboard(receivedFromAddress?.text.toString())
+                        })
 
                 receivedFromAddress?.text = transaction.sender
 
@@ -235,9 +244,17 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 val sendView = inflater?.inflate(R.layout.fragment_bottom_sheet_send_layout, historyContainer, false)
                 val sentToName = sendView?.findViewById<AppCompatTextView>(R.id.text_sent_to_name)
                 val sentAddress = sendView?.findViewById<AppCompatTextView>(R.id.text_sent_address)
+                val imageCopy = sendView?.findViewById<AppCompatImageView>(R.id.image_address_copy)
                 val imageAddressAction = sendView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
                 sentAddress?.text = transaction.recipientAddress
+
+                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                        .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            imageCopy.copyToClipboard(sentAddress?.text.toString())
+                        })
 
                 resolveExistOrNoAddress(sentToName, sentAddress, imageAddressAction)
 
@@ -246,6 +263,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
             TransactionType.STARTED_LEASING_TYPE -> {
                 val startLeaseView = inflater?.inflate(R.layout.fragment_bottom_sheet_start_lease_layout, historyContainer, false)
                 val textLeasingToName = startLeaseView?.findViewById<TextView>(R.id.text_leasing_to_name)
+                val imageCopy = startLeaseView?.findViewById<AppCompatImageView>(R.id.image_address_copy)
                 val textLeasingToAddress = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_leasing_to_address)
                 val imageAddressAction = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
@@ -255,6 +273,13 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 } else {
                     textLeasingToAddress?.text = nodeLeasingRecipient
                 }
+
+                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                        .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            imageCopy.copyToClipboard(textLeasingToAddress?.text.toString())
+                        })
 
                 resolveExistOrNoAddress(textLeasingToName, textLeasingToAddress, imageAddressAction)
 
@@ -335,6 +360,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 val receiveView = inflater?.inflate(R.layout.fragment_bottom_sheet_cancel_or_incoming_leasing_layout, historyContainer, false)
                 val textCancelLeasingFromName = receiveView?.findViewById<AppCompatTextView>(R.id.text_cancel_leasing_from_name)
                 val textCancelLeasingFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_cancel_leasing_from_address)
+                val imageCopy = receiveView?.findViewById<AppCompatImageView>(R.id.image_address_copy)
                 val imageAddressAction = receiveView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
                 val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
@@ -343,6 +369,13 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 } else {
                     textCancelLeasingFromAddress?.text = nodeLeasingRecipient
                 }
+
+                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                        .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            imageCopy.copyToClipboard(textCancelLeasingFromAddress?.text.toString())
+                        })
 
 //                if (transaction.status == LeasingStatus.ACTIVE.status) {
 //                    status?.text = getString(R.string.history_details_active_now)
@@ -357,6 +390,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
             TransactionType.TOKEN_REISSUE_TYPE -> {
                 val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout, historyContainer, false)
                 val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
+                val imageCopy = tokenView?.findViewById<AppCompatImageView>(R.id.image_copy)
                 val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
 
                 textIdValue?.text = transaction.assetId
@@ -365,6 +399,13 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 } else {
                     textTokenStatus?.text = getString(R.string.history_details_not_reissuable)
                 }
+
+                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                        .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            imageCopy.copyToClipboard(textIdValue?.text.toString())
+                        })
 
                 historyContainer?.addView(tokenView)
             }
@@ -388,6 +429,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                     val textRecipientNumber = addressView?.findViewById<AppCompatTextView>(R.id.text_recipient_number)
                     val textSentAddress = addressView?.findViewById<TextView>(R.id.text_sent_address)
                     val textSendAmountTag = addressView?.findViewById<AppCompatTextView>(R.id.text_send_amount_tag)
+                    val imageCopy = addressView?.findViewById<AppCompatImageView>(R.id.image_copy)
                     val textSentName = addressView?.findViewById<TextView>(R.id.text_sent_name)
                     val textSentAmount = addressView?.findViewById<TextView>(R.id.text_sent_amount)
                     val imageAddressAction = addressView?.findViewById<AppCompatImageView>(R.id.image_address_action)
@@ -416,6 +458,13 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                     }
                     textSentAddress?.text = recipient
 
+                    eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                            .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe {
+                                imageCopy.copyToClipboard(textSentAddress?.text.toString())
+                            })
+
                     resolveExistOrNoAddressForMassSend(textSentName, textSentAddress, imageAddressAction)
 
                     if (index >= 3) {
@@ -427,6 +476,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
                             for (i in 3 until transfers.size) {
                                 val addressView = inflater?.inflate(R.layout.address_layout, null, false)
+                                val imageCopy = addressView?.findViewById<AppCompatImageView>(R.id.image_copy)
                                 val textSendAmountTag = addressView?.findViewById<AppCompatTextView>(R.id.text_send_amount_tag)
                                 val textRecipientNumber = addressView?.findViewById<AppCompatTextView>(R.id.text_recipient_number)
                                 val textSentAddress = addressView?.findViewById<AppCompatTextView>(R.id.text_sent_address)
@@ -440,6 +490,13 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                                 val transfer = transfers[i]
 
                                 textSentAddress?.text = transfer.recipientAddress
+
+                                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                                        .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe {
+                                            imageCopy.copyToClipboard(textSentAddress?.text.toString())
+                                        })
 
                                 if (isSpamConsidered(transaction.assetId, prefsUtil)) {
                                     textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset).stripZeros()
@@ -475,6 +532,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
             TransactionType.SET_SPONSORSHIP_TYPE -> {
                 val sponsorView = inflater?.inflate(R.layout.fragment_bottom_sheet_set_sponsorship_layout, historyContainer, false)
                 val textIdValue = sponsorView?.findViewById<TextView>(R.id.text_id_value)
+                val imageCopy = sponsorView?.findViewById<AppCompatImageView>(R.id.image_copy)
                 val textAmountPerTransValue = sponsorView?.findViewById<TextView>(R.id.text_amount_per_trans_value)
 
                 textIdValue?.text = transaction.assetId
@@ -482,6 +540,13 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 getScaledAmount(transaction.minSponsoredAssetFee?.toLong()
                         ?: 0, transaction.asset?.precision ?: 0)
                 } ${transaction.asset?.name}"
+
+                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                        .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            imageCopy.copyToClipboard(textIdValue?.text.toString())
+                        })
 
                 historyContainer?.addView(sponsorView)
             }
@@ -504,9 +569,17 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
             TransactionType.RECEIVE_SPONSORSHIP_TYPE -> {
                 val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout, historyContainer, false)
                 val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
+                val imageCopy = tokenView?.findViewById<AppCompatImageView>(R.id.image_copy)
                 val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
 
                 textIdValue?.text = transaction.assetId
+
+                eventSubscriptions.add(RxView.clicks(imageCopy!!)
+                        .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            imageCopy.copyToClipboard(textIdValue?.text.toString())
+                        })
 
                 textTokenStatus?.gone()
 
@@ -560,7 +633,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
     }
 
     private fun setupFooter(transaction: Transaction): View? {
-        val view = inflate(R.layout.fragment_history_bottom_sheet_bottom_btns)
+        val view = inflater?.inflate(R.layout.fragment_history_bottom_sheet_bottom_btns, null, false)
 
         fun changeViewMargin(view: View) {
             val llp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -568,7 +641,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
             view.layoutParams = llp
         }
 
-        eventSubscriptions.add(RxView.clicks(view.frame_close)
+        eventSubscriptions.add(RxView.clicks(view!!.image_close)
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -579,7 +652,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    copyToClipboard(transaction.id, view.text_copy_tx_id, R.string.history_details_copy_tx_id)
+                    copyToClipboard(transaction.id, view?.text_copy_tx_id, R.string.history_details_copy_tx_id)
                 })
 
         eventSubscriptions.add(RxView.clicks(view.text_copy_all_data)
@@ -594,7 +667,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    // TODO: Open explorer
+                    openUrlWithChromeTab(String.format(Constants.WAVES_EXPLORER, transaction.id))
                 })
 
         when (transaction.transactionType()) {
@@ -820,6 +893,16 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
             }
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        SimpleChromeCustomTabs.getInstance().connectTo(requireActivity())
+    }
+
+    override fun onPause() {
+        SimpleChromeCustomTabs.getInstance().disconnectFrom(requireActivity())
+        super.onPause()
     }
 
     fun configureData(selectedItem: Transaction) {

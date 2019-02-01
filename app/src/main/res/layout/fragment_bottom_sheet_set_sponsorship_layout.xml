@@ -42,11 +42,12 @@
         android:paddingEnd="16dp">
 
         <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/image_address_copy"
+            android:id="@+id/image_copy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:padding="8dp"
             app:srcCompat="@drawable/ic_copy_18_black" />
