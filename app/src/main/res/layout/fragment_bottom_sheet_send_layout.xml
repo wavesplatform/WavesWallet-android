@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/basic50"
+    android:layout_marginBottom="8dp"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingStart="24dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="10dp">
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_sent_to_hint"
@@ -22,32 +26,60 @@
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_sent_to_name"
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_sent_to_hint"
             android:layout_marginTop="6dp"
             android:text="Mr. Big Mike"
-            android:textColor="@color/disabled900" />
+            android:textColor="@color/disabled900"
+            android:visibility="gone" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_sent_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_sent_to_name"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="2dp"
-            android:textSize="14sp"
-            android:layout_toStartOf="@+id/image_address_action"
+            android:layout_marginEnd="16dp"
             android:singleLine="true"
             android:text="96AFUzFKebbwmJulY6evx9GrfYBkmn8LcUL0"
-            android:textColor="@color/disabled900" />
+            android:textColor="@color/disabled900"
+            android:textSize="14sp" />
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/image_address_action"
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="16dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_address_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/text_sent_address"
-            android:layout_alignParentRight="true"
-            app:srcCompat="@drawable/ic_edit_address_submit_300" />
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_submit300_rounded"
+            android:drawableStart="@drawable/ic_add_address_submit_300"
+            android:drawablePadding="4dp"
+            android:gravity="center_vertical"
+            android:paddingStart="4dp"
+            android:paddingTop="1dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="1dp"
+            android:text="@string/history_details_edit_address"
+            android:textColor="@color/white" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_address_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_copy_18_black" />
+
     </RelativeLayout>
+
 </LinearLayout>

@@ -11,7 +11,6 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -26,12 +25,15 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
 import com.wavesplatform.wallet.v2.data.remote.CoinomatService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
+import com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
+import com.wavesplatform.wallet.v2.ui.custom.SpamTag
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
@@ -174,7 +176,7 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                         view.text_tag.visiable()
                     }
                 } else {
-                    view.text_transaction_name.text = "${view.text_transaction_name.text} ${transaction.asset?.name}"
+                    view.text_transaction_value.text = "${view.text_transaction_value.text} ${transaction.asset?.name}"
                 }
             }
         }
@@ -184,7 +186,340 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
     }
 
     private fun setupBody(transaction: Transaction): View? {
-        return View(activity)
+        val historyContainer = LinearLayout(activity)
+        historyContainer.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        historyContainer.orientation = LinearLayout.VERTICAL
+
+        val commentBlock = inflate(R.layout.history_detailed_transcation_comment_block_layout)
+
+        /**Comment block views**/
+        val textComment = commentBlock?.findViewById<TextView>(R.id.text_comment)
+
+        val showCommentBlock = !transaction.attachment.isNullOrEmpty()
+        if (showCommentBlock) {
+            commentBlock.visiable()
+            textComment?.text = String(Base58.decode(transaction.attachment))
+        } else {
+            commentBlock.gone()
+        }
+
+        when (transaction.transactionType()) {
+            TransactionType.RECEIVED_TYPE,
+            TransactionType.MASS_RECEIVE_TYPE,
+            TransactionType.SPAM_RECEIVE_TYPE,
+            TransactionType.MASS_SPAM_RECEIVE_TYPE,
+            TransactionType.UNRECOGNISED_TYPE -> {
+                val receiveView = inflate(R.layout.fragment_bottom_sheet_receive_layout)
+                val receivedFromName = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_name)
+                val receivedFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_address)
+                val textAddressAction = receiveView?.findViewById<AppCompatTextView>(R.id.text_address_action)
+                val spamTag = receiveView?.findViewById<SpamTag>(R.id.spam_tag)
+
+                receivedFromAddress?.text = transaction.sender
+
+                textAddressAction?.goneIf {
+                    transaction.transactionType() == TransactionType.SPAM_RECEIVE_TYPE ||
+                            transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE
+                }
+
+                spamTag?.visiableIf {
+                    transaction.transactionType() == TransactionType.SPAM_RECEIVE_TYPE ||
+                            transaction.transactionType() == TransactionType.MASS_SPAM_RECEIVE_TYPE
+                }
+
+                resolveExistOrNoAddress(receivedFromName, receivedFromAddress, textAddressAction)
+
+                historyContainer?.addView(receiveView)
+            }
+            TransactionType.SENT_TYPE -> {
+                val sendView = inflater?.inflate(R.layout.fragment_bottom_sheet_send_layout, historyContainer, false)
+                val sentToName = sendView?.findViewById<AppCompatTextView>(R.id.text_sent_to_name)
+                val sentAddress = sendView?.findViewById<AppCompatTextView>(R.id.text_sent_address)
+                val imageAddressAction = sendView?.findViewById<AppCompatTextView>(R.id.text_address_action)
+
+                sentAddress?.text = transaction.recipientAddress
+
+                resolveExistOrNoAddress(sentToName, sentAddress, imageAddressAction)
+
+                historyContainer?.addView(sendView)
+            }
+            TransactionType.STARTED_LEASING_TYPE -> {
+                val startLeaseView = inflater?.inflate(R.layout.fragment_bottom_sheet_start_lease_layout, historyContainer, false)
+                val textLeasingToName = startLeaseView?.findViewById<TextView>(R.id.text_leasing_to_name)
+                val textLeasingToAddress = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_leasing_to_address)
+                val imageAddressAction = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_address_action)
+
+                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
+                if (nodeLeasingRecipient.isNullOrEmpty()) {
+                    textLeasingToAddress?.text = transaction.recipient.clearAlias()
+                } else {
+                    textLeasingToAddress?.text = nodeLeasingRecipient
+                }
+
+                resolveExistOrNoAddress(textLeasingToName, textLeasingToAddress, imageAddressAction)
+
+                historyContainer?.addView(startLeaseView)
+            }
+            TransactionType.EXCHANGE_TYPE -> {
+                val exchangeView = inflater?.inflate(
+                        R.layout.fragment_bottom_sheet_exchange_layout,
+                        historyContainer, false)
+
+                val historyDetailsType = exchangeView?.findViewById<AppCompatTextView>(
+                        R.id.history_details_type)
+
+                val textExchangeValue = exchangeView?.findViewById<AppCompatTextView>(
+                        R.id.text_exchange_value)
+                val textExchangeTag = exchangeView?.findViewById<AppCompatTextView>(
+                        R.id.text_exchange_tag)
+
+                val textPriceValue = exchangeView?.findViewById<AppCompatTextView>(
+                        R.id.text_price_value)
+                val textPriceTag = exchangeView?.findViewById<AppCompatTextView>(
+                        R.id.text_price_tag)
+
+                val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
+                        App.getAccessManager().getWallet()?.address!!)
+
+                if (myOrder.getType() == OrderType.BUY) {
+                    historyDetailsType?.text = getString(R.string.history_exchange_sell)
+                } else {
+                    historyDetailsType?.text = getString(R.string.history_exchange_buy)
+                }
+
+                // show value for price
+                if (isShowTicker(myOrder.assetPair?.priceAssetObject?.id)) {
+                    textPriceValue?.text = MoneyUtil.getScaledPrice(transaction.price,
+                            myOrder?.assetPair?.amountAssetObject?.precision ?: 0,
+                            myOrder?.assetPair?.priceAssetObject?.precision ?: 0)
+
+                    val ticker = myOrder.assetPair?.priceAssetObject?.getTicker()
+                    if (!ticker.isNullOrBlank()) {
+                        textPriceTag?.text = ticker
+                        textPriceTag?.visiable()
+                    }
+                } else {
+                    textPriceValue?.text = "${MoneyUtil.getScaledPrice(transaction.price,
+                            myOrder.assetPair?.amountAssetObject?.precision ?: 0,
+                            myOrder.assetPair?.priceAssetObject?.precision ?: 0)} " +
+                            "${myOrder.assetPair?.priceAssetObject?.name}"
+                }
+
+                // show value for amount
+                if (isShowTicker(myOrder.assetPair?.priceAssetObject?.id)) {
+                    textExchangeValue?.text = MoneyUtil.getScaledPrice(transaction.getOrderSum(),
+                            myOrder.assetPair?.amountAssetObject?.precision ?: 0,
+                            myOrder.assetPair?.priceAssetObject?.precision ?: 0)
+
+                    val ticker = myOrder.assetPair?.priceAssetObject?.getTicker()
+                    if (!ticker.isNullOrBlank()) {
+                        textExchangeTag?.text = ticker
+                        textExchangeTag?.visiable()
+                    }
+                } else {
+                    textExchangeValue?.text = "${MoneyUtil.getScaledPrice(transaction.getOrderSum(),
+                            myOrder.assetPair?.amountAssetObject?.precision ?: 0,
+                            myOrder.assetPair?.priceAssetObject?.precision ?: 0)} " +
+                            "${myOrder.assetPair?.priceAssetObject?.name}"
+                }
+
+                historyContainer?.addView(exchangeView)
+            }
+            TransactionType.SELF_TRANSFER_TYPE -> {
+                val selfTransferView = inflater?.inflate(R.layout.fragment_bottom_sheet_seft_transfer_layout, historyContainer, false)
+
+                historyContainer.addView(selfTransferView)
+            }
+            TransactionType.CANCELED_LEASING_TYPE,
+            TransactionType.INCOMING_LEASING_TYPE -> {
+                val receiveView = inflater?.inflate(R.layout.fragment_bottom_sheet_cancel_or_incoming_leasing_layout, historyContainer, false)
+                val textCancelLeasingFromName = receiveView?.findViewById<AppCompatTextView>(R.id.text_cancel_leasing_from_name)
+                val textCancelLeasingFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_cancel_leasing_from_address)
+                val imageAddressAction = receiveView?.findViewById<AppCompatTextView>(R.id.text_address_action)
+
+                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
+                if (nodeLeasingRecipient.isNullOrEmpty()) {
+                    textCancelLeasingFromAddress?.text = transaction.recipient.clearAlias()
+                } else {
+                    textCancelLeasingFromAddress?.text = nodeLeasingRecipient
+                }
+
+//                if (transaction.status == LeasingStatus.ACTIVE.status) {
+//                    status?.text = getString(R.string.history_details_active_now)
+//                }
+
+                resolveExistOrNoAddress(textCancelLeasingFromName, textCancelLeasingFromAddress, imageAddressAction)
+
+                historyContainer?.addView(receiveView)
+            }
+            TransactionType.TOKEN_GENERATION_TYPE,
+            TransactionType.TOKEN_BURN_TYPE,
+            TransactionType.TOKEN_REISSUE_TYPE -> {
+                val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout, historyContainer, false)
+                val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
+                val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
+
+                textIdValue?.text = transaction.assetId
+                if (transaction.reissuable) {
+                    textTokenStatus?.text = getString(R.string.history_details_reissuable)
+                } else {
+                    textTokenStatus?.text = getString(R.string.history_details_not_reissuable)
+                }
+
+                historyContainer?.addView(tokenView)
+            }
+            TransactionType.CREATE_ALIAS_TYPE,
+            TransactionType.DATA_TYPE,
+            TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
+            TransactionType.SET_ADDRESS_SCRIPT_TYPE -> {
+                val createAliasView = inflater?.inflate(R.layout.fragment_bottom_sheet_only_line_layout, historyContainer, false)
+
+                historyContainer.addView(createAliasView)
+            }
+            TransactionType.MASS_SEND_TYPE -> {
+                val massSendLayout = inflater?.inflate(R.layout.fragment_bottom_sheet_mass_send_layout, null, false)
+                val addressContainer = massSendLayout?.findViewById<LinearLayout>(R.id.container_address)
+                val showMoreAddress = massSendLayout?.findViewById<TextView>(R.id.text_show_more_address)
+
+                val transfers: MutableList<Transfer> = transaction.transfers.toMutableList()
+
+                transfers.forEachIndexed { index, transfer ->
+                    val addressView = inflater?.inflate(R.layout.address_layout, null, false)
+                    val textRecipientNumber = addressView?.findViewById<AppCompatTextView>(R.id.text_recipient_number)
+                    val textSentAddress = addressView?.findViewById<TextView>(R.id.text_sent_address)
+                    val textSendAmountTag = addressView?.findViewById<AppCompatTextView>(R.id.text_send_amount_tag)
+                    val textSentName = addressView?.findViewById<TextView>(R.id.text_sent_name)
+                    val textSentAmount = addressView?.findViewById<TextView>(R.id.text_sent_amount)
+                    val imageAddressAction = addressView?.findViewById<AppCompatImageView>(R.id.image_address_action)
+                    val viewDivider = addressView?.findViewById<View>(R.id.view_divider)
+
+                    if (isSpamConsidered(transaction.assetId, prefsUtil)) {
+                        textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset).stripZeros()
+                    } else {
+                        if (isShowTicker(transaction.assetId)) {
+                            textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset).stripZeros()
+                            val ticker = transaction.asset?.getTicker()
+                            if (!ticker.isNullOrBlank()) {
+                                textSendAmountTag?.text = ticker
+                                textSendAmountTag?.visiable()
+                            }
+                        } else {
+                            textSentAmount?.text = "${MoneyUtil.getScaledText(transfer.amount, transaction.asset).stripZeros()} ${transaction.asset?.name}"
+                        }
+                    }
+
+                    textRecipientNumber?.text = getString(R.string.history_mass_send_recipient, index.inc().toString())
+
+                    var recipient = transfer.recipient.clearAlias()
+                    if (TextUtils.isEmpty(recipient)) {
+                        recipient = transfer.recipientAddress ?: ""
+                    }
+                    textSentAddress?.text = recipient
+
+                    resolveExistOrNoAddressForMassSend(textSentName, textSentAddress, imageAddressAction)
+
+                    if (index >= 3) {
+                        showMoreAddress?.visiable()
+                        showMoreAddress?.text = getString(R.string.history_details_show_all, (transfers.size).toString())
+
+                        showMoreAddress?.click {
+                            showMoreAddress.gone()
+
+                            for (i in 3 until transfers.size) {
+                                val addressView = inflater?.inflate(R.layout.address_layout, null, false)
+                                val textSendAmountTag = addressView?.findViewById<AppCompatTextView>(R.id.text_send_amount_tag)
+                                val textRecipientNumber = addressView?.findViewById<AppCompatTextView>(R.id.text_recipient_number)
+                                val textSentAddress = addressView?.findViewById<AppCompatTextView>(R.id.text_sent_address)
+                                val textSentName = addressView?.findViewById<TextView>(R.id.text_sent_name)
+                                val textSentAmount = addressView?.findViewById<AppCompatTextView>(R.id.text_sent_amount)
+                                val imageAddressAction = addressView?.findViewById<AppCompatImageView>(R.id.image_address_action)
+                                val viewDivider = addressView?.findViewById<View>(R.id.view_divider)
+
+                                textRecipientNumber?.text = getString(R.string.history_mass_send_recipient, index.inc().toString())
+
+                                val transfer = transfers[i]
+
+                                textSentAddress?.text = transfer.recipientAddress
+
+                                if (isSpamConsidered(transaction.assetId, prefsUtil)) {
+                                    textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset).stripZeros()
+                                } else {
+                                    if (isShowTicker(transaction.assetId)) {
+                                        textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset).stripZeros()
+                                        val ticker = transaction.asset?.getTicker()
+                                        if (!ticker.isNullOrBlank()) {
+                                            textSendAmountTag?.text = ticker
+                                            textSendAmountTag?.visiable()
+                                        }
+                                    } else {
+                                        textSentAmount?.text = "${MoneyUtil.getScaledText(transfer.amount, transaction.asset).stripZeros()} ${transaction.asset?.name}"
+                                    }
+                                }
+
+                                resolveExistOrNoAddressForMassSend(textSentName, textSentAddress, imageAddressAction)
+
+                                if (i == transfers.size - 1) viewDivider?.gone()
+
+                                addressContainer?.addView(addressView)
+                            }
+                        }
+                    } else {
+                        if (index == transfers.size - 1) viewDivider?.gone()
+
+                        addressContainer?.addView(addressView)
+                    }
+                }
+                historyContainer?.addView(massSendLayout)
+//                historyContainer?.addView(button)
+            }
+            TransactionType.SET_SPONSORSHIP_TYPE -> {
+                val sponsorView = inflater?.inflate(R.layout.fragment_bottom_sheet_set_sponsorship_layout, historyContainer, false)
+                val textIdValue = sponsorView?.findViewById<TextView>(R.id.text_id_value)
+                val textAmountPerTransValue = sponsorView?.findViewById<TextView>(R.id.text_amount_per_trans_value)
+
+                textIdValue?.text = transaction.assetId
+                textAmountPerTransValue?.text = "${
+                getScaledAmount(transaction.minSponsoredAssetFee?.toLong()
+                        ?: 0, transaction.asset?.precision ?: 0)
+                } ${transaction.asset?.name}"
+
+                historyContainer?.addView(sponsorView)
+            }
+            TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
+                val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_set_asset_script_layout, historyContainer, false)
+                val textAssetValue = tokenView?.findViewById<AppCompatTextView>(R.id.text_asset_value)
+                val imageAssetIcon = tokenView?.findViewById<MaterialLetterIcon>(R.id.image_asset_icon)
+
+                imageAssetIcon?.isOval = true
+
+                transaction.asset?.let {
+                    imageAssetIcon?.setAssetInfo(transaction.asset)
+                }
+
+                textAssetValue?.text = transaction.asset?.name
+
+                historyContainer?.addView(tokenView)
+            }
+            TransactionType.CANCEL_SPONSORSHIP_TYPE,
+            TransactionType.RECEIVE_SPONSORSHIP_TYPE -> {
+                val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout, historyContainer, false)
+                val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
+                val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
+
+                textIdValue?.text = transaction.assetId
+
+                textTokenStatus?.gone()
+
+                historyContainer?.addView(tokenView)
+            }
+            else -> {
+
+            }
+        }
+
+        historyContainer?.addView(commentBlock)
+
+        return historyContainer
     }
 
     private fun setupTransactionInfo(transaction: Transaction): View? {
@@ -386,344 +721,55 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
     }
 
     private fun setupView(transaction: Transaction) {
-        val historyContainer = rootView?.findViewById<LinearLayout>(R.id.main_container)
-        val commentBlock = inflater?.inflate(R.layout.history_detailed_transcation_comment_block_layout, historyContainer, false)
-        val baseInfoLayout = inflater?.inflate(R.layout.fragment_history_bottom_sheet_base_info_layout, historyContainer, false)
-        val bottomBtns = inflater?.inflate(R.layout.fragment_history_bottom_sheet_bottom_btns, historyContainer, false)
 
-        /**Base info views**/
-        val feeValue = baseInfoLayout?.findViewById<TextView>(R.id.text_fee)
-        val confirmation = baseInfoLayout?.findViewById<TextView>(R.id.text_confirmations)
-        val block = baseInfoLayout?.findViewById<TextView>(R.id.text_block)
-        val timeStamp = baseInfoLayout?.findViewById<TextView>(R.id.text_timestamp)
-        val status = baseInfoLayout?.findViewById<TextView>(R.id.text_status)
-
-        /**Comment block views**/
-        val textComment = commentBlock?.findViewById<TextView>(R.id.text_comment)
-        val viewCommentLine = commentBlock?.findViewById<View>(R.id.view_comment_line)
-
-        val showCommentBlock = !transaction.attachment.isNullOrEmpty()
-        if (showCommentBlock) {
-            viewCommentLine?.gone()
-            textComment?.visiable()
-            textComment?.text = String(Base58.decode(transaction.attachment))
-        } else {
-            viewCommentLine?.visiable()
-            textComment?.gone()
-        }
-
-        feeValue?.text = "${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject).stripZeros()} ${transaction.feeAssetObject?.name}"
-
-        val confirmations = preferencesHelper.currentBlocksHeight - transaction.height
-        confirmation?.text = if (confirmations < 0) {
-            "0"
-        } else {
-            confirmations.toString()
-        }
-        block?.text = transaction.height.toString()
-        timeStamp?.text = transaction.timestamp.date("dd.MM.yyyy HH:mm")
-
-        if (preferencesHelper.currentBlocksHeight.minus(transaction.height) > 0) {
-            status?.setBackgroundResource(R.drawable.success400_01_shape)
-            status?.text = getString(R.string.history_details_completed)
-            status?.setTextColor(findColor(R.color.success500))
-        } else {
-            status?.setBackgroundResource(R.drawable.warning400_01_shape)
-            status?.text = getString(R.string.history_details_unconfirmed)
-            status?.setTextColor(findColor(R.color.warning600))
-        }
-
-
-        historyContainer?.removeAllViews()
-
-        when (transaction.transactionType()) {
-            TransactionType.RECEIVED_TYPE,
-            TransactionType.MASS_RECEIVE_TYPE,
-            TransactionType.SPAM_RECEIVE_TYPE,
-            TransactionType.MASS_SPAM_RECEIVE_TYPE,
-            TransactionType.UNRECOGNISED_TYPE -> {
-                val receiveView = inflater?.inflate(R.layout.fragment_bottom_sheet_receive_layout, historyContainer, false)
-                val receivedFromName = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_name)
-                val receivedFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_address)
-                val imageAddressAction = receiveView?.findViewById<AppCompatImageView>(R.id.image_address_action)
-
-                receivedFromAddress?.text = transaction.sender
-
-                resolveExistOrNoAddress(receivedFromName, receivedFromAddress, imageAddressAction)
-
-                historyContainer?.addView(receiveView)
-                historyContainer?.addView(commentBlock)
-                historyContainer?.addView(baseInfoLayout)
-            }
-            TransactionType.SENT_TYPE -> {
-                val sendView = inflater?.inflate(R.layout.fragment_bottom_sheet_send_layout, historyContainer, false)
-                val sentToName = sendView?.findViewById<AppCompatTextView>(R.id.text_sent_to_name)
-                val sentAddress = sendView?.findViewById<AppCompatTextView>(R.id.text_sent_address)
-                val imageAddressAction = sendView?.findViewById<AppCompatImageView>(R.id.image_address_action)
-
-                sentAddress?.text = transaction.recipientAddress
-
-                resolveExistOrNoAddress(sentToName, sentAddress, imageAddressAction)
-
-                historyContainer?.addView(sendView)
-                historyContainer?.addView(commentBlock)
-                historyContainer?.addView(baseInfoLayout)
-
-                val assetBalance = queryFirst<AssetBalance> {
-                    equalTo("assetId", transaction.assetId ?: "")
-                }
-                if (assetBalance != null && (nonGateway(assetBalance, transaction)
-                                || assetBalance.isWaves() || assetBalance.isFiatMoney)) {
-                    val resendBtn = inflater?.inflate(R.layout.resend_btn, historyContainer, false)
-                    resendBtn!!.findViewById<View>(R.id.button_send_again).click {
-                        launchActivity<SendActivity> {
-                            putExtra(SendActivity.KEY_INTENT_REPEAT_TRANSACTION, true)
-                            putExtra(SendActivity.KEY_INTENT_TRANSACTION_ASSET_BALANCE, assetBalance)
-                            putExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT,
-                                    MoneyUtil.getScaledText(transaction.amount, transaction.asset)
-                                            .clearBalance())
-                            putExtra(SendActivity.KEY_INTENT_TRANSACTION_RECIPIENT,
-                                    transaction.recipientAddress)
-                            if (showCommentBlock) {
-                                putExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT,
-                                        String(Base58.decode(transaction.attachment)))
-                            } else {
-                                putExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT, "")
-                            }
-                        }
-                    }
-                    historyContainer?.addView(resendBtn)
-                }
-            }
-            TransactionType.STARTED_LEASING_TYPE -> {
-                val startLeaseView = inflater?.inflate(R.layout.fragment_bottom_sheet_start_lease_layout, historyContainer, false)
-                val cancelLeasingBtn = inflater?.inflate(R.layout.cancel_leasing_btn, historyContainer, false)
-                val textLeasingToName = startLeaseView?.findViewById<TextView>(R.id.text_leasing_to_name)
-                val textLeasingToAddress = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_leasing_to_address)
-                val imageAddressAction = startLeaseView?.findViewById<AppCompatImageView>(R.id.image_address_action)
-
-                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
-                if (nodeLeasingRecipient.isNullOrEmpty()) {
-                    textLeasingToAddress?.text = transaction.recipient.clearAlias()
-                } else {
-                    textLeasingToAddress?.text = nodeLeasingRecipient
-                }
-
-                resolveExistOrNoAddress(textLeasingToName, textLeasingToAddress, imageAddressAction)
-
-                historyContainer?.addView(startLeaseView)
-                historyContainer?.addView(commentBlock)
-                if (transaction.status == LeasingStatus.ACTIVE.status) {
-                    status?.text = getString(R.string.history_details_active_now)
-                    cancelLeasingBtn?.findViewById<FrameLayout>(R.id.frame_cancel_button)?.click {
-                        launchActivity<ConfirmationCancelLeasingActivity>(
-                                ConfirmationCancelLeasingActivity.REQUEST_CANCEL_LEASING_CONFIRMATION) {
-                            putExtra(ConfirmationCancelLeasingActivity.BUNDLE_CANCEL_CONFIRMATION_LEASING_TX,
-                                    transaction.id)
-                            putExtra(ConfirmationCancelLeasingActivity.BUNDLE_ADDRESS, transaction.recipient)
-                            putExtra(ConfirmationCancelLeasingActivity.BUNDLE_AMOUNT,
-                                    MoneyUtil.getScaledText(transaction.amount, transaction.asset))
-                        }
-                    }
-
-                    historyContainer?.addView(baseInfoLayout)
-                    historyContainer?.addView(cancelLeasingBtn)
-                } else {
-                    historyContainer?.addView(baseInfoLayout)
-                }
-            }
-            TransactionType.EXCHANGE_TYPE -> {
-                val exchangeView = inflater?.inflate(
-                        R.layout.fragment_bottom_sheet_exchange_layout,
-                        historyContainer, false)
-                val typeView = exchangeView?.findViewById<AppCompatTextView>(
-                        R.id.text_type)
-                val btcPrice = exchangeView?.findViewById<AppCompatTextView>(
-                        R.id.text_btc_price)
-
-                val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
-                        App.getAccessManager().getWallet()?.address!!)
-
-                if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
-                    typeView?.text = getString(
-                            R.string.history_my_dex_intent_sell,
-                            myOrder.assetPair?.amountAssetObject!!.name,
-                            myOrder.assetPair?.priceAssetObject?.name)
-                } else {
-                    typeView?.text = getString(
-                            R.string.history_my_dex_intent_buy,
-                            myOrder.assetPair?.amountAssetObject!!.name,
-                            myOrder.assetPair?.priceAssetObject?.name)
-                }
-
-                btcPrice?.text = "${MoneyUtil.getScaledPrice(transaction.price,
-                        myOrder?.assetPair?.amountAssetObject?.precision ?: 0,
-                        myOrder?.assetPair?.priceAssetObject?.precision ?: 0)} " +
-                        "${myOrder?.assetPair?.priceAssetObject?.name}"
-
-                historyContainer?.addView(exchangeView)
-                historyContainer?.addView(commentBlock)
-                historyContainer?.addView(baseInfoLayout)
-            }
-            TransactionType.SELF_TRANSFER_TYPE -> {
-                viewCommentLine?.gone()
-
-                if (showCommentBlock) {
-                    historyContainer?.addView(commentBlock)
-                } else {
-                    baseInfoLayout?.setMargins(top = dp2px(16))
-                }
-                historyContainer?.addView(baseInfoLayout)
-            }
-            TransactionType.CANCELED_LEASING_TYPE,
-            TransactionType.INCOMING_LEASING_TYPE -> {
-                val receiveView = inflater?.inflate(R.layout.fragment_bottom_sheet_cancel_or_incoming_leasing_layout, historyContainer, false)
-
-                val textCancelLeasingFromName = receiveView?.findViewById<AppCompatTextView>(R.id.text_cancel_leasing_from_name)
-                val textCancelLeasingFromAddress = receiveView?.findViewById<AppCompatTextView>(R.id.text_cancel_leasing_from_address)
-                val imageAddressAction = receiveView?.findViewById<AppCompatImageView>(R.id.image_address_action)
-
-                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
-                if (nodeLeasingRecipient.isNullOrEmpty()) {
-                    textCancelLeasingFromAddress?.text = transaction.recipient.clearAlias()
-                } else {
-                    textCancelLeasingFromAddress?.text = nodeLeasingRecipient
-                }
-
-                if (transaction.status == LeasingStatus.ACTIVE.status) {
-                    status?.text = getString(R.string.history_details_active_now)
-                }
-
-                resolveExistOrNoAddress(textCancelLeasingFromName, textCancelLeasingFromAddress, imageAddressAction)
-
-                historyContainer?.addView(receiveView)
-                historyContainer?.addView(commentBlock)
-                historyContainer?.addView(baseInfoLayout)
-            }
-            TransactionType.TOKEN_GENERATION_TYPE,
-            TransactionType.TOKEN_BURN_TYPE,
-            TransactionType.TOKEN_REISSUE_TYPE -> {
-                val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout, historyContainer, false)
-                val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
-                val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
-
-                textIdValue?.text = transaction.assetId
-                if (transaction.reissuable) {
-                    textTokenStatus?.text = getString(R.string.history_details_reissuable)
-                } else {
-                    textTokenStatus?.text = getString(R.string.history_details_not_reissuable)
-                }
-
-                historyContainer?.addView(tokenView)
-                historyContainer?.addView(commentBlock)
-                historyContainer?.addView(baseInfoLayout)
-            }
-            TransactionType.CREATE_ALIAS_TYPE -> {
-                if (showCommentBlock) {
-                    historyContainer?.addView(commentBlock)
-                } else {
-                    baseInfoLayout?.setMargins(top = dp2px(16))
-                }
-                historyContainer?.addView(baseInfoLayout)
-            }
-            TransactionType.MASS_SEND_TYPE -> {
-                val massSendLayout = inflater?.inflate(R.layout.fragment_bottom_sheet_mass_send_layout, null, false)
-                val addressContainer = massSendLayout?.findViewById<LinearLayout>(R.id.container_address)
-                val showMoreAddress = massSendLayout?.findViewById<TextView>(R.id.text_show_more_address)
-                val button = inflater?.inflate(R.layout.resend_btn, null, false)
-
-                val transfers: MutableList<Transfer> = transaction.transfers.toMutableList()
-
-                transfers.forEachIndexed { index, transfer ->
-                    val addressView = inflater?.inflate(R.layout.address_layout, null, false)
-                    val textSentAddress = addressView?.findViewById<TextView>(R.id.text_sent_address)
-                    val textSentAmount = addressView?.findViewById<TextView>(R.id.text_sent_amount)
-                    val imageAddressAction = addressView?.findViewById<AppCompatImageView>(R.id.image_address_action)
-                    val viewDivider = addressView?.findViewById<AppCompatImageView>(R.id.view_divider)
-
-                    var recipient = transfer.recipient.clearAlias()
-                    if (TextUtils.isEmpty(recipient)) {
-                        recipient = transfer.recipientAddress ?: ""
-                    }
-                    textSentAddress?.text = recipient
-                    textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset)
-
-                    resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
-
-                    if (index >= 3) {
-                        showMoreAddress?.visiable()
-                        showMoreAddress?.text = getString(R.string.history_details_show_all, (transfers.size).toString())
-
-                        showMoreAddress?.click {
-                            showMoreAddress.gone()
-
-                            for (i in 3 until transfers.size) {
-                                val addressView = inflater?.inflate(R.layout.address_layout, null, false)
-
-                                val textSentAddress = addressView?.findViewById<AppCompatTextView>(R.id.text_sent_address)
-                                val textSentAmount = addressView?.findViewById<AppCompatTextView>(R.id.text_sent_amount)
-                                val imageAddressAction = addressView?.findViewById<AppCompatImageView>(R.id.image_address_action)
-                                val viewDivider = addressView?.findViewById<AppCompatImageView>(R.id.view_divider)
-
-                                val transfer = transfers[i]
-
-                                textSentAddress?.text = transfer.recipientAddress
-                                textSentAmount?.text = MoneyUtil.getScaledText(transfer.amount, transaction.asset)
-
-                                resolveExistOrNoAddressForMassSend(textSentAddress, imageAddressAction)
-
-                                if (i == transfers.size - 1) viewDivider?.gone()
-
-                                addressContainer?.addView(addressView)
-                            }
-                        }
-                    } else {
-                        if (index == transfers.size - 1) viewDivider?.gone()
-
-                        addressContainer?.addView(addressView)
-                    }
-                }
-                historyContainer?.addView(massSendLayout)
-                historyContainer?.addView(commentBlock)
-                historyContainer?.addView(baseInfoLayout)
-                historyContainer?.addView(button)
-            }
-            TransactionType.SET_SPONSORSHIP_TYPE -> {
-                val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout,
-                        historyContainer, false)
-                val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
-                textIdValue?.text = transaction.assetId
-                historyContainer?.addView(tokenView)
-                baseInfoLayout?.findViewById<View>(R.id.view_line_1)?.visiable()
-                historyContainer?.addView(baseInfoLayout)
-            }
-            TransactionType.CANCEL_SPONSORSHIP_TYPE -> {
-                val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_token_layout,
-                        historyContainer, false)
-                val textIdValue = tokenView?.findViewById<TextView>(R.id.text_id_value)
-                textIdValue?.text = transaction.assetId
-                historyContainer?.addView(tokenView)
-                baseInfoLayout?.findViewById<View>(R.id.view_line_1)?.visiable()
-                historyContainer?.addView(baseInfoLayout)
-            }
-            else -> {
-                baseInfoLayout?.setMargins(top = dp2px(16))
-                historyContainer?.addView(baseInfoLayout)
-            }
-        }
-        historyContainer?.addView(bottomBtns)
     }
 
     private fun nonGateway(assetBalance: AssetBalance, transaction: Transaction) =
             !assetBalance.isGateway || (assetBalance.isGateway
                     && !transaction.recipientAddress.equals(CoinomatService.GATEWAY_ADDRESS))
 
-    private fun resolveExistOrNoAddress(textViewName: TextView?, textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
+    private fun resolveExistOrNoAddress(textViewName: TextView?, textViewAddress: TextView?, textAddressAction: AppCompatTextView?) {
         val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
         if (addressBookUser == null) {
             //  not exist
             textViewName?.gone()
             textViewAddress?.textSize = 14f
+
+            textAddressAction?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_address_submit_300, 0, 0, 0)
+            textAddressAction?.text = getString(R.string.history_details_add_address)
+
+            textAddressAction?.click {
+                launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
+                    putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
+                }
+            }
+        } else {
+            // exist
+            textViewName?.text = addressBookUser.name
+            textViewName?.visiable()
+            textViewAddress?.textSize = 12f
+
+            textAddressAction?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_edit_address_submit_300, 0, 0, 0)
+            textAddressAction?.text = getString(R.string.history_details_edit_address)
+
+
+            textAddressAction?.click {
+                launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
+                    putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), addressBookUser.name))
+                }
+            }
+        }
+    }
+
+    private fun resolveExistOrNoAddressForMassSend(textViewName: TextView?, textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
+        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
+        if (addressBookUser == null) {
+            //  not exist
+            textViewName?.gone()
+            textViewAddress?.textSize = 14f
+
             imageAddressAction?.setImageResource(R.drawable.ic_add_address_submit_300)
 
             imageAddressAction?.click {
@@ -737,33 +783,6 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
             textViewName?.text = addressBookUser.name
             textViewName?.visiable()
             textViewAddress?.textSize = 12f
-            imageAddressAction?.setImageResource(R.drawable.ic_edit_address_submit_300)
-
-
-            imageAddressAction?.click {
-                launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
-                    putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), addressBookUser.name))
-                }
-            }
-        }
-    }
-
-    private fun resolveExistOrNoAddressForMassSend(textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
-        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
-        if (addressBookUser == null) {
-            //  not exist
-            imageAddressAction?.setImageResource(R.drawable.ic_add_address_submit_300)
-
-            imageAddressAction?.click {
-                launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
-                    putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
-                }
-            }
-        } else {
-            // exist
-            textViewAddress?.text = addressBookUser.name
 
             imageAddressAction?.setImageResource(R.drawable.ic_edit_address_submit_300)
 
