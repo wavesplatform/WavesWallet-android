@@ -51,9 +51,10 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         val isAvailable = FingerprintAuthDialogFragment.isAvailable(this)
         guid = getGuid()
 
-        val isLoggedIn = !TextUtils.isEmpty(guid)
-        val useFingerprint = (isAvailable && !isProcessSetFingerprint
-                && (isLoggedIn && App.getAccessManager().isGuidUseFingerPrint(guid)))
+        val useFingerprint = isAvailable
+                && !isProcessSetFingerprint
+                && isLoggedIn()
+                && App.getAccessManager().isGuidUseFingerPrint(guid)
 
 
         if (EnterPassCodePresenter.overMaxWrongPassCodes(guid)) {
@@ -122,6 +123,8 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
             }
         }
     }
+
+    private fun isLoggedIn() = !TextUtils.isEmpty(guid)
 
     private fun startUsePasswordScreen(afterOverAttempts: Boolean) {
         val guid = getGuid()

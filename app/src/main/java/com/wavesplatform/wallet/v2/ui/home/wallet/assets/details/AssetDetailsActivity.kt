@@ -103,6 +103,8 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
                 .load(R.layout.skeleton_detailed_asset_layout)
                 .show()
 
+        assetDetailsContentPageAdapter = AssetDetailsContentPageAdapter(
+                supportFragmentManager, emptyList())
         presenter.loadAssets(intent.getIntExtra(BUNDLE_ASSET_TYPE, 0))
     }
 

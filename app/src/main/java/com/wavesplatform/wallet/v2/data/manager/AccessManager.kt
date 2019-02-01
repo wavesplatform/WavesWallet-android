@@ -351,6 +351,9 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
     }
 
     fun setUseFingerPrint(guid: String, use: Boolean) {
+        if (!use) {
+            prefs.removeValue(guid, PrefsUtil.KEY_USE_FINGERPRINT)
+        }
         prefs.setValue(guid, PrefsUtil.KEY_USE_FINGERPRINT, use)
     }
 

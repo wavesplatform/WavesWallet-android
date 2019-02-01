@@ -3,12 +3,14 @@ package com.wavesplatform.wallet.v2.ui.auth.fingerprint
 
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.AppCompatTextView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,23 +23,26 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.RootUtil
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
+import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fingerprint_dialog.*
 import kotlinx.android.synthetic.main.fingerprint_dialog.view.*
 import pers.victor.ext.click
 import pers.victor.ext.findColor
 import timber.log.Timber
+import java.security.UnrecoverableKeyException
 
 
 class FingerprintAuthDialogFragment : DialogFragment() {
 
     private var fingerprintState = FingerprintState.DEFAULT
-    private var numberOfAttempts = 0
     private var fingerPrintDialogListener: FingerPrintDialogListener? = null
     private var subscriptions = CompositeDisposable()
-    private var mode: Int? = CRYPT
+    private var mode: Int? = ENCRYPT
     private var handler = Handler()
     private var guid: String = ""
+    private lateinit var fingerprintIdentify: FingerprintIdentify
 
     init {
         setFingerPrintDialogListener(object : FingerPrintDialogListener {})
@@ -53,48 +58,71 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fingerprint_dialog, container, false)
-        view.text_cancel.click {
-            fingerPrintDialogListener?.onCancelButtonClicked(this.dialog, it)
-        }
-        mode = arguments?.getInt(KEY_INTENT_MODE, CRYPT)
+        view.text_cancel.click { cancelDialog() }
+        mode = arguments?.getInt(KEY_INTENT_MODE, ENCRYPT)
         return view
+    }
+
+    private fun cancelDialog() {
+        fingerPrintDialogListener?.onCancelButtonClicked(this.dialog)
+        fingerprintIdentify.cancelIdentify()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        dialog.setOnKeyListener(DialogInterface.OnKeyListener { _, keyCode, _ ->
+            if ((keyCode == android.view.KeyEvent.KEYCODE_BACK)) {
+                cancelDialog()
+                return@OnKeyListener true
+            }
+            return@OnKeyListener false
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        startScanning()
+        startIdentify()
+    }
+
+    private fun startIdentify() {
         onDefaultState()
-    }
+        fingerprintIdentify = FingerprintIdentify(context)
+        fingerprintIdentify.startIdentify(AVAILABLE_TIMES, object : BaseFingerprint.FingerprintIdentifyListener {
 
-    private fun startScanning() {
-        if (RootUtil.isDeviceRooted()) {
-            val message = getString(R.string.fingerprint_fatal_error_root)
-            showErrorMessage(message, "Fingerprint auth Error rooted Device",
-                    Throwable(message))
-            return
-        }
-
-        when (mode) {
-            CRYPT -> {
-                subscriptions.add(RxFingerprint.authenticate(requireActivity())
-                        .subscribe(
-                                { result ->
-                                    when (result?.result) {
-                                        FingerprintResult.FAILED -> onFingerprintDoNotMatchTryAgain()
-                                        FingerprintResult.HELP -> showHelpMessage(result.message)
-                                        FingerprintResult.AUTHENTICATED -> {
-                                            crypt()
-                                        }
-                                    }
-                                },
-                                { showErrorMessage(it.message, "authenticate", it) }
-                        ))
+            override fun onSucceed() {
+                when (mode) {
+                    ENCRYPT -> encrypt()
+                    DECRYPT -> decrypt()
+                    else -> showHelpMessage(null)
+                }
             }
-            DECRYPT -> decrypt()
-        }
+
+            override fun onFailed(isDeviceLocked: Boolean) {
+                fingerprintIdentify.cancelIdentify()
+                App.getAccessManager().setUseFingerPrint(guid, false)
+                onFingerprintLocked()
+            }
+
+            override fun onNotMatch(availableTimes: Int) {
+                onFingerprintDoNotMatchTryAgain()
+                fingerprintIdentify.cancelIdentify()
+                handler.postDelayed({
+                    if (fingerprintState == FingerprintState.NOT_RECOGNIZED
+                            || fingerprintState == FingerprintState.DEFAULT) {
+                        onDefaultState()
+                        fingerprintIdentify.resumeIdentify()
+                    }
+                }, DELAY_TO_CHANGE_STATE)
+            }
+
+            override fun onStartFailedByDeviceLocked() {
+                fingerprintIdentify.cancelIdentify()
+                onFingerprintLocked()
+            }
+        })
     }
 
-    private fun crypt() {
+    private fun encrypt() {
         guid = arguments?.getString(KEY_INTENT_GUID, "") ?: ""
         val passCode = arguments?.getString(KEY_INTENT_PASS_CODE, "") ?: ""
         subscriptions.add(RxFingerprint.encrypt(
@@ -105,13 +133,12 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                 .subscribe(
                         { encryptionResult ->
                             when (encryptionResult?.result) {
-                                FingerprintResult.FAILED -> onFingerprintDoNotMatchTryAgain()
+                                FingerprintResult.FAILED -> showHelpMessage(null)
                                 FingerprintResult.HELP -> showHelpMessage(encryptionResult.message)
                                 FingerprintResult.AUTHENTICATED -> {
                                     App.getAccessManager()
                                             .setEncryptedPassCode(guid, encryptionResult.encrypted)
                                     onSuccessRecognizedFingerprint()
-
                                     handler.postDelayed({
                                         fingerPrintDialogListener?.onSuccessRecognizedFingerprint()
                                         dismissAllowingStateLoss()
@@ -119,39 +146,49 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                                 }
                             }
                         },
-                        { showErrorMessage(it.message, "crypt", it) }))
+                        { throwable -> onErrorGetKey(throwable, "crypt") }))
     }
 
     private fun decrypt() {
         guid = arguments?.getString(KEY_INTENT_GUID, "") ?: ""
-        subscriptions.add(RxFingerprint.decrypt(EncryptionMethod.RSA, requireActivity(),
+        subscriptions.add(RxFingerprint.decrypt(EncryptionMethod.RSA, activity!!,
                 guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE,
                 App.getAccessManager().getEncryptedPassCode(guid))
-                .subscribe(
-                        { result ->
-                            when (result?.result) {
-                                FingerprintResult.FAILED -> onFingerprintDoNotMatchTryAgain()
-                                FingerprintResult.HELP -> showHelpMessage(result.message)
-                                FingerprintResult.AUTHENTICATED -> {
-                                    onSuccessRecognizedFingerprint()
+                .subscribe({ result ->
+                    when (result?.result) {
+                        FingerprintResult.FAILED -> showHelpMessage(null)
+                        FingerprintResult.HELP -> showHelpMessage(result.message)
+                        FingerprintResult.AUTHENTICATED -> {
+                            //fingerprintIdentify.cancelIdentify()
 
-                                    handler.postDelayed({
-                                        fingerPrintDialogListener?.onSuccessRecognizedFingerprint(
-                                                result.decrypted)
-                                        dismissAllowingStateLoss()
-                                    }, DELAY_TO_CHANGE_STATE)
-                                }
-                            }
-                        },
-                        {
-                            if (RxFingerprint.keyInvalidated(it)) {
-                                showErrorMessage(requireActivity().getString(
-                                        R.string.fingerprint_fatal_error_key_invalidate),
-                                        "decypt", it)
-                            } else {
-                                showErrorMessage(it.message, "decypt", it)
-                            }
-                        }))
+                            handler.postDelayed({
+                                fingerPrintDialogListener?.onSuccessRecognizedFingerprint(
+                                        result.decrypted)
+                                dismissAllowingStateLoss()
+                                onSuccessRecognizedFingerprint()
+                            }, DELAY_TO_CHANGE_STATE)
+                        }
+                    }
+                }, { throwable ->
+                    if (RxFingerprint.keyInvalidated(throwable)) {
+                        // The keys you wanted to use are invalidated because the user has turned off his
+                        // secure lock screen or changed the fingerprints stored on the device
+                        // You have to re-encrypt the data to access it
+                    }
+                    Log.e("ERROR", "decrypt", throwable)
+                }))
+    }
+
+    private fun onErrorGetKey(throwable: Throwable, errMessage: String) {
+        if (RxFingerprint.keyInvalidated(throwable) || throwable is UnrecoverableKeyException) {
+            App.getAccessManager().setUseFingerPrint(guid, false)
+            showErrorMessage(requireActivity().getString(
+                    R.string.fingerprint_fatal_error_key_invalidate),
+                    errMessage, throwable)
+            dismiss()
+        } else {
+            showErrorMessage(throwable.message, errMessage, throwable)
+        }
     }
 
     private fun showHelpMessage(message: String?) {
@@ -206,20 +243,8 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         image_fingerprint_state.setImageResource(R.drawable.ic_fingerprint_sensor_48_submit_300)
         text_fingerprint_state.setTextColor(findColor(R.color.error500))
         text_fingerprint_state.setText(R.string.fingerprint_dialog_not_recognized)
-
-        handler.postDelayed({
-            if (fingerprintState == FingerprintState.NOT_RECOGNIZED
-                    || fingerprintState == FingerprintState.DEFAULT) {
-                onDefaultState()
-            }
-        }, DELAY_TO_CHANGE_STATE)
-
-        numberOfAttempts++
-        if (numberOfAttempts == AVAILABLE_TIMES) {
-            App.getAccessManager().setUseFingerPrint(guid, false)
-            onFingerprintLocked()
-        }
     }
+
 
     fun setFingerPrintDialogListener(fingerPrintDialogListener: FingerPrintDialogListener) {
         this.fingerPrintDialogListener = fingerPrintDialogListener
@@ -230,7 +255,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     interface FingerPrintDialogListener {
-        fun onCancelButtonClicked(dialog: Dialog, button: AppCompatTextView) {
+        fun onCancelButtonClicked(dialog: Dialog) {
             dialog.dismiss()
         }
 
@@ -255,6 +280,7 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         }
     }
 
+
     companion object {
         const val AVAILABLE_TIMES = 5
 
@@ -262,12 +288,12 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         private const val KEY_INTENT_MODE = "intent_mode"
         private const val KEY_INTENT_PASS_CODE = "intent_pass_code"
         private const val KEY_INTENT_GUID = "intent_guid"
-        private const val CRYPT = 0
+        private const val ENCRYPT = 0
         private const val DECRYPT = 1
 
         fun newInstance(guid: String, passCode: String): FingerprintAuthDialogFragment {
             val args = Bundle()
-            args.putInt(KEY_INTENT_MODE, CRYPT)
+            args.putInt(KEY_INTENT_MODE, ENCRYPT)
             args.putString(KEY_INTENT_PASS_CODE, passCode)
             args.putString(KEY_INTENT_GUID, guid)
             val fragment = FingerprintAuthDialogFragment()
@@ -285,7 +311,8 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         }
 
         fun isAvailable(context: Context): Boolean {
-            return !RootUtil.isDeviceRooted() && RxFingerprint.isAvailable(context)
+            val mFingerprintIdentify = FingerprintIdentify(context)
+            return !RootUtil.isDeviceRooted() && mFingerprintIdentify.isFingerprintEnable
         }
     }
 }
