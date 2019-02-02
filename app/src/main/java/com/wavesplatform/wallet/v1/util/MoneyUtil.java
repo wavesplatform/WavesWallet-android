@@ -1,12 +1,10 @@
 package com.wavesplatform.wallet.v1.util;
 
-import com.wavesplatform.wallet.v1.payload.AssetBalance;
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +16,7 @@ public class MoneyUtil {
     public static BigDecimal ONE_K = new BigDecimal(1000);
 
     private static MoneyUtil instance = new MoneyUtil();
+
     private static String defaultSeparator;
     private final DecimalFormat wavesFormat;
     private final List<DecimalFormat> formatsMap;
@@ -82,10 +81,6 @@ public class MoneyUtil {
         return formatter.format(amount);
     }
 
-    public static String getScaledText(long amount, AssetBalance ab) {
-        return getScaledText(amount, ab != null ? ab.getDecimals() : 8);
-    }
-
     public static String getScaledText(Long amount, com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance ab) {
         return getScaledText(amount, ab != null ? ab.getDecimals() : 8);
     }
@@ -96,18 +91,6 @@ public class MoneyUtil {
 
     public static String getDisplayWaves(long amount) {
         return get().wavesFormat.format(BigDecimal.valueOf(amount, 8));
-    }
-
-    public static String getWavesStripZeros(long amount) {
-        return getTextStripZeros(amount, 8);
-    }
-
-    public static long getUnscaledWaves(String amount) {
-        return getUnscaledValue(amount, 8);
-    }
-
-    public static long getUnscaledValue(String amount, AssetBalance ab) {
-        return getUnscaledValue(amount, ab.getDecimals());
     }
 
     public static long getUnscaledValue(
@@ -128,57 +111,6 @@ public class MoneyUtil {
             }
         } catch (Exception ex) {
             return 0L;
-        }
-    }
-
-    public static String getDefaultDecimalSeparator() {
-        if (defaultSeparator == null) {
-            DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
-            DecimalFormatSymbols symbols = format.getDecimalFormatSymbols();
-            defaultSeparator = Character.toString(symbols.getDecimalSeparator());
-        }
-        return defaultSeparator;
-    }
-
-    public static String convertToCorrectFormat(String amount, AssetBalance ab) {
-        if (ab == null) {
-            return amount;
-        }
-
-        if (convertExceedingMaxAmount(amount, ab).isEmpty()) {
-            return "";
-        }
-
-        int max_len = ab.getDecimals();
-        //DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        //formatter.setMaximumFractionDigits(max_len + 1);
-        //formatter.setMinimumFractionDigits(0);
-
-        try {
-            if (amount.contains(getDefaultDecimalSeparator())) {
-                String dec = amount.substring(amount.indexOf(getDefaultDecimalSeparator()));
-                if (dec.length() > 0) {
-                    int exceed = dec.substring(1).length() - max_len;
-                    if (exceed > 0) {
-                        return amount.substring(0, amount.length() - exceed);
-                    }
-                }
-            }
-        } catch (Exception nfe) {
-            // No-op
-        }
-
-        return amount;
-    }
-
-    private static String convertExceedingMaxAmount(String amount, AssetBalance ab) {
-        try {
-            if (getUnscaledValue(amount, ab) > ab.quantity) {
-                return "";
-            }
-            return amount;
-        } catch (Exception nfe) {
-            return "";
         }
     }
 }
