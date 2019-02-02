@@ -105,7 +105,10 @@ public class App extends DaggerApplication {
         });
 
         Wavesplatform.init(this);
-        Wavesplatform.get().createWallet("", "", "");
+        Wavesplatform.get().createWallet(
+                "cousin define prevent proof deal absurd purpose swap original tired ivory spoil reflect simple oval",
+                "11111111",
+                "cousin");
     }
 
     public static Context getAppContext() {
