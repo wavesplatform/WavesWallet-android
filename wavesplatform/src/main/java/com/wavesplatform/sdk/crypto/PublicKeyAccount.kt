@@ -1,0 +1,27 @@
+package com.wavesplatform.sdk.crypto
+
+import com.wavesplatform.sdk.utils.AddressUtil
+
+class PublicKeyAccount @Throws(InvalidPublicKey::class)
+constructor(val publicKeyStr: String) {
+
+    val publicKey: ByteArray
+    val address: String
+
+    class InvalidPublicKey : Exception()
+
+    init {
+        if (publicKeyStr.length > KeyStringLength) throw InvalidPublicKey()
+        try {
+            this.publicKey = Base58.decode(publicKeyStr)
+        } catch (invalidBase58: Base58.InvalidBase58) {
+            throw InvalidPublicKey()
+        }
+
+        this.address = AddressUtil.addressFromPublicKey(publicKey)
+    }
+
+    companion object {
+        var KeyStringLength = Base58.base58Length(32)
+    }
+}

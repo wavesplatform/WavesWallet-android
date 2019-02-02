@@ -31,8 +31,9 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         archivesBaseName = "waves-wallet-$versionName"
+        manifestPlaceholders = [appIcon: "@mipmap/ic_launcher", appIconRound: "@mipmap/ic_launcher"]
     }
-    buildTypes {
+    /*buildTypes {
         release {
             debuggable false
             minifyEnabled true
@@ -45,7 +46,7 @@ android {
         debug {
             multiDexEnabled false
         }
-    }
+    }*/
 
     applicationVariants.all { variant ->
         def SEP = "_"
@@ -60,7 +61,7 @@ android {
     }
 
 
-    productFlavors {
+    /*productFlavors {
         prod {
             signingConfig signingConfigs.config
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher", appIconRound: "@mipmap/ic_launcher_round"]
@@ -73,7 +74,7 @@ android {
             applicationIdSuffix ".test"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test", appIconRound: "@mipmap/ic_launcher_test_round"]
         }
-    }
+    }*/
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -142,6 +143,7 @@ ext {
 }
 
 dependencies {
+    implementation project(':wavesplatform')
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$supportVersion"

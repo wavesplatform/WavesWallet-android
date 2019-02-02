@@ -14,6 +14,7 @@ import com.github.moduth.blockcanary.BlockCanary;
 import com.google.firebase.FirebaseApp;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.squareup.leakcanary.LeakCanary;
+import com.wavesplatform.sdk.Wavesplatform;
 import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v1.util.AppUtil;
@@ -102,6 +103,9 @@ public class App extends DaggerApplication {
                 // No-op
             }
         });
+
+        Wavesplatform.init(this);
+        Wavesplatform.get().createWallet("", "", "");
     }
 
     public static Context getAppContext() {
