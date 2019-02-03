@@ -1,7 +1,7 @@
-package com.wavesplatform.wallet.v2.data.manager
+package com.wavesplatform.sdk.manager
 
-import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
+import com.wavesplatform.sdk.manager.base.BaseDataManager
+import com.wavesplatform.sdk.model.response.SpamAsset
 import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject

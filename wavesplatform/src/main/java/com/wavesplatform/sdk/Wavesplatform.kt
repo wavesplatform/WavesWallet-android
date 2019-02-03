@@ -2,11 +2,16 @@ package com.wavesplatform.sdk
 
 import android.app.Application
 import android.util.Log
+import com.wavesplatform.sdk.manager.base.BaseDataManager
 import java.util.*
+import javax.inject.Inject
 
 class Wavesplatform private constructor(private var app: Application) {
 
     private var wavesWallet: WavesWallet? = null
+    var cookies: HashSet<String> = hashSetOf()
+    @Inject
+    lateinit var loader: BaseDataManager
 
     fun createWallet(seed: String, password: String, name: String = ""): String {
         return try {

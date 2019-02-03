@@ -1,14 +1,12 @@
-package com.wavesplatform.wallet.v2.data.manager
+package com.wavesplatform.sdk.manager
 
-import com.vicpin.krealmextensions.queryFirst
-import com.vicpin.krealmextensions.save
-import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.model.response.Alias
+import com.wavesplatform.sdk.model.response.AssetInfo
+import com.wavesplatform.sdk.model.response.CandlesResponse
+import com.wavesplatform.sdk.model.response.LastTradesResponse
+import com.wavesplatform.sdk.manager.base.BaseDataManager
+import com.wavesplatform.sdk.utils.notNull
 import io.reactivex.Observable
 import pers.victor.ext.currentTimeMillis
 import java.util.*
@@ -50,18 +48,12 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadAlias(alias: String): Observable<Alias> {
-        val localAlias = queryFirst<Alias> { equalTo("alias", alias) }
-
-        if (localAlias != null) {
-            return Observable.just(localAlias)
-        } else {
-            return apiService.alias(alias)
-                    .map {
-                        it.alias.own = false
-                        it.alias.save()
-                        return@map it.alias
-                    }
-        }
+        return apiService.alias(alias)
+                .map {
+                    it.alias.own = false
+                    it.alias.save()
+                    return@map it.alias
+                }
     }
 
     fun assetsInfoByIds(ids: List<String?>): Observable<List<AssetInfo>> {

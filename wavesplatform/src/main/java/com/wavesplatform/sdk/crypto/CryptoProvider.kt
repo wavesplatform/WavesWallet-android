@@ -6,6 +6,8 @@ import java.lang.reflect.Constructor
 
 object CryptoProvider {
 
+    private var SIGNATURE_LENGTH = 64
+
     private var provider: OpportunisticCurve25519Provider? = null
     fun get(): OpportunisticCurve25519Provider {
         if (provider == null) {
@@ -20,5 +22,10 @@ object CryptoProvider {
             }
         }
         return provider!!
+    }
+
+    @JvmStatic
+    fun sign(key: ByteArray, msg: ByteArray): ByteArray {
+        return get().calculateSignature(CryptoProvider.get().getRandom(SIGNATURE_LENGTH), key, msg)
     }
 }

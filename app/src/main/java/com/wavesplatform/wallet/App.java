@@ -109,6 +109,7 @@ public class App extends DaggerApplication {
                 "cousin define prevent proof deal absurd purpose swap original tired ivory spoil reflect simple oval",
                 "11111111",
                 "cousin");
+        Wavesplatform.get().loader.apiService.alias("");
     }
 
     public static Context getAppContext() {

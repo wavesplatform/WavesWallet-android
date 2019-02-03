@@ -1,21 +1,17 @@
-package com.wavesplatform.wallet.v2.data.manager
+package com.wavesplatform.sdk.manager
 
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.internal.LinkedTreeMap
-import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.crypto.Base58
-import com.wavesplatform.wallet.v1.crypto.CryptoProvider
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.request.CancelOrderRequest
-import com.wavesplatform.wallet.v2.data.model.remote.request.OrderRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.crypto.CryptoProvider
+import com.wavesplatform.sdk.manager.base.BaseDataManager
+import com.wavesplatform.sdk.model.request.CancelOrderRequest
+import com.wavesplatform.sdk.model.request.OrderRequest
+import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.utils.notNull
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
@@ -30,7 +26,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     fun loadReservedBalances(): Observable<Map<String, Long>> {
         val timestamp = currentTimeMillis
         var signature = ""
-        App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
+        Wavesplatform.get().getWallet().privateKey.notNull { privateKey ->
             val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()),
                     Longs.toByteArray(timestamp))
             signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
@@ -41,7 +37,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     fun loadMyOrders(watchMarket: WatchMarket?): Observable<List<OrderResponse>> {
         val timestamp = currentTimeMillis
         var signature = ""
-        App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
+        Wavesplatform.get().getWallet().privateKey.notNull { privateKey ->
             val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()),
                     Longs.toByteArray(timestamp))
             signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
@@ -56,7 +52,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     fun cancelOrder(orderId: String?, watchMarket: WatchMarket?, cancelOrderRequest: CancelOrderRequest): Observable<Any> {
         cancelOrderRequest.sender = getPublicKeyStr()
         cancelOrderRequest.orderId = orderId
-        App.getAccessManager().getWallet()?.privateKey.notNull {
+        Wavesplatform.get().getWallet().privateKey.notNull {
             cancelOrderRequest.sign(it)
         }
         return matcherService.cancelOrder(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, cancelOrderRequest)
@@ -75,7 +71,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
     fun placeOrder(orderRequest: OrderRequest): Observable<Any> {
         orderRequest.senderPublicKey = getPublicKeyStr()
-        App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
+        Wavesplatform.get().getWallet().privateKey.notNull { privateKey ->
             orderRequest.sign(privateKey)
         }
         return matcherService.placeOrder(orderRequest)

@@ -16,7 +16,8 @@ class AddressUtil {
         var WAVES_PREFIX = "waves://"
 
 
-        private fun calcCheckSum(bytes: ByteArray): ByteArray {
+
+        fun calcCheckSum(bytes: ByteArray): ByteArray {
             return Arrays.copyOfRange(Hash.secureHash(bytes), 0, checksumLength)
         }
 

@@ -1,11 +1,8 @@
-package com.wavesplatform.wallet.v2.data.manager
+package com.wavesplatform.sdk.manager
 
 import android.content.Context
-import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.exception.RetrofitException
-import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.util.RxEventBus
+import android.provider.CalendarContract
+import com.wavesplatform.sdk.exception.RetrofitException
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
@@ -15,13 +12,13 @@ import javax.inject.Inject
 
 class ErrorManager @Inject constructor(val mRxEventBus: RxEventBus, val mPreferencesHelper: PreferencesHelper) {
     private lateinit var mActivity: BaseActivity
-    private lateinit var retrySubject: PublishSubject<Events.RetryEvent>
+    private lateinit var retrySubject: PublishSubject<CalendarContract.Events.RetryEvent>
 
     fun handleError(response: RetrofitException, retrySubject: PublishSubject<Events.RetryEvent>) {
         mRxEventBus.post(Events.ErrorEvent(response, retrySubject))
     }
 
-    fun showError(context: Context, retrofitException: RetrofitException, retrySubject: PublishSubject<Events.RetryEvent>) {
+    fun showError(context: Context, retrofitException: RetrofitException, retrySubject: PublishSubject<CalendarContract.Events.RetryEvent>) {
         this.mActivity = context as BaseActivity
         this.retrySubject = retrySubject
 

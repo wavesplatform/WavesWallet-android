@@ -10,6 +10,7 @@ object Hash {
     private val blake = Blake2b.Digest.newInstance(DigestSize)
     private val keccak256 = Keccak256()
 
+    @JvmStatic
     fun hashChain(input: ByteArray, vararg engines: DigestEngine): ByteArray {
         var input = input
         for (engine in engines) {
@@ -18,10 +19,12 @@ object Hash {
         return input
     }
 
+    @JvmStatic
     fun secureHash(input: ByteArray): ByteArray {
         return keccak256.digest(blake.digest(input))
     }
 
+    @JvmStatic
     fun fastHash(input: ByteArray): ByteArray {
         return blake.digest(input)
     }

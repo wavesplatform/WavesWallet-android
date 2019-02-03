@@ -1,20 +1,22 @@
-package com.wavesplatform.wallet.v2.data.manager
+package com.wavesplatform.sdk.manager
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ProcessLifecycleOwner
+import android.provider.CalendarContract
 import android.text.TextUtils
-import com.vicpin.krealmextensions.*
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
-import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.wallet.v2.data.model.remote.request.*
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
-import com.wavesplatform.wallet.v2.util.TransactionUtil
-import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.sumByLong
+import com.google.common.base.Predicates.equalTo
+import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.manager.base.BaseDataManager
+import com.wavesplatform.sdk.model.request.AliasRequest
+import com.wavesplatform.sdk.model.request.BurnRequest
+import com.wavesplatform.sdk.model.request.CreateLeasingRequest
+import com.wavesplatform.sdk.model.request.TransactionsBroadcastRequest
+import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.utils.TransactionUtil
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.sdk.utils.sumByLong
+import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
@@ -35,8 +37,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     lateinit var matcherDataManager: MatcherDataManager
     var transactions: List<Transaction> = ArrayList()
 
-    fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
-        return spamService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM_FILE))
+    fun loadSpamAssets(enableSpamFilter: Boolean): Observable<ArrayList<SpamAsset>> {
+        return spamService.spamAssets(Constants.URL_SPAM_FILE)
                 .map {
                     val scanner = Scanner(it)
                     val spam = arrayListOf<SpamAsset>()
@@ -44,14 +46,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                         spam.add(SpamAsset(scanner.nextLine().split(",")[0]))
                     }
                     scanner.close()
-
-                    // clear old spam list and save new
-                    deleteAll<SpamAsset>()
-                    spam.saveAll()
-
                     return@map spam
                 }.map { spamListFromDb ->
-                    if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
+                    if (enableSpamFilter) {
                         return@map spamListFromDb
                     } else {
                         return@map arrayListOf<SpamAsset>()
@@ -171,7 +168,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     fun createAlias(createAliasRequest: AliasRequest): Observable<Alias> {
         createAliasRequest.senderPublicKey = getPublicKeyStr()
         createAliasRequest.timestamp = currentTimeMillis
-        App.getAccessManager().getWallet()?.privateKey.notNull {
+        Wavesplatform.get().getWallet().privateKey.notNull {
             createAliasRequest.sign(it)
         }
         return nodeService.createAlias(createAliasRequest)
@@ -189,7 +186,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         cancelLeasingRequest.senderPublicKey = getPublicKeyStr()
         cancelLeasingRequest.timestamp = currentTimeMillis
 
-        App.getAccessManager().getWallet()?.privateKey.notNull {
+        Wavesplatform.get().getWallet().privateKey.notNull {
             cancelLeasingRequest.sign(it)
         }
         return nodeService.cancelLeasing(cancelLeasingRequest)
@@ -200,7 +197,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     return@map it
                 }
                 .doOnNext {
-                    rxEventBus.post(Events.UpdateAssetsBalance())
+                    rxEventBus.post(CalendarContract.Events.UpdateAssetsBalance())
                 }
     }
 
@@ -211,7 +208,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         createLeasingRequest.fee = fee
         createLeasingRequest.timestamp = currentTimeMillis
 
-        App.getAccessManager().getWallet()?.privateKey.notNull {
+        Wavesplatform.get().getWallet().privateKey.notNull {
             createLeasingRequest.sign(it, recipientIsAlias)
         }
         return nodeService.createLeasing(createLeasingRequest)
@@ -258,7 +255,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     return@map it.filter {
                         it.asset = Constants.wavesAssetInfo
                         it.transactionTypeId = transactionUtil.getTransactionType(it)
-                        it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE && it.sender == App.getAccessManager().getWallet()?.address
+                        it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE && it.sender == Wavesplatform.get().getWallet().address
                     }
                 }
                 .flatMap {

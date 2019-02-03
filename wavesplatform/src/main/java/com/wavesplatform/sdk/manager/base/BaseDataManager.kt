@@ -1,10 +1,11 @@
-package com.wavesplatform.wallet.v2.data.manager.base
+package com.wavesplatform.sdk.manager.base
 
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
+import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.service.ApiService
+import com.wavesplatform.sdk.service.CoinomatService
+import com.wavesplatform.sdk.service.MatcherService
+import com.wavesplatform.sdk.service.NodeService
 import com.wavesplatform.wallet.v2.data.remote.*
-import com.wavesplatform.wallet.v2.util.RxEventBus
 import javax.inject.Inject
 
 open class BaseDataManager @Inject constructor() {
@@ -19,18 +20,12 @@ open class BaseDataManager @Inject constructor() {
     lateinit var coinomatService: CoinomatService
     @Inject
     lateinit var matcherService: MatcherService
-    @Inject
-    lateinit var preferencesHelper: PreferencesHelper
-    @Inject
-    lateinit var prefsUtil: PrefsUtil
-    @Inject
-    lateinit var rxEventBus: RxEventBus
 
     fun getAddress(): String? {
-        return App.getAccessManager().getWallet()?.address
+        return Wavesplatform.get().getWallet().address
     }
 
     fun getPublicKeyStr(): String? {
-        return App.getAccessManager().getWallet()?.publicKeyStr
+        return Wavesplatform.get().getWallet().publicKeyStr
     }
 }

@@ -1,12 +1,8 @@
-package com.wavesplatform.wallet.v2.data.remote
+package com.wavesplatform.sdk.service
 
-import com.wavesplatform.wallet.v1.payload.TransactionsInfo
-import com.wavesplatform.wallet.v1.payload.WavesBalance
-import com.wavesplatform.wallet.v1.request.IssueTransactionRequest
-import com.wavesplatform.wallet.v1.request.ReissueTransactionRequest
-import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
-import com.wavesplatform.wallet.v2.data.model.remote.request.*
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.sdk.model.request.*
+import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.GET
