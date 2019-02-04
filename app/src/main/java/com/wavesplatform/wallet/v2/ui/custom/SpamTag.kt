@@ -21,7 +21,7 @@ class SpamTag : AppCompatTextView {
         this.text = context.getString(R.string.wallet_assets_spam_tag)
         this.isAllCaps = true
         this.setTextColor(findColor(R.color.basic500))
-        this.textSize = 12f
+        this.textSize = 11f
         this.background = findDrawable(R.drawable.bg_spam_tag)
     }
 }

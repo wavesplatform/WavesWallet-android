@@ -86,7 +86,7 @@
                 android:clipToPadding="true"
                 android:translationZ="1dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="2dp"
+                app:cardCornerRadius="@dimen/asset_item_radius"
                 app:cardElevation="2dp">
 
                 <RelativeLayout
@@ -318,7 +318,7 @@
                 android:translationZ="1dp"
                 android:visibility="gone"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="2dp"
+                app:cardCornerRadius="@dimen/asset_item_radius"
                 app:cardElevation="2dp"
                 tools:visibility="visible">
 
@@ -414,7 +414,7 @@
                 android:clipToPadding="true"
                 android:translationZ="1dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="2dp"
+                app:cardCornerRadius="@dimen/asset_item_radius"
                 app:cardElevation="2dp">
 
                 <RelativeLayout

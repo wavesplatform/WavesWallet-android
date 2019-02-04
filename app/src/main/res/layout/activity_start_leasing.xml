@@ -131,7 +131,7 @@
                 android:layout_marginTop="8dp"
                 android:clipToPadding="true"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="2dp"
+                app:cardCornerRadius="@dimen/asset_item_radius"
                 app:cardElevation="2dp">
 
                 <RelativeLayout
@@ -244,7 +244,7 @@
                 android:layout_marginTop="8dp"
                 android:clipToPadding="true"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="2dp"
+                app:cardCornerRadius="@dimen/asset_item_radius"
                 app:cardElevation="2dp">
 
                 <RelativeLayout

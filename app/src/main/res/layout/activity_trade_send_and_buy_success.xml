@@ -14,7 +14,7 @@
         android:layout_marginTop="74dp"
         android:visibility="visible"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="2dp"
+        app:cardCornerRadius="@dimen/asset_item_radius"
         app:cardElevation="0dp">
 
 

@@ -122,12 +122,10 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
             val imageCloseBottomY = (closeOriginalPos[1] + close.height)
             val difference = dialogHeight - imageCloseBottomY
 
-            if (imageCloseBottomY < dialogHeight) {
-                if (difference > 0) {
-                    val lp = close.layoutParams as RelativeLayout.LayoutParams
-                    lp.setMargins(0, dp2px(34) + difference, dp2px(24), 0)
-                    close.layoutParams = lp
-                }
+            if (imageCloseBottomY < dialogHeight && difference > 0) {
+                val lp = close.layoutParams as RelativeLayout.LayoutParams
+                lp.setMargins(0, dp2px(34) + difference, dp2px(24), 0)
+                close.layoutParams = lp
             }
         }
     }
