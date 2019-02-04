@@ -208,7 +208,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
         swipe_container?.isRefreshing = false
     }
 
-    override fun startServiceToLoadData(assets: ArrayList<AssetBalance>) {
+    override fun startServiceToLoadData() {
         runOnUiThread {
             if (!isMyServiceRunning(UpdateApiDataService::class.java)) {
                 val intent = Intent(baseActivity, UpdateApiDataService::class.java)
