@@ -20,16 +20,16 @@ class Constants {
         const val URL_CONFIG = "https://github-proxy.wvservices.com/" + "wavesplatform/waves-client-config/master/environment_mainnet.json"
 
         val WAVES_ASSET_ID = ""
-        val MONERO_ASSET_ID = EnvironmentManager.findAssetId("XMR")
-        val BITCOIN_ASSET_ID = EnvironmentManager.findAssetId("BTC")
-        val ETHEREUM_ASSET_ID = EnvironmentManager.findAssetId("ETH")
-        val BITCOINCASH_ASSET_ID = EnvironmentManager.findAssetId("BCH")
-        val LIGHTCOIN_ASSET_ID = EnvironmentManager.findAssetId("LTC")
-        val ZEC_ASSET_ID = EnvironmentManager.findAssetId("ZEC")
-        val DASH_ASSET_ID = EnvironmentManager.findAssetId("DASH")
-        val WUSD_ASSET_ID = EnvironmentManager.findAssetId("USD")
-        val WEUR_ASSET_ID = EnvironmentManager.findAssetId("EUR")
-        val WTRY_ASSET_ID = EnvironmentManager.findAssetId("TRY")
+        val MONERO_ASSET_ID = "5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3"
+        val BITCOIN_ASSET_ID = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS"
+        val ETHEREUM_ASSET_ID = "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu"
+        val BITCOINCASH_ASSET_ID = "zMFqXuoyrn5w17PFurTqxB7GsS71fp9dfk6XFwxbPCy"
+        val LIGHTCOIN_ASSET_ID = "HZk1mbfuJpmxU1Fs4AX5MWLVYtctsNcg6e2C6VKqK8zk"
+        val ZEC_ASSET_ID = "BrjUWjndUanm5VsJkbUip8VRYy6LWJePtxya3FNv4TQa"
+        val DASH_ASSET_ID = "B3uGHFRpSUuGEDWjqB9LWWxafQj8VTvpMucEyoxzws5H"
+        val WUSD_ASSET_ID = "Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck"
+        val WEUR_ASSET_ID = "Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU"
+        val WTRY_ASSET_ID = "2mX5DzVKWrAJw8iwdJnV2qtoeVG9h5nTDpTqC1wb1WEN"
 
         val wavesAssetInfo = AssetInfo(id = WAVES_ASSET_ID, precision = 8, name = "WAVES", quantity = 10000000000000000L)
 
@@ -52,6 +52,19 @@ class Constants {
                 AssetBalance(DASH_ASSET_ID, quantity = 1890000000000000, issueTransaction = IssueTransaction(assetId = DASH_ASSET_ID, id = DASH_ASSET_ID, name = "DASH", decimals = 8, quantity = 1890000000000000, timestamp = 1524430860000L), isGateway = true),
                 AssetBalance(MONERO_ASSET_ID, quantity = 1603984700000000, issueTransaction = IssueTransaction(assetId = MONERO_ASSET_ID, id = MONERO_ASSET_ID, name = "Monero", decimals = 8, quantity = 1603984700000000, timestamp = 1526572200000L), isGateway = true))
 
+        val defaultCrypto = arrayOf(
+                BITCOIN_ASSET_ID,
+                ETHEREUM_ASSET_ID,
+                LIGHTCOIN_ASSET_ID,
+                MONERO_ASSET_ID,
+                BITCOINCASH_ASSET_ID,
+                ZEC_ASSET_ID,
+                DASH_ASSET_ID)
+
+        val defaultFiat = arrayOf(
+                WEUR_ASSET_ID,
+                WUSD_ASSET_ID,
+                WTRY_ASSET_ID)
 
         const val SELL_ORDER_TYPE = "sell"
         const val BUY_ORDER_TYPE = "buy"

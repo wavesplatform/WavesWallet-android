@@ -8,6 +8,7 @@ import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.manager.base.BaseDataManager
+import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.model.request.CancelOrderRequest
 import com.wavesplatform.sdk.model.request.OrderRequest
 import com.wavesplatform.sdk.model.response.*

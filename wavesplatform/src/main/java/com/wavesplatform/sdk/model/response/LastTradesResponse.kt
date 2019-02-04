@@ -1,7 +1,7 @@
 package com.wavesplatform.sdk.model.response
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
+import com.wavesplatform.sdk.model.OrderType
 
 data class LastTradesResponse(
         @SerializedName("__type")

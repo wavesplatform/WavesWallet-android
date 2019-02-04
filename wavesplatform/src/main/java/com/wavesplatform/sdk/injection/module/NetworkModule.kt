@@ -10,9 +10,13 @@ import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.sdk.BuildConfig
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
-import com.wavesplatform.wallet.v2.data.manager.ErrorManager
-import com.wavesplatform.wallet.v2.data.remote.*
+import com.wavesplatform.sdk.factory.RxErrorHandlingCallAdapterFactory
+import com.wavesplatform.sdk.manager.ErrorManager
+import com.wavesplatform.sdk.service.ApiService
+import com.wavesplatform.sdk.service.CoinomatService
+import com.wavesplatform.sdk.service.MatcherService
+import com.wavesplatform.sdk.service.NodeService
+import com.wavesplatform.wallet.v2.data.remote.SpamService
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import dagger.Module
 import dagger.Provides

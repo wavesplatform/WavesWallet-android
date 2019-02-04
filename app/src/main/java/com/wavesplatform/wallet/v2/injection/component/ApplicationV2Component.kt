@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.injection.component
 
+import com.wavesplatform.sdk.injection.module.ServiceModule
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.injection.module.*
 import dagger.Component

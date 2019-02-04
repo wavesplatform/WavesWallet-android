@@ -11,7 +11,7 @@ import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
+import com.wavesplatform.sdk.factory.RxErrorHandlingCallAdapterFactory
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.remote.*
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext

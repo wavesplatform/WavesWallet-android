@@ -1,6 +1,8 @@
 package com.wavesplatform.sdk.model.response
 
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.sdk.model.OrderStatus
+import com.wavesplatform.sdk.model.OrderType
 
 class OrderResponse {
 

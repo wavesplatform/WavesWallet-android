@@ -1,10 +1,6 @@
 package com.wavesplatform.sdk.manager
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.ProcessLifecycleOwner
-import android.provider.CalendarContract
 import android.text.TextUtils
-import com.google.common.base.Predicates.equalTo
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.manager.base.BaseDataManager
@@ -58,13 +54,10 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     fun transactionsBroadcast(tx: TransactionsBroadcastRequest): Observable<TransactionsBroadcastRequest> {
         return nodeService.transactionsBroadcast(tx)
-                .doOnNext {
-                    rxEventBus.post(Events.UpdateAssetsBalance())
-                }
     }
 
     fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
-        return loadSpamAssets()
+        return loadSpamAssets(false)
                 .flatMap { spamAssets ->
                     return@flatMap nodeService.assetsBalance(getAddress())
                             .flatMap { assets ->
@@ -112,15 +105,18 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                     }
                                 }
 
-                                tripple.third.balances.saveAll()
+                                /*tripple.third.balances.saveAll()
+                                return@map queryAll<AssetBalance>()*/
 
-                                return@map queryAll<AssetBalance>()
+                                return@map tripple.third.balances
                             }
                             .subscribeOn(Schedulers.io())
                 }
     }
 
-    private fun findElementsInDbWithZeroBalancesAndDelete(assetsFromDb: List<AssetBalance>?, tripple: Triple<AssetBalance, Map<String, Long>, AssetBalances>) {
+    private fun findElementsInDbWithZeroBalancesAndDelete(
+            assetsFromDb: List<AssetBalance>?,
+            tripple: Triple<AssetBalance, Map<String, Long>, AssetBalances>) {
         if (assetsFromDb?.size != tripple.third.balances.size) {
             val dbIds = assetsFromDb?.mapTo(ArrayList()) { it.assetId }
             val apiIds = tripple.third.balances.mapTo(ArrayList()) { it.assetId }
@@ -128,13 +124,13 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
             offsetAsset?.forEach { id ->
                 if (id.isNotEmpty()) {
-                    val assetBalance = queryFirst<AssetBalance> { equalTo("assetId", id) }
+                    /*val assetBalance = queryFirst<AssetBalance> { equalTo("assetId", id) }
                     if (assetBalance?.isGateway == false) {
                         assetBalance.delete { equalTo("assetId", id) }
                     } else {
                         assetBalance?.balance = 0
                         assetBalance?.save()
-                    }
+                    }*/
                 }
             }
         }
@@ -160,7 +156,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     currentWaves.balance = totalBalance
                     currentWaves.leasedBalance = leasedBalance
                     currentWaves.inOrderBalance = inOrderBalance
-                    currentWaves.save()
+                    //currentWaves.save()
                     return@Function3 currentWaves
                 })
     }
@@ -172,14 +168,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
             createAliasRequest.sign(it)
         }
         return nodeService.createAlias(createAliasRequest)
-                .map {
-                    it.address = getAddress()
-                    it.save()
-                    return@map it
-                }
-                .doOnNext {
-                    rxEventBus.post(Events.UpdateAssetsBalance())
-                }
     }
 
     fun cancelLeasing(cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction> {
@@ -190,15 +178,6 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
             cancelLeasingRequest.sign(it)
         }
         return nodeService.cancelLeasing(cancelLeasingRequest)
-                .map {
-                    val first = queryFirst<Transaction> { equalTo("id", cancelLeasingRequest.leaseId) }
-                    first?.status = LeasingStatus.CANCELED.status
-                    first?.save()
-                    return@map it
-                }
-                .doOnNext {
-                    rxEventBus.post(CalendarContract.Events.UpdateAssetsBalance())
-                }
     }
 
     fun startLeasing(createLeasingRequest: CreateLeasingRequest,
@@ -212,21 +191,20 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
             createLeasingRequest.sign(it, recipientIsAlias)
         }
         return nodeService.createLeasing(createLeasingRequest)
-                .doOnNext {
-                    rxEventBus.post(Events.UpdateAssetsBalance())
-                }
     }
 
     fun loadTransactions(currentLoadTransactionLimitPerRequest: Int): Observable<List<Transaction>> {
         return Observable.interval(0, 15, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap {
-                    if (ProcessLifecycleOwner.get().lifecycle.currentState == Lifecycle.State.RESUMED) {
+                    /*if (ProcessLifecycleOwner.get().lifecycle.currentState == Lifecycle.State.RESUMED) {
                         return@flatMap nodeService.transactionList(getAddress(), currentLoadTransactionLimitPerRequest)
                                 .map { r -> r[0] }
                     } else {
                         return@flatMap Observable.just(listOf<Transaction>())
-                    }
+                    }*/
+                    return@flatMap nodeService.transactionList(getAddress(), currentLoadTransactionLimitPerRequest)
+                            .map { r -> r[0] }
                 }
                 .onErrorResumeNext(Observable.empty())
     }
@@ -243,7 +221,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     return@flatMap nodeService.currentBlocksHeight()
                 }
                 .map {
-                    preferencesHelper.currentBlocksHeight = it.height
+                    //preferencesHelper.currentBlocksHeight = it.height
                     return@map it
                 }
                 .onErrorResumeNext(Observable.empty())
@@ -278,16 +256,10 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     fun burn(burn: BurnRequest): Observable<BurnRequest> {
         return nodeService.burn(burn)
-                .doOnNext {
-                    rxEventBus.post(Events.UpdateAssetsBalance())
-                }
     }
 
     fun scriptAddressInfo(address: String): Observable<ScriptInfo> {
         return nodeService.scriptAddressInfo(address)
-                .doOnNext {
-                    prefsUtil.setValue(PrefsUtil.KEY_SCRIPTED_ACCOUNT, it.extraFee != 0L)
-                }
     }
 
     fun assetDetails(assetId: String?): Observable<AssetsDetails> {

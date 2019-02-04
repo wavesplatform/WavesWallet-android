@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
+import com.wavesplatform.sdk.model.OrderType
 import com.wavesplatform.sdk.model.response.OrderBook
 import pers.victor.ext.currentTimeMillis
 

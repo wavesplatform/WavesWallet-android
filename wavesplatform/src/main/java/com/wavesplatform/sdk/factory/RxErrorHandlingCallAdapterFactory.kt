@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.data.factory
+package com.wavesplatform.sdk.factory
 
 import com.wavesplatform.sdk.exception.RetrofitException
 import com.wavesplatform.sdk.manager.ErrorManager

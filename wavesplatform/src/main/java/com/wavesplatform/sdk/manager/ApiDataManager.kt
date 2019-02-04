@@ -6,6 +6,7 @@ import com.wavesplatform.sdk.model.response.AssetInfo
 import com.wavesplatform.sdk.model.response.CandlesResponse
 import com.wavesplatform.sdk.model.response.LastTradesResponse
 import com.wavesplatform.sdk.manager.base.BaseDataManager
+import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.utils.notNull
 import io.reactivex.Observable
 import pers.victor.ext.currentTimeMillis
@@ -28,7 +29,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                         it.alias.own = true
                         return@mapTo it.alias
                     }
-                    aliases.saveAll()
+                    //aliases.saveAll()
                     return@map aliases
                 }
     }
@@ -39,7 +40,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                 .flatMap {
                     apiService.loadDexPairInfo(watchMarket.market.amountAsset, watchMarket.market.priceAsset)
                             .map {
-                                prefsUtil.setValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, currentTimeMillis)
+                                //prefsUtil.setValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, currentTimeMillis)
                                 watchMarket.pairResponse = it
                                 return@map watchMarket
                             }
@@ -51,7 +52,6 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
         return apiService.alias(alias)
                 .map {
                     it.alias.own = false
-                    it.alias.save()
                     return@map it.alias
                 }
     }
@@ -74,7 +74,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
 
                             return@mapTo assetInfoData.assetInfo
                         }
-                        assetsInfo.saveAll()
+                        //assetsInfo.saveAll()
                         return@map assetsInfo
                     }
         }
