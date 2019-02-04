@@ -5,13 +5,19 @@ import android.content.ClipData
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.design.widget.CoordinatorLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -34,6 +40,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
 import com.wavesplatform.wallet.v2.data.remote.CoinomatService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
+import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
 import com.wavesplatform.wallet.v2.ui.custom.SpamTag
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -55,7 +62,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), HistoryDetailsView {
+class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), HistoryDetailsView {
     var selectedItem: Transaction? = null
     var selectedItemPosition: Int = 0
     var rootView: View? = null
@@ -79,8 +86,11 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         this.inflater = inflater
         rootView = inflater.inflate(R.layout.history_details_bottom_sheet_dialog, container, false)
+
+//        dialog?.window?.statusBarColor = findColor(R.color.white)
 
         configureView()
 
@@ -97,6 +107,27 @@ class HistoryDetailsBottomSheetFragment : BaseBottomSheetDialogFragment(), Histo
                 addView(setupBody(it))
                 addView(setupTransactionInfo(it))
                 addView(setupFooter(it))
+            }
+            configCloseButton()
+        }
+    }
+
+    private fun configCloseButton() {
+        val close = rootView?.findViewById<AppCompatImageView>(R.id.image_close)
+        close?.post {
+            val closeOriginalPos = IntArray(2)
+            close.getLocationOnScreen(closeOriginalPos)
+
+            val dialogHeight = dialog.findViewById<CoordinatorLayout>(R.id.coordinator).height
+            val imageCloseBottomY = (closeOriginalPos[1] + close.height)
+            val difference = dialogHeight - imageCloseBottomY
+
+            if (imageCloseBottomY < dialogHeight) {
+                if (difference > 0) {
+                    val lp = close.layoutParams as RelativeLayout.LayoutParams
+                    lp.setMargins(0, dp2px(34) + difference, dp2px(24), 0)
+                    close.layoutParams = lp
+                }
             }
         }
     }
