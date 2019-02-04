@@ -11,10 +11,7 @@ import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -89,8 +86,6 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         super.onCreateView(inflater, container, savedInstanceState)
         this.inflater = inflater
         rootView = inflater.inflate(R.layout.history_details_bottom_sheet_dialog, container, false)
-
-//        dialog?.window?.statusBarColor = findColor(R.color.white)
 
         configureView()
 
@@ -738,11 +733,12 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 }
             }
             TransactionType.STARTED_LEASING_TYPE -> {
-                view.text_cancel_leasing.visiable()
-
-                changeViewMargin(view.text_view_on_explorer)
-
                 if (transaction.status == LeasingStatus.ACTIVE.status) {
+
+                    view.text_cancel_leasing.visiable()
+
+                    changeViewMargin(view.text_view_on_explorer)
+
                     eventSubscriptions.add(RxView.clicks(view.text_cancel_leasing)
                             .throttleFirst(1500, TimeUnit.MILLISECONDS)
                             .observeOn(AndroidSchedulers.mainThread())
@@ -833,6 +829,19 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
 
     private fun resolveExistOrNoAddress(textViewName: TextView?, textViewAddress: TextView?, textAddressAction: AppCompatTextView?) {
         val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
+        textAddressAction?.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.alpha = 0.6f
+                }
+                MotionEvent.ACTION_UP,
+                MotionEvent.ACTION_CANCEL -> {
+                    v.alpha = 1f
+                }
+            }
+            return@setOnTouchListener false
+        }
+
         if (addressBookUser == null) {
             //  not exist
             textViewName?.gone()
@@ -868,6 +877,20 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
 
     private fun resolveExistOrNoAddressForMassSend(textViewName: TextView?, textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
         val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
+
+        imageAddressAction?.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.alpha = 0.6f
+                }
+                MotionEvent.ACTION_UP,
+                MotionEvent.ACTION_CANCEL -> {
+                    v.alpha = 1f
+                }
+            }
+            return@setOnTouchListener false
+        }
+
         if (addressBookUser == null) {
             //  not exist
             textViewName?.gone()

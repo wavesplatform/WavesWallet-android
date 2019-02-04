@@ -61,7 +61,6 @@ class HistoryTabItemAdapter @Inject constructor() :
                     }
                 } catch (e: Throwable) {
                     helper.itemView.card_history.setMargins(bottom = dp2px(8))
-                    e.printStackTrace()
                 }
 
                 helper.itemView.notNull { view ->
