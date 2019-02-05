@@ -122,14 +122,13 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         val passCode = arguments?.getString(KEY_INTENT_PASS_CODE, "") ?: ""
         try {
             SecurePreferences.setValue(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
-            onSuccessRecognizedFingerprint()
             fingerprintIdentify.cancelIdentify()
+            onSuccessRecognizedFingerprint()
             handler.postDelayed({
                 fingerPrintDialogListener?.onSuccessRecognizedFingerprint()
                 dismissAllowingStateLoss()
             }, DELAY_TO_CHANGE_STATE)
         } catch (throwable: SecureStorageException) {
-            App.getAccessManager().setUseFingerPrint(guid, false)
             onErrorGetKey(throwable, "crypt")
         }
     }
@@ -146,12 +145,12 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                 dismissAllowingStateLoss()
             }, DELAY_TO_CHANGE_STATE)
         } catch (throwable: SecureStorageException) {
-            App.getAccessManager().setUseFingerPrint(guid, false)
-            onErrorGetKey(throwable, "crypt")
+            onErrorGetKey(throwable, "decrypt")
         }
     }
 
     private fun onErrorGetKey(throwable: SecureStorageException, errMessage: String) {
+        App.getAccessManager().setUseFingerPrint(guid, false)
         showErrorMessage(throwable.message, errMessage, throwable)
     }
 
