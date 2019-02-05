@@ -34,7 +34,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
     @Inject
     lateinit var adapterAvatar: AssetDetailsAvatarPagerAdapter
-    lateinit var assetDetailsContentPageAdapter: AssetDetailsContentPageAdapter
+    var assetDetailsContentPageAdapter: AssetDetailsContentPageAdapter? = null
 
     lateinit var menu: Menu
     private var skeletonScreen: ViewSkeletonScreen? = null
@@ -208,7 +208,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     override fun onDestroy() {
-        assetDetailsContentPageAdapter.assets = emptyList()
+        assetDetailsContentPageAdapter?.assets = emptyList()
         adapterAvatar.items = emptyList()
         skeletonScreen?.hide()
         skeletonScreen = null
