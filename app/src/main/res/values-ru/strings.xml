@@ -505,6 +505,7 @@
     <string name="sell_btn_txt">Продать %s</string>
     <string name="send_amount">Количество</string>
     <string name="send_amount_error_insufficient_funds">Недостаточно средств</string>
+    <string name="send_spam_error">This is spam asset</string>
     <string name="send_asset">Ассет</string>
     <string name="send_choose_from_address_book">Адресная книга</string>
     <string name="send_confirmation_confirm">Подтвердить</string>
@@ -534,6 +535,7 @@
     <string name="send_recipient">Получатель</string>
     <string name="send_recipient_address_hint">Адрес получателя…</string>
     <string name="send_recipient_the_address_is_not_valid">Неверный адрес</string>
+    <string name="send_recipient_asset_is_not_valid">Неверный ассет</string>
     <string name="send_select_your_asset">Выберите свой ассет</string>
     <string name="send_success_do_you_want_to_save_this_address">Вы хотите сохранить этот адрес?</string>
     <string name="send_success_okay">Хорошо</string>

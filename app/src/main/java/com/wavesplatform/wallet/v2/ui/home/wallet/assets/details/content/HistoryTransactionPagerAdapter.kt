@@ -162,7 +162,7 @@ class HistoryTransactionPagerAdapter constructor(
         val directionSign: String
         val amountAsset = myOrder.assetPair?.amountAssetObject!!
         val amountValue = getScaledAmount(transaction.amount,
-                transaction.asset?.precision ?: 8)
+                amountAsset.precision)
 
         if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell

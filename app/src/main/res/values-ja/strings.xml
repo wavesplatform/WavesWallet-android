@@ -505,6 +505,7 @@
     <string name="sell_btn_txt">%s を売却する</string>
     <string name="send_amount">取引量</string>
     <string name="send_amount_error_insufficient_funds">残高が不足しています</string>
+    <string name="send_spam_error">This is spam asset</string>
     <string name="send_asset">資産</string>
     <string name="send_choose_from_address_book">アドレス帳から選択する</string>
     <string name="send_confirmation_confirm">確定</string>
@@ -534,6 +535,7 @@
     <string name="send_recipient">送信先</string>
     <string name="send_recipient_address_hint">送信先のアドレス…</string>
     <string name="send_recipient_the_address_is_not_valid">有効なアドレスではありません</string>
+    <string name="send_recipient_asset_is_not_valid">The asset is not valid</string>
     <string name="send_select_your_asset">通貨を選択する</string>
     <string name="send_success_do_you_want_to_save_this_address">このアドレスを保存しますか？</string>
     <string name="send_success_okay">OK</string>
