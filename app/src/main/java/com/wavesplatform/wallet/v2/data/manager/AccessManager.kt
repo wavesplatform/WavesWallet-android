@@ -365,14 +365,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         return prefs.getGuidValue(guid, PrefsUtil.KEY_USE_FINGERPRINT, false)
     }
 
-    fun setEncryptedPassCode(guid: String, data: String) {
-        prefs.setValue(guid, PrefsUtil.KEY_ENCRYPTED_PIN, data)
-    }
-
-    fun getEncryptedPassCode(guid: String): String {
-        return prefs.getValue(guid, PrefsUtil.KEY_ENCRYPTED_PIN, "")
-    }
-
     fun restartApp(context: Context) {
         val intent = Intent(context, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)

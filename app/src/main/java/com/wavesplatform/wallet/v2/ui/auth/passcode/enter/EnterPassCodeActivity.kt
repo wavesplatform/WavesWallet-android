@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
@@ -17,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.U
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.PassCodeEntryKeypad
 import com.wavesplatform.wallet.v2.util.*
+import de.adorsys.android.securestoragelibrary.SecurePreferences
 import kotlinx.android.synthetic.main.activity_enter_passcode.*
 import pers.victor.ext.click
 import pers.victor.ext.inflate
@@ -30,6 +32,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     lateinit var presenter: EnterPassCodePresenter
     private lateinit var fingerprintDialog: FingerprintAuthDialogFragment
     private lateinit var guid: String
+    private var useFingerprint: Boolean = false
 
     @ProvidePresenter
     fun providePresenter(): EnterPassCodePresenter = presenter
@@ -51,9 +54,9 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         val isAvailable = FingerprintAuthDialogFragment.isAvailable(this)
         guid = getGuid()
 
-        val useFingerprint = isAvailable
+        useFingerprint = isAvailable
                 && !isProcessSetFingerprint
-                && isLoggedIn()
+                && !TextUtils.isEmpty(guid)
                 && App.getAccessManager().isGuidUseFingerPrint(guid)
 
 
@@ -82,28 +85,32 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
                 })
 
         if (useFingerprint) {
-            fingerprintDialog = FingerprintAuthDialogFragment.newInstance(getGuid())
-            fingerprintDialog.setFingerPrintDialogListener(
-                    object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
-                        override fun onSuccessRecognizedFingerprint(passCode: String) {
-                            validate(passCode)
-                        }
+            if (!SecurePreferences.contains(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE)) {
+                pass_keypad.isFingerprintAvailable(false)
+            } else {
+                fingerprintDialog = FingerprintAuthDialogFragment.newInstance(getGuid())
+                fingerprintDialog.setFingerPrintDialogListener(
+                        object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
+                            override fun onSuccessRecognizedFingerprint(passCode: String) {
+                                validate(passCode)
+                            }
 
-                        override fun onFingerprintLocked(message: String) {
-                            pass_keypad.isFingerprintAvailable(false)
-                        }
+                            override fun onFingerprintLocked(message: String) {
+                                pass_keypad.isFingerprintAvailable(false)
+                            }
 
-                        override fun onShowErrorMessage(message: String) {
-                            showError(message, R.id.content)
-                            fingerprintDialog.dismiss()
-                        }
+                            override fun onShowErrorMessage(message: String) {
+                                showError(message, R.id.content)
+                                fingerprintDialog.dismiss()
+                            }
 
-                        override fun onShowMessage(message: String) {
-                            showMessage(message, R.id.content)
-                            fingerprintDialog.dismiss()
-                        }
-                    })
-            showFingerPrint()
+                            override fun onShowMessage(message: String) {
+                                showMessage(message, R.id.content)
+                                fingerprintDialog.dismiss()
+                            }
+                        })
+                showFingerPrint()
+            }
         }
 
         if (TextUtils.isEmpty(guid)) {
@@ -123,8 +130,6 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
             }
         }
     }
-
-    private fun isLoggedIn() = !TextUtils.isEmpty(guid)
 
     private fun startUsePasswordScreen(afterOverAttempts: Boolean) {
         val guid = getGuid()
@@ -158,6 +163,11 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     }
 
     override fun onSuccessValidatePassCode(password: String, passCode: String) {
+        if (useFingerprint && !SecurePreferences.contains(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE)) {
+            SecurePreferences.setValue(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
+            prefsUtil.removeValue(guid, PrefsUtil.KEY_ENCRYPTED_PIN)
+        }
+
         showProgressBar(false)
 
         val data = Intent()
