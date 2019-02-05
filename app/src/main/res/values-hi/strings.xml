@@ -505,6 +505,7 @@
     <string name="sell_btn_txt">%s बेचें</string>
     <string name="send_amount">रकम</string>
     <string name="send_amount_error_insufficient_funds">अपर्याप्त फंड्स</string>
+    <string name="send_spam_error">This is spam asset</string>
     <string name="send_asset">एसेट</string>
     <string name="send_choose_from_address_book">पता पुस्तिक से चुनें</string>
     <string name="send_confirmation_confirm">की पुष्टि करें</string>
@@ -534,6 +535,7 @@
     <string name="send_recipient">प्राप्त करने वाला</string>
     <string name="send_recipient_address_hint">प्राप्तकर्ता का पता…</string>
     <string name="send_recipient_the_address_is_not_valid">पता मान्य नहीं है</string>
+    <string name="send_recipient_asset_is_not_valid">The asset is not valid</string>
     <string name="send_select_your_asset">अपनी संपत्ति का चुनाव करें</string>
     <string name="send_success_do_you_want_to_save_this_address">क्या आप इस पते को सेव करना चाहते हैं?</string>
     <string name="send_success_okay">ठीक है</string>

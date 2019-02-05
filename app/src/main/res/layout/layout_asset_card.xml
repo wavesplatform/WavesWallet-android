@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="14dp"
+            android:layout_marginRight="16dp"
             app:srcCompat="@drawable/ic_changearrows_14_basic_500" />
     </RelativeLayout>
 

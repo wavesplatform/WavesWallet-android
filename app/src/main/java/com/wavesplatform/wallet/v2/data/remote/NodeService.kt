@@ -64,6 +64,6 @@ interface NodeService {
     fun scriptAddressInfo(@Path("address") address: String): Observable<ScriptInfo>
 
     @GET("/assets/details/{assetId}")
-    fun scriptAssetInfo(@Path("assetId") assetId: String): Observable<AssetsDetails>
+    fun assetDetails(@Path("assetId") assetId: String): Observable<AssetsDetails>
 
 }

@@ -1,9 +1,12 @@
 package com.wavesplatform.wallet.v2.data.service
 
 import android.app.Service
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.ProcessLifecycleOwner
 import android.content.Intent
 import android.os.IBinder
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
@@ -32,6 +35,12 @@ class UpdateApiDataService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        if (App.getAccessManager().getWallet() == null
+                || ProcessLifecycleOwner.get().lifecycle.currentState != Lifecycle.State.RESUMED) {
+            stopSelf()
+            return Service.START_NOT_STICKY
+        }
+
         val transaction = queryFirst<Transaction>()
         if (transaction == null) {
             transactionLimit = TransactionSaver.MAX_LIMIT
