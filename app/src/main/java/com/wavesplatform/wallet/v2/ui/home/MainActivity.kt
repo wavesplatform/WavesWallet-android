@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -14,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
@@ -24,6 +26,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
+import com.wavesplatform.wallet.v2.ui.custom.SwipeDismissBehaviorWithAnimation
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
@@ -36,8 +39,8 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeLinks
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
+import kotlinx.android.synthetic.main.backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
-import org.spongycastle.crypto.tls.ExtensionType.padding
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.put
 import javax.inject.Inject
@@ -350,8 +353,9 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             val now = System.currentTimeMillis()
             if (now > lastTime + MIN_15) {
                 warning_container.visiable()
-                warning_container.click {
-                    it.gone()
+                implementSwipeDismiss()
+                linear_warning_container.click {
+                    warning_container.gone()
                     launchActivity<BackupPhraseActivity> {
                         putExtra(ProfileFragment.KEY_INTENT_SET_BACKUP, true)
                     }
@@ -365,6 +369,21 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         } else {
             tab_navigation.getTabAt(PROFILE_SCREEN)?.customView?.findViewById<View>(R.id.view_seed_error)?.gone()
         }
+    }
+
+    private fun implementSwipeDismiss() {
+        val swipeDismissBehavior = SwipeDismissBehaviorWithAnimation<LinearLayout>()
+        swipeDismissBehavior.setSwipeDirection(SwipeDismissBehaviorWithAnimation.SWIPE_DIRECTION_ANY)
+        swipeDismissBehavior.setListener(object : SwipeDismissBehaviorWithAnimation.OnDismissListener {
+            override fun onDismiss(p0: View?) {
+                warning_container.gone()
+            }
+
+            override fun onDragStateChanged(p0: Int) {}
+        })
+        val layoutParams = linear_warning_container.layoutParams as CoordinatorLayout.LayoutParams
+
+        layoutParams.behavior = swipeDismissBehavior
     }
 
     override fun needToShowNetworkMessage() = true
