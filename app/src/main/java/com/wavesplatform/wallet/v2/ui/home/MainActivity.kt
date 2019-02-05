@@ -37,6 +37,7 @@ import com.wavesplatform.wallet.v2.util.makeLinks
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
+import org.spongycastle.crypto.tls.ExtensionType.padding
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.put
 import javax.inject.Inject
@@ -103,21 +104,17 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     private fun getFirstOpenAlertView(): View? {
         val view = LayoutInflater.from(this)
                 .inflate(R.layout.dialog_account_first_open, null)
-        val padding = (14.0f * this.resources.displayMetrics.density + 0.5f).toInt()
+
         view.checkbox_funds_on_device.setOnCheckedChangeListener { _, isChecked ->
             presenter.checkedAboutBackup = isChecked
             view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
         }
-        view.checkbox_funds_on_device.setPadding(padding, 0, 0, 0)
-
 
         view.checkbox_backup.setOnCheckedChangeListener { _, isChecked ->
             presenter.checkedAboutFundsOnDevice = isChecked
             view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
         }
-        view.checkbox_backup.setPadding(padding, padding, 0, padding)
 
-        view.checkbox_terms_of_use.setPadding(padding, padding, 0, padding)
         view.checkbox_terms_of_use.setOnCheckedChangeListener { _, isChecked ->
             presenter.checkedAboutTerms = isChecked
             view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
@@ -135,7 +132,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             }
         }
 
-        view.text_about_terms.makeLinks(
+        view.checkbox_terms_of_use.makeLinks(
                 arrayOf(getString(R.string.dialog_account_first_open_about_terms_key)),
                 arrayOf(siteClick))
 
