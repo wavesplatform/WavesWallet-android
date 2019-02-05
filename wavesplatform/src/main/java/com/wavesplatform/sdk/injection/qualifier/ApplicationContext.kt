@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.injection.qualifier
+package com.wavesplatform.sdk.injection.qualifier
 
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy

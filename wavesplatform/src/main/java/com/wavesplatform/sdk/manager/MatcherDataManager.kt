@@ -57,9 +57,9 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
             cancelOrderRequest.sign(it)
         }
         return matcherService.cancelOrder(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, cancelOrderRequest)
-                .doOnNext {
+                /*.doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
-                }
+                }*/
     }
 
     fun getBalanceFromAssetPair(watchMarket: WatchMarket?): Observable<LinkedTreeMap<String, Long>> {
@@ -76,9 +76,9 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
             orderRequest.sign(privateKey)
         }
         return matcherService.placeOrder(orderRequest)
-                .doOnNext {
+                /*.doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
-                }
+                }*/
     }
 
 
@@ -117,16 +117,8 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
                             market.popular = it.first[market.amountAsset] != null && it.first[market.priceAsset] != null
 
-                            market.amountAssetDecimals = if (market.amountAssetInfo == null) {
-                                8
-                            } else {
-                                market.amountAssetInfo.decimals
-                            }
-                            market.priceAssetDecimals = if (market.priceAssetInfo == null) {
-                                8
-                            } else {
-                                market.priceAssetInfo.decimals
-                            }
+                            market.amountAssetDecimals = market.amountAssetInfo.decimals
+                            market.priceAssetDecimals = market.priceAssetInfo.decimals
 
                             val group = hashGroup[market.amountAsset]
                             if (group != null) {
@@ -140,10 +132,13 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                             allMarketsList.addAll(it)
                         }
 
-                        return@flatMap filterMarketsBySpamAndSelect(allMarketsList)
+                        //return@flatMap filterMarketsBySpamAndSelect(allMarketsList)
+                        return@flatMap Observable.just(allMarketsList)
+
                     }
         } else {
-            return filterMarketsBySpamAndSelect(allMarketsList)
+            // return filterMarketsBySpamAndSelect(allMarketsList)
+            return Observable.just(allMarketsList)
         }
     }
 
@@ -151,8 +146,10 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return apiService.loadGlobalCommission()
     }
 
-    private fun filterMarketsBySpamAndSelect(markets: List<MarketResponse>): Observable<MutableList<MarketResponse>> {
-        return Observable.zip(Observable.just(markets), queryAllAsSingle<SpamAsset>().toObservable()
+    /*private fun filterMarketsBySpamAndSelect(markets: List<MarketResponse>): Observable<MutableList<MarketResponse>> {
+        return Observable.zip(
+                Observable.just(markets),
+                queryAllAsSingle<SpamAsset>().toObservable()
                 .map {
                     val map = it.associateBy { it.assetId }
                     return@map map
@@ -175,7 +172,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
             return@Function3 filteredSpamList
         })
-    }
+    }*/
 
     companion object {
         var OTHER_GROUP = "other"

@@ -1,8 +1,8 @@
-package com.wavesplatform.wallet.v2.injection.module
+package com.wavesplatform.sdk.injection.module
 
 import android.app.Application
 import android.content.Context
-import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
+import com.wavesplatform.sdk.injection.qualifier.ApplicationContext
 import dagger.Binds
 import dagger.Module
 

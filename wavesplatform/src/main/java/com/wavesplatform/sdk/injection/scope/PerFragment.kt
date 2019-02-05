@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.injection.scope
+package com.wavesplatform.sdk.injection.scope
 
 import java.lang.annotation.Documented
 import java.lang.annotation.Retention

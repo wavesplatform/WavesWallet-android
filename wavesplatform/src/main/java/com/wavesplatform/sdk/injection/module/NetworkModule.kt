@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.injection.module
+package com.wavesplatform.sdk.injection.module
 
 import android.content.Context
 import android.util.Log
@@ -17,7 +17,7 @@ import com.wavesplatform.sdk.service.CoinomatService
 import com.wavesplatform.sdk.service.MatcherService
 import com.wavesplatform.sdk.service.NodeService
 import com.wavesplatform.wallet.v2.data.remote.SpamService
-import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
+import com.wavesplatform.sdk.injection.qualifier.ApplicationContext
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache

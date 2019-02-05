@@ -36,15 +36,15 @@ class RxErrorHandlingCallAdapterFactory(private val mErrorManager: ErrorManager)
         }
 
         override fun adapt(call: Call<R>): Observable<*> {
-            val retrySubject = PublishSubject.create<Events.RetryEvent>()
+            //val retrySubject = PublishSubject.create<Events.RetryEvent>()
             var observable = convert(wrapped.adapt(call))
-                    .onErrorResumeNext { t: Throwable -> Observable.error(handleErrorToShow(t, retrySubject)) }
+                    .onErrorResumeNext { t: Throwable -> Observable.error(handleErrorToShow(t/*, retrySubject*/)) }
             return observable
         }
 
-        private fun handleErrorToShow(throwable: Throwable, retrySubject: PublishSubject<Events.RetryEvent>): RetrofitException {
+        private fun handleErrorToShow(throwable: Throwable/*, retrySubject: PublishSubject<Events.RetryEvent>*/): RetrofitException {
             val retrofitException = asRetrofitException(throwable)
-            mErrorManager.handleError(retrofitException, retrySubject)
+            mErrorManager.handleError(retrofitException/*, retrySubject*/)
             return retrofitException
         }
 

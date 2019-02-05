@@ -2,26 +2,25 @@ package com.wavesplatform.sdk.manager
 
 import android.app.Activity
 import android.content.Context
-import android.provider.CalendarContract
 import com.wavesplatform.sdk.exception.RetrofitException
-import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 /**
  * Created by anonymous on 22.03.17.
  */
 
-class ErrorManager @Inject constructor(val mRxEventBus: RxEventBus) {
+class ErrorManager @Inject constructor(/*val mRxEventBus: RxEventBus*/) {
     private lateinit var mActivity: Activity
-    private lateinit var retrySubject: PublishSubject<Events.RetryEvent>
+    //private lateinit var retrySubject: PublishSubject<Events.RetryEvent>
 
-    fun handleError(response: RetrofitException, retrySubject: PublishSubject<Events.RetryEvent>) {
-        mRxEventBus.post(Events.ErrorEvent(response, retrySubject))
+    fun handleError(response: RetrofitException /*, retrySubject: PublishSubject<Events.RetryEvent>*/) {
+        //mRxEventBus.post(Events.ErrorEvent(response, retrySubject))
     }
 
-    fun showError(context: Context, retrofitException: RetrofitException, retrySubject: PublishSubject<CalendarContract.Events.RetryEvent>) {
+    fun showError(context: Context, retrofitException: RetrofitException
+            /*, retrySubject: PublishSubject<CalendarContract.Events.RetryEvent>*/) {
         this.mActivity = context as Activity
-        this.retrySubject = retrySubject
+        //this.retrySubject = retrySubject
 
 
         if (retrofitException.kind === RetrofitException.Kind.NETWORK || retrofitException.response!!.code() == 504) {

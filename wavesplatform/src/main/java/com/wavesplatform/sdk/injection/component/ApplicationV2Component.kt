@@ -1,6 +1,8 @@
-package com.wavesplatform.wallet.v2.injection.component
+package com.wavesplatform.sdk.injection.component
 
 import android.app.Application
+import com.wavesplatform.sdk.injection.module.ApplicationModule
+import com.wavesplatform.sdk.injection.module.NetworkModule
 import com.wavesplatform.wallet.v2.injection.module.*
 import dagger.Component
 import dagger.android.AndroidInjector
