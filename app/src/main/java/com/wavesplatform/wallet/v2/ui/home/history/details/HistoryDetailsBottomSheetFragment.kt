@@ -220,9 +220,9 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         historyContainer.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         historyContainer.orientation = LinearLayout.VERTICAL
 
+        /**Comment block views**/
         val commentBlock = inflate(R.layout.history_detailed_transcation_comment_block_layout)
 
-        /**Comment block views**/
         val textComment = commentBlock?.findViewById<TextView>(R.id.text_comment)
 
         val showCommentBlock = !transaction.attachment.isNullOrEmpty()
@@ -405,10 +405,6 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                         .subscribe {
                             imageCopy.copyToClipboard(textCancelLeasingFromAddress?.text.toString())
                         })
-
-//                if (transaction.status == LeasingStatus.ACTIVE.status) {
-//                    status?.text = getString(R.string.history_details_active_now)
-//                }
 
                 resolveExistOrNoAddress(textCancelLeasingFromName, textCancelLeasingFromAddress, imageAddressAction)
 
@@ -829,18 +825,8 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
 
     private fun resolveExistOrNoAddress(textViewName: TextView?, textViewAddress: TextView?, textAddressAction: AppCompatTextView?) {
         val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
-        textAddressAction?.setOnTouchListener { v, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    v.alpha = 0.6f
-                }
-                MotionEvent.ACTION_UP,
-                MotionEvent.ACTION_CANCEL -> {
-                    v.alpha = 1f
-                }
-            }
-            return@setOnTouchListener false
-        }
+
+        makeAddressActionViewClickableStyled(textAddressAction)
 
         if (addressBookUser == null) {
             //  not exist
@@ -875,10 +861,8 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         }
     }
 
-    private fun resolveExistOrNoAddressForMassSend(textViewName: TextView?, textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
-        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
-
-        imageAddressAction?.setOnTouchListener { v, event ->
+    private fun makeAddressActionViewClickableStyled(view: View?) {
+        view?.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     v.alpha = 0.6f
@@ -890,6 +874,12 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
             }
             return@setOnTouchListener false
         }
+    }
+
+    private fun resolveExistOrNoAddressForMassSend(textViewName: TextView?, textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
+        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
+
+        makeAddressActionViewClickableStyled(imageAddressAction)
 
         if (addressBookUser == null) {
             //  not exist
