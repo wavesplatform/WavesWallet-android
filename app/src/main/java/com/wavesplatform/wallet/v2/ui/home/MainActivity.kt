@@ -3,7 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.CoordinatorLayout
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -26,7 +26,6 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
-import com.wavesplatform.wallet.v2.ui.custom.SwipeDismissBehaviorWithAnimation
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
@@ -54,6 +53,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     private var accountFirstOpenDialog: AlertDialog? = null
     private val fragments = arrayListOf<Fragment>()
     private var activeFragment = Fragment()
+    private var seedWarningBehavior: BottomSheetBehavior<LinearLayout>? = null
 
     @ProvidePresenter
     fun providePresenter(): MainPresenter = presenter
@@ -352,8 +352,18 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
             val now = System.currentTimeMillis()
             if (now > lastTime + MIN_15) {
+                seedWarningBehavior = BottomSheetBehavior.from(linear_warning_container)
+                seedWarningBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+                        if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                            warning_container.gone()
+                        }
+                    }
+
+                    override fun onSlide(p0: View, p1: Float) {}
+                })
+                seedWarningBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
                 warning_container.visiable()
-                implementSwipeDismiss()
                 linear_warning_container.click {
                     warning_container.gone()
                     launchActivity<BackupPhraseActivity> {
@@ -369,21 +379,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         } else {
             tab_navigation.getTabAt(PROFILE_SCREEN)?.customView?.findViewById<View>(R.id.view_seed_error)?.gone()
         }
-    }
-
-    private fun implementSwipeDismiss() {
-        val swipeDismissBehavior = SwipeDismissBehaviorWithAnimation<LinearLayout>()
-        swipeDismissBehavior.setSwipeDirection(SwipeDismissBehaviorWithAnimation.SWIPE_DIRECTION_ANY)
-        swipeDismissBehavior.setListener(object : SwipeDismissBehaviorWithAnimation.OnDismissListener {
-            override fun onDismiss(p0: View?) {
-                warning_container.gone()
-            }
-
-            override fun onDragStateChanged(p0: Int) {}
-        })
-        val layoutParams = linear_warning_container.layoutParams as CoordinatorLayout.LayoutParams
-
-        layoutParams.behavior = swipeDismissBehavior
     }
 
     override fun needToShowNetworkMessage() = true
