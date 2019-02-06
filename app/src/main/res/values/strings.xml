@@ -640,4 +640,6 @@
     <string name="history_exchange_sell">Sell</string>
     <string name="history_exchange_buy">Buy</string>
     <string name="history_mass_send_recipient">#%s Recipient</string>
+
+    <string name="sponsored_fee_dialog_title">Transaction Fee</string>
 </resources>

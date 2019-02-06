@@ -66,6 +66,10 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
+    fun assetsBalances(): Observable<AssetBalances> {
+        return nodeService.assetsBalance(getAddress())
+    }
+
     fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
         return loadSpamAssets()
                 .flatMap { spamAssets ->

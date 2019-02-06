@@ -21,7 +21,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showSuccess
-import kotlinx.android.synthetic.main.activit_choose_account.*
+import kotlinx.android.synthetic.main.activity_choose_account.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.inflate
 import javax.inject.Inject
@@ -38,7 +38,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     @Inject
     lateinit var adapter: ChooseAccountAdapter
 
-    override fun configLayoutRes(): Int = R.layout.activit_choose_account
+    override fun configLayoutRes(): Int = R.layout.activity_choose_account
 
     override fun askPassCode() = false
 

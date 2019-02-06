@@ -38,6 +38,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendCo
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ASSET
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_RECIPIENT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_TYPE
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee.SponsoredFeeBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
@@ -75,6 +76,8 @@ class SendActivity : BaseActivity(), SendView {
         setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title),
                 R.drawable.ic_toolbar_back_black)
         checkRecipient(edit_address.text.toString())
+
+        setupCommissionBlock()
 
         when {
             intent.hasExtra(KEY_INTENT_ASSET_DETAILS) -> {
@@ -162,6 +165,15 @@ class SendActivity : BaseActivity(), SendView {
 
         setRecipientSuggestions()
         commission_card.gone()
+    }
+
+    private fun setupCommissionBlock() {
+        image_arrows.visiable()
+        commission_card.click {
+            val dialog = SponsoredFeeBottomSheetFragment()
+            dialog.configureData() // TODO: Need or no? Pass waves balance or sth another
+            dialog.show(supportFragmentManager, dialog::class.java.simpleName)
+        }
     }
 
     private fun loadAsset(assetId: String) {
