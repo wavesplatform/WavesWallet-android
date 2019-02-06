@@ -4,8 +4,6 @@
     package="com.wavesplatform.wallet"
     android:installLocation="auto">
 
-    <uses-sdk tools:overrideLibrary="com.mtramin.rxfingerprint" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
