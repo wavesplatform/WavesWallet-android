@@ -56,7 +56,9 @@ public class App extends DaggerApplication {
 
         Analytics.appsFlyerInit(this);
         FirebaseApp.initializeApp(this);
-        Fabric.with(this, new Crashlytics());
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(this, new Crashlytics());
+        }
         sContext = this;
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
 

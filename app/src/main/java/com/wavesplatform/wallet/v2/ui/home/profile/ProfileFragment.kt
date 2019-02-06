@@ -327,7 +327,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                             initFingerPrintControl()
                         }
 
-                        override fun onCancelButtonClicked(dialog: Dialog, button: AppCompatTextView) {
+                        override fun onCancelButtonClicked(dialog: Dialog) {
                             dialog.dismiss()
                             initFingerPrintControl()
                         }
