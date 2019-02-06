@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v7.widget.AppCompatTextView
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -85,39 +84,57 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     override fun onSuccessCreatePassCode(guid: String, passCode: String) {
         showProgressBar(false)
-        if ((intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)
-                        || intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT))
-                && FingerprintAuthDialogFragment.isAvailable(this)) {
+        val createOrImport = (intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)
+                || intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT))
+        if (createOrImport && FingerprintAuthDialogFragment.isAvailable(this)) {
             launchActivity<UseFingerprintActivity>(intent.extras) {
                 putExtra(CreatePassCodeActivity.KEY_INTENT_GUID, guid)
                 putExtra(CreatePassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
             }
-        } else if (App.getAccessManager().isUseFingerPrint(guid)) {
-            val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
-            fingerprintDialog.isCancelable = false
-            fingerprintDialog.show(supportFragmentManager, "fingerprintDialog")
-            fingerprintDialog.setFingerPrintDialogListener(
-                    object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
-                        override fun onSuccessRecognizedFingerprint() {
-                            launchActivity<MainActivity>(clear = true)
-                        }
-
-                        override fun onCancelButtonClicked(dialog: Dialog) {
-                            App.getAccessManager().setUseFingerPrint(guid, false)
-                            launchActivity<MainActivity>(clear = true)
-                        }
-
-                        override fun onFingerprintLocked(message: String) {
-                            launchActivity<MainActivity>(clear = true)
-                        }
-
-                        override fun onShowErrorMessage(message: String) {
-                            Toast.makeText(this@CreatePassCodeActivity, message,
-                                    Toast.LENGTH_SHORT).show()
-                            launchActivity<MainActivity>(clear = true)
-                        }
-                    })
+        } else if (App.getAccessManager().isUseFingerPrint(guid)
+                && FingerprintAuthDialogFragment.isAvailable(this)) {
+            showFingerprintDialog(guid, passCode)
         } else if (intent.hasExtra(KEY_INTENT_GUID)) {
+            setResult(RESULT_OK)
+            finish()
+        } else {
+            closeOrMain()
+        }
+    }
+
+    private fun showFingerprintDialog(guid: String, passCode: String) {
+        val fingerprintDialog = FingerprintAuthDialogFragment.newInstance(guid, passCode)
+        fingerprintDialog.isCancelable = false
+        fingerprintDialog.show(supportFragmentManager, "fingerprintDialog")
+        fingerprintDialog.setFingerPrintDialogListener(
+                object : FingerprintAuthDialogFragment.FingerPrintDialogListener {
+                    override fun onSuccessRecognizedFingerprint() {
+                        App.getAccessManager().setUseFingerPrint(guid, true)
+                        closeOrMain()
+                    }
+
+                    override fun onCancelButtonClicked(dialog: Dialog) {
+                        App.getAccessManager().setUseFingerPrint(guid, false)
+                        closeOrMain()
+                    }
+
+                    override fun onFingerprintLocked(message: String) {
+                        App.getAccessManager().setUseFingerPrint(guid, false)
+                        closeOrMain()
+                    }
+
+                    override fun onShowErrorMessage(message: String) {
+                        Toast.makeText(this@CreatePassCodeActivity,
+                                message, Toast.LENGTH_SHORT).show()
+                        closeOrMain()
+                    }
+                })
+    }
+
+    private fun closeOrMain() {
+        val changePassCode = intent.getBooleanExtra(
+                KEY_INTENT_PROCESS_CHANGE_PASS_CODE, false)
+        if (changePassCode) {
             setResult(RESULT_OK)
             finish()
         } else {
