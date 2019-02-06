@@ -66,6 +66,10 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         presenter.getBalanceFromAssetPair()
         presenter.loadWavesBalance()
 
+        edit_amount.applyFilterStartWithDot()
+        edit_limit_price.applyFilterStartWithDot()
+        edit_total_price.applyFilterStartWithDot()
+
         CounterHandler.Builder()
                 .valueView(edit_amount)
                 .incrementalView(image_amount_plus)

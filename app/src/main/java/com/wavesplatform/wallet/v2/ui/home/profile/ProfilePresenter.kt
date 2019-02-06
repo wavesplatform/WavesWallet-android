@@ -6,5 +6,5 @@ import javax.inject.Inject
 
 @InjectViewState
 class ProfilePresenter @Inject constructor() : BasePresenter<ProfileView>() {
-
+    var hideShadow: Boolean = true
 }

@@ -18,10 +18,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.success.SuccessActivity
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.showError
+import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.fragment_card.*
 import kotlinx.android.synthetic.main.layout_asset_card.*
 import pers.victor.ext.click
@@ -59,6 +56,7 @@ class CardFragment : BaseFragment(), CardView {
             }
         }
 
+        edit_amount.applyFilterStartWithDot()
 
         eventSubscriptions.add(RxTextView.textChanges(edit_amount)
                 .debounce(300, TimeUnit.MILLISECONDS)

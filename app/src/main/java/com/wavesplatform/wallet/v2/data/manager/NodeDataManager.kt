@@ -293,12 +293,11 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun scriptAssetInfo(assetId: String?): Observable<AssetsDetails> {
+    fun assetDetails(assetId: String?): Observable<AssetsDetails> {
         return if (TextUtils.isEmpty(assetId) || assetId == "WAVES") {
             Observable.just(AssetsDetails(assetId = "WAVES", scripted = false))
         } else {
-            nodeService.scriptAssetInfo(assetId!!)
+            nodeService.assetDetails(assetId!!)
         }
     }
-
 }

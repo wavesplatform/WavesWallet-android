@@ -505,6 +505,7 @@
     <string name="sell_btn_txt">Sat %s</string>
     <string name="send_amount">Miktar</string>
     <string name="send_amount_error_insufficient_funds">Yetersiz bakiye</string>
+    <string name="send_spam_error">This is spam asset</string>
     <string name="send_asset">Kripto para</string>
     <string name="send_choose_from_address_book">Adres defterinden seç</string>
     <string name="send_confirmation_confirm">Onayla</string>
@@ -534,6 +535,7 @@
     <string name="send_recipient">Alıcı</string>
     <string name="send_recipient_address_hint">Alıcı adresi…</string>
     <string name="send_recipient_the_address_is_not_valid">Adres geçerli değil</string>
+    <string name="send_recipient_asset_is_not_valid">The asset is not valid</string>
     <string name="send_select_your_asset">Kripto paranızı seçin</string>
     <string name="send_success_do_you_want_to_save_this_address">Bu adresi kaydetmek istiyor musunuz?</string>
     <string name="send_success_okay">Tamam</string>

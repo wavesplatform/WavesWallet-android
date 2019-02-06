@@ -3,14 +3,7 @@ package com.wavesplatform.wallet
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
-import android.content.Context
 import android.os.Handler
-import android.widget.Toast
-import com.wavesplatform.wallet.v2.data.manager.AccessManager
-import pers.victor.ext.toast
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
-import java.util.*
-import javax.inject.Inject
 
 class AppLifecycleObserver : LifecycleObserver {
 

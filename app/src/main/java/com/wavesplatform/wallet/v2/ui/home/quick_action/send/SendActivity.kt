@@ -56,7 +56,8 @@ class SendActivity : BaseActivity(), SendView {
     @InjectPresenter
     lateinit var presenter: SendPresenter
 
-    private var skeletonView: SkeletonScreen? = null
+    private var xRateSkeletonView: SkeletonScreen? = null
+    private var assetsSkeletonView: SkeletonScreen? = null
 
     @ProvidePresenter
     fun providePresenter(): SendPresenter = presenter
@@ -103,6 +104,8 @@ class SendActivity : BaseActivity(), SendView {
                 .subscribe {
                     checkRecipient(it.toString())
                 })
+
+        edit_amount.applyFilterStartWithDot()
 
         edit_amount.addTextChangedListener {
             on { s, _, _, _ ->
@@ -159,6 +162,20 @@ class SendActivity : BaseActivity(), SendView {
 
         setRecipientSuggestions()
         commission_card.gone()
+    }
+
+    private fun loadAsset(assetId: String) {
+        if (assetsSkeletonView == null) {
+            assetsSkeletonView = Skeleton.bind(edit_asset_layout)
+                    .color(R.color.basic50)
+                    .load(R.layout.item_skeleton_asset)
+                    .show()
+        } else {
+            assetsSkeletonView!!.show()
+        }
+        assetEnable(false)
+        button_continue.isEnabled = false
+        presenter.loadAsset(assetId)
     }
 
     private fun setRecipientSuggestions() {
@@ -271,7 +288,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun showXRate(xRate: XRate, ticker: String) {
-        skeletonView!!.hide()
+        xRateSkeletonView!!.hide()
 
         val fee = if (xRate.feeOut == null) {
             "-"
@@ -301,7 +318,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun showXRateError() {
-        skeletonView!!.hide()
+        xRateSkeletonView!!.hide()
         gateway_fee.text = getString(R.string.send_gateway_error_title)
         gateway_limits.text = getString(R.string.send_gateway_error_subtitle)
         relative_do_not_withdraw.gone()
@@ -412,6 +429,20 @@ class SendActivity : BaseActivity(), SendView {
         text_fee_transaction.visiable()
     }
 
+    override fun showLoadAssetSuccess(assetBalance: AssetBalance) {
+        assetsSkeletonView!!.hide()
+        setAsset(assetBalance)
+        assetEnable(false)
+        showError(R.string.insufficient_funds, R.id.root)
+    }
+
+    override fun showLoadAssetError(errorMsgRes: Int) {
+        assetsSkeletonView!!.hide()
+        setAsset(null)
+        assetEnable(false)
+        showError(errorMsgRes, R.id.root)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -459,6 +490,9 @@ class SendActivity : BaseActivity(), SendView {
     private fun parseDataFromQr(result: String) {
         if (result.isNullOrEmpty()) {
             showError(R.string.send_error_get_data_from_qr, R.id.root_view)
+            assetEnable(false)
+            recipientEnable(false)
+            amountEnable(false)
             return
         }
 
@@ -492,38 +526,46 @@ class SendActivity : BaseActivity(), SendView {
                     equalTo("assetId", assetId)
                 }
 
-                if (assetBalance != null) {
+                if (assetBalance == null) {
+                    loadAsset(assetId)
+                } else {
                     setAsset(assetBalance)
                     assetEnable(false)
                 }
             } catch (error: Exception) {
                 showError(R.string.send_error_get_data_from_qr, R.id.root_view)
+                assetEnable(false)
+                recipientEnable(false)
+                amountEnable(false)
                 error.printStackTrace()
             }
         } else {
             edit_address.setText(result)
-
-            if (!TextUtils.isEmpty(result)) {
-                edit_address.setText(result)
-            } else {
-            }
         }
     }
 
     private fun setAsset(asset: AssetBalance?) {
-        asset.notNull {
+        if (asset == null) {
+            text_asset_error.visiable()
+            presenter.selectedAsset = null
+            text_asset_value.text = "-"
+            container_asset.visiable()
+            button_continue.isEnabled = false
+            text_asset.gone()
+        } else {
+            text_asset_error.gone()
+
             presenter.selectedAsset = asset
 
             image_asset_icon.isOval = true
-            image_asset_icon.setAsset(it)
-            text_asset_name.text = it.getName()
-            text_asset_value.text = it.getDisplayAvailableBalance()
+            image_asset_icon.setAsset(asset)
+            text_asset_name.text = asset.getName()
+            text_asset_value.text = asset.getDisplayAvailableBalance()
 
             image_is_favourite.visiableIf {
-                it.isFavorite
+                asset.isFavorite
             }
 
-            text_asset.gone()
             container_asset.visiable()
 
             checkRecipient(edit_address.text.toString())
@@ -533,6 +575,8 @@ class SendActivity : BaseActivity(), SendView {
             button_continue.isEnabled = true
 
             presenter.loadCommission(presenter.selectedAsset?.assetId)
+
+            text_asset.gone()
         }
     }
 
@@ -540,13 +584,13 @@ class SendActivity : BaseActivity(), SendView {
         if (AssetBalance.isGateway(assetId)) {
             relative_do_not_withdraw.visiable()
             relative_gateway_fee.visiable()
-            if (skeletonView == null) {
-                skeletonView = Skeleton.bind(relative_gateway_fee)
+            if (xRateSkeletonView == null) {
+                xRateSkeletonView = Skeleton.bind(relative_gateway_fee)
                         .color(R.color.basic50)
                         .load(R.layout.item_skeleton_gateway_warning)
                         .show()
             } else {
-                skeletonView!!.show()
+                xRateSkeletonView!!.show()
             }
             presenter.loadXRate(assetId)
         } else {
