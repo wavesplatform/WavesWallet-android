@@ -26,7 +26,6 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_leasing.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -167,7 +166,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
 
     override fun showBalances(wavesAsset: AssetBalance) {
         skeletonScreen?.hide()
-        if (wavesAsset.balance ?: 0 > 0) {
+        if (wavesAsset.getAvailableBalance() > 0) {
             linear_details_balances.visiable()
         } else {
             linear_details_balances.gone()
@@ -178,20 +177,19 @@ class LeasingFragment : BaseFragment(), LeasingView {
         text_available_balance.makeTextHalfBold()
         text_leased.text = wavesAsset.getDisplayLeasedBalance()
         text_total.text = wavesAsset.getDisplayTotalBalance()
-        wavesAsset.balance.notNull { wavesBalance ->
-            if (wavesBalance != 0L) {
-                progress_of_leasing.progress = ((wavesAsset.leasedBalance ?: 0
-                * 100) / wavesBalance).toInt()
-            } else {
-                progress_of_leasing.progress = 0
-            }
+        val wavesBalance = wavesAsset.getAvailableBalance()
+        if (wavesBalance != 0L) {
+            progress_of_leasing.progress =
+                    ((wavesAsset.leasedBalance ?: 0 * 100) / wavesBalance).toInt()
+        } else {
+            progress_of_leasing.progress = 0
         }
 
 
         button_start_lease.click {
             launchActivity<StartLeasingActivity> {
                 val bundle = Bundle()
-                bundle.putLong(StartLeasingActivity.BUNDLE_WAVES, wavesAsset.getAvailableBalance() ?: 0)
+                bundle.putLong(StartLeasingActivity.BUNDLE_WAVES, wavesAsset.getAvailableBalance())
                 putExtras(bundle)
             }
         }

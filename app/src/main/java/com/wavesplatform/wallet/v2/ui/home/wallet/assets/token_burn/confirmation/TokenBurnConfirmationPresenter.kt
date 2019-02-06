@@ -33,8 +33,9 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
         request.sign(App.getAccessManager().getWallet()!!.privateKey)
 
         addSubscription(nodeDataManager.burn(request)
-                .compose(RxUtil.applySchedulersToObservable()).subscribe({ it ->
-                    viewState.onShowBurnSuccess(it, quantity >= assetBalance?.balance ?: 0)
+                .compose(RxUtil.applySchedulersToObservable()).subscribe({
+                    viewState.onShowBurnSuccess(it,
+                            quantity >= assetBalance?.getAvailableBalance() ?: 0)
                 }, {
                     if (it.errorBody()?.isSmartError() == true) {
                         viewState.failedTokenBurnCauseSmart()
@@ -43,7 +44,6 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
                             viewState.onShowError(it.message)
                         }
                     }
-
                 }))
     }
 }

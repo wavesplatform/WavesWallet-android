@@ -128,7 +128,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     private fun isGatewayAmountError(): Boolean {
         if (type == Type.GATEWAY && selectedAsset != null && gatewayMax.toFloat() > 0) {
             val totalAmount = amount + gatewayCommission
-            val balance = BigDecimal.valueOf(selectedAsset!!.balance ?: 0,
+            val balance = BigDecimal.valueOf(selectedAsset!!.getAvailableBalance(),
                     selectedAsset!!.getDecimals())
             return !(balance >= totalAmount
                     && totalAmount >= gatewayMin
@@ -139,12 +139,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     private fun isFundSufficient(tx: TransactionsBroadcastRequest): Boolean {
         return if (isSameSendingAndFeeAssets()) {
-            tx.amount + tx.fee <= selectedAsset!!.balance!!
+            tx.amount + tx.fee <= selectedAsset!!.getAvailableBalance()
         } else {
-            tx.amount <= selectedAsset!!.balance!!
+            tx.amount <= selectedAsset!!.getAvailableBalance()
                     && tx.fee <= queryFirst<AssetBalance> {
                 equalTo("assetId", "")
-            }?.balance ?: 0
+            }?.getAvailableBalance() ?: 0
         }
     }
 
