@@ -69,15 +69,6 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
     @InjectPresenter
     lateinit var presenter: HistoryDetailsPresenter
 
-    @Inject
-    lateinit var historyDetailsAdapter: HistoryDetailsAdapter
-
-    @Inject
-    lateinit var gson: Gson
-
-    @Inject
-    lateinit var prefsUtil: PrefsUtil
-
     @ProvidePresenter
     fun providePresenter(): HistoryDetailsPresenter = presenter
 
