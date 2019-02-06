@@ -1,7 +1,9 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content
 
 import com.arellomobile.mvp.InjectViewState
-import com.vicpin.krealmextensions.queryAllAsSingle
+import com.vicpin.krealmextensions.queryFirst
+import com.vicpin.krealmextensions.save
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
@@ -9,6 +11,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.isWavesId
+import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.transactionType
 import io.reactivex.Observable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -48,6 +51,23 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
                         }
                     }))
         }
+    }
+
+    fun reloadAssets() {
+        addSubscription(nodeDataManager.addressAssetBalance(
+                App.getAccessManager().getWallet()?.address ?: "",
+                assetBalance?.assetId ?: "")
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe {
+                    val assetBalance = queryFirst<AssetBalance> {
+                        equalTo("assetId", assetBalance?.assetId ?: "")
+                    }
+                    assetBalance.notNull {
+                        it.balance = it.balance
+                        it.save()
+                        //viewState.afterSuccessLoadAsset(it)
+                    }
+                })
     }
 
 

@@ -83,7 +83,12 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         relative_success.visiable()
 
         button_okay.click {
-            launchActivity<MainActivity>(clear = true)
+            if (totalBurn) {
+                launchActivity<MainActivity>(clear = true)
+            } else {
+                setResult(Constants.RESULT_OK)
+                finish()
+            }
         }
     }
 
