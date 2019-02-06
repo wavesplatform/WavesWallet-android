@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -44,14 +45,20 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
-        setupToolbar(toolbar_view,  true,
+        setupToolbar(toolbar_view, true,
                 getString(R.string.choose_account), R.drawable.ic_toolbar_back_black)
 
         recycle_addresses.layoutManager = LinearLayoutManager(this)
-        recycle_addresses.adapter = adapter
+        recycle_addresses.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                appbar_layout.isSelected = recycle_addresses.canScrollVertically(-1)
+            }
+        })
         adapter.bindToRecyclerView(recycle_addresses)
-        presenter.getAddresses()
         adapter.chooseAccountOnClickListener = this
+
+
+        presenter.getAddresses()
     }
 
     override fun afterSuccessGetAddress(list: ArrayList<AddressBookUser>) {
