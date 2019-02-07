@@ -1,6 +1,7 @@
 package com.wavesplatform.sdk.manager
 
 import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.model.response.Alias
 import com.wavesplatform.sdk.model.response.AssetInfo
 import com.wavesplatform.sdk.model.response.CandlesResponse
@@ -23,7 +24,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadAliases(): Observable<List<Alias>> {
-        return apiService.aliases(getAddress())
+        return apiService.aliases(Wavesplatform.get().getWallet().address)
                 .map {
                     val aliases = it.data.mapTo(ArrayList()) {
                         it.alias.own = true

@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.data.model.remote.request
+package com.wavesplatform.sdk.model.request
 
 import android.util.Log
 import com.google.common.primitives.Bytes

@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.data.remote
 
+import com.wavesplatform.sdk.model.request.CancelLeasingRequest
 import com.wavesplatform.wallet.v1.payload.TransactionsInfo
 import com.wavesplatform.wallet.v1.payload.WavesBalance
 import com.wavesplatform.wallet.v1.request.IssueTransactionRequest

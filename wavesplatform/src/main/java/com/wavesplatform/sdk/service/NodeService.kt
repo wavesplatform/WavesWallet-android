@@ -1,9 +1,14 @@
 package com.wavesplatform.sdk.service
 
+import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.model.request.*
 import com.wavesplatform.sdk.model.response.*
-import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
+import com.wavesplatform.sdk.model.request.CancelLeasingRequest
 import io.reactivex.Observable
+import ren.yale.android.retrofitcachelibrx2.RetrofitCache
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -62,4 +67,15 @@ interface NodeService {
     @GET("/assets/details/{assetId}")
     fun assetDetails(@Path("assetId") assetId: String): Observable<AssetsDetails>
 
+    companion object Factory {
+        fun create(): NodeService {
+            val retrofit = Retrofit.Builder()
+                    .baseUrl(Constants.URL_NODE)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+            RetrofitCache.getInstance().addRetrofit(retrofit)
+            return retrofit.create(NodeService::class.java)
+        }
+    }
 }

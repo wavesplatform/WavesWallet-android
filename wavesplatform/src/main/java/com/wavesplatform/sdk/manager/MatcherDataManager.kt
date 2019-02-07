@@ -28,42 +28,57 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         val timestamp = currentTimeMillis
         var signature = ""
         Wavesplatform.get().getWallet().privateKey.notNull { privateKey ->
-            val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()),
+            val bytes = Bytes.concat(Base58.decode(Wavesplatform.get().getWallet().publicKeyStr),
                     Longs.toByteArray(timestamp))
             signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
         }
-        return matcherService.loadReservedBalances(getPublicKeyStr(), timestamp, signature)
+        return matcherService.loadReservedBalances(
+                Wavesplatform.get().getWallet().publicKeyStr, timestamp, signature)
     }
 
     fun loadMyOrders(watchMarket: WatchMarket?): Observable<List<OrderResponse>> {
         val timestamp = currentTimeMillis
         var signature = ""
         Wavesplatform.get().getWallet().privateKey.notNull { privateKey ->
-            val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()),
+            val bytes = Bytes.concat(Base58.decode(Wavesplatform.get().getWallet().publicKeyStr),
                     Longs.toByteArray(timestamp))
             signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
         }
-        return matcherService.getMyOrders(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getPublicKeyStr(), signature, timestamp)
+        return matcherService.getMyOrders(
+                watchMarket?.market?.amountAsset,
+                watchMarket?.market?.priceAsset,
+                Wavesplatform.get().getWallet().publicKeyStr,
+                signature,
+                timestamp)
     }
 
     fun loadOrderBook(watchMarket: WatchMarket?): Observable<OrderBook> {
-        return matcherService.getOrderBook(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset)
+        return matcherService.getOrderBook(
+                watchMarket?.market?.amountAsset,
+                watchMarket?.market?.priceAsset)
     }
 
-    fun cancelOrder(orderId: String?, watchMarket: WatchMarket?, cancelOrderRequest: CancelOrderRequest): Observable<Any> {
-        cancelOrderRequest.sender = getPublicKeyStr()
+    fun cancelOrder(orderId: String?,
+                    watchMarket: WatchMarket?,
+                    cancelOrderRequest: CancelOrderRequest): Observable<Any> {
+        cancelOrderRequest.sender = Wavesplatform.get().getWallet().publicKeyStr
         cancelOrderRequest.orderId = orderId
         Wavesplatform.get().getWallet().privateKey.notNull {
             cancelOrderRequest.sign(it)
         }
-        return matcherService.cancelOrder(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, cancelOrderRequest)
+        return matcherService.cancelOrder(
+                watchMarket?.market?.amountAsset,
+                watchMarket?.market?.priceAsset, cancelOrderRequest)
                 /*.doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }*/
     }
 
     fun getBalanceFromAssetPair(watchMarket: WatchMarket?): Observable<LinkedTreeMap<String, Long>> {
-        return matcherService.getBalanceFromAssetPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getAddress())
+        return matcherService.getBalanceFromAssetPair(
+                watchMarket?.market?.amountAsset,
+                watchMarket?.market?.priceAsset,
+                Wavesplatform.get().getWallet().address)
     }
 
     fun getMatcherKey(): Observable<String> {
@@ -71,7 +86,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun placeOrder(orderRequest: OrderRequest): Observable<Any> {
-        orderRequest.senderPublicKey = getPublicKeyStr()
+        orderRequest.senderPublicKey = Wavesplatform.get().getWallet().publicKeyStr
         Wavesplatform.get().getWallet().privateKey.notNull { privateKey ->
             orderRequest.sign(privateKey)
         }
@@ -93,7 +108,8 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                     },
                     matcherService.getAllMarkets()
                             .map { it.markets },
-                    BiFunction { configure: Map<String, GlobalConfiguration.GeneralAssetId>, apiMarkets: List<MarketResponse> ->
+                    BiFunction { configure: Map<String, GlobalConfiguration.GeneralAssetId>,
+                                 apiMarkets: List<MarketResponse> ->
                         return@BiFunction Pair(configure, apiMarkets)
                     })
                     .flatMap {
@@ -109,13 +125,18 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                         it.second.forEach { market ->
                             market.id = market.amountAsset + market.priceAsset
 
-                            market.amountAssetLongName = it.first[market.amountAsset]?.displayName ?: market.amountAssetName
-                            market.priceAssetLongName = it.first[market.priceAsset]?.displayName ?: market.priceAssetName
+                            market.amountAssetLongName = it.first[market.amountAsset]?.displayName
+                                    ?: market.amountAssetName
+                            market.priceAssetLongName = it.first[market.priceAsset]?.displayName
+                                    ?: market.priceAssetName
 
-                            market.amountAssetShortName = it.first[market.amountAsset]?.gatewayId ?: market.amountAssetName
-                            market.priceAssetShortName = it.first[market.priceAsset]?.gatewayId ?: market.priceAssetName
+                            market.amountAssetShortName = it.first[market.amountAsset]?.gatewayId
+                                    ?: market.amountAssetName
+                            market.priceAssetShortName = it.first[market.priceAsset]?.gatewayId
+                                    ?: market.priceAssetName
 
-                            market.popular = it.first[market.amountAsset] != null && it.first[market.priceAsset] != null
+                            market.popular = it.first[market.amountAsset] != null
+                                    && it.first[market.priceAsset] != null
 
                             market.amountAssetDecimals = market.amountAssetInfo.decimals
                             market.priceAssetDecimals = market.priceAssetInfo.decimals

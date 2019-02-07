@@ -16,7 +16,7 @@ class WavesplatformTest {
                     "11111111",
                     "")
 
-            Wavesplatform.get().loader.apiService
+            Wavesplatform.get().dataManager.apiService
                     .aliases(Wavesplatform.get().getWallet().address)
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({ aliases ->

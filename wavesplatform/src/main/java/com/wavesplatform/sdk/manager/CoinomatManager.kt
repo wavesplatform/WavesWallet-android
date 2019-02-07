@@ -1,9 +1,9 @@
 package com.wavesplatform.sdk.manager
 
 import com.wavesplatform.sdk.manager.base.BaseDataManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.CreateTunnel
-import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
-import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.Limit
+import com.wavesplatform.sdk.model.response.coinomat.CreateTunnel
+import com.wavesplatform.sdk.model.response.coinomat.GetTunnel
+import com.wavesplatform.sdk.model.response.coinomat.Limit
 import com.wavesplatform.sdk.model.response.coinomat.XRate
 import io.reactivex.Observable
 import javax.inject.Inject

@@ -3,19 +3,16 @@ package com.wavesplatform.sdk
 import android.app.Application
 import android.util.Log
 import com.wavesplatform.sdk.manager.base.BaseDataManager
-import com.wavesplatform.sdk.service.ApiService
 import java.util.*
-import javax.inject.Inject
 
-class Wavesplatform private constructor(private var app: Application) {
+class Wavesplatform private constructor() {
 
-    private var wavesWallet: WavesWallet? = null
+    var dataManager: BaseDataManager = BaseDataManager()
     var cookies: HashSet<String> = hashSetOf()
-    lateinit var loader: BaseDataManager
+    private var wavesWallet: WavesWallet? = null
 
     fun createWallet(seed: String, password: String, name: String = ""): String {
-        loader = BaseDataManager()
-        loader.apiService = ApiService.create()
+
         return try {
             wavesWallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
             val guid = UUID.randomUUID().toString()
@@ -38,7 +35,9 @@ class Wavesplatform private constructor(private var app: Application) {
 
         @JvmStatic
         fun init(app: Application) {
-            instance = Wavesplatform(app)
+            if (instance == null) {
+                instance = Wavesplatform()
+            }
         }
 
         @JvmStatic

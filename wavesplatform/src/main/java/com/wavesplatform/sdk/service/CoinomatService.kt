@@ -1,10 +1,15 @@
 package com.wavesplatform.sdk.service
 
+import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.model.response.coinomat.XRate
-import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.CreateTunnel
-import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
-import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.Limit
+import com.wavesplatform.sdk.model.response.coinomat.CreateTunnel
+import com.wavesplatform.sdk.model.response.coinomat.GetTunnel
+import com.wavesplatform.sdk.model.response.coinomat.Limit
 import io.reactivex.Observable
+import ren.yale.android.retrofitcachelibrx2.RetrofitCache
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -39,8 +44,18 @@ interface CoinomatService {
                  @Query("t") to: String?,
                  @Query("lang") lang: String?): Observable<XRate>
 
+    companion object Factory {
 
-    companion object {
         const val GATEWAY_ADDRESS = "3PAs2qSeUAfgqSKS8LpZPKGYEjJKcud9Djr"
+
+        fun create(): CoinomatService {
+            val retrofit = Retrofit.Builder()
+                    .baseUrl(Constants.URL_COINOMAT)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+            RetrofitCache.getInstance().addRetrofit(retrofit)
+            return retrofit.create(CoinomatService::class.java)
+        }
     }
 }
