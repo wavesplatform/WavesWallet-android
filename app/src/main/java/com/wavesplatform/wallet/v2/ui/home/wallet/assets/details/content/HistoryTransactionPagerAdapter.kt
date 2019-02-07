@@ -30,14 +30,7 @@ class HistoryTransactionPagerAdapter constructor(
         layout.card_transaction.click {
             val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
 
-            val allItems = items.asSequence()
-                    .filter {
-                        it.header.isEmpty()
-                    }
-                    .map { it.data }
-                    .toList()
-
-            bottomSheetFragment.configureData(item.data, position, allItems)
+            bottomSheetFragment.configureData(item.data, position)
             bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
         }
 

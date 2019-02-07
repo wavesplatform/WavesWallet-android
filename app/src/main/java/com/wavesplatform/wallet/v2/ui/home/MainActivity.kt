@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -14,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
@@ -36,6 +38,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeLinks
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
+import kotlinx.android.synthetic.main.backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.put
@@ -50,6 +53,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     private var accountFirstOpenDialog: AlertDialog? = null
     private val fragments = arrayListOf<Fragment>()
     private var activeFragment = Fragment()
+    private var seedWarningBehavior: BottomSheetBehavior<LinearLayout>? = null
 
     @ProvidePresenter
     fun providePresenter(): MainPresenter = presenter
@@ -103,21 +107,17 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     private fun getFirstOpenAlertView(): View? {
         val view = LayoutInflater.from(this)
                 .inflate(R.layout.dialog_account_first_open, null)
-        val padding = (14.0f * this.resources.displayMetrics.density + 0.5f).toInt()
+
         view.checkbox_funds_on_device.setOnCheckedChangeListener { _, isChecked ->
             presenter.checkedAboutBackup = isChecked
             view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
         }
-        view.checkbox_funds_on_device.setPadding(padding, 0, 0, 0)
-
 
         view.checkbox_backup.setOnCheckedChangeListener { _, isChecked ->
             presenter.checkedAboutFundsOnDevice = isChecked
             view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
         }
-        view.checkbox_backup.setPadding(padding, padding, 0, padding)
 
-        view.checkbox_terms_of_use.setPadding(padding, padding, 0, padding)
         view.checkbox_terms_of_use.setOnCheckedChangeListener { _, isChecked ->
             presenter.checkedAboutTerms = isChecked
             view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
@@ -135,7 +135,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             }
         }
 
-        view.text_about_terms.makeLinks(
+        view.checkbox_terms_of_use.makeLinks(
                 arrayOf(getString(R.string.dialog_account_first_open_about_terms_key)),
                 arrayOf(siteClick))
 
@@ -352,9 +352,20 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
             val now = System.currentTimeMillis()
             if (now > lastTime + MIN_15) {
+                seedWarningBehavior = BottomSheetBehavior.from(linear_warning_container)
+                seedWarningBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+                        if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                            warning_container.gone()
+                        }
+                    }
+
+                    override fun onSlide(p0: View, p1: Float) {}
+                })
+                seedWarningBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
                 warning_container.visiable()
-                warning_container.click {
-                    it.gone()
+                linear_warning_container.click {
+                    warning_container.gone()
                     launchActivity<BackupPhraseActivity> {
                         putExtra(ProfileFragment.KEY_INTENT_SET_BACKUP, true)
                     }

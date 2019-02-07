@@ -135,7 +135,7 @@
                 android:layout_height="48dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/skeleton_basic_100_round_2" />
+                android:background="@drawable/skeleton_basic_100_round_4" />
         </LinearLayout>
 
 

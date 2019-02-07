@@ -30,6 +30,8 @@ object Constants {
     const val SUPPORT_SITE = "https://support.wavesplatform.com/"
     const val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
 
+    const val WAVES_EXPLORER = "http://wavesexplorer.com/tx/%s"
+
     const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
 
     const val SELL_ORDER_TYPE = "sell"
@@ -68,6 +70,7 @@ object Constants {
     const val RESULT_SMART_ERROR = 307
 
     const val VERSION = 2
+
     val WAVES_ASSET_ID = ""
     val MONERO_ASSET_ID = EnvironmentManager.findAssetId("XMR")
     val BITCOIN_ASSET_ID = EnvironmentManager.findAssetId("BTC")
@@ -141,7 +144,8 @@ object Constants {
             Pair(MONERO_ASSET_ID, R.drawable.logo_monero_48),
             Pair(BITCOINCASH_ASSET_ID, R.drawable.logo_bitcoincash_48),
             Pair(ZEC_ASSET_ID, R.drawable.logo_zec_48),
-            Pair(DASH_ASSET_ID, R.drawable.logo_dash_48))
+            Pair(DASH_ASSET_ID, R.drawable.logo_dash_48),
+            Pair(WCTGeneralAsset.assetId, R.drawable.ic_logo_wct_48))
 
     val coinomatCryptoCurrencies = hashMapOf(
             Pair(BITCOIN_ASSET_ID, "BTC"),

@@ -25,7 +25,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="-2dp"
-        app:cardCornerRadius="2dp"
+        app:cardCornerRadius="@dimen/asset_item_radius"
         app:cardElevation="3dp">
 
         <RelativeLayout
@@ -198,7 +198,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginRight="16dp"
             app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="0dp">
 
 
@@ -262,7 +262,7 @@
         android:layout_marginRight="16dp"
         android:visibility="gone"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="2dp"
+        app:cardCornerRadius="@dimen/asset_item_radius"
         app:cardElevation="0dp">
 
         <RelativeLayout

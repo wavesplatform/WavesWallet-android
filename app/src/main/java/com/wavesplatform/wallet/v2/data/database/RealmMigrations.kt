@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.database
+package com.wavesplatform.wallet.v2.data.database
 
 import com.wavesplatform.wallet.v2.util.notNull
 import io.realm.DynamicRealm

@@ -270,7 +270,6 @@
     <string name="history_details_copy_tx_id">Copy TX ID</string>
     <string name="history_details_exchange_price">Price</string>
     <string name="history_details_fee">Fee</string>
-    <string name="history_details_id">ID</string>
     <string name="history_details_leasing_from">Leasing to</string>
     <string name="history_details_leasing_to">Leasing to</string>
     <string name="history_details_not_reissuable">Not Reissuable</string>
@@ -627,4 +626,18 @@
     <string name="your_asset_activity_greater_zero">With balance</string>
     <string name="your_assets_empty_state">Nothing Here… \nYou do not have assets with funds</string>
     <string name="your_assets_toolbar_title">Your assets</string>
+
+    <string name="history_details_status">Status</string>
+    <string name="history_details_view_on_explorer">View on Explorer</string>
+    <string name="history_details_edit_address">Edit name</string>
+    <string name="history_details_add_address">Save address</string>
+    <string name="history_details_description">Description</string>
+    <string name="history_details_node_address">Node address</string>
+    <string name="history_details_id">Asset ID</string>
+    <string name="history_details_asset">Asset</string>
+    <string name="history_details_amount_per_transaction">Amount per transaction</string>
+
+    <string name="history_exchange_sell">Sell</string>
+    <string name="history_exchange_buy">Buy</string>
+    <string name="history_mass_send_recipient">#%s Recipient</string>
 </resources>
