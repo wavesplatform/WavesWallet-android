@@ -39,7 +39,6 @@ import kotlinx.android.synthetic.main.wallet_header_item.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.isVisible
-import pers.victor.ext.toast
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject

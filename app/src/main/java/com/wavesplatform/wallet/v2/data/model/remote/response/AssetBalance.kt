@@ -79,28 +79,21 @@ open class AssetBalance(
     }
 
     fun getDisplayAvailableBalance(): String {
-        return MoneyUtil.getScaledText(balance
-                ?.minus(inOrderBalance ?: 0)
-                ?.minus(leasedBalance ?: 0),
-                this)
+        return MoneyUtil.getScaledText(getAvailableBalance(), this)
     }
 
-    fun getAvailableBalance(): Long? {
-        return balance
-                ?.minus(inOrderBalance ?: 0)
-                ?.minus(leasedBalance ?: 0)
-    }
-
-    fun isAssetId(assetId: String): Boolean {
-        return assetId == this.assetId
+    fun getAvailableBalance(): Long {
+        var availableBalance = balance
+                ?.minus(inOrderBalance ?: 0L)
+                ?.minus(leasedBalance ?: 0L) ?: 0L
+        if (availableBalance < 0L) {
+            availableBalance = 0L
+        }
+        return availableBalance
     }
 
     fun getName(): String? {
         return issueTransaction?.name
-    }
-
-    fun getDisplayBalanceWithUnit(): String {
-        return getDisplayTotalBalance() + " " + getName()
     }
 
     fun isWaves(): Boolean {
