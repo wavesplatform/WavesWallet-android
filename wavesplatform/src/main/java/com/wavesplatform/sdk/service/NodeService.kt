@@ -23,7 +23,8 @@ interface NodeService {
     fun wavesBalance(@Path("address") address: String?): Observable<WavesBalance>
 
     @GET("transactions/address/{address}/limit/{limit}")
-    fun transactionList(@Path("address") address: String?, @Path("limit") limit: Int): Observable<List<List<Transaction>>>
+    fun transactionList(@Path("address") address: String?,
+                        @Path("limit") limit: Int): Observable<List<List<Transaction>>>
 
     @GET("transactions/info/{asset}")
     fun getTransactionsInfo(@Path("asset") asset: String): Observable<TransactionsInfo>

@@ -25,5 +25,4 @@ interface SpamService {
             return retrofit.create(SpamService::class.java)
         }
     }
-
 }
