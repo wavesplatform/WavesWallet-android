@@ -1,0 +1,116 @@
+package com.wavesplatform.sdk.utils
+
+import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.model.response.AssetInfo
+
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.ArrayList
+import java.util.Locale
+
+class MoneyUtil private constructor() {
+    private val wavesFormat: DecimalFormat
+    private val formatsMap: MutableList<DecimalFormat>
+
+    init {
+        wavesFormat = createFormatter(8)
+        formatsMap = ArrayList()
+        for (i in 0..8) {
+            formatsMap.add(createFormatter(i))
+        }
+    }
+
+    fun getFormatter(decimals: Int): DecimalFormat {
+        return formatsMap[decimals]
+    }
+
+    companion object {
+
+        val ONE_M = BigDecimal(1000000)
+        val ONE_K = BigDecimal(1000)
+
+        private val instance = MoneyUtil()
+
+        private val defaultSeparator: String? = null
+
+        fun createFormatter(decimals: Int): DecimalFormat {
+            val formatter = NumberFormat.getInstance(Locale.US) as DecimalFormat
+            formatter.maximumFractionDigits = decimals
+            formatter.minimumFractionDigits = decimals
+            formatter.isParseBigDecimal = true
+            return formatter
+        }
+
+        fun get(): MoneyUtil {
+            return instance
+        }
+
+        fun getScaledPrice(amount: Long, amountDecimals: Int, priceDecimals: Int): String {
+            return get().getFormatter(priceDecimals).format(BigDecimal.valueOf(amount, 8 + priceDecimals - amountDecimals))
+        }
+
+        fun getScaledText(amount: Long, decimals: Int): String {
+            try {
+                return get().getFormatter(decimals).format(
+                        BigDecimal.valueOf(amount, decimals))
+            } catch (e: Exception) {
+                return get().getFormatter(8).format(
+                        BigDecimal.valueOf(amount, decimals))
+            }
+
+        }
+
+        fun getTextStripZeros(amount: String): String {
+            if (amount == "0.0") return amount
+            return if (!amount.contains(".")) amount else amount.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
+        }
+
+        fun getTextStripZeros(amount: Long, decimals: Int): String {
+            val formatter = NumberFormat.getInstance(Locale.US) as DecimalFormat
+            formatter.maximumFractionDigits = decimals
+            formatter.minimumFractionDigits = 1
+            formatter.isParseBigDecimal = true
+            return formatter.format(
+                    BigDecimal.valueOf(amount, decimals))
+        }
+
+        fun getFormattedTotal(amount: Double, decimals: Int): String {
+            val formatter = NumberFormat.getInstance(Locale.US) as DecimalFormat
+            formatter.maximumFractionDigits = decimals
+            formatter.minimumFractionDigits = 0
+            formatter.isParseBigDecimal = true
+            return formatter.format(amount)
+        }
+
+        fun getScaledText(amount: Long?, ab: AssetBalance?): String {
+            return getScaledText(amount!!, ab?.getDecimals() ?: 8)
+        }
+
+        fun getScaledText(amount: Long?, assetInfo: AssetInfo?): String {
+            return getScaledText(amount!!, assetInfo?.precision ?: 8)
+        }
+
+        fun getDisplayWaves(amount: Long): String {
+            return get().wavesFormat.format(BigDecimal.valueOf(amount, 8))
+        }
+
+        fun getUnscaledValue(
+                amount: String, ab: AssetBalance): Long {
+            return getUnscaledValue(amount, ab.getDecimals())
+        }
+
+        fun getUnscaledValue(amount: String?, decimals: Int): Long {
+            if (amount == null)
+                return 0L
+            return try {
+                val value = get().getFormatter(decimals).parse(amount)
+                (value as? BigDecimal)?.setScale(decimals,
+                        RoundingMode.HALF_EVEN)?.unscaledValue()?.toLong() ?: 0L
+            } catch (ex: Exception) {
+                0L
+            }
+        }
+    }
+}

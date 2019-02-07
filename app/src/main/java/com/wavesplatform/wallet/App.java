@@ -14,7 +14,7 @@ import com.github.moduth.blockcanary.BlockCanary;
 import com.google.firebase.FirebaseApp;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.squareup.leakcanary.LeakCanary;
-import com.wavesplatform.sdk.Wavesplatform;
+import com.wavesplatform.sdk.WavesplatformTest;
 import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v1.util.AppUtil;
@@ -104,12 +104,7 @@ public class App extends DaggerApplication {
             }
         });
 
-        Wavesplatform.init(this);
-        Wavesplatform.get().createWallet(
-                "cousin define prevent proof deal absurd purpose swap original tired ivory spoil reflect simple oval",
-                "11111111",
-                "cousin");
-        Wavesplatform.get().loader.apiService.alias("");
+        WavesplatformTest.testLoadAliases(this);
     }
 
     public static Context getAppContext() {

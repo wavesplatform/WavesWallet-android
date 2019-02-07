@@ -27,7 +27,7 @@ class TransactionsBroadcastRequest(
     @SerializedName("version")
     val version: Int = Constants.VERSION
     @SerializedName("feeAssetId")
-    var feeAssetId: String? = ""
+    var feeAssetId: String = ""
     @SerializedName("proofs")
     var proofs = arrayOf("")
     @SerializedName("signature")

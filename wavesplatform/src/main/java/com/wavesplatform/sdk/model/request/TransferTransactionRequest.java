@@ -29,9 +29,9 @@ public class TransferTransactionRequest {
     public byte[] toSignBytes() {
         try {
             byte[] timestampBytes = Longs.toByteArray(timestamp);
-            byte[] assetIdBytes = SignUtil.arrayOption(assetId);
+            byte[] assetIdBytes = SignUtil.INSTANCE.arrayOption(assetId);
             byte[] amountBytes = Longs.toByteArray(amount);
-            byte[] feeAssetIdBytes = SignUtil.arrayOption(feeAssetId);
+            byte[] feeAssetIdBytes = SignUtil.INSTANCE.arrayOption(feeAssetId);
             byte[] feeBytes = Longs.toByteArray(fee);
 
             return Bytes.concat(new byte[]{txType},
@@ -42,7 +42,7 @@ public class TransferTransactionRequest {
                     amountBytes,
                     feeBytes,
                     Base58.decode(recipient),
-                    SignUtil.arrayWithSize(attachment));
+                    SignUtil.INSTANCE.arrayWithSize(attachment));
         } catch (Exception e) {
             Log.e("Wallet", "Couldn't create transaction sign", e);
             return new byte[0];
