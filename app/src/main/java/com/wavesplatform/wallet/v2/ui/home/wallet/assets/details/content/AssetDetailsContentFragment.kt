@@ -11,6 +11,7 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -98,7 +99,19 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
             presenter.loadLastTransactionsFor(it.assetId, (activity as AssetDetailsActivity).getAllTransactions())
         }
+
+        eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
+                .subscribe {
+                    presenter.reloadAssetAddressBalance()
+                })
     }
+
+
+    override fun onAssetAddressBalanceLoadSuccess(assetBalance: AssetBalance) {
+        presenter.assetBalance = assetBalance
+        fillInformation(assetBalance)
+    }
+
 
     override fun showLastTransactions(data: MutableList<HistoryItem>) {
         skeletonScreen?.hide()
