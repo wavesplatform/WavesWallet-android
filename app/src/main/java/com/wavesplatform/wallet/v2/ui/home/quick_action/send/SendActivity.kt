@@ -32,6 +32,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_BLOCKCHAIN_COMMISSION
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_FEE_ASSET
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_GATEWAY_COMMISSION
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_MONERO_PAYMENT_ID
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_AMOUNT
@@ -171,10 +172,19 @@ class SendActivity : BaseActivity(), SendView {
         image_arrows.visiable()
         commission_card.click {
             val dialog = SponsoredFeeBottomSheetFragment()
-            dialog.configureData(presenter.feeAsset.assetId, presenter.fee)
+            dialog.configureData(presenter.feeAsset.assetId, presenter.feeWaves)
             dialog.onSelectedAssetListener = object : SponsoredFeeBottomSheetFragment.SponsoredAssetSelectedListener {
-                override fun onSelected(asset: AssetBalance) {
+                override fun onSelected(asset: AssetBalance, fee: Long) {
                     presenter.feeAsset = asset
+                    presenter.fee = fee
+
+                    if (presenter.feeAsset.assetId.isWaves()) {
+                        text_fee_transaction.text = MoneyUtil.getScaledText(fee, asset).stripZeros()
+                        commission_asset_name_text.visiable()
+                    } else {
+                        text_fee_transaction.text = "${MoneyUtil.getScaledText(fee, asset).stripZeros()} ${asset.getName()}"
+                        commission_asset_name_text.gone()
+                    }
                 }
             }
             dialog.show(supportFragmentManager, dialog::class.java.simpleName)
@@ -237,7 +247,7 @@ class SendActivity : BaseActivity(), SendView {
         showError(res, R.id.root)
     }
 
-    override fun onShowPaymentDetails(details: PaymentConfirmationDetails) {
+    override fun onShowPaymentDetails() {
         launchActivity<SendConfirmationActivity>(REQUEST_SEND) {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
             putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)
@@ -249,6 +259,7 @@ class SendActivity : BaseActivity(), SendView {
             putExtra(KEY_INTENT_MONERO_PAYMENT_ID, presenter.moneroPaymentId)
             putExtra(KEY_INTENT_TYPE, presenter.type)
             putExtra(KEY_INTENT_BLOCKCHAIN_COMMISSION, presenter.fee)
+            putExtra(KEY_INTENT_FEE_ASSET, presenter.feeAsset)
         }
     }
 

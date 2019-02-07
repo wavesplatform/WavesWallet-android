@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -60,7 +61,7 @@ class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), Sp
                 val oldCheckedPosition = this.adapter.data.indexOfFirst { it.assetBalance.assetId == this.adapter.currentAssetId }
 
                 this.adapter.currentAssetId = item.assetBalance.assetId
-                onSelectedAssetListener?.onSelected(item.assetBalance)
+                onSelectedAssetListener?.onSelected(item.assetBalance, MoneyUtil.getUnscaledValue(item.fee, item.assetBalance))
 
                 adapter.notifyItemChanged(oldCheckedPosition)
                 adapter.notifyItemChanged(position)
@@ -90,6 +91,6 @@ class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), Sp
     }
 
     interface SponsoredAssetSelectedListener {
-        fun onSelected(asset: AssetBalance)
+        fun onSelected(asset: AssetBalance, fee: Long)
     }
 }

@@ -61,6 +61,8 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.assetInfo = queryFirst { equalTo("id", presenter.selectedAsset!!.assetId) }
         presenter.type = intent!!.extras!!.getSerializable(KEY_INTENT_TYPE) as SendPresenter.Type
         presenter.blockchainCommission = intent!!.extras!!.getLong(KEY_INTENT_BLOCKCHAIN_COMMISSION)
+        presenter.feeAsset = intent!!.extras!!.getParcelable(KEY_INTENT_FEE_ASSET)
+                ?: Constants.defaultAssets[0]
 
         if (presenter.type == SendPresenter.Type.GATEWAY) {
             presenter.gatewayCommission = BigDecimal(
@@ -87,8 +89,8 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         }
         text_sent_to_address.text = presenter.recipient
         presenter.getAddressName(presenter.recipient!!)
-        text_fee_value.text = "${getScaledAmount(presenter.blockchainCommission, 8)} " +
-                "${Constants.CUSTOM_FEE_ASSET_NAME}"
+        text_fee_value.text = "${getScaledAmount(presenter.blockchainCommission, presenter.feeAsset.getDecimals())} " +
+                presenter.feeAsset.getName()
 
         if (presenter.type == SendPresenter.Type.GATEWAY) {
             attachment_layout.gone()
@@ -217,6 +219,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
 
     companion object {
         const val KEY_INTENT_SELECTED_ASSET = "intent_selected_asset"
+        const val KEY_INTENT_FEE_ASSET = "intent_fee_asset"
         const val KEY_INTENT_SELECTED_RECIPIENT = "intent_selected_recipient"
         const val KEY_INTENT_SELECTED_AMOUNT = "intent_selected_amount"
         const val KEY_INTENT_GATEWAY_COMMISSION = "intent_gateway_commission"

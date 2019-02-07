@@ -22,7 +22,9 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
                         .flatMapIterable { it }
                         .filter { it.isSponsored() || it.isWaves() }
                         .map {
-                            return@map SponsoredAssetItem(it, getFee(it), isValidBalanceForSponsoring(it))
+                            val fee = getFee(it)
+                            val isActive = isValidBalanceForSponsoring(it, fee)
+                            return@map SponsoredAssetItem(it, fee, isActive)
                         }
                         .toList()
                         .map {
@@ -37,13 +39,19 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
     }
 
 
-    private fun isValidBalanceForSponsoring(item: AssetBalance): Boolean {
+    private fun isValidBalanceForSponsoring(item: AssetBalance, fee: String): Boolean {
         val sponsorBalance = MoneyUtil.getScaledText(item.getSponsorBalance(), Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
-        val fee = getFee(item).clearBalance().toBigDecimal()
+        val feeDecimalValue = fee.clearBalance().toBigDecimal()
         val availableBalance = MoneyUtil.getScaledText(item.getAvailableBalance()
                 ?: 0, item.getDecimals()).clearBalance().toBigDecimal()
 
-        return (sponsorBalance >= Constants.MIN_WAVES_SPONSORED_BALANCE.toBigDecimal() && availableBalance >= fee) || item.isWaves()
+        return ((sponsorBalance >= Constants.MIN_WAVES_SPONSORED_BALANCE.toBigDecimal() && availableBalance >= feeDecimalValue) ||
+
+                (sponsorBalance >= MoneyUtil.getScaledText(wavesFee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal() &&
+                        availableBalance >= feeDecimalValue &&
+                        item.isMyWavesToken()) ||
+
+                item.isWaves())
     }
 
     private fun getFee(item: AssetBalance): String {
