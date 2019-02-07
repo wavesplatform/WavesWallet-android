@@ -1,35 +1,65 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
+import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalances
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.clearBalance
+import com.wavesplatform.wallet.v2.util.stripZeros
 import javax.inject.Inject
 
 @InjectViewState
 class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<SponsoredFeeDetailsView>() {
 
-    fun loadSponsoredAssets(listener: (MutableList<AssetBalance>) -> Unit) {
-        addSubscription(Observable.zip(
+    var wavesFee: Long = Constants.WAVES_MIN_FEE
+
+    fun loadSponsoredAssets(listener: (MutableList<SponsoredAssetItem>) -> Unit) {
+        addSubscription(
                 nodeDataManager.assetsBalances()
-                        .flatMap { Observable.fromIterable(it.balances) }
-                        .filter { it.minSponsoredAssetFee ?: 0 > 0 }
-                        .toList().toObservable()
+                        .flatMapIterable { it }
+                        .filter { it.isSponsored() || it.isWaves() }
                         .map {
-                            return@map it.toMutableList()
-                        },
-                nodeDataManager.loadWavesBalance(),
-                BiFunction { assetsBalance: MutableList<AssetBalance>, wavesBalance: AssetBalance ->
-                    assetsBalance.add(0, wavesBalance)
-                    return@BiFunction assetsBalance
-                })
-                .compose(RxUtil.applySchedulersToObservable())
-                .subscribe {
-                    listener.invoke(it)
-                })
+                            return@map SponsoredAssetItem(it, getFee(it), isValidBalanceForSponsoring(it))
+                        }
+                        .toList()
+                        .map {
+                            it.sortedByDescending { it.isActive }.toMutableList()
+                        }
+                        .compose(RxUtil.applySingleDefaultSchedulers())
+                        .subscribe({
+                            listener.invoke(it)
+                        }, {
+                            it.printStackTrace()
+                        }))
+    }
+
+
+    private fun isValidBalanceForSponsoring(item: AssetBalance): Boolean {
+        val sponsorBalance = MoneyUtil.getScaledText(item.getSponsorBalance(), Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
+        val fee = getFee(item).clearBalance().toBigDecimal()
+        val availableBalance = MoneyUtil.getScaledText(item.getAvailableBalance()
+                ?: 0, item.getDecimals()).clearBalance().toBigDecimal()
+
+        return (sponsorBalance >= Constants.MIN_WAVES_SPONSORED_BALANCE.toBigDecimal() && availableBalance >= fee) || item.isWaves()
+    }
+
+    private fun getFee(item: AssetBalance): String {
+        return if (item.isWaves()) {
+            MoneyUtil.getScaledText(wavesFee, Constants.wavesAssetInfo.precision).stripZeros()
+        } else {
+            calculateFeeForSponsoredAsset(item).stripZeros()
+        }
+    }
+
+    private fun calculateFeeForSponsoredAsset(item: AssetBalance): String {
+        val sponsorFee = MoneyUtil.getScaledText(item.minSponsoredAssetFee, item).clearBalance().toBigDecimal()
+        val value = ((MoneyUtil.getScaledText(wavesFee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal() /
+                MoneyUtil.getScaledText(Constants.WAVES_MIN_FEE, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()) * sponsorFee)
+
+        return value.toString()
     }
 
 }

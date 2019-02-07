@@ -43,6 +43,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var gatewayMin: BigDecimal = BigDecimal.ZERO
     var gatewayMax: BigDecimal = BigDecimal.ZERO
     var fee = 0L
+    var feeAsset: AssetBalance = Constants.defaultAssets[0]
 
     fun sendClicked() {
         val res = validateTransfer()
@@ -273,10 +274,6 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     companion object {
         const val LANG: String = "ru_RU"
         const val MONERO_PAYMENT_ID_LENGTH = 64
-        private val feeAsset: AssetBalance = AssetBalance(
-                quantity = 100000000L * 100000000L,
-                issueTransaction = IssueTransaction(
-                        name = Constants.CUSTOM_FEE_ASSET_NAME, quantity = 0, decimals = 8))
 
         fun getAssetId(recipient: String?): String? {
             return when {

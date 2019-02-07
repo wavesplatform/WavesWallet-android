@@ -50,6 +50,10 @@ open class AssetBalance(
         }
     }
 
+    fun isSponsored(): Boolean {
+        return minSponsoredAssetFee ?: 0 > 0
+    }
+
     fun getDecimals(): Int {
         return if (issueTransaction != null) {
             issueTransaction!!.decimals ?: 8
@@ -89,6 +93,10 @@ open class AssetBalance(
         return balance
                 ?.minus(inOrderBalance ?: 0)
                 ?.minus(leasedBalance ?: 0)
+    }
+
+    fun getSponsorBalance(): Long {
+        return sponsorBalance ?: 0
     }
 
     fun isAssetId(assetId: String): Boolean {

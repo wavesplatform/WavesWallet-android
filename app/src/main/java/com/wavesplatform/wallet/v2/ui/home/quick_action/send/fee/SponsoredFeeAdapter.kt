@@ -3,29 +3,37 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import kotlinx.android.synthetic.main.your_assets_item.view.*
+import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
+import com.wavesplatform.wallet.v2.util.makeBackgroundWithRippleEffect
+import kotlinx.android.synthetic.main.recycle_item_sponsored_fee.view.*
+import pers.victor.ext.findColor
 import javax.inject.Inject
 
-class SponsoredFeeAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, BaseViewHolder>(R.layout.recycle_item_sponsored_fee, null) {
+class SponsoredFeeAdapter @Inject constructor() : BaseQuickAdapter<SponsoredAssetItem, BaseViewHolder>(R.layout.recycle_item_sponsored_fee, null) {
 
     var currentAssetId: String? = null
 
-    override fun convert(helper: BaseViewHolder, item: AssetBalance) {
-        helper.setText(R.id.text_asset_name, item.getName())
-                .setChecked(R.id.checkbox_choose, item.assetId == currentAssetId)
-                .setText(R.id.text_asset_value, "${item.getDisplayAvailableBalance()} ${item.getName()}")
-//        helper.itemView.text_asset_value.visibility =
-//                if ((item.getDisplayAvailableBalance()
-//                                .clearBalance()
-//                                .toDouble()) == 0.toDouble()) {
-//                    View.GONE
-//                } else {
-//                    View.VISIBLE
-//                }
-        helper.itemView.image_asset_icon.isOval = true
-        helper.itemView.image_asset_icon.setAsset(item)
+    override fun convert(helper: BaseViewHolder, item: SponsoredAssetItem) {
+        helper.setText(R.id.text_asset_name, item.assetBalance.getName())
+                .setChecked(R.id.checkbox_choose, item.assetBalance.assetId == currentAssetId)
+                .setText(R.id.text_asset_value,
+                        if (item.isActive) "${item.fee} ${item.assetBalance.getName()}"
+                        else mContext.getString(R.string.sponsored_fee_dialog_not_available))
+                .setGone(R.id.checkbox_choose, item.isActive)
+                .setTextColor(R.id.text_asset_name,
+                        if (item.isActive) findColor(R.color.disabled900)
+                        else findColor(R.color.basic500))
+                .setAlpha(R.id.image_asset_icon,
+                        if (item.isActive) 1.0f
+                        else 0.3f)
 
-        helper.itemView.checkbox_choose.isChecked = item.assetId == currentAssetId
+        if (item.isActive) helper.itemView.root.makeBackgroundWithRippleEffect()
+        else helper.itemView.root.background = null
+
+        helper.itemView.image_asset_icon.isOval = true
+        helper.itemView.image_asset_icon.setAsset(item.assetBalance)
+
+        helper.itemView.checkbox_choose.isChecked = item.assetBalance.assetId == currentAssetId
     }
+
 }

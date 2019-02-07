@@ -171,7 +171,12 @@ class SendActivity : BaseActivity(), SendView {
         image_arrows.visiable()
         commission_card.click {
             val dialog = SponsoredFeeBottomSheetFragment()
-            dialog.configureData() // TODO: Need or no? Pass waves balance or sth another
+            dialog.configureData(presenter.feeAsset.assetId, presenter.fee)
+            dialog.onSelectedAssetListener = object : SponsoredFeeBottomSheetFragment.SponsoredAssetSelectedListener {
+                override fun onSelected(asset: AssetBalance) {
+                    presenter.feeAsset = asset
+                }
+            }
             dialog.show(supportFragmentManager, dialog::class.java.simpleName)
         }
     }

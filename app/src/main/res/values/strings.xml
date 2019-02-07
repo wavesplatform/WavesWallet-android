@@ -642,4 +642,5 @@
     <string name="history_mass_send_recipient">#%s Recipient</string>
 
     <string name="sponsored_fee_dialog_title">Transaction Fee</string>
+    <string name="sponsored_fee_dialog_not_available">Not available</string>
 </resources>

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
-    android:foreground="?attr/selectableItemBackground"
+    android:id="@+id/root"
+    android:background="?attr/selectableItemBackground"
     android:paddingStart="24dp"
     android:paddingTop="14dp"
     android:paddingEnd="24dp"
@@ -29,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
         android:layout_toEndOf="@+id/image_asset_icon"
-        android:textColor="@color/black"
+        android:textColor="@color/disabled900"
         app:layout_constraintStart_toEndOf="@+id/image_asset_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Bitcoin" />

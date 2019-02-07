@@ -188,7 +188,7 @@ dependencies {
     implementation "org.whispersystems:curve25519-java:0.4.1"
 
     implementation 'com.oushangfeng:PinnedSectionItemDecoration:1.3.2'
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.44'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
     debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'
     releaseImplementation 'com.github.markzhai:blockcanary-no-op:1.5.0'
