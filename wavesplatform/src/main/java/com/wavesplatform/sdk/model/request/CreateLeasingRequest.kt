@@ -14,7 +14,7 @@ import java.nio.charset.Charset
 
 data class CreateLeasingRequest(
         @SerializedName("type") val type: Int = Transaction.LEASE,
-        @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+        @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("scheme") var scheme: String? = Constants.NET_CODE.toString(),
         @SerializedName("amount") var amount: Long = 0,
         @SerializedName("fee") var fee: Long = 0,

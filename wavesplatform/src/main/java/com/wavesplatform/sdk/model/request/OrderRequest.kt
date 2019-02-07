@@ -13,8 +13,8 @@ import pers.victor.ext.currentTimeMillis
 
 
 data class OrderRequest(
-        @SerializedName("matcherPublicKey") var matcherPublicKey: String? = "",
-        @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+        @SerializedName("matcherPublicKey") var matcherPublicKey: String = "",
+        @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("assetPair") var assetPair: OrderBook.Pair = OrderBook.Pair(),
         @SerializedName("orderType") var orderType: OrderType = OrderType.BUY,
         @SerializedName("price") var price: Long = 0L,

@@ -8,8 +8,8 @@ import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 
 class CancelOrderRequest(
-        @SerializedName("orderId") var orderId: String? = "",
-        @SerializedName("sender") var sender: String? = "",
+        @SerializedName("orderId") var orderId: String = "",
+        @SerializedName("sender") var sender: String = "",
         @SerializedName("signature") var signature: String? = null
 ) {
 

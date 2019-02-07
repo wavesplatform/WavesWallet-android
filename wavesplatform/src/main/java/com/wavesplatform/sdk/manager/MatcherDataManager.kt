@@ -58,7 +58,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                 watchMarket?.market?.priceAsset)
     }
 
-    fun cancelOrder(orderId: String?,
+    fun cancelOrder(orderId: String,
                     watchMarket: WatchMarket?,
                     cancelOrderRequest: CancelOrderRequest): Observable<Any> {
         cancelOrderRequest.sender = Wavesplatform.get().getWallet().publicKeyStr

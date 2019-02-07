@@ -14,7 +14,7 @@ import java.nio.charset.Charset
 
 data class AliasRequest(
         @SerializedName("type") val type: Int = Transaction.CREATE_ALIAS,
-        @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+        @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("fee") var fee: Long = 0,
         @SerializedName("timestamp") var timestamp: Long = 0,
         @SerializedName("version") var version: Int = Constants.NET_CODE.toInt(),
