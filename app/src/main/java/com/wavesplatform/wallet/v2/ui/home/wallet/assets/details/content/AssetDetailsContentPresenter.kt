@@ -53,19 +53,19 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
         }
     }
 
-    fun reloadAssets() {
+    fun reloadAssetAddressBalance() {
         addSubscription(nodeDataManager.addressAssetBalance(
                 App.getAccessManager().getWallet()?.address ?: "",
                 assetBalance?.assetId ?: "")
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe {
-                    val assetBalance = queryFirst<AssetBalance> {
+                .subscribe { assetAddressBalance ->
+                    val dbAssetBalance = queryFirst<AssetBalance> {
                         equalTo("assetId", assetBalance?.assetId ?: "")
                     }
-                    assetBalance.notNull {
-                        it.balance = it.balance
+                    dbAssetBalance.notNull {
+                        it.balance = assetAddressBalance.balance
                         it.save()
-                        //viewState.afterSuccessLoadAsset(it)
+                        viewState.onAssetAddressBalanceLoadSuccess(it)
                     }
                 })
     }
