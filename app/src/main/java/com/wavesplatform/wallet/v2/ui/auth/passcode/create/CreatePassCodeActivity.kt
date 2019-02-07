@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v7.widget.AppCompatTextView
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -114,7 +113,7 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                         closeOrMain()
                     }
 
-                    override fun onCancelButtonClicked(dialog: Dialog, button: AppCompatTextView) {
+                    override fun onCancelButtonClicked(dialog: Dialog) {
                         App.getAccessManager().setUseFingerPrint(guid, false)
                         closeOrMain()
                     }
