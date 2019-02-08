@@ -12,7 +12,7 @@
     android:paddingEnd="24dp"
     android:paddingBottom="14dp">
 
-        <com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
+    <com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
             android:id="@+id/image_asset_icon"
             android:layout_width="28dp"
             android:layout_height="28dp"
@@ -20,8 +20,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:src="@drawable/asset_gray_icon"
-            app:text_number="1"
-            app:text_size="14" />
+            app:avatar_text_size="14sp" />
 
 
     <android.support.v7.widget.AppCompatTextView

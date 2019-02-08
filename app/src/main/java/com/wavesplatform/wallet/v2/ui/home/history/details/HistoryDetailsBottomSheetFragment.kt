@@ -6,19 +6,18 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
-import android.util.Log
-import android.view.*
-import android.widget.FrameLayout
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.google.gson.Gson
 import com.jakewharton.rxbinding2.view.RxView
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
@@ -26,7 +25,6 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
@@ -36,9 +34,8 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
 import com.wavesplatform.wallet.v2.data.remote.CoinomatService
-import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
-import com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
+import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
 import com.wavesplatform.wallet.v2.ui.custom.SpamTag
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
@@ -569,12 +566,10 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
             TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                 val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_set_asset_script_layout, historyContainer, false)
                 val textAssetValue = tokenView?.findViewById<AppCompatTextView>(R.id.text_asset_value)
-                val imageAssetIcon = tokenView?.findViewById<MaterialLetterIcon>(R.id.image_asset_icon)
-
-                imageAssetIcon?.isOval = true
+                val imageAssetIcon = tokenView?.findViewById<AssetAvatarView>(R.id.image_asset_icon)
 
                 transaction.asset?.let {
-                    imageAssetIcon?.setAssetInfo(transaction.asset)
+                    imageAssetIcon?.setAssetInfo(it)
                 }
 
                 textAssetValue?.text = transaction.asset?.name

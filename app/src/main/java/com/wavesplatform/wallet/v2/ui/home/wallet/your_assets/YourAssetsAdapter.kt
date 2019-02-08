@@ -27,7 +27,6 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
                 } else {
                     View.VISIBLE
                 }
-        helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)
 
         if (item.assetId == currentAssetId) {

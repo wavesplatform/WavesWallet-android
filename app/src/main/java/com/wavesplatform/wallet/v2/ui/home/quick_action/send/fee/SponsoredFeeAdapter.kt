@@ -30,7 +30,6 @@ class SponsoredFeeAdapter @Inject constructor() : BaseQuickAdapter<SponsoredAsse
         if (item.isActive) helper.itemView.root.makeBackgroundWithRippleEffect()
         else helper.itemView.root.background = null
 
-        helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item.assetBalance)
 
         helper.itemView.checkbox_choose.isChecked = item.assetBalance.assetId == currentAssetId

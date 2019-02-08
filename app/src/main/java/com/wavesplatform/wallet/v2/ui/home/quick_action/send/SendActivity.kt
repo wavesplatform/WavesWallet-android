@@ -585,7 +585,6 @@ class SendActivity : BaseActivity(), SendView {
 
             presenter.selectedAsset = asset
 
-            image_asset_icon.isOval = true
             image_asset_icon.setAsset(asset)
             text_asset_name.text = asset.getName()
             text_asset_value.text = asset.getDisplayAvailableBalance()
