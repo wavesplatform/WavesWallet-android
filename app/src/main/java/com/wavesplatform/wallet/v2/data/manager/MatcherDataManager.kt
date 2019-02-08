@@ -53,7 +53,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return matcherService.getOrderBook(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset)
     }
 
-    fun cancelOrder(orderId: String?, watchMarket: WatchMarket?, cancelOrderRequest: CancelOrderRequest): Observable<Any> {
+    fun cancelOrder(orderId: String, watchMarket: WatchMarket?, cancelOrderRequest: CancelOrderRequest): Observable<Any> {
         cancelOrderRequest.sender = getPublicKeyStr()
         cancelOrderRequest.orderId = orderId
         App.getAccessManager().getWallet()?.privateKey.notNull {

@@ -26,7 +26,7 @@ class TradeMyOrdersPresenter @Inject constructor() : BasePresenter<TradeMyOrders
                 }))
     }
 
-    fun cancelOrder(orderId: String?) {
+    fun cancelOrder(orderId: String) {
         viewState.showProgressBar(true)
         addSubscription(matcherDataManager.cancelOrder(orderId, watchMarket, cancelOrderRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())

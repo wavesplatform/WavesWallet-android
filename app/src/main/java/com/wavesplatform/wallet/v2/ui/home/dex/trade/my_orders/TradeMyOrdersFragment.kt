@@ -59,7 +59,7 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
             val item = this.adapter.getItem(position)
             when (view.id) {
                 R.id.image_delete -> {
-                    presenter.cancelOrder(item?.id)
+                    presenter.cancelOrder(item?.id ?: "")
                 }
             }
         }
