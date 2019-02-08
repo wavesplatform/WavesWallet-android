@@ -14,10 +14,11 @@ import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.sdk.model.request.TransactionsBroadcastRequest
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.AssetInfo
+import com.wavesplatform.sdk.utils.clearAlias
+import com.wavesplatform.sdk.utils.makeAsAlias
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
-import com.wavesplatform.wallet.v2.util.makeAsAlias
 import java.math.BigDecimal
 import javax.inject.Inject
 

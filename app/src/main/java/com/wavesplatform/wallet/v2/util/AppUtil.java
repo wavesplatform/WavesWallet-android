@@ -32,7 +32,7 @@ public class AppUtil {
         try {
             PRNGFixes.apply();
         } catch (Exception e0) {
-            //
+            // todo is it need?
             // some Android 4.0 devices throw an exception when PRNGFixes is re-applied
             // removing provider before apply() is a workaround
             //

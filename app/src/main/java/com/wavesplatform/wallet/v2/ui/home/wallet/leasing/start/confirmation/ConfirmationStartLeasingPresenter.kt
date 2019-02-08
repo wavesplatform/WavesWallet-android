@@ -3,11 +3,11 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.model.request.CreateLeasingRequest
+import com.wavesplatform.sdk.utils.makeAsAlias
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.errorBody
 import com.wavesplatform.wallet.v2.util.isSmartError
-import com.wavesplatform.wallet.v2.util.makeAsAlias
 import javax.inject.Inject
 
 @InjectViewState

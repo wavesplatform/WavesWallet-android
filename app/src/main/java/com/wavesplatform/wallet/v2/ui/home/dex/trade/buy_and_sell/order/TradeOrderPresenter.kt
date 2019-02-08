@@ -1,10 +1,10 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
 import com.arellomobile.mvp.InjectViewState
+import com.wavesplatform.sdk.model.OrderType
 import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.sdk.model.request.OrderRequest
 import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.sdk.model.response.AssetBalance
@@ -108,10 +108,10 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     private fun createPair(): OrderBook.Pair {
         val amountAsset =
                 if (data?.watchMarket?.market?.amountAsset?.isWaves() == true) ""
-                else data?.watchMarket?.market?.amountAsset
+                else data?.watchMarket?.market?.amountAsset ?: ""
         val priceAsset =
                 if (data?.watchMarket?.market?.priceAsset?.isWaves() == true) ""
-                else data?.watchMarket?.market?.priceAsset
+                else data?.watchMarket?.market?.priceAsset ?: ""
 
         return OrderBook.Pair(amountAsset, priceAsset)
     }

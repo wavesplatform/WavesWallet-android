@@ -16,10 +16,10 @@ import com.github.mikephil.charting.listener.BarLineChartTouchListener
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.utils.EntryXComparator
+import com.wavesplatform.sdk.model.OrderType
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.model.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -335,7 +335,11 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     override fun successGetTrades(tradesMarket: LastTradesResponse.Data.ExchangeTransaction?) {
         tradesMarket.notNull {
             val limitLine = LimitLine(it.price.toFloat(), "")
-            limitLine.lineColor = if (it.getMyOrder().getType() == OrderType.BUY) findColor(R.color.submit300) else findColor(R.color.error400)
+            limitLine.lineColor = if (it.getMyOrder().getType() == OrderType.BUY) {
+                findColor(R.color.submit300)
+            } else {
+                findColor(R.color.error400)
+            }
             limitLine.lineWidth = 1f
             limitLine.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
             candle_chart.axisRight.removeAllLimitLines()

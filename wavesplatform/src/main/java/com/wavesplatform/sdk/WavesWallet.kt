@@ -27,8 +27,7 @@ class WavesWallet(val seed: ByteArray) {
 
     @Throws(Exception::class)
     constructor(walletData: String, password: String?) : this(Base58.decode(
-            AESUtil.decrypt(walletData, password, DEFAULT_PBKDF2_ITERATIONS_V2))) {
-    }
+            AESUtil.decrypt(walletData, password, DEFAULT_PBKDF2_ITERATIONS_V2)))
 
     @Throws(Exception::class)
     fun getEncryptedData(password: String?): String {

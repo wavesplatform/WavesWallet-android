@@ -1,38 +1,30 @@
 package com.wavesplatform.wallet.v2.data.manager.base
 
+import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.service.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.v2.data.remote.*
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import javax.inject.Inject
 
 open class BaseDataManager @Inject constructor() {
 
+    var nodeService: NodeService = Wavesplatform.get().dataManager.nodeService
+    var apiService: ApiService = Wavesplatform.get().dataManager.apiService
+    var spamService: SpamService = Wavesplatform.get().dataManager.spamService
+    var coinomatService: CoinomatService = Wavesplatform.get().dataManager.coinomatService
+    var matcherService: MatcherService = Wavesplatform.get().dataManager.matcherService
+    var preferencesHelper: PreferencesHelper = PreferencesHelper(App.getAppContext())
+    var prefsUtil: PrefsUtil = PrefsUtil(App.getAppContext())
+    var rxEventBus: RxEventBus = RxEventBus()
 
 
-    @Inject
-    lateinit var nodeService: NodeService
-    @Inject
-    lateinit var apiService: ApiService
-    @Inject
-    lateinit var spamService: SpamService
-    @Inject
-    lateinit var coinomatService: CoinomatService
-    @Inject
-    lateinit var matcherService: MatcherService
-    @Inject
-    lateinit var preferencesHelper: PreferencesHelper
-    @Inject
-    lateinit var prefsUtil: PrefsUtil
-    @Inject
-    lateinit var rxEventBus: RxEventBus
-
-    fun getAddress(): String? {
-        return App.getAccessManager().getWallet()?.address
+    fun getAddress(): String {
+        return Wavesplatform.get().getWallet().address
     }
 
-    fun getPublicKeyStr(): String? {
-        return App.getAccessManager().getWallet()?.publicKeyStr
+    fun getPublicKeyStr(): String {
+        return Wavesplatform.get().getWallet().publicKeyStr
     }
 }

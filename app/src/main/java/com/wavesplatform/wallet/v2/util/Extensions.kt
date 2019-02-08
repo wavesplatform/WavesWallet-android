@@ -728,7 +728,7 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
 
 fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
     return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
-            && (null != queryFirst<SpamAsset> {
+            && (null != queryFirst<com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset> {
         equalTo("assetId", assetId)
     }))
 }

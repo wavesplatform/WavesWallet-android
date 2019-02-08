@@ -23,7 +23,7 @@ class AddressUtil {
 
 
         fun addressFromPublicKey(publicKey: ByteArray): String {
-            val publicKeyHash = Arrays.copyOf(Hash.secureHash(publicKey), hashLength)
+            val publicKeyHash = Hash.secureHash(publicKey).copyOf(hashLength)
             val withoutChecksum = Bytes.concat(byteArrayOf(addressVersion, Constants.NET_CODE), publicKeyHash)
             return Base58.encode(Bytes.concat(withoutChecksum, calcCheckSum(withoutChecksum)))
         }

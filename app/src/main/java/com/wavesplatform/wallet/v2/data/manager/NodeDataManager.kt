@@ -4,7 +4,6 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ProcessLifecycleOwner
 import android.text.TextUtils
 import com.vicpin.krealmextensions.*
-import com.wavesplatform.sdk.manager.base.BaseDataManager
 import com.wavesplatform.sdk.model.request.AliasRequest
 import com.wavesplatform.sdk.model.request.CancelLeasingRequest
 import com.wavesplatform.sdk.model.request.CreateLeasingRequest
@@ -15,6 +14,7 @@ import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.sumByLong
 import io.reactivex.Observable
