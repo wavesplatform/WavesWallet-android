@@ -13,7 +13,7 @@ class AddressUtil {
         var addressVersion: Byte = 1
         var checksumLength = 4
         var hashLength = 20
-        var WAVES_PREFIX = "waves://"
+        const val WAVES_PREFIX = "waves://"
 
 
 

@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data.model.local
 
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.sdk.model.response.Transaction
 
 class HistoryItem : MultiItemEntity {
     private var itemType: Int = 0

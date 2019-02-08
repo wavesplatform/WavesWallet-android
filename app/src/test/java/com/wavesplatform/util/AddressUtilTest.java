@@ -1,6 +1,6 @@
 package com.wavesplatform.util;
 
-import com.wavesplatform.wallet.v2.util.AddressUtil;
+import com.wavesplatform.sdk.utils.AddressUtil;
 
 import org.junit.Test;
 

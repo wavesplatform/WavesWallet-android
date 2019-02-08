@@ -1,13 +1,12 @@
 package com.wavesplatform.wallet.v2.data.manager
 
 import com.vicpin.krealmextensions.queryFirst
-import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.sdk.model.WatchMarket
+import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import pers.victor.ext.currentTimeMillis

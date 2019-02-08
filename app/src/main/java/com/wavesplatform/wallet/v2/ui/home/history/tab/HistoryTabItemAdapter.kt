@@ -9,11 +9,11 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
+import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.sdk.model.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import kotlinx.android.synthetic.main.recycle_item_history.view.*

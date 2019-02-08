@@ -1,11 +1,11 @@
 package com.wavesplatform.wallet.v2.data
 
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
-import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.model.response.AssetInfo
+import com.wavesplatform.sdk.model.response.GlobalConfiguration
+import com.wavesplatform.sdk.model.response.IssueTransaction
 
 object Constants {
 

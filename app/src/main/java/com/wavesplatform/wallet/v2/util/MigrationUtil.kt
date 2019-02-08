@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.util
 
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import io.realm.Realm
 import java.io.File

@@ -1,15 +1,16 @@
 package com.wavesplatform.wallet.v2.database
 
 import com.vicpin.krealmextensions.*
+import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
-import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
+import com.wavesplatform.sdk.model.response.AssetInfo
+import com.wavesplatform.sdk.model.response.SpamAsset
+import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.sdk.model.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync

@@ -2,9 +2,9 @@ package com.wavesplatform.wallet.v2.data.helpers
 
 import com.vicpin.krealmextensions.RealmConfigStore
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.wallet.v2.database.DBHelper
 import com.wavesplatform.wallet.v2.database.RealmMigrations
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser

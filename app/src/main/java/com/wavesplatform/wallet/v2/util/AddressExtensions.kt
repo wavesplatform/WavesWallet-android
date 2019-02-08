@@ -1,8 +1,7 @@
 package com.wavesplatform.wallet.v2.util
 
-import com.wavesplatform.wallet.v1.crypto.Base58
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v2.util.AddressUtil.calcCheckSum
+import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.utils.AddressUtil.Companion.calcCheckSum
 import java.util.*
 
 var AddressVersion: Byte = 1

@@ -2,8 +2,8 @@ package com.wavesplatform.wallet.v2.ui.home.dex
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
+import com.wavesplatform.sdk.model.WatchMarket
+import com.wavesplatform.sdk.model.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.disposables.CompositeDisposable

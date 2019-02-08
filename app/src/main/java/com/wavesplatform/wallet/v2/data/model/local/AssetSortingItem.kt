@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data.model.local
 
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.model.response.AssetBalance
 
 class AssetSortingItem : MultiItemEntity {
     var type: Int = 0

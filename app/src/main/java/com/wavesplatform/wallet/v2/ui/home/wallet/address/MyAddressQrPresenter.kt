@@ -6,9 +6,9 @@ import com.arellomobile.mvp.InjectViewState
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.wallet.v1.ui.zxing.Contents
-import com.wavesplatform.wallet.v1.ui.zxing.encode.QRCodeEncoder
-import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
+import com.wavesplatform.wallet.v2.util.zxing.Contents
+import com.wavesplatform.wallet.v2.util.zxing.encode.QRCodeEncoder
+import com.wavesplatform.sdk.model.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.RxUtil

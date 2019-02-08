@@ -14,7 +14,6 @@ open class MarketResponse(
         @PrimaryKey
         @SerializedName("id")
         var id: String? = "",
-
         @SerializedName("amountAsset") var amountAsset: String = "",
         @SerializedName("amountAssetName") var amountAssetName: String = "",
         @SerializedName("amountAssetShortName") var amountAssetShortName: String? = "",
@@ -33,13 +32,3 @@ open class MarketResponse(
         @SerializedName("position") var position: Int = -1,
         @SerializedName("currentTimeFrame") var currentTimeFrame: Int? = null
 ) : Parcelable, RealmModel
-
-@Parcelize
-data class AmountAssetInfo(
-        @SerializedName("decimals") var decimals: Int = 0
-) : Parcelable
-
-@Parcelize
-data class PriceAssetInfo(
-        @SerializedName("decimals") var decimals: Int = 0
-) : Parcelable

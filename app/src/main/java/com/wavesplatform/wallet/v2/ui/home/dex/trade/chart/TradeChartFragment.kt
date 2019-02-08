@@ -20,8 +20,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
+import com.wavesplatform.sdk.model.WatchMarket
+import com.wavesplatform.sdk.model.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CandleTouchListener
 import com.wavesplatform.wallet.v2.ui.custom.OnCandleGestureListener

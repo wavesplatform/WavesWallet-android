@@ -6,7 +6,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemTouchHelperAdapter
 import kotlinx.android.synthetic.main.wallet_asset_sorting_favorite_item.view.*

@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data.remote
 
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
+import com.wavesplatform.sdk.model.response.*
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path

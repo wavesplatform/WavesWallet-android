@@ -7,7 +7,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.v2.data.model.local.ChartModel
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
+import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Observable

@@ -2,13 +2,13 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
-import com.wavesplatform.wallet.v2.data.model.remote.response.ScriptInfo
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.sdk.model.request.CancelLeasingRequest
+import com.wavesplatform.sdk.model.response.GlobalTransactionCommission
+import com.wavesplatform.sdk.model.response.ScriptInfo
+import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.TransactionUtil
+import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.wallet.v2.util.errorBody
 import com.wavesplatform.wallet.v2.util.isSmartError
 import io.reactivex.Observable

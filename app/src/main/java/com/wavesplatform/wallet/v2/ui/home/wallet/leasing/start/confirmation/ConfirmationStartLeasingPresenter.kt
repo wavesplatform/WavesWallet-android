@@ -1,8 +1,8 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.model.remote.request.CreateLeasingRequest
+import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.model.request.CreateLeasingRequest
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.errorBody

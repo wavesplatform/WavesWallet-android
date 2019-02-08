@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data.manager.base
 
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.remote.*
 import com.wavesplatform.wallet.v2.util.RxEventBus

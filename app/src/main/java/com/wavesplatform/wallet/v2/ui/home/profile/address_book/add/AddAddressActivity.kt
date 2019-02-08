@@ -9,6 +9,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.OnDrawableClickListener
+import com.wavesplatform.sdk.utils.AddressUtil
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.rules.AddressBookAddressRule
@@ -20,7 +21,6 @@ import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
-import com.wavesplatform.wallet.v2.util.AddressUtil
 import com.wavesplatform.wallet.v2.util.notNull
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator

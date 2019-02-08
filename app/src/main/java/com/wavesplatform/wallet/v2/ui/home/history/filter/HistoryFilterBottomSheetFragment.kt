@@ -10,7 +10,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.history.filter.adapter.AssetsAdapter
 import com.wavesplatform.wallet.v2.ui.home.history.filter.adapter.TransferAdapter

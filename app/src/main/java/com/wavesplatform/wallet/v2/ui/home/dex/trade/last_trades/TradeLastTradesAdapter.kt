@@ -4,9 +4,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.internal.bind.util.ISO8601Utils
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
+import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.model.response.LastTradesResponse
+import com.wavesplatform.sdk.model.response.MarketResponse
 import com.wavesplatform.wallet.v2.util.clearBalance
 import com.wavesplatform.wallet.v2.util.stripZeros
 import pyxis.uzuki.live.richutilskt.utils.asDateString

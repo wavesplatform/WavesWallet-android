@@ -15,7 +15,7 @@ import android.util.TypedValue;
 
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.v2.data.Constants;
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
+import com.wavesplatform.sdk.model.response.AssetBalance;
 
 
 public class MaterialLetterIcon extends RoundedImageViewWithBorder {

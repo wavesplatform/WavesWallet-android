@@ -1,10 +1,7 @@
 package com.wavesplatform.wallet.v2.data.model.local
 
 import android.os.Parcelable
-import com.wavesplatform.wallet.v1.payload.TickerMarket
-import com.wavesplatform.wallet.v1.payload.TradesMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.PairResponse
+import com.wavesplatform.sdk.model.WatchMarket
 import kotlinx.android.parcel.Parcelize
 
 /**
