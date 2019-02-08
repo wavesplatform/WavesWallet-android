@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.data.model.remote.response
+package com.wavesplatform.wallet.v2.data.model.db
 
 import com.google.gson.annotations.SerializedName
 import io.realm.RealmList

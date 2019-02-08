@@ -55,6 +55,7 @@ import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.wallet.v2.data.model.db.SpamAsset
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
@@ -728,7 +729,7 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
 
 fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
     return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
-            && (null != queryFirst<com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset> {
+            && (null != queryFirst<SpamAsset> {
         equalTo("assetId", assetId)
     }))
 }

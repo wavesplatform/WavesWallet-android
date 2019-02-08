@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.data.model.remote.response
+package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
