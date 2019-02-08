@@ -21,8 +21,6 @@ import com.wavesplatform.wallet.v2.util.clearAlias
 import com.wavesplatform.wallet.v2.util.errorBody
 import com.wavesplatform.wallet.v2.util.isSmartError
 import com.wavesplatform.wallet.v2.util.makeAsAlias
-import pyxis.uzuki.live.richutilskt.utils.runAsync
-import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.math.BigDecimal
 import javax.inject.Inject
 

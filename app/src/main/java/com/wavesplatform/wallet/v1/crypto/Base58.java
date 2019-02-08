@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v1.crypto;
 
+@Deprecated
 public class Base58 {
 
     public static class InvalidBase58 extends Exception {}
@@ -19,9 +20,6 @@ public class Base58 {
         }
     }
 
-    public static int base58Length(int byteArrayLength) {
-        return (int) Math.ceil(Math.log(256) / Math.log(58) * byteArrayLength);
-    }
 
     public static String encode(byte[] input) {
         if (input.length == 0) {

@@ -9,6 +9,8 @@ import javax.inject.Inject
 
 open class BaseDataManager @Inject constructor() {
 
+
+
     @Inject
     lateinit var nodeService: NodeService
     @Inject

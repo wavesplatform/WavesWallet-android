@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.widget.AppCompatImageView
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v1.data.auth.WalletManager
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
+import com.wavesplatform.sdk.WalletManager
+import com.wavesplatform.sdk.WavesWallet
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.RxUtil

@@ -14,6 +14,7 @@ import com.github.moduth.blockcanary.BlockCanary;
 import com.google.firebase.FirebaseApp;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.squareup.leakcanary.LeakCanary;
+import com.wavesplatform.sdk.Wavesplatform;
 import com.wavesplatform.sdk.WavesplatformTest;
 import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
@@ -66,6 +67,8 @@ public class App extends DaggerApplication {
         Realm.init(this);
         Ext.INSTANCE.setCtx(this);
 
+        Wavesplatform.init(this);
+
         RxJavaPlugins.setErrorHandler(Timber::e);
 
         AppUtil appUtil = new AppUtil(this);
@@ -106,7 +109,7 @@ public class App extends DaggerApplication {
             }
         });
 
-        WavesplatformTest.testLoadAliases(this);
+
     }
 
     public static Context getAppContext() {

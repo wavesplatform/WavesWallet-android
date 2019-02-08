@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v1.ui.assets;
 
+import com.wavesplatform.sdk.WavesWallet;
 import com.wavesplatform.wallet.App;
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet;
 import com.wavesplatform.wallet.v1.util.MoneyUtil;
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest;
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;

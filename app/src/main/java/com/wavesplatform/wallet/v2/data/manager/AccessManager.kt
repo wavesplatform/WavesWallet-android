@@ -5,9 +5,9 @@ import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
 import com.vicpin.krealmextensions.RealmConfigStore
+import com.wavesplatform.sdk.WavesWallet
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.crypto.AESUtil
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v1.data.services.PinStoreService
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager

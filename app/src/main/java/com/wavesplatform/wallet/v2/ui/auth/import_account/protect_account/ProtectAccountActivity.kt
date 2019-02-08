@@ -6,8 +6,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.wavesplatform.sdk.WavesWallet
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.data.rules.AccountNameRule
 import com.wavesplatform.wallet.v2.data.rules.EqualRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
