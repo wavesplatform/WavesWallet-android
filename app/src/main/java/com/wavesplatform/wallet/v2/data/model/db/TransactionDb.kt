@@ -1,13 +1,14 @@
 package com.wavesplatform.wallet.v2.data.model.db
 
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.sdk.model.response.Transaction
 import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 
-@RealmClass
-open class Transaction(
+@RealmClass(name = "Transaction")
+open class TransactionDb(
         @SerializedName("type")
         var type: Int = 0,
         @PrimaryKey
@@ -38,13 +39,13 @@ open class Transaction(
         @SerializedName("status")
         var status: String? = "",
         @SerializedName("lease")
-        var lease: Lease? = Lease(),
+        var lease: LeaseDb? = LeaseDb(),
         @SerializedName("fee")
         var fee: Long = 0,
         @SerializedName("feeAssetId")
         var feeAssetId: String? = null,
         @SerializedName("feeAssetObject")
-        var feeAssetObject: AssetInfo? = AssetInfo(),
+        var feeAssetObject: AssetInfoDb? = AssetInfoDb(),
         @SerializedName("quantity")
         var quantity: Long = 0,
         @SerializedName("price")
@@ -58,13 +59,13 @@ open class Transaction(
         @SerializedName("sellMatcherFee")
         var sellMatcherFee: Long = 0,
         @SerializedName("order1")
-        var order1: Order? = Order(),
+        var order1: OrderDb? = OrderDb(),
         @SerializedName("order2")
-        var order2: Order? = Order(),
+        var order2: OrderDb? = OrderDb(),
         @SerializedName("totalAmount")
         var totalAmount: Long = 0,
         @SerializedName("transfers")
-        var transfers: RealmList<Transfer> = RealmList(),
+        var transfers: RealmList<TransferDb> = RealmList(),
         @SerializedName("data")
         var data: RealmList<Data> = RealmList(),
         @SerializedName("isPending")
@@ -74,5 +75,18 @@ open class Transaction(
         @SerializedName("minSponsoredAssetFee")
         var minSponsoredAssetFee: String? = "",
         var transactionTypeId: Int = 0,
-        var asset: AssetInfo? = AssetInfo()
-) : RealmModel
+        var asset: AssetInfoDb? = AssetInfoDb()
+) : RealmModel {
+
+    fun convertFromDb(): Transaction {
+        return Transaction()
+    }
+
+    companion object {
+
+        fun convertToDb(transaction: Transaction): TransactionDb {
+            return TransactionDb()
+        }
+
+    }
+}

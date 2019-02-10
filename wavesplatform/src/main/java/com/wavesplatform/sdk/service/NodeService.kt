@@ -26,6 +26,10 @@ interface NodeService {
     fun transactionList(@Path("address") address: String?,
                         @Path("limit") limit: Int): Observable<List<List<Transaction>>>
 
+    @GET("assets/balance/{address}/{assetId}")
+    fun addressAssetBalance(@Path("address") address: String?,
+                            @Path("assetId") assetId: String?): Observable<AddressAssetBalance>
+
     @GET("transactions/info/{asset}")
     fun getTransactionsInfo(@Path("asset") asset: String): Observable<TransactionsInfo>
 

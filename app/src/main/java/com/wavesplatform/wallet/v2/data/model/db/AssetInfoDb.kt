@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.sdk.model.response.AssetInfo
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
@@ -9,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 
 @RealmClass
 @Parcelize
-open class AssetInfo(
+open class AssetInfoDb(
         @SerializedName("ticker") var ticker: String? = "",
         @PrimaryKey
         @SerializedName("id") var id: String = "",
@@ -22,4 +23,24 @@ open class AssetInfo(
         @SerializedName("quantity") var quantity: Long = 0,
         @SerializedName("reissuable") var reissuable: Boolean = false,
         var isSpam: Boolean = false
-) : Parcelable, RealmModel
+) : Parcelable, RealmModel {
+
+        fun convertFromDb(): AssetInfo {
+                return AssetInfo()
+        }
+
+        companion object {
+
+                fun convertToDb(assetInfo: AssetInfo): AssetInfoDb {
+                        return AssetInfoDb()
+                }
+
+                fun convertToDb(assetInfo: List<AssetInfo>): List<AssetInfoDb> {
+                        return listOf()
+                }
+
+                fun convertFromDb(assetInfo: List<AssetInfoDb>): List<AssetInfo> {
+                        return listOf()
+                }
+        }
+}

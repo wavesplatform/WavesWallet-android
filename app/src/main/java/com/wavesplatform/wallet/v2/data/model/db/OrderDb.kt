@@ -8,14 +8,14 @@ import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@RealmClass
-open class Order(
+@RealmClass(name = "Order")
+open class OrderDb(
         @PrimaryKey
         @SerializedName("id") var id: String = "",
         @SerializedName("sender") var sender: String = "",
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("matcherPublicKey") var matcherPublicKey: String = "",
-        @SerializedName("assetPair") var assetPair: AssetPair? = AssetPair(),
+        @SerializedName("assetPair") var assetPair: AssetPairDb? = AssetPairDb(),
         @SerializedName("orderType") var orderType: String = "",
         @SerializedName("price") var price: Long = 0,
         @SerializedName("amount") var amount: Long = 0,

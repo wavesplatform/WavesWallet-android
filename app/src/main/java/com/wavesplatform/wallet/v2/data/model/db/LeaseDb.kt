@@ -5,8 +5,8 @@ import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 
-@RealmClass
-open class Lease(
+@RealmClass(name = "Lease")
+open class LeaseDb(
         @SerializedName("type") var type: Int = 0,
         @PrimaryKey
         @SerializedName("id") var id: String = "",

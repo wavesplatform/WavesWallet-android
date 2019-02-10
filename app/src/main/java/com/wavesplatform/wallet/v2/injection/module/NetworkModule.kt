@@ -13,7 +13,7 @@ import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
-import com.wavesplatform.wallet.v2.data.remote.*
+import com.wavesplatform.sdk.service.*
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import dagger.Module
 import dagger.Provides

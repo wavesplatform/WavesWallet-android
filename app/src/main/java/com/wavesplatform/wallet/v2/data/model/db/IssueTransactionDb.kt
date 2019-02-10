@@ -8,8 +8,8 @@ import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@RealmClass
-open class IssueTransaction(
+@RealmClass(name = "IssueTransaction")
+open class IssueTransactionDb(
         @SerializedName("type") var type: Int? = 0,
         @PrimaryKey
         @SerializedName("id") var id: String? = "",

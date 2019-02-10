@@ -21,8 +21,7 @@ import kotlin.collections.ArrayList
 
 @Singleton
 class NodeDataManager @Inject constructor() : BaseDataManager() {
-    @Inject
-    lateinit var transactionUtil: TransactionUtil
+
     @Inject
     lateinit var apiDataManager: ApiDataManager
     @Inject
@@ -231,7 +230,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 .map {
                     return@map it.filter {
                         it.asset = Constants.wavesAssetInfo
-                        it.transactionTypeId = transactionUtil.getTransactionType(it)
+                        it.transactionTypeId = TransactionUtil.getTransactionType(it)
                         it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
                                 && it.sender == Wavesplatform.get().getWallet().address
                     }

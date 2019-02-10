@@ -2,6 +2,8 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.model.response.SpamAsset
 import io.realm.RealmModel
 import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
@@ -9,8 +11,8 @@ import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@RealmClass
-open class AssetBalance(
+@RealmClass(name = "AssetBalance")
+open class AssetBalanceDb(
         @PrimaryKey
         @SerializedName("assetId") var assetId: String = "",
         @SerializedName("balance") var balance: Long? = 0,
@@ -20,7 +22,7 @@ open class AssetBalance(
         @SerializedName("minSponsoredAssetFee") var minSponsoredAssetFee: Long? = 0,
         @SerializedName("sponsorBalance") var sponsorBalance: Long? = 0,
         @SerializedName("quantity") var quantity: Long? = 0,
-        @SerializedName("issueTransaction") var issueTransaction: IssueTransaction? = IssueTransaction(),
+        @SerializedName("issueTransaction") var issueTransaction: IssueTransactionDb? = IssueTransactionDb(),
         var isHidden: Boolean = false,
         var position: Int = -1,
         @Ignore var configureVisibleState: Boolean = false,
@@ -29,4 +31,24 @@ open class AssetBalance(
         var isFavorite: Boolean = false,
         var isGateway: Boolean = false,
         var isSpam: Boolean = false
-) : RealmModel, Parcelable
+) : RealmModel, Parcelable {
+
+        fun convertFromDb(): AssetBalance {
+                return AssetBalance()
+        }
+
+        companion object {
+
+                fun convertToDb(assetBalance: AssetBalance): AssetBalanceDb {
+                        return AssetBalanceDb()
+                }
+
+                fun convertToDb(assetBalances: List<AssetBalance>): List<SpamAssetDb> {
+                        return listOf()
+                }
+
+                fun convertFromDb(assetBalances: List<AssetBalanceDb>): List<AssetBalance> {
+                        return listOf()
+                }
+        }
+}

@@ -6,11 +6,12 @@ import io.realm.RealmModel
 import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 
-@RealmClass
+
 @Parcelize
-open class AssetPair(
+@RealmClass(name = "AssetPair")
+open class AssetPairDb(
         @SerializedName("amountAsset") var amountAsset: String? = "",
-        @SerializedName("amountAssetObject") var amountAssetObject: AssetInfo? = AssetInfo(),
+        @SerializedName("amountAssetObject") var amountAssetObject: AssetInfoDb? = AssetInfoDb(),
         @SerializedName("priceAsset") var priceAsset: String? = "",
-        @SerializedName("priceAssetObject") var priceAssetObject: AssetInfo? = AssetInfo()
+        @SerializedName("priceAssetObject") var priceAssetObject: AssetInfoDb? = AssetInfoDb()
 ) : RealmModel, Parcelable

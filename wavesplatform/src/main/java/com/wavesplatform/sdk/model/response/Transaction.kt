@@ -55,7 +55,6 @@ open class AssetPair(
 open class Transaction(
         @SerializedName("type")
         var type: Int = 0,
-
         @SerializedName("id")
         var id: String = "",
         @SerializedName("sender")

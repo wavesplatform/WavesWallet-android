@@ -1,12 +1,15 @@
 package com.wavesplatform.wallet.v2.data.manager
 
 import com.vicpin.krealmextensions.queryFirst
+import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.wallet.v2.data.model.db.AliasDb
+import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import pers.victor.ext.currentTimeMillis
@@ -29,7 +32,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                         it.alias.own = true
                         return@mapTo it.alias
                     }
-                    aliases.saveAll()
+                    AliasDb.convertToDb(aliases).saveAll()
                     return@map aliases
                 }
     }
@@ -49,15 +52,15 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadAlias(alias: String): Observable<Alias> {
-        val localAlias = queryFirst<Alias> { equalTo("alias", alias) }
+        val localAlias = queryFirst<AliasDb> { equalTo("alias", alias) }
 
         if (localAlias != null) {
-            return Observable.just(localAlias)
+            return Observable.just(localAlias.convertFromDb())
         } else {
             return apiService.alias(alias)
                     .map {
                         it.alias.own = false
-                        it.alias.save()
+                        AliasDb.convertToDb(it.alias).save()
                         return@map it.alias
                     }
         }
@@ -81,7 +84,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
 
                             return@mapTo assetInfoData.assetInfo
                         }
-                        assetsInfo.saveAll()
+                        AssetInfoDb.convertToDb(assetsInfo).saveAll()
                         return@map assetsInfo
                     }
         }

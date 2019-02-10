@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 import io.realm.RealmModel
 import io.realm.annotations.RealmClass
 
-@RealmClass
-open class Transfer(
+@RealmClass(name = "Transfer")
+open class TransferDb(
         @SerializedName("recipient")
         var recipient: String = "",
         @SerializedName("recipientAddress")

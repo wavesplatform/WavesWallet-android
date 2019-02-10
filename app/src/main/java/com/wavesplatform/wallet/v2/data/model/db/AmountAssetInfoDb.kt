@@ -5,6 +5,4 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class AmountAssetInfo(
-        @SerializedName("decimals") var decimals: Int = 0
-) : Parcelable
+data class AmountAssetInfoDb(@SerializedName("decimals") var decimals: Int = 0) : Parcelable
