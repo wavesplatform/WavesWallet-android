@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.database
+package com.wavesplatform.wallet.v2.data.database
 
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.utils.TransactionUtil

@@ -81,15 +81,10 @@ data class LastTradesResponse(
                         var priceAsset: String = ""
                 )
 
-                companion object {
-                    var API_BUY_TYPE = "buy"
-                    var API_SELL_TYPE = "sell"
-                }
-
                 fun getType(): OrderType {
                     return when (orderType) {
-                        API_BUY_TYPE -> OrderType.BUY
-                        API_SELL_TYPE -> OrderType.SELL
+                        Constants.BUY_ORDER_TYPE -> OrderType.BUY
+                        Constants.SELL_ORDER_TYPE -> OrderType.SELL
                         else -> OrderType.BUY
                     }
                 }

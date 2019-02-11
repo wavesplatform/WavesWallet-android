@@ -67,22 +67,14 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/text_transaction_value"
+                style="@style/TickerTag"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="4dp"
                 android:layout_toEndOf="@+id/text_transaction_value"
-                android:background="@drawable/asset_price_border"
-                android:paddingStart="4dp"
-                android:paddingTop="2dp"
-                android:paddingEnd="4dp"
-                android:paddingBottom="2dp"
-                android:textColor="@color/info500"
-                android:textSize="12sp"
+                android:layout_alignBottom="@+id/text_transaction_value"
+                android:layout_marginStart="4dp"
                 android:visibility="gone"
-                tools:text="WAVES" />
-
+                tools:text="WAVES"
+                tools:visibility="visible" />
 
             <com.wavesplatform.wallet.v2.ui.custom.SpamTag
                 android:id="@+id/text_tag_spam"

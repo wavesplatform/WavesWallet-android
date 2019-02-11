@@ -173,6 +173,8 @@ dependencies {
     implementation('com.google.zxing:core:3.3.0') {
         transitive = true
     }
+
+    implementation 'com.github.andrefrsousa:SuperBottomSheet:1.3.0'
     implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.1'
 
     // RxJava

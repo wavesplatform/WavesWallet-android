@@ -65,6 +65,13 @@ class LeasingFragment : BaseFragment(), LeasingView {
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.UpdateListOfActiveTransaction::class.java)
                 .subscribe {
                     adapterActiveAdapter.remove(it.position)
+
+                    if (adapterActiveAdapter.data.isEmpty()) {
+                        linear_active_leasing.gone()
+                    } else {
+                        linear_active_leasing.visiable()
+                    }
+
                     text_active_leasing.text = getString(R.string.wallet_leasing_active_now, adapterActiveAdapter.data.size.toString())
                 })
 
@@ -135,7 +142,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
 
             val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
 
-            bottomSheetFragment.configureData(historyItem, position, ArrayList(adapter.data) as ArrayList<Transaction>)
+            bottomSheetFragment.configureData(historyItem, position)
             bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
         }
 
@@ -189,7 +196,8 @@ class LeasingFragment : BaseFragment(), LeasingView {
         button_start_lease.click {
             launchActivity<StartLeasingActivity> {
                 val bundle = Bundle()
-                bundle.putLong(StartLeasingActivity.BUNDLE_WAVES, wavesAsset.getAvailableBalance())
+                bundle.putLong(StartLeasingActivity.BUNDLE_WAVES, wavesAsset.getAvailableBalance()
+                        ?: 0)
                 putExtras(bundle)
             }
         }
