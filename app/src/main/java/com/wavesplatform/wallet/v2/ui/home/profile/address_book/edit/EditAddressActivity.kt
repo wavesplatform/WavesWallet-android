@@ -23,7 +23,7 @@ import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity.Companion.BUNDLE_POSITION
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
+import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
 import io.github.anderscheow.validator.Validation
@@ -136,7 +136,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
             edit_address.isFocusableInTouchMode = false
             edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 
-            edit_address.setText(intent.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM).address)
+            edit_address.setText(intent.getParcelableExtra<AddressBookUserDb>(AddressBookActivity.BUNDLE_ADDRESS_ITEM).address)
             presenter.addressFieldValid = edit_address.text.isNotEmpty()
         } else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE) {
             val addressValidation = Validation(til_address)
@@ -177,7 +177,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         button_save.isEnabled = presenter.isAllFieldsValid()
     }
 
-    override fun successEditAddress(addressBookUser: AddressBookUser?) {
+    override fun successEditAddress(addressBookUser: AddressBookUserDb?) {
         val newIntent = Intent()
         newIntent.putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, addressBookUser)
         newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(BUNDLE_POSITION, -1))

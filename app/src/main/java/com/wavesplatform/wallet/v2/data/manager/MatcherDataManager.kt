@@ -15,7 +15,7 @@ import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.model.request.CancelOrderRequest
 import com.wavesplatform.sdk.model.request.OrderRequest
 import com.wavesplatform.sdk.model.response.*
-import com.wavesplatform.wallet.v2.data.model.db.MarketDb
+import com.wavesplatform.wallet.v2.data.model.db.MarketResponseDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
@@ -161,9 +161,9 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                 .map {
                     return@map SpamAssetDb.convertFromDb(it).associateBy { it.assetId }
                 },
-                queryAllAsSingle<MarketDb>().toObservable()
+                queryAllAsSingle<MarketResponseDb>().toObservable()
                         .map {
-                            return@map MarketDb.convertFromDb(it).associateBy { it.id }
+                            return@map MarketResponseDb.convertFromDb(it).associateBy { it.id }
                         }
                 , Function3 { apiMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAsset>, dbMarkets: Map<String?, MarketResponse> ->
             val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {

@@ -5,14 +5,14 @@ import com.google.common.primitives.Bytes
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.utils.SignUtil
 
-data class OrderBook(
+class OrderBook(
         @SerializedName("timestamp") var timestamp: Long = 0,
         @SerializedName("pair") var pair: Pair = Pair(),
         @SerializedName("bids") var bids: List<Bid> = listOf(),
         @SerializedName("asks") var asks: List<Ask> = listOf()
 ) {
 
-    data class Pair(
+    class Pair(
             @SerializedName("amountAsset") var amountAsset: String = "",
             @SerializedName("priceAsset") var priceAsset: String = ""
     ) {
@@ -28,13 +28,13 @@ data class OrderBook(
         }
     }
 
-    data class Ask(
+    open class Ask(
             @SerializedName("amount") var amount: Long = 0,
             @SerializedName("price") var price: Long = 0,
             @SerializedName("sum") var sum: Double = 0.0
     )
 
-    data class Bid(
+    open class Bid(
             @SerializedName("amount") var amount: Long = 0,
             @SerializedName("price") var price: Long = 0,
             @SerializedName("sum") var sum: Double = 0.0

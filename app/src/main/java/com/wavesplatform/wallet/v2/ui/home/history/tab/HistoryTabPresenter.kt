@@ -11,6 +11,7 @@ import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.database.TransactionSaver
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentPresenter
@@ -54,7 +55,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
     private fun loadFromDb(): Single<ArrayList<HistoryItem>> {
         Log.d("historydev", "on presenter")
-        val singleData: Single<List<Transaction>> = when (type) {
+        val singleData: Single<List<TransactionDb>> = when (type) {
             HistoryTabFragment.all -> {
                 queryAllAsSingle()
             }
@@ -109,9 +110,10 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
         return singleData.map { transitions ->
             allItemsFromDb = if (assetBalance == null) {
-                transitions.sortedByDescending { transaction -> transaction.timestamp }
+                TransactionDb.convertFromDb(
+                        transitions.sortedByDescending { transaction -> transaction.timestamp })
             } else {
-                filterDetailed(transitions, assetBalance!!.assetId)
+                filterDetailed(TransactionDb.convertFromDb(transitions), assetBalance!!.assetId)
                         .sortedByDescending { transaction -> transaction.timestamp }
             }
             return@map sortAndConfigToUi(allItemsFromDb)

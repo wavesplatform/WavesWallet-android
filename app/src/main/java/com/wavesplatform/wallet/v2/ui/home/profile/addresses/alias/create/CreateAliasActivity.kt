@@ -9,6 +9,7 @@ import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.sdk.model.response.Alias
+import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
@@ -135,7 +136,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     }
 
     override fun successCreateAlias(alias: Alias) {
-        alias.save()
+        AliasDb.convertToDb(alias).save()
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_ALIAS, alias)
         })

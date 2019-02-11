@@ -35,15 +35,17 @@ open class MarketResponseDb(
         @SerializedName("currentTimeFrame") var currentTimeFrame: Int? = null
 ) : Parcelable, RealmModel {
 
+        constructor(market: MarketResponse) : this() {
+                //
+        }
+
         fun convertFromDb(): MarketResponse {
                 return MarketResponse()
         }
 
         companion object {
 
-                fun convertToDb(market: MarketResponse): MarketResponseDb {
-                        return MarketResponseDb()
-                }
+
 
                 fun convertToDb(markets: List<MarketResponse>): List<MarketResponseDb> {
                         return listOf()

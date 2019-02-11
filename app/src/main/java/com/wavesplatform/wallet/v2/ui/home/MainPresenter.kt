@@ -11,6 +11,9 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.sdk.model.response.AssetInfo
 import com.wavesplatform.sdk.model.response.SpamAsset
 import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
+import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -20,8 +23,6 @@ import javax.inject.Inject
 
 @InjectViewState
 class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
-    @Inject
-    lateinit var transactionUtil: TransactionUtil
 
     var checkedAboutFundsOnDevice = false
     var checkedAboutBackup = false
@@ -33,35 +34,42 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
 
     fun reloadTransactionsAfterSpamSettingsChanged(afterUrlChanged: Boolean = false) {
         runAsync {
-            val singleData: Single<List<Transaction>> = if (afterUrlChanged) {
-                queryAsSingle<Transaction> {
-                    `in`("transactionTypeId", arrayOf(Constants.ID_MASS_SPAM_RECEIVE_TYPE, Constants.ID_SPAM_RECEIVE_TYPE,
-                            Constants.ID_RECEIVED_TYPE, Constants.ID_MASS_RECEIVE_TYPE))
+            val singleData: Single<List<TransactionDb>> = if (afterUrlChanged) {
+                queryAsSingle {
+                    `in`("transactionTypeId", arrayOf(
+                            Constants.ID_MASS_SPAM_RECEIVE_TYPE,
+                            Constants.ID_SPAM_RECEIVE_TYPE,
+                            Constants.ID_RECEIVED_TYPE,
+                            Constants.ID_MASS_RECEIVE_TYPE))
                 }
             } else {
                 if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
-                    queryAsSingle<Transaction> {
-                        `in`("transactionTypeId", arrayOf(Constants.ID_RECEIVED_TYPE, Constants.ID_MASS_RECEIVE_TYPE))
+                    queryAsSingle {
+                        `in`("transactionTypeId", arrayOf(
+                                Constants.ID_RECEIVED_TYPE,
+                                Constants.ID_MASS_RECEIVE_TYPE))
                     }
                 } else {
-                    queryAsSingle<Transaction> {
-                        `in`("transactionTypeId", arrayOf(Constants.ID_MASS_SPAM_RECEIVE_TYPE, Constants.ID_SPAM_RECEIVE_TYPE))
+                    queryAsSingle {
+                        `in`("transactionTypeId", arrayOf(
+                                Constants.ID_MASS_SPAM_RECEIVE_TYPE,
+                                Constants.ID_SPAM_RECEIVE_TYPE))
                     }
                 }
             }
 
             addSubscription(Observable.zip(
                     singleData.toObservable(),
-                    queryAllAsSingle<SpamAsset>().toObservable()
+                    queryAllAsSingle<SpamAssetDb>().toObservable()
                             .map { spamListFromDb ->
                                 if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
                                     return@map spamListFromDb
                                 } else {
-                                    return@map listOf<SpamAsset>()
+                                    return@map listOf<SpamAssetDb>()
                                 }
                             },
-                    queryAllAsSingle<AssetInfo>().toObservable(),
-                    Function3 { t1: List<Transaction>, t2: List<SpamAsset>, t3: List<AssetInfo> ->
+                    queryAllAsSingle<AssetInfoDb>().toObservable(),
+                    Function3 { t1: List<TransactionDb>, t2: List<SpamAssetDb>, t3: List<AssetInfoDb> ->
                         return@Function3 Triple(t1, t2, t3)
                     })
                     .subscribe { pairOfData ->
@@ -75,11 +83,11 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
 
                         transactionListFromDb.forEach { transaction ->
                             transaction.asset = if (transaction.assetId.isNullOrEmpty()) {
-                                Constants.wavesAssetInfo
+                                AssetInfoDb(Constants.wavesAssetInfo)
                             } else {
                                 assetsInfoListFromDb.firstOrNull { it.id == transaction.assetId }
                             }
-                            transaction.transactionTypeId = transactionUtil.getTransactionType(transaction)
+                            transaction.transactionTypeId = TransactionUtil.getTransactionType(transaction.convertFromDb())
                         }
 
                         transactionListFromDb.saveAll()

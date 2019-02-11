@@ -16,6 +16,7 @@ import com.wavesplatform.sdk.model.request.TransferTransactionRequest
 import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.sdk.utils.TransactionUtil.Companion.countCommission
 import com.wavesplatform.sdk.utils.isValidAddress
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.isSpamConsidered
@@ -142,9 +143,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             tx.amount + tx.fee <= selectedAsset!!.getAvailableBalance()
         } else {
             tx.amount <= selectedAsset!!.getAvailableBalance()
-                    && tx.fee <= queryFirst<AssetBalance> {
+                    && tx.fee <= queryFirst<AssetBalanceDb> {
                 equalTo("assetId", "")
-            }?.getAvailableBalance() ?: 0
+            }?.convertFromDb()?.getAvailableBalance() ?: 0
         }
     }
 

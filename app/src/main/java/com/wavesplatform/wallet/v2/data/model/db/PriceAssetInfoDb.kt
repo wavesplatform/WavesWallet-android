@@ -8,5 +8,5 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @RealmClass(name = "PriceAssetInfo")
-data class PriceAssetInfoDb(@SerializedName("decimals") var decimals: Int = 0
+open class PriceAssetInfoDb(@SerializedName("decimals") var decimals: Int = 0
 ) : RealmModel, Parcelable

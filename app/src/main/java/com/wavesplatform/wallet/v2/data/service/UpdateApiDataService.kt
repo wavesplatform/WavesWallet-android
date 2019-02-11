@@ -10,6 +10,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.database.TransactionSaver
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.RxUtil
@@ -41,7 +42,7 @@ class UpdateApiDataService : Service() {
             return Service.START_NOT_STICKY
         }
 
-        val transaction = queryFirst<Transaction>()
+        val transaction = queryFirst<TransactionDb>()
         if (transaction == null) {
             transactionLimit = TransactionSaver.MAX_LIMIT
         }

@@ -10,6 +10,7 @@ import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.sdk.utils.TransactionUtil
+import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -24,11 +25,11 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
     fun loadAliases(callback: (List<Alias>) -> Unit) {
         runAsync {
             addSubscription(
-                    queryAllAsSingle<Alias>().toObservable()
+                    queryAllAsSingle<AliasDb>().toObservable()
                             .compose(RxUtil.applyObservableDefaultSchedulers())
                             .subscribe { aliases ->
                                 val ownAliases = aliases.filter { it.own }.toMutableList()
-                                runOnUiThread { callback.invoke(ownAliases) }
+                                runOnUiThread { callback.invoke(AliasDb.convertFromDb(ownAliases)) }
                             })
         }
     }

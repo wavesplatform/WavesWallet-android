@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.ui.home.profile.address_book
+package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -8,8 +8,8 @@ import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@RealmClass
-open class AddressBookUser(
+@RealmClass(name = "AddressBookUser")
+open class AddressBookUserDb(
         @PrimaryKey
         @SerializedName("address") var address: String = "",
         @SerializedName("name") var name: String = ""

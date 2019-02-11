@@ -15,7 +15,7 @@ import com.wavesplatform.wallet.v2.ui.auth.choose_account.edit.EditAccountNameAc
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
+import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
@@ -54,7 +54,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         adapter.chooseAccountOnClickListener = this
     }
 
-    override fun afterSuccessGetAddress(list: ArrayList<AddressBookUser>) {
+    override fun afterSuccessGetAddress(list: ArrayList<AddressBookUserDb>) {
         adapter.setNewData(list)
         adapter.emptyView = getEmptyView()
     }
@@ -65,7 +65,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         return view
     }
 
-    override fun onItemClicked(item: AddressBookUser) {
+    override fun onItemClicked(item: AddressBookUserDb) {
         val guid = App.getAccessManager().findGuidBy(item.address)
         launchActivity<EnterPassCodeActivity>(
                 requestCode = EnterPassCodeActivity.REQUEST_ENTER_PASS_CODE) {
@@ -75,7 +75,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onEditClicked(position: Int) {
-        val item = adapter.getItem(position) as AddressBookUser
+        val item = adapter.getItem(position) as AddressBookUserDb
         launchActivity<EditAccountNameActivity>(REQUEST_EDIT_ACCOUNT_NAME) {
             putExtra(KEY_INTENT_ITEM_ADDRESS, item)
             putExtra(KEY_INTENT_ITEM_POSITION, position)
@@ -83,7 +83,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     override fun onDeleteClicked(position: Int) {
-        val item = adapter.getItem(position) as AddressBookUser
+        val item = adapter.getItem(position) as AddressBookUserDb
         val guid = App.getAccessManager().findGuidBy(item.address)
 
         val alertDialog = AlertDialog.Builder(this).create()
@@ -114,7 +114,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         when (requestCode) {
             REQUEST_EDIT_ACCOUNT_NAME -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    val item = data?.getParcelableExtra<AddressBookUser>(KEY_INTENT_ITEM_ADDRESS)
+                    val item = data?.getParcelableExtra<AddressBookUserDb>(KEY_INTENT_ITEM_ADDRESS)
                     val position = data?.getIntExtra(KEY_INTENT_ITEM_POSITION, 0)
                     item.notNull {
                         adapter.setData(position!!, it)

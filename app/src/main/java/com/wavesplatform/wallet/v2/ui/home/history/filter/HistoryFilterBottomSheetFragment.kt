@@ -11,6 +11,7 @@ import android.widget.CheckBox
 import com.vicpin.krealmextensions.queryAllAsync
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.history.filter.adapter.AssetsAdapter
 import com.wavesplatform.wallet.v2.ui.home.history.filter.adapter.TransferAdapter
@@ -80,8 +81,8 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
         recycleAssets?.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         recycleAssets?.adapter = assetsAdapter
 
-        queryAllAsync<AssetBalance> {
-            assetsAdapter.setNewData(it)
+        queryAllAsync<AssetBalanceDb> {
+            assetsAdapter.setNewData(AssetBalanceDb.convertFromDb(it))
         }
 
         assetsAdapter.setOnItemClickListener { adapter, view, position ->

@@ -25,15 +25,17 @@ open class AssetInfoDb(
         var isSpam: Boolean = false
 ) : Parcelable, RealmModel {
 
+        constructor(assetInfo: AssetInfo) : this() {
+//
+        }
+
         fun convertFromDb(): AssetInfo {
                 return AssetInfo()
         }
 
         companion object {
 
-                fun convertToDb(assetInfo: AssetInfo): AssetInfoDb {
-                        return AssetInfoDb()
-                }
+
 
                 fun convertToDb(assetInfo: List<AssetInfo>): List<AssetInfoDb> {
                         return listOf()

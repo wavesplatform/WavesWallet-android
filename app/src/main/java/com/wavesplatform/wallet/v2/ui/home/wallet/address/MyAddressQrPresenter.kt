@@ -9,6 +9,7 @@ import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.wallet.v2.util.zxing.Contents
 import com.wavesplatform.wallet.v2.util.zxing.encode.QRCodeEncoder
 import com.wavesplatform.sdk.model.response.Alias
+import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.RxUtil
@@ -61,11 +62,12 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
     fun loadAliases() {
         runAsync {
             addSubscription(
-                    queryAllAsSingle<Alias>().toObservable()
+                    queryAllAsSingle<AliasDb>().toObservable()
                             .observeOn(AndroidSchedulers.mainThread())
                             .map { aliases ->
                                 val ownAliases = aliases.filter { it.own }
-                                runOnUiThread { viewState.afterSuccessLoadAliases(ownAliases) }
+                                runOnUiThread { viewState.afterSuccessLoadAliases(
+                                        AliasDb.convertFromDb(ownAliases)) }
                             }
                             .observeOn(Schedulers.io())
                             .flatMap {

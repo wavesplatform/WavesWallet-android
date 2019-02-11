@@ -2,8 +2,7 @@ package com.wavesplatform.wallet.v2.data.rules
 
 import android.support.annotation.StringRes
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
+import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 
 import io.github.anderscheow.validator.rules.BaseRule
 
@@ -21,7 +20,7 @@ class AddressBookAddressRule : BaseRule {
         }
 
         if (value is String) {
-            val user = queryFirst<AddressBookUser> { equalTo("address", value) }
+            val user = queryFirst<AddressBookUserDb> { equalTo("address", value) }
             return user == null
         }
 

@@ -12,9 +12,9 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.sdk.model.response.TransactionType
+import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import kotlinx.android.synthetic.main.assets_detailed_history_item.view.*
 import pers.victor.ext.*
 
@@ -68,7 +68,7 @@ class HistoryTransactionPagerAdapter constructor(
                 TransactionType.MASS_SPAM_RECEIVE_TYPE,
                 TransactionType.MASS_RECEIVE_TYPE,
                 TransactionType.MASS_SEND_TYPE -> {
-                    layout.text_transaction_value.text = getTransactionAmount(
+                    layout.text_transaction_value.text = TransactionUtil.getTransactionAmount(
                             transaction = item.data, round = false)
                 }
                 TransactionType.CREATE_ALIAS_TYPE -> {

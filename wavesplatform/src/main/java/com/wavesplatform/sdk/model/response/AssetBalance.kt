@@ -69,10 +69,10 @@ open class AssetBalance(
                 this)
     }
 
-    fun getAvailableBalance(): Long? {
+    fun getAvailableBalance(): Long {
         return balance
                 ?.minus(inOrderBalance ?: 0)
-                ?.minus(leasedBalance ?: 0)
+                ?.minus(leasedBalance ?: 0) ?: 0
     }
 
     fun isAssetId(assetId: String): Boolean {

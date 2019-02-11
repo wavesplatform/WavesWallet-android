@@ -8,8 +8,10 @@ import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.v2.data.model.local.ChartModel
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.sdk.model.WatchMarket
+import com.wavesplatform.wallet.v2.data.model.db.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,7 +33,9 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
         set(value) {
             field = value
             watchMarket?.market?.currentTimeFrame = value
-            watchMarket?.market?.save()
+            watchMarket?.market.notNull {
+                MarketResponseDb(it).save()
+            }
         }
     var prevToDate: Long = 0
     private var timer: Timer? = null

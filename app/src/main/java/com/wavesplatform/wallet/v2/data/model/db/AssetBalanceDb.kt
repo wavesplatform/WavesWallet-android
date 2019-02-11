@@ -33,22 +33,22 @@ open class AssetBalanceDb(
         var isSpam: Boolean = false
 ) : RealmModel, Parcelable {
 
+        constructor(assetBalance: AssetBalance) : this() {
+                //
+        }
+
         fun convertFromDb(): AssetBalance {
                 return AssetBalance()
         }
 
         companion object {
 
-                fun convertToDb(assetBalance: AssetBalance): AssetBalanceDb {
-                        return AssetBalanceDb()
+                fun convertToDb(assetBalances: List<AssetBalance>): MutableList<AssetBalanceDb> {
+                        return mutableListOf()
                 }
 
-                fun convertToDb(assetBalances: List<AssetBalance>): List<SpamAssetDb> {
-                        return listOf()
-                }
-
-                fun convertFromDb(assetBalances: List<AssetBalanceDb>): List<AssetBalance> {
-                        return listOf()
+                fun convertFromDb(assetBalances: List<AssetBalanceDb>): MutableList<AssetBalance> {
+                        return mutableListOf()
                 }
         }
 }

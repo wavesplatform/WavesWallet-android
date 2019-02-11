@@ -5,6 +5,7 @@ import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Single
@@ -23,8 +24,8 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
     fun loadAssets(greaterZeroBalance: Boolean) {
         this.greaterZeroBalance = greaterZeroBalance
         runAsync {
-            val favorite: Single<List<AssetBalance>>
-            val notFavorite: Single<List<AssetBalance>>
+            val favorite: Single<List<AssetBalanceDb>>
+            val notFavorite: Single<List<AssetBalanceDb>>
             if (this.greaterZeroBalance) {
                 favorite = queryAsSingle {
                     equalTo("isFavorite", true)
@@ -40,12 +41,12 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
             }
 
             Single.zip(favorite, notFavorite,
-                    BiFunction<List<AssetBalance>, List<AssetBalance>, Pair<List<AssetBalance>,
-                            List<AssetBalance>>> { t1, t2 ->
+                    BiFunction<List<AssetBalanceDb>, List<AssetBalanceDb>, Pair<List<AssetBalanceDb>,
+                            List<AssetBalanceDb>>> { t1, t2 ->
                         return@BiFunction Pair(t1, t2)
                     }).compose(RxUtil.applySingleDefaultSchedulers())
                     .subscribe({
-                        val assets = mutableListOf<AssetBalance>()
+                        val assets = mutableListOf<AssetBalanceDb>()
                         assets.addAll(it.first)
                         assets.addAll(it.second)
 
@@ -55,7 +56,7 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
                             assets
                         }
                         runOnUiThread {
-                            viewState.showAssets(filteredSpamAssets)
+                            viewState.showAssets(AssetBalanceDb.convertFromDb(filteredSpamAssets))
                         }
                     }, {
                         it.printStackTrace()
@@ -66,7 +67,7 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
     fun loadCryptoAssets(greaterZeroBalance: Boolean) {
         this.greaterZeroBalance = greaterZeroBalance
         runAsync {
-            val singleData: Single<List<AssetBalance>> = if (this.greaterZeroBalance) {
+            val singleData: Single<List<AssetBalanceDb>> = if (this.greaterZeroBalance) {
                 queryAsSingle {
                     greaterThan("balance", 0)
                             .`in`("assetId", Constants.defaultCrypto)
@@ -84,10 +85,10 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        val assets = mutableListOf<AssetBalance>()
+                        val assets = mutableListOf<AssetBalanceDb>()
                         assets.addAll(it)
                         runOnUiThread {
-                            viewState.showAssets(assets)
+                            viewState.showAssets(AssetBalanceDb.convertFromDb(assets))
                         }
                     }, {
 

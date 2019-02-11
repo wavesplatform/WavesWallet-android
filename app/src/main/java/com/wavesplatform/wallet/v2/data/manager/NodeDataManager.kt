@@ -163,7 +163,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     currentWaves.balance = totalBalance
                     currentWaves.leasedBalance = leasedBalance
                     currentWaves.inOrderBalance = inOrderBalance
-                    AssetBalanceDb.convertToDb(currentWaves).save()
+                    AssetBalanceDb(currentWaves).save()
                     return@Function3 currentWaves
                 })
     }

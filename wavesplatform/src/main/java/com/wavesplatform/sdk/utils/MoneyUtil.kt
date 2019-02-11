@@ -96,9 +96,8 @@ class MoneyUtil private constructor() {
             return get().wavesFormat.format(BigDecimal.valueOf(amount, 8))
         }
 
-        fun getUnscaledValue(
-                amount: String, ab: AssetBalance): Long {
-            return getUnscaledValue(amount, ab.getDecimals())
+        fun getUnscaledValue(amount: String, ab: AssetBalance?): Long {
+            return getUnscaledValue(amount, ab?.getDecimals() ?: 8)
         }
 
         fun getUnscaledValue(amount: String?, decimals: Int): Long {

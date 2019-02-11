@@ -13,7 +13,6 @@ import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.sdk.model.response.TransactionType
 import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.sdk.utils.TransactionUtil.Companion.getTransactionAmount
 import kotlinx.android.synthetic.main.history_details_layout.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
@@ -55,7 +54,7 @@ class HistoryDetailsAdapter @Inject constructor() : PagerAdapter() {
                 TransactionType.MASS_SPAM_RECEIVE_TYPE,
                 TransactionType.MASS_RECEIVE_TYPE,
                 TransactionType.MASS_SEND_TYPE -> {
-                    layout.text_title.text = getTransactionAmount(
+                    layout.text_title.text = TransactionUtil.getTransactionAmount(
                             transaction = transaction, round = false)
                 }
                 TransactionType.CREATE_ALIAS_TYPE -> {

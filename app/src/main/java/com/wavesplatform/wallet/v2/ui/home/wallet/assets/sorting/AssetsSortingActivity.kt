@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
@@ -86,7 +87,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                                 this.adapter.addData(linePosition, globalItem)
 
                                 // Save to DB
-                                asset.save()
+                                AssetBalanceDb(asset).save()
                             }
                         }
                         AssetSortingItem.TYPE_NOT_FAVORITE -> {
@@ -103,7 +104,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             this.adapter.addData(linePosition, globalItem)
 
                             // Save to DB
-                            asset.save()
+                            AssetBalanceDb(asset).save()
                         }
                     }
                 }
@@ -115,7 +116,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             override fun onHiddenStateChanged(item: AssetBalance, checked: Boolean) {
                 presenter.needToUpdate = true
                 item.isHidden = !checked
-                item.save()
+                AssetBalanceDb(item).save()
             }
         }
 

@@ -26,7 +26,7 @@ object Base58 {
 
     fun encode(input: ByteArray): String {
         var input = input
-        if (input.size == 0) {
+        if (input.isEmpty()) {
             // paying with the same coin
             return ""
         }

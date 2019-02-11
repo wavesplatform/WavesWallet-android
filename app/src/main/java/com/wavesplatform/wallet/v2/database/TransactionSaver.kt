@@ -11,6 +11,9 @@ import com.wavesplatform.sdk.model.response.AssetInfo
 import com.wavesplatform.sdk.model.response.SpamAsset
 import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.sdk.model.response.TransactionType
+import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
+import com.wavesplatform.wallet.v2.data.model.db.TransferDb
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -26,8 +29,6 @@ class TransactionSaver @Inject constructor() {
     lateinit var nodeDataManager: NodeDataManager
     @Inject
     lateinit var apiDataManager: ApiDataManager
-    @Inject
-    lateinit var transactionUtil: TransactionUtil
     private var allAssets = arrayListOf<AssetInfo>()
     private var subscriptions: CompositeDisposable = CompositeDisposable()
     private var currentLimit = DEFAULT_LIMIT
@@ -45,7 +46,7 @@ class TransactionSaver @Inject constructor() {
 
         runAsync {
             // check if exist last transaction
-            queryAsync<Transaction>({ equalTo("id", sortedList[sortedList.size - 1].id) },
+            queryAsync<TransactionDb>({ equalTo("id", sortedList[sortedList.size - 1].id) },
                     {
                         if (it.isEmpty()) {
                             // all list is new, need load more
@@ -77,7 +78,7 @@ class TransactionSaver @Inject constructor() {
 
                         } else {
                             // check if exist first transaction
-                            queryAsync<Transaction>({ equalTo("id", sortedList[0].id) },
+                            queryAsync<TransactionDb>({ equalTo("id", sortedList[0].id) },
                                     {
                                         if (it.isEmpty()) {
                                             // only few new transaction
@@ -131,8 +132,8 @@ class TransactionSaver @Inject constructor() {
                                             .compose(RxUtil.applyObservableDefaultSchedulers())
                                             .subscribe {
                                                 trans.recipientAddress = it.address
-                                                trans.transactionTypeId = transactionUtil.getTransactionType(trans)
-                                                trans.save()
+                                                trans.transactionTypeId = TransactionUtil.getTransactionType(trans)
+                                                TransactionDb(trans).save()
                                             })
                                 }
                             } else {
@@ -147,7 +148,7 @@ class TransactionSaver @Inject constructor() {
                                                 .compose(RxUtil.applyObservableDefaultSchedulers())
                                                 .subscribe {
                                                     trans.recipientAddress = it.address
-                                                    trans.save()
+                                                    TransferDb(trans).save()
                                                 })
                                     }
                                 } else {
@@ -177,7 +178,7 @@ class TransactionSaver @Inject constructor() {
                                     it.assetPair?.priceAssetObject = priceAsset
                                 }
                             }
-                            trans.transactionTypeId = transactionUtil.getTransactionType(trans)
+                            trans.transactionTypeId = TransactionUtil.getTransactionType(trans)
                         }
 
                         if (needCheckToUpdateBalance) {
@@ -197,7 +198,7 @@ class TransactionSaver @Inject constructor() {
                                 .filter { it.transactionType() == TransactionType.CANCELED_LEASING_TYPE }
                         if (canceledLeasingTransactions.isNotEmpty()) {
                             canceledLeasingTransactions.forEach {
-                                val first = queryFirst<Transaction> { equalTo("id", it.leaseId) }
+                                val first = queryFirst<TransactionDb> { equalTo("id", it.leaseId) }
                                 if (first?.status != LeasingStatus.CANCELED.status) {
                                     first?.status = LeasingStatus.CANCELED.status
                                     first?.save()
@@ -205,7 +206,7 @@ class TransactionSaver @Inject constructor() {
                             }
                         }
 
-                        transactions.saveAll()
+                        TransactionDb.convertToDb(transactions).saveAll()
                         runOnUiThread {
                             rxEventBus.post(Events.NeedUpdateHistoryScreen())
                         }
@@ -216,7 +217,7 @@ class TransactionSaver @Inject constructor() {
 
     private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfo>, callback: (ArrayList<AssetInfo>) -> Unit) {
         runAsync {
-            queryAllAsync<SpamAsset> { spams ->
+            queryAllAsync<SpamAssetDb> { spams ->
                 arrayList.forEach { newAsset ->
                     if (!allAssets.any { it.id == newAsset.id }) {
                         if (spams.any { it.assetId == newAsset.id }) {

@@ -67,7 +67,7 @@ open class TransactionDb(
         @SerializedName("transfers")
         var transfers: RealmList<TransferDb> = RealmList(),
         @SerializedName("data")
-        var data: RealmList<Data> = RealmList(),
+        var data: RealmList<DataDb> = RealmList(),
         @SerializedName("isPending")
         var isPending: Boolean = false,
         @SerializedName("script")
@@ -78,15 +78,22 @@ open class TransactionDb(
         var asset: AssetInfoDb? = AssetInfoDb()
 ) : RealmModel {
 
+    constructor(transaction: Transaction) : this() {
+        //
+    }
+
     fun convertFromDb(): Transaction {
         return Transaction()
     }
 
     companion object {
 
-        fun convertToDb(transaction: Transaction): TransactionDb {
-            return TransactionDb()
+        fun convertToDb(transactions: List<Transaction>): List<TransactionDb> {
+            return listOf()
         }
 
+        fun convertFromDb(transactions: List<TransactionDb>): List<Transaction> {
+            return listOf()
+        }
     }
 }

@@ -4,6 +4,8 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import com.wavesplatform.wallet.v2.util.RxUtil
@@ -22,9 +24,9 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
 
     fun loadAssets(itemType: Int) {
         runAsync {
-            addSubscription(Single.zip(queryAllAsSingle<AssetBalance>(), queryAllAsSingle<Transaction>(),
-                    BiFunction { assets: List<AssetBalance>, transactions: List<Transaction> ->
-                        allTransaction = transactions
+            addSubscription(Single.zip(queryAllAsSingle(), queryAllAsSingle(),
+                    BiFunction { assets: List<AssetBalanceDb>, transactions: List<TransactionDb> ->
+                        allTransaction = TransactionDb.convertFromDb(transactions)
                         return@BiFunction assets
                     })
                     .map {
@@ -46,7 +48,7 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
                     .compose(RxUtil.applySingleDefaultSchedulers())
                     .subscribe({ it ->
                         runOnUiThread {
-                            viewState.afterSuccessLoadAssets(it)
+                            viewState.afterSuccessLoadAssets(AssetBalanceDb.convertFromDb(it))
                         }
                     }, {
                         it.printStackTrace()

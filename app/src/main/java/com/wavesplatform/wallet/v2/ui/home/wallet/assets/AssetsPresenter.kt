@@ -11,6 +11,8 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.SpamAsset
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Observable
@@ -28,15 +30,15 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
         viewState.startServiceToLoadData()
         runAsync {
-            var dbAssets = mutableListOf<AssetBalance>()
-            addSubscription(queryAllAsSingle<AssetBalance>().toObservable()
+            var dbAssets = mutableListOf<AssetBalanceDb>()
+            addSubscription(queryAllAsSingle<AssetBalanceDb>().toObservable()
                     .subscribeOn(Schedulers.io())
                     .map {
                         dbAssets = it.toMutableList()
                         return@map createTripleSortedLists(it.toMutableList())
                     }
                     .doOnNext { postSuccess(it, withApiUpdate, true) }
-                    .flatMap { tryUpdateWithApi(withApiUpdate, dbAssets) }
+                    .flatMap { tryUpdateWithApi(withApiUpdate, AssetBalanceDb.convertFromDb(dbAssets)) }
                     .map {
                         // update settings of spam list and send event to update
                         if (prefsUtil.getValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)) {
@@ -45,7 +47,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)
                         return@map it
                     }
-                    .map { createTripleSortedLists(it.toMutableList()) }
+                    .map { createTripleSortedLists(AssetBalanceDb.convertToDb(it)) }
                     .subscribe({
                         postSuccess(it, withApiUpdate, false)
                     }, {
@@ -60,16 +62,16 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     fun reloadAssetsAfterSpamFilterStateChanged() {
         runAsync {
             addSubscription(Observable.zip(
-                    queryAllAsSingle<AssetBalance>().toObservable(),
-                    queryAllAsSingle<SpamAsset>().toObservable()
+                    queryAllAsSingle<AssetBalanceDb>().toObservable(),
+                    queryAllAsSingle<SpamAssetDb>().toObservable()
                             .map { spamListFromDb ->
                                 if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, false)) {
                                     return@map spamListFromDb
                                 } else {
-                                    return@map listOf<SpamAsset>()
+                                    return@map listOf<SpamAssetDb>()
                                 }
                             },
-                    BiFunction { t1: List<AssetBalance>, t2: List<SpamAsset> ->
+                    BiFunction { t1: List<AssetBalanceDb>, t2: List<SpamAssetDb> ->
                         return@BiFunction Pair(t1, t2)
                     })
                     .map { pairOfData ->
@@ -105,9 +107,9 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
             addSubscription(nodeDataManager.loadSpamAssets()
                     .flatMap { newSpamAssets ->
                         Observable.zip(
-                                queryAllAsSingle<AssetBalance>().toObservable(),
-                                Observable.just(newSpamAssets),
-                                BiFunction { t1: List<AssetBalance>, t2: List<SpamAsset> ->
+                                queryAllAsSingle<AssetBalanceDb>().toObservable(),
+                                Observable.just(SpamAssetDb.convertToDb(newSpamAssets)),
+                                BiFunction { t1: List<AssetBalanceDb>, t2: List<SpamAssetDb> ->
                                     return@BiFunction Pair(t1, t2)
                                 })
                     }
@@ -154,20 +156,20 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
     }
 
-    private fun postSuccess(it: Triple<MutableList<AssetBalance>, MutableList<AssetBalance>, MutableList<AssetBalance>>,
+    private fun postSuccess(it: Triple<MutableList<AssetBalanceDb>, MutableList<AssetBalanceDb>, MutableList<AssetBalanceDb>>,
                             withApiUpdate: Boolean,
                             fromDb: Boolean) {
         val listToShow = arrayListOf<MultiItemEntity>()
 
         // add all main assets
-        listToShow.addAll(it.first)
+        listToShow.addAll(it.first) // todo impl MultiItemEntity
 
         // check if hidden assets exists and create section with them
         if (it.second.isNotEmpty()) {
             val hiddenSection = WalletSectionItem(app.getString(R.string.wallet_assets_hidden_category,
                     it.second.size.toString()))
             it.second.forEach {
-                hiddenSection.addSubItem(it)
+                hiddenSection.addSubItem(it.convertFromDb())
             }
             listToShow.add(hiddenSection)
         }
@@ -177,7 +179,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
             val spamSection = WalletSectionItem(app.getString(R.string.wallet_assets_spam_category,
                     it.third.size.toString()))
             it.third.forEach {
-                spamSection.addSubItem(it)
+                spamSection.addSubItem(it.convertFromDb())
             }
             listToShow.add(spamSection)
         }
@@ -188,17 +190,28 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
     }
 
-    private fun createTripleSortedLists(list: MutableList<AssetBalance>): Triple<MutableList<AssetBalance>, MutableList<AssetBalance>, MutableList<AssetBalance>> {
-        val hiddenList = list.filter { it.isHidden && !it.isSpam }.sortedBy { it.position }.toMutableList()
-        val sortedToFirstFavoriteList = list.filter { !it.isHidden && !it.isSpam }.sortedByDescending({ it.isGateway }).sortedBy { it.position }.sortedByDescending({ it.isFavorite }).toMutableList()
-        val spamList = list.filter { it.isSpam }.toMutableList()
+    private fun createTripleSortedLists(list: MutableList<AssetBalanceDb>):
+            Triple<MutableList<AssetBalanceDb>, MutableList<AssetBalanceDb>,
+                    MutableList<AssetBalanceDb>> {
+        val hiddenList = list
+                .filter { it.isHidden && !it.isSpam }
+                .sortedBy { it.position }
+                .toMutableList()
+        val sortedToFirstFavoriteList = list
+                .asSequence()
+                .filter { !it.isHidden && !it.isSpam }
+                .sortedByDescending { it.isGateway }
+                .sortedBy { it.position }
+                .sortedByDescending { it.isFavorite }
+                .toMutableList()
+        val spamList = list.filter { it.isSpam }
+                .toMutableList()
         return Triple(sortedToFirstFavoriteList, hiddenList, spamList)
     }
 
     fun loadAliases() {
         addSubscription(apiDataManager.loadAliases()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe {
-                })
+                .subscribe {})
     }
 }

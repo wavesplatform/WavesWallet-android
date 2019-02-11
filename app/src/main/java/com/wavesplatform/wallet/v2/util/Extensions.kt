@@ -56,6 +56,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
@@ -737,5 +738,13 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 fun isShowTicker(assetId: String?): Boolean {
     return Constants.defaultAssets.any {
         it.assetId == assetId || assetId.isNullOrEmpty()
+    }
+}
+
+fun AssetBalance.getItemType(): Int {
+    return when {
+        isSpam -> AssetsAdapter.TYPE_SPAM_ASSET
+        isHidden -> AssetsAdapter.TYPE_HIDDEN_ASSET
+        else -> AssetsAdapter.TYPE_ASSET
     }
 }

@@ -7,6 +7,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -42,15 +43,15 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
 
     fun loadWaves() {
         runAsync {
-            val singleData: Single<List<AssetBalance>> = queryAsSingle { equalTo("assetId", "") }
+            val singleData: Single<List<AssetBalanceDb>> = queryAsSingle { equalTo("assetId", "") }
             addSubscription(singleData
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         if (it.size == 1) {
                             runOnUiThread {
-                                asset = it[0]
-                                viewState.showWaves(it[0])
+                                asset = it[0].convertFromDb()
+                                viewState.showWaves(asset)
                             }
                         }
                     }, {

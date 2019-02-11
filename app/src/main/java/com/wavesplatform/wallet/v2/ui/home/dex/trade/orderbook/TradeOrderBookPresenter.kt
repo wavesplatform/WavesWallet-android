@@ -7,6 +7,8 @@ import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.model.response.LastTradesResponse
 import com.wavesplatform.sdk.model.response.OrderBook
+import com.wavesplatform.wallet.v2.data.model.local.OrderBookAsk
+import com.wavesplatform.wallet.v2.data.model.local.OrderBookBid
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.clearBalance
@@ -70,8 +72,9 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
 
     }
 
-    private fun getCalculatedBids(list: List<OrderBook.Bid>): Collection<MultiItemEntity> {
+    private fun getCalculatedBids(list: List<OrderBook.Bid>): List<MultiItemEntity> {
         var sum = 0.0
+        val orderBookBids = mutableListOf<OrderBookBid>()
         list.forEach {
             val amountUIValue = MoneyUtil.getScaledText(it.amount, watchMarket?.market?.amountAssetDecimals
                     ?: 0).stripZeros()
@@ -79,12 +82,14 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                     ?: 0, watchMarket?.market?.priceAssetDecimals ?: 0).stripZeros()
             sum += amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
             it.sum = sum
+            orderBookBids.add(it as OrderBookBid)
         }
-        return list
+        return orderBookBids
     }
 
-    private fun getCalculatedAsks(list: List<OrderBook.Ask>): List<OrderBook.Ask> {
+    private fun getCalculatedAsks(list: List<OrderBook.Ask>): List<MultiItemEntity> {
         var sum = 0.0
+        val orderBookAsks = mutableListOf<OrderBookAsk>()
         list.forEach {
             val amountUIValue = MoneyUtil.getScaledText(it.amount, watchMarket?.market?.amountAssetDecimals
                     ?: 0).stripZeros()
@@ -92,8 +97,9 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                     ?: 0, watchMarket?.market?.priceAssetDecimals ?: 0).stripZeros()
             sum += amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
             it.sum = sum
+            orderBookAsks.add(it as OrderBookAsk)
         }
-        return list
+        return orderBookAsks
     }
 
     override fun onDestroy() {

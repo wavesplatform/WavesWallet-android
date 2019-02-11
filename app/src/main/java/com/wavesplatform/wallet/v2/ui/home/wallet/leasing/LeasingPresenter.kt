@@ -7,6 +7,8 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -19,20 +21,20 @@ class LeasingPresenter @Inject constructor() : BasePresenter<LeasingView>() {
     fun getActiveLeasing() {
         runAsync {
             addSubscription(Observable.zip(nodeDataManager.loadWavesBalance(),
-                    queryAsSingle<Transaction> {
+                    queryAsSingle<TransactionDb> {
                         equalTo("status", LeasingStatus.ACTIVE.status)
                                 .and()
                                 .equalTo("transactionTypeId", Constants.ID_STARTED_LEASING_TYPE)
                     }.map {
                         return@map ArrayList(it.sortedByDescending { it.timestamp })
                     }.toObservable(),
-                    BiFunction { t1: AssetBalance, t2: List<Transaction> ->
+                    BiFunction { t1: AssetBalance, t2: List<TransactionDb> ->
                         return@BiFunction Pair(t1, t2)
                     })
                     .compose(RxUtil.applySchedulersToObservable())
                     .subscribe({
                         viewState.showBalances(it.first)
-                        viewState.showActiveLeasingTransaction(it.second)
+                        viewState.showActiveLeasingTransaction(TransactionDb.convertFromDb(it.second))
                     },{
                         it.printStackTrace()
                         viewState.afterFailedLoadLeasing()
