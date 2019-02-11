@@ -7,7 +7,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook.TradeOrderBookAda
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class OrderBookAsk : OrderBook.Ask(), MultiItemEntity, Parcelable {
+class OrderBookAskMultiItemEntity : OrderBook.Ask(), MultiItemEntity, Parcelable {
 
     override fun getItemType(): Int {
         return TradeOrderBookAdapter.ASK_TYPE

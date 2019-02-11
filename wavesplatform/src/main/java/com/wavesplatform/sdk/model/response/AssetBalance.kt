@@ -7,8 +7,7 @@ import com.wavesplatform.sdk.utils.MoneyUtil
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
-
-data class AssetBalances(
+class AssetBalances(
         @SerializedName("address") var address: String? = null,
         @SerializedName("balances") var balances: List<AssetBalance> = ArrayList()
 )

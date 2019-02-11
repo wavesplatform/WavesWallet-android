@@ -13,6 +13,7 @@ import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.SpamAsset
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Observable
@@ -162,7 +163,11 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         val listToShow = arrayListOf<MultiItemEntity>()
 
         // add all main assets
-        listToShow.addAll(it.first) // todo impl MultiItemEntity
+        val assetBalances = mutableListOf<AssetBalanceMultiItemEntity>()
+        it.first.forEach {
+            assetBalances.add(it as AssetBalanceMultiItemEntity)
+        }
+        listToShow.addAll(assetBalances)
 
         // check if hidden assets exists and create section with them
         if (it.second.isNotEmpty()) {
