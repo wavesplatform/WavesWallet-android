@@ -6,13 +6,13 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
-import android.util.Log
-import android.view.*
-import android.widget.FrameLayout
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -22,42 +22,33 @@ import com.google.gson.Gson
 import com.jakewharton.rxbinding2.view.RxView
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.wallet.v1.crypto.Base58
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.sdk.model.response.TransactionType
 import com.wavesplatform.sdk.model.response.Transfer
 import com.wavesplatform.sdk.service.CoinomatService
+import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.sdk.utils.clearAlias
+import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
-import com.wavesplatform.wallet.v2.data.remote.CoinomatService
-import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
 import com.wavesplatform.wallet.v2.ui.custom.SpamTag
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
-import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
@@ -160,7 +151,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 TransactionType.MASS_SPAM_RECEIVE_TYPE,
                 TransactionType.MASS_RECEIVE_TYPE,
                 TransactionType.MASS_SEND_TYPE -> {
-                    view.text_transaction_value.text = getTransactionAmount(
+                    view.text_transaction_value.text = TransactionUtil.getTransactionAmount(
                             transaction = transaction, decimals = decimals)
                 }
                 TransactionType.CREATE_ALIAS_TYPE -> {
@@ -833,7 +824,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                     && !transaction.recipientAddress.equals(CoinomatService.GATEWAY_ADDRESS))
 
     private fun resolveExistOrNoAddress(textViewName: TextView?, textViewAddress: TextView?, textAddressAction: AppCompatTextView?) {
-        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
+        val addressBookUser = queryFirst<AddressBookUserDb> { equalTo("address", textViewAddress?.text.toString()) }
 
         makeAddressActionViewClickableStyled(textAddressAction)
 
@@ -886,7 +877,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
     }
 
     private fun resolveExistOrNoAddressForMassSend(textViewName: TextView?, textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
-        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
+        val addressBookUser = queryFirst<AddressBookUserDb> { equalTo("address", textViewAddress?.text.toString()) }
 
         makeAddressActionViewClickableStyled(imageAddressAction)
 

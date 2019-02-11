@@ -13,11 +13,10 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
+import com.wavesplatform.sdk.model.response.AssetInfo;
 import com.wavesplatform.wallet.R;
 import com.wavesplatform.wallet.v2.data.Constants;
 import com.wavesplatform.sdk.model.response.AssetBalance;
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo;
 
 
 public class MaterialLetterIcon extends RoundedImageViewWithBorder {

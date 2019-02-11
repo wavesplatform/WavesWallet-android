@@ -1,28 +1,11 @@
 package com.wavesplatform.sdk.model.response
 
-import com.google.common.base.Optional
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.sdk.utils.clearAlias
-import com.wavesplatform.sdk.utils.findMyOrder
-import com.wavesplatform.sdk.utils.stripZeros
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.crypto.Base58
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.util.clearAlias
-import com.wavesplatform.wallet.v2.util.findMyOrder
-import com.wavesplatform.wallet.v2.util.stripZeros
-import com.wavesplatform.wallet.v2.util.transactionType
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
-import org.apache.commons.lang3.ArrayUtils
+import com.wavesplatform.sdk.model.OrderType
+import com.wavesplatform.sdk.utils.*
 import pers.victor.ext.date
 import java.math.BigInteger
 
@@ -55,7 +38,7 @@ open class Order(
         @SerializedName("expiration") var expiration: Long = 0,
         @SerializedName("matcherFee") var matcherFee: Long = 0,
         @SerializedName("signature") var signature: String = ""
-) : RealmModel {
+) {
 
     fun getType(): OrderType {
         return when (orderType) {
@@ -216,7 +199,7 @@ open class Transaction(
                             if (findMyOrder(transaction.order1!!,
                                             transaction.order2!!,
                                             Wavesplatform.get().getWallet().address!!)
-                                                    .orderType == Constants.SELL_ORDER_TYPE) {
+                                            .orderType == Constants.SELL_ORDER_TYPE) {
                                 "-${Constants.SELL_ORDER_TYPE})\n"
                             } else {
                                 "-${Constants.BUY_ORDER_TYPE})\n"

@@ -4,9 +4,9 @@ import com.vicpin.krealmextensions.RealmConfigStore
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.database.DBHelper
+import com.wavesplatform.wallet.v2.data.database.RealmMigrations
 import com.wavesplatform.wallet.v2.data.model.db.*
-import com.wavesplatform.wallet.v2.database.DBHelper
-import com.wavesplatform.wallet.v2.database.RealmMigrations
 import com.wavesplatform.wallet.v2.util.MigrationUtil
 import io.realm.Realm
 import io.realm.RealmConfiguration

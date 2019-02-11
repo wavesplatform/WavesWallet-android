@@ -1,6 +1,7 @@
 package com.wavesplatform.sdk.model.response
 
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.model.OrderType
 
 data class LastTradesResponse(
