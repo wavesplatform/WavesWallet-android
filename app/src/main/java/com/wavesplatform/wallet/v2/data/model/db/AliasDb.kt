@@ -10,7 +10,7 @@ import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@RealmClass(name = "Alias")
+@RealmClass
 open class AliasDb(
         @PrimaryKey
         @SerializedName("alias") var alias: String? = "",

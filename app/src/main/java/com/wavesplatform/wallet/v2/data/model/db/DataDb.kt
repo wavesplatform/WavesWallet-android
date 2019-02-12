@@ -8,7 +8,7 @@ import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.annotations.RealmClass
 
-@RealmClass(name = "Data")
+@RealmClass
 open class DataDb(
         @SerializedName("key") var key: String = "",
         @SerializedName("type") var type: String = "",

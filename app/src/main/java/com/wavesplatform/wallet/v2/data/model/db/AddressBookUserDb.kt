@@ -8,7 +8,7 @@ import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@RealmClass(name = "AddressBookUser")
+@RealmClass
 open class AddressBookUserDb(
         @PrimaryKey
         @SerializedName("address") var address: String = "",

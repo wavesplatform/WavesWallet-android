@@ -11,7 +11,7 @@ import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@RealmClass(name = "SpamAsset")
+@RealmClass
 open class SpamAssetDb(
         @PrimaryKey
         @SerializedName("assetId") var assetId: String? = "") : RealmModel, Parcelable {

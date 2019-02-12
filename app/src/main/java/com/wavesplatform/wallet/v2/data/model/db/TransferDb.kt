@@ -7,7 +7,7 @@ import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.annotations.RealmClass
 
-@RealmClass(name = "Transfer")
+@RealmClass
 open class TransferDb(
         @SerializedName("recipient")
         var recipient: String = "",

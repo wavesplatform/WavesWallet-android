@@ -10,7 +10,7 @@ import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@RealmClass(name = "Order")
+@RealmClass
 open class OrderDb(
         @PrimaryKey
         @SerializedName("id") var id: String = "",

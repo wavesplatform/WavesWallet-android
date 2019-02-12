@@ -11,7 +11,7 @@ import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@RealmClass(name = "AssetBalance")
+@RealmClass
 open class AssetBalanceDb(
         @PrimaryKey
         @SerializedName("assetId") var assetId: String = "",

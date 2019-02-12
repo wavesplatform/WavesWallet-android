@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 
 
 @Parcelize
-@RealmClass(name = "AssetPair")
+@RealmClass
 open class AssetPairDb(
         @SerializedName("amountAsset") var amountAsset: String? = "",
         @SerializedName("amountAssetObject") var amountAssetObject: AssetInfoDb? = AssetInfoDb(),

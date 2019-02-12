@@ -8,7 +8,7 @@ import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 
-@RealmClass(name = "Transaction")
+@RealmClass
 open class TransactionDb(
         @SerializedName("type")
         var type: Int = 0,

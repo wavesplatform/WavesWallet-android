@@ -13,7 +13,7 @@ import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@RealmClass(name = "MarketResponse")
+@RealmClass
 open class MarketResponseDb(
         @PrimaryKey
         @SerializedName("id") var id: String? = "",
