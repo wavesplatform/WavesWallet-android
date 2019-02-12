@@ -14,7 +14,7 @@ class Constants {
         const val URL_NODE = "https://nodes.wavesnodes.com"
         const val URL_DATA = "https://api.wavesplatform.com"
         const val URL_MATCHER = "https://matcher.wavesplatform.com"
-        const val URL_SPAM_FILE = "https://github-proxy.wvservices.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv"
+        const val URL_SPAM_FILE = "https://github-proxy.wvservices.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv/"
         const val URL_COINOMAT = "https://coinomat.com/api/"
         const val URL_COMMISSION = "https://github-proxy.wvservices.com/" + "wavesplatform/waves-client-config/master/fee.json"
         const val URL_CONFIG = "https://github-proxy.wvservices.com/" + "wavesplatform/waves-client-config/master/environment_mainnet.json"
