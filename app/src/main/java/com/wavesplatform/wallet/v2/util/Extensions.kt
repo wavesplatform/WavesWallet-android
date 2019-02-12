@@ -8,6 +8,7 @@ import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -67,7 +68,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
-    if (dest.isNullOrEmpty() && source.startsWith(".")){
+    if (dest.isNullOrEmpty() && source.startsWith(".")) {
         return@InputFilter "0."
     }
     null
@@ -77,7 +78,7 @@ val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
  * Created by anonymous on 13.09.17.
  */
 
-fun EditText.applyFilterStartWithDot(){
+fun EditText.applyFilterStartWithDot() {
     this.filters = arrayOf(filterStartWithDot)
 }
 
@@ -132,6 +133,14 @@ fun ByteArray.arrayWithSize(): ByteArray {
 
 fun String.clearBalance(): String {
     return this.stripZeros().replace(",", "")
+}
+
+fun View.makeBackgroundWithRippleEffect() {
+    val typedArray = context.obtainStyledAttributes(intArrayOf(R.attr.selectableItemBackground))
+    val backgroundResource = typedArray.getResourceId(0, 0)
+    this.isClickable = true
+    this.setBackgroundResource(backgroundResource)
+    typedArray.recycle()
 }
 
 fun getDeviceName(): String {

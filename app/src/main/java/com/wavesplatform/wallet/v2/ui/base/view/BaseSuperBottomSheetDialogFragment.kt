@@ -1,11 +1,10 @@
 package com.wavesplatform.wallet.v2.ui.base.view
 
-import android.graphics.Color
 import android.os.Bundle
-import android.view.WindowManager
 import com.andrefrsousa.superbottomsheet.SuperBottomSheetFragment
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.getToolBarHeight
@@ -14,7 +13,6 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import pers.victor.ext.dp2px
 import pers.victor.ext.findColor
 import pers.victor.ext.screenHeight
 import javax.inject.Inject
@@ -27,6 +25,10 @@ open class BaseSuperBottomSheetDialogFragment : SuperBottomSheetFragment(), Base
 
     @Inject
     lateinit var preferencesHelper: PreferencesHelper
+
+    @Inject
+    lateinit var prefsUtil: PrefsUtil
+
     @Inject
     lateinit var rxEventBus: RxEventBus
 

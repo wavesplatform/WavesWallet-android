@@ -8,7 +8,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 interface SendView : BaseMvpView {
 
     fun onShowError(errorMsgRes: Int)
-    fun onShowPaymentDetails(details: PaymentConfirmationDetails)
+    fun onShowPaymentDetails()
     fun showXRate(xRate: XRate, ticker: String)
     fun showXRateError()
     fun setRecipientValid(valid: Boolean?)

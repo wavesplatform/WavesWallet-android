@@ -51,7 +51,6 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
                 assetBalance?.getName()
                         ?: "")
 
-        image_asset_icon.isOval = true
         image_asset_icon.setAsset(assetBalance)
 
         image_close.click {

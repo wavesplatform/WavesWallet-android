@@ -18,7 +18,6 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.google.gson.Gson
 import com.jakewharton.rxbinding2.view.RxView
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
@@ -40,7 +39,7 @@ import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
-import com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
+import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
 import com.wavesplatform.wallet.v2.ui.custom.SpamTag
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
@@ -68,15 +67,6 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
     @Inject
     @InjectPresenter
     lateinit var presenter: HistoryDetailsPresenter
-
-    @Inject
-    lateinit var historyDetailsAdapter: HistoryDetailsAdapter
-
-    @Inject
-    lateinit var gson: Gson
-
-    @Inject
-    lateinit var prefsUtil: PrefsUtil
 
     @ProvidePresenter
     fun providePresenter(): HistoryDetailsPresenter = presenter
@@ -578,12 +568,10 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
             TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                 val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_set_asset_script_layout, historyContainer, false)
                 val textAssetValue = tokenView?.findViewById<AppCompatTextView>(R.id.text_asset_value)
-                val imageAssetIcon = tokenView?.findViewById<MaterialLetterIcon>(R.id.image_asset_icon)
-
-                imageAssetIcon?.isOval = true
+                val imageAssetIcon = tokenView?.findViewById<AssetAvatarView>(R.id.image_asset_icon)
 
                 transaction.asset?.let {
-                    imageAssetIcon?.setAssetInfo(transaction.asset)
+                    imageAssetIcon?.setAssetInfo(it)
                 }
 
                 textAssetValue?.text = transaction.asset?.name

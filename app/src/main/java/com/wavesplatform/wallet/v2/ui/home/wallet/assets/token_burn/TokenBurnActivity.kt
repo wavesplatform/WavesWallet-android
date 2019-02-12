@@ -50,7 +50,6 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
 
         presenter.loadWavesBalance()
 
-        image_asset_icon.isOval = true
         image_asset_icon.setAsset(presenter.assetBalance)
         text_asset_name.text = presenter.assetBalance.getName()
         text_asset_value.text = presenter.assetBalance.getDisplayAvailableBalance()

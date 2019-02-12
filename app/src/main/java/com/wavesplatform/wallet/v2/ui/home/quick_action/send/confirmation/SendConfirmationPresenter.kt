@@ -39,6 +39,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
     var blockchainCommission = 0L
+    var feeAsset: AssetBalance = Constants.defaultAssets[0]
 
 
     fun confirmSend() {
@@ -119,7 +120,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
                 System.currentTimeMillis(),
                 blockchainCommission,
-                attachment)
+                attachment,
+                feeAsset.assetId)
     }
 
     fun getAddressName(address: String) {

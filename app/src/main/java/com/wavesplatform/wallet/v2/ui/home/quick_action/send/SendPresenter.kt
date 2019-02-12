@@ -44,11 +44,13 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var gatewayMin: BigDecimal = BigDecimal.ZERO
     var gatewayMax: BigDecimal = BigDecimal.ZERO
     var fee = 0L
+    var feeWaves = 0L
+    var feeAsset: AssetBalance = Constants.defaultAssets[0]
 
     fun sendClicked() {
         val res = validateTransfer()
         if (res == 0) {
-            confirmPayment()
+            viewState.onShowPaymentDetails()
         } else {
             viewState.onShowError(res)
         }
@@ -56,27 +58,19 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     fun checkAlias(alias: String) {
         if (alias.length in 4..30) {
-            runAsync {
-                addSubscription(
-                        apiDataManager.loadAlias(alias)
-
-                                .subscribe({ _ ->
-                                    type = Type.ALIAS
-                                    runOnUiThread {
-                                        viewState.setRecipientValid(true)
-                                    }
-                                }, {
-                                    type = Type.UNKNOWN
-                                    runOnUiThread {
-                                        viewState.setRecipientValid(false)
-                                    }
-                                }))
-            }
+            addSubscription(
+                    apiDataManager.loadAlias(alias)
+                            .compose(RxUtil.applyObservableDefaultSchedulers())
+                            .subscribe({ _ ->
+                                type = Type.ALIAS
+                                viewState.setRecipientValid(true)
+                            }, {
+                                type = Type.UNKNOWN
+                                viewState.setRecipientValid(false)
+                            }))
         } else {
             type = Type.UNKNOWN
-            runOnUiThread {
-                viewState.setRecipientValid(null)
-            }
+            viewState.setRecipientValid(null)
         }
     }
 
@@ -88,13 +82,8 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
                 System.currentTimeMillis(),
                 fee,
-                "")
-    }
-
-    private fun confirmPayment() {
-        val details = PaymentConfirmationDetails.fromRequest(
-                selectedAsset, getTxRequest())
-        viewState.onShowPaymentDetails(details)
+                "",
+                feeAsset.assetId)
     }
 
     fun validateTransfer(): Int {
@@ -110,7 +99,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             } else
                 if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
                     return R.string.invalid_amount
-                } else if (tx.fee <= 0 || tx.fee < TransferTransactionRequest.MinFee) {
+                } else if (tx.fee <= 0 || (feeAsset.isWaves() && tx.fee < Constants.WAVES_MIN_FEE)) {
                     return R.string.insufficient_fee
                 } else if (!isFundSufficient(tx)) {
                     return R.string.insufficient_funds
@@ -142,10 +131,14 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return if (isSameSendingAndFeeAssets()) {
             tx.amount + tx.fee <= selectedAsset!!.getAvailableBalance()
         } else {
-            tx.amount <= selectedAsset!!.getAvailableBalance()
-                    && tx.fee <= queryFirst<AssetBalanceDb> {
-                equalTo("assetId", "")
-            }?.convertFromDb()?.getAvailableBalance() ?: 0
+            val validFee = if (tx.feeAssetId?.isWaves() == true) {
+                tx.fee <= queryFirst<AssetBalanceDb> {
+                    equalTo("assetId", "") }?.convertFromDb()?.balance ?: 0
+            } else {
+                true
+            }
+
+            tx.amount <= selectedAsset!!.balance!! && validFee
         }
     }
 
@@ -236,6 +229,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     params.smartAccount = scriptInfo.extraFee != 0L
                     params.smartAsset = assetsDetails.scripted
                     fee = countCommission(commission, params)
+                    feeWaves = fee
                     viewState.showCommissionSuccess(fee)
                 }, {
                     it.printStackTrace()
@@ -274,10 +268,6 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     companion object {
         const val LANG: String = "ru_RU"
         const val MONERO_PAYMENT_ID_LENGTH = 64
-        private val feeAsset: AssetBalance = AssetBalance(
-                quantity = 100000000L * 100000000L,
-                issueTransaction = IssueTransaction(
-                        name = Constants.CUSTOM_FEE_ASSET_NAME, quantity = 0, decimals = 8))
 
         fun getAssetId(recipient: String?): String? {
             return when {

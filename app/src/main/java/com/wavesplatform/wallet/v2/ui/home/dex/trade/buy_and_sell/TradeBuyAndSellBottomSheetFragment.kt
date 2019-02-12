@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
+import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order.TradeOrderFragment
 import kotlinx.android.synthetic.main.buy_and_sell_bottom_sheet_dialog_layout.*
 import kotlinx.android.synthetic.main.buy_and_sell_bottom_sheet_dialog_layout.view.*
@@ -24,7 +25,7 @@ import pers.victor.ext.findColor
 import javax.inject.Inject
 
 
-class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), TradeBuyAndSellView, SuccessOrderListener {
+class TradeBuyAndSellBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), TradeBuyAndSellView, SuccessOrderListener {
     @Inject
     @InjectPresenter
     lateinit var presenter: TradeBuyAndSellPresenter
@@ -50,6 +51,7 @@ class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), Trad
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         val rootView = inflater.inflate(R.layout.buy_and_sell_bottom_sheet_dialog_layout, container, false)
 
         presenter.data = arguments?.getParcelable<BuySellData>(BUNDLE_DATA)

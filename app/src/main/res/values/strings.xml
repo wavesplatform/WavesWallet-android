@@ -169,7 +169,7 @@
     <string name="common_msg_in_development">Sorry, this feature will be available in the near future</string>
     <string name="common_no_internet_bottom_msg">No connection to the Internet</string>
     <string name="common_or">or</string>
-    <string name="common_persist"><![CDATA[&#x26;]]></string>
+    <string name="common_persist">&amp;</string>
     <string name="common_server_error">Something went wrong</string>
     <string name="common_transaction_fee">Transaction Fee</string>
     <string name="confirm_backup">Confirm backup</string>
@@ -640,4 +640,7 @@
     <string name="history_exchange_sell">Sell</string>
     <string name="history_exchange_buy">Buy</string>
     <string name="history_mass_send_recipient">#%s Recipient</string>
+
+    <string name="sponsored_fee_dialog_title">Transaction Fee</string>
+    <string name="sponsored_fee_dialog_not_available">Not available</string>
 </resources>

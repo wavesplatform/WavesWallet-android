@@ -42,6 +42,7 @@ import kotlinx.android.synthetic.main.backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.put
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
 
@@ -352,24 +353,18 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
             val now = System.currentTimeMillis()
             if (now > lastTime + MIN_15) {
-                seedWarningBehavior = BottomSheetBehavior.from(linear_warning_container)
-                seedWarningBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-                    override fun onStateChanged(bottomSheet: View, newState: Int) {
-                        if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                            warning_container.gone()
+                implementSwipeToDismiss()
+
+                linear_warning_container.click {
+                    seedWarningBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+                    // wait for close animation end and open backup screen
+                    runDelayed(250) {
+                        launchActivity<BackupPhraseActivity> {
+                            putExtra(ProfileFragment.KEY_INTENT_SET_BACKUP, true)
                         }
                     }
-
-                    override fun onSlide(p0: View, p1: Float) {}
-                })
-                seedWarningBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-                warning_container.visiable()
-                linear_warning_container.click {
-                    warning_container.gone()
-                    launchActivity<BackupPhraseActivity> {
-                        putExtra(ProfileFragment.KEY_INTENT_SET_BACKUP, true)
-                    }
                 }
+
                 preferencesHelper.setShowSaveSeedWarningTime(currentGuid, now)
             }
         }
@@ -379,6 +374,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         } else {
             tab_navigation.getTabAt(PROFILE_SCREEN)?.customView?.findViewById<View>(R.id.view_seed_error)?.gone()
         }
+    }
+
+    private fun implementSwipeToDismiss() {
+        seedWarningBehavior = BottomSheetBehavior.from(linear_warning_container)
+        seedWarningBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     override fun needToShowNetworkMessage() = true

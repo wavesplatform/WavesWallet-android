@@ -2,6 +2,7 @@ package com.wavesplatform.sdk.model.response
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.wallet.App
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.utils.MoneyUtil
 import kotlinx.android.parcel.Parcelize
@@ -32,6 +33,14 @@ open class AssetBalance(
         var isGateway: Boolean = false,
         var isSpam: Boolean = false
 ) : Parcelable {
+
+    fun isSponsored(): Boolean {
+        return minSponsoredAssetFee ?: 0 > 0
+    }
+
+    fun isMyWavesToken(): Boolean {
+        return issueTransaction?.sender == App.getAccessManager().getWallet()?.address
+    }
 
     fun getDecimals(): Int {
         return if (issueTransaction != null) {
@@ -72,6 +81,10 @@ open class AssetBalance(
         return balance
                 ?.minus(inOrderBalance ?: 0)
                 ?.minus(leasedBalance ?: 0) ?: 0
+    }
+
+    fun getSponsorBalance(): Long {
+        return sponsorBalance ?: 0
     }
 
     fun isAssetId(assetId: String): Boolean {
