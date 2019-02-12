@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true">
 
-        <com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
+        <com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
             android:id="@+id/image_asset_icon"
             android:layout_width="@dimen/asset_icon_size"
             android:layout_height="@dimen/asset_icon_size"

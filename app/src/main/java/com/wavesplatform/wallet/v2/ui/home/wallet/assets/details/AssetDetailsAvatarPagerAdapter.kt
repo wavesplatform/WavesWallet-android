@@ -15,7 +15,6 @@ class AssetDetailsAvatarPagerAdapter @Inject constructor() : PagerAdapter() {
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
         val layout = inflate(R.layout.item_asset_details_avatar, collection, false) as ViewGroup
 
-        layout.image_welcome_photo.isOval = true
         layout.image_welcome_photo.setAsset(items[position])
 
         collection.addView(layout)

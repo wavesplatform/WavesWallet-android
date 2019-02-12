@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.data.model.remote.response
 import android.os.Parcelable
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
@@ -50,6 +51,14 @@ open class AssetBalance(
         }
     }
 
+    fun isSponsored(): Boolean {
+        return minSponsoredAssetFee ?: 0 > 0
+    }
+
+    fun isMyWavesToken(): Boolean {
+        return issueTransaction?.sender == App.getAccessManager().getWallet()?.address
+    }
+
     fun getDecimals(): Int {
         return if (issueTransaction != null) {
             issueTransaction!!.decimals ?: 8
@@ -89,6 +98,10 @@ open class AssetBalance(
         return balance
                 ?.minus(inOrderBalance ?: 0)
                 ?.minus(leasedBalance ?: 0)
+    }
+
+    fun getSponsorBalance(): Long {
+        return sponsorBalance ?: 0
     }
 
     fun isAssetId(assetId: String): Boolean {

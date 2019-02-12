@@ -22,6 +22,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.bank.BankFragmen
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card.CardFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency.CryptoCurrencyFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee.SponsoredFeeBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentFragment
@@ -136,4 +137,8 @@ abstract class FragmentModule {
     @PerFragment
     @ContributesAndroidInjector
     internal abstract fun quickActionBottomSheetFragment(): QuickActionBottomSheetFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun sponsoredFeeBottomSheetFragment(): SponsoredFeeBottomSheetFragment
 }

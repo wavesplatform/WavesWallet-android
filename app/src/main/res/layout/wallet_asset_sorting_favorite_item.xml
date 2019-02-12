@@ -37,14 +37,13 @@
                 android:layout_marginEnd="10dp"
                 app:srcCompat="@drawable/ic_favorite_14_submit_300" />
 
-            <com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
+            <com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
                 android:id="@+id/image_asset_favorite_icon"
                 android:layout_width="28dp"
                 android:layout_toEndOf="@id/image_favorite"
                 android:layout_height="28dp"
                 android:layout_centerVertical="true"
-                app:text_number="1"
-                app:text_size="16"
+                app:avatar_text_size="16sp"
                 android:src="@drawable/asset_gray_icon"/>
 
             <android.support.v7.widget.AppCompatTextView

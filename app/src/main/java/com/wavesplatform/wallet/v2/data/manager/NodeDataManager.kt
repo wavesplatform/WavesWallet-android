@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.sumByLong
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.currentTimeMillis
@@ -64,6 +65,24 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
+    }
+
+    fun assetsBalances(withWaves: Boolean = true): Observable<MutableList<AssetBalance>> {
+        return if (withWaves) {
+            Observable.zip(
+                    nodeService.assetsBalance(getAddress())
+                            .map { it.balances.toMutableList() },
+                    loadWavesBalance(),
+                    BiFunction { assetsBalance: MutableList<AssetBalance>, wavesBalance: AssetBalance ->
+                        assetsBalance.add(0, wavesBalance)
+                        return@BiFunction assetsBalance
+                    })
+        } else {
+            nodeService.assetsBalance(getAddress())
+                    .map {
+                        it.balances.toMutableList()
+                    }
+        }
     }
 
     fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {

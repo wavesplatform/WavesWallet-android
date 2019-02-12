@@ -14,7 +14,6 @@ class AssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, BaseV
     override fun convert(helper: BaseViewHolder, item: AssetBalance) {
         helper.setText(R.id.text_asset_name, item.getName())
 
-        helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)
 
         if (item.isChecked) {
