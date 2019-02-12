@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v2.data.model.local
 
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.model.response.AssetBalance
 
 data class SponsoredAssetItem(
         var assetBalance: AssetBalance,

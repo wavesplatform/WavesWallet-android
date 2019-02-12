@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
-import com.wavesplatform.wallet.v2.data.model.local.PaymentConfirmationDetails
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.coinomat.XRate
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView

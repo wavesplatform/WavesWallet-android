@@ -6,7 +6,6 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.Hash
-import com.wavesplatform.wallet.v2.data.model.local.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -16,6 +15,7 @@ import com.wavesplatform.sdk.model.request.TransferTransactionRequest
 import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.sdk.utils.TransactionUtil.Companion.countCommission
 import com.wavesplatform.sdk.utils.isValidAddress
+import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
@@ -131,7 +131,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return if (isSameSendingAndFeeAssets()) {
             tx.amount + tx.fee <= selectedAsset!!.getAvailableBalance()
         } else {
-            val validFee = if (tx.feeAssetId?.isWaves() == true) {
+            val validFee = if (tx.feeAssetId.isWaves()) {
                 tx.fee <= queryFirst<AssetBalanceDb> {
                     equalTo("assetId", "") }?.convertFromDb()?.balance ?: 0
             } else {

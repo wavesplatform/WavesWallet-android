@@ -2,8 +2,8 @@ package com.wavesplatform.sdk.model.response
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.wallet.App
 import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.utils.MoneyUtil
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -39,7 +39,7 @@ open class AssetBalance(
     }
 
     fun isMyWavesToken(): Boolean {
-        return issueTransaction?.sender == App.getAccessManager().getWallet()?.address
+        return issueTransaction?.sender == Wavesplatform.get().getWallet()?.address
     }
 
     fun getDecimals(): Int {

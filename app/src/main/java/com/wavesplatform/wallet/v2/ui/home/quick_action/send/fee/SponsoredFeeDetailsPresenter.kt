@@ -1,10 +1,10 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.clearBalance

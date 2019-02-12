@@ -13,7 +13,6 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.sdk.model.response.Alias
-import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
@@ -22,7 +21,6 @@ import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_layout.view.*
 import pers.victor.ext.click
-import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
