@@ -136,7 +136,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
     }
 
     override fun successCreateAlias(alias: Alias) {
-        AliasDb.convertToDb(alias).save()
+        AliasDb(alias).save()
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_ALIAS, alias)
         })

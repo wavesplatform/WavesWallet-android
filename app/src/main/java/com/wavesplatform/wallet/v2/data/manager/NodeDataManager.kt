@@ -177,7 +177,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         return nodeService.createAlias(createAliasRequest)
                 .map {
                     it.address = getAddress()
-                    AliasDb.convertToDb(it).save()
+                    AliasDb(it).save()
                     return@map it
                 }
                 .doOnNext {

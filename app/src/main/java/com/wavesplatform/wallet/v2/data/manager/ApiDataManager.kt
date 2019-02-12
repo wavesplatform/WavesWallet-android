@@ -60,7 +60,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
             return apiService.alias(alias)
                     .map {
                         it.alias.own = false
-                        AliasDb.convertToDb(it.alias).save()
+                        AliasDb(it.alias).save()
                         return@map it.alias
                     }
         }

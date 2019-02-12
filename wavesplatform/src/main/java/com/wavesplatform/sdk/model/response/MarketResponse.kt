@@ -27,11 +27,7 @@ open class MarketResponse(
 ) : Parcelable
 
 @Parcelize
-data class AmountAssetInfo(
-        @SerializedName("decimals") var decimals: Int = 0
-) : Parcelable
+data class AmountAssetInfo(@SerializedName("decimals") var decimals: Int = 0) : Parcelable
 
 @Parcelize
-data class PriceAssetInfo(
-        @SerializedName("decimals") var decimals: Int = 0
-) : Parcelable
+data class PriceAssetInfo(@SerializedName("decimals") var decimals: Int = 0) : Parcelable

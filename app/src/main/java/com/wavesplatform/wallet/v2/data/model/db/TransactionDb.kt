@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.wallet.v2.util.notNull
 import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
@@ -79,21 +80,98 @@ open class TransactionDb(
 ) : RealmModel {
 
     constructor(transaction: Transaction) : this() {
-        //
+        transaction.notNull {
+            this.type = it.type
+            this.id = it.id
+            this.sender = it.sender
+            this.senderPublicKey = it.senderPublicKey
+            this.timestamp = it.timestamp
+            this.amount = it.amount
+            this.signature = it.signature
+            this.recipient = it.recipient
+            this.recipientAddress = it.recipientAddress
+            this.assetId = it.assetId
+            this.leaseId = it.leaseId
+            this.alias = it.alias
+            this.attachment = it.attachment
+            this.status = it.status
+            this.lease = LeaseDb(it.lease)
+            this.fee = it.fee
+            this.feeAssetId = it.feeAssetId
+            this.feeAssetObject = AssetInfoDb(it.feeAssetObject)
+            this.quantity = it.quantity
+            this.price = it.price
+            this.height = it.height
+            this.reissuable = it.reissuable
+            this.buyMatcherFee = it.buyMatcherFee
+            this.sellMatcherFee = it.sellMatcherFee
+            this.order1 = OrderDb(it.order1)
+            this.order2 = OrderDb(it.order2)
+            this.totalAmount = it.totalAmount
+            this.transfers = TransferDb.convertToDb(it.transfers)
+            this.data = DataDb.convertToDb(it.data)
+            this.isPending = it.isPending
+            this.script = it.script
+            this.minSponsoredAssetFee = it.minSponsoredAssetFee
+            this.transactionTypeId = it.transactionTypeId
+            this.asset = AssetInfoDb(it.asset)
+        }
     }
 
     fun convertFromDb(): Transaction {
-        return Transaction()
+        return Transaction(
+                type = this.type,
+                id = this.id,
+                sender = this.sender,
+                senderPublicKey = this.senderPublicKey,
+                timestamp = this.timestamp,
+                amount = this.amount,
+                signature = this.signature,
+                recipient = this.recipient,
+                recipientAddress = this.recipientAddress,
+                assetId = this.assetId,
+                leaseId = this.leaseId,
+                alias = this.alias,
+                attachment = this.attachment ?: "",
+                status = this.status,
+                lease = this.lease?.convertFromDb(),
+                fee = this.fee,
+                feeAssetId = this.feeAssetId,
+                feeAssetObject = this.feeAssetObject?.convertFromDb(),
+                quantity = this.quantity,
+                price = this.price,
+                height = this.height,
+                reissuable = this.reissuable,
+                buyMatcherFee = this.buyMatcherFee,
+                sellMatcherFee = this.sellMatcherFee,
+                order1 = this.order1?.convertFromDb(),
+                order2 = this.order2?.convertFromDb(),
+                totalAmount = this.totalAmount,
+                transfers = TransferDb.convertFromDb(this.transfers),
+                data = DataDb.convertFromDb(this.data),
+                isPending = this.isPending,
+                script = this.script,
+                minSponsoredAssetFee = this.minSponsoredAssetFee,
+                transactionTypeId = this.transactionTypeId,
+                asset = this.asset?.convertFromDb())
     }
 
     companion object {
 
         fun convertToDb(transactions: List<Transaction>): List<TransactionDb> {
-            return listOf()
+            val list = mutableListOf<TransactionDb>()
+            transactions.forEach {
+                list.add(TransactionDb(it))
+            }
+            return list
         }
 
         fun convertFromDb(transactions: List<TransactionDb>): List<Transaction> {
-            return listOf()
+            val list = mutableListOf<Transaction>()
+            transactions.forEach {
+                list.add(it.convertFromDb())
+            }
+            return list
         }
     }
 }
