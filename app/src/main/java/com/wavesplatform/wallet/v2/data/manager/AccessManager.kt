@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.util.Log
 import com.vicpin.krealmextensions.RealmConfigStore
 import com.wavesplatform.sdk.WavesWallet
+import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.utils.AddressUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.util.AESUtil
@@ -37,7 +38,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
 
     private val pinStore = PinStoreService()
     private var loggedInGuid: String = ""
-    private var wallet: WavesWallet? = null
 
     fun validatePassCodeObservable(guid: String, passCode: String): Observable<String> {
         return readPassCodeObservable(
@@ -104,16 +104,16 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
 
     fun storeWalletData(seed: String, password: String, walletName: String, skipBackup: Boolean): String {
         try {
-            wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
+            Wavesplatform.get().createWallet(seed)
             val guid = UUID.randomUUID().toString()
             loggedInGuid = guid
             prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, guid)
             prefs.addGlobalListValue(EnvironmentManager.get().current().getName()
                     + PrefsUtil.LIST_WALLET_GUIDS, guid)
-            prefs.setValue(PrefsUtil.KEY_PUB_KEY, wallet!!.publicKeyStr)
+            prefs.setValue(PrefsUtil.KEY_PUB_KEY, Wavesplatform.get().getWallet()?.publicKeyStr)
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
-            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet!!.getEncryptedData(password))
-            authHelper.configureDB(wallet?.address, guid)
+            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, Wavesplatform.get().getWallet()?.getEncryptedData(password))
+            authHelper.configureDB(Wavesplatform.get().getWallet()?.address, guid)
             MigrationUtil.checkOldAddressBook(prefs, loggedInGuid)
             prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, skipBackup)
             return guid
@@ -193,19 +193,19 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
 
     fun resetWallet() {
         clearRealmConfiguration()
-        wallet = null
+        Wavesplatform.get().resetWallet()
         loggedInGuid = ""
     }
 
     fun setWallet(guid: String, password: String) {
-        wallet = WavesWallet(getWalletData(guid), password)
+        Wavesplatform.get().createWallet(getWalletData(guid), password)
         setLastLoggedInGuid(guid)
-        authHelper.configureDB(wallet?.address, guid)
+        authHelper.configureDB(Wavesplatform.get().getWallet()?.address, guid)
         MigrationUtil.checkOldAddressBook(prefs, guid)
     }
 
     fun getWallet(): WavesWallet? {
-        return wallet
+        return Wavesplatform.get().getWallet()
     }
 
     private fun createAddressBookCurrentAccount(): AddressBookUserDb? {

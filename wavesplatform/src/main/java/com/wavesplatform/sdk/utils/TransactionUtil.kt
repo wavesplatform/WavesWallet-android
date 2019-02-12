@@ -19,27 +19,27 @@ class TransactionUtil @Inject constructor() {
 
         fun getTransactionType(transaction: Transaction): Int =
                 if (transaction.type == Transaction.TRANSFER
-                        && transaction.sender != Wavesplatform.get().getWallet().address
+                        && transaction.sender != Wavesplatform.get().getWallet()?.address
                         && transaction.asset?.isSpam == true) {
                     Constants.ID_SPAM_RECEIVE_TYPE
                 } else if (transaction.type == Transaction.MASS_TRANSFER
-                        && transaction.sender != Wavesplatform.get().getWallet().address
+                        && transaction.sender != Wavesplatform.get().getWallet()?.address
                         && transaction.asset?.isSpam == true) {
                     Constants.ID_MASS_SPAM_RECEIVE_TYPE
                 } else if (transaction.type == Transaction.LEASE_CANCEL
                         && !transaction.leaseId.isNullOrEmpty()) {
                     Constants.ID_CANCELED_LEASING_TYPE
                 } else if ((transaction.type == Transaction.TRANSFER || transaction.type == 9)
-                        && transaction.sender != Wavesplatform.get().getWallet().address) {
+                        && transaction.sender != Wavesplatform.get().getWallet()?.address) {
                     Constants.ID_RECEIVED_TYPE
                 } else if (transaction.type == Transaction.TRANSFER
                         && transaction.sender == transaction.recipientAddress) {
                     Constants.ID_SELF_TRANSFER_TYPE
                 } else if (transaction.type == Transaction.TRANSFER
-                        && transaction.sender == Wavesplatform.get().getWallet().address) {
+                        && transaction.sender == Wavesplatform.get().getWallet()?.address) {
                     Constants.ID_SENT_TYPE
                 } else if (transaction.type == Transaction.LEASE
-                        && transaction.recipientAddress != Wavesplatform.get().getWallet().address) {
+                        && transaction.recipientAddress != Wavesplatform.get().getWallet()?.address) {
                     Constants.ID_STARTED_LEASING_TYPE
                 } else if (transaction.type == Transaction.EXCHANGE) {
                     Constants.ID_EXCHANGE_TYPE
@@ -52,13 +52,13 @@ class TransactionUtil @Inject constructor() {
                 } else if (transaction.type == Transaction.CREATE_ALIAS) {
                     Constants.ID_CREATE_ALIAS_TYPE
                 } else if (transaction.type == Transaction.LEASE
-                        && transaction.recipientAddress == Wavesplatform.get().getWallet().address) {
+                        && transaction.recipientAddress == Wavesplatform.get().getWallet()?.address) {
                     Constants.ID_INCOMING_LEASING_TYPE
                 } else if (transaction.type == Transaction.MASS_TRANSFER
-                        && transaction.sender == Wavesplatform.get().getWallet().address) {
+                        && transaction.sender == Wavesplatform.get().getWallet()?.address) {
                     Constants.ID_MASS_SEND_TYPE
                 } else if (transaction.type == Transaction.MASS_TRANSFER
-                        && transaction.sender != Wavesplatform.get().getWallet().address) {
+                        && transaction.sender != Wavesplatform.get().getWallet()?.address) {
                     Constants.ID_MASS_RECEIVE_TYPE
                 } else if (transaction.type == Transaction.DATA) {
                     Constants.ID_DATA_TYPE

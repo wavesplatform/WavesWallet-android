@@ -24,7 +24,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadAliases(): Observable<List<Alias>> {
-        return apiService.aliases(Wavesplatform.get().getWallet().address)
+        return apiService.aliases(Wavesplatform.get().getWallet()?.address)
                 .map {
                     val aliases = it.data.mapTo(ArrayList()) {
                         it.alias.own = true

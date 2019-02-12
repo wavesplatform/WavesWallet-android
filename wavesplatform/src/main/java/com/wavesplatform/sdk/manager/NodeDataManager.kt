@@ -54,7 +54,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
         return loadSpamAssets(false)
                 .flatMap { spamAssets ->
-                    return@flatMap nodeService.assetsBalance(Wavesplatform.get().getWallet().address)
+                    return@flatMap nodeService.assetsBalance(Wavesplatform.get().getWallet()?.address)
                             .flatMap { assets ->
                                 return@flatMap Observable.zip(loadWavesBalance(), matcherDataManager.loadReservedBalances(), Observable.just(assets), Function3 { t1: AssetBalance, t2: Map<String, Long>, t3: AssetBalances ->
                                     return@Function3 Triple(t1, t2, t3)
@@ -135,7 +135,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     fun loadWavesBalance(): Observable<AssetBalance> {
         return Observable.zip(
                 // load total balance
-                nodeService.wavesBalance(Wavesplatform.get().getWallet().address).map {
+                nodeService.wavesBalance(Wavesplatform.get().getWallet()?.address).map {
                     return@map it.balance
                 },
                 // load leased balance
@@ -158,19 +158,19 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun createAlias(createAliasRequest: AliasRequest): Observable<Alias> {
-        createAliasRequest.senderPublicKey = Wavesplatform.get().getWallet().publicKeyStr
+        createAliasRequest.senderPublicKey = Wavesplatform.get().getWallet()?.publicKeyStr ?: ""
         createAliasRequest.timestamp = currentTimeMillis
-        Wavesplatform.get().getWallet().privateKey.notNull {
+        Wavesplatform.get().getWallet()?.privateKey.notNull {
             createAliasRequest.sign(it)
         }
         return nodeService.createAlias(createAliasRequest)
     }
 
     fun cancelLeasing(cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction> {
-        cancelLeasingRequest.senderPublicKey = Wavesplatform.get().getWallet().publicKeyStr
+        cancelLeasingRequest.senderPublicKey = Wavesplatform.get().getWallet()?.publicKeyStr ?: ""
         cancelLeasingRequest.timestamp = currentTimeMillis
 
-        Wavesplatform.get().getWallet().privateKey.notNull {
+        Wavesplatform.get().getWallet()?.privateKey.notNull {
             cancelLeasingRequest.sign(it)
         }
         return nodeService.cancelLeasing(cancelLeasingRequest)
@@ -179,11 +179,11 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     fun startLeasing(createLeasingRequest: CreateLeasingRequest,
                      recipientIsAlias: Boolean,
                      fee: Long): Observable<Transaction> {
-        createLeasingRequest.senderPublicKey = Wavesplatform.get().getWallet().publicKeyStr
+        createLeasingRequest.senderPublicKey = Wavesplatform.get().getWallet()?.publicKeyStr ?: ""
         createLeasingRequest.fee = fee
         createLeasingRequest.timestamp = currentTimeMillis
 
-        Wavesplatform.get().getWallet().privateKey.notNull {
+        Wavesplatform.get().getWallet()?.privateKey.notNull {
             createLeasingRequest.sign(it, recipientIsAlias)
         }
         return nodeService.createLeasing(createLeasingRequest)
@@ -200,7 +200,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                         return@flatMap Observable.just(listOf<Transaction>())
                     }*/
                     return@flatMap nodeService.transactionList(
-                            Wavesplatform.get().getWallet().address,
+                            Wavesplatform.get().getWallet()?.address,
                             currentLoadTransactionLimitPerRequest)
                             .map { r -> r[0] }
                 }
@@ -208,7 +208,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadLightTransactions(): Observable<List<Transaction>> {
-        return nodeService.transactionList(Wavesplatform.get().getWallet().address, 100)
+        return nodeService.transactionList(Wavesplatform.get().getWallet()?.address, 100)
                 .map { r -> r[0] }
     }
 
@@ -226,13 +226,13 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun activeLeasing(): Observable<List<Transaction>> {
-        return nodeService.activeLeasing(Wavesplatform.get().getWallet().address)
+        return nodeService.activeLeasing(Wavesplatform.get().getWallet()?.address)
                 .map {
                     return@map it.filter {
                         it.asset = Constants.wavesAssetInfo
                         it.transactionTypeId = TransactionUtil.getTransactionType(it)
                         it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
-                                && it.sender == Wavesplatform.get().getWallet().address
+                                && it.sender == Wavesplatform.get().getWallet()?.address
                     }
                 }
                 .flatMap {

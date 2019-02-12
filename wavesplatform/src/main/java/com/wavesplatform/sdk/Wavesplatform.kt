@@ -11,13 +11,11 @@ class Wavesplatform private constructor() {
     var cookies: HashSet<String> = hashSetOf()
     private var wavesWallet: WavesWallet? = null
 
-    fun createWallet(seed: String, password: String, name: String = ""): String {
+    fun createWallet(seed: String): String {
 
         return try {
             wavesWallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
             val guid = UUID.randomUUID().toString()
-            /*prefs.setValue(PrefsUtil.KEY_PUB_KEY, wavesWallet!!.publicKeyStr)
-            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wavesWallet!!.getEncryptedData(password))*/
             guid
         } catch (e: Exception) {
             Log.e(javaClass.simpleName, "storeWalletData: ", e)
@@ -25,8 +23,23 @@ class Wavesplatform private constructor() {
         }
     }
 
-    fun getWallet(): WavesWallet {
-        return wavesWallet!!
+    fun createWallet(encrypted: String, password: String): String {
+        return try {
+            wavesWallet = WavesWallet(encrypted, password)
+            val guid = UUID.randomUUID().toString()
+            guid
+        } catch (e: Exception) {
+            Log.e(javaClass.simpleName, "storeWalletData: ", e)
+            ""
+        }
+    }
+
+    fun getWallet(): WavesWallet? {
+        return wavesWallet
+    }
+
+    fun resetWallet() {
+        wavesWallet = null
     }
 
     companion object {

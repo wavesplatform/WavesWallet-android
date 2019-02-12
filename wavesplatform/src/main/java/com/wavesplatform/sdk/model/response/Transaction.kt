@@ -198,7 +198,7 @@ open class Transaction(
                         if (transaction.type == EXCHANGE) {
                             if (findMyOrder(transaction.order1!!,
                                             transaction.order2!!,
-                                            Wavesplatform.get().getWallet().address!!)
+                                            Wavesplatform.get().getWallet()?.address!!)
                                             .orderType == Constants.SELL_ORDER_TYPE) {
                                 "-${Constants.SELL_ORDER_TYPE})\n"
                             } else {
@@ -247,7 +247,7 @@ open class Transaction(
         private fun exchangePrice(transaction: Transaction): String {
             return if (transaction.type == EXCHANGE) {
                 val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
-                        Wavesplatform.get().getWallet().address)
+                        Wavesplatform.get().getWallet()?.address)
                 val priceAsset = myOrder.assetPair?.priceAssetObject
                 val priceValue = MoneyUtil.getScaledText(
                         transaction.amount.times(transaction.price).div(100000000),

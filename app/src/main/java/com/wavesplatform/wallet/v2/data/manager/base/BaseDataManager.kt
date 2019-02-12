@@ -21,10 +21,10 @@ open class BaseDataManager @Inject constructor() {
 
 
     fun getAddress(): String {
-        return Wavesplatform.get().getWallet().address
+        return Wavesplatform.get().getWallet()?.address ?: ""
     }
 
     fun getPublicKeyStr(): String {
-        return Wavesplatform.get().getWallet().publicKeyStr
+        return Wavesplatform.get().getWallet()?.publicKeyStr ?: ""
     }
 }
