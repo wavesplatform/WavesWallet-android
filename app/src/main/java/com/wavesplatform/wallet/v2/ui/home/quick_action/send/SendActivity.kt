@@ -568,7 +568,12 @@ class SendActivity : BaseActivity(), SendView {
                 error.printStackTrace()
             }
         } else {
-            edit_address.setText(result)
+            if (result.contains(":")) {
+                val split = result.split(":")
+                edit_address.setText(split[1].trim())
+            } else {
+                edit_address.setText(result)
+            }
         }
     }
 
