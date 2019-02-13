@@ -85,30 +85,11 @@ public class App extends DaggerApplication {
         BroadcastReceiver mReceiver = new ScreenReceiver();
         registerReceiver(mReceiver, filter);
 
-        // Apply PRNG fixes on app start if needed
-        appUtil.applyPRNGFixes();
-
         ConnectivityManager.getInstance().registerNetworkListener(this);
 
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         SimpleChromeCustomTabs.initialize(this);
-
-        // todo сомнительная штука
-        ApplicationLifeCycle.getInstance().addListener(new ApplicationLifeCycle.LifeCycleListener() {
-            @Override
-            public void onBecameForeground() {
-                // Ensure that PRNG fixes are always current for the session
-                appUtil.applyPRNGFixes();
-            }
-
-            @Override
-            public void onBecameBackground() {
-                // No-op
-            }
-        });
-
-
     }
 
     public static Context getAppContext() {

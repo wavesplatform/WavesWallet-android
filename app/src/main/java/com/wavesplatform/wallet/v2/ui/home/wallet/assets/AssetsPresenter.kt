@@ -163,8 +163,8 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
 
         // add all main assets
         val assetBalances = mutableListOf<AssetBalanceMultiItemEntity>()
-        AssetBalanceDb.convertFromDb(it.first).forEach {
-            assetBalances.add(it as AssetBalanceMultiItemEntity)
+        it.first.forEach {
+            assetBalances.add(AssetBalanceMultiItemEntity(it))
         }
         listToShow.addAll(assetBalances)
 

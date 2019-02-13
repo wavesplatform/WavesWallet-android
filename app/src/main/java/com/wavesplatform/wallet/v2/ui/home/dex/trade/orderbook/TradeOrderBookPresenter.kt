@@ -82,7 +82,7 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                     ?: 0, watchMarket?.market?.priceAssetDecimals ?: 0).stripZeros()
             sum += amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
             it.sum = sum
-            orderBookBids.add(it as OrderBookBidMultiItemEntity)
+            orderBookBids.add(OrderBookBidMultiItemEntity(it))
         }
         return orderBookBids
     }
@@ -97,7 +97,7 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                     ?: 0, watchMarket?.market?.priceAssetDecimals ?: 0).stripZeros()
             sum += amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
             it.sum = sum
-            orderBookAsks.add(it as OrderBookAskMultiItemEntity)
+            orderBookAsks.add(OrderBookAskMultiItemEntity(it))
         }
         return orderBookAsks
     }

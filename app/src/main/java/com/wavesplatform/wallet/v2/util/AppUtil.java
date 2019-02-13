@@ -26,22 +26,4 @@ public class AppUtil {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
-
-
-    public void applyPRNGFixes() {
-        try {
-            PRNGFixes.apply();
-        } catch (Exception e0) {
-            // todo is it need?
-            // some Android 4.0 devices throw an exception when PRNGFixes is re-applied
-            // removing provider before apply() is a workaround
-            //
-            Security.removeProvider("LinuxPRNG");
-            try {
-                PRNGFixes.apply();
-            } catch (Exception e1) {
-                Toast.makeText(context, R.string.cannot_launch_app, Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 }

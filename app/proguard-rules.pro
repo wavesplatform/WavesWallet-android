@@ -85,8 +85,6 @@
 # Retrolambda
 -dontwarn java.lang.invoke.*
 
--dontnote com.subgraph.orchid.crypto.PRNGFixes
-
 # zxing
 -dontwarn com.google.zxing.common.BitMatrix
 
