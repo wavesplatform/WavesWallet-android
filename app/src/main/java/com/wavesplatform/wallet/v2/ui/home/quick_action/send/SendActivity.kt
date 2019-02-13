@@ -15,20 +15,17 @@ import com.ethanhua.skeleton.SkeletonScreen
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.utils.AddressUtil
-import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.local.PaymentConfirmationDetails
-import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.wallet.v2.util.PrefsUtil
-import com.wavesplatform.wallet.v2.util.ViewUtils
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.coinomat.XRate
+import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.utils.WAVES_PREFIX
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
-import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_BLOCKCHAIN_COMMISSION
@@ -478,7 +475,7 @@ class SendActivity : BaseActivity(), SendView {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
                             .contents
-                            .replace(AddressUtil.WAVES_PREFIX, "")
+                            .replace(WAVES_PREFIX, "")
                     parseDataFromQr(result)
                 }
             }
@@ -487,7 +484,7 @@ class SendActivity : BaseActivity(), SendView {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
                             .contents
-                            .replace(AddressUtil.WAVES_PREFIX, "")
+                            .replace(WAVES_PREFIX, "")
                     edit_monero_payment_id.setText(result)
                 }
             }

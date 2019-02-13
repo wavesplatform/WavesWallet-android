@@ -8,12 +8,12 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.wavesplatform.sdk.utils.AddressUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.sdk.model.response.Alias
+import com.wavesplatform.sdk.utils.WAVES_PREFIX
 import com.wavesplatform.sdk.utils.isValidAddress
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
@@ -221,7 +221,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             REQUEST_SCAN_QR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                    val address = result.contents.replace(AddressUtil.WAVES_PREFIX, "")
+                    val address = result.contents.replace(WAVES_PREFIX, "")
                     if (!address.isEmpty()) {
                         edit_address.setText(address)
                     } else {

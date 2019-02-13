@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CoinomatManager @Inject constructor() : BaseDataManager() {
+class CoinomatManager @Inject constructor() : BaseDataManager(context, factory) {
 
     fun loadRate(crypto: String?, address: String?, fiat: String?, amount: String?): Observable<String> {
         return coinomatService.rate(crypto, address, fiat, amount)

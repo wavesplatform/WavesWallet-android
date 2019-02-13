@@ -12,7 +12,8 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     private val mPref: EncryptedPreferences
 
     init {
-        mPref = EncryptedPreferences.Builder(context).withPreferenceName(PREF_FILE_NAME).withEncryptionPassword("Waves").build()
+        mPref = EncryptedPreferences.Builder(context).withPreferenceName(PREF_FILE_NAME)
+                .withEncryptionPassword("Waves").build()
     }
 
     fun clear() {

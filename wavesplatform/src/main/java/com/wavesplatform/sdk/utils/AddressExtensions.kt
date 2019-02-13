@@ -1,24 +1,28 @@
 package com.wavesplatform.sdk.utils
 
+import com.google.common.primitives.Bytes
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.utils.AddressUtil.Companion.calcCheckSum
+import com.wavesplatform.sdk.crypto.Hash
 import java.util.*
 
-var AddressVersion: Byte = 1
-var ChecksumLength = 4
-var HashLength = 20
-var AddressLength = 1 + 1 + ChecksumLength + HashLength
+const val ADDRESS_VERSION: Byte = 1
+const val CHECK_SUM_LENGTH = 4
+const val HASH_LENGTH = 20
+const val ADDRESS_LENGTH = 1 + 1 + CHECK_SUM_LENGTH + HASH_LENGTH
+const val WAVES_PREFIX = "waves://"
 
 fun String?.isValidAddress(): Boolean {
-    if (this.isNullOrEmpty()) return false
+    if (this.isNullOrEmpty()) {
+        return false
+    }
     return try {
         val bytes = Base58.decode(this)
-        if (bytes.size == AddressLength
-                && bytes[0] == AddressVersion
+        if (bytes.size == ADDRESS_LENGTH
+                && bytes[0] == ADDRESS_VERSION
                 && bytes[1] == Constants.NET_CODE) {
-            val checkSum = Arrays.copyOfRange(bytes, bytes.size - ChecksumLength, bytes.size)
-            val checkSumGenerated = calcCheckSum(Arrays.copyOf(bytes, bytes.size - ChecksumLength))
+            val checkSum = Arrays.copyOfRange(bytes, bytes.size - CHECK_SUM_LENGTH, bytes.size)
+            val checkSumGenerated = calcCheckSum(bytes.copyOf(bytes.size - CHECK_SUM_LENGTH))
             Arrays.equals(checkSum, checkSumGenerated)
         } else {
             false
@@ -34,4 +38,22 @@ fun String.makeAsAlias(): String {
 
 fun String.clearAlias(): String {
     return this.substringAfterLast(":")
+}
+
+fun calcCheckSum(bytes: ByteArray): ByteArray {
+    return Arrays.copyOfRange(Hash.secureHash(bytes), 0, CHECK_SUM_LENGTH)
+}
+
+fun addressFromPublicKey(publicKey: ByteArray): String {
+    return try {
+        val publicKeyHash = Hash.secureHash(publicKey).copyOf(HASH_LENGTH)
+        val withoutChecksum = Bytes.concat(byteArrayOf(ADDRESS_VERSION, Constants.NET_CODE), publicKeyHash)
+        Base58.encode(Bytes.concat(withoutChecksum, calcCheckSum(withoutChecksum)))
+    } catch (e: Exception) {
+        "Unknown address"
+    }
+}
+
+fun addressFromPublicKey(publicKey: String): String {
+    return addressFromPublicKey(Base58.decode(publicKey))
 }

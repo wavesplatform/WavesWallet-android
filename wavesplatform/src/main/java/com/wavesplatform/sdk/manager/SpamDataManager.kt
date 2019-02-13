@@ -8,7 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SpamDataManager @Inject constructor() : BaseDataManager() {
+class SpamDataManager @Inject constructor() : BaseDataManager(context, factory) {
 
     fun isValidNewSpamUrl(url: String): Observable<Boolean> {
         return spamService.spamAssets(url)

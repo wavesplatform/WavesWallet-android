@@ -15,16 +15,14 @@ import com.google.firebase.FirebaseApp;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.squareup.leakcanary.LeakCanary;
 import com.wavesplatform.sdk.Wavesplatform;
-import com.wavesplatform.wallet.v2.util.connectivity.ConnectivityManager;
-import com.wavesplatform.wallet.v2.util.EnvironmentManager;
-import com.wavesplatform.wallet.v2.util.AppUtil;
-import com.wavesplatform.wallet.v2.util.ApplicationLifeCycle;
-import com.wavesplatform.wallet.v2.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
 import com.wavesplatform.wallet.v2.util.Analytics;
+import com.wavesplatform.wallet.v2.util.EnvironmentManager;
+import com.wavesplatform.wallet.v2.util.PrefsUtil;
+import com.wavesplatform.wallet.v2.util.connectivity.ConnectivityManager;
 
 import javax.inject.Inject;
 
@@ -66,13 +64,12 @@ public class App extends DaggerApplication {
         Realm.init(this);
         Ext.INSTANCE.setCtx(this);
 
-        Wavesplatform.init(this);
-
         RxJavaPlugins.setErrorHandler(Timber::e);
 
-        AppUtil appUtil = new AppUtil(this);
         EnvironmentManager.init(this);
-        accessManager = new AccessManager(mPrefsUtil, appUtil, authHelper);
+        accessManager = new AccessManager(mPrefsUtil, authHelper);
+
+        Wavesplatform.init(this, null);// new RxErrorHandlingCallAdapterFactory(errorManager)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

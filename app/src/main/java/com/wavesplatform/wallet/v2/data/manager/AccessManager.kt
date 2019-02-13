@@ -1,40 +1,33 @@
 package com.wavesplatform.wallet.v2.data.manager
 
-import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
 import com.vicpin.krealmextensions.RealmConfigStore
 import com.wavesplatform.sdk.WavesWallet
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.utils.AddressUtil
+import com.wavesplatform.sdk.crypto.AESUtil
+import com.wavesplatform.sdk.utils.addressFromPublicKey
+import com.wavesplatform.sdk.utils.randomString
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v2.util.AESUtil
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
-import com.wavesplatform.wallet.v2.util.AppUtil
-import com.wavesplatform.wallet.v2.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
-import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.data.database.DBHelper
-import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
+import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
 import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
-import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
-import com.wavesplatform.wallet.v2.util.MigrationUtil
-import com.wavesplatform.wallet.v2.util.deleteRecursive
+import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
+import com.wavesplatform.wallet.v2.util.*
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.exceptions.Exceptions
 import org.apache.commons.io.Charsets
-import org.spongycastle.util.encoders.Hex
 import pers.victor.ext.app
+import timber.log.Timber
 import java.io.File
-import java.security.SecureRandom
 import java.util.*
 
 
-class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, private var authHelper: AuthHelper) {
+class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHelper) {
 
     private val pinStore = PinStoreService()
     private var loggedInGuid: String = ""
@@ -72,7 +65,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             try {
                 val keyPassword = randomString()
                 pinStore.writePassword(guid, passCode, keyPassword)
-                        .subscribe({ _ ->
+                        .subscribe({
                             val encryptedPassword = AESUtil.encrypt(
                                     password, keyPassword, AESUtil.PIN_PBKDF2_ITERATIONS)
                             prefs.setValue(guid, PrefsUtil.KEY_ENCRYPTED_PASSWORD, encryptedPassword)
@@ -85,7 +78,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
                             }
                         })
             } catch (e: Exception) {
-                Log.e(javaClass.simpleName, "createPinObservable", e)
+                Timber.e(e,"AccessManager: writePassCodeObservable")
                 if (!subscriber.isDisposed) {
                     subscriber.onError(RuntimeException("Failed to encrypt password"))
                 }
@@ -93,30 +86,21 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         }.compose(RxUtil.applySchedulersToCompletable())
     }
 
-    private fun randomString(): String {
-        val bytes = ByteArray(16)
-        val random = SecureRandom()
-        random.nextBytes(bytes)
-        return String(Hex.encode(bytes), charset("UTF-8"))
-    }
-
     fun storeWalletData(seed: String, password: String, walletName: String, skipBackup: Boolean): String {
         try {
-            Wavesplatform.get().createWallet(seed)
-            val guid = UUID.randomUUID().toString()
-            loggedInGuid = guid
-            prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, guid)
+            loggedInGuid = Wavesplatform.createWallet(seed)
+            prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, loggedInGuid)
             prefs.addGlobalListValue(EnvironmentManager.get().current().getName()
-                    + PrefsUtil.LIST_WALLET_GUIDS, guid)
-            prefs.setValue(PrefsUtil.KEY_PUB_KEY, Wavesplatform.get().getWallet()?.publicKeyStr)
+                    + PrefsUtil.LIST_WALLET_GUIDS, loggedInGuid)
+            prefs.setValue(PrefsUtil.KEY_PUB_KEY, Wavesplatform.getWallet().publicKeyStr)
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
-            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, Wavesplatform.get().getWallet()?.getEncryptedData(password))
-            authHelper.configureDB(Wavesplatform.get().getWallet()?.address, guid)
+            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, Wavesplatform.getWallet().getEncryptedData(password))
+            authHelper.configureDB(Wavesplatform.getWallet().address, loggedInGuid)
             MigrationUtil.checkOldAddressBook(prefs, loggedInGuid)
             prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, skipBackup)
-            return guid
+            return loggedInGuid
         } catch (e: Exception) {
-            Log.e(javaClass.simpleName, "storeWalletData: ", e)
+            Timber.e(e,"AccessManager: storeWalletData")
             return ""
         }
     }
@@ -134,7 +118,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         var resultGuid = ""
         for (guid in guids) {
             val publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "")
-            if (AddressUtil.addressFromPublicKey(publicKey) == address) {
+            if (addressFromPublicKey(publicKey) == address) {
                 resultGuid = guid
             }
         }
@@ -191,19 +175,23 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
 
     fun resetWallet() {
         clearRealmConfiguration()
-        Wavesplatform.get().resetWallet()
+        Wavesplatform.resetWallet()
         loggedInGuid = ""
     }
 
     fun setWallet(guid: String, password: String) {
-        Wavesplatform.get().createWallet(getWalletData(guid), password)
+        Wavesplatform.createWallet(getWalletData(guid), password, guid)
         setLastLoggedInGuid(guid)
-        authHelper.configureDB(Wavesplatform.get().getWallet()?.address, guid)
+        authHelper.configureDB(getWallet().address, guid)
         MigrationUtil.checkOldAddressBook(prefs, guid)
     }
 
-    fun getWallet(): WavesWallet? {
-        return Wavesplatform.get().getWallet()
+    fun isAuthenticated(): Boolean {
+        return Wavesplatform.isAuthenticated()
+    }
+
+    fun getWallet(): WavesWallet {
+        return Wavesplatform.getWallet()
     }
 
     private fun createAddressBookCurrentAccount(): AddressBookUserDb? {
@@ -216,8 +204,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
 
         return if (TextUtils.isEmpty(publicKey) || TextUtils.isEmpty(name)) {
             null
-        } else AddressBookUserDb(AddressUtil.addressFromPublicKey(publicKey), name)
-
+        } else AddressBookUserDb(addressFromPublicKey(publicKey), name)
     }
 
     fun deleteCurrentWavesWallet(): Boolean {
@@ -313,7 +300,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             return ""
         }
         val publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "")
-        return AddressUtil.addressFromPublicKey(publicKey)
+        return addressFromPublicKey(publicKey)
     }
 
     fun storePassword(guid: String, publicKeyStr: String, encryptedPassword: String) {
@@ -363,11 +350,5 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
 
     fun isUseFingerPrint(guid: String): Boolean {
         return prefs.getGuidValue(guid, PrefsUtil.KEY_USE_FINGERPRINT, false)
-    }
-
-    fun restartApp(context: Context) {
-        val intent = Intent(context, SplashActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(intent)
     }
 }

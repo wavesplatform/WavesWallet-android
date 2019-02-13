@@ -31,7 +31,7 @@ data class BurnRequest(
                     byteArrayOf(Transaction.BURN.toByte()),
                     byteArrayOf(Constants.NET_CODE),
                     byteArrayOf(chainId),
-                    Base58.decode(Wavesplatform.get().getWallet()?.publicKeyStr ?: ""),
+                    Base58.decode(Wavesplatform.getWallet().publicKeyStr ?: ""),
                     Base58.decode(assetId),
                     Longs.toByteArray(quantity),
                     Longs.toByteArray(fee),

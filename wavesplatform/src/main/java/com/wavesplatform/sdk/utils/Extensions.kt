@@ -23,9 +23,11 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.model.response.*
+import org.spongycastle.util.encoders.Hex
 import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.security.SecureRandom
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -334,4 +336,11 @@ fun getScaledAmount(amount: Long, decimals: Int): String {
         else -> MoneyUtil.createFormatter(decimals).format(BigDecimal.valueOf(absAmount, decimals))
                 .stripZeros() + ""
     }
+}
+
+fun randomString(): String {
+    val bytes = ByteArray(16)
+    val random = SecureRandom()
+    random.nextBytes(bytes)
+    return String(Hex.encode(bytes), charset("UTF-8"))
 }

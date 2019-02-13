@@ -3,7 +3,7 @@ package com.wavesplatform.sdk
 import com.wavesplatform.sdk.crypto.AESUtil
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.PrivateKeyAccount
-import com.wavesplatform.sdk.utils.AddressUtil
+import com.wavesplatform.sdk.utils.addressFromPublicKey
 
 class WavesWallet(val seed: ByteArray) {
     private val account: PrivateKeyAccount = PrivateKeyAccount(seed)
@@ -22,7 +22,7 @@ class WavesWallet(val seed: ByteArray) {
         get() = String(seed, Charsets.UTF_8)
 
     init {
-        address = AddressUtil.addressFromPublicKey(account.publicKey)
+        address = addressFromPublicKey(account.publicKey)
     }
 
     @Throws(Exception::class)

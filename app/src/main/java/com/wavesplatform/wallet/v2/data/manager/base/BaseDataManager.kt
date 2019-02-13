@@ -10,21 +10,21 @@ import javax.inject.Inject
 
 open class BaseDataManager @Inject constructor() {
 
-    var nodeService: NodeService = Wavesplatform.get().dataManager.nodeService
-    var apiService: ApiService = Wavesplatform.get().dataManager.apiService
-    var spamService: SpamService = Wavesplatform.get().dataManager.spamService
-    var coinomatService: CoinomatService = Wavesplatform.get().dataManager.coinomatService
-    var matcherService: MatcherService = Wavesplatform.get().dataManager.matcherService
+    var nodeService: NodeService = Wavesplatform.getNodeService()
+    var apiService: ApiService = Wavesplatform.getApiService()
+    var spamService: SpamService = Wavesplatform.getSpamService()
+    var coinomatService: CoinomatService = Wavesplatform.getCoinomatService()
+    var matcherService: MatcherService = Wavesplatform.getMatcherService()
     var preferencesHelper: PreferencesHelper = PreferencesHelper(App.getAppContext())
     var prefsUtil: PrefsUtil = PrefsUtil(App.getAppContext())
     var rxEventBus: RxEventBus = RxEventBus()
 
 
     fun getAddress(): String {
-        return Wavesplatform.get().getWallet()?.address ?: ""
+        return Wavesplatform.getAddress()
     }
 
     fun getPublicKeyStr(): String {
-        return Wavesplatform.get().getWallet()?.publicKeyStr ?: ""
+        return Wavesplatform.getPublicKeyStr()
     }
 }

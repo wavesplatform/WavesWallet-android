@@ -10,21 +10,20 @@ import com.wavesplatform.sdk.manager.base.BaseDataManager
 import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.utils.notNull
 import io.reactivex.Observable
-import pers.victor.ext.currentTimeMillis
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ApiDataManager @Inject constructor() : BaseDataManager() {
+class ApiDataManager @Inject constructor() : BaseDataManager(context, factory) {
 
     companion object {
         var DEFAULT_LAST_TRADES_LIMIT = 50
     }
 
     fun loadAliases(): Observable<List<Alias>> {
-        return apiService.aliases(Wavesplatform.get().getWallet()?.address)
+        return apiService.aliases(Wavesplatform.getWallet().address)
                 .map {
                     val aliases = it.data.mapTo(ArrayList()) {
                         it.alias.own = true

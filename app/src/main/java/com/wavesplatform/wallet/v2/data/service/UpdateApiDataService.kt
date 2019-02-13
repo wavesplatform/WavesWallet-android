@@ -35,7 +35,7 @@ class UpdateApiDataService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (App.getAccessManager().getWallet() == null
+        if (App.getAccessManager().isAuthenticated()
                 || ProcessLifecycleOwner.get().lifecycle.currentState != Lifecycle.State.RESUMED) {
             stopSelf()
             return Service.START_NOT_STICKY

@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.util
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.ClipData
@@ -56,6 +57,7 @@ import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import pers.victor.ext.*
@@ -125,10 +127,6 @@ fun getWavesDexFee(fee: Long): BigDecimal {
 
 fun String.isWavesId(): Boolean {
     return this.toLowerCase() == Constants.wavesAssetInfo.id
-}
-
-fun ByteArray.arrayWithSize(): ByteArray {
-    return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
 }
 
 fun String.clearBalance(): String {
@@ -595,11 +593,7 @@ inline fun <reified T : Any> Context.launchActivity(
 
 
     intent.init()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        startActivity(intent, options)
-    } else {
-        startActivity(intent)
-    }
+    startActivity(intent, options)
 }
 
 fun Snackbar.withColor(@ColorRes colorInt: Int?): Snackbar {
@@ -756,4 +750,10 @@ fun AssetBalance.getItemType(): Int {
         isHidden -> AssetsAdapter.TYPE_HIDDEN_ASSET
         else -> AssetsAdapter.TYPE_ASSET
     }
+}
+
+fun restartApp() {
+    val intent = Intent(App.getAppContext(), com.wavesplatform.wallet.v2.ui.splash.SplashActivity::class.java)
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+    App.getAppContext().startActivity(intent)
 }

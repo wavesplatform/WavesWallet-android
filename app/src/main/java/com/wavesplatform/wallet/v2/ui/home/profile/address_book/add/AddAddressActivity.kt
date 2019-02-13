@@ -9,7 +9,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.OnDrawableClickListener
-import com.wavesplatform.sdk.utils.AddressUtil
+import com.wavesplatform.sdk.utils.WAVES_PREFIX
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.rules.AddressBookAddressRule
@@ -21,7 +22,6 @@ import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
-import com.wavesplatform.wallet.v2.util.notNull
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -157,7 +157,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
             ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                    result.contents.replace(AddressUtil.WAVES_PREFIX, "").notNull {
+                    result.contents.replace(WAVES_PREFIX, "").notNull {
                         edit_address.setText(it.trim())
                     }
                 }

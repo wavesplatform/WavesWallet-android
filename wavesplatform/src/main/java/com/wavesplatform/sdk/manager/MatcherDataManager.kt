@@ -15,41 +15,40 @@ import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.sdk.utils.notNull
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function3
 import pers.victor.ext.currentTimeMillis
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MatcherDataManager @Inject constructor() : BaseDataManager() {
+class MatcherDataManager @Inject constructor() : BaseDataManager(context, factory) {
     var allMarketsList = mutableListOf<MarketResponse>()
 
     fun loadReservedBalances(): Observable<Map<String, Long>> {
         val timestamp = currentTimeMillis
         var signature = ""
-        Wavesplatform.get().getWallet()?.privateKey.notNull { privateKey ->
+        Wavesplatform.getWallet().privateKey.notNull { privateKey ->
             val bytes = Bytes.concat(Base58.decode(
-                    Wavesplatform.get().getWallet()?.publicKeyStr ?: ""),
+                    Wavesplatform.getWallet().publicKeyStr ?: ""),
                     Longs.toByteArray(timestamp))
             signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
         }
         return matcherService.loadReservedBalances(
-                Wavesplatform.get().getWallet()?.publicKeyStr, timestamp, signature)
+                Wavesplatform.getWallet().publicKeyStr, timestamp, signature)
     }
 
     fun loadMyOrders(watchMarket: WatchMarket?): Observable<List<OrderResponse>> {
         val timestamp = currentTimeMillis
         var signature = ""
-        Wavesplatform.get().getWallet()?.privateKey.notNull { privateKey ->
+        Wavesplatform.getWallet().privateKey.notNull { privateKey ->
             val bytes = Bytes.concat(Base58.decode(
-                    Wavesplatform.get().getWallet()?.publicKeyStr ?: ""),
+                    Wavesplatform.getWallet().publicKeyStr ?: ""),
                     Longs.toByteArray(timestamp))
             signature = Base58.encode(CryptoProvider.sign(privateKey, bytes))
         }
         return matcherService.getMyOrders(
                 watchMarket?.market?.amountAsset,
                 watchMarket?.market?.priceAsset,
-                Wavesplatform.get().getWallet()?.publicKeyStr,
+                Wavesplatform.getWallet().publicKeyStr,
                 signature,
                 timestamp)
     }
@@ -63,9 +62,9 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     fun cancelOrder(orderId: String,
                     watchMarket: WatchMarket?,
                     cancelOrderRequest: CancelOrderRequest): Observable<Any> {
-        cancelOrderRequest.sender = Wavesplatform.get().getWallet()?.publicKeyStr ?: ""
+        cancelOrderRequest.sender = Wavesplatform.getWallet().publicKeyStr ?: ""
         cancelOrderRequest.orderId = orderId
-        Wavesplatform.get().getWallet()?.privateKey.notNull {
+        Wavesplatform.getWallet().privateKey.notNull {
             cancelOrderRequest.sign(it)
         }
         return matcherService.cancelOrder(
@@ -80,7 +79,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return matcherService.getBalanceFromAssetPair(
                 watchMarket?.market?.amountAsset,
                 watchMarket?.market?.priceAsset,
-                Wavesplatform.get().getWallet()?.address)
+                Wavesplatform.getWallet().address)
     }
 
     fun getMatcherKey(): Observable<String> {
@@ -88,8 +87,8 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun placeOrder(orderRequest: OrderRequest): Observable<Any> {
-        orderRequest.senderPublicKey = Wavesplatform.get().getWallet()?.publicKeyStr ?: ""
-        Wavesplatform.get().getWallet()?.privateKey.notNull { privateKey ->
+        orderRequest.senderPublicKey = Wavesplatform.getWallet().publicKeyStr ?: ""
+        Wavesplatform.getWallet().privateKey.notNull { privateKey ->
             orderRequest.sign(privateKey)
         }
         return matcherService.placeOrder(orderRequest)

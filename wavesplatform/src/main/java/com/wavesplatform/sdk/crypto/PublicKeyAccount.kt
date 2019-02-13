@@ -1,6 +1,6 @@
 package com.wavesplatform.sdk.crypto
 
-import com.wavesplatform.sdk.utils.AddressUtil
+import com.wavesplatform.sdk.utils.addressFromPublicKey
 
 class PublicKeyAccount @Throws(InvalidPublicKey::class)
 constructor(val publicKeyStr: String) {
@@ -18,7 +18,7 @@ constructor(val publicKeyStr: String) {
             throw InvalidPublicKey()
         }
 
-        this.address = AddressUtil.addressFromPublicKey(publicKey)
+        this.address = addressFromPublicKey(publicKey)
     }
 
     companion object {

@@ -272,7 +272,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 .onErrorResumeNext(Observable.empty())
     }
 
-    fun activeLeasing(): Observable<List<Transaction>> {
+    private fun activeLeasing(): Observable<List<Transaction>> {
         return nodeService.activeLeasing(getAddress())
                 .map {
                     return@map it.filter {

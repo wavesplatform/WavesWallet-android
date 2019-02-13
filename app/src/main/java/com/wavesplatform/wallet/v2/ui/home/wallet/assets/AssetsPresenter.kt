@@ -5,6 +5,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.saveAll
+import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
@@ -214,8 +215,10 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     }
 
     fun loadAliases() {
-        addSubscription(apiDataManager.loadAliases()
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe {})
+        if (Wavesplatform.isAuthenticated()) {
+            addSubscription(apiDataManager.loadAliases()
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe {})
+        }
     }
 }
