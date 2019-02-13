@@ -157,7 +157,7 @@ class SendActivity : BaseActivity(), SendView {
             }
         }
 
-        button_continue.click { parseDataFromQr("bitcoin:wefwfwijfwijfiwjfi") }
+        button_continue.click { presenter.sendClicked() }
 
         text_use_total_balance.click { setPercent(1.0) }
         text_50_percent.click { setPercent(0.50) }
