@@ -157,7 +157,7 @@ class SendActivity : BaseActivity(), SendView {
             }
         }
 
-        button_continue.click { presenter.sendClicked() }
+        button_continue.click { parseDataFromQr("bitcoin:wefwfwijfwijfiwjfi") }
 
         text_use_total_balance.click { setPercent(1.0) }
         text_50_percent.click { setPercent(0.50) }
@@ -568,7 +568,12 @@ class SendActivity : BaseActivity(), SendView {
                 error.printStackTrace()
             }
         } else {
-            edit_address.setText(result)
+            if (result.contains(":")) {
+                val split = result.split(":")
+                edit_address.setText(split[1].trim())
+            } else {
+                edit_address.setText(result)
+            }
         }
     }
 
