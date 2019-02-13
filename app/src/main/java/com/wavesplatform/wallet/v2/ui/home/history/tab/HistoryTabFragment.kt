@@ -18,10 +18,8 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_history_tab.*
 import pers.victor.ext.inflate
-import pyxis.uzuki.live.richutilskt.utils.runAsync
 import java.util.*
 import javax.inject.Inject
 
@@ -134,7 +132,10 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
     override fun afterSuccessLoadTransaction(data: ArrayList<HistoryItem>, type: String?) {
         adapter.setNewData(data)
-        skeletonScreen.notNull { it.hide() }
+        skeletonScreen.notNull {
+            skeletonShow = false
+            it.hide()
+        }
         swipe_refresh.isRefreshing = false
     }
 
