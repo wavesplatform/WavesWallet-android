@@ -184,25 +184,25 @@ public class CommissionTest {
         assertEquals(700000L, Companion.countCommission(commission, params));
 
         params = new GlobalTransactionCommission.Params();
-        params.setTransactionType(Transaction.SET_SCRIPT);
+        params.setTransactionType(Transaction.ADDRESS_SCRIPT);
         params.setSmartAccount(false);
         params.setSmartAsset(true);
         assertEquals(1000000L, Companion.countCommission(commission, params));
 
         params = new GlobalTransactionCommission.Params();
-        params.setTransactionType(Transaction.SET_SCRIPT);
+        params.setTransactionType(Transaction.ADDRESS_SCRIPT);
         params.setSmartAccount(true);
         params.setSmartAsset(true);
         assertEquals(1400000L, Companion.countCommission(commission, params));
 
         params = new GlobalTransactionCommission.Params();
-        params.setTransactionType(Transaction.SPONSOR_FEE);
+        params.setTransactionType(Transaction.SPONSORSHIP);
         params.setSmartAccount(false);
         params.setSmartAsset(true);
         assertEquals(100000000L, Companion.countCommission(commission, params));
 
         params = new GlobalTransactionCommission.Params();
-        params.setTransactionType(Transaction.SPONSOR_FEE);
+        params.setTransactionType(Transaction.SPONSORSHIP);
         params.setSmartAccount(true);
         params.setSmartAsset(true);
         assertEquals(100400000L, Companion.countCommission(commission, params));

@@ -34,7 +34,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
     @Inject
     lateinit var adapterAvatar: AssetDetailsAvatarPagerAdapter
-    var assetDetailsContentPageAdapter: AssetDetailsContentPageAdapter? = null
+    private var assetDetailsContentPageAdapter: AssetDetailsContentPageAdapter? = null
 
     lateinit var menu: Menu
     private var skeletonScreen: ViewSkeletonScreen? = null
