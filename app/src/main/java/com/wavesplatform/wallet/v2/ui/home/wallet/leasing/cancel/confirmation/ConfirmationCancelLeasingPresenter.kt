@@ -9,8 +9,8 @@ import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.sdk.utils.TransactionUtil
+import com.wavesplatform.sdk.utils.isSmartError
 import com.wavesplatform.wallet.v2.util.errorBody
-import com.wavesplatform.wallet.v2.util.isSmartError
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import javax.inject.Inject

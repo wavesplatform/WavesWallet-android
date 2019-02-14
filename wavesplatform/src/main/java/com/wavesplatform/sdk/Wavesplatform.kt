@@ -2,14 +2,14 @@ package com.wavesplatform.sdk
 
 import android.content.Context
 import android.util.Log
-import com.wavesplatform.sdk.manager.base.BaseDataManager
+import com.wavesplatform.sdk.service.DataManager
 import com.wavesplatform.sdk.service.*
 import retrofit2.CallAdapter
 import java.util.*
 
 class Wavesplatform private constructor(context: Context, factory: CallAdapter.Factory?) {
 
-    private var dataManager: BaseDataManager = BaseDataManager(context, factory)
+    private var dataManager: DataManager = DataManager(context, factory)
     private var cookies: HashSet<String> = hashSetOf()
     private var wavesWallet: WavesWallet? = null
     private var guid: String = UUID.randomUUID().toString()

@@ -17,7 +17,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragme
 import com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_layout.view.*
 import pers.victor.ext.click

@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.data.manager
 
 import android.content.Intent
 import android.text.TextUtils
-import android.util.Log
 import com.vicpin.krealmextensions.RealmConfigStore
 import com.wavesplatform.sdk.WavesWallet
 import com.wavesplatform.sdk.Wavesplatform

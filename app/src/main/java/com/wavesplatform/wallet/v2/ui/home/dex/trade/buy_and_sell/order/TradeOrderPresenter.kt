@@ -9,12 +9,12 @@ import com.wavesplatform.sdk.model.request.OrderRequest
 import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.OrderBook
+import com.wavesplatform.sdk.utils.clearBalance
+import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.clearBalance
 import com.wavesplatform.wallet.v2.util.errorBody
-import com.wavesplatform.wallet.v2.util.isWaves
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import pers.victor.ext.currentTimeMillis

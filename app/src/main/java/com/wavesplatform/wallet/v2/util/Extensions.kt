@@ -1,15 +1,9 @@
 package com.wavesplatform.wallet.v2.util
 
-import android.animation.Animator
-import android.animation.AnimatorSet
-import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
-import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -40,34 +34,21 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
-import com.google.common.primitives.Bytes
-import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.exception.RetrofitException
-import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.model.response.ErrorResponse
+import com.wavesplatform.sdk.model.response.TransactionType
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.io.File
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.text.SimpleDateFormat
-import java.util.*
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     if (dest.isNullOrEmpty() && source.startsWith(".")) {
@@ -75,10 +56,6 @@ val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     }
     null
 }
-
-/**
- * Created by anonymous on 13.09.17.
- */
 
 fun EditText.applyFilterStartWithDot() {
     this.filters = arrayOf(filterStartWithDot)
@@ -115,22 +92,6 @@ fun Long.currentDateAsTimeSpanString(context: Context): String {
     val timeHour = currentTime.asDateString("HH:mm")
 
     return context.getString(R.string.dex_last_update_value, "$timeDayRelative, $timeHour")
-}
-
-fun String.isWaves(): Boolean {
-    return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
-}
-
-fun getWavesDexFee(fee: Long): BigDecimal {
-    return MoneyUtil.getScaledText(fee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
-}
-
-fun String.isWavesId(): Boolean {
-    return this.toLowerCase() == Constants.wavesAssetInfo.id
-}
-
-fun String.clearBalance(): String {
-    return this.stripZeros().replace(",", "")
 }
 
 fun View.makeBackgroundWithRippleEffect() {
@@ -186,10 +147,6 @@ fun Activity.openUrlWithIntent(url: String) {
     startActivity(browserIntent)
 }
 
-fun Transaction.transactionType(): TransactionType {
-    return TransactionType.getTypeById(this.transactionTypeId)
-}
-
 fun TransactionType.icon(): Drawable? {
     return ContextCompat.getDrawable(app, this.image)
 }
@@ -213,18 +170,6 @@ fun AlertDialog.makeStyled() {
     buttonNegative?.setTextColor(findColor(R.color.submit300))
 }
 
-fun Context.isAppOnForeground(): Boolean {
-    val appProcesses: MutableList<ActivityManager.RunningAppProcessInfo>? = activityManager.runningAppProcesses
-            ?: return false
-    val packageName = packageName
-    appProcesses?.forEach {
-        if (it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
-                && it.processName.equals(packageName)) {
-            return true
-        }
-    }
-    return false
-}
 
 fun Context.getToolBarHeight(): Int {
     val styledAttributes = getTheme().obtainStyledAttributes(
@@ -233,8 +178,6 @@ fun Context.getToolBarHeight(): Int {
     styledAttributes.recycle()
     return mActionBarSize
 }
-
-fun Number.roundTo(numFractionDigits: Int?) = String.format("%.${numFractionDigits}f", toDouble()).toDouble()
 
 fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
     return if (numDecimalPlaces != null) {
@@ -245,8 +188,6 @@ fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
     }
 }
 
-fun ClosedRange<Int>.random() =
-        Random().nextInt((endInclusive + 1) - start) + start
 
 fun TextView.makeLinks(links: Array<String>, clickableSpans: Array<ClickableSpan>) {
     val spannableString = SpannableString(this.text)
@@ -279,12 +220,6 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
         }
     }
 }
-
-fun String.stripZeros(): String {
-    if (this == "0.0") return this
-    return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
-}
-
 
 fun Fragment.showSuccess(@StringRes msgId: Int, @IdRes viewId: Int) {
     showSuccess(getString(msgId), viewId)
@@ -397,131 +332,6 @@ fun View.copyToClipboard(text: String, textView: AppCompatTextView,
     }
 }
 
-inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
-    var sum = 0L
-    for (element in this) {
-        sum += selector(element)
-    }
-    return sum
-}
-
-fun <T : Any> T?.notNull(f: (it: T) -> Unit) {
-    if (this != null) f(this)
-}
-
-fun String?.getAge(): String {
-    if (this.isNullOrEmpty()) return ""
-
-    val dob = Calendar.getInstance()
-    val today = Calendar.getInstance()
-
-    val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-    dob.time = sdf.parse(this)
-
-    var age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR)
-
-    if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
-        age--
-    }
-
-    val ageInt = age
-
-    return ageInt.toString()
-}
-
-
-fun ImageView.loadImage(url: String?, centerCrop: Boolean = true) {
-    this.post {
-        val options = RequestOptions()
-                .override(this.width, this.height)
-
-        if (centerCrop) options.transform(CenterCrop())
-
-        Glide.with(this)
-                .asBitmap()
-                .load(url)
-                .apply(options)
-                .into(this)
-    }
-}
-
-fun Context.getViewScaleAnimator(from: View, target: View, additionalPadding: Int = 0): Animator {
-    // height resize animation
-    val animatorSet = AnimatorSet()
-    val desiredHeight = from.height
-    val currentHeight = target.height
-    val heightAnimator = ValueAnimator.ofInt(currentHeight, desiredHeight - additionalPadding)
-    heightAnimator.addUpdateListener { animation ->
-        val params = target.layoutParams as ViewGroup.LayoutParams
-        params.height = animation.animatedValue as Int
-        target.layoutParams = params
-    }
-    animatorSet.play(heightAnimator)
-
-    // width resize animation
-    val desiredWidth = from.width
-    val currentWidth = target.width
-    val widthAnimator = ValueAnimator.ofInt(currentWidth, desiredWidth - additionalPadding)
-    widthAnimator.addUpdateListener { animation ->
-        val params = target.layoutParams as ViewGroup.LayoutParams
-        params.width = animation.animatedValue as Int
-        target.layoutParams = params
-    }
-    animatorSet.play(widthAnimator)
-    return animatorSet
-}
-
-fun ImageView.loadImage(drawableRes: Int?, centerCrop: Boolean = true) {
-    this.post {
-        val options = RequestOptions()
-                .override(this.width, this.height)
-
-        if (centerCrop) options.transform(CenterCrop())
-
-        Glide.with(this)
-                .asBitmap()
-                .load(drawableRes)
-                .apply(options)
-                .into(this)
-    }
-}
-
-fun ImageView.loadImage(file: File?, centerCrop: Boolean = true, circleCrop: Boolean = false, deleteImmediately: Boolean = true) {
-    this.post {
-        val options = RequestOptions()
-                .override(this.width, this.height)
-
-        if (centerCrop) options.transform(CenterCrop())
-        if (circleCrop) options.transform(CircleCrop())
-
-        Glide.with(this)
-                .load(file)
-                .apply(options)
-                .listener(object : RequestListener<Drawable> {
-                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        this@loadImage.setImageDrawable(resource)
-                        if (deleteImmediately) file?.delete()
-                        return true
-                    }
-
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                        return true
-                    }
-
-                })
-                .into(this)
-    }
-}
-
-
-@SuppressWarnings("deprecation")
-fun Context.fromHtml(source: String): Spanned {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
-    } else {
-        return Html.fromHtml(source)
-    }
-}
 
 /**
  * Extensions for simpler launching of Activities
@@ -649,26 +459,6 @@ fun TextView.makeTextHalfBold() {
     this.text = str.append(" $textAfter")
 }
 
-fun findMyOrder(first: Order, second: Order, address: String?): Order {
-    return if (first.sender == second.sender) {
-        if (first.timestamp > second.timestamp) {
-            first
-        } else {
-            second
-        }
-    } else if (first.sender == address) {
-        first
-    } else if (second.sender == address) {
-        second
-    } else {
-        if (first.timestamp > second.timestamp) {
-            first
-        } else {
-            second
-        }
-    }
-}
-
 fun Throwable.errorBody(): ErrorResponse? {
     return if (this is RetrofitException) {
         this.getErrorBodyAs(ErrorResponse::class.java)
@@ -677,37 +467,6 @@ fun Throwable.errorBody(): ErrorResponse? {
     }
 }
 
-fun ErrorResponse.isSmartError(): Boolean {
-    return this.error in 305..307
-}
-
-fun AssetInfo.getTicker(): String {
-
-    if (this.id.isWavesId()) {
-        return Constants.wavesAssetInfo.name
-    }
-
-    return this.ticker ?: this.name
-}
-
-fun getScaledAmount(amount: Long, decimals: Int): String {
-    val absAmount = Math.abs(amount)
-    val value = BigDecimal.valueOf(absAmount, decimals)
-    if (amount == 0L) {
-        return "0"
-    }
-
-    val sign = if (amount < 0) "-" else ""
-
-    return sign + when {
-        value >= MoneyUtil.ONE_M -> value.divide(MoneyUtil.ONE_M, 1, RoundingMode.HALF_EVEN)
-                .toPlainString().stripZeros() + "M"
-        value >= MoneyUtil.ONE_K -> value.divide(MoneyUtil.ONE_K, 1, RoundingMode.HALF_EVEN)
-                .toPlainString().stripZeros() + "k"
-        else -> MoneyUtil.createFormatter(decimals).format(BigDecimal.valueOf(absAmount, decimals))
-                .stripZeros() + ""
-    }
-}
 
 fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { }) {
     val alertDialogBuilder = AlertDialog.Builder(this, R.style.DialogBackgroundTheme).create()
@@ -737,12 +496,6 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
             && (null != queryFirst<SpamAssetDb> {
         equalTo("assetId", assetId)
     }))
-}
-
-fun isShowTicker(assetId: String?): Boolean {
-    return Constants.defaultAssets.any {
-        it.assetId == assetId || assetId.isNullOrEmpty()
-    }
 }
 
 fun AssetBalance.getItemType(): Int {

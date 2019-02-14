@@ -5,7 +5,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
-import com.wavesplatform.wallet.v2.util.clearBalance
+import com.wavesplatform.sdk.utils.clearBalance
 import java.math.BigDecimal
 
 class CounterHandler private constructor(builder: Builder) {

@@ -15,9 +15,9 @@ import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.model.request.CancelOrderRequest
 import com.wavesplatform.sdk.model.request.OrderRequest
 import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.db.MarketResponseDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
-import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3

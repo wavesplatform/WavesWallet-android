@@ -11,7 +11,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_change_language_layout.view.*
 import pers.victor.ext.click
 import pers.victor.ext.invisiable

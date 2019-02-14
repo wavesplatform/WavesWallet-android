@@ -10,10 +10,10 @@ import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.model.response.LastTradesResponse
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
-import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.fragment_trade_last_trades.*
 import kotlinx.android.synthetic.main.global_server_error_layout.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*

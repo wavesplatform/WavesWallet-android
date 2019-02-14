@@ -18,7 +18,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
 import kotlinx.android.synthetic.main.layout_asset_card.*

@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v2.data.database
 
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
 

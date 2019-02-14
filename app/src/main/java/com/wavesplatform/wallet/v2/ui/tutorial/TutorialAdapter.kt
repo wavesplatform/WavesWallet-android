@@ -9,7 +9,7 @@ import android.view.ViewTreeObserver
 import android.widget.ScrollView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import javax.inject.Inject
 
 

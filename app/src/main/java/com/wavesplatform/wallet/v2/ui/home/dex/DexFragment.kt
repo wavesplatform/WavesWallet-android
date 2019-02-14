@@ -23,7 +23,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.sorting.ActiveMarketsSortingActiv
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.currentDateAsTimeSpanString
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.empty_dex_layout.view.*
 import kotlinx.android.synthetic.main.fragment_dex_new.*
 import kotlinx.android.synthetic.main.header_dex_layout.view.*

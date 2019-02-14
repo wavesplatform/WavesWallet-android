@@ -17,7 +17,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivit
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.activity_confirm_backup_pharse.*
 import pers.victor.ext.*

@@ -8,9 +8,10 @@ import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.sdk.model.response.AssetInfo
-import com.wavesplatform.sdk.model.response.SpamAsset
 import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.sdk.model.response.TransactionType
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.sdk.utils.transactionType
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.db.TransferDb

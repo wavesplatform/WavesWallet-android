@@ -8,9 +8,9 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
-import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import pers.victor.ext.currentTimeMillis
 import java.util.*

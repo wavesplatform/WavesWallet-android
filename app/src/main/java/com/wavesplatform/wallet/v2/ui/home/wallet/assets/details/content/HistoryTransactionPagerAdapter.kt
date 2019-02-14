@@ -12,7 +12,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.sdk.model.response.TransactionType
-import com.wavesplatform.sdk.utils.TransactionUtil
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.assets_detailed_history_item.view.*

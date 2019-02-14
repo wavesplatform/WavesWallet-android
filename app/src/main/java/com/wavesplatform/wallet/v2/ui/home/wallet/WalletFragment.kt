@@ -11,7 +11,7 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import pers.victor.ext.gone
 import pers.victor.ext.visiable

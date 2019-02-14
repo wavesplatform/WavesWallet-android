@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.model.response.Transfer
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.annotations.RealmClass

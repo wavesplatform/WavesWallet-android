@@ -17,7 +17,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.Rec
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.applyFilterStartWithDot
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.fragment_invoice.*
 import kotlinx.android.synthetic.main.layout_asset_card.*
 import pers.victor.ext.click

@@ -1,5 +1,6 @@
 package com.wavesplatform.sdk.utils
 
+import io.reactivex.CompletableTransformer
 import io.reactivex.FlowableTransformer
 import io.reactivex.ObservableTransformer
 import io.reactivex.SingleTransformer
@@ -31,6 +32,20 @@ object RxUtil {
 
     fun <T> applyFlowableDefaultSchedulers(): FlowableTransformer<T, T> {    //compose
         return FlowableTransformer { observable ->
+            observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+        }
+    }
+
+    fun applySchedulersToCompletable(): CompletableTransformer {
+        return CompletableTransformer { observable ->
+            observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+        }
+    }
+
+    fun <T> applySchedulersToObservable(): ObservableTransformer<T, T> {
+        return ObservableTransformer { observable ->
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
         }

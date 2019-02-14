@@ -10,7 +10,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
 import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.wallet.v2.util.getScaledAmount
+import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.wallet_asset_item.view.*

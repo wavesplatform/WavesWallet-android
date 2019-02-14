@@ -11,7 +11,7 @@ import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.db.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import io.reactivex.Observable
 import java.text.SimpleDateFormat
 import java.util.*

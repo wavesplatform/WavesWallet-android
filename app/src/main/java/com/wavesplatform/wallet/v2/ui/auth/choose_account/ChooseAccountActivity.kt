@@ -19,7 +19,7 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.showSuccess
 import kotlinx.android.synthetic.main.activity_choose_account.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*

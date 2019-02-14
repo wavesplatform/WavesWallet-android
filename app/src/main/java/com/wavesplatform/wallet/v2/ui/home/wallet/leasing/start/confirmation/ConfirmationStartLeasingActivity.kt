@@ -2,15 +2,13 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
-import com.wavesplatform.wallet.v2.util.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_confirm_leasing.*

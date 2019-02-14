@@ -3,7 +3,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.model.response.AssetInfo
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass

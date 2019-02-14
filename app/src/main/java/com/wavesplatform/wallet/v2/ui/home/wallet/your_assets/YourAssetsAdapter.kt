@@ -5,8 +5,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.wallet.v2.util.clearBalance
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.clearBalance
+import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.your_assets_item.view.*
 import javax.inject.Inject
 
@@ -29,11 +29,7 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
                 }
         helper.itemView.image_asset_icon.setAsset(item)
 
-        if (item.assetId == currentAssetId) {
-            helper.itemView.checkbox_choose.isChecked = true
-        } else {
-            helper.itemView.checkbox_choose.isChecked = false
-        }
+        helper.itemView.checkbox_choose.isChecked = item.assetId == currentAssetId
     }
 
 

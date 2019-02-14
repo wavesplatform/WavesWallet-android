@@ -14,7 +14,7 @@ import com.wavesplatform.wallet.v2.ui.language.LanguagePresenter
 import com.wavesplatform.wallet.v2.ui.language.LanguageView
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.activity_choose_language.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px

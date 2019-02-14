@@ -1,4 +1,4 @@
-package com.wavesplatform.sdk.manager.base
+package com.wavesplatform.sdk.service
 
 import android.content.Context
 import android.util.Log
@@ -9,7 +9,6 @@ import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.sdk.BuildConfig
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.service.*
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -26,8 +25,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Singleton
-open class BaseDataManager(var context: Context,
-                           var adapterFactory: CallAdapter.Factory? = RxJava2CallAdapterFactory.create()) {
+open class DataManager(var context: Context,
+                       var adapterFactory: CallAdapter.Factory? = RxJava2CallAdapterFactory.create()) {
 
     lateinit var nodeService: NodeService
     lateinit var apiService: ApiService

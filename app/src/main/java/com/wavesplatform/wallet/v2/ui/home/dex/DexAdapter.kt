@@ -4,8 +4,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.model.WatchMarket
-import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.roundTo
+import com.wavesplatform.sdk.utils.notNull
 import pers.victor.ext.findDrawable
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -49,6 +48,4 @@ class DexAdapter @Inject constructor() : BaseQuickAdapter<WatchMarket, BaseViewH
         helper.setText(R.id.text_asset_name, "${item.market.amountAssetShortName} / ${item.market.priceAssetShortName}")
                 .setText(R.id.text_price_asset, mContext.getString(R.string.dex_last_price_value, item.market.priceAssetLongName))
     }
-
-
 }

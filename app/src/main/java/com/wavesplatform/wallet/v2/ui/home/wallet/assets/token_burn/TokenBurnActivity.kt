@@ -9,6 +9,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.utils.clearBalance
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.util.*

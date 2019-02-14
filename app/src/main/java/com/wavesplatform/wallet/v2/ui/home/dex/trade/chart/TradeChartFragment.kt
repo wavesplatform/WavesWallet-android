@@ -27,7 +27,7 @@ import com.wavesplatform.wallet.v2.ui.custom.CandleTouchListener
 import com.wavesplatform.wallet.v2.ui.custom.OnCandleGestureListener
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.activity_trade.*
 import kotlinx.android.synthetic.main.fragment_trade_chart.*
 import kotlinx.android.synthetic.main.global_server_error_layout.*

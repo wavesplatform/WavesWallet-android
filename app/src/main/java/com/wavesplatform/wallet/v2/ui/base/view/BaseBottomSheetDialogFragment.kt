@@ -15,7 +15,7 @@ import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.getToolBarHeight
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

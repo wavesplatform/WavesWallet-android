@@ -7,13 +7,13 @@ import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.model.response.LastTradesResponse
 import com.wavesplatform.sdk.model.response.OrderBook
+import com.wavesplatform.sdk.utils.clearBalance
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.data.model.local.OrderBookAskMultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.OrderBookBidMultiItemEntity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.clearBalance
-import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.stripZeros
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

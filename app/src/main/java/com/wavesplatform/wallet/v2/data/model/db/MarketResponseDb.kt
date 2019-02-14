@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.model.response.AmountAssetInfo
 import com.wavesplatform.sdk.model.response.MarketResponse
 import com.wavesplatform.sdk.model.response.PriceAssetInfo
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey

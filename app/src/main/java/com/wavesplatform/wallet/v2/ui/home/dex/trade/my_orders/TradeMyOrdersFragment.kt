@@ -12,7 +12,7 @@ import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.model.response.OrderResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.fragment_trade_my_orders.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.gone

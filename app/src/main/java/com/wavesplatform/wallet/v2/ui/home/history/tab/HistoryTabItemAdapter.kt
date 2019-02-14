@@ -16,10 +16,9 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.sdk.model.response.TransactionType
-import com.wavesplatform.sdk.utils.TransactionUtil
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.recycle_item_history.view.*
-import org.spongycastle.asn1.x500.style.RFC4519Style.title
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable

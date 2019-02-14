@@ -17,8 +17,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.coinomat.XRate
-import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.sdk.utils.WAVES_PREFIX
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb

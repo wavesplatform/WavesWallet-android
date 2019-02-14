@@ -27,9 +27,7 @@ import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.sdk.model.response.TransactionType
 import com.wavesplatform.sdk.model.response.Transfer
 import com.wavesplatform.sdk.service.CoinomatService
-import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.sdk.utils.TransactionUtil
-import com.wavesplatform.sdk.utils.clearAlias
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
