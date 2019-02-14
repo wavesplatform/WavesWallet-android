@@ -119,7 +119,7 @@ class SendActivity : BaseActivity(), SendView {
                 }
                 val amount = edit_amount.text?.toString() ?: "0"
                 if (amount.isNotBlank()) {
-                    if (amount == ".") {
+                    if (amount == "." || amount == "-") {
                         presenter.amount = BigDecimal.ZERO
                     } else {
                         presenter.amount = BigDecimal(amount)
