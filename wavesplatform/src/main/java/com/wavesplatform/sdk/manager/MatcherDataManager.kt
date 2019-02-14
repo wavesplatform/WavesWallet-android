@@ -1,5 +1,6 @@
 package com.wavesplatform.sdk.manager
 
+import android.content.Context
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.internal.LinkedTreeMap
@@ -16,12 +17,15 @@ import com.wavesplatform.sdk.utils.notNull
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import pers.victor.ext.currentTimeMillis
+import retrofit2.CallAdapter
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MatcherDataManager @Inject constructor() : BaseDataManager(context, factory) {
-    var allMarketsList = mutableListOf<MarketResponse>()
+class MatcherDataManager (context: Context,
+                          factory: CallAdapter.Factory?) : BaseDataManager(context, factory) {
+
+    private var allMarketsList = mutableListOf<MarketResponse>()
 
     fun loadReservedBalances(): Observable<Map<String, Long>> {
         val timestamp = currentTimeMillis

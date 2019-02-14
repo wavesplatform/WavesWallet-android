@@ -26,10 +26,12 @@ import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
@@ -132,6 +134,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                 }, {
                     it.printStackTrace()
                 }))
+
+        Wavesplatform.setCallAdapterFactory(RxErrorHandlingCallAdapterFactory(mErrorManager))
     }
 
     protected fun checkInternet() {

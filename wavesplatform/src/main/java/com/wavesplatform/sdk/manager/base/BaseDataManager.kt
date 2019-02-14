@@ -1,24 +1,157 @@
 package com.wavesplatform.sdk.manager.base
 
 import android.content.Context
+import android.util.Log
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
+import com.ihsanbal.logging.Level
+import com.ihsanbal.logging.LoggingInterceptor
+import com.wavesplatform.sdk.BuildConfig
+import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.service.*
+import okhttp3.Cache
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import ren.yale.android.retrofitcachelibrx2.RetrofitCache
+import ren.yale.android.retrofitcachelibrx2.intercept.CacheForceInterceptorNoNet
+import ren.yale.android.retrofitcachelibrx2.intercept.CacheInterceptorOnNet
 import retrofit2.CallAdapter
+import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import javax.inject.Inject
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.io.File
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Singleton
-open class BaseDataManager @Inject constructor(var context: Context,
-                                               var factory: CallAdapter.Factory?) {
+open class BaseDataManager(var context: Context,
+                           var adapterFactory: CallAdapter.Factory? = RxJava2CallAdapterFactory.create()) {
 
-    var nodeService = NodeService.create(context, factory ?: RxJava2CallAdapterFactory.create())
-    var apiService: ApiService = ApiService.create()
-    var spamService: SpamService = SpamService.create()
-    var coinomatService: CoinomatService = CoinomatService.create()
-    var matcherService: MatcherService = MatcherService.create()
+    lateinit var nodeService: NodeService
+    lateinit var apiService: ApiService
+    lateinit var matcherService: MatcherService
+    lateinit var spamService: SpamService
+    lateinit var coinomatService: CoinomatService
 
-    fun setCallAdapterFactory(factory: CallAdapter.Factory) {
-        nodeService = NodeService.create(context, factory)
+    init { createServices() }
+
+    private fun createServices() {
+        nodeService = createRetrofit(
+                Constants.URL_NODE,
+                createClient(),
+                adapterFactory ?: RxJava2CallAdapterFactory.create(),
+                createGsonFactory()).create(NodeService::class.java)
+
+        apiService = createRetrofit(
+                Constants.URL_DATA,
+                createClient(),
+                adapterFactory ?: RxJava2CallAdapterFactory.create(),
+                createGsonFactory()).create(ApiService::class.java)
+
+        matcherService = createRetrofit(
+                Constants.URL_MATCHER,
+                createClient(),
+                adapterFactory ?: RxJava2CallAdapterFactory.create(),
+                createGsonFactory()).create(MatcherService::class.java)
+
+        spamService = createRetrofit(
+                Constants.URL_SPAM_FILE,
+                createClient(),
+                adapterFactory ?: RxJava2CallAdapterFactory.create(),
+                createGsonFactory()).create(SpamService::class.java)
+
+        coinomatService = createRetrofit(
+                Constants.URL_COINOMAT,
+                createClient(),
+                adapterFactory ?: RxJava2CallAdapterFactory.create(),
+                createGsonFactory()).create(CoinomatService::class.java)
+    }
+
+    fun setCallAdapterFactory(adapterFactory: CallAdapter.Factory) {
+        this.adapterFactory = adapterFactory
+        createServices()
+    }
+
+    private fun createRetrofit(
+            baseUrl: String,
+            client: OkHttpClient,
+            adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create(),
+            gsonFactory: GsonConverterFactory): Retrofit {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(client)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addCallAdapterFactory(adapterFactory)
+                .addConverterFactory(gsonFactory)
+                .build()
+        RetrofitCache.getInstance().addRetrofit(retrofit)
+        return retrofit
+    }
+
+    private fun createClient(timeout: Long = 30L): OkHttpClient {
+        return OkHttpClient.Builder()
+                .cache(createCache())
+                .readTimeout(timeout, TimeUnit.SECONDS)
+                .writeTimeout(timeout, TimeUnit.SECONDS)
+                .addInterceptor(receivedCookiesInterceptor())
+                .addInterceptor(addCookiesInterceptor())
+                .addInterceptor(CacheForceInterceptorNoNet())
+                .addNetworkInterceptor(CacheInterceptorOnNet())
+                .addInterceptor(LoggingInterceptor.Builder()
+                        .loggable(BuildConfig.DEBUG)
+                        .setLevel(Level.BASIC)
+                        .log(Log.INFO)
+                        .request("Request")
+                        .response("Response")
+                        .build())
+                .build()
+    }
+
+    private fun receivedCookiesInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val originalResponse = chain.proceed(chain.request())
+            if (originalResponse.request().url().url().toString()
+                            .contains(Constants.URL_NODE)
+                    && originalResponse.headers("Set-Cookie").isNotEmpty()
+                    && Wavesplatform.getCookies().isEmpty()) {
+                val cookies = originalResponse.headers("Set-Cookie")
+                        .toHashSet()
+                Wavesplatform.setCookies(cookies)
+            }
+            originalResponse
+        }
+    }
+
+    private fun addCookiesInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val cookies = Wavesplatform.getCookies()
+            if (cookies.isNotEmpty() && chain.request().url().url().toString()
+                            .contains(Constants.URL_NODE)) {
+                val builder = chain.request().newBuilder()
+                cookies.forEach {
+                    builder.addHeader("Cookie", it)
+                }
+                chain.proceed(builder.build())
+            } else {
+                chain.proceed(chain.request())
+            }
+        }
+    }
+
+    private fun createCache(): Cache {
+        val cacheSize = 200 * 1024 * 1024
+        val cacheDirectory = File(context.cacheDir, "httpcache")
+        return Cache(cacheDirectory, cacheSize.toLong())
+    }
+
+    private fun createGsonFactory(): GsonConverterFactory {
+        return GsonConverterFactory.create(GsonBuilder()
+                .setLenient()
+                .setPrettyPrinting()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                .create())
     }
 }

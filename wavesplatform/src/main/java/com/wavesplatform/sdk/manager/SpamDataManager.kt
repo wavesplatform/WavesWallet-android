@@ -1,14 +1,17 @@
 package com.wavesplatform.sdk.manager
 
+import android.content.Context
 import com.wavesplatform.sdk.manager.base.BaseDataManager
 import com.wavesplatform.sdk.model.response.SpamAsset
 import io.reactivex.Observable
+import retrofit2.CallAdapter
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SpamDataManager @Inject constructor() : BaseDataManager(context, factory) {
+class SpamDataManager (context: Context,
+                       factory: CallAdapter.Factory?) : BaseDataManager(context, factory) {
 
     fun isValidNewSpamUrl(url: String): Observable<Boolean> {
         return spamService.spamAssets(url)

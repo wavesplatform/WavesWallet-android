@@ -1,18 +1,22 @@
 package com.wavesplatform.sdk.manager
 
+import android.content.Context
 import com.wavesplatform.sdk.manager.base.BaseDataManager
 import com.wavesplatform.sdk.model.response.coinomat.CreateTunnel
 import com.wavesplatform.sdk.model.response.coinomat.GetTunnel
 import com.wavesplatform.sdk.model.response.coinomat.Limit
 import com.wavesplatform.sdk.model.response.coinomat.XRate
 import io.reactivex.Observable
+import retrofit2.CallAdapter
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CoinomatManager @Inject constructor() : BaseDataManager(context, factory) {
+class CoinomatManager(context: Context,
+                      factory: CallAdapter.Factory?) : BaseDataManager(context, factory) {
 
-    fun loadRate(crypto: String?, address: String?, fiat: String?, amount: String?): Observable<String> {
+
+        fun loadRate(crypto: String?, address: String?, fiat: String?, amount: String?): Observable<String> {
         return coinomatService.rate(crypto, address, fiat, amount)
     }
 

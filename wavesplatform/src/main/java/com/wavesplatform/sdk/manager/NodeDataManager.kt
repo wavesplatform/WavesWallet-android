@@ -1,5 +1,6 @@
 package com.wavesplatform.sdk.manager
 
+import android.content.Context
 import android.text.TextUtils
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.Wavesplatform
@@ -13,6 +14,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.currentTimeMillis
+import retrofit2.CallAdapter
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -20,7 +22,8 @@ import javax.inject.Singleton
 import kotlin.collections.ArrayList
 
 @Singleton
-class NodeDataManager @Inject constructor() : BaseDataManager(context, factory) {
+class NodeDataManager (context: Context,
+                       factory: CallAdapter.Factory?) : BaseDataManager(context, factory) {
 
     @Inject
     lateinit var apiDataManager: ApiDataManager

@@ -52,16 +52,4 @@ interface MatcherService {
 
     @POST("matcher/orderbook")
     fun placeOrder(@Body orderRequest: OrderRequest): Observable<Any>
-
-    companion object Factory {
-        fun create(): MatcherService {
-            val retrofit = Retrofit.Builder()
-                    .baseUrl(Constants.URL_MATCHER)
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-            RetrofitCache.getInstance().addRetrofit(retrofit)
-            return retrofit.create(MatcherService::class.java)
-        }
-    }
 }

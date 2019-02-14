@@ -47,15 +47,5 @@ interface CoinomatService {
     companion object Factory {
 
         const val GATEWAY_ADDRESS = "3PAs2qSeUAfgqSKS8LpZPKGYEjJKcud9Djr"
-
-        fun create(): CoinomatService {
-            val retrofit = Retrofit.Builder()
-                    .baseUrl(Constants.URL_COINOMAT)
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-            RetrofitCache.getInstance().addRetrofit(retrofit)
-            return retrofit.create(CoinomatService::class.java)
-        }
     }
 }

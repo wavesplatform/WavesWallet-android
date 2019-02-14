@@ -55,9 +55,7 @@ public class App extends DaggerApplication {
 
         Analytics.appsFlyerInit(this);
         FirebaseApp.initializeApp(this);
-        if (!BuildConfig.DEBUG) {
-            Fabric.with(this, new Crashlytics());
-        }
+        Fabric.with(this, new Crashlytics());
         sContext = this;
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
@@ -69,7 +67,7 @@ public class App extends DaggerApplication {
         EnvironmentManager.init(this);
         accessManager = new AccessManager(mPrefsUtil, authHelper);
 
-        Wavesplatform.init(this, null);// new RxErrorHandlingCallAdapterFactory(errorManager)
+        Wavesplatform.init(this, null);
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

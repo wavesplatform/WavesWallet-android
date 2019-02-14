@@ -1,34 +1,20 @@
 package com.wavesplatform.sdk.service
 
-import android.content.Context
-import android.util.Log
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.ihsanbal.logging.Level
-import com.ihsanbal.logging.LoggingInterceptor
-import com.wavesplatform.sdk.BuildConfig
 import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.model.request.*
 import com.wavesplatform.sdk.model.response.*
 import io.reactivex.Observable
-import okhttp3.Cache
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import ren.yale.android.retrofitcachelibrx2.RetrofitCache
-import ren.yale.android.retrofitcachelibrx2.intercept.CacheForceInterceptorNoNet
-import ren.yale.android.retrofitcachelibrx2.intercept.CacheInterceptorOnNet
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import java.io.File
-import java.util.concurrent.TimeUnit
 
 interface NodeService {
 
@@ -87,87 +73,4 @@ interface NodeService {
 
     @GET("/assets/details/{assetId}")
     fun assetDetails(@Path("assetId") assetId: String): Observable<AssetsDetails>
-
-    companion object Factory {
-
-        // todo задать параметры и заменить везде ^
-        fun create(context: Context,
-                   factory: CallAdapter.Factory,
-                   timeout: Long = 30L): NodeService {
-            val retrofit = Retrofit.Builder()
-                    .baseUrl(Constants.URL_NODE)
-                    .client(createClient(context, timeout))
-                    .addCallAdapterFactory(factory)
-                    .addConverterFactory(GsonConverterFactory.create(createGson()))
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build()
-            RetrofitCache.getInstance().addRetrofit(retrofit)
-            return retrofit.create(NodeService::class.java)
-        }
-
-        private fun createClient(context: Context, timeout: Long = 30L) : OkHttpClient {
-            return OkHttpClient.Builder()
-                    .cache(createCache(context))
-                    .readTimeout(timeout, TimeUnit.SECONDS)
-                    .writeTimeout(timeout, TimeUnit.SECONDS)
-                    .addInterceptor(receivedCookiesInterceptor())
-                    .addInterceptor(addCookiesInterceptor())
-                    .addInterceptor(CacheForceInterceptorNoNet())
-                    .addNetworkInterceptor(CacheInterceptorOnNet())
-                    .addInterceptor(LoggingInterceptor.Builder()
-                            .loggable(BuildConfig.DEBUG)
-                            .setLevel(Level.BASIC)
-                            .log(Log.INFO)
-                            .request("Request")
-                            .response("Response")
-                            .build())
-                    .build()
-        }
-
-        private fun receivedCookiesInterceptor(): Interceptor {
-            return Interceptor { chain ->
-                val originalResponse = chain.proceed(chain.request())
-                if (originalResponse.request().url().url().toString()
-                                .contains(Constants.URL_NODE)
-                        && originalResponse.headers("Set-Cookie").isNotEmpty()
-                        && Wavesplatform.getCookies().isEmpty()) {
-                    val cookies = originalResponse.headers("Set-Cookie")
-                            .toHashSet()
-                    Wavesplatform.setCookies(cookies)
-                }
-                originalResponse
-            }
-        }
-
-        private fun addCookiesInterceptor(): Interceptor {
-            return Interceptor { chain ->
-                val cookies = Wavesplatform.getCookies()
-                if (cookies.isNotEmpty() && chain.request().url().url().toString()
-                                .contains(Constants.URL_NODE)) {
-                    val builder = chain.request().newBuilder()
-                    cookies.forEach {
-                        builder.addHeader("Cookie", it)
-                    }
-                    chain.proceed(builder.build())
-                } else {
-                    chain.proceed(chain.request())
-                }
-            }
-        }
-
-        private fun createCache(context: Context) : Cache {
-            val cacheSize = 200 * 1024 * 1024
-            val cacheDirectory = File(context.cacheDir, "httpcache")
-            return Cache(cacheDirectory, cacheSize.toLong())
-        }
-
-        private fun createGson() : Gson {
-            return GsonBuilder()
-                    .setLenient()
-                    .setPrettyPrinting()
-                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES) // if filed status_code need as statusCode
-                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                    .create()
-        }
-    }
 }

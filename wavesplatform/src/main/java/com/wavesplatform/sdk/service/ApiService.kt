@@ -46,16 +46,4 @@ interface ApiService {
                     @Query("interval") timeFrame: String,
                     @Query("timeStart") from: Long,
                     @Query("timeEnd") timeEnd: Long): Observable<CandlesResponse>
-
-    companion object Factory {
-        fun create(): ApiService {
-            val retrofit = Retrofit.Builder()
-                    .baseUrl(Constants.URL_DATA)
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-            RetrofitCache.getInstance().addRetrofit(retrofit)
-            return retrofit.create(ApiService::class.java)
-        }
-    }
 }

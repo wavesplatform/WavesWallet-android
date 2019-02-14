@@ -1,5 +1,6 @@
 package com.wavesplatform.sdk.manager
 
+import android.content.Context
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.model.response.Alias
@@ -10,13 +11,15 @@ import com.wavesplatform.sdk.manager.base.BaseDataManager
 import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.utils.notNull
 import io.reactivex.Observable
+import retrofit2.CallAdapter
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ApiDataManager @Inject constructor() : BaseDataManager(context, factory) {
+class ApiDataManager(context: Context,
+                     factory: CallAdapter.Factory?) : BaseDataManager(context, factory) {
 
     companion object {
         var DEFAULT_LAST_TRADES_LIMIT = 50
