@@ -147,7 +147,7 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
             }
         }
 
-        presenter.generateSeeds(this, linear_images.children as List<AppCompatImageView>)
+        presenter.generateSeeds(linear_images.children as List<AppCompatImageView>)
     }
 
     private fun goNext() {

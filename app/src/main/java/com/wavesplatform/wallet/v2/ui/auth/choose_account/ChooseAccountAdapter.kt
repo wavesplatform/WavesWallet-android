@@ -7,7 +7,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.daimajia.swipe.SwipeLayout
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.ui.custom.Identicon
+import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.runDelayed

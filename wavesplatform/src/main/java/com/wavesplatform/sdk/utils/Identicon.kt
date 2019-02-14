@@ -1,9 +1,8 @@
-package com.wavesplatform.wallet.v2.ui.custom
+package com.wavesplatform.sdk.utils
 
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
-import com.wavesplatform.wallet.v2.ui.custom.Identicon.Options.Palette.Colors
 import java.util.*
 
 class Identicon {
@@ -120,7 +119,7 @@ class Identicon {
         return reduce
     }
 
-    private fun colors(options: Options, hash: String): Colors {
+    private fun colors(options: Options, hash: String): Options.Palette.Colors {
         val backgroundColor: Array<Int>
         val mainColor: Array<Int>
         val hollowColor: Array<Int>
@@ -131,16 +130,16 @@ class Identicon {
                 mainColor = colorRange(hash = hash, range = options.mainRange)
                 hollowColor = colorRange(hash = hash, range = options.hollowRange)
             }
-            is Colors -> {
+            is Options.Palette.Colors -> {
                 backgroundColor = options.palette.background
                 mainColor = options.palette.main
                 hollowColor = options.palette.hollow
             }
         }
-        return Colors(backgroundColor, mainColor, hollowColor)
+        return Options.Palette.Colors(backgroundColor, mainColor, hollowColor)
     }
 
-    private fun color(point: Point, matrix: Array<Array<Int?>>, colors: Colors): Array<Int> {
+    private fun color(point: Point, matrix: Array<Array<Int?>>, colors: Options.Palette.Colors): Array<Int> {
         if (point.x < (matrix.size / 2.0)) {
             var cellIndex = Math.max(0, matrix.size - 1)
             cellIndex = Math.max(Math.min(cellIndex, (point.x)), 0)

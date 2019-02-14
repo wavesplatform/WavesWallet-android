@@ -10,7 +10,7 @@ import com.wavesplatform.wallet.v2.util.zxing.Contents
 import com.wavesplatform.wallet.v2.util.zxing.encode.QRCodeEncoder
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.ui.custom.Identicon
+import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

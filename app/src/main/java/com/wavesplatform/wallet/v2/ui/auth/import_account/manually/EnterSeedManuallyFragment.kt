@@ -16,7 +16,7 @@ import com.wavesplatform.wallet.v2.data.rules.SeedRule
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
-import com.wavesplatform.wallet.v2.ui.custom.Identicon
+import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.sdk.utils.notNull
 import io.github.anderscheow.validator.Validation

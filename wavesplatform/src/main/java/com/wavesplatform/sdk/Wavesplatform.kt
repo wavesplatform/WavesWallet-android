@@ -7,7 +7,7 @@ import com.wavesplatform.sdk.service.*
 import retrofit2.CallAdapter
 import java.util.*
 
-class Wavesplatform private constructor(context: Context, factory: CallAdapter.Factory?) {
+class Wavesplatform private constructor(var context: Context, factory: CallAdapter.Factory?) {
 
     private var dataManager: DataManager = DataManager(context, factory)
     private var cookies: HashSet<String> = hashSetOf()
@@ -28,6 +28,10 @@ class Wavesplatform private constructor(context: Context, factory: CallAdapter.F
                 throw NullPointerException("Wavesplatform must be init first!")
             }
             return instance!!
+        }
+
+        fun generateSeed(): String {
+            return WalletManager.createWalletSeed(Wavesplatform.get().context)
         }
 
         fun createWallet(seed: String,
