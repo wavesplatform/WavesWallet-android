@@ -2,7 +2,9 @@ package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import android.annotation.SuppressLint
 import android.graphics.Typeface
+import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
 import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -17,6 +19,7 @@ import com.wavesplatform.sdk.model.response.TransactionType
 import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.recycle_item_history.view.*
+import org.spongycastle.asn1.x500.style.RFC4519Style.title
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -64,6 +67,9 @@ class HistoryTabItemAdapter @Inject constructor() :
                 }
 
                 helper.itemView.notNull { view ->
+                    TextViewCompat.setAutoSizeTextTypeWithDefaults(view.text_transaction_value,
+                            TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE)
+                    view.text_transaction_value.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                     view.text_tag.gone()
                     view.text_tag_spam.gone()
                     view.text_transaction_value.setTypeface(null, Typeface.NORMAL)
@@ -151,6 +157,11 @@ class HistoryTabItemAdapter @Inject constructor() :
                         }
                     }
                     view.text_transaction_value.makeTextHalfBold()
+                    view.text_transaction_value.post {
+                        TextViewCompat
+                                .setAutoSizeTextTypeUniformWithConfiguration(view.text_transaction_value,
+                                        10, 16, 1, TypedValue.COMPLEX_UNIT_SP)
+                    }
                 }
             }
         }

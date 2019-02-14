@@ -66,7 +66,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     queryAllAsSingle<AssetBalanceDb>().toObservable(),
                     queryAllAsSingle<SpamAssetDb>().toObservable()
                             .map { spamListFromDb ->
-                                if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, false)) {
+                                if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
                                     return@map spamListFromDb
                                 } else {
                                     return@map listOf<SpamAssetDb>()

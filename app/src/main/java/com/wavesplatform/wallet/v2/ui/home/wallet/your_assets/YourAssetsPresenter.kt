@@ -4,7 +4,6 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
@@ -40,7 +39,7 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
                 notFavorite = queryAsSingle { equalTo("isFavorite", false) }
             }
 
-            Single.zip(favorite, notFavorite,
+            addSubscription(Single.zip(favorite, notFavorite,
                     BiFunction<List<AssetBalanceDb>, List<AssetBalanceDb>, Pair<List<AssetBalanceDb>,
                             List<AssetBalanceDb>>> { t1, t2 ->
                         return@BiFunction Pair(t1, t2)
@@ -50,7 +49,7 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
                         assets.addAll(it.first)
                         assets.addAll(it.second)
 
-                        val filteredSpamAssets = if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, false)) {
+                        val filteredSpamAssets = if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
                             assets.filter { !it.isSpam }.toMutableList()
                         } else {
                             assets
@@ -60,7 +59,7 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
                         }
                     }, {
                         it.printStackTrace()
-                    })
+                    }))
         }
     }
 
