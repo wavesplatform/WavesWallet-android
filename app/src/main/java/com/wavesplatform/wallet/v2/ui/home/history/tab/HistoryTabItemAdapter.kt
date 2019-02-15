@@ -91,6 +91,13 @@ class HistoryTabItemAdapter @Inject constructor() :
                                             "+${getScaledAmount(it, decimals)}"
                                 }
                             }
+                            TransactionType.RECEIVE_SPONSORSHIP_TYPE -> {
+                                item.data.fee.notNull {
+                                    view.text_transaction_value.text =
+                                            "+${getScaledAmount(it, item.data.feeAssetObject?.precision
+                                                    ?: 8)}"
+                                }
+                            }
                             TransactionType.MASS_SPAM_RECEIVE_TYPE,
                             TransactionType.MASS_RECEIVE_TYPE,
                             TransactionType.MASS_SEND_TYPE -> {
@@ -141,7 +148,9 @@ class HistoryTabItemAdapter @Inject constructor() :
                     }
 
                     if (!TransactionType.isZeroTransferOrExchange(item.data.transactionType())) {
-                        if (isSpamConsidered(item.data.assetId, prefsUtil)) {
+                        if (item.data.transactionType() == TransactionType.RECEIVE_SPONSORSHIP_TYPE) {
+                            view.text_transaction_value.text = "${view.text_transaction_value.text} ${item.data.feeAssetObject?.name}"
+                        }else if (isSpamConsidered(item.data.assetId, prefsUtil)) {
                             view.text_tag_spam.visiable()
                         } else {
                             if (isShowTicker(item.data.assetId)) {

@@ -58,6 +58,13 @@ class HistoryTransactionPagerAdapter constructor(
                                 "+${getScaledAmount(it, decimals)}"
                     }
                 }
+                TransactionType.RECEIVE_SPONSORSHIP_TYPE -> {
+                    item.data.fee.notNull {
+                        layout.text_transaction_value.text =
+                                "+${getScaledAmount(it,  item.data.feeAssetObject?.precision
+                                        ?: 8)}"
+                    }
+                }
                 TransactionType.MASS_SPAM_RECEIVE_TYPE,
                 TransactionType.MASS_RECEIVE_TYPE,
                 TransactionType.MASS_SEND_TYPE -> {
@@ -109,7 +116,9 @@ class HistoryTransactionPagerAdapter constructor(
 
         // todo reuse this code and HistoryTabItemAdapter and HistoryDetailsAdapter
         if (!TransactionType.isZeroTransferOrExchange(item.data.transactionType())) {
-            if (isSpamConsidered(item.data.assetId, prefsUtil)) {
+            if ( item.data.transactionType() == TransactionType.RECEIVE_SPONSORSHIP_TYPE) {
+                layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${ item.data.feeAssetObject?.name}"
+            }else if (isSpamConsidered(item.data.assetId, prefsUtil)) {
                 layout.text_tag_spam.visiable()
             } else {
                 if (isShowTicker(item.data.assetId)) {
