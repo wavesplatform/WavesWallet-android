@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.data.helpers
 
 import com.vicpin.krealmextensions.RealmConfigStore
+import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -45,12 +46,20 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
         DBHelper.getInstance().realmConfig = config
         Realm.getInstance(config).isAutoRefresh = false
 
-        if (!prefsUtil.getValue(PrefsUtil.KEY_DEFAULT_ASSETS, false)) {
-            runAsync {
-                AssetBalanceDb.convertToDb(Constants.defaultAssets).saveAll()
-                prefsUtil.setValue(PrefsUtil.KEY_DEFAULT_ASSETS, true)
-            }
-        }
+        saveDefaultAssets()
+    }
 
+    private fun saveDefaultAssets() {
+        runAsync {
+            AssetBalanceDb.convertToDb(Constants.defaultAssets).forEach {
+                val listToSave = arrayListOf<AssetBalanceDb>()
+                val asset = queryFirst<AssetBalanceDb> { equalTo("assetId", it.assetId) }
+                if (asset == null) {
+                    listToSave.add(it)
+                }
+                if (listToSave.isNotEmpty()) listToSave.saveAll()
+            }
+            prefsUtil.setValue(PrefsUtil.KEY_DEFAULT_ASSETS, true)
+        }
     }
 }

@@ -9,6 +9,8 @@ import android.support.v7.widget.AppCompatImageView
 import android.text.TextPaint
 import android.text.TextUtils
 import android.util.AttributeSet
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.AssetInfo
@@ -85,24 +87,14 @@ class AssetAvatarView : AppCompatImageView {
     * Set asset object to get initials for drawable
     * */
     fun setAsset(asset: AssetBalance?) {
-        val avatar = Constants.defaultAssetsAvatar[asset?.assetId]
-        if (avatar != null) {
-            setImageResource(avatar)
-        } else {
-            setValues(asset?.getName() ?: "", asset?.isSponsored() == true)
-        }
+        setValues(asset?.assetId ?: "", asset?.getName() ?: "", asset?.isSponsored() == true)
     }
 
     /*
    * Set asset info object to get initials for drawable
    * */
     fun setAssetInfo(asset: AssetInfo) {
-        val avatar = Constants.defaultAssetsAvatar[asset.id]
-        if (avatar != null) {
-            setImageResource(avatar)
-        } else {
-            setValues(asset.name, false) // TODO: check if need to show sponsor asset icon here
-        }
+        setValues(asset.id, asset.name, false) // TODO: check if need to show sponsor asset icon here
     }
 
     /*
@@ -139,11 +131,24 @@ class AssetAvatarView : AppCompatImageView {
     /*
     * Setup view with values
     * */
-    private fun setValues(name: String, isSponsoredAsset: Boolean) {
+    private fun setValues(assetId: String, name: String, isSponsoredAsset: Boolean) {
+        val avatar = Constants.defaultAssetsAvatar[assetId]
+
         val color = getPlaceholderColorFromAssetName(name)
         paint.color = color
         text = getInitialsFromAssetName(name)
+
         setDrawable(isSponsoredAsset)
+
+        if (avatar != null) {
+            Glide.with(context)
+                    .load(avatar)
+                    .apply(RequestOptions()
+                            .placeholder(drawable)
+                            .centerCrop()
+                            .override(drawable.intrinsicWidth, drawable.intrinsicHeight))
+                    .into(this)
+        }
     }
 
 
