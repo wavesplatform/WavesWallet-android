@@ -136,6 +136,13 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                                 "+${getScaledAmount(it, decimals)}"
                     }
                 }
+                TransactionType.RECEIVE_SPONSORSHIP_TYPE -> {
+                    transaction.fee.notNull {
+                        view.text_transaction_value.text =
+                                "+${getScaledAmount(it, transaction.feeAssetObject?.precision
+                                        ?: 8)}"
+                    }
+                }
                 TransactionType.MASS_SPAM_RECEIVE_TYPE,
                 TransactionType.MASS_RECEIVE_TYPE,
                 TransactionType.MASS_SEND_TYPE -> {
@@ -184,7 +191,9 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         }
 
         if (!TransactionType.isZeroTransferOrExchange(transaction.transactionType())) {
-            if (isSpamConsidered(transaction.assetId, prefsUtil)) {
+            if (transaction.transactionType() == TransactionType.RECEIVE_SPONSORSHIP_TYPE) {
+                view.text_transaction_value.text = "${view.text_transaction_value.text} ${transaction.feeAssetObject?.name}"
+            }else if (isSpamConsidered(transaction.assetId, prefsUtil)) {
                 // nothing
             } else {
                 if (isShowTicker(transaction.assetId)) {
