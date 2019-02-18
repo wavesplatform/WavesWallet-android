@@ -62,7 +62,7 @@ class HistoryTransactionPagerAdapter constructor(
                     item.data.fee.notNull {
                         layout.text_transaction_value.text =
                                 "+${getScaledAmount(it,  item.data.feeAssetObject?.precision
-                                        ?: 8)}"
+                                        ?: 8)} ${item.data.feeAssetObject?.name}"
                     }
                 }
                 TransactionType.MASS_SPAM_RECEIVE_TYPE,
@@ -97,14 +97,16 @@ class HistoryTransactionPagerAdapter constructor(
                 TransactionType.DATA_TYPE,
                 TransactionType.SET_ADDRESS_SCRIPT_TYPE,
                 TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
-                TransactionType.SET_SPONSORSHIP_TYPE,
-                TransactionType.CANCEL_SPONSORSHIP_TYPE,
                 TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                     layout.text_transaction_value.setTypeface(null, Typeface.BOLD)
                     layout.text_transaction_value.text = layout.text_transaction_name.context
                             .getString(it.title)
                     layout.text_transaction_name.text = layout.text_transaction_name.context
                             .getString(R.string.history_data_type_title)
+                }
+                TransactionType.SET_SPONSORSHIP_TYPE,
+                TransactionType.CANCEL_SPONSORSHIP_TYPE -> {
+                    layout.text_transaction_value.text = item.data.asset?.name
                 }
                 else -> {
                     item.data.amount.notNull {
@@ -116,9 +118,7 @@ class HistoryTransactionPagerAdapter constructor(
 
         // todo reuse this code and HistoryTabItemAdapter and HistoryDetailsAdapter
         if (!TransactionType.isZeroTransferOrExchange(item.data.transactionType())) {
-            if ( item.data.transactionType() == TransactionType.RECEIVE_SPONSORSHIP_TYPE) {
-                layout.text_transaction_value.text = "${layout.text_transaction_value.text} ${ item.data.feeAssetObject?.name}"
-            }else if (isSpamConsidered(item.data.assetId, prefsUtil)) {
+            if (isSpamConsidered(item.data.assetId, prefsUtil)) {
                 layout.text_tag_spam.visiable()
             } else {
                 if (isShowTicker(item.data.assetId)) {

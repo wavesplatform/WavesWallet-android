@@ -24,8 +24,10 @@ interface ApiService {
     fun assetsInfoByIds(@Query("ids") ids: List<String?>): Observable<AssetsInfoResponse>
 
     @GET
-    fun loadGlobalConfiguration(@Url url: String = Constants.URL_CONFIG)
-            : Observable<GlobalConfiguration>
+    fun loadGlobalConfiguration(@Url url: String = Constants.URL_CONFIG): Observable<GlobalConfiguration>
+
+    @GET
+    fun loadNews(@Url url: String): Observable<News>
 
     @GET
     fun loadGlobalCommission(@Url url: String = Constants.URL_COMMISSION)

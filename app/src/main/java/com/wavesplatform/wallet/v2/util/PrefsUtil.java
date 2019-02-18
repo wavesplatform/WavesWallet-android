@@ -16,6 +16,7 @@ import javax.inject.Inject;
 public class PrefsUtil {
 
     public static final String GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment";
+    public static final String SHOWED_NEWS_IDS = "showed_news_ids";
     public static final String GLOBAL_LAST_LOGGED_IN_GUID = "global_logged_in_wallet_guid";
     public static final String GLOBAL_SCHEME_URL = "scheme_url";
     public static final String LIST_WALLET_GUIDS = "list_wallet_guid";
@@ -65,6 +66,10 @@ public class PrefsUtil {
         return getValueInternal(name, value);
     }
 
+    public Long getGlobalValue(String name, Long value) {
+        return getValueInternal(name, value);
+    }
+
     public Set<String> getGlobalValue(String name) {
         return getValueInternal(name);
     }
@@ -78,6 +83,10 @@ public class PrefsUtil {
     }
 
     public void setGlobalValue(String name, String value) {
+        setValueInternal(name, value);
+    }
+
+    public void setGlobalValue(String name, Long value) {
         setValueInternal(name, value);
     }
 

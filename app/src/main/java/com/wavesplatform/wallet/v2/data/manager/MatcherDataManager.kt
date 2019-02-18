@@ -89,7 +89,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
         if (allMarketsList.isEmpty()) {
-            return Observable.zip(apiService.loadGlobalConfiguration()
+            return Observable.zip(apiService.loadGlobalConfiguration(EnvironmentManager.get().current().url)
                     .map {
                         val globalAssets = it.generalAssetIds.toMutableList()
                         globalAssets.add(Constants.MRTGeneralAsset)
@@ -114,11 +114,15 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                         it.second.forEach { market ->
                             market.id = market.amountAsset + market.priceAsset
 
-                            market.amountAssetLongName = it.first[market.amountAsset]?.displayName ?: market.amountAssetName
-                            market.priceAssetLongName = it.first[market.priceAsset]?.displayName ?: market.priceAssetName
+                            market.amountAssetLongName = it.first[market.amountAsset]?.displayName
+                                    ?: market.amountAssetName
+                            market.priceAssetLongName = it.first[market.priceAsset]?.displayName
+                                    ?: market.priceAssetName
 
-                            market.amountAssetShortName = it.first[market.amountAsset]?.gatewayId ?: market.amountAssetName
-                            market.priceAssetShortName = it.first[market.priceAsset]?.gatewayId ?: market.priceAssetName
+                            market.amountAssetShortName = it.first[market.amountAsset]?.gatewayId
+                                    ?: market.amountAssetName
+                            market.priceAssetShortName = it.first[market.priceAsset]?.gatewayId
+                                    ?: market.priceAssetName
 
                             market.popular = it.first[market.amountAsset] != null && it.first[market.priceAsset] != null
 
@@ -178,6 +182,10 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
             return@Function3 filteredSpamList
         })
+    }
+
+    fun loadNews(): Observable<News> {
+        return apiService.loadNews(News.URL)
     }
 
     companion object {

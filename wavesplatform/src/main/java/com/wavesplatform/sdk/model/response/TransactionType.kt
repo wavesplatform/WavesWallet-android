@@ -72,6 +72,7 @@ enum class TransactionType(var id: Int,
                     || type == TransactionType.SET_ADDRESS_SCRIPT_TYPE
                     || type == TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE
                     || type == TransactionType.SET_SPONSORSHIP_TYPE
+                    || type == TransactionType.RECEIVE_SPONSORSHIP_TYPE
                     || type == TransactionType.CANCEL_SPONSORSHIP_TYPE
                     || type == TransactionType.UPDATE_ASSET_SCRIPT_TYPE
                     || type == TransactionType.EXCHANGE_TYPE)
