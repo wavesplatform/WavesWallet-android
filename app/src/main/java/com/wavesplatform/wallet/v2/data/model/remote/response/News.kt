@@ -25,10 +25,8 @@ class News {
     }
 
     companion object {
-        const val URL = "https://github-proxy.wvservices.com/wavesplatform/waves-client-config/mobile/v2.2/notifications.json"
+        const val URL = "https://github-proxy.wvservices.com/wavesplatform/waves-client-config/mobile/v2.2/notifications_android.json"
         private const val DEFAULT_LANG_CODE = "en"
-        private const val PT_LANG_CODE = "pt-PT"
-        private const val BR_LANG_CODE = "pt-BR"
 
         fun getTitle(langCode: String, notification: Notification): String {
             return getLine(langCode, notification, true)
@@ -39,19 +37,12 @@ class News {
         }
 
         private fun getLine(langCode: String, notification: Notification, title: Boolean): String {
-
-            val langKey = when (langCode) {
-                Language.PORTUGUESE.code -> PT_LANG_CODE
-                Language.BRAZILIAN.code -> BR_LANG_CODE
-                else -> langCode
-            }
-
             return if (title) {
-                notification.title?.get(langKey)
+                notification.title?.get(langCode)
                         ?: notification.title?.get(DEFAULT_LANG_CODE)
                         ?: ""
             } else {
-                notification.subtitle?.get(langKey)
+                notification.subtitle?.get(langCode)
                         ?: notification.subtitle?.get(DEFAULT_LANG_CODE)
                         ?: ""
             }
