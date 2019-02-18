@@ -193,7 +193,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         if (!TransactionType.isZeroTransferOrExchange(transaction.transactionType())) {
             if (transaction.transactionType() == TransactionType.RECEIVE_SPONSORSHIP_TYPE) {
                 view.text_transaction_value.text = "${view.text_transaction_value.text} ${transaction.feeAssetObject?.name}"
-            }else if (isSpamConsidered(transaction.assetId, prefsUtil)) {
+            } else if (isSpamConsidered(transaction.assetId, prefsUtil)) {
                 // nothing
             } else {
                 if (isShowTicker(transaction.assetId)) {
@@ -594,6 +594,9 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
 
                 textIdValue?.text = transaction.assetId
 
+                // force hide for this types of transaction
+                commentBlock.gone()
+
                 eventSubscriptions.add(RxView.clicks(imageCopy!!)
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -603,14 +606,14 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
 
                 textTokenStatus?.gone()
 
-                historyContainer?.addView(tokenView)
+                historyContainer.addView(tokenView)
             }
             else -> {
 
             }
         }
 
-        historyContainer?.addView(commentBlock)
+        historyContainer.addView(commentBlock)
 
         return historyContainer
     }
