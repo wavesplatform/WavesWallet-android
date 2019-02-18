@@ -1,13 +1,13 @@
 package com.wavesplatform.sdk
 
-import android.content.Context
+import android.app.Application
 import android.util.Log
 import com.wavesplatform.sdk.service.DataManager
 import com.wavesplatform.sdk.service.*
 import retrofit2.CallAdapter
 import java.util.*
 
-class Wavesplatform private constructor(var context: Context, factory: CallAdapter.Factory?) {
+class Wavesplatform private constructor(var context: Application, factory: CallAdapter.Factory?) {
 
     private var dataManager: DataManager = DataManager(context, factory)
     private var cookies: HashSet<String> = hashSetOf()
@@ -19,7 +19,7 @@ class Wavesplatform private constructor(var context: Context, factory: CallAdapt
         private var instance: Wavesplatform? = null
 
         @JvmStatic
-        fun init(context: Context, factory: CallAdapter.Factory? = null) {
+        fun init(context: Application, factory: CallAdapter.Factory? = null) {
             instance = Wavesplatform(context, factory)
         }
 
