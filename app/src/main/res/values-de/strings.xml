@@ -275,7 +275,7 @@
     <string name="history_details_edit_address">Namen bearbeiten</string>
     <string name="history_details_exchange_price">Preis</string>
     <string name="history_details_fee">Gebühr</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">Asset ID</string>
     <string name="history_details_leasing_from">Leasen an</string>
     <string name="history_details_leasing_to">Leasing an</string>
     <string name="history_details_node_address">Adresse des Knotens</string>

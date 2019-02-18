@@ -275,7 +275,7 @@
     <string name="history_details_edit_address">Naam aanpassen</string>
     <string name="history_details_exchange_price">Prijs</string>
     <string name="history_details_fee">Transactiekosten</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">Asset ID</string>
     <string name="history_details_leasing_from">Van</string>
     <string name="history_details_leasing_to">Lease aan</string>
     <string name="history_details_node_address">Node adres</string>

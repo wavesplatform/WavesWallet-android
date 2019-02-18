@@ -276,7 +276,7 @@
     <string name="history_details_edit_address">编辑名称</string>
     <string name="history_details_exchange_price">价格</string>
     <string name="history_details_fee">费用</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">资产 ID</string>
     <string name="history_details_leasing_from">租赁给</string>
     <string name="history_details_leasing_to">租赁给</string>
     <string name="history_details_node_address">节点地址

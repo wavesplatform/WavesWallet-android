@@ -275,7 +275,7 @@
     <string name="history_details_edit_address">名前を編集</string>
     <string name="history_details_exchange_price">の価格</string>
     <string name="history_details_fee">手数料</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">資産 ID</string>
     <string name="history_details_leasing_from">リース元</string>
     <string name="history_details_leasing_to">リース先</string>
     <string name="history_details_node_address">ノードアドレス</string>

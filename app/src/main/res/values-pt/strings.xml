@@ -275,7 +275,7 @@
     <string name="history_details_edit_address">Modificar</string>
     <string name="history_details_exchange_price">Cotação</string>
     <string name="history_details_fee">Taxa</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">Ativo ID</string>
     <string name="history_details_leasing_from">Concessionado a</string>
     <string name="history_details_leasing_to">Concessionado a</string>
     <string name="history_details_node_address">Endereço do Nó</string>
