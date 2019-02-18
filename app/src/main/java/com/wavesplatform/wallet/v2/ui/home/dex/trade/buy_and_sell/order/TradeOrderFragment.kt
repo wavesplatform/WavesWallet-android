@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.EditText
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.google.gson.internal.LinkedTreeMap
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
@@ -62,8 +61,16 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             presenter.orderType = it.getInt(TradeBuyAndSellBottomSheetFragment.BUNDLE_ORDER_TYPE)
         }
 
+        if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
+            horizontal_amount_suggestion.visiable()
+            horizontal_total_suggestion.gone()
+        } else {
+            horizontal_amount_suggestion.gone()
+            horizontal_total_suggestion.visiable()
+        }
+
         presenter.getMatcherKey()
-        presenter.getBalanceFromAssetPair()
+        presenter.loadPairBalancesAndCommission()
         presenter.loadWavesBalance()
 
         edit_amount.applyFilterStartWithDot()
@@ -394,9 +401,6 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         button_confirm.click {
             presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
         }
-
-        presenter.loadCommission(presenter.data?.watchMarket?.market?.priceAsset,
-                presenter.data?.watchMarket?.market?.amountAsset)
     }
 
     private fun getFeeIfNeed(): Long {
@@ -427,8 +431,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         button_confirm.isEnabled = presenter.isAllFieldsValid() && isNetworkConnected()
     }
 
-    override fun successLoadPairBalance(pairBalance: LinkedTreeMap<String, Long>) {
-        pairBalance[presenter.data?.watchMarket?.market?.amountAsset].notNull { balance ->
+    override fun successLoadPairBalance(currentAmountBalance: Long?, currentPriceBalance: Long?) {
+        currentAmountBalance.notNull { balance ->
             linear_percent_values.children.forEach { children ->
                 var balance = balance
                 val quickBalanceView = children as AppCompatTextView
@@ -456,6 +460,42 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                                     presenter.data?.watchMarket?.market?.amountAssetDecimals
                                             ?: 0).clearBalance())
                             edit_amount.setSelection(edit_amount.text?.length ?: 0)
+                        }
+                    }
+                }
+            }
+        }
+
+        currentPriceBalance.notNull { balance ->
+            linear_total_percent_values.children.forEach { children ->
+                var balance = balance
+                val quickBalanceView = children as AppCompatTextView
+                when (quickBalanceView.tag) {
+                    TOTAL_BALANCE -> {
+                        if (presenter.data?.watchMarket?.market?.priceAsset?.isWaves() == true) {
+                            if (balance < presenter.fee) {
+                                balance = 0
+                            } else {
+                                balance -= presenter.fee
+                            }
+                        }
+                        quickBalanceView.click {
+                            presenter.humanTotalTyping = true
+                            edit_total_price.setText((MoneyUtil.getScaledText(balance,
+                                    presenter.data?.watchMarket?.market?.priceAssetDecimals
+                                            ?: 0)).clearBalance())
+                            edit_total_price.setSelection(edit_total_price.text?.length ?: 0)
+                        }
+                    }
+                    else -> {
+                        val percentBalance = (balance.times((quickBalanceView.tag.toString().toDouble()
+                                .div(100)))).toLong()
+                        quickBalanceView.click {
+                            presenter.humanTotalTyping = true
+                            edit_total_price.setText(MoneyUtil.getScaledText(percentBalance,
+                                    presenter.data?.watchMarket?.market?.priceAssetDecimals
+                                            ?: 0).clearBalance())
+                            edit_total_price.setSelection(edit_total_price.text?.length ?: 0)
                         }
                     }
                 }
