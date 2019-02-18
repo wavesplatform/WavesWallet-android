@@ -27,8 +27,7 @@ import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
-import com.wavesplatform.wallet.v2.data.model.local.Language
-import com.wavesplatform.wallet.v2.data.model.remote.response.News
+import com.wavesplatform.sdk.model.response.News
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment

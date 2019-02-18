@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.data.model.local
+package com.wavesplatform.sdk.model
 
 data class LanguageItem(
         var language: Language,

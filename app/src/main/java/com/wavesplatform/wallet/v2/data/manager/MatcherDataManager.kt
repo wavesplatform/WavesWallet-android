@@ -18,6 +18,8 @@ import com.wavesplatform.sdk.model.response.*
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.db.MarketResponseDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.sdk.model.response.News
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3

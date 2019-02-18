@@ -7,7 +7,7 @@ import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import com.wavesplatform.wallet.v2.data.model.local.Language
+import com.wavesplatform.sdk.model.Language
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.Transaction
