@@ -19,42 +19,16 @@ class News {
         @SerializedName("id")
         var id: String = ""
         @SerializedName("title")
-        var title: Language? = null
+        var title: HashMap<String, String>? = hashMapOf()
         @SerializedName("subTitle")
-        var subTitle: Language? = null
-
-        class Language {
-            @SerializedName("en")
-            var en: String = ""
-            @SerializedName("ru")
-            var ru: String = ""
-            @SerializedName("ko")
-            var ko: String = ""
-            @SerializedName("zh")
-            var zh: String = ""
-            @SerializedName("tr")
-            var tr: String = ""
-            @SerializedName("nl")
-            var nl: String = ""
-            @SerializedName("hi")
-            var hi: String = ""
-            @SerializedName("es")
-            var es: String = ""
-            @SerializedName("in")
-            var ind: String = ""
-            @SerializedName("de")
-            var de: String = ""
-            @SerializedName("jp")
-            var jp: String = ""
-            @SerializedName("pt")
-            var pt: String = ""
-            @SerializedName("br")
-            var br: String = ""
-        }
+        var subtitle: HashMap<String, String>? = hashMapOf()
     }
 
     companion object {
         const val URL = "https://github-proxy.wvservices.com/wavesplatform/waves-client-config/mobile/v2.2/notifications.json"
+        private const val DEFAULT_LANG_CODE = "en"
+        private const val PT_LANG_CODE = "pt-PT"
+        private const val BR_LANG_CODE = "pt-BR"
 
         fun getTitle(langCode: String, notification: Notification): String {
             return getLine(langCode, notification, true)
@@ -65,109 +39,22 @@ class News {
         }
 
         private fun getLine(langCode: String, notification: Notification, title: Boolean): String {
-            val result: String
-            when (langCode) {
-                Language.ENGLISH.code -> {
-                    result = if (title) {
-                        notification.title?.en ?: ""
-                    } else {
-                        notification.subTitle?.en ?: ""
-                    }
-                }
-                Language.RUSSIAN.code -> {
-                    result = if (title) {
-                        notification.title?.ru ?: ""
-                    } else {
-                        notification.subTitle?.ru ?: ""
-                    }
-                }
-                Language.KOREAN.code -> {
-                    result = if (title) {
-                        notification.title?.ko ?: ""
-                    } else {
-                        notification.subTitle?.ko ?: ""
-                    }
-                }
-                Language.CHINESE.code -> {
-                    result = if (title) {
-                        notification.title?.zh ?: ""
-                    } else {
-                        notification.subTitle?.zh ?: ""
-                    }
-                }
-                Language.TURKISH.code -> {
-                    result = if (title) {
-                        notification.title?.tr ?: ""
-                    } else {
-                        notification.subTitle?.tr ?: ""
-                    }
-                }
-                Language.DUTCH.code -> {
-                    result = if (title) {
-                        notification.title?.nl ?: ""
-                    } else {
-                        notification.subTitle?.nl ?: ""
-                    }
-                }
-                Language.HINDI.code -> {
-                    result = if (title) {
-                        notification.title?.hi ?: ""
-                    } else {
-                        notification.subTitle?.hi ?: ""
-                    }
-                }
-                Language.SPANISH.code -> {
-                    result = if (title) {
-                        notification.title?.es ?: ""
-                    } else {
-                        notification.subTitle?.es ?: ""
-                    }
-                }
-                Language.INDONESIAN.code -> {
-                    result = if (title) {
-                        notification.title?.ind ?: ""
-                    } else {
-                        notification.subTitle?.ind ?: ""
-                    }
-                }
-                Language.GERMAN.code -> {
-                    result = if (title) {
-                        notification.title?.de ?: ""
-                    } else {
-                        notification.subTitle?.de ?: ""
-                    }
-                }
-                Language.JAPAN.code -> {
-                    result = if (title) {
-                        notification.title?.jp ?: ""
-                    } else {
-                        notification.subTitle?.jp ?: ""
-                    }
-                }
-                Language.PORTUGUESE.code -> {
-                    result = if (title) {
-                        notification.title?.pt ?: ""
-                    } else {
-                        notification.subTitle?.pt ?: ""
-                    }
-                }
-                Language.BRAZILIAN.code -> {
-                    result = if (title) {
-                        notification.title?.br ?: ""
-                    } else {
-                        notification.subTitle?.br ?: ""
-                    }
-                }
-                else -> {
-                    result = if (title) {
-                        notification.title?.en ?: ""
-                    } else {
-                        notification.subTitle?.en ?: ""
-                    }
-                }
-            }
-            return result
-        }
 
+            val langKey = when (langCode) {
+                Language.PORTUGUESE.code -> PT_LANG_CODE
+                Language.BRAZILIAN.code -> BR_LANG_CODE
+                else -> langCode
+            }
+
+            return if (title) {
+                notification.title?.get(langKey)
+                        ?: notification.title?.get(DEFAULT_LANG_CODE)
+                        ?: ""
+            } else {
+                notification.subtitle?.get(langKey)
+                        ?: notification.subtitle?.get(DEFAULT_LANG_CODE)
+                        ?: ""
+            }
+        }
     }
 }
