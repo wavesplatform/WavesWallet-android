@@ -95,7 +95,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                                 item.data.fee.notNull {
                                     view.text_transaction_value.text =
                                             "+${getScaledAmount(it, item.data.feeAssetObject?.precision
-                                                    ?: 8)}"
+                                                    ?: 8)} ${item.data.feeAssetObject?.name}"
                                 }
                             }
                             TransactionType.MASS_SPAM_RECEIVE_TYPE,
@@ -130,14 +130,16 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.DATA_TYPE,
                             TransactionType.SET_ADDRESS_SCRIPT_TYPE,
                             TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
-                            TransactionType.SET_SPONSORSHIP_TYPE,
-                            TransactionType.CANCEL_SPONSORSHIP_TYPE,
                             TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                                 view.text_transaction_name.text =
                                         mContext.getString(R.string.history_data_type_title)
                                 view.text_transaction_value.text = mContext.getString(
                                         item.data.transactionType().title)
                                 view.text_transaction_value.setTypeface(null, Typeface.BOLD)
+                            }
+                            TransactionType.SET_SPONSORSHIP_TYPE,
+                            TransactionType.CANCEL_SPONSORSHIP_TYPE -> {
+                                view.text_transaction_value.text = item.data.asset?.name
                             }
                             else -> {
                                 item.data.amount.notNull {
@@ -148,9 +150,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                     }
 
                     if (!TransactionType.isZeroTransferOrExchange(item.data.transactionType())) {
-                        if (item.data.transactionType() == TransactionType.RECEIVE_SPONSORSHIP_TYPE) {
-                            view.text_transaction_value.text = "${view.text_transaction_value.text} ${item.data.feeAssetObject?.name}"
-                        }else if (isSpamConsidered(item.data.assetId, prefsUtil)) {
+                        if (isSpamConsidered(item.data.assetId, prefsUtil)) {
                             view.text_tag_spam.visiable()
                         } else {
                             if (isShowTicker(item.data.assetId)) {
@@ -165,6 +165,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                             }
                         }
                     }
+
                     view.text_transaction_value.makeTextHalfBold()
                     view.text_transaction_value.post {
                         TextViewCompat
