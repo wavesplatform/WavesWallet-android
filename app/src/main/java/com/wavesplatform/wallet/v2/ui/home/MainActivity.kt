@@ -11,6 +11,7 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.app.AlertDialog
 import android.text.TextPaint
 import android.text.style.ClickableSpan
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.bumptech.glide.Glide
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
@@ -25,6 +27,8 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
+import com.wavesplatform.wallet.v2.data.model.local.Language
+import com.wavesplatform.wallet.v2.data.model.remote.response.News
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
@@ -40,6 +44,7 @@ import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
+import kotlinx.android.synthetic.main.dialog_news.view.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.put
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
@@ -91,6 +96,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun onResume() {
         super.onResume()
         showBackUpSeedWarning()
+        if (!prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true)
+                && App.getAccessManager().getWallet() != null) {
+            presenter.loadNews()
+        }
     }
 
     private fun showFirstOpenAlert(firstOpen: Boolean) {
@@ -405,6 +414,46 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             slidingRootNav.closeMenu(true)
         } else {
             exit()
+        }
+    }
+
+    override fun showNews(news: News) {
+        val ids = prefsUtil.getGlobalValueList(PrefsUtil.SHOWED_NEWS_IDS).toHashSet()
+        var anyNewsShowed = false
+        for (notification in news.notifications) {
+            if (!ids.contains(notification.id) && !anyNewsShowed) {
+
+                val startDate = notification.startDate ?: Long.MAX_VALUE
+                val endDate = notification.endDate ?: Long.MAX_VALUE
+
+                if ((System.currentTimeMillis() / 1000) in startDate..endDate) {
+                    var accountFirstOpenDialog: AlertDialog? = null
+                    val view = LayoutInflater.from(this)
+                            .inflate(R.layout.dialog_news, null)
+
+                    Glide.with(this)
+                            .load(notification.logoUrl)
+                            .into(view.image)
+
+                    val langCode = preferencesHelper.getLanguage()
+                    view.text_title.text = News.getTitle(langCode, notification)
+                    view.text_subtitle.text = News.getSubtitle(langCode, notification)
+                    view.button_ok.click {
+                        prefsUtil.addGlobalListValue(PrefsUtil.SHOWED_NEWS_IDS, notification.id)
+                        accountFirstOpenDialog?.dismiss()
+                    }
+
+                    accountFirstOpenDialog = AlertDialog.Builder(this)
+                            .setCancelable(false)
+                            .setView(view)
+                            .create()
+
+                    accountFirstOpenDialog.window?.setGravity(Gravity.BOTTOM)
+                    accountFirstOpenDialog.show()
+
+                    anyNewsShowed = true
+                }
+            }
         }
     }
 
