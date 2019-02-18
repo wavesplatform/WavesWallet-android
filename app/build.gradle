@@ -25,15 +25,16 @@ android {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 415
-        versionName "2.1.1"
+        versionCode 416
+        versionName "2.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         archivesBaseName = "waves-wallet-$versionName"
-        manifestPlaceholders = [appIcon: "@mipmap/ic_launcher", appIconRound: "@mipmap/ic_launcher"]
+        manifestPlaceholders = [appIcon: "@mipmap/ic_launcher", appIconRound: "@mipmap/ic_launcher_round"]
     }
-    /*buildTypes {
+
+    buildTypes {
         release {
             debuggable false
             minifyEnabled true
@@ -46,7 +47,7 @@ android {
         debug {
             multiDexEnabled false
         }
-    }*/
+    }
 
     applicationVariants.all { variant ->
         def SEP = "_"
@@ -65,7 +66,7 @@ android {
     }
 
 
-    /*productFlavors {
+    productFlavors {
         prod {
             signingConfig signingConfigs.config
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher", appIconRound: "@mipmap/ic_launcher_round"]
@@ -78,7 +79,8 @@ android {
             applicationIdSuffix ".test"
             manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test", appIconRound: "@mipmap/ic_launcher_test_round"]
         }
-    }*/
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
