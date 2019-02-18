@@ -29,23 +29,15 @@ class News {
         private const val DEFAULT_LANG_CODE = "en"
 
         fun getTitle(langCode: String, notification: Notification): String {
-            return getLine(langCode, notification, true)
+            return notification.title?.get(langCode)
+                    ?: notification.title?.get(DEFAULT_LANG_CODE)
+                    ?: ""
         }
 
         fun getSubtitle(langCode: String, notification: Notification): String {
-            return getLine(langCode, notification, false)
-        }
-
-        private fun getLine(langCode: String, notification: Notification, title: Boolean): String {
-            return if (title) {
-                notification.title?.get(langCode)
-                        ?: notification.title?.get(DEFAULT_LANG_CODE)
-                        ?: ""
-            } else {
-                notification.subtitle?.get(langCode)
-                        ?: notification.subtitle?.get(DEFAULT_LANG_CODE)
-                        ?: ""
-            }
+            return notification.subtitle?.get(langCode)
+                    ?: notification.subtitle?.get(DEFAULT_LANG_CODE)
+                    ?: ""
         }
     }
 }
