@@ -94,9 +94,12 @@ class TransactionUtil @Inject constructor() {
 
             return sign + if (transaction.transfers.isNotEmpty()) {
                 val sumString = if (round) {
-                    getScaledAmount(transaction.transfers.sumByLong { it.amount }, decimals)
+                    MoneyUtil.getScaledText(transaction.transfers.sumByLong { it.amount }, decimals)
+                            .stripZeros()
                 } else {
-                    MoneyUtil.getScaledText(transaction.transfers.sumByLong { it.amount }, transaction.asset)
+                    MoneyUtil.getScaledText(
+                            transaction.transfers.sumByLong { it.amount }, transaction.asset)
+                            .stripZeros()
                 }
                 if (sumString.isEmpty()) {
                     ""
@@ -105,9 +108,9 @@ class TransactionUtil @Inject constructor() {
                 }
             } else {
                 if (round) {
-                    getScaledAmount(transaction.amount, decimals)
+                    MoneyUtil.getScaledText(transaction.amount, decimals).stripZeros()
                 } else {
-                    MoneyUtil.getScaledText(transaction.amount, transaction.asset)
+                    MoneyUtil.getScaledText(transaction.amount, transaction.asset).stripZeros()
                 }
             }
         }
