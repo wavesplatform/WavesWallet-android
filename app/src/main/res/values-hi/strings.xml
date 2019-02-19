@@ -275,7 +275,7 @@
     <string name="history_details_edit_address">नाम बदलना</string>
     <string name="history_details_exchange_price">मूल्य</string>
     <string name="history_details_fee">फ़ीस</string>
-    <string name="history_details_id">आईडी</string>
+    <string name="history_details_id">एसेट आईडी</string>
     <string name="history_details_leasing_from">लीजिंग</string>
     <string name="history_details_leasing_to">लीजिंग टु</string>
     <string name="history_details_node_address">नोड का पता</string>

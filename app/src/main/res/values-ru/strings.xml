@@ -275,7 +275,7 @@
     <string name="history_details_edit_address">Изменить имя</string>
     <string name="history_details_exchange_price">Цена</string>
     <string name="history_details_fee">Комиссия</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">Ассет ID</string>
     <string name="history_details_leasing_from">Отдано в лизинг</string>
     <string name="history_details_leasing_to">Отдано в лизинг</string>
     <string name="history_details_node_address">Адрес ноды</string>

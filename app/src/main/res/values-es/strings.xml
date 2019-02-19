@@ -275,7 +275,7 @@
     <string name="history_details_edit_address">Editar su nombre</string>
     <string name="history_details_exchange_price">Precio</string>
     <string name="history_details_fee">Comisión </string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">Activo ID</string>
     <string name="history_details_leasing_from">Arrendamiento a</string>
     <string name="history_details_leasing_to">Arrendamiento a</string>
     <string name="history_details_node_address">Dirección del nodo</string>

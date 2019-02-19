@@ -275,7 +275,7 @@
     <string name="history_details_edit_address">이름 편집</string>
     <string name="history_details_exchange_price">가격</string>
     <string name="history_details_fee">수수료</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">자산 ID</string>
     <string name="history_details_leasing_from">Lease 받는 주소</string>
     <string name="history_details_leasing_to">Lease 받는 주소</string>
     <string name="history_details_node_address">노드 주소</string>
