@@ -65,13 +65,39 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                 })
     }
 
-    fun getBalanceFromAssetPair() {
+    fun loadPairBalancesAndCommission() {
+        viewState.showCommissionLoading()
+        fee = 0L
         addSubscription(matcherDataManager.getBalanceFromAssetPair(data?.watchMarket)
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({
+                .flatMap {
+                    // save balance
                     currentAmountBalance = it[data?.watchMarket?.market?.amountAsset]
                     currentPriceBalance = it[data?.watchMarket?.market?.priceAsset]
-                    viewState.successLoadPairBalance(it)
+
+                    return@flatMap Observable.zip(
+                            matcherDataManager.getGlobalCommission(),
+                            nodeDataManager.assetDetails(data?.watchMarket?.market?.priceAsset),
+                            nodeDataManager.assetDetails(data?.watchMarket?.market?.amountAsset),
+                            Function3 { t1: GlobalTransactionCommission,
+                                        t2: AssetsDetails,
+                                        t3: AssetsDetails ->
+                                return@Function3 Triple(t1, t2, t3)
+                            })
+                }
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe({
+                    val commission = it.first
+                    val priceAssetsDetails = it.second
+                    val amountAssetsDetails = it.third
+                    val params = GlobalTransactionCommission.Params()
+                    params.transactionType = Transaction.EXCHANGE
+                    params.smartPriceAsset = priceAssetsDetails.scripted
+                    params.smartAmountAsset = amountAssetsDetails.scripted
+                    fee = TransactionUtil.countCommission(commission, params)
+                    orderRequest.matcherFee = fee
+
+                    viewState.showCommissionSuccess(fee)
+                    viewState.successLoadPairBalance(currentAmountBalance, currentPriceBalance)
                 }, {
                     it.printStackTrace()
                 }))
@@ -114,36 +140,5 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                 else data?.watchMarket?.market?.priceAsset
 
         return OrderBook.Pair(amountAsset, priceAsset)
-    }
-
-    fun loadCommission(assetIdPrice: String?, assetIdAmount: String?) {
-        viewState.showCommissionLoading()
-        fee = 0L
-        addSubscription(Observable.zip(
-                matcherDataManager.getGlobalCommission(),
-                nodeDataManager.assetDetails(assetIdPrice),
-                nodeDataManager.assetDetails(assetIdAmount),
-                Function3 { t1: GlobalTransactionCommission,
-                            t2: AssetsDetails,
-                            t3: AssetsDetails ->
-                    return@Function3 Triple(t1, t2, t3)
-                })
-                .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({ triple ->
-                    val commission = triple.first
-                    val priceAssetsDetails = triple.second
-                    val amountAssetsDetails = triple.third
-                    val params = GlobalTransactionCommission.Params()
-                    params.transactionType = Transaction.EXCHANGE
-                    params.smartPriceAsset = priceAssetsDetails.scripted
-                    params.smartAmountAsset = amountAssetsDetails.scripted
-                    fee = TransactionUtil.countCommission(commission, params)
-                    orderRequest.matcherFee = fee
-                    viewState.showCommissionSuccess(fee)
-                }, {
-                    it.printStackTrace()
-                    fee = 0L
-                    viewState.showCommissionError()
-                }))
     }
 }

@@ -58,18 +58,13 @@ class TradeBuyAndSellBottomSheetFragment : BaseSuperBottomSheetDialogFragment(),
 
         val fragments = arrayListOf<Fragment>(
                 TradeOrderFragment.newInstance(BUY_TYPE, presenter.data, this),
-                TradeOrderFragment.newInstance(SELL_TYPE, presenter.data, this)
-        )
+                TradeOrderFragment.newInstance(SELL_TYPE, presenter.data, this))
 
         val adapter = TradeBuyAndSellPageAdapter(childFragmentManager, fragments,
                 arrayOf(getString(R.string.buy_and_sell_dialog_buy_tab), getString(R.string.buy_and_sell_dialog_sell_tab)))
+
         rootView.viewpager_buy_sell.adapter = adapter
         rootView.stl_buy_sell.setViewPager(rootView.viewpager_buy_sell)
-        if (presenter.data?.orderType == BUY_TYPE) {
-            rootView.stl_buy_sell.currentTab = 0
-        } else if (presenter.data?.orderType == SELL_TYPE) {
-            rootView.stl_buy_sell.currentTab = 1
-        }
         rootView.stl_buy_sell.setOnTabSelectListener(object : OnTabSelectListener {
             override fun onTabSelect(position: Int) {
                 when (position) {
@@ -87,6 +82,12 @@ class TradeBuyAndSellBottomSheetFragment : BaseSuperBottomSheetDialogFragment(),
             }
         })
 
+        if (presenter.data?.orderType == BUY_TYPE) {
+            rootView.stl_buy_sell.currentTab = 0
+        } else if (presenter.data?.orderType == SELL_TYPE) {
+            rootView.stl_buy_sell.currentTab = 1
+        }
+
         rootView.appbar_layout.addOnOffsetChangedListener(
                 AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
                     val offsetForShowShadow = appbar_layout?.totalScrollRange?.minus(dp2px(9)) ?: 0
@@ -97,6 +98,12 @@ class TradeBuyAndSellBottomSheetFragment : BaseSuperBottomSheetDialogFragment(),
                     }
                 })
 
+        configureScrollColorAnimation(rootView, adapter)
+
+        return rootView
+    }
+
+    private fun configureScrollColorAnimation(rootView: View, adapter: TradeBuyAndSellPageAdapter) {
         val colors = arrayOf<Int>(findColor(R.color.submit400), findColor(R.color.error400))
         val argbEvaluator = ArgbEvaluator()
         val mColorAnimation = ValueAnimator.ofObject(argbEvaluator, findColor(R.color.submit400), findColor(R.color.error400))
@@ -132,9 +139,6 @@ class TradeBuyAndSellBottomSheetFragment : BaseSuperBottomSheetDialogFragment(),
             }
 
         })
-
-
-        return rootView
     }
 
     override fun onSuccessPlaceOrder() {
