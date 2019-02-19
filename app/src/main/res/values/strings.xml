@@ -31,7 +31,7 @@
     <string name="alias_dialog_about_alias">About Alias</string>
     <string name="alias_dialog_create_alias">Create a new alias</string>
     <string name="alias_dialog_description_1">An Alias is a nickname for your address. You can use an Alias instead of an address to make transactions.</string>
-    <string name="alias_dialog_description_2">Your Alias must be between 4 and 30 characters long, and must contain only lowercase Latin letters, digits and symbols (@, -, _ etc)</string>
+    <string name="alias_dialog_description_2">Your Alias must be between 4 and 30 characters long, and must contain only lowercase Latin letters, digits and symbols (@, -, _ and dot)</string>
     <string name="alias_dialog_you_dont_have">You do not have Aliases</string>
     <string name="alias_dialog_you_have">You have %s</string>
     <string name="alias_dialog_your_aliases">Your Aliases</string>
@@ -169,7 +169,7 @@
     <string name="common_msg_in_development">Sorry, this feature will be available in the near future</string>
     <string name="common_no_internet_bottom_msg">No connection to the Internet</string>
     <string name="common_or">or</string>
-    <string name="common_persist">&amp;</string>
+    <string name="common_persist"><![CDATA[&amp;]]></string>
     <string name="common_server_error">Something went wrong</string>
     <string name="common_transaction_fee">Transaction Fee</string>
     <string name="confirm_backup">Confirm backup</string>
@@ -262,16 +262,23 @@
     <string name="history_canceled">Canceled</string>
     <string name="history_data_type_title">Entry in blockchain</string>
     <string name="history_details_active_now">ACTIVE NOW</string>
+    <string name="history_details_add_address">Save address</string>
+    <string name="history_details_amount_per_transaction">Amount per transaction</string>
+    <string name="history_details_asset">Asset</string>
     <string name="history_details_block">Block</string>
     <string name="history_details_cancel_leasing">Cancel leasing</string>
     <string name="history_details_completed">COMPLETED</string>
     <string name="history_details_confirmations">Confirmations</string>
     <string name="history_details_copy_all_data">Copy all data</string>
     <string name="history_details_copy_tx_id">Copy TX ID</string>
+    <string name="history_details_description">Description</string>
+    <string name="history_details_edit_address">Edit name</string>
     <string name="history_details_exchange_price">Price</string>
     <string name="history_details_fee">Fee</string>
+    <string name="history_details_id">Asset ID</string>
     <string name="history_details_leasing_from">Leasing to</string>
     <string name="history_details_leasing_to">Leasing to</string>
+    <string name="history_details_node_address">Node address</string>
     <string name="history_details_not_reissuable">Not Reissuable</string>
     <string name="history_details_received_from">Received from</string>
     <string name="history_details_recipient">Recipient</string>
@@ -279,13 +286,18 @@
     <string name="history_details_send_again">Send again</string>
     <string name="history_details_sent_to">Sent to</string>
     <string name="history_details_show_all">Show all (%1$s)</string>
+    <string name="history_details_status">Status</string>
     <string name="history_details_timestamp">Timestamp</string>
     <string name="history_details_unconfirmed">UNCONFIRMED</string>
+    <string name="history_details_view_on_explorer">View on Explorer</string>
     <string name="history_empty">Nothing Here… \nYou do not have any transactions</string>
     <string name="history_error_receive_data">Error receive data. Please try later</string>
+    <string name="history_exchange_buy">Buy</string>
+    <string name="history_exchange_sell">Sell</string>
     <string name="history_exchanged">Exchanged</string>
     <string name="history_issued">Issued</string>
     <string name="history_leased">Leased</string>
+    <string name="history_mass_send_recipient">#%s Recipient</string>
     <string name="history_my_dex_intent_buy">Exchange Buy: %1$s/%2$s</string>
     <string name="history_my_dex_intent_sell">Exchange Sell: %1$s/%2$s</string>
     <string name="history_my_dex_type">Type</string>
@@ -300,7 +312,7 @@
     <string name="history_sorting_week">Week</string>
     <string name="history_toolbar_title">History</string>
     <string name="history_type_cancel_address_script">Cancel Script Transaction</string>
-    <string name="history_type_cancel_sponsorship">Cancel Sponsorship transaction</string>
+    <string name="history_type_cancel_sponsorship">Disable Sponsorship</string>
     <string name="history_type_canceled_leasing">Canceled Leasing</string>
     <string name="history_type_create_alias">Create Alias</string>
     <string name="history_type_data">Data transaction</string>
@@ -314,7 +326,7 @@
     <string name="history_type_self_transfer">Self-transfer</string>
     <string name="history_type_sent">Sent</string>
     <string name="history_type_set_address_script">Set Script Transaction</string>
-    <string name="history_type_set_sponsorship">Set sponsorship transaction</string>
+    <string name="history_type_set_sponsorship">Set Sponsorship</string>
     <string name="history_type_spam_receive">Received</string>
     <string name="history_type_started_leasing">Started Leasing</string>
     <string name="history_type_token_burn">Token Burn</string>
@@ -504,7 +516,6 @@
     <string name="sell_btn_txt">Sell %s</string>
     <string name="send_amount">Amount</string>
     <string name="send_amount_error_insufficient_funds">Insufficient funds</string>
-    <string name="send_spam_error">This is spam asset</string>
     <string name="send_asset">Asset</string>
     <string name="send_choose_from_address_book">Choose from Address book</string>
     <string name="send_confirmation_confirm">Confirm</string>
@@ -533,9 +544,10 @@
     <string name="send_progress_sending">Sending…</string>
     <string name="send_recipient">Recipient</string>
     <string name="send_recipient_address_hint">Recipient address…</string>
-    <string name="send_recipient_the_address_is_not_valid">The address is not valid</string>
     <string name="send_recipient_asset_is_not_valid">The asset is not valid</string>
+    <string name="send_recipient_the_address_is_not_valid">The address is not valid</string>
     <string name="send_select_your_asset">Select your asset</string>
+    <string name="send_spam_error">Sending funds to spam asset is not possible</string>
     <string name="send_success_do_you_want_to_save_this_address">Do you want to save this address?</string>
     <string name="send_success_okay">Okay</string>
     <string name="send_success_you_have_sent_sum">You have sent %1$s %2$s</string>
@@ -545,6 +557,8 @@
     <string name="send_toolbar_title">Send</string>
     <string name="send_transaction_error_check_asset">Check asset</string>
     <string name="send_use_total_balance">Use total balance</string>
+    <string name="sponsored_fee_dialog_not_available">Not available</string>
+    <string name="sponsored_fee_dialog_title">Transaction Fee</string>
     <string name="start_leasing_amount">Amount</string>
     <string name="start_leasing_balance">Balance</string>
     <string name="start_leasing_choose_from_address">Choose from Address book</string>
@@ -626,21 +640,4 @@
     <string name="your_asset_activity_greater_zero">With balance</string>
     <string name="your_assets_empty_state">Nothing Here… \nYou do not have assets with funds</string>
     <string name="your_assets_toolbar_title">Your assets</string>
-
-    <string name="history_details_status">Status</string>
-    <string name="history_details_view_on_explorer">View on Explorer</string>
-    <string name="history_details_edit_address">Edit name</string>
-    <string name="history_details_add_address">Save address</string>
-    <string name="history_details_description">Description</string>
-    <string name="history_details_node_address">Node address</string>
-    <string name="history_details_id">Asset ID</string>
-    <string name="history_details_asset">Asset</string>
-    <string name="history_details_amount_per_transaction">Amount per transaction</string>
-
-    <string name="history_exchange_sell">Sell</string>
-    <string name="history_exchange_buy">Buy</string>
-    <string name="history_mass_send_recipient">#%s Recipient</string>
-
-    <string name="sponsored_fee_dialog_title">Transaction Fee</string>
-    <string name="sponsored_fee_dialog_not_available">Not available</string>
 </resources>

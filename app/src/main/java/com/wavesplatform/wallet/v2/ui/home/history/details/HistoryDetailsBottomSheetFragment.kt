@@ -127,20 +127,20 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 TransactionType.SENT_TYPE -> {
                     transaction.amount.notNull {
                         view.text_transaction_value.text =
-                                "-${getScaledAmount(it, decimals)}"
+                                "-${MoneyUtil.getScaledText(it, decimals).stripZeros()}"
                     }
                 }
                 TransactionType.RECEIVED_TYPE -> {
                     transaction.amount.notNull {
                         view.text_transaction_value.text =
-                                "+${getScaledAmount(it, decimals)}"
+                                "+${MoneyUtil.getScaledText(it, decimals).stripZeros()}"
                     }
                 }
                 TransactionType.RECEIVE_SPONSORSHIP_TYPE -> {
                     transaction.fee.notNull {
-                        view.text_transaction_value.text =
-                                "+${getScaledAmount(it, transaction.feeAssetObject?.precision
-                                        ?: 8)} ${transaction.feeAssetObject?.name}"
+                        view.text_transaction_value.text = "+${MoneyUtil.getScaledText(
+                                it, transaction.feeAssetObject?.precision ?: 8)
+                                .stripZeros()} ${transaction.feeAssetObject?.name}"
                     }
                 }
                 TransactionType.MASS_SPAM_RECEIVE_TYPE,
@@ -158,18 +158,24 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 }
                 TransactionType.CANCELED_LEASING_TYPE -> {
                     transaction.lease?.amount.notNull {
-                        view.text_transaction_value.text = getScaledAmount(it, decimals)
+                        view.text_transaction_value.text =
+                                MoneyUtil.getScaledText(it, decimals).stripZeros()
                     }
                 }
                 TransactionType.TOKEN_BURN_TYPE -> {
                     transaction.amount.notNull {
                         view.text_transaction_value.text =
-                                "-${getScaledAmount(it, decimals)}"
+                                "-${MoneyUtil.getScaledText(it, decimals).stripZeros()}"
                     }
                 }
-                TransactionType.TOKEN_GENERATION_TYPE,
+                TransactionType.TOKEN_GENERATION_TYPE -> {
+                    val quantity = MoneyUtil.getScaledText(transaction.quantity, decimals)
+                            .stripZeros()
+                    view.text_transaction_value.text = quantity
+                }
                 TransactionType.TOKEN_REISSUE_TYPE -> {
-                    val quantity = getScaledAmount(transaction.quantity, decimals)
+                    val quantity = MoneyUtil.getScaledText(transaction.quantity, decimals)
+                            .stripZeros()
                     view.text_transaction_value.text = "+$quantity"
                 }
                 TransactionType.DATA_TYPE,
@@ -187,7 +193,8 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 }
                 else -> {
                     transaction.amount.notNull {
-                        view.text_transaction_value.text = getScaledAmount(it, decimals)
+                        view.text_transaction_value.text =
+                                MoneyUtil.getScaledText(it, decimals).stripZeros()
                     }
                 }
             }

@@ -14,6 +14,7 @@ import java.util.Locale;
 
 public class MoneyUtil {
 
+    public static BigDecimal ONE_B = new BigDecimal(1000000000);
     public static BigDecimal ONE_M = new BigDecimal(1000000);
     public static BigDecimal ONE_K = new BigDecimal(1000);
 
@@ -35,6 +36,9 @@ public class MoneyUtil {
         formatter.setMaximumFractionDigits(decimals);
         formatter.setMinimumFractionDigits(decimals);
         formatter.setParseBigDecimal(true);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator('\u2009'); // Thin space
+        formatter.setDecimalFormatSymbols(symbols);
         return formatter;
     }
 
