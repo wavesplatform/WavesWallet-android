@@ -600,7 +600,12 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 val imageCopy = tokenView?.findViewById<AppCompatImageView>(R.id.image_copy)
                 val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
 
-                textIdValue?.text = transaction.assetId
+                textIdValue?.text =
+                        if (transaction.feeAssetId?.isNotEmpty() == true) {
+                            transaction.feeAssetId
+                        } else {
+                            transaction.assetId
+                        }
 
                 // force hide for this types of transaction
                 commentBlock.gone()
