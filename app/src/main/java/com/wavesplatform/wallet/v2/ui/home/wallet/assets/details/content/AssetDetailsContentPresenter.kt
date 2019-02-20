@@ -29,9 +29,10 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
                     .map {
                         return@map it.filter { transaction ->
                             isNotSpam(transaction)
-                                    && (assetId.isWavesId() && transaction.assetId.isNullOrEmpty())
+                                    && (assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && isNotSponsorship(transaction))
                                     || AssetDetailsContentPresenter.isAssetIdInExchange(transaction, assetId)
                                     || transaction.assetId == assetId
+                                    || transaction.feeAssetId == assetId
                         }
                                 .sortedByDescending { it.timestamp }
                                 .mapTo(ArrayList()) { HistoryItem(HistoryItem.TYPE_DATA, it) }
@@ -51,6 +52,11 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
                         }
                     }))
         }
+    }
+
+    private fun isNotSponsorship(transaction: Transaction): Boolean {
+        return transaction.transactionType() != TransactionType.RECEIVE_SPONSORSHIP_TYPE &&
+                transaction.transactionType() != TransactionType.CANCEL_SPONSORSHIP_TYPE
     }
 
     fun reloadAssetAddressBalance() {
