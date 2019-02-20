@@ -281,7 +281,11 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 val imageCopy = sendView?.findViewById<AppCompatImageView>(R.id.image_address_copy)
                 val imageAddressAction = sendView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
-                sentAddress?.text = transaction.recipientAddress
+                var recipient = transaction.recipient.clearAlias()
+                if (TextUtils.isEmpty(recipient)) {
+                    recipient = transaction.recipientAddress ?: ""
+                }
+                sentAddress?.text = recipient
 
                 eventSubscriptions.add(RxView.clicks(imageCopy!!)
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
@@ -519,7 +523,11 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
 
                                 val transfer = transfers[i]
 
-                                textSentAddress?.text = transfer.recipientAddress
+                                var recipient = transfer.recipient.clearAlias()
+                                if (TextUtils.isEmpty(recipient)) {
+                                    recipient = transfer.recipientAddress ?: ""
+                                }
+                                textSentAddress?.text = recipient
 
                                 eventSubscriptions.add(RxView.clicks(imageCopy!!)
                                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
