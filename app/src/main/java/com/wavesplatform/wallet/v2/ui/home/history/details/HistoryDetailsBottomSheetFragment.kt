@@ -147,7 +147,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 TransactionType.MASS_RECEIVE_TYPE,
                 TransactionType.MASS_SEND_TYPE -> {
                     view.text_transaction_value.text = getTransactionAmount(
-                            transaction = transaction, decimals = decimals)
+                            transaction = transaction, decimals = decimals, round = false)
                 }
                 TransactionType.CREATE_ALIAS_TYPE -> {
                     view.text_transaction_value.text = transaction.alias
