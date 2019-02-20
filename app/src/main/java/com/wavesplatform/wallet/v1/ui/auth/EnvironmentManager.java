@@ -1,20 +1,29 @@
 package com.wavesplatform.wallet.v1.ui.auth;
 
+import android.app.Application;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.wavesplatform.wallet.App;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
+import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager;
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration;
+import com.wavesplatform.wallet.v2.data.model.remote.response.News;
+import com.wavesplatform.wallet.v2.util.RxUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class EnvironmentManager {
 
@@ -26,23 +35,30 @@ public class EnvironmentManager {
             "wavesplatform/waves-client-config/master/environment_mainnet.json";
     private static final String URL_CONFIG_TEST_NET = "https://github-proxy.wvservices.com/" +
             "wavesplatform/waves-client-config/master/environment_testnet.json";
-    private static final String JSON_FILENAME_MAIN_NET = "environment_mainnet.json";
-    private static final String JSON_FILENAME_TEST_NET = "environment_testnet.json";
 
     private static EnvironmentManager instance;
 
     private Environment current;
-    private PrefsUtil prefsUtil;
-    private Handler handler = new Handler();
+    private static Handler handler = new Handler();
+    private Application application;
 
-    private EnvironmentManager(Context context) {
-        this.prefsUtil = new PrefsUtil(context);
-        this.current = Environment.find(prefsUtil.getEnvironment());
+    public static void init(Application application) {
+        instance = new EnvironmentManager();
+        instance.application = application;
+        instance.current = Environment.find(getEnvironment());
     }
 
-    public static void init(Context context) {
-        instance = new EnvironmentManager(context);
+    public static void updateConfiguration(MatcherDataManager matcherDataManager) {
+        matcherDataManager.apiService.loadNews(News.URL)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(news -> {
+            Log.d("updateConfiguration", "success");
+        }, e -> {
+            Log.e("updateConfiguration", "error");
+        });
     }
+
 
     public static EnvironmentManager get() {
         return instance;
@@ -52,9 +68,20 @@ public class EnvironmentManager {
         return current;
     }
 
-    public void setCurrent(Environment current) {
-        prefsUtil.setGlobalValue(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.getName());
+    public static void setCurrentEnvironment(Environment current) {
+        SharedPreferences preferenceManager = PreferenceManager
+                .getDefaultSharedPreferences(App.getAppContext());
+        SharedPreferences.Editor editor = preferenceManager.edit();
+        editor.putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.getName());
+        editor.apply();
         handler.postDelayed(EnvironmentManager::restartApp, 500);
+    }
+
+    public static String getEnvironment() {
+        SharedPreferences preferenceManager = PreferenceManager
+                .getDefaultSharedPreferences(instance.application);
+        return preferenceManager.getString(
+                PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, Environment.MAIN_NET.name);
     }
 
     public static GlobalConfiguration.GeneralAssetId findAssetId(@NotNull String gatewayId) {
@@ -69,22 +96,6 @@ public class EnvironmentManager {
         return get().current().getGlobalConfiguration();
     }
 
-    private static GlobalConfiguration getConfiguration(String fileName) {
-        String json;
-        try {
-            InputStream is = App.getAppContext().getAssets().open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return new Gson().fromJson(json, GlobalConfiguration.class);
-    }
-
     private static void restartApp() {
         PackageManager packageManager = App.getAppContext().getPackageManager();
         Intent intent = packageManager.getLaunchIntentForPackage(App.getAppContext().getPackageName());
@@ -95,19 +106,26 @@ public class EnvironmentManager {
         System.exit(0);
     }
 
-    public enum Environment {
-
-        MAIN_NET(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, JSON_FILENAME_MAIN_NET),
-        TEST_NET(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, JSON_FILENAME_TEST_NET);
+    public static class Environment {
 
         private String name;
         private String url;
         private GlobalConfiguration configuration;
+        public static Environment TEST_NET = new Environment(
+                KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, EnvironmentConstants.TEST_NET_JSON);
+        public static Environment MAIN_NET = new Environment(
+                KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, EnvironmentConstants.MAIN_NET_JSON);
+        static List<Environment> environments = new ArrayList<>();
+
+        static {
+            environments.add(TEST_NET);
+            environments.add(MAIN_NET);
+        }
 
         Environment(String name, String url, String json) {
             this.name = name;
             this.url = url;
-            this.configuration = getConfiguration(json);
+            this.configuration = new Gson().fromJson(json, GlobalConfiguration.class);
         }
 
         public String getName() {
@@ -137,9 +155,9 @@ public class EnvironmentManager {
 
         public static Environment find(String name) {
             if (name != null) {
-                for (Environment anAll : values()) {
-                    if (name.equalsIgnoreCase(anAll.getName())) {
-                        return anAll;
+                for (Environment environment : environments) {
+                    if (name.equalsIgnoreCase(environment.getName())) {
+                        return environment;
                     }
                 }
             }

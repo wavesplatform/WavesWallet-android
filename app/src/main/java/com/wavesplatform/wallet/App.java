@@ -21,7 +21,9 @@ import com.wavesplatform.wallet.v1.util.ApplicationLifeCycle;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
+import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
+import com.wavesplatform.wallet.v2.data.remote.ApiService;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
 import com.wavesplatform.wallet.v2.util.Analytics;
 
@@ -41,6 +43,8 @@ public class App extends DaggerApplication {
     PrefsUtil mPrefsUtil;
     @Inject
     AuthHelper authHelper;
+    @Inject
+    MatcherDataManager matcherDataManager;
     private static Context sContext;
     private static AccessManager accessManager;
     private LocalizationApplicationDelegate localizationDelegate
@@ -48,6 +52,7 @@ public class App extends DaggerApplication {
 
     @Override
     public void onCreate() {
+        EnvironmentManager.init(this);
         super.onCreate();
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
@@ -66,7 +71,6 @@ public class App extends DaggerApplication {
         RxJavaPlugins.setErrorHandler(Timber::e);
 
         AppUtil appUtil = new AppUtil(this);
-        EnvironmentManager.init(this);
         accessManager = new AccessManager(mPrefsUtil, appUtil, authHelper);
 
         if (BuildConfig.DEBUG) {
@@ -102,6 +106,8 @@ public class App extends DaggerApplication {
                 // No-op
             }
         });
+
+        EnvironmentManager.updateConfiguration(matcherDataManager);
     }
 
     public static Context getAppContext() {
