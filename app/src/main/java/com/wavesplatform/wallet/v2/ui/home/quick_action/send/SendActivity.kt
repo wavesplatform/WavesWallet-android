@@ -265,10 +265,8 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun setPercent(percent: Double) {
         presenter.selectedAsset.notNull { assetBalance ->
-            assetBalance.getAvailableBalance().notNull { balance ->
-                val amount = (balance * percent).toLong()
-                checkAndSetAmount(amount, assetBalance)
-            }
+            val amount = (assetBalance.getAvailableBalance() * percent).toLong()
+            checkAndSetAmount(amount, assetBalance)
         }
     }
 
@@ -375,7 +373,7 @@ class SendActivity : BaseActivity(), SendView {
                     relative_gateway_fee.gone()
                 }
                 else -> {
-                    presenter.recipientAssetId = SendPresenter.getAssetId(recipient)
+                    presenter.recipientAssetId = SendPresenter.getAssetId(recipient, presenter.selectedAsset)
                     if (presenter.recipientAssetId.isNullOrEmpty()) {
                         presenter.type = SendPresenter.Type.UNKNOWN
                         setRecipientValid(false)

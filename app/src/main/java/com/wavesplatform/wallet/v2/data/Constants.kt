@@ -158,7 +158,7 @@ object Constants {
             Pair(LIGHTCOIN_ASSET_ID, "LTC"),
             Pair(MONERO_ASSET_ID, "XMR"),
             Pair(BITCOINCASH_ASSET_ID, "BCH"),
-            Pair(BITCOINCASH_ASSET_ID, "BSV"),
+            Pair(BITCOIN_SV_ASSET_ID, "BSV"),
             Pair(ZEC_ASSET_ID, "ZEC"),
             Pair(DASH_ASSET_ID, "DASH"))
 
