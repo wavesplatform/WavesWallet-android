@@ -124,7 +124,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         return transactions.filter { transaction ->
             (assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && isNotSponsorship(transaction))
                     || AssetDetailsContentPresenter.isAssetIdInExchange(transaction, assetId)
-                    || transaction.assetId == assetId
+                    || transaction.assetId == assetId && transaction.transactionType() != TransactionType.RECEIVE_SPONSORSHIP_TYPE
                     || transaction.feeAssetId == assetId
         }
     }
