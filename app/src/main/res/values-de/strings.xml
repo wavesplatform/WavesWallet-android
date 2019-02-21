@@ -169,7 +169,6 @@
     <string name="common_msg_in_development">Diese Funktion wird in naher Zukunft verfügbar sein</string>
     <string name="common_no_internet_bottom_msg">Keine Verbindung zum Internet</string>
     <string name="common_or">oder</string>
-    <string name="common_persist"><![CDATA[&amp;]]></string>
     <string name="common_server_error">Etwas ist schief gelaufen</string>
     <string name="common_transaction_fee">Transaktionsgebühr</string>
     <string name="confirm_backup">Bestätigen Sie die Sicherung</string>

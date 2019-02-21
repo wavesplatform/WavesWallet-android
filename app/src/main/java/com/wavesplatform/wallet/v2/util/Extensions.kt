@@ -131,7 +131,7 @@ fun ByteArray.arrayWithSize(): ByteArray {
 }
 
 fun String.clearBalance(): String {
-    return this.stripZeros().replace(",", "")
+    return this.stripZeros().replace("\u2009", "")  // Thin space
 }
 
 fun View.makeBackgroundWithRippleEffect() {

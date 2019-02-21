@@ -169,7 +169,6 @@
     <string name="common_msg_in_development">Lo sentimos, esta artículo estará disponible en un futuro próximo.</string>
     <string name="common_no_internet_bottom_msg">No hay conexión a internet</string>
     <string name="common_or">o</string>
-    <string name="common_persist"><![CDATA[&amp;]]></string>
     <string name="common_server_error">Algo fue mal</string>
     <string name="common_transaction_fee">Tarifa por transacción</string>
     <string name="confirm_backup">Confirmar el backup </string>

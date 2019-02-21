@@ -185,6 +185,12 @@ class SendActivity : BaseActivity(), SendView {
                         text_fee_transaction.text = "${MoneyUtil.getScaledText(fee, asset).stripZeros()} ${asset.getName()}"
                         commission_asset_name_text.gone()
                     }
+
+                    text_amount_fee_error.text = getString(
+                            R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
+                            "${getScaledAmount(presenter.fee, asset.getDecimals())} ${asset.getName()}",
+                            presenter.gatewayCommission.toPlainString(),
+                            presenter.selectedAsset?.getName() ?: "")
                 }
             }
             dialog.show(supportFragmentManager, dialog::class.java.simpleName)
@@ -265,10 +271,8 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun setPercent(percent: Double) {
         presenter.selectedAsset.notNull { assetBalance ->
-            assetBalance.getAvailableBalance().notNull { balance ->
-                val amount = (balance * percent).toLong()
-                checkAndSetAmount(amount, assetBalance)
-            }
+            val amount = (assetBalance.getAvailableBalance() * percent).toLong()
+            checkAndSetAmount(amount, assetBalance)
         }
     }
 
@@ -286,7 +290,7 @@ class SendActivity : BaseActivity(), SendView {
                 horizontal_amount_suggestion.gone()
                 text_amount_fee_error.text = getString(
                         R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
-                        "${getScaledAmount(presenter.fee, 8)} ${Constants.wavesAssetInfo.name}",
+                        "${getScaledAmount(presenter.fee, presenter.feeAsset.getDecimals())} ${presenter.feeAsset.getName()}",
                         presenter.gatewayCommission.toPlainString(),
                         assetBalance.getName() ?: "")
                 presenter.amount = BigDecimal.ZERO
@@ -375,7 +379,7 @@ class SendActivity : BaseActivity(), SendView {
                     relative_gateway_fee.gone()
                 }
                 else -> {
-                    presenter.recipientAssetId = SendPresenter.getAssetId(recipient)
+                    presenter.recipientAssetId = SendPresenter.getAssetId(recipient, presenter.selectedAsset)
                     if (presenter.recipientAssetId.isNullOrEmpty()) {
                         presenter.type = SendPresenter.Type.UNKNOWN
                         setRecipientValid(false)

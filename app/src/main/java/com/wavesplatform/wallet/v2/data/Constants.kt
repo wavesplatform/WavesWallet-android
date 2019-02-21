@@ -189,6 +189,15 @@ object Constants {
         return null
     }
 
+    val coinomatCryptoCurrencies = hashMapOf(
+            Pair(BITCOIN_ASSET_ID, "BTC"),
+            Pair(ETHEREUM_ASSET_ID, "ETH"),
+            Pair(LIGHTCOIN_ASSET_ID, "LTC"),
+            Pair(MONERO_ASSET_ID, "XMR"),
+            Pair(BITCOINCASH_ASSET_ID, "BCH"),
+            Pair(BITCOIN_SV_ASSET_ID, "BSV"),
+            Pair(ZEC_ASSET_ID, "ZEC"),
+            Pair(DASH_ASSET_ID, "DASH"))
 
     fun defaultAssetsAvatar(): HashMap<String, String> {
         val map = hashMapOf<String, String>()

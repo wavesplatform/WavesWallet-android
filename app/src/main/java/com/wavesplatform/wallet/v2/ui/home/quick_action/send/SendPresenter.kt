@@ -85,7 +85,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 feeAsset.assetId)
     }
 
-    fun validateTransfer(): Int {
+    private fun validateTransfer(): Int {
         if (selectedAsset == null) {
             return R.string.send_transaction_error_check_asset
         } else if (isRecipientValid() != true) {
@@ -267,9 +267,26 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         const val LANG: String = "ru_RU"
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
-        fun getAssetId(recipient: String?): String? {
+        fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
             for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
                 if (recipient!!.matches("${asset.addressRegEx}$".toRegex())) {
+
+                    // todo check btc bsl bitcoincash same regexp
+                    if (assetBalance != null) {
+                        when {
+                            assetBalance.assetId == Constants.BITCOIN_ASSET_ID ->
+                                Constants.BITCOIN_ASSET_ID
+                            assetBalance.assetId == Constants.BITCOINCASH_ASSET_ID ->
+                                Constants.BITCOINCASH_ASSET_ID
+                            assetBalance.assetId == Constants.BITCOIN_SV_ASSET_ID ->
+                                Constants.BITCOIN_SV_ASSET_ID
+                            else -> null
+                        }
+                    } else {
+                        null
+                    }
+
+
                     return asset.assetId
                 }
             }

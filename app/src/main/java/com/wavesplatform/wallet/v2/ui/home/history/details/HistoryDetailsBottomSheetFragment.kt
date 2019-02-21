@@ -147,7 +147,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 TransactionType.MASS_RECEIVE_TYPE,
                 TransactionType.MASS_SEND_TYPE -> {
                     view.text_transaction_value.text = getTransactionAmount(
-                            transaction = transaction, decimals = decimals)
+                            transaction = transaction, decimals = decimals, round = false)
                 }
                 TransactionType.CREATE_ALIAS_TYPE -> {
                     view.text_transaction_value.text = transaction.alias
@@ -281,7 +281,11 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 val imageCopy = sendView?.findViewById<AppCompatImageView>(R.id.image_address_copy)
                 val imageAddressAction = sendView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
-                sentAddress?.text = transaction.recipientAddress
+                var recipient = transaction.recipient.clearAlias()
+                if (TextUtils.isEmpty(recipient)) {
+                    recipient = transaction.recipientAddress ?: ""
+                }
+                sentAddress?.text = recipient
 
                 eventSubscriptions.add(RxView.clicks(imageCopy!!)
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
@@ -519,7 +523,11 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
 
                                 val transfer = transfers[i]
 
-                                textSentAddress?.text = transfer.recipientAddress
+                                var recipient = transfer.recipient.clearAlias()
+                                if (TextUtils.isEmpty(recipient)) {
+                                    recipient = transfer.recipientAddress ?: ""
+                                }
+                                textSentAddress?.text = recipient
 
                                 eventSubscriptions.add(RxView.clicks(imageCopy!!)
                                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
@@ -600,7 +608,12 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 val imageCopy = tokenView?.findViewById<AppCompatImageView>(R.id.image_copy)
                 val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
 
-                textIdValue?.text = transaction.assetId
+                textIdValue?.text =
+                        if (transaction.feeAssetId?.isNotEmpty() == true) {
+                            transaction.feeAssetId
+                        } else {
+                            transaction.assetId
+                        }
 
                 // force hide for this types of transaction
                 commentBlock.gone()
