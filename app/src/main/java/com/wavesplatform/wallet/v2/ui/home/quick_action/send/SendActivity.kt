@@ -315,7 +315,13 @@ class SendActivity : BaseActivity(), SendView {
                 amount
             }
 
-            edit_amount.setText(MoneyUtil.getScaledText(total, assetBalance).clearBalance())
+            if (total.toFloat() > 0) {
+                edit_amount.setText(MoneyUtil.getScaledText(total, assetBalance).clearBalance())
+            } else {
+                edit_amount.setText("")
+                text_amount_error.visiable()
+                presenter.amount = BigDecimal.ZERO
+            }
         }
     }
 
