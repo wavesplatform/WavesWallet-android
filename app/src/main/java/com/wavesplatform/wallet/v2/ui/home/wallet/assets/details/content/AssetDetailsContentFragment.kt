@@ -97,7 +97,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                     .load(R.layout.item_skeleton_wallet)
                     .show()
 
-            presenter.loadLastTransactionsFor(it.assetId, (activity as AssetDetailsActivity).getAllTransactions())
+            presenter.loadLastTransactionsFor(it, (activity as AssetDetailsActivity).getAllTransactions())
         }
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateHistoryScreen::class.java)
