@@ -408,7 +408,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun checkMonero(assetId: String?) {
-        if (assetId == Constants.MONERO_ASSET_ID) {
+        if (assetId == Constants.findByGatewayId("XMR")!!.assetId) {
             monero_layout.visiable()
             eventSubscriptions.add(RxTextView.textChanges(edit_monero_payment_id)
                     .subscribe { paymentId ->

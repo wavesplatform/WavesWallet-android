@@ -44,7 +44,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var gatewayMax: BigDecimal = BigDecimal.ZERO
     var fee = 0L
     var feeWaves = 0L
-    var feeAsset: AssetBalance = Constants.defaultAssets[0]
+    var feeAsset: AssetBalance = Constants.find(Constants.WAVES_ASSET_ID)!!
 
     fun sendClicked() {
         val res = validateTransfer()
@@ -104,7 +104,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     return R.string.insufficient_funds
                 } else if (isGatewayAmountError()) {
                     return R.string.insufficient_gateway_funds_error
-                } else if (Constants.MONERO_ASSET_ID == recipientAssetId
+                } else if (Constants.findByGatewayId("XMR")!!.assetId == recipientAssetId
                         && moneroPaymentId != null
                         && (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH
                                 || moneroPaymentId!!.contains(" ".toRegex()))) {
@@ -130,9 +130,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return if (isSameSendingAndFeeAssets()) {
             tx.amount + tx.fee <= selectedAsset!!.balance!!
         } else {
-            val validFee = if (tx.feeAssetId?.isWaves() == true){
+            val validFee = if (tx.feeAssetId?.isWaves() == true) {
                 tx.fee <= queryFirst<AssetBalance> { equalTo("assetId", "") }?.balance ?: 0
-            }else{
+            } else {
                 true
             }
 
@@ -148,7 +148,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     fun loadXRate(assetId: String) {
-        val currencyTo = Constants.coinomatCryptoCurrencies[assetId]
+        val currencyTo = Constants.coinomatCryptoCurrencies()[assetId]
         if (currencyTo.isNullOrEmpty()) {
             type = SendPresenter.Type.UNKNOWN
             runOnUiThread {
@@ -268,23 +268,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
         fun getAssetId(recipient: String?): String? {
-            return when {
-                recipient!!.matches("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
-                    Constants.BITCOIN_ASSET_ID
-                recipient.matches("^0x[0-9a-fA-F]{40}$".toRegex()) ->
-                    Constants.ETHEREUM_ASSET_ID
-                recipient.matches("^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$".toRegex()) ->
-                    Constants.LIGHTCOIN_ASSET_ID
-                recipient.matches("^t1[a-zA-Z0-9]{33}$".toRegex()) ->
-                    Constants.ZEC_ASSET_ID
-                recipient.matches("^([13][a-km-zA-HJ-NP-Z1-9]{25,34}|[qp][a-zA-Z0-9]{41})$".toRegex()) ->
-                    Constants.BITCOINCASH_ASSET_ID
-                recipient.matches("^X[a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
-                    Constants.DASH_ASSET_ID
-                recipient.matches("^4([0-9]|[A-B])(.){93}".toRegex()) ->
-                    Constants.MONERO_ASSET_ID
-                else -> null
+            for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+                if (recipient!!.matches("${asset.addressRegEx}$".toRegex())) {
+                    return asset.assetId
+                }
             }
+            return null
         }
 
         fun isWavesAddress(address: String?): Boolean {

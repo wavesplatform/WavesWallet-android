@@ -124,7 +124,7 @@ open class AssetBalance(
     companion object {
 
         fun isFiat(assetId: String): Boolean {
-            for (fiat in Constants.defaultFiat) {
+            for (fiat in Constants.defaultFiat()) {
                 if (assetId == fiat) {
                     return true
                 }
@@ -137,7 +137,7 @@ open class AssetBalance(
                 return false
             }
 
-            for (fiat in Constants.defaultCrypto) {
+            for (fiat in Constants.defaultCrypto()) {
                 if (assetId == fiat) {
                     return true
                 }

@@ -7,15 +7,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.wavesplatform.wallet.App;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager;
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration;
-import com.wavesplatform.wallet.v2.data.model.remote.response.News;
-import com.wavesplatform.wallet.v2.util.RxUtil;
+import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,17 +23,20 @@ import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class EnvironmentManager {
 
-    public static final String KEY_ENV_MAIN_NET = "env_prod";
     public static final String KEY_ENV_TEST_NET = "env_testnet";
-    public static final String URL_COMMISSION_MAIN_NET = "https://github-proxy.wvservices.com/" +
-            "wavesplatform/waves-client-config/master/fee.json";
     private static final String URL_CONFIG_MAIN_NET = "https://github-proxy.wvservices.com/" +
             "wavesplatform/waves-client-config/master/environment_mainnet.json";
+
+    public static final String KEY_ENV_MAIN_NET = "env_prod";
     private static final String URL_CONFIG_TEST_NET = "https://github-proxy.wvservices.com/" +
             "wavesplatform/waves-client-config/master/environment_testnet.json";
+
+    public static final String URL_COMMISSION_MAIN_NET = "https://github-proxy.wvservices.com/" +
+            "wavesplatform/waves-client-config/master/fee.json";
 
     private static EnvironmentManager instance;
 
@@ -49,14 +51,25 @@ public class EnvironmentManager {
     }
 
     public static void updateConfiguration(MatcherDataManager matcherDataManager) {
-        matcherDataManager.apiService.loadNews(News.URL)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(news -> {
-            Log.d("updateConfiguration", "success");
-        }, e -> {
-            Log.e("updateConfiguration", "error");
-        });
+        if (needForceUpdate()) {
+            matcherDataManager.apiService.loadGlobalConfiguration(instance.current.url)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(globalConfiguration -> {
+                        SharedPreferences preferenceManager = PreferenceManager
+                                .getDefaultSharedPreferences(App.getAppContext());
+                        SharedPreferences.Editor editor = preferenceManager.edit();
+                        editor.putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                                new Gson().toJson(globalConfiguration))
+                                .putLong(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_LAST_UPDATE_TIME,
+                                        System.currentTimeMillis())
+                                .apply();
+                        instance.current.setConfiguration(globalConfiguration);
+                    }, error -> {
+                        Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration");
+                        error.printStackTrace();
+                    });
+        }
     }
 
 
@@ -72,7 +85,9 @@ public class EnvironmentManager {
         SharedPreferences preferenceManager = PreferenceManager
                 .getDefaultSharedPreferences(App.getAppContext());
         SharedPreferences.Editor editor = preferenceManager.edit();
-        editor.putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.getName());
+        editor.putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.getName())
+                .remove(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA)
+                .remove(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_LAST_UPDATE_TIME);
         editor.apply();
         handler.postDelayed(EnvironmentManager::restartApp, 500);
     }
@@ -94,6 +109,14 @@ public class EnvironmentManager {
 
     public static GlobalConfiguration getGlobalConfiguration() {
         return get().current().getGlobalConfiguration();
+    }
+
+    private static boolean needForceUpdate() {
+        SharedPreferences preferenceManager = PreferenceManager
+                .getDefaultSharedPreferences(instance.application);
+        long lastUpdateTime = preferenceManager.getLong(
+                PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_LAST_UPDATE_TIME, 0L);
+        return System.currentTimeMillis() > lastUpdateTime + 1_000;
     }
 
     private static void restartApp() {
@@ -128,6 +151,10 @@ public class EnvironmentManager {
             this.configuration = new Gson().fromJson(json, GlobalConfiguration.class);
         }
 
+        void setConfiguration(GlobalConfiguration configuration) {
+            this.configuration = configuration;
+        }
+
         public String getName() {
             return name;
         }
@@ -144,7 +171,7 @@ public class EnvironmentManager {
             return (byte) configuration.getScheme().charAt(0);
         }
 
-        public GlobalConfiguration.GeneralAssetId findAssetId(String gatewayId) {
+        GlobalConfiguration.GeneralAssetId findAssetId(String gatewayId) {
             for (GlobalConfiguration.GeneralAssetId assetId : configuration.getGeneralAssetIds()) {
                 if (assetId.getGatewayId().equals(gatewayId)) {
                     return assetId;
@@ -153,10 +180,16 @@ public class EnvironmentManager {
             return null;
         }
 
-        public static Environment find(String name) {
+        static Environment find(String name) {
             if (name != null) {
                 for (Environment environment : environments) {
                     if (name.equalsIgnoreCase(environment.getName())) {
+                        SharedPreferences preferenceManager = PreferenceManager
+                                .getDefaultSharedPreferences(instance.application);
+                        String json = preferenceManager.getString(
+                                PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                                EnvironmentConstants.MAIN_NET_JSON);
+                        environment.setConfiguration(new Gson().fromJson(json, GlobalConfiguration.class));
                         return environment;
                     }
                 }

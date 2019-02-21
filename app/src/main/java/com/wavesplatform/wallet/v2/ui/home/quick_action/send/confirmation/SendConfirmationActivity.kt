@@ -62,7 +62,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.type = intent!!.extras!!.getSerializable(KEY_INTENT_TYPE) as SendPresenter.Type
         presenter.blockchainCommission = intent!!.extras!!.getLong(KEY_INTENT_BLOCKCHAIN_COMMISSION)
         presenter.feeAsset = intent!!.extras!!.getParcelable(KEY_INTENT_FEE_ASSET)
-                ?: Constants.defaultAssets[0]
+                ?: Constants.find(Constants.WAVES_ASSET_ID)!!
 
         if (presenter.type == SendPresenter.Type.GATEWAY) {
             presenter.gatewayCommission = BigDecimal(

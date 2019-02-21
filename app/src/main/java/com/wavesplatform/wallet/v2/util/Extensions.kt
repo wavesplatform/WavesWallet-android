@@ -747,7 +747,7 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 }
 
 fun isShowTicker(assetId: String?): Boolean {
-    return Constants.defaultAssets.any {
+    return Constants.defaultAssets().any {
         it.assetId == assetId || assetId.isNullOrEmpty()
     }
 }

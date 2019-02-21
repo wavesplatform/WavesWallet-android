@@ -71,7 +71,9 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
             return apiService.assetsInfoByIds(ids)
                     .map { it ->
                         val assetsInfo = it.data.mapTo(ArrayList()) { assetInfoData ->
-                            val defaultAsset = Constants.defaultAssets.firstOrNull { it.assetId == assetInfoData.assetInfo.id }
+                            val defaultAsset = Constants.defaultAssets().firstOrNull {
+                                it.assetId == assetInfoData.assetInfo.id
+                            }
 
                             defaultAsset.notNull { assetBalance ->
                                 assetBalance.getName().notNull {

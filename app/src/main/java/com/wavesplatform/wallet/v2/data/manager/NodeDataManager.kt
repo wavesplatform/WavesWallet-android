@@ -178,7 +178,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                             return@map it[Constants.wavesAssetInfo.name] ?: 0L
                         },
                 Function3 { totalBalance: Long, leasedBalance: Long, inOrderBalance: Long ->
-                    val currentWaves = Constants.defaultAssets[0]
+                    val currentWaves = Constants.find(Constants.WAVES_ASSET_ID)!!
                     currentWaves.balance = totalBalance
                     currentWaves.leasedBalance = leasedBalance
                     currentWaves.inOrderBalance = inOrderBalance

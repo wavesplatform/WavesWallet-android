@@ -73,18 +73,7 @@ object Constants {
 
     const val VERSION = 2
 
-    val WAVES_ASSET_ID = ""
-    val MONERO_ASSET_ID = EnvironmentManager.findAssetId("XMR").assetId
-    val BITCOIN_ASSET_ID = EnvironmentManager.findAssetId("BTC").assetId
-    val ETHEREUM_ASSET_ID = EnvironmentManager.findAssetId("ETH").assetId
-    val BITCOINCASH_ASSET_ID = EnvironmentManager.findAssetId("BCH").assetId
-    val LIGHTCOIN_ASSET_ID = EnvironmentManager.findAssetId("LTC").assetId
-    val ZEC_ASSET_ID = EnvironmentManager.findAssetId("ZEC").assetId
-    val DASH_ASSET_ID = EnvironmentManager.findAssetId("DASH").assetId
-    val WUSD_ASSET_ID = EnvironmentManager.findAssetId("USD").assetId
-    val WEUR_ASSET_ID = EnvironmentManager.findAssetId("EUR").assetId
-    val WTRY_ASSET_ID = EnvironmentManager.findAssetId("TRY").assetId
-    val BITCOIN_SV_ASSET_ID = EnvironmentManager.findAssetId("BSV").assetId
+    const val WAVES_ASSET_ID = ""
 
     val alphabetColor = hashMapOf(
             Pair("a", R.color.a),
@@ -123,7 +112,7 @@ object Constants {
     var WCTGeneralAsset = GlobalConfiguration.GeneralAssetId(assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
             gatewayId = "WCT", displayName = "WavesCommunity")
 
-    val defaultAssets = listOf(
+    /*val defaultAssets = listOf(
             AssetBalance(WAVES_ASSET_ID, quantity = 10000000000000000L, isFavorite = true, issueTransaction = IssueTransaction(name = "WAVES", decimals = 8, quantity = 10000000000000000L, timestamp = 1460419200000L), isGateway = true),
             AssetBalance(BITCOIN_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = BITCOIN_ASSET_ID, id = BITCOIN_ASSET_ID, name = "Bitcoin", decimals = 8, quantity = 2100000000000000, timestamp = 1480698060000L), isGateway = true),
             AssetBalance(ETHEREUM_ASSET_ID, quantity = 10000000000000000, issueTransaction = IssueTransaction(assetId = ETHEREUM_ASSET_ID, id = ETHEREUM_ASSET_ID, name = "Ethereum", decimals = 8, quantity = 10000000000000000, timestamp = 1500385140000L), isGateway = true),
@@ -136,47 +125,110 @@ object Constants {
             AssetBalance(WTRY_ASSET_ID, quantity = 100000000, issueTransaction = IssueTransaction(assetId = WTRY_ASSET_ID, id = WTRY_ASSET_ID, name = "TRY", decimals = 2, quantity = 100000000, timestamp = 1512411060000L), isFiatMoney = true, isGateway = true),
             AssetBalance(DASH_ASSET_ID, quantity = 1890000000000000, issueTransaction = IssueTransaction(assetId = DASH_ASSET_ID, id = DASH_ASSET_ID, name = "DASH", decimals = 8, quantity = 1890000000000000, timestamp = 1524430860000L), isGateway = true),
             AssetBalance(MONERO_ASSET_ID, quantity = 1603984700000000, issueTransaction = IssueTransaction(assetId = MONERO_ASSET_ID, id = MONERO_ASSET_ID, name = "Monero", decimals = 8, quantity = 1603984700000000, timestamp = 1526572200000L), isGateway = true))
+*/
+    fun defaultAssets(): MutableList<AssetBalance> {
+        val list = mutableListOf<AssetBalance>()
+        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+            list.add(AssetBalance(assetId = asset.assetId,
+                    quantity = 0L,
+                    isFavorite = false,
+                    issueTransaction = IssueTransaction(
+                            name = asset.displayName,
+                            decimals = if (asset.isFiat) {
+                                2
+                            } else {
+                                8
+                            },
+                            quantity = 0L,
+                            timestamp = 1460419200000L),
+                    isGateway = asset.isGateway)
+            )
+        }
+        return list
+    }
 
-    val defaultAssetsAvatar = hashMapOf(
-            Pair(WAVES_ASSET_ID, EnvironmentManager.findAssetId("WAVES").iconUrls.default),
-            Pair(BITCOIN_ASSET_ID, EnvironmentManager.findAssetId("BTC").iconUrls.default),
-            Pair(ETHEREUM_ASSET_ID, EnvironmentManager.findAssetId("ETH").iconUrls.default),
-            Pair(WUSD_ASSET_ID, EnvironmentManager.findAssetId("USD").iconUrls.default),
-            Pair(WEUR_ASSET_ID, EnvironmentManager.findAssetId("EUR").iconUrls.default),
-            Pair(WTRY_ASSET_ID, EnvironmentManager.findAssetId("TRY").iconUrls.default),
-            Pair(LIGHTCOIN_ASSET_ID, EnvironmentManager.findAssetId("LTC").iconUrls.default),
-            Pair(MONERO_ASSET_ID, EnvironmentManager.findAssetId("XMR").iconUrls.default),
-            Pair(BITCOINCASH_ASSET_ID, EnvironmentManager.findAssetId("BCH").iconUrls.default),
-            Pair(BITCOIN_SV_ASSET_ID, EnvironmentManager.findAssetId("BSV").iconUrls.default),
-            Pair(ZEC_ASSET_ID, EnvironmentManager.findAssetId("ZEC").iconUrls.default),
-            Pair(DASH_ASSET_ID, EnvironmentManager.findAssetId("DASH").iconUrls.default),
-            Pair(WCTGeneralAsset.assetId, R.drawable.ic_logo_wct_48))
+    fun find(assetId: String): AssetBalance? {
+        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+            if (asset.assetId == assetId) {
+                return AssetBalance(assetId = asset.assetId,
+                        quantity = 0L,
+                        isFavorite = false,
+                        issueTransaction = IssueTransaction(
+                                name = asset.displayName,
+                                decimals = if (asset.isFiat) {
+                                    2
+                                } else {
+                                    8
+                                },
+                                quantity = 0L,
+                                timestamp = 1460419200000L),
+                        isGateway = asset.isGateway)
+            }
+        }
+        return null
+    }
 
-    val coinomatCryptoCurrencies = hashMapOf(
-            Pair(BITCOIN_ASSET_ID, "BTC"),
-            Pair(ETHEREUM_ASSET_ID, "ETH"),
-            Pair(LIGHTCOIN_ASSET_ID, "LTC"),
-            Pair(MONERO_ASSET_ID, "XMR"),
-            Pair(BITCOINCASH_ASSET_ID, "BCH"),
-            Pair(BITCOINCASH_ASSET_ID, "BSV"),
-            Pair(ZEC_ASSET_ID, "ZEC"),
-            Pair(DASH_ASSET_ID, "DASH"))
+    fun findByGatewayId(gatewayId: String): AssetBalance? {
+        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+            if (asset.gatewayId == gatewayId) {
+                return AssetBalance(assetId = asset.assetId,
+                        quantity = 0L,
+                        isFavorite = false,
+                        issueTransaction = IssueTransaction(
+                                name = asset.displayName,
+                                decimals = if (asset.isFiat) {
+                                    2
+                                } else {
+                                    8
+                                },
+                                quantity = 0L,
+                                timestamp = 1460419200000L),
+                        isGateway = asset.isGateway)
+            }
+        }
+        return null
+    }
 
-    val defaultCrypto = arrayOf(
-            BITCOIN_ASSET_ID,
-            ETHEREUM_ASSET_ID,
-            LIGHTCOIN_ASSET_ID,
-            MONERO_ASSET_ID,
-            BITCOINCASH_ASSET_ID,
-            BITCOIN_SV_ASSET_ID,
-            ZEC_ASSET_ID,
-            DASH_ASSET_ID)
 
-    val defaultFiat = arrayOf(
-            WEUR_ASSET_ID,
-            WUSD_ASSET_ID,
-            WTRY_ASSET_ID)
+    fun defaultAssetsAvatar(): HashMap<String, String> {
+        val map = hashMapOf<String, String>()
+        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+            map[asset.assetId] = asset.iconUrls.default
+        }
+        // Pair(WCTGeneralAsset.assetId, R.drawable.ic_logo_wct_48))
+        return map
+    }
 
-    val ENABLE_VIEW = 1f
-    val DISABLE_VIEW = 0.3f
+    fun coinomatCryptoCurrencies(): HashMap<String, String> {
+        val map = hashMapOf<String, String>()
+        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+            if (asset.isGateway) {
+                map[asset.assetId] = asset.gatewayId
+            }
+        }
+        return map
+    }
+
+    fun defaultCrypto(): Array<String> {
+        val list = mutableListOf<String>()
+        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+            if (!asset.isFiat) {
+                list.add(asset.assetId)
+            }
+        }
+        return list.toTypedArray()
+    }
+
+    fun defaultFiat(): Array<String> {
+        val list = mutableListOf<String>()
+        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+            if (asset.isFiat) {
+                list.add(asset.assetId)
+            }
+        }
+        return list.toTypedArray()
+    }
+
+    const val ENABLE_VIEW = 1f
+    const val DISABLE_VIEW = 0.3f
 }

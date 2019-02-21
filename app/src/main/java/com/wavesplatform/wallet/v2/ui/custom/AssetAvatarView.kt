@@ -132,7 +132,7 @@ class AssetAvatarView : AppCompatImageView {
     * Setup view with values
     * */
     private fun setValues(assetId: String, name: String, isSponsoredAsset: Boolean) {
-        val avatar = Constants.defaultAssetsAvatar[assetId]
+        val avatar = Constants.defaultAssetsAvatar()[assetId]
 
         val color = getPlaceholderColorFromAssetName(name)
         paint.color = color
