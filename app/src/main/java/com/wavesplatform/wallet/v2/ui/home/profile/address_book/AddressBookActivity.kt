@@ -140,7 +140,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                     position.notNull { position ->
                         if (position != -1) {
                             item.notNull {
-                                adapter.allData.add(position, it)
+                                adapter.allData[position] = it
                                 adapter.allData.sortBy { it.name }
                                 adapter.setNewData(adapter.allData)
                             }
@@ -149,10 +149,10 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
 
                 } else if (resultCode == Constants.RESULT_OK_NO_RESULT) {
                     val position = data?.getIntExtra(BUNDLE_POSITION, -1)
-                    position.notNull {
-                        if (it != -1) {
-                            adapter.remove(it)
-                            adapter.allData.removeAt(it)
+                    position?.let {
+                        if (position != -1) {
+                            adapter.remove(position)
+                            adapter.allData.removeAt(position)
                             configureSearchVisibility()
                             showSnackbar(R.string.address_book_success_deleted, R.color.success500)
                         }
@@ -187,7 +187,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
 
     override fun afterSuccessGetAddress(list: List<AddressBookUser>) {
         adapter.allData = ArrayList(list)
-        adapter.setNewData(list)
+        adapter.setNewData(ArrayList(list))
         adapter.emptyView = getEmptyView()
         configureSearchVisibility()
     }
