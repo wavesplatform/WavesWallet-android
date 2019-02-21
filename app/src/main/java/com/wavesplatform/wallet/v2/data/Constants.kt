@@ -112,20 +112,6 @@ object Constants {
     var WCTGeneralAsset = GlobalConfiguration.GeneralAssetId(assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
             gatewayId = "WCT", displayName = "WavesCommunity")
 
-    /*val defaultAssets = listOf(
-            AssetBalance(WAVES_ASSET_ID, quantity = 10000000000000000L, isFavorite = true, issueTransaction = IssueTransaction(name = "WAVES", decimals = 8, quantity = 10000000000000000L, timestamp = 1460419200000L), isGateway = true),
-            AssetBalance(BITCOIN_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = BITCOIN_ASSET_ID, id = BITCOIN_ASSET_ID, name = "Bitcoin", decimals = 8, quantity = 2100000000000000, timestamp = 1480698060000L), isGateway = true),
-            AssetBalance(ETHEREUM_ASSET_ID, quantity = 10000000000000000, issueTransaction = IssueTransaction(assetId = ETHEREUM_ASSET_ID, id = ETHEREUM_ASSET_ID, name = "Ethereum", decimals = 8, quantity = 10000000000000000, timestamp = 1500385140000L), isGateway = true),
-            AssetBalance(WUSD_ASSET_ID, quantity = 100000000000, issueTransaction = IssueTransaction(assetId = WUSD_ASSET_ID, id = WUSD_ASSET_ID, name = "US Dollar", decimals = 2, quantity = 100000000000, timestamp = 1480431300000L), isFiatMoney = true, isGateway = true),
-            AssetBalance(WEUR_ASSET_ID, quantity = 100000000000, issueTransaction = IssueTransaction(assetId = WEUR_ASSET_ID, id = WEUR_ASSET_ID, name = "Euro", decimals = 2, quantity = 10000000000, timestamp = 1480432200000L), isFiatMoney = true, isGateway = true),
-            AssetBalance(LIGHTCOIN_ASSET_ID, quantity = 8400000000000000, issueTransaction = IssueTransaction(assetId = LIGHTCOIN_ASSET_ID, id = LIGHTCOIN_ASSET_ID, name = "Litecoin", decimals = 8, quantity = 8400000000000000, timestamp = 1505472180000L), isGateway = true),
-            AssetBalance(ZEC_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = ZEC_ASSET_ID, id = ZEC_ASSET_ID, name = "Zcash", decimals = 8, quantity = 2100000000000000, timestamp = 1507039380000L), isGateway = true),
-            AssetBalance(BITCOINCASH_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = BITCOINCASH_ASSET_ID, id = BITCOINCASH_ASSET_ID, name = "Bitcoin Cash", decimals = 8, quantity = 2100000000000000, timestamp = 1501678320000L), isGateway = true),
-            AssetBalance(BITCOIN_SV_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = BITCOIN_SV_ASSET_ID, id = BITCOIN_SV_ASSET_ID, name = "Bitcoin SV", decimals = 8, quantity = 2100000000000000, timestamp = 1548075060000L), isGateway = true),
-            AssetBalance(WTRY_ASSET_ID, quantity = 100000000, issueTransaction = IssueTransaction(assetId = WTRY_ASSET_ID, id = WTRY_ASSET_ID, name = "TRY", decimals = 2, quantity = 100000000, timestamp = 1512411060000L), isFiatMoney = true, isGateway = true),
-            AssetBalance(DASH_ASSET_ID, quantity = 1890000000000000, issueTransaction = IssueTransaction(assetId = DASH_ASSET_ID, id = DASH_ASSET_ID, name = "DASH", decimals = 8, quantity = 1890000000000000, timestamp = 1524430860000L), isGateway = true),
-            AssetBalance(MONERO_ASSET_ID, quantity = 1603984700000000, issueTransaction = IssueTransaction(assetId = MONERO_ASSET_ID, id = MONERO_ASSET_ID, name = "Monero", decimals = 8, quantity = 1603984700000000, timestamp = 1526572200000L), isGateway = true))
-*/
     fun defaultAssets(): MutableList<AssetBalance> {
         val list = mutableListOf<AssetBalance>()
         for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
@@ -188,16 +174,6 @@ object Constants {
         }
         return null
     }
-
-    val coinomatCryptoCurrencies = hashMapOf(
-            Pair(BITCOIN_ASSET_ID, "BTC"),
-            Pair(ETHEREUM_ASSET_ID, "ETH"),
-            Pair(LIGHTCOIN_ASSET_ID, "LTC"),
-            Pair(MONERO_ASSET_ID, "XMR"),
-            Pair(BITCOINCASH_ASSET_ID, "BCH"),
-            Pair(BITCOIN_SV_ASSET_ID, "BSV"),
-            Pair(ZEC_ASSET_ID, "ZEC"),
-            Pair(DASH_ASSET_ID, "DASH"))
 
     fun defaultAssetsAvatar(): HashMap<String, String> {
         val map = hashMapOf<String, String>()

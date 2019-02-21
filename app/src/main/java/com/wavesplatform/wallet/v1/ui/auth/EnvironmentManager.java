@@ -51,25 +51,21 @@ public class EnvironmentManager {
     }
 
     public static void updateConfiguration(MatcherDataManager matcherDataManager) {
-        if (needForceUpdate()) {
-            matcherDataManager.apiService.loadGlobalConfiguration(instance.current.url)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(globalConfiguration -> {
-                        SharedPreferences preferenceManager = PreferenceManager
-                                .getDefaultSharedPreferences(App.getAppContext());
-                        SharedPreferences.Editor editor = preferenceManager.edit();
-                        editor.putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
-                                new Gson().toJson(globalConfiguration))
-                                .putLong(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_LAST_UPDATE_TIME,
-                                        System.currentTimeMillis())
-                                .apply();
-                        instance.current.setConfiguration(globalConfiguration);
-                    }, error -> {
-                        Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration");
-                        error.printStackTrace();
-                    });
-        }
+        matcherDataManager.apiService.loadGlobalConfiguration(instance.current.url)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(globalConfiguration -> {
+                    SharedPreferences preferenceManager = PreferenceManager
+                            .getDefaultSharedPreferences(App.getAppContext());
+                    SharedPreferences.Editor editor = preferenceManager.edit();
+                    editor.putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                            new Gson().toJson(globalConfiguration))
+                            .apply();
+                    instance.current.setConfiguration(globalConfiguration);
+                }, error -> {
+                    Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration");
+                    error.printStackTrace();
+                });
     }
 
 
@@ -84,11 +80,11 @@ public class EnvironmentManager {
     public static void setCurrentEnvironment(Environment current) {
         SharedPreferences preferenceManager = PreferenceManager
                 .getDefaultSharedPreferences(App.getAppContext());
-        SharedPreferences.Editor editor = preferenceManager.edit();
-        editor.putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.getName())
+        preferenceManager
+                .edit()
+                .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.getName())
                 .remove(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA)
-                .remove(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_LAST_UPDATE_TIME);
-        editor.apply();
+                .apply();
         handler.postDelayed(EnvironmentManager::restartApp, 500);
     }
 
@@ -99,8 +95,8 @@ public class EnvironmentManager {
                 PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, Environment.MAIN_NET.name);
     }
 
-    public static GlobalConfiguration.GeneralAssetId findAssetId(@NotNull String gatewayId) {
-        return get().current().findAssetId(gatewayId);
+    public static GlobalConfiguration.GeneralAssetId findAssetIdByAssetId(@NotNull String assetId) {
+        return get().current().findAssetByAssetId(assetId);
     }
 
     public static byte getNetCode() {
@@ -109,14 +105,6 @@ public class EnvironmentManager {
 
     public static GlobalConfiguration getGlobalConfiguration() {
         return get().current().getGlobalConfiguration();
-    }
-
-    private static boolean needForceUpdate() {
-        SharedPreferences preferenceManager = PreferenceManager
-                .getDefaultSharedPreferences(instance.application);
-        long lastUpdateTime = preferenceManager.getLong(
-                PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_LAST_UPDATE_TIME, 0L);
-        return System.currentTimeMillis() > lastUpdateTime + 1_000;
     }
 
     private static void restartApp() {
@@ -175,6 +163,15 @@ public class EnvironmentManager {
             for (GlobalConfiguration.GeneralAssetId assetId : configuration.getGeneralAssetIds()) {
                 if (assetId.getGatewayId().equals(gatewayId)) {
                     return assetId;
+                }
+            }
+            return null;
+        }
+
+        GlobalConfiguration.GeneralAssetId findAssetByAssetId(String assetId) {
+            for (GlobalConfiguration.GeneralAssetId asset : configuration.getGeneralAssetIds()) {
+                if (asset.getAssetId().equals(assetId)) {
+                    return asset;
                 }
             }
             return null;

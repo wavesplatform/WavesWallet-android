@@ -272,7 +272,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 if (recipient!!.matches("${asset.addressRegEx}$".toRegex())) {
 
                     // todo check btc bsl bitcoincash same regexp
-                    if (assetBalance != null) {
+                    /*if (assetBalance != null) {
                         when {
                             assetBalance.assetId == Constants.BITCOIN_ASSET_ID ->
                                 Constants.BITCOIN_ASSET_ID
@@ -284,7 +284,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                         }
                     } else {
                         null
-                    }
+                    }*/
 
 
                     return asset.assetId
