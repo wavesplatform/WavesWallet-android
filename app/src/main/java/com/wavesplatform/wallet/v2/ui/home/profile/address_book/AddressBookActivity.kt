@@ -128,7 +128,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                     item.notNull {
                         adapter.allData.add(it)
                         adapter.allData.sortBy { it.name }
-                        adapter.setNewData(adapter.allData)
+                        adapter.setNewData(ArrayList(adapter.allData))
                         configureSearchVisibility()
                     }
                 }
@@ -142,7 +142,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                             item.notNull {
                                 adapter.allData[position] = it
                                 adapter.allData.sortBy { it.name }
-                                adapter.setNewData(adapter.allData)
+                                adapter.setNewData(ArrayList(adapter.allData))
                             }
                         }
                     }
@@ -185,9 +185,9 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun afterSuccessGetAddress(list: List<AddressBookUser>) {
+    override fun afterSuccessGetAddress(list: MutableList<AddressBookUser>) {
         adapter.allData = ArrayList(list)
-        adapter.setNewData(ArrayList(list))
+        adapter.setNewData(list)
         adapter.emptyView = getEmptyView()
         configureSearchVisibility()
     }
