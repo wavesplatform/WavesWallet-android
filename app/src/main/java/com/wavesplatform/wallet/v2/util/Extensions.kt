@@ -73,12 +73,23 @@ val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     null
 }
 
+val filterEmptySpace = InputFilter { source, start, end, dest, dstart, dend ->
+    if (dest.isNullOrEmpty() && source.startsWith(" ")) {
+        return@InputFilter ""
+    }
+    null
+}
+
 /**
  * Created by anonymous on 13.09.17.
  */
 
 fun EditText.applyFilterStartWithDot() {
     this.filters = arrayOf(filterStartWithDot)
+}
+
+fun EditText.applyFilterStartEmptySpace() {
+    this.filters = arrayOf(filterEmptySpace)
 }
 
 fun Context.isNetworkConnection(): Boolean {
