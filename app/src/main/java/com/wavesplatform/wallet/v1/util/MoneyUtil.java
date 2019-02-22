@@ -5,6 +5,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
