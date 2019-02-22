@@ -30,7 +30,11 @@ object Constants {
     const val SUPPORT_SITE = "https://support.wavesplatform.com/"
     const val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
 
+    const val WAVES_EXPLORER = "http://wavesexplorer.com/tx/%s"
+
     const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
+    const val WAVES_MIN_FEE: Long = 100000L
+    const val MIN_WAVES_SPONSORED_BALANCE: Double = 1.005
 
     const val SELL_ORDER_TYPE = "sell"
     const val BUY_ORDER_TYPE = "buy"
@@ -68,17 +72,19 @@ object Constants {
     const val RESULT_SMART_ERROR = 307
 
     const val VERSION = 2
+
     val WAVES_ASSET_ID = ""
-    val MONERO_ASSET_ID = EnvironmentManager.findAssetId("XMR")
-    val BITCOIN_ASSET_ID = EnvironmentManager.findAssetId("BTC")
-    val ETHEREUM_ASSET_ID = EnvironmentManager.findAssetId("ETH")
-    val BITCOINCASH_ASSET_ID = EnvironmentManager.findAssetId("BCH")
-    val LIGHTCOIN_ASSET_ID = EnvironmentManager.findAssetId("LTC")
-    val ZEC_ASSET_ID = EnvironmentManager.findAssetId("ZEC")
-    val DASH_ASSET_ID = EnvironmentManager.findAssetId("DASH")
-    val WUSD_ASSET_ID = EnvironmentManager.findAssetId("USD")
-    val WEUR_ASSET_ID = EnvironmentManager.findAssetId("EUR")
-    val WTRY_ASSET_ID = EnvironmentManager.findAssetId("TRY")
+    val MONERO_ASSET_ID = EnvironmentManager.findAssetId("XMR").assetId
+    val BITCOIN_ASSET_ID = EnvironmentManager.findAssetId("BTC").assetId
+    val ETHEREUM_ASSET_ID = EnvironmentManager.findAssetId("ETH").assetId
+    val BITCOINCASH_ASSET_ID = EnvironmentManager.findAssetId("BCH").assetId
+    val LIGHTCOIN_ASSET_ID = EnvironmentManager.findAssetId("LTC").assetId
+    val ZEC_ASSET_ID = EnvironmentManager.findAssetId("ZEC").assetId
+    val DASH_ASSET_ID = EnvironmentManager.findAssetId("DASH").assetId
+    val WUSD_ASSET_ID = EnvironmentManager.findAssetId("USD").assetId
+    val WEUR_ASSET_ID = EnvironmentManager.findAssetId("EUR").assetId
+    val WTRY_ASSET_ID = EnvironmentManager.findAssetId("TRY").assetId
+    val BITCOIN_SV_ASSET_ID = EnvironmentManager.findAssetId("BSV").assetId
 
     val alphabetColor = hashMapOf(
             Pair("a", R.color.a),
@@ -126,22 +132,25 @@ object Constants {
             AssetBalance(LIGHTCOIN_ASSET_ID, quantity = 8400000000000000, issueTransaction = IssueTransaction(assetId = LIGHTCOIN_ASSET_ID, id = LIGHTCOIN_ASSET_ID, name = "Litecoin", decimals = 8, quantity = 8400000000000000, timestamp = 1505472180000L), isGateway = true),
             AssetBalance(ZEC_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = ZEC_ASSET_ID, id = ZEC_ASSET_ID, name = "Zcash", decimals = 8, quantity = 2100000000000000, timestamp = 1507039380000L), isGateway = true),
             AssetBalance(BITCOINCASH_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = BITCOINCASH_ASSET_ID, id = BITCOINCASH_ASSET_ID, name = "Bitcoin Cash", decimals = 8, quantity = 2100000000000000, timestamp = 1501678320000L), isGateway = true),
+            AssetBalance(BITCOIN_SV_ASSET_ID, quantity = 2100000000000000, issueTransaction = IssueTransaction(assetId = BITCOIN_SV_ASSET_ID, id = BITCOIN_SV_ASSET_ID, name = "Bitcoin SV", decimals = 8, quantity = 2100000000000000, timestamp = 1548075060000L), isGateway = true),
             AssetBalance(WTRY_ASSET_ID, quantity = 100000000, issueTransaction = IssueTransaction(assetId = WTRY_ASSET_ID, id = WTRY_ASSET_ID, name = "TRY", decimals = 2, quantity = 100000000, timestamp = 1512411060000L), isFiatMoney = true, isGateway = true),
             AssetBalance(DASH_ASSET_ID, quantity = 1890000000000000, issueTransaction = IssueTransaction(assetId = DASH_ASSET_ID, id = DASH_ASSET_ID, name = "DASH", decimals = 8, quantity = 1890000000000000, timestamp = 1524430860000L), isGateway = true),
             AssetBalance(MONERO_ASSET_ID, quantity = 1603984700000000, issueTransaction = IssueTransaction(assetId = MONERO_ASSET_ID, id = MONERO_ASSET_ID, name = "Monero", decimals = 8, quantity = 1603984700000000, timestamp = 1526572200000L), isGateway = true))
 
     val defaultAssetsAvatar = hashMapOf(
-            Pair(WAVES_ASSET_ID, R.drawable.logo_waves_48),
-            Pair(BITCOIN_ASSET_ID, R.drawable.logo_bitcoin_48),
-            Pair(ETHEREUM_ASSET_ID, R.drawable.logo_ethereum_48),
-            Pair(WUSD_ASSET_ID, R.drawable.logo_usd_48),
-            Pair(WEUR_ASSET_ID, R.drawable.logo_euro_48),
-            Pair(WTRY_ASSET_ID, R.drawable.logo_lira_48),
-            Pair(LIGHTCOIN_ASSET_ID, R.drawable.logo_ltc_48),
-            Pair(MONERO_ASSET_ID, R.drawable.logo_monero_48),
-            Pair(BITCOINCASH_ASSET_ID, R.drawable.logo_bitcoincash_48),
-            Pair(ZEC_ASSET_ID, R.drawable.logo_zec_48),
-            Pair(DASH_ASSET_ID, R.drawable.logo_dash_48))
+            Pair(WAVES_ASSET_ID, EnvironmentManager.findAssetId("WAVES").iconUrls.default),
+            Pair(BITCOIN_ASSET_ID, EnvironmentManager.findAssetId("BTC").iconUrls.default),
+            Pair(ETHEREUM_ASSET_ID, EnvironmentManager.findAssetId("ETH").iconUrls.default),
+            Pair(WUSD_ASSET_ID, EnvironmentManager.findAssetId("USD").iconUrls.default),
+            Pair(WEUR_ASSET_ID, EnvironmentManager.findAssetId("EUR").iconUrls.default),
+            Pair(WTRY_ASSET_ID, EnvironmentManager.findAssetId("TRY").iconUrls.default),
+            Pair(LIGHTCOIN_ASSET_ID, EnvironmentManager.findAssetId("LTC").iconUrls.default),
+            Pair(MONERO_ASSET_ID, EnvironmentManager.findAssetId("XMR").iconUrls.default),
+            Pair(BITCOINCASH_ASSET_ID, EnvironmentManager.findAssetId("BCH").iconUrls.default),
+            Pair(BITCOIN_SV_ASSET_ID, EnvironmentManager.findAssetId("BSV").iconUrls.default),
+            Pair(ZEC_ASSET_ID, EnvironmentManager.findAssetId("ZEC").iconUrls.default),
+            Pair(DASH_ASSET_ID, EnvironmentManager.findAssetId("DASH").iconUrls.default),
+            Pair(WCTGeneralAsset.assetId, R.drawable.ic_logo_wct_48))
 
     val coinomatCryptoCurrencies = hashMapOf(
             Pair(BITCOIN_ASSET_ID, "BTC"),
@@ -149,6 +158,7 @@ object Constants {
             Pair(LIGHTCOIN_ASSET_ID, "LTC"),
             Pair(MONERO_ASSET_ID, "XMR"),
             Pair(BITCOINCASH_ASSET_ID, "BCH"),
+            Pair(BITCOIN_SV_ASSET_ID, "BSV"),
             Pair(ZEC_ASSET_ID, "ZEC"),
             Pair(DASH_ASSET_ID, "DASH"))
 
@@ -158,6 +168,7 @@ object Constants {
             LIGHTCOIN_ASSET_ID,
             MONERO_ASSET_ID,
             BITCOINCASH_ASSET_ID,
+            BITCOIN_SV_ASSET_ID,
             ZEC_ASSET_ID,
             DASH_ASSET_ID)
 

@@ -3,21 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/basic50"
+    android:paddingBottom="14dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     android:orientation="vertical">
 
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/text_recipient_hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="14dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:text="@string/history_details_recipient"
-        android:textColor="@color/basic500" />
-
     <LinearLayout
-        android:layout_marginTop="-10dp"
         android:id="@+id/container_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

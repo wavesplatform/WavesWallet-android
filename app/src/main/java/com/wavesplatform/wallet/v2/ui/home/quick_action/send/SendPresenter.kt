@@ -7,7 +7,6 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.Hash
 import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
-import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -19,6 +18,7 @@ import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
 import com.wavesplatform.wallet.v2.util.isSpamConsidered
 import com.wavesplatform.wallet.v2.util.isValidAddress
+import com.wavesplatform.wallet.v2.util.isWaves
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -43,11 +43,13 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var gatewayMin: BigDecimal = BigDecimal.ZERO
     var gatewayMax: BigDecimal = BigDecimal.ZERO
     var fee = 0L
+    var feeWaves = 0L
+    var feeAsset: AssetBalance = Constants.defaultAssets[0]
 
     fun sendClicked() {
         val res = validateTransfer()
         if (res == 0) {
-            confirmPayment()
+            viewState.onShowPaymentDetails()
         } else {
             viewState.onShowError(res)
         }
@@ -55,27 +57,19 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
     fun checkAlias(alias: String) {
         if (alias.length in 4..30) {
-            runAsync {
-                addSubscription(
-                        apiDataManager.loadAlias(alias)
-
-                                .subscribe({ _ ->
-                                    type = Type.ALIAS
-                                    runOnUiThread {
-                                        viewState.setRecipientValid(true)
-                                    }
-                                }, {
-                                    type = Type.UNKNOWN
-                                    runOnUiThread {
-                                        viewState.setRecipientValid(false)
-                                    }
-                                }))
-            }
+            addSubscription(
+                    apiDataManager.loadAlias(alias)
+                            .compose(RxUtil.applyObservableDefaultSchedulers())
+                            .subscribe({ _ ->
+                                type = Type.ALIAS
+                                viewState.setRecipientValid(true)
+                            }, {
+                                type = Type.UNKNOWN
+                                viewState.setRecipientValid(false)
+                            }))
         } else {
             type = Type.UNKNOWN
-            runOnUiThread {
-                viewState.setRecipientValid(null)
-            }
+            viewState.setRecipientValid(null)
         }
     }
 
@@ -87,16 +81,11 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
                 System.currentTimeMillis(),
                 fee,
-                "")
+                "",
+                feeAsset.assetId)
     }
 
-    private fun confirmPayment() {
-        val details = PaymentConfirmationDetails.fromRequest(
-                selectedAsset, getTxRequest())
-        viewState.onShowPaymentDetails(details)
-    }
-
-    fun validateTransfer(): Int {
+    private fun validateTransfer(): Int {
         if (selectedAsset == null) {
             return R.string.send_transaction_error_check_asset
         } else if (isRecipientValid() != true) {
@@ -109,7 +98,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             } else
                 if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
                     return R.string.invalid_amount
-                } else if (tx.fee <= 0 || tx.fee < TransferTransactionRequest.MinFee) {
+                } else if (tx.fee <= 0 || (feeAsset.isWaves() && tx.fee < Constants.WAVES_MIN_FEE)) {
                     return R.string.insufficient_fee
                 } else if (!isFundSufficient(tx)) {
                     return R.string.insufficient_funds
@@ -141,10 +130,13 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return if (isSameSendingAndFeeAssets()) {
             tx.amount + tx.fee <= selectedAsset!!.balance!!
         } else {
-            tx.amount <= selectedAsset!!.balance!!
-                    && tx.fee <= queryFirst<AssetBalance> {
-                equalTo("assetId", "")
-            }?.balance ?: 0
+            val validFee = if (tx.feeAssetId?.isWaves() == true) {
+                tx.fee <= queryFirst<AssetBalance> { equalTo("assetId", "") }?.balance ?: 0
+            } else {
+                true
+            }
+
+            tx.amount <= selectedAsset!!.balance!! && validFee
         }
     }
 
@@ -235,6 +227,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     params.smartAccount = scriptInfo.extraFee != 0L
                     params.smartAsset = assetsDetails.scripted
                     fee = countCommission(commission, params)
+                    feeWaves = fee
                     viewState.showCommissionSuccess(fee)
                 }, {
                     it.printStackTrace()
@@ -273,23 +266,29 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     companion object {
         const val LANG: String = "ru_RU"
         const val MONERO_PAYMENT_ID_LENGTH = 64
-        private val feeAsset: AssetBalance = AssetBalance(
-                quantity = 100000000L * 100000000L,
-                issueTransaction = IssueTransaction(
-                        name = Constants.CUSTOM_FEE_ASSET_NAME, quantity = 0, decimals = 8))
 
-        fun getAssetId(recipient: String?): String? {
+        fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
             return when {
                 recipient!!.matches("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
-                    Constants.BITCOIN_ASSET_ID
+                    if (assetBalance != null) {
+                        when {
+                            assetBalance.assetId == Constants.BITCOIN_ASSET_ID ->
+                                Constants.BITCOIN_ASSET_ID
+                            assetBalance.assetId == Constants.BITCOINCASH_ASSET_ID ->
+                                Constants.BITCOINCASH_ASSET_ID
+                            assetBalance.assetId == Constants.BITCOIN_SV_ASSET_ID ->
+                                Constants.BITCOIN_SV_ASSET_ID
+                            else -> null
+                        }
+                    } else {
+                        null
+                    }
                 recipient.matches("^0x[0-9a-fA-F]{40}$".toRegex()) ->
                     Constants.ETHEREUM_ASSET_ID
                 recipient.matches("^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$".toRegex()) ->
                     Constants.LIGHTCOIN_ASSET_ID
                 recipient.matches("^t1[a-zA-Z0-9]{33}$".toRegex()) ->
                     Constants.ZEC_ASSET_ID
-                recipient.matches("^([13][a-km-zA-HJ-NP-Z1-9]{25,34}|[qp][a-zA-Z0-9]{41})$".toRegex()) ->
-                    Constants.BITCOINCASH_ASSET_ID
                 recipient.matches("^X[a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
                     Constants.DASH_ASSET_ID
                 recipient.matches("^4([0-9]|[A-B])(.){93}".toRegex()) ->

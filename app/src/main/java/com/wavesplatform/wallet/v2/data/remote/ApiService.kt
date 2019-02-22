@@ -20,8 +20,10 @@ interface ApiService {
     fun assetsInfoByIds(@Query("ids") ids: List<String?>): Observable<AssetsInfoResponse>
 
     @GET
-    fun loadGlobalConfiguration(@Url url: String = EnvironmentManager.get().current().url)
-            : Observable<GlobalConfiguration>
+    fun loadGlobalConfiguration(@Url url: String): Observable<GlobalConfiguration>
+
+    @GET
+    fun loadNews(@Url url: String): Observable<News>
 
     @GET
     fun loadGlobalCommission(@Url url: String = EnvironmentManager.URL_COMMISSION_MAIN_NET)

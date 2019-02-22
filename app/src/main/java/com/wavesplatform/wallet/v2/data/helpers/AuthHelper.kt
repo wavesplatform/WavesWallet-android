@@ -1,12 +1,13 @@
 package com.wavesplatform.wallet.v2.data.helpers
 
 import com.vicpin.krealmextensions.RealmConfigStore
+import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
-import com.wavesplatform.wallet.v2.database.DBHelper
-import com.wavesplatform.wallet.v2.database.RealmMigrations
+import com.wavesplatform.wallet.v2.data.database.DBHelper
+import com.wavesplatform.wallet.v2.data.database.RealmMigrations
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.util.MigrationUtil
 import io.realm.Realm
@@ -23,7 +24,7 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
 
         val config = RealmConfiguration.Builder()
                 .name(String.format("%s.realm", guid))
-                .schemaVersion(1)
+                .schemaVersion(2)
                 .migration(RealmMigrations())
                 .build()
 
@@ -46,12 +47,20 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
         DBHelper.getInstance().realmConfig = config
         Realm.getInstance(config).isAutoRefresh = false
 
-        if (!prefsUtil.getValue(PrefsUtil.KEY_DEFAULT_ASSETS, false)) {
-            runAsync {
-                Constants.defaultAssets.saveAll()
-                prefsUtil.setValue(PrefsUtil.KEY_DEFAULT_ASSETS, true)
-            }
-        }
+        saveDefaultAssets()
+    }
 
+    private fun saveDefaultAssets() {
+        runAsync {
+            Constants.defaultAssets.forEach {
+                val listToSave = arrayListOf<AssetBalance>()
+                val asset = queryFirst<AssetBalance> { equalTo("assetId", it.assetId) }
+                if (asset == null) {
+                    listToSave.add(it)
+                }
+                if (listToSave.isNotEmpty()) listToSave.saveAll()
+            }
+            prefsUtil.setValue(PrefsUtil.KEY_DEFAULT_ASSETS, true)
+        }
     }
 }

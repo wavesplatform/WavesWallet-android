@@ -11,7 +11,7 @@
     android:layout_marginBottom="8dp"
     android:clipToPadding="true"
     app:cardBackgroundColor="@color/basic50"
-    app:cardCornerRadius="2dp"
+    app:cardCornerRadius="@dimen/asset_item_radius"
     app:cardElevation="0dp">
 
     <android.support.constraint.ConstraintLayout
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_rect_bordered_accent50"
-        android:padding="16dp">
+        android:padding="14dp">
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -66,14 +66,22 @@
             android:id="@+id/commission_asset_name_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/submit50"
-            android:padding="4dp"
+            style="@style/TickerTag"
             android:text="@string/common_waves_asset_name"
-            android:textColor="@color/info500"
-            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/image_arrows"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_arrows"
+            android:visibility="gone"
+            android:paddingStart="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_changearrows_14_basic_500"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </android.support.constraint.ConstraintLayout>
 

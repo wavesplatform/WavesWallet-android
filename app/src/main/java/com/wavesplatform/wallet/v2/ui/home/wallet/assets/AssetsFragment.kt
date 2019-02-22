@@ -105,7 +105,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
             presenter.loadAssetsBalance()
         }
 
-        recycle_assets.layoutManager = LinearLayoutManager(baseActivity)
+        recycle_assets.layoutManager = LinearLayoutManager(activity)
         adapter.bindToRecyclerView(recycle_assets)
 
         val headerClickListener = object : OnHeaderClickAdapter() {
@@ -211,8 +211,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun startServiceToLoadData() {
         runOnUiThread {
             if (!isMyServiceRunning(UpdateApiDataService::class.java)) {
-                val intent = Intent(baseActivity, UpdateApiDataService::class.java)
-                baseActivity.startService(intent)
+                val intent = Intent(activity, UpdateApiDataService::class.java)
+                activity?.startService(intent)
             }
         }
     }

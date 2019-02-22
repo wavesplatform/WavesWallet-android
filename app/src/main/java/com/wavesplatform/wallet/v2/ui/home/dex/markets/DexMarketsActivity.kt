@@ -143,5 +143,10 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
 
+    override fun onDestroy() {
+        progress_bar?.hide()
+        super.onDestroy()
+    }
+
     override fun needToShowNetworkMessage() = true
 }

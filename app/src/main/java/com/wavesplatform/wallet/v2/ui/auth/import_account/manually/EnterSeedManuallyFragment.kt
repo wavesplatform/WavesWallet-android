@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.Protec
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
+import com.wavesplatform.wallet.v2.util.applyFilterStartEmptySpace
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import io.github.anderscheow.validator.Validation
@@ -53,6 +54,8 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                 .and(SeedRule(getString(R.string.enter_seed_manually_validation_seed_exists_error)))
 
         val identicon = Identicon()
+
+        edit_seed.applyFilterStartEmptySpace()
 
         edit_seed.addTextChangedListener {
             on { s, start, before, count ->

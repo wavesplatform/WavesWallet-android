@@ -21,19 +21,17 @@ class TransactionsBroadcastRequest(
         @SerializedName("amount") var amount: Long,
         @SerializedName("timestamp") var timestamp: Long,
         @SerializedName("fee") var fee: Long,
-        @SerializedName("attachment") var attachment: String?) {
+        @SerializedName("attachment") var attachment: String?,
+        @SerializedName("feeAssetId") var feeAssetId: String? = "") {
 
     @SerializedName("type")
     val type: Int = 4
     @SerializedName("version")
     val version: Int = Constants.VERSION
-    @SerializedName("feeAssetId")
-    var feeAssetId: String? = ""
     @SerializedName("proofs")
     var proofs = arrayOf("")
     @SerializedName("signature")
     var signature: String = ""
-
     @SerializedName("sender")
     var sender: String? = ""
     @SerializedName("id")

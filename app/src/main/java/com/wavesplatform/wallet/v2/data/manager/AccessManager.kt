@@ -15,12 +15,14 @@ import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
-import com.wavesplatform.wallet.v2.database.DBHelper
+import com.wavesplatform.wallet.v2.data.database.DBHelper
+import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.util.AddressUtil
 import com.wavesplatform.wallet.v2.util.MigrationUtil
 import com.wavesplatform.wallet.v2.util.deleteRecursive
+import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.exceptions.Exceptions
@@ -351,6 +353,10 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
     }
 
     fun setUseFingerPrint(guid: String, use: Boolean) {
+        if (!use) {
+            prefs.removeValue(guid, PrefsUtil.KEY_USE_FINGERPRINT)
+            SecurePreferences.removeValue(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE)
+        }
         prefs.setValue(guid, PrefsUtil.KEY_USE_FINGERPRINT, use)
     }
 
@@ -360,14 +366,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
 
     fun isUseFingerPrint(guid: String): Boolean {
         return prefs.getGuidValue(guid, PrefsUtil.KEY_USE_FINGERPRINT, false)
-    }
-
-    fun setEncryptedPassCode(guid: String, data: String) {
-        prefs.setValue(guid, PrefsUtil.KEY_ENCRYPTED_PIN, data)
-    }
-
-    fun getEncryptedPassCode(guid: String): String {
-        return prefs.getValue(guid, PrefsUtil.KEY_ENCRYPTED_PIN, "")
     }
 
     fun restartApp(context: Context) {

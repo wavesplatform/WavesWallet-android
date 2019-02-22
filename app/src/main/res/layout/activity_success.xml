@@ -16,7 +16,7 @@
         android:layout_marginTop="92dp"
         android:visibility="visible"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="2dp">
+        app:cardCornerRadius="@dimen/asset_item_radius">
 
         <LinearLayout
             android:layout_width="match_parent"

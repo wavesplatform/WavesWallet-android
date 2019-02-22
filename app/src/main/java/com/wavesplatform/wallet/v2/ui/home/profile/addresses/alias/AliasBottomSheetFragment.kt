@@ -14,6 +14,7 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
+import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -27,7 +28,7 @@ import pers.victor.ext.visiable
 import javax.inject.Inject
 
 
-class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
+class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView {
 
     @Inject
     lateinit var adapter: AliasesAdapter
@@ -42,13 +43,6 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
     var onCreateAliasListener: OnCreateAliasListener? = null
 
     var type = TYPE_EMPTY
-        set(value) {
-            field = value
-            fullScreenHeightEnable = value != TYPE_EMPTY
-            when (value) {
-                TYPE_CONTENT -> extraTopMargin = dp2px(4)
-            }
-        }
 
     lateinit var rootView: View
     lateinit var progressBarFee: ImageProgressBar
@@ -57,6 +51,7 @@ class AliasBottomSheetFragment : BaseBottomSheetDialogFragment(), AliasView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         when (type) {
             TYPE_EMPTY -> {
                 rootView = inflater.inflate(R.layout.bottom_sheet_dialog_aliases_empty_layout, container, false)

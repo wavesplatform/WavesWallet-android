@@ -24,6 +24,9 @@ data class GlobalConfiguration(
             @SerializedName("isGateway") var isGateway: Boolean = false,
             @SerializedName("wavesId") var wavesId: String = "",
             @SerializedName("gatewayId") var gatewayId: String = "",
+            @SerializedName("iconUrls") var iconUrls: IconUrls = IconUrls(),
             @SerializedName("addressRegEx") var addressRegEx: String = ""
-    )
+    ) {
+        data class IconUrls(@SerializedName("default") var default: String = "")
+    }
 }

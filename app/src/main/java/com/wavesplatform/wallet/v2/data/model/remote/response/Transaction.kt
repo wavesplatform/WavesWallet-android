@@ -6,15 +6,18 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.util.clearAlias
 import com.wavesplatform.wallet.v2.util.findMyOrder
 import com.wavesplatform.wallet.v2.util.stripZeros
+import com.wavesplatform.wallet.v2.util.transactionType
 import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import org.apache.commons.lang3.ArrayUtils
 import pers.victor.ext.date
+import java.math.BigInteger
 
 @RealmClass
 open class Lease(
@@ -46,7 +49,16 @@ open class Order(
         @SerializedName("expiration") var expiration: Long = 0,
         @SerializedName("matcherFee") var matcherFee: Long = 0,
         @SerializedName("signature") var signature: String = ""
-) : RealmModel
+) : RealmModel {
+
+    fun getType(): OrderType {
+        return when (orderType) {
+            Constants.BUY_ORDER_TYPE -> OrderType.BUY
+            Constants.SELL_ORDER_TYPE -> OrderType.SELL
+            else -> OrderType.BUY
+        }
+    }
+}
 
 @RealmClass
 open class AssetPair(
@@ -127,25 +139,14 @@ open class Transaction(
         var asset: AssetInfo? = AssetInfo()
 ) : RealmModel {
 
-    val displayAmount: String
-        get() = MoneyUtil.getDisplayWaves(amount)
-
     val decimals: Int
         get() = 8
 
-
-    val assetName: String
-        get() = "WAVES"
-
-    val conterParty: Optional<String>
-        get() = Optional.absent()
-
-    fun isForAsset(assetId: String): Boolean {
-        return false
-    }
-
-    fun toBytes(): ByteArray {
-        return ArrayUtils.EMPTY_BYTE_ARRAY
+    fun getOrderSum(): Long {
+        if (transactionType() == TransactionType.EXCHANGE_TYPE) {
+            return BigInteger.valueOf(amount).multiply(BigInteger.valueOf(price)).divide(BigInteger.valueOf(100000000)).toLong()
+        }
+        return 0
     }
 
     companion object {
@@ -210,7 +211,7 @@ open class Transaction(
                             if (findMyOrder(transaction.order1!!,
                                             transaction.order2!!,
                                             App.getAccessManager().getWallet()?.address!!)
-                                                    .orderType == Constants.SELL_ORDER_TYPE) {
+                                            .orderType == Constants.SELL_ORDER_TYPE) {
                                 "-${Constants.SELL_ORDER_TYPE})\n"
                             } else {
                                 "-${Constants.BUY_ORDER_TYPE})\n"

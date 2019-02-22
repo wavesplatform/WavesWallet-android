@@ -41,6 +41,7 @@
                 android:id="@+id/image_graph"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 app:srcCompat="@drawable/ic_chartarrow_accent_100" />
 

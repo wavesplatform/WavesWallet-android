@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:paddingTop="16dp"
     android:orientation="vertical"
-    android:paddingBottom="16dp">
+    android:paddingTop="14dp">
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/view_comment_line"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/shape_dashed_line"
-        android:layerType="software" />
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_received_from_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:text="@string/history_details_description"
+        android:textColor="@color/basic500" />
 
-    <android.support.v7.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/shape_rect_outline_basic300"
-        android:paddingBottom="10dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="10dp"
-        tools:text="Some long long long long long long long long text"
-        android:textColor="@color/disabled900" />
+        android:layout_marginTop="4dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:textColor="@color/disabled900"
+        tools:text="Some long long long long long long long long text" />
+
+    <android.support.v7.widget.AppCompatImageView
+        style="@style/DashedLine"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp" />
 </LinearLayout>

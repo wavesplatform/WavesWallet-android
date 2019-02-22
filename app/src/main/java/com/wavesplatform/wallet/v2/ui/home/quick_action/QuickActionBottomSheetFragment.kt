@@ -17,6 +17,7 @@ class QuickActionBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         val rootView = inflater.inflate(R.layout.quick_action_bottom_sheet_dialog_layout, container, false)
 
         rootView.image_close.click {

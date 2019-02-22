@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.database;
+package com.wavesplatform.wallet.v2.data.database;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;

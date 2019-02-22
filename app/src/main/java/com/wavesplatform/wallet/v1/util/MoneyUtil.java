@@ -12,12 +12,12 @@ import java.util.Locale;
 
 public class MoneyUtil {
 
+    public static BigDecimal ONE_B = new BigDecimal(1000000000);
     public static BigDecimal ONE_M = new BigDecimal(1000000);
     public static BigDecimal ONE_K = new BigDecimal(1000);
+    public static char DEFAULT_SEPARATOR_THIN_SPACE = '\u2009';
 
     private static MoneyUtil instance = new MoneyUtil();
-
-    private static String defaultSeparator;
     private final DecimalFormat wavesFormat;
     private final List<DecimalFormat> formatsMap;
 
@@ -34,6 +34,9 @@ public class MoneyUtil {
         formatter.setMaximumFractionDigits(decimals);
         formatter.setMinimumFractionDigits(decimals);
         formatter.setParseBigDecimal(true);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator(DEFAULT_SEPARATOR_THIN_SPACE);
+        formatter.setDecimalFormatSymbols(symbols);
         return formatter;
     }
 
@@ -69,6 +72,9 @@ public class MoneyUtil {
         formatter.setMaximumFractionDigits(decimals);
         formatter.setMinimumFractionDigits(1);
         formatter.setParseBigDecimal(true);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator(DEFAULT_SEPARATOR_THIN_SPACE);
+        formatter.setDecimalFormatSymbols(symbols);
         return formatter.format(
                 BigDecimal.valueOf(amount, decimals));
     }
@@ -78,6 +84,9 @@ public class MoneyUtil {
         formatter.setMaximumFractionDigits(decimals);
         formatter.setMinimumFractionDigits(0);
         formatter.setParseBigDecimal(true);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator(DEFAULT_SEPARATOR_THIN_SPACE);
+        formatter.setDecimalFormatSymbols(symbols);
         return formatter.format(amount);
     }
 
@@ -91,6 +100,10 @@ public class MoneyUtil {
 
     public static String getDisplayWaves(long amount) {
         return get().wavesFormat.format(BigDecimal.valueOf(amount, 8));
+    }
+
+    public static String getWavesStripZeros(long amount) {
+        return getTextStripZeros(amount, 8);
     }
 
     public static long getUnscaledValue(

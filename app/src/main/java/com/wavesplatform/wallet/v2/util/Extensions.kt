@@ -8,6 +8,7 @@ import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -66,8 +67,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
-    if (dest.isNullOrEmpty() && source.startsWith(".")){
+    if (dest.isNullOrEmpty() && source.startsWith(".")) {
         return@InputFilter "0."
+    }
+    null
+}
+
+val filterEmptySpace = InputFilter { source, start, end, dest, dstart, dend ->
+    if (dest.isNullOrEmpty() && source.startsWith(" ")) {
+        return@InputFilter ""
     }
     null
 }
@@ -76,8 +84,12 @@ val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
  * Created by anonymous on 13.09.17.
  */
 
-fun EditText.applyFilterStartWithDot(){
+fun EditText.applyFilterStartWithDot() {
     this.filters = arrayOf(filterStartWithDot)
+}
+
+fun EditText.applyFilterStartEmptySpace() {
+    this.filters = arrayOf(filterEmptySpace)
 }
 
 fun Context.isNetworkConnection(): Boolean {
@@ -130,7 +142,15 @@ fun ByteArray.arrayWithSize(): ByteArray {
 }
 
 fun String.clearBalance(): String {
-    return this.stripZeros().replace(",", "")
+    return this.stripZeros().replace(MoneyUtil.DEFAULT_SEPARATOR_THIN_SPACE.toString(), "")
+}
+
+fun View.makeBackgroundWithRippleEffect() {
+    val typedArray = context.obtainStyledAttributes(intArrayOf(R.attr.selectableItemBackground))
+    val backgroundResource = typedArray.getResourceId(0, 0)
+    this.isClickable = true
+    this.setBackgroundResource(backgroundResource)
+    typedArray.recycle()
 }
 
 fun getDeviceName(): String {
@@ -530,6 +550,7 @@ inline fun <reified T : Any> Activity.launchActivity(
     if (options != null) intent.putExtras(options)
 
     if (clear) {
+        setResult(Activity.RESULT_CANCELED)
         finishAffinity()
         intent = newClearIntent<T>(this)
     }
@@ -695,9 +716,11 @@ fun getScaledAmount(amount: Long, decimals: Int): String {
     val sign = if (amount < 0) "-" else ""
 
     return sign + when {
-        value >= MoneyUtil.ONE_M -> value.divide(MoneyUtil.ONE_M, 1, RoundingMode.HALF_EVEN)
+        value >= MoneyUtil.ONE_B -> value.divide(MoneyUtil.ONE_B, 1, RoundingMode.FLOOR)
+                .toPlainString().stripZeros() + "B"
+        value >= MoneyUtil.ONE_M -> value.divide(MoneyUtil.ONE_M, 1, RoundingMode.FLOOR)
                 .toPlainString().stripZeros() + "M"
-        value >= MoneyUtil.ONE_K -> value.divide(MoneyUtil.ONE_K, 1, RoundingMode.HALF_EVEN)
+        value >= MoneyUtil.ONE_K -> value.divide(MoneyUtil.ONE_K, 1, RoundingMode.FLOOR)
                 .toPlainString().stripZeros() + "k"
         else -> MoneyUtil.createFormatter(decimals).format(BigDecimal.valueOf(absAmount, decimals))
                 .stripZeros() + ""

@@ -11,7 +11,7 @@
     android:layout_marginBottom="24dp"
     android:clipToPadding="true"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="2dp"
+    app:cardCornerRadius="@dimen/asset_item_radius"
     app:cardElevation="2dp">
 
     <RelativeLayout
@@ -40,20 +40,18 @@
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/image_change"
             android:padding="8dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
-            <com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
+            <com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
                 android:id="@+id/image_asset_icon"
                 tools:src="@drawable/logo_bitcoin_48"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:padding="4dp"
-                android:scaleType="fitXY"
+                android:layout_marginStart="6dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:text_number="1"
-                app:text_size="16" />
+                app:avatar_text_size="14sp" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_asset_name"

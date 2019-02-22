@@ -12,23 +12,11 @@
     </declare-styleable>
 
 
-    <declare-styleable name="RoundedImageView">
-        <attr name="corner_radius" format="dimension" />
-        <attr name="border_width" format="dimension" />
-        <attr name="border_color" format="color" />
-        <attr name="round_background" format="boolean" />
-        <attr name="is_oval" format="boolean" />
-        <attr name="android:scaleType" />
+    <declare-styleable name="AutoResizeTextView">
+        <!-- Minimum size of the text. -->
+        <attr name="minTextSize" format="float" />
     </declare-styleable>
-    <declare-styleable name="MaterialLetterIcon">
-        <attr name="text" format="string" />
-        <attr name="text_color" format="color" />
-        <attr name="shape_color" format="color" />
-        <attr name="text_size" format="integer" />
-        <attr name="text_number" format="integer" />
-        <attr name="is_uppercase" format="boolean" />
-        <attr name="is_bold" format="boolean" />
-    </declare-styleable>
+
     <declare-styleable name="TintableImageView">
         <attr name="image_tint" format="reference|color" />
         <attr name="background_tint" format="reference|color" />
@@ -44,5 +32,9 @@
         <attr name="progress_text_visibility" format="boolean" />
         <attr name="progress_text_color" format="reference|color" />
         <attr name="progress_duration" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="AssetAvatarView">
+        <attr name="avatar_text_size" format="dimension" />
     </declare-styleable>
 </resources>
