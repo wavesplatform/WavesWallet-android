@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.manager.AccessManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
@@ -110,7 +111,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 App.getAccessManager().deleteCurrentWavesWallet()
 
                 presenter.prefsUtil.logOut()
-                presenter.appUtil.restartApp()
+                App.getAccessManager().restartApp(activity!!)
                 dialog.dismiss()
             }
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel)) { dialog, _ ->

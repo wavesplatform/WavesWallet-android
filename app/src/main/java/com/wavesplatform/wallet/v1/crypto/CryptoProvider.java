@@ -9,18 +9,18 @@ import static com.wavesplatform.wallet.v1.request.TransferTransactionRequest.Sig
 public class CryptoProvider {
 
     private static OpportunisticCurve25519Provider provider;
+
     public static OpportunisticCurve25519Provider get() {
         if (provider == null) {
-            Constructor<OpportunisticCurve25519Provider> constructor = null;
+            Constructor<OpportunisticCurve25519Provider> constructor;
             try {
-                constructor =OpportunisticCurve25519Provider.class.getDeclaredConstructor();
+                constructor = OpportunisticCurve25519Provider.class.getDeclaredConstructor();
                 constructor.setAccessible(true);
                 provider = constructor.newInstance();
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException("Couldn't create crypto provider", e);
             }
-
         }
         return provider;
     }

@@ -58,7 +58,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         setupToolbar(toolbar_view, true, getString(R.string.edit_address_toolbar_title), R.drawable.ic_toolbar_back_black)
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
-        presenter.addressBookUser = intent.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
+        presenter.addressBookUser = intent.getParcelableExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
 
         val nameValidation = Validation(til_name)
                 .and(NotEmptyTrimRule(R.string.address_book_name_validation_required_error))

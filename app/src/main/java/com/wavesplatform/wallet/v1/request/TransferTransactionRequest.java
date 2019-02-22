@@ -6,10 +6,7 @@ import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
 import com.wavesplatform.wallet.v1.crypto.Base58;
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider;
-import com.wavesplatform.wallet.v1.crypto.Hash;
-import com.wavesplatform.wallet.v1.payload.TransferTransaction;
 import com.wavesplatform.wallet.v1.util.SignUtil;
-import com.wavesplatform.wallet.v2.util.AddressUtil;
 
 public class TransferTransactionRequest {
     public static int SignatureLength = 64;
@@ -31,13 +28,13 @@ public class TransferTransactionRequest {
 
     public byte[] toSignBytes() {
         try {
-            byte[] timestampBytes  = Longs.toByteArray(timestamp);
+            byte[] timestampBytes = Longs.toByteArray(timestamp);
             byte[] assetIdBytes = SignUtil.arrayOption(assetId);
-            byte[] amountBytes     = Longs.toByteArray(amount);
+            byte[] amountBytes = Longs.toByteArray(amount);
             byte[] feeAssetIdBytes = SignUtil.arrayOption(feeAssetId);
-            byte[] feeBytes        = Longs.toByteArray(fee);
+            byte[] feeBytes = Longs.toByteArray(fee);
 
-            return Bytes.concat(new byte[] {txType},
+            return Bytes.concat(new byte[]{txType},
                     Base58.decode(senderPublicKey),
                     assetIdBytes,
                     feeAssetIdBytes,
@@ -52,29 +49,9 @@ public class TransferTransactionRequest {
         }
     }
 
-    public void sign(byte[] privateKey)  {
+    public void sign(byte[] privateKey) {
         if (signature == null) {
             signature = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()));
         }
-    }
-
-    public int getAttachmentSize() {
-        if (attachment == null) {
-            return 0;
-        }
-        try {
-            return Base58.decode(attachment).length;
-        } catch (Base58.InvalidBase58 invalidBase58) {
-            invalidBase58.printStackTrace();
-            return 0;
-        }
-    }
-
-    public TransferTransaction createDisplayTransaction() {
-        TransferTransaction tt = new TransferTransaction(4, Base58.encode(Hash.fastHash(toSignBytes())),
-                AddressUtil.addressFromPublicKey(senderPublicKey), timestamp, amount, fee,
-                assetId, recipient, attachment);
-        tt.isPending = true;
-        return tt;
     }
 }

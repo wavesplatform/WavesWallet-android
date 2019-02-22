@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v1.util;
 
-import com.wavesplatform.wallet.v1.payload.AssetBalance;
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo;
 
 import java.math.BigDecimal;
@@ -90,10 +89,6 @@ public class MoneyUtil {
         symbols.setGroupingSeparator(DEFAULT_SEPARATOR_THIN_SPACE);
         formatter.setDecimalFormatSymbols(symbols);
         return formatter.format(amount);
-    }
-
-    public static String getScaledText(long amount, AssetBalance ab) {
-        return getScaledText(amount, ab != null ? ab.getDecimals() : 8);
     }
 
     public static String getScaledText(Long amount, com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance ab) {
