@@ -164,6 +164,25 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="TickerTag">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_ticket_submit50_rounded</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:textColor">@color/info500</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="DashedLine">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">@drawable/shape_dashed_line</item>
+        <item name="android:layerType">software</item>
+    </style>
+
     <style name="DialogBackgroundTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowBackground">@null</item>
         <item name="android:windowNoTitle">true</item>

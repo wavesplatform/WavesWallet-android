@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:paddingBottom="10dp"
-    android:paddingEnd="8dp"
     android:paddingStart="8dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,14 +16,14 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:layout_weight="1"
-            android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,15 +32,27 @@
                 android:gravity="start"
                 android:text="26.09.16"
                 android:textColor="@color/black"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                android:lines="1"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="11sp"
+                app:autoSizeMinTextSize="9sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="start"
+                android:lines="1"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="11sp"
+                app:autoSizeMinTextSize="9sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform"
                 android:text="11:09:44"
                 android:textColor="@color/black"
                 android:textSize="11sp" />
@@ -48,15 +60,15 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:layout_weight="1"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="12dp"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_side"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,13 +79,19 @@
                 android:textColor="@color/submit400"
                 android:textSize="11sp" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="start"
+                android:lines="1"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="11sp"
+                app:autoSizeMinTextSize="9sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform"
                 android:text="0.00193456"
                 android:textColor="@color/submit400"
                 android:textSize="11sp" />
@@ -81,15 +99,15 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:layout_weight="1"
-            android:layout_marginStart="12dp"
             android:layout_width="0dp"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,16 +115,28 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="124.04"
+                android:lines="1"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="11sp"
+                app:autoSizeMinTextSize="9sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform"
                 android:textColor="@color/black"
                 android:textSize="11sp" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_sum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="start"
+                android:lines="1"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="11sp"
+                app:autoSizeMinTextSize="9sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform"
                 android:text="23213423423"
                 android:textColor="@color/black"
                 android:textSize="11sp" />
@@ -114,15 +144,15 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:layout_weight="1"
-            android:layout_marginStart="12dp"
-            android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,43 +161,55 @@
                 android:gravity="start"
                 android:text="Success"
                 android:textColor="@color/basic700"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                android:lines="1"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="11sp"
+                app:autoSizeMinTextSize="9sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_failed_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="start"
-                android:visibility="gone"
                 android:textColor="@color/basic700"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                android:lines="1"
+                android:maxLines="1"
+                app:autoSizeMaxTextSize="11sp"
+                app:autoSizeMinTextSize="9sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform"
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/relative_cancel_block"
             android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="16dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_height="wrap_content">
+            android:layout_marginStart="16dp"
+            android:orientation="horizontal">
 
 
             <View
                 android:id="@+id/view_divider"
-                android:background="@color/accent50"
                 android:layout_width="1dp"
                 android:layout_height="24dp"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="8dp"
+                android:background="@color/accent50" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/image_delete"
-                android:clickable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/ic_toolbar_close"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                app:srcCompat="@drawable/ic_toolbar_close" />
 
         </LinearLayout>
 

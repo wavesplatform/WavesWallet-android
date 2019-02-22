@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/basic50"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="24dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_id_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/history_details_id"
+            android:textColor="@color/basic500" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_id_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_id_hint"
+            android:layout_marginTop="4dp"
+            android:text="Mr. Big Mike"
+            android:textColor="@color/disabled900"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-4dp"
+        android:layout_marginBottom="6dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="16dp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_copy_18_black" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="14dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_amount_per_trans_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/history_details_amount_per_transaction"
+            android:textColor="@color/basic500" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_amount_per_trans_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_amount_per_trans_hint"
+            android:layout_marginTop="4dp"
+            android:text="Mr. Big Mike"
+            android:textColor="@color/disabled900"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+

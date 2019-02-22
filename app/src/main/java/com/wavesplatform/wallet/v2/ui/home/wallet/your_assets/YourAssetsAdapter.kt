@@ -1,12 +1,10 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.your_assets
 
-import android.support.v7.widget.AppCompatCheckBox
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.util.clearBalance
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.your_assets_item.view.*
 import javax.inject.Inject
@@ -15,29 +13,19 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
 
     var allData: MutableList<AssetBalance> = arrayListOf()
     var currentAssetId: String? = null
-    private var currentAssetIdCheckbox: AppCompatCheckBox? = null
 
     override fun convert(helper: BaseViewHolder, item: AssetBalance) {
         helper.setText(R.id.text_asset_name, item.getName())
                 .setText(R.id.text_asset_value, item.getDisplayAvailableBalance())
                 .setVisible(R.id.image_favourite, item.isFavorite)
         helper.itemView.text_asset_value.visibility =
-                if ((item.getDisplayAvailableBalance()
-                                .clearBalance()
-                                .toDouble()) == 0.toDouble()) {
+                if (item.getAvailableBalance() == 0L) {
                     View.GONE
                 } else {
                     View.VISIBLE
                 }
-        helper.itemView.image_asset_icon.isOval = true
         helper.itemView.image_asset_icon.setAsset(item)
-
-        if (item.assetId == currentAssetId) {
-            currentAssetIdCheckbox = helper.itemView.checkbox_choose
-            helper.itemView.checkbox_choose.isChecked = true
-        } else {
-            helper.itemView.checkbox_choose.isChecked = false
-        }
+        helper.itemView.checkbox_choose.isChecked = item.assetId == currentAssetId
     }
 
 

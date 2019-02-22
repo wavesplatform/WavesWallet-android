@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -20,7 +21,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showSuccess
-import kotlinx.android.synthetic.main.activit_choose_account.*
+import kotlinx.android.synthetic.main.activity_choose_account.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.inflate
 import javax.inject.Inject
@@ -37,21 +38,27 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     @Inject
     lateinit var adapter: ChooseAccountAdapter
 
-    override fun configLayoutRes(): Int = R.layout.activit_choose_account
+    override fun configLayoutRes(): Int = R.layout.activity_choose_account
 
     override fun askPassCode() = false
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
-        setupToolbar(toolbar_view,  true,
+        setupToolbar(toolbar_view, true,
                 getString(R.string.choose_account), R.drawable.ic_toolbar_back_black)
 
         recycle_addresses.layoutManager = LinearLayoutManager(this)
-        recycle_addresses.adapter = adapter
+        recycle_addresses.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                appbar_layout.isSelected = recycle_addresses.canScrollVertically(-1)
+            }
+        })
         adapter.bindToRecyclerView(recycle_addresses)
-        presenter.getAddresses()
         adapter.chooseAccountOnClickListener = this
+
+
+        presenter.getAddresses()
     }
 
     override fun afterSuccessGetAddress(list: ArrayList<AddressBookUser>) {

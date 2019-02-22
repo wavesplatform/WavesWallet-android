@@ -20,6 +20,7 @@ class DexMarketInformationBottomSheetFragment : BaseBottomSheetDialogFragment() 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         val rootView = inflater.inflate(R.layout.dex_markets_info_bottom_sheet_dialog_layout, container, false)
 
         rootView.text_name.text = "${market?.amountAssetShortName} / ${market?.priceAssetShortName}"

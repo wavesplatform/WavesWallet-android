@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.database
+package com.wavesplatform.wallet.v2.data.database
 
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.v2.data.Constants
@@ -121,6 +121,12 @@ class TransactionSaver @Inject constructor() {
                                 trans.asset = Constants.wavesAssetInfo
                             } else {
                                 trans.asset = allAssets.firstOrNull { it.id == trans.assetId }
+                            }
+
+                            if (trans.feeAssetId.isNullOrEmpty()) {
+                                trans.feeAssetObject = Constants.wavesAssetInfo
+                            } else {
+                                trans.feeAssetObject = allAssets.firstOrNull { it.id == trans.feeAssetId }
                             }
 
                             if (trans.recipient.contains("alias")) {

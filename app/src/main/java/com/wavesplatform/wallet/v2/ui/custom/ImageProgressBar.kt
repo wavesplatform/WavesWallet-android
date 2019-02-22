@@ -137,6 +137,11 @@ class ImageProgressBar : LinearLayout {
         animator?.start()
     }
 
+    override fun onDetachedFromWindow() {
+        hide()
+        super.onDetachedFromWindow()
+    }
+
     companion object {
         const val DEFAULT_DURATION = 750
     }

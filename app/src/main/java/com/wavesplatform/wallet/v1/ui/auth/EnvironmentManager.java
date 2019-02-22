@@ -57,8 +57,8 @@ public class EnvironmentManager {
         handler.postDelayed(EnvironmentManager::restartApp, 500);
     }
 
-    public static String findAssetId(@NotNull String gatewayId) {
-        return get().current().findAssetId(gatewayId).getAssetId();
+    public static GlobalConfiguration.GeneralAssetId findAssetId(@NotNull String gatewayId) {
+        return get().current().findAssetId(gatewayId);
     }
 
     public static byte getNetCode() {

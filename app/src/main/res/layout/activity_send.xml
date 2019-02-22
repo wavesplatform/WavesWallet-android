@@ -21,6 +21,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         android:layout_below="@+id/toolbar_view">
 
         <LinearLayout
@@ -106,7 +107,7 @@
                 android:clipToPadding="true"
                 android:translationZ="1dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="2dp"
+                app:cardCornerRadius="@dimen/asset_item_radius"
                 app:cardElevation="2dp">
 
                 <RelativeLayout
@@ -338,7 +339,7 @@
                 android:translationZ="1dp"
                 android:visibility="gone"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="2dp"
+                app:cardCornerRadius="@dimen/asset_item_radius"
                 app:cardElevation="2dp"
                 tools:visibility="visible">
 
@@ -434,7 +435,7 @@
                 android:clipToPadding="true"
                 android:translationZ="1dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="2dp"
+                app:cardCornerRadius="@dimen/asset_item_radius"
                 app:cardElevation="2dp">
 
                 <RelativeLayout
@@ -592,8 +593,10 @@
                 layout="@layout/view_commission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp" />
-
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="16dp" />
 
         </LinearLayout>
 

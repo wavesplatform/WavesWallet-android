@@ -20,6 +20,10 @@ class TransactionUtil @Inject constructor() {
                     && transaction.sender != App.getAccessManager().getWallet()?.address
                     && transaction.asset?.isSpam == true) {
                 Constants.ID_SPAM_RECEIVE_TYPE
+            } else if (transaction.type == Transaction.TRANSFER
+                    && transaction.sender != App.getAccessManager().getWallet()?.address
+                    && transaction.recipientAddress != App.getAccessManager().getWallet()?.address) {
+                Constants.ID_RECEIVE_SPONSORSHIP_TYPE
             } else if (transaction.type == Transaction.MASS_TRANSFER
                     && transaction.sender != App.getAccessManager().getWallet()?.address
                     && transaction.asset?.isSpam == true) {
@@ -92,7 +96,9 @@ class TransactionUtil @Inject constructor() {
                 val sumString = if (round) {
                     getScaledAmount(transaction.transfers.sumByLong { it.amount }, decimals)
                 } else {
-                    MoneyUtil.getScaledText(transaction.transfers.sumByLong { it.amount }, transaction.asset)
+                    MoneyUtil.getScaledText(
+                            transaction.transfers.sumByLong { it.amount }, transaction.asset)
+                            .stripZeros()
                 }
                 if (sumString.isEmpty()) {
                     ""
@@ -103,7 +109,7 @@ class TransactionUtil @Inject constructor() {
                 if (round) {
                     getScaledAmount(transaction.amount, decimals)
                 } else {
-                    MoneyUtil.getScaledText(transaction.amount, transaction.asset)
+                    MoneyUtil.getScaledText(transaction.amount, transaction.asset).stripZeros()
                 }
             }
         }

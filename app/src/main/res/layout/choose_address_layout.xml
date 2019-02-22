@@ -67,7 +67,7 @@
             android:layout_marginTop="2dp"
             android:foreground="?attr/selectableItemBackground"
             app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="2dp">
 
 

@@ -12,7 +12,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="@dimen/_70sdp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="2dp">
+        app:cardCornerRadius="@dimen/asset_item_radius">
 
         <LinearLayout
             android:layout_width="match_parent"

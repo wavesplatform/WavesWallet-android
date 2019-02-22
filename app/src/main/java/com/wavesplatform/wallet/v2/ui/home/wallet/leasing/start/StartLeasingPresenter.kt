@@ -25,14 +25,14 @@ class StartLeasingPresenter @Inject constructor() : BasePresenter<StartLeasingVi
         return nodeAddressValidation && amountValidation && fee > 0L
     }
 
-    fun loadCommission() {
+    fun loadCommission(wavesBalance: Long) {
         viewState.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
                 matcherDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(App.getAccessManager().getWallet()?.address!!),
                 BiFunction { t1: GlobalTransactionCommission,
-                            t2: ScriptInfo ->
+                             t2: ScriptInfo ->
                     return@BiFunction Pair(t1, t2)
                 })
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -44,6 +44,7 @@ class StartLeasingPresenter @Inject constructor() : BasePresenter<StartLeasingVi
                     params.smartAccount = scriptInfo.extraFee != 0L
                     fee = TransactionUtil.countCommission(commission, params)
                     viewState.showCommissionSuccess(fee)
+                    viewState.afterSuccessLoadWavesBalance(wavesBalance)
                 }, {
                     it.printStackTrace()
                     fee = 0L

@@ -52,14 +52,13 @@
                 android:background="@drawable/basic50_rounded_border"
                 android:padding="14dp">
 
-                <com.wavesplatform.wallet.v2.ui.custom.MaterialLetterIcon
+                <com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
                     android:id="@+id/image_asset_icon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/asset_gray_icon"
-                    app:text_number="1"
-                    app:text_size="14" />
+                    app:avatar_text_size="14sp" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_asset_name"
@@ -126,10 +125,6 @@
 
             </RelativeLayout>
 
-
-
-
-
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -139,7 +134,7 @@
                 android:layout_marginBottom="6dp"
                 android:clipToPadding="true"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="2dp"
+                app:cardCornerRadius="@dimen/asset_item_radius"
                 app:cardElevation="2dp">
 
                 <RelativeLayout

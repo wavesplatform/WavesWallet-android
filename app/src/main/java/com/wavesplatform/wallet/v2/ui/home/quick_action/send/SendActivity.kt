@@ -32,12 +32,14 @@ import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_BLOCKCHAIN_COMMISSION
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_FEE_ASSET
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_GATEWAY_COMMISSION
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_MONERO_PAYMENT_ID
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_AMOUNT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_ASSET
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_SELECTED_RECIPIENT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_TYPE
+import com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee.SponsoredFeeBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
@@ -75,6 +77,8 @@ class SendActivity : BaseActivity(), SendView {
         setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title),
                 R.drawable.ic_toolbar_back_black)
         checkRecipient(edit_address.text.toString())
+
+        setupCommissionBlock()
 
         when {
             intent.hasExtra(KEY_INTENT_ASSET_DETAILS) -> {
@@ -115,7 +119,7 @@ class SendActivity : BaseActivity(), SendView {
                 }
                 val amount = edit_amount.text?.toString() ?: "0"
                 if (amount.isNotBlank()) {
-                    if (amount == ".") {
+                    if (amount == "." || amount == "-") {
                         presenter.amount = BigDecimal.ZERO
                     } else {
                         presenter.amount = BigDecimal(amount)
@@ -162,6 +166,35 @@ class SendActivity : BaseActivity(), SendView {
 
         setRecipientSuggestions()
         commission_card.gone()
+    }
+
+    private fun setupCommissionBlock() {
+        image_arrows.visiable()
+        commission_card.click {
+            val dialog = SponsoredFeeBottomSheetFragment()
+            dialog.configureData(presenter.feeAsset.assetId, presenter.feeWaves)
+            dialog.onSelectedAssetListener = object : SponsoredFeeBottomSheetFragment.SponsoredAssetSelectedListener {
+                override fun onSelected(asset: AssetBalance, fee: Long) {
+                    presenter.feeAsset = asset
+                    presenter.fee = fee
+
+                    if (presenter.feeAsset.assetId.isWaves()) {
+                        text_fee_transaction.text = MoneyUtil.getScaledText(fee, asset).stripZeros()
+                        commission_asset_name_text.visiable()
+                    } else {
+                        text_fee_transaction.text = "${MoneyUtil.getScaledText(fee, asset).stripZeros()} ${asset.getName()}"
+                        commission_asset_name_text.gone()
+                    }
+
+                    text_amount_fee_error.text = getString(
+                            R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
+                            "${getScaledAmount(presenter.fee, asset.getDecimals())} ${asset.getName()}",
+                            presenter.gatewayCommission.toPlainString(),
+                            presenter.selectedAsset?.getName() ?: "")
+                }
+            }
+            dialog.show(supportFragmentManager, dialog::class.java.simpleName)
+        }
     }
 
     private fun loadAsset(assetId: String) {
@@ -220,7 +253,7 @@ class SendActivity : BaseActivity(), SendView {
         showError(res, R.id.root)
     }
 
-    override fun onShowPaymentDetails(details: PaymentConfirmationDetails) {
+    override fun onShowPaymentDetails() {
         launchActivity<SendConfirmationActivity>(REQUEST_SEND) {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
             putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)
@@ -232,15 +265,14 @@ class SendActivity : BaseActivity(), SendView {
             putExtra(KEY_INTENT_MONERO_PAYMENT_ID, presenter.moneroPaymentId)
             putExtra(KEY_INTENT_TYPE, presenter.type)
             putExtra(KEY_INTENT_BLOCKCHAIN_COMMISSION, presenter.fee)
+            putExtra(KEY_INTENT_FEE_ASSET, presenter.feeAsset)
         }
     }
 
     private fun setPercent(percent: Double) {
         presenter.selectedAsset.notNull { assetBalance ->
-            assetBalance.getAvailableBalance().notNull { balance ->
-                val amount = (balance * percent).toLong()
-                checkAndSetAmount(amount, assetBalance)
-            }
+            val amount = (assetBalance.getAvailableBalance() * percent).toLong()
+            checkAndSetAmount(amount, assetBalance)
         }
     }
 
@@ -258,7 +290,7 @@ class SendActivity : BaseActivity(), SendView {
                 horizontal_amount_suggestion.gone()
                 text_amount_fee_error.text = getString(
                         R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
-                        "${getScaledAmount(presenter.fee, 8)} ${Constants.wavesAssetInfo.name}",
+                        "${getScaledAmount(presenter.fee, presenter.feeAsset.getDecimals())} ${presenter.feeAsset.getName()}",
                         presenter.gatewayCommission.toPlainString(),
                         assetBalance.getName() ?: "")
                 presenter.amount = BigDecimal.ZERO
@@ -283,7 +315,13 @@ class SendActivity : BaseActivity(), SendView {
                 amount
             }
 
-            edit_amount.setText(MoneyUtil.getScaledText(total, assetBalance).clearBalance())
+            if (total.toFloat() > 0) {
+                edit_amount.setText(MoneyUtil.getScaledText(total, assetBalance).clearBalance())
+            } else {
+                edit_amount.setText("")
+                text_amount_error.visiable()
+                presenter.amount = BigDecimal.ZERO
+            }
         }
     }
 
@@ -347,7 +385,7 @@ class SendActivity : BaseActivity(), SendView {
                     relative_gateway_fee.gone()
                 }
                 else -> {
-                    presenter.recipientAssetId = SendPresenter.getAssetId(recipient)
+                    presenter.recipientAssetId = SendPresenter.getAssetId(recipient, presenter.selectedAsset)
                     if (presenter.recipientAssetId.isNullOrEmpty()) {
                         presenter.type = SendPresenter.Type.UNKNOWN
                         setRecipientValid(false)
@@ -540,7 +578,12 @@ class SendActivity : BaseActivity(), SendView {
                 error.printStackTrace()
             }
         } else {
-            edit_address.setText(result)
+            if (result.contains(":")) {
+                val split = result.split(":")
+                edit_address.setText(split[1].trim())
+            } else {
+                edit_address.setText(result)
+            }
         }
     }
 
@@ -557,7 +600,6 @@ class SendActivity : BaseActivity(), SendView {
 
             presenter.selectedAsset = asset
 
-            image_asset_icon.isOval = true
             image_asset_icon.setAsset(asset)
             text_asset_name.text = asset.getName()
             text_asset_value.text = asset.getDisplayAvailableBalance()

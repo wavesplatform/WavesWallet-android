@@ -56,7 +56,6 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
                 } else {
                     helper.itemView.image_blocked.gone()
                 }
-                helper.itemView.image_asset_favorite_icon.isOval = true
                 helper.itemView.image_asset_favorite_icon.setAsset(item)
             }
             AssetSortingItem.TYPE_NOT_FAVORITE -> {
@@ -96,7 +95,6 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
                     helper.itemView.card_asset.setCardBackgroundColor(findColor(R.color.white))
                 }
 
-                helper.itemView.image_asset_icon.isOval = true
                 helper.itemView.image_asset_icon.setAsset(item)
             }
             AssetSortingItem.TYPE_LINE -> {

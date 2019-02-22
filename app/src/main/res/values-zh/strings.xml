@@ -31,7 +31,7 @@
     <string name="alias_dialog_about_alias">关于别名</string>
     <string name="alias_dialog_create_alias">创建新别名</string>
     <string name="alias_dialog_description_1">别名是您地址的昵称。您可以使用别名代替地址来进行交易。</string>
-    <string name="alias_dialog_description_2">您的别名长度必须介于4到30个字符之间，且必须只包含小写拉丁字母，数字和符号（@， - ，_等）</string>
+    <string name="alias_dialog_description_2">您的别名长度必须介于4到30个字符之间，且必须只包含小写拉丁字母，数字和符号（@， - ，_， 和点）</string>
     <string name="alias_dialog_you_dont_have">你没有别名</string>
     <string name="alias_dialog_you_have">你有 %s</string>
     <string name="alias_dialog_your_aliases">你的别名</string>
@@ -169,7 +169,6 @@
     <string name="common_msg_in_development">对不起，此功能将在不久的将来推出</string>
     <string name="common_no_internet_bottom_msg">没有连接到互联网</string>
     <string name="common_or">或者</string>
-    <string name="common_persist"><![CDATA[&#x26;]]></string>
     <string name="common_server_error">有问题</string>
     <string name="common_transaction_fee">交易费用</string>
     <string name="confirm_backup">确认备份</string>
@@ -262,17 +261,25 @@
     <string name="history_canceled">已经取消</string>
     <string name="history_data_type_title">进入区块链</string>
     <string name="history_details_active_now">现在激活</string>
+    <string name="history_details_add_address">保存地址</string>
+    <string name="history_details_amount_per_transaction">每笔交易金额
+</string>
+    <string name="history_details_asset">资产</string>
     <string name="history_details_block">区块</string>
     <string name="history_details_cancel_leasing">取消租赁</string>
     <string name="history_details_completed">已完成</string>
     <string name="history_details_confirmations">确认</string>
     <string name="history_details_copy_all_data">复制所有数据</string>
     <string name="history_details_copy_tx_id">复制TX ID</string>
+    <string name="history_details_description">描述</string>
+    <string name="history_details_edit_address">编辑名称</string>
     <string name="history_details_exchange_price">价格</string>
     <string name="history_details_fee">费用</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">资产 ID</string>
     <string name="history_details_leasing_from">租赁给</string>
     <string name="history_details_leasing_to">租赁给</string>
+    <string name="history_details_node_address">节点地址
+</string>
     <string name="history_details_not_reissuable">不可再发行</string>
     <string name="history_details_received_from">从 收到</string>
     <string name="history_details_recipient">接收者</string>
@@ -280,13 +287,19 @@
     <string name="history_details_send_again">重新发送</string>
     <string name="history_details_sent_to">发送给</string>
     <string name="history_details_show_all">全部显示 (%1$s)</string>
+    <string name="history_details_status">状态</string>
     <string name="history_details_timestamp">时间戳</string>
     <string name="history_details_unconfirmed">未确认的</string>
+    <string name="history_details_view_on_explorer">查看浏览器
+</string>
     <string name="history_empty">没有内容… \n你没有任何交易</string>
     <string name="history_error_receive_data">接收数据错误。请稍后再试</string>
+    <string name="history_exchange_buy">买</string>
+    <string name="history_exchange_sell">卖</string>
     <string name="history_exchanged">交换</string>
     <string name="history_issued">发行</string>
     <string name="history_leased">租用</string>
+    <string name="history_mass_send_recipient">#%s 收件人</string>
     <string name="history_my_dex_intent_buy">交换买入：%1$s/%2$s</string>
     <string name="history_my_dex_intent_sell">交换卖出：%1$s/%2$s</string>
     <string name="history_my_dex_type">类型</string>
@@ -505,7 +518,6 @@
     <string name="sell_btn_txt">卖出 %s</string>
     <string name="send_amount">总量</string>
     <string name="send_amount_error_insufficient_funds">资金不足</string>
-    <string name="send_spam_error">This is spam asset</string>
     <string name="send_asset">资金</string>
     <string name="send_choose_from_address_book">从地址簿中选择</string>
     <string name="send_confirmation_confirm">确认</string>
@@ -534,9 +546,10 @@
     <string name="send_progress_sending">发送中…</string>
     <string name="send_recipient">接收者</string>
     <string name="send_recipient_address_hint">接收人地址…</string>
+    <string name="send_recipient_asset_is_not_valid">资产无效</string>
     <string name="send_recipient_the_address_is_not_valid">地址无效</string>
-    <string name="send_recipient_asset_is_not_valid">The asset is not valid</string>
     <string name="send_select_your_asset">选择您的资产</string>
+    <string name="send_spam_error">无法将资金发送到垃圾资产</string>
     <string name="send_success_do_you_want_to_save_this_address">要保存此地址吗？</string>
     <string name="send_success_okay">OK</string>
     <string name="send_success_you_have_sent_sum">您已发送%1$s %2$s</string>
@@ -546,6 +559,8 @@
     <string name="send_toolbar_title">发送</string>
     <string name="send_transaction_error_check_asset">检查资产</string>
     <string name="send_use_total_balance">使用全部余额</string>
+    <string name="sponsored_fee_dialog_not_available">无法使用</string>
+    <string name="sponsored_fee_dialog_title">交易费用</string>
     <string name="start_leasing_amount">总量</string>
     <string name="start_leasing_balance">余额</string>
     <string name="start_leasing_choose_from_address">从地址簿中选择</string>

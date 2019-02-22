@@ -32,7 +32,7 @@
             android:layout_marginRight="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="2dp">
 
             <FrameLayout
@@ -65,7 +65,7 @@
             android:layout_marginRight="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="2dp">
 
             <FrameLayout
@@ -110,7 +110,7 @@
             android:layout_marginRight="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="2dp">
 
             <RelativeLayout
@@ -164,7 +164,7 @@
             android:layout_marginRight="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="2dp">
 
             <LinearLayout
@@ -223,7 +223,7 @@
             android:layout_marginRight="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="2dp">
 
             <FrameLayout
@@ -257,7 +257,7 @@
             android:layout_marginRight="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="2dp">
 
             <FrameLayout
@@ -291,7 +291,7 @@
             android:layout_marginRight="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="2dp">
 
             <FrameLayout
@@ -325,7 +325,7 @@
             android:layout_marginRight="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="2dp">
 
             <FrameLayout
@@ -368,7 +368,7 @@
             android:layout_marginRight="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="2dp">
 
             <FrameLayout
@@ -401,7 +401,7 @@
             android:layout_marginRight="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="2dp">
 
             <FrameLayout
@@ -434,7 +434,7 @@
             android:layout_marginRight="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="2dp">
 
             <FrameLayout

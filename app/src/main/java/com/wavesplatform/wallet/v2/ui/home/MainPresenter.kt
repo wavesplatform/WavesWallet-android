@@ -11,6 +11,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -87,5 +88,13 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
                         rxEventBus.post(Events.NeedUpdateHistoryScreen())
                     })
         }
+    }
+
+    fun loadNews() {
+        addSubscription(matcherDataManager.loadNews()
+                .compose(RxUtil.applyObservableDefaultSchedulers())
+                .subscribe {
+                    viewState.showNews(it)
+                })
     }
 }

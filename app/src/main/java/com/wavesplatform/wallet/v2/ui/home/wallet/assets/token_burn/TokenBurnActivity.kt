@@ -45,12 +45,11 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.token_burn_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        presenter.assetBalance = intent.getParcelableExtra<AssetBalance>(
+        presenter.assetBalance = intent.getParcelableExtra(
                 KEY_INTENT_ASSET_BALANCE)
 
         presenter.loadWavesBalance()
 
-        image_asset_icon.isOval = true
         image_asset_icon.setAsset(presenter.assetBalance)
         text_asset_name.text = presenter.assetBalance.getName()
         text_asset_value.text = presenter.assetBalance.getDisplayAvailableBalance()

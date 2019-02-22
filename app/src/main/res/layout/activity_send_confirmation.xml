@@ -26,7 +26,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="2dp"
+        app:cardCornerRadius="@dimen/asset_item_radius"
         app:cardElevation="3dp">
 
         <ScrollView
@@ -65,21 +65,12 @@
                         android:textSize="16sp"
                         tools:text="-00000000.00000000" />
 
-
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_tag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/TickerTag"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="4dp"
-                        android:background="@drawable/asset_price_border"
-                        android:paddingStart="4dp"
-                        android:paddingTop="2dp"
-                        android:paddingEnd="4dp"
-                        android:paddingBottom="2dp"
-                        android:textColor="@color/info500"
-                        android:textSize="14sp"
-                        tools:text="TAG" />
+                        tools:text="WAVES" />
 
                 </LinearLayout>
 
@@ -151,13 +142,21 @@
                     android:textColor="@color/basic500"
                     android:textSize="14sp" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_fee_value"
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/disabled900"
-                    android:textSize="14sp"
-                    tools:text="0.001 Waves" />
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_fee_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/disabled900"
+                        android:textSize="14sp"
+                        tools:text="0.001 Waves" />
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/gateway_commission_layout"
@@ -281,7 +280,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginRight="16dp"
             app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="0dp">
 
 
@@ -344,7 +343,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginRight="16dp"
             app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="@dimen/asset_item_radius"
             app:cardElevation="0dp">
 
             <RelativeLayout
@@ -402,7 +401,7 @@
         android:layout_marginRight="16dp"
         android:visibility="gone"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="2dp"
+        app:cardCornerRadius="@dimen/asset_item_radius"
         app:cardElevation="0dp">
 
         <RelativeLayout

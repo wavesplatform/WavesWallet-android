@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="tab_corner_radius">2dp</dimen>
-    <dimen name="asset_item_radius">2dp</dimen>
+    <dimen name="asset_item_radius">4dp</dimen>
     <dimen name="asset_icon_size">48dp</dimen>
 </resources>

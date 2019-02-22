@@ -14,11 +14,12 @@ import java.util.Locale;
 
 public class MoneyUtil {
 
+    public static BigDecimal ONE_B = new BigDecimal(1000000000);
     public static BigDecimal ONE_M = new BigDecimal(1000000);
     public static BigDecimal ONE_K = new BigDecimal(1000);
+    public static char DEFAULT_SEPARATOR_THIN_SPACE = '\u2009';
 
     private static MoneyUtil instance = new MoneyUtil();
-    private static String defaultSeparator;
     private final DecimalFormat wavesFormat;
     private final List<DecimalFormat> formatsMap;
 
@@ -35,6 +36,9 @@ public class MoneyUtil {
         formatter.setMaximumFractionDigits(decimals);
         formatter.setMinimumFractionDigits(decimals);
         formatter.setParseBigDecimal(true);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator(DEFAULT_SEPARATOR_THIN_SPACE);
+        formatter.setDecimalFormatSymbols(symbols);
         return formatter;
     }
 
@@ -70,6 +74,9 @@ public class MoneyUtil {
         formatter.setMaximumFractionDigits(decimals);
         formatter.setMinimumFractionDigits(1);
         formatter.setParseBigDecimal(true);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator(DEFAULT_SEPARATOR_THIN_SPACE);
+        formatter.setDecimalFormatSymbols(symbols);
         return formatter.format(
                 BigDecimal.valueOf(amount, decimals));
     }
@@ -79,6 +86,9 @@ public class MoneyUtil {
         formatter.setMaximumFractionDigits(decimals);
         formatter.setMinimumFractionDigits(0);
         formatter.setParseBigDecimal(true);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator(DEFAULT_SEPARATOR_THIN_SPACE);
+        formatter.setDecimalFormatSymbols(symbols);
         return formatter.format(amount);
     }
 
@@ -102,14 +112,6 @@ public class MoneyUtil {
         return getTextStripZeros(amount, 8);
     }
 
-    public static long getUnscaledWaves(String amount) {
-        return getUnscaledValue(amount, 8);
-    }
-
-    public static long getUnscaledValue(String amount, AssetBalance ab) {
-        return getUnscaledValue(amount, ab.getDecimals());
-    }
-
     public static long getUnscaledValue(
             String amount, com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance ab) {
         return getUnscaledValue(amount, ab.getDecimals());
@@ -128,57 +130,6 @@ public class MoneyUtil {
             }
         } catch (Exception ex) {
             return 0L;
-        }
-    }
-
-    public static String getDefaultDecimalSeparator() {
-        if (defaultSeparator == null) {
-            DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
-            DecimalFormatSymbols symbols = format.getDecimalFormatSymbols();
-            defaultSeparator = Character.toString(symbols.getDecimalSeparator());
-        }
-        return defaultSeparator;
-    }
-
-    public static String convertToCorrectFormat(String amount, AssetBalance ab) {
-        if (ab == null) {
-            return amount;
-        }
-
-        if (convertExceedingMaxAmount(amount, ab).isEmpty()) {
-            return "";
-        }
-
-        int max_len = ab.getDecimals();
-        //DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        //formatter.setMaximumFractionDigits(max_len + 1);
-        //formatter.setMinimumFractionDigits(0);
-
-        try {
-            if (amount.contains(getDefaultDecimalSeparator())) {
-                String dec = amount.substring(amount.indexOf(getDefaultDecimalSeparator()));
-                if (dec.length() > 0) {
-                    int exceed = dec.substring(1).length() - max_len;
-                    if (exceed > 0) {
-                        return amount.substring(0, amount.length() - exceed);
-                    }
-                }
-            }
-        } catch (Exception nfe) {
-            // No-op
-        }
-
-        return amount;
-    }
-
-    private static String convertExceedingMaxAmount(String amount, AssetBalance ab) {
-        try {
-            if (getUnscaledValue(amount, ab) > ab.quantity) {
-                return "";
-            }
-            return amount;
-        } catch (Exception nfe) {
-            return "";
         }
     }
 }
