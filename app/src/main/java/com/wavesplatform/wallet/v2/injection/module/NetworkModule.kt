@@ -95,6 +95,7 @@ class NetworkModule {
                 .addInterceptor(receivedCookiesInterceptor)
                 .addInterceptor(addCookiesInterceptor)
                 .addInterceptor(CacheForceInterceptorNoNet())
+                //.addInterceptor(HostSelectionInterceptor())
                 .addNetworkInterceptor(CacheInterceptorOnNet())
                 .addInterceptor(LoggingInterceptor.Builder()
                         .loggable(BuildConfig.DEBUG)
@@ -130,6 +131,9 @@ class NetworkModule {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
         RetrofitCache.getInstance().addRetrofit(retrofit)
+
+        retrofit.newBuilder()
+
         return retrofit
     }
 

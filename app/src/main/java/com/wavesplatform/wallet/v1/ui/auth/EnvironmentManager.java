@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import ren.yale.android.retrofitcachelibrx2.RetrofitCache;
 import timber.log.Timber;
 
 public class EnvironmentManager {
@@ -43,6 +45,7 @@ public class EnvironmentManager {
     private Environment current;
     private static Handler handler = new Handler();
     private Application application;
+    private Disposable disposable;
 
     public static void init(Application application) {
         instance = new EnvironmentManager();
@@ -51,10 +54,15 @@ public class EnvironmentManager {
     }
 
     public static void updateConfiguration(MatcherDataManager matcherDataManager) {
-        matcherDataManager.apiService.loadGlobalConfiguration(instance.current.url)
+        instance.disposable = matcherDataManager.apiService.loadGlobalConfiguration(instance.current.url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(globalConfiguration -> {
+
+
+                    RetrofitCache.getInstance().addRetrofit()
+
+
                     SharedPreferences preferenceManager = PreferenceManager
                             .getDefaultSharedPreferences(App.getAppContext());
                     SharedPreferences.Editor editor = preferenceManager.edit();
@@ -62,9 +70,11 @@ public class EnvironmentManager {
                             new Gson().toJson(globalConfiguration))
                             .apply();
                     instance.current.setConfiguration(globalConfiguration);
+                    instance.disposable.dispose();
                 }, error -> {
                     Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration");
                     error.printStackTrace();
+                    instance.disposable.dispose();
                 });
     }
 
