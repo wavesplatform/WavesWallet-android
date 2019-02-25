@@ -51,7 +51,7 @@ class NetworkModule {
         return Interceptor { chain ->
             val originalResponse = chain.proceed(chain.request())
             if (originalResponse.request().url().url().toString()
-                            .contains(EnvironmentManager.get().current().globalConfiguration.servers.nodeUrl)
+                            .contains(EnvironmentManager.getServers().nodeUrl)
                     && originalResponse.headers("Set-Cookie").isNotEmpty()
                     && prefsUtil.getGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES).isEmpty()) {
                 val cookies = originalResponse.headers("Set-Cookie")
@@ -69,7 +69,7 @@ class NetworkModule {
         return Interceptor { chain ->
             val cookies = prefsUtil.getGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES)
             if (cookies.isNotEmpty() && chain.request().url().url().toString()
-                            .contains(EnvironmentManager.get().current().globalConfiguration.servers.nodeUrl)) {
+                            .contains(EnvironmentManager.getServers().nodeUrl)) {
                 val builder = chain.request().newBuilder()
                 cookies.forEach {
                     builder.addHeader("Cookie", it)
@@ -124,7 +124,7 @@ class NetworkModule {
     @Provides
     internal fun provideNodeRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.get().current().globalConfiguration.servers.nodeUrl)
+                .baseUrl(EnvironmentManager.getServers().nodeUrl)
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -139,7 +139,7 @@ class NetworkModule {
     @Provides
     internal fun provideMatcherRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.get().current().globalConfiguration.servers.matcherUrl)
+                .baseUrl(EnvironmentManager.getServers().matcherUrl)
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -187,7 +187,7 @@ class NetworkModule {
     @Provides
     internal fun provideApiRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.get().current().globalConfiguration.servers.dataUrl)
+                .baseUrl(EnvironmentManager.getServers().dataUrl)
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))

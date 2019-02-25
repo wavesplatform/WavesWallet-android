@@ -49,7 +49,7 @@ public class EnvironmentManager {
     public static void init(Application application) {
         instance = new EnvironmentManager();
         instance.application = application;
-        instance.current = Environment.find(getEnvironment());
+        instance.current = Environment.find(getEnvironmentName());
     }
 
     public static HostSelectionInterceptor createHostInterceptor() {
@@ -80,15 +80,6 @@ public class EnvironmentManager {
                 });
     }
 
-
-    public static EnvironmentManager get() {
-        return instance;
-    }
-
-    public Environment current() {
-        return current;
-    }
-
     public static void setCurrentEnvironment(Environment current) {
         PreferenceManager.getDefaultSharedPreferences(App.getAppContext())
                 .edit()
@@ -98,7 +89,7 @@ public class EnvironmentManager {
         handler.postDelayed(EnvironmentManager::restartApp, 500);
     }
 
-    public static String getEnvironment() {
+    public static String getEnvironmentName() {
         SharedPreferences preferenceManager = PreferenceManager
                 .getDefaultSharedPreferences(instance.application);
         return preferenceManager.getString(
@@ -106,15 +97,27 @@ public class EnvironmentManager {
     }
 
     public static GlobalConfiguration.GeneralAssetId findAssetIdByAssetId(@NotNull String assetId) {
-        return get().current().findAssetByAssetId(assetId);
+        return instance.current.findAssetByAssetId(assetId);
     }
 
     public static byte getNetCode() {
-        return get().current().getNetCode();
+        return instance.current.getNetCode();
     }
 
     public static GlobalConfiguration getGlobalConfiguration() {
-        return get().current().getGlobalConfiguration();
+        return instance.current.getGlobalConfiguration();
+    }
+
+    public static String getName() {
+        return instance.current.name;
+    }
+
+    public static GlobalConfiguration.Servers getServers() {
+        return instance.current.getGlobalConfiguration().getServers();
+    }
+
+    public static Environment getEnvironment() {
+        return instance.current;
     }
 
     private static void restartApp() {
@@ -161,7 +164,7 @@ public class EnvironmentManager {
             return url;
         }
 
-        public GlobalConfiguration getGlobalConfiguration() {
+        GlobalConfiguration getGlobalConfiguration() {
             return configuration;
         }
 

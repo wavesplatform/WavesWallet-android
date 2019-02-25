@@ -6,7 +6,6 @@ import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.database.RealmMigrations
@@ -17,7 +16,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
 class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil, var nodeDataManager: NodeDataManager) {
@@ -64,7 +62,6 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil, var nodeD
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ list ->
-
                     for (assetInfo in list) {
                         val assetBalance = AssetBalance(assetId = assetInfo.id,
                                 quantity = assetInfo.quantity,
