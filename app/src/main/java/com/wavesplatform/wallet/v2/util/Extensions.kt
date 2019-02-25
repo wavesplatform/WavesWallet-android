@@ -52,6 +52,7 @@ import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -758,7 +759,7 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 }
 
 fun isShowTicker(assetId: String?): Boolean {
-    return Constants.defaultAssets().any {
+    return EnvironmentManager.getGlobalConfiguration().generalAssetIds.any {
         it.assetId == assetId || assetId.isNullOrEmpty()
     }
 }

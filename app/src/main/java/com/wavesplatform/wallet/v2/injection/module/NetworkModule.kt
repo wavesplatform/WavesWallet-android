@@ -39,7 +39,7 @@ class NetworkModule {
     @Singleton
     internal fun provideCache(@ApplicationContext context: Context): Cache {
         val cacheSize = 200 * 1024 * 1024
-        val cacheDirectory = File(context.getCacheDir(), "httpcache")
+        val cacheDirectory = File(context.cacheDir, "httpcache")
 
         return Cache(cacheDirectory, cacheSize.toLong())
     }
@@ -95,7 +95,7 @@ class NetworkModule {
                 .addInterceptor(receivedCookiesInterceptor)
                 .addInterceptor(addCookiesInterceptor)
                 .addInterceptor(CacheForceInterceptorNoNet())
-                //.addInterceptor(HostSelectionInterceptor())
+                .addInterceptor(EnvironmentManager.createHostInterceptor())
                 .addNetworkInterceptor(CacheInterceptorOnNet())
                 .addInterceptor(LoggingInterceptor.Builder()
                         .loggable(BuildConfig.DEBUG)
@@ -131,9 +131,6 @@ class NetworkModule {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
         RetrofitCache.getInstance().addRetrofit(retrofit)
-
-        retrofit.newBuilder()
-
         return retrofit
     }
 

@@ -12,9 +12,8 @@ import com.google.gson.Gson;
 import com.wavesplatform.wallet.App;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager;
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration;
-import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction;
+import com.wavesplatform.wallet.v2.injection.module.HostSelectionInterceptor;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +23,6 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ren.yale.android.retrofitcachelibrx2.RetrofitCache;
 import timber.log.Timber;
 
 public class EnvironmentManager {
@@ -41,16 +39,22 @@ public class EnvironmentManager {
             "wavesplatform/waves-client-config/master/fee.json";
 
     private static EnvironmentManager instance;
+    private static Handler handler = new Handler();
 
     private Environment current;
-    private static Handler handler = new Handler();
     private Application application;
     private Disposable disposable;
+    private HostSelectionInterceptor interceptor;
 
     public static void init(Application application) {
         instance = new EnvironmentManager();
         instance.application = application;
         instance.current = Environment.find(getEnvironment());
+    }
+
+    public static HostSelectionInterceptor createHostInterceptor() {
+        instance.interceptor = new HostSelectionInterceptor(instance.current.configuration.getServers());
+        return instance.interceptor;
     }
 
     public static void updateConfiguration(MatcherDataManager matcherDataManager) {
@@ -59,9 +63,7 @@ public class EnvironmentManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(globalConfiguration -> {
 
-
-                    RetrofitCache.getInstance().addRetrofit()
-
+                    instance.interceptor.setHosts(globalConfiguration.getServers());
 
                     SharedPreferences preferenceManager = PreferenceManager
                             .getDefaultSharedPreferences(App.getAppContext());
@@ -88,9 +90,7 @@ public class EnvironmentManager {
     }
 
     public static void setCurrentEnvironment(Environment current) {
-        SharedPreferences preferenceManager = PreferenceManager
-                .getDefaultSharedPreferences(App.getAppContext());
-        preferenceManager
+        PreferenceManager.getDefaultSharedPreferences(App.getAppContext())
                 .edit()
                 .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.getName())
                 .remove(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA)
@@ -167,15 +167,6 @@ public class EnvironmentManager {
 
         public byte getNetCode() {
             return (byte) configuration.getScheme().charAt(0);
-        }
-
-        GlobalConfiguration.GeneralAssetId findAssetId(String gatewayId) {
-            for (GlobalConfiguration.GeneralAssetId assetId : configuration.getGeneralAssetIds()) {
-                if (assetId.getGatewayId().equals(gatewayId)) {
-                    return assetId;
-                }
-            }
-            return null;
         }
 
         GlobalConfiguration.GeneralAssetId findAssetByAssetId(String assetId) {

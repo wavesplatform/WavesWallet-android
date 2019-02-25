@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.data.helpers
 
+import android.util.Log
 import com.vicpin.krealmextensions.RealmConfigStore
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.saveAll
@@ -67,7 +68,7 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil, var nodeD
                     for (assetInfo in list) {
                         val assetBalance = AssetBalance(assetId = assetInfo.id,
                                 quantity = assetInfo.quantity,
-                                isFavorite = false, // WAVES
+                                isFavorite = assetInfo.id == "WAVES",
                                 issueTransaction = IssueTransaction(
                                         name = assetInfo.name,
                                         decimals = assetInfo.precision,
@@ -86,7 +87,7 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil, var nodeD
                     }
                     prefsUtil.setValue(PrefsUtil.KEY_DEFAULT_ASSETS, true)
                 }, { error ->
-
+                    Log.d("AuthHelper", "saveDefaultAssets: error")
                 })
     }
 }

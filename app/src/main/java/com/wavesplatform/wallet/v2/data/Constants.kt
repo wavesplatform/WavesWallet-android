@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.data
 
+import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -72,8 +73,9 @@ object Constants {
     const val RESULT_SMART_ERROR = 307
 
     const val VERSION = 2
-
     const val WAVES_ASSET_ID = ""
+    const val ENABLE_VIEW = 1f
+    const val DISABLE_VIEW = 0.3f
 
     val alphabetColor = hashMapOf(
             Pair("a", R.color.a),
@@ -112,64 +114,14 @@ object Constants {
     var WCTGeneralAsset = GlobalConfiguration.GeneralAssetId(assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
             gatewayId = "WCT", displayName = "WavesCommunity")
 
-    fun defaultAssets(): MutableList<AssetBalance> {
-        val list = mutableListOf<AssetBalance>()
-        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
-            list.add(AssetBalance(assetId = asset.assetId,
-                    quantity = 0L,
-                    isFavorite = false,
-                    issueTransaction = IssueTransaction(
-                            name = asset.displayName,
-                            decimals = if (asset.isFiat) {
-                                2
-                            } else {
-                                8
-                            },
-                            quantity = 0L,
-                            timestamp = 1460419200000L),
-                    isGateway = asset.isGateway)
-            )
-        }
-        return list
-    }
-
     fun find(assetId: String): AssetBalance? {
-        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
-            if (asset.assetId == assetId) {
-                return AssetBalance(assetId = asset.assetId,
-                        quantity = 0L,
-                        isFavorite = false,
-                        issueTransaction = IssueTransaction(
-                                name = asset.displayName,
-                                decimals = if (asset.isFiat) {
-                                    2
-                                } else {
-                                    8
-                                },
-                                quantity = 0L,
-                                timestamp = 1460419200000L),
-                        isGateway = asset.isGateway)
-            }
-        }
-        return null
+        return queryFirst { equalTo("assetId", assetId) }
     }
 
-    fun findByGatewayId(gatewayId: String): AssetBalance? {
+    fun findByGatewayId(gatewayId: String): AssetBalance? { // ticker
         for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
             if (asset.gatewayId == gatewayId) {
-                return AssetBalance(assetId = asset.assetId,
-                        quantity = 0L,
-                        isFavorite = false,
-                        issueTransaction = IssueTransaction(
-                                name = asset.displayName,
-                                decimals = if (asset.isFiat) {
-                                    2
-                                } else {
-                                    8
-                                },
-                                quantity = 0L,
-                                timestamp = 1460419200000L),
-                        isGateway = asset.isGateway)
+                return find(asset.assetId)
             }
         }
         return null
@@ -180,7 +132,6 @@ object Constants {
         for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
             map[asset.assetId] = asset.iconUrls.default
         }
-        // Pair(WCTGeneralAsset.assetId, R.drawable.ic_logo_wct_48))
         return map
     }
 
@@ -213,7 +164,4 @@ object Constants {
         }
         return list.toTypedArray()
     }
-
-    const val ENABLE_VIEW = 1f
-    const val DISABLE_VIEW = 0.3f
 }
