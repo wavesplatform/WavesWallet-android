@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.data.rules
 
 import android.support.annotation.StringRes
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 
 import io.github.anderscheow.validator.rules.BaseRule

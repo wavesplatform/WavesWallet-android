@@ -6,11 +6,9 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import kotlinx.android.synthetic.main.activity_leasing_history.*
 
-
 class HistoryActivity : BaseActivity() {
 
     override fun configLayoutRes() = R.layout.activity_leasing_history
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)

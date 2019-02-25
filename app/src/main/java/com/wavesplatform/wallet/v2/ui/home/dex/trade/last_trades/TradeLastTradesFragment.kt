@@ -23,7 +23,6 @@ import pers.victor.ext.inflate
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-
 class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
 
     @Inject
@@ -43,7 +42,6 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
             return fragment
         }
     }
-
 
     @ProvidePresenter
     fun providePresenter(): TradeLastTradesPresenter = presenter
@@ -108,7 +106,6 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
         view.text_empty.text = getString(R.string.last_trades_empty)
         return view
     }
-
 
     override fun afterSuccessLoadLastTrades(data: List<LastTradesResponse.Data.ExchangeTransaction>) {
         progress_bar.hide()

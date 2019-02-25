@@ -17,7 +17,6 @@ import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-
 class UpdateApiDataService : Service() {
 
     @Inject
@@ -35,8 +34,8 @@ class UpdateApiDataService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (App.getAccessManager().getWallet() == null
-                || ProcessLifecycleOwner.get().lifecycle.currentState != Lifecycle.State.RESUMED) {
+        if (App.getAccessManager().getWallet() == null ||
+                ProcessLifecycleOwner.get().lifecycle.currentState != Lifecycle.State.RESUMED) {
             stopSelf()
             return Service.START_NOT_STICKY
         }
@@ -64,11 +63,9 @@ class UpdateApiDataService : Service() {
                 }))
         subscriptions.add(nodeDataManager.currentBlocksHeight()
                 .subscribe {
-
                 })
         return Service.START_NOT_STICKY
     }
-
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -78,5 +75,4 @@ class UpdateApiDataService : Service() {
         subscriptions.clear()
         super.onDestroy()
     }
-
 }

@@ -33,4 +33,3 @@ class TradeMyOrdersAdapter @Inject constructor() : BaseQuickAdapter<OrderRespons
                 .setTextColor(R.id.text_price, item.getType().color)
     }
 }
-

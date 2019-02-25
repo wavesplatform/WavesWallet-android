@@ -19,7 +19,6 @@ import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_import_account.*
 import javax.inject.Inject
 
-
 class ImportAccountActivity : BaseActivity(), ImportAccountView {
 
     @Inject

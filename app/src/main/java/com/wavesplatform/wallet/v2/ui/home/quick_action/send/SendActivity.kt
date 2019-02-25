@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatTextView
-import android.text.TextUtils
 import android.view.View
 import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -17,7 +16,6 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil.getWavesStripZeros
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -50,7 +48,6 @@ import pers.victor.ext.*
 import java.math.BigDecimal
 import java.net.URI
 import javax.inject.Inject
-
 
 class SendActivity : BaseActivity(), SendView {
 
@@ -295,8 +292,8 @@ class SendActivity : BaseActivity(), SendView {
                         assetBalance.getName() ?: "")
                 presenter.amount = BigDecimal.ZERO
             }
-        } else if (presenter.type == SendPresenter.Type.WAVES
-                && assetBalance.assetId.isWavesId()) {
+        } else if (presenter.type == SendPresenter.Type.WAVES &&
+                assetBalance.assetId.isWavesId()) {
             val total = BigDecimal.valueOf(amount - presenter.fee,
                     assetBalance.getDecimals())
             if (total.toFloat() > 0) {

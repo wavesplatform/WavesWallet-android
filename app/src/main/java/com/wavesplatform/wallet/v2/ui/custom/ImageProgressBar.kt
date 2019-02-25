@@ -18,7 +18,6 @@ import pers.victor.ext.dp2px
 import pers.victor.ext.findColorStateList
 import pers.victor.ext.findDrawable
 
-
 class ImageProgressBar : LinearLayout {
 
     private var imageProgress: AppCompatImageView = AppCompatImageView(app)
@@ -104,7 +103,6 @@ class ImageProgressBar : LinearLayout {
         animator?.interpolator = AccelerateInterpolator()
         animator?.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator) {
-
             }
 
             override fun onAnimationEnd(animation: Animator) {
@@ -114,11 +112,9 @@ class ImageProgressBar : LinearLayout {
             }
 
             override fun onAnimationCancel(animation: Animator) {
-
             }
 
             override fun onAnimationRepeat(animation: Animator) {
-
             }
         })
         animator?.start()

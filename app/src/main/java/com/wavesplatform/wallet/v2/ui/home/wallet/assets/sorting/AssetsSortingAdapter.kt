@@ -17,7 +17,6 @@ import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-
 class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<AssetSortingItem, BaseViewHolder>(null),
         ItemTouchHelperAdapter {
 
@@ -101,7 +100,6 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
                 // nothing
             }
         }
-
     }
 
     interface OnHiddenChangeListener {

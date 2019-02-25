@@ -95,8 +95,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             if (TransactionsBroadcastRequest.getAttachmentSize(tx.attachment)
                     > TransferTransactionRequest.MaxAttachmentSize) {
                 return R.string.attachment_too_long
-            } else
-                if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
+            } else if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
                     return R.string.invalid_amount
                 } else if (tx.fee <= 0 || (feeAsset.isWaves() && tx.fee < Constants.WAVES_MIN_FEE)) {
                     return R.string.insufficient_fee
@@ -104,10 +103,10 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     return R.string.insufficient_funds
                 } else if (isGatewayAmountError()) {
                     return R.string.insufficient_gateway_funds_error
-                } else if (Constants.MONERO_ASSET_ID == recipientAssetId
-                        && moneroPaymentId != null
-                        && (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH
-                                || moneroPaymentId!!.contains(" ".toRegex()))) {
+                } else if (Constants.MONERO_ASSET_ID == recipientAssetId &&
+                        moneroPaymentId != null &&
+                        (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH ||
+                                moneroPaymentId!!.contains(" ".toRegex()))) {
                     return R.string.invalid_monero_payment_id
                 }
         }
@@ -119,9 +118,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             val totalAmount = amount + gatewayCommission
             val balance = BigDecimal.valueOf(selectedAsset!!.balance ?: 0,
                     selectedAsset!!.getDecimals())
-            return !(balance >= totalAmount
-                    && totalAmount >= gatewayMin
-                    && totalAmount <= gatewayMax)
+            return !(balance >= totalAmount &&
+                    totalAmount >= gatewayMin &&
+                    totalAmount <= gatewayMax)
         }
         return false
     }
@@ -304,8 +303,8 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
             val addressBytes = Base58.decode(address)
 
-            if (addressBytes[0] != 1.toByte()
-                    || addressBytes[1] != EnvironmentManager.getNetCode()) {
+            if (addressBytes[0] != 1.toByte() ||
+                    addressBytes[1] != EnvironmentManager.getNetCode()) {
                 return false
             }
 

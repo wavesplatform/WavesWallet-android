@@ -19,7 +19,6 @@ class ConfirmationStartLeasingPresenter @Inject constructor() : BasePresenter<Co
     var amount: String = ""
     var fee = 0L
 
-
     fun startLeasing() {
         if (recipientIsAlias) {
             createLeasingRequest.recipient = address.makeAsAlias()

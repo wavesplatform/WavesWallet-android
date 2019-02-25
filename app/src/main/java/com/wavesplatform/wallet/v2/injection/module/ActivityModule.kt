@@ -116,7 +116,6 @@ abstract class ActivityModule {
     @ContributesAndroidInjector
     internal abstract fun backupPharseActivity(): BackupPhraseActivity
 
-
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun addAddressActivity(): AddAddressActivity

@@ -8,5 +8,4 @@ interface SpamService {
 
     @GET
     fun spamAssets(@Url url: String): Observable<String>
-
 }

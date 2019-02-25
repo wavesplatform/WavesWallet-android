@@ -10,7 +10,6 @@ class NetworkPresenter @Inject constructor() : BasePresenter<NetworkView>() {
     var spamUrlFieldValid: Boolean = false
     var spamFilterEnableValid: Boolean = false
 
-
     fun isAllFieldsValid(): Boolean {
         return spamUrlFieldValid || spamFilterEnableValid
     }
@@ -28,6 +27,4 @@ class NetworkPresenter @Inject constructor() : BasePresenter<NetworkView>() {
                     it.printStackTrace()
                 }))
     }
-
-
 }

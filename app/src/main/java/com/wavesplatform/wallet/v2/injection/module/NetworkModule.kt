@@ -51,9 +51,9 @@ class NetworkModule {
         return Interceptor { chain ->
             val originalResponse = chain.proceed(chain.request())
             if (originalResponse.request().url().url().toString()
-                            .contains(EnvironmentManager.get().current().globalConfiguration.servers.nodeUrl)
-                    && originalResponse.headers("Set-Cookie").isNotEmpty()
-                    && prefsUtil.getGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES).isEmpty()) {
+                            .contains(EnvironmentManager.get().current().globalConfiguration.servers.nodeUrl) &&
+                    originalResponse.headers("Set-Cookie").isNotEmpty() &&
+                    prefsUtil.getGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES).isEmpty()) {
                 val cookies = originalResponse.headers("Set-Cookie")
                         .toHashSet()
                 prefsUtil.setGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES, cookies)
@@ -81,12 +81,13 @@ class NetworkModule {
         }
     }
 
-
     @Singleton
     @Provides
-    internal fun provideOkHttpClient(cache: Cache, @Named("timeout") timeout: Int,
-                                     @Named("ReceivedCookiesInterceptor") receivedCookiesInterceptor: Interceptor,
-                                     @Named("AddCookiesInterceptor") addCookiesInterceptor: Interceptor
+    internal fun provideOkHttpClient(
+        cache: Cache,
+        @Named("timeout") timeout: Int,
+        @Named("ReceivedCookiesInterceptor") receivedCookiesInterceptor: Interceptor,
+        @Named("AddCookiesInterceptor") addCookiesInterceptor: Interceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
                 .cache(cache)
@@ -116,7 +117,6 @@ class NetworkModule {
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .create()
     }
-
 
     @Singleton
     @Named("NodeRetrofit")
@@ -179,7 +179,6 @@ class NetworkModule {
         RetrofitCache.getInstance().addRetrofit(retrofit)
         return retrofit
     }
-
 
     @Singleton
     @Named("ApiRetrofit")

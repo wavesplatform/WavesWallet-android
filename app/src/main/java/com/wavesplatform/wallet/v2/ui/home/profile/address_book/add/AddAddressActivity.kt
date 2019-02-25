@@ -31,7 +31,6 @@ import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import javax.inject.Inject
 
-
 class AddAddressActivity : BaseActivity(), AddAddressView {
     lateinit var validator: Validator
 
@@ -44,12 +43,10 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
 
     override fun configLayoutRes() = R.layout.activity_add_address
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
     }
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.add_address_toolbar_title), R.drawable.ic_toolbar_back_black)

@@ -18,7 +18,6 @@ import com.yarolegovich.slidingrootnav.callback.DragStateListener
 import kotlinx.android.synthetic.main.menu_left_drawer.view.*
 import pers.victor.ext.*
 
-
 abstract class BaseDrawerActivity : BaseActivity() {
 
     lateinit var slidingRootNav: SlidingRootNav
@@ -144,7 +143,6 @@ abstract class BaseDrawerActivity : BaseActivity() {
             openUrlWithChromeTab(Constants.URL_DISCORD)
         }
     }
-
 
     fun openReddit(url: String) {
         var intent: Intent? = null

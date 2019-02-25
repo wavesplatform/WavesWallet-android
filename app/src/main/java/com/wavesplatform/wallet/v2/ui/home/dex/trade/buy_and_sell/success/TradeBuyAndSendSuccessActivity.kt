@@ -11,7 +11,6 @@ import pers.victor.ext.click
 import pers.victor.ext.findColor
 import javax.inject.Inject
 
-
 class TradeBuyAndSendSuccessActivity : BaseActivity(), TradeBuyAndSendSucessView {
 
     @Inject
@@ -50,5 +49,4 @@ class TradeBuyAndSendSuccessActivity : BaseActivity(), TradeBuyAndSendSucessView
             finish()
         }
     }
-
 }

@@ -85,7 +85,6 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
         if (allMarketsList.isEmpty()) {
             return Observable.zip(apiService.loadGlobalConfiguration(EnvironmentManager.get().current().url)
@@ -169,8 +168,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                         .map {
                             val map = it.associateBy { it.id }
                             return@map map
-                        }
-                , Function3 { apiMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAsset>, dbMarkets: Map<String?, MarketResponse> ->
+                        }, Function3 { apiMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAsset>, dbMarkets: Map<String?, MarketResponse> ->
             val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
                 apiMarkets.filter { market -> spamAssets[market.amountAsset] == null && spamAssets[market.priceAsset] == null }
             } else {

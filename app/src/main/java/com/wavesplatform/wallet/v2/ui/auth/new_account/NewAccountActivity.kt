@@ -33,7 +33,6 @@ import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
-
 class NewAccountActivity : BaseActivity(), NewAccountView {
 
     @Inject

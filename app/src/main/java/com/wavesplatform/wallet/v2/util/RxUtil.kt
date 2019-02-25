@@ -15,25 +15,24 @@ object RxUtil {
         }
     }
 
-    fun <T> applyObservableDefaultSchedulers(): ObservableTransformer<T, T> {    //compose
+    fun <T> applyObservableDefaultSchedulers(): ObservableTransformer<T, T> { // compose
         return ObservableTransformer { observable ->
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
         }
     }
 
-    fun <T> applySingleDefaultSchedulers(): SingleTransformer<T, T> {    //compose
+    fun <T> applySingleDefaultSchedulers(): SingleTransformer<T, T> { // compose
         return SingleTransformer { observable ->
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
         }
     }
 
-    fun <T> applyFlowableDefaultSchedulers(): FlowableTransformer<T, T> {    //compose
+    fun <T> applyFlowableDefaultSchedulers(): FlowableTransformer<T, T> { // compose
         return FlowableTransformer { observable ->
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
         }
     }
-
 }

@@ -13,16 +13,16 @@ import com.wavesplatform.wallet.v2.util.arrayWithSize
 import com.wavesplatform.wallet.v2.util.clearAlias
 import java.nio.charset.Charset
 
-
 class TransactionsBroadcastRequest(
-        @SerializedName("assetId") var assetId: String,
-        @SerializedName("senderPublicKey") var senderPublicKey: String,
-        @SerializedName("recipient") var recipient: String,
-        @SerializedName("amount") var amount: Long,
-        @SerializedName("timestamp") var timestamp: Long,
-        @SerializedName("fee") var fee: Long,
-        @SerializedName("attachment") var attachment: String?,
-        @SerializedName("feeAssetId") var feeAssetId: String? = "") {
+    @SerializedName("assetId") var assetId: String,
+    @SerializedName("senderPublicKey") var senderPublicKey: String,
+    @SerializedName("recipient") var recipient: String,
+    @SerializedName("amount") var amount: Long,
+    @SerializedName("timestamp") var timestamp: Long,
+    @SerializedName("fee") var fee: Long,
+    @SerializedName("attachment") var attachment: String?,
+    @SerializedName("feeAssetId") var feeAssetId: String? = ""
+) {
 
     @SerializedName("type")
     val type: Int = 4

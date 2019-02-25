@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.activity_use_fingerprint.*
 import pers.victor.ext.click
 import javax.inject.Inject
 
-
 class UseFingerprintActivity : BaseActivity(), UseFingerprintView {
 
     @Inject

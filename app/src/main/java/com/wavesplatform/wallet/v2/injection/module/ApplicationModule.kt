@@ -12,5 +12,4 @@ abstract class ApplicationModule {
     @Binds
     @ApplicationContext
     internal abstract fun application(app: App): Context
-
 }

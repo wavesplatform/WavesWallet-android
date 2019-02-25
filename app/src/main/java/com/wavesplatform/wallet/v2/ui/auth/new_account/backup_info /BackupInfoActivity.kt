@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.activity_backup_info.*
 import pers.victor.ext.click
 import javax.inject.Inject
 
-
 class BackupInfoActivity : BaseActivity(), BackupInfoView {
 
     @Inject
@@ -29,7 +28,7 @@ class BackupInfoActivity : BaseActivity(), BackupInfoView {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
     }
-    
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         button_confirm.click {
             launchActivity<BackupPhraseActivity>(options = intent.extras)

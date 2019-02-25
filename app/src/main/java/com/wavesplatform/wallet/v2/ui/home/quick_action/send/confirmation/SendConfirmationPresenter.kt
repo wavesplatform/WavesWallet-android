@@ -21,8 +21,6 @@ import com.wavesplatform.wallet.v2.util.clearAlias
 import com.wavesplatform.wallet.v2.util.errorBody
 import com.wavesplatform.wallet.v2.util.isSmartError
 import com.wavesplatform.wallet.v2.util.makeAsAlias
-import pyxis.uzuki.live.richutilskt.utils.runAsync
-import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -43,7 +41,6 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var blockchainCommission = 0L
     var feeAsset: AssetBalance = Constants.defaultAssets[0]
 
-
     fun confirmSend() {
         val singed = signTransaction()
         if (singed != null) {
@@ -54,8 +51,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     fun getTicker(): String {
         return if (assetInfo == null) {
             ""
-        } else if (assetInfo!!.ticker.equals(null)
-                || assetInfo!!.ticker.equals("")) {
+        } else if (assetInfo!!.ticker.equals(null) ||
+                assetInfo!!.ticker.equals("")) {
             assetInfo!!.name
         } else {
             assetInfo!!.ticker ?: ""
@@ -141,7 +138,6 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         val assetId = selectedAsset!!.assetId
         val currencyTo = Constants.coinomatCryptoCurrencies[assetId]
 
-
         if (currencyTo.isNullOrEmpty()) {
             viewState.onShowError(R.string.receive_error_network)
             return
@@ -149,8 +145,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
 
         val currencyFrom = "${EnvironmentManager.getNetCode().toChar()}$currencyTo"
 
-        val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY
-                && !this.moneroPaymentId.isNullOrEmpty()) {
+        val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY &&
+                !this.moneroPaymentId.isNullOrEmpty()) {
             this.moneroPaymentId
         } else {
             null

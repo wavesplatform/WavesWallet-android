@@ -14,12 +14,14 @@ import kotlinx.android.synthetic.main.dex_markets_info_bottom_sheet_dialog_layou
 import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
 
-
 class DexMarketInformationBottomSheetFragment : BaseBottomSheetDialogFragment() {
     private var market: MarketResponse? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val rootView = inflater.inflate(R.layout.dex_markets_info_bottom_sheet_dialog_layout, container, false)
 
