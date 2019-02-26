@@ -145,19 +145,19 @@ class EnvironmentManager {
         }
 
         val netCode: Byte
-            get() = environment!!.configuration!!.scheme[0].toByte()
+            get() = environment.configuration!!.scheme[0].toByte()
 
         val globalConfiguration: GlobalConfiguration
-            get() = environment!!.configuration!!
+            get() = environment.configuration!!
 
         val name: String
-            get() = environment!!.name
+            get() = environment.name
 
         val servers: GlobalConfiguration.Servers
-            get() = environment!!.configuration!!.servers
+            get() = environment.configuration!!.servers
 
-        val environment: Environment?
-            get() = instance!!.current
+        val environment: Environment
+            get() = instance!!.current!!
 
         private fun restartApp() {
             handler.postDelayed({
