@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.data.helpers
 
-import android.util.Log
 import com.vicpin.krealmextensions.RealmConfigStore
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.saveAll
@@ -13,12 +12,16 @@ import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.util.MigrationUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import timber.log.Timber
 import javax.inject.Inject
 
 class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil, var nodeDataManager: NodeDataManager) {
+
+    private lateinit var disposable: Disposable
 
     fun configureDB(address: String?, guid: String) {
 
@@ -55,10 +58,10 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil, var nodeD
 
     private fun saveDefaultAssets() {
         val list = mutableListOf<String>()
-        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
             list.add(asset.assetId)
         }
-        nodeDataManager.apiDataManager.assetsInfoByIds(list)
+        disposable = nodeDataManager.apiDataManager.assetsInfoByIds(list)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ list ->
@@ -71,10 +74,13 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil, var nodeD
                                         decimals = assetInfo.precision,
                                         quantity = assetInfo.quantity,
                                         timestamp = assetInfo.timestamp.time),
-                                isGateway = EnvironmentManager.findAssetIdByAssetId(assetInfo.id).isGateway)
+                                isGateway = EnvironmentManager
+                                        .findAssetIdByAssetId(assetInfo.id)?.isGateway ?: false)
 
                         val listToSave = arrayListOf<AssetBalance>()
-                        val asset = queryFirst<AssetBalance> { equalTo("assetId", assetInfo.id) }
+                        val asset = queryFirst<AssetBalance> {
+                            equalTo("assetId", assetInfo.id)
+                        }
                         if (asset == null) {
                             listToSave.add(assetBalance)
                         }
@@ -83,8 +89,10 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil, var nodeD
                         }
                     }
                     prefsUtil.setValue(PrefsUtil.KEY_DEFAULT_ASSETS, true)
+                    disposable.dispose()
                 }, { error ->
-                    Log.d("AuthHelper", "saveDefaultAssets: error")
+                    Timber.d("AuthHelper:saveDefaultAssets: ${error.localizedMessage}")
+                    disposable.dispose()
                 })
     }
 }

@@ -153,7 +153,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             showBackUpSeedWarning()
             val values = Bundle()
             values.put("wallets_count", prefsUtil.getGlobalValueList(
-                    EnvironmentManager.getName()
+                    EnvironmentManager.name
                             + PrefsUtil.LIST_WALLET_GUIDS).size.toString())
             Analytics.sendEvent(firebaseAnalytics, "new_wallet", values)
         }

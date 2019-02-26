@@ -119,7 +119,7 @@ object Constants {
     }
 
     fun findByGatewayId(gatewayId: String): AssetBalance? { // ticker
-        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
             if (asset.gatewayId == gatewayId) {
                 return find(asset.assetId)
             }
@@ -129,7 +129,7 @@ object Constants {
 
     fun defaultAssetsAvatar(): HashMap<String, String> {
         val map = hashMapOf<String, String>()
-        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
             map[asset.assetId] = asset.iconUrls.default
         }
         return map
@@ -137,7 +137,7 @@ object Constants {
 
     fun coinomatCryptoCurrencies(): HashMap<String, String> {
         val map = hashMapOf<String, String>()
-        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
             if (asset.isGateway) {
                 map[asset.assetId] = asset.gatewayId
             }
@@ -147,7 +147,7 @@ object Constants {
 
     fun defaultCrypto(): Array<String> {
         val list = mutableListOf<String>()
-        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
             if (!asset.isFiat) {
                 list.add(asset.assetId)
             }
@@ -157,7 +157,7 @@ object Constants {
 
     fun defaultFiat(): Array<String> {
         val list = mutableListOf<String>()
-        for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
             if (asset.isFiat) {
                 list.add(asset.assetId)
             }

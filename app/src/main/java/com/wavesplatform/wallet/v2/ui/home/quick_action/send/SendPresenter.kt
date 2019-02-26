@@ -268,7 +268,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
         fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
-            for (asset in EnvironmentManager.getGlobalConfiguration().generalAssetIds) {
+            for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
                 if (recipient!!.matches("${asset.addressRegEx}$".toRegex())) {
 
                     // todo check btc bsl bitcoincash same regexp
@@ -301,7 +301,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             val addressBytes = Base58.decode(address)
 
             if (addressBytes[0] != 1.toByte()
-                    || addressBytes[1] != EnvironmentManager.getNetCode()) {
+                    || addressBytes[1] != EnvironmentManager.netCode) {
                 return false
             }
 

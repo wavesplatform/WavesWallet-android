@@ -74,7 +74,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
             return apiService.assetsInfoByIds(ids)
                     .map { response ->
                         val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
-                            val defaultGeneralAssetId = EnvironmentManager.getGlobalConfiguration()
+                            val defaultGeneralAssetId = EnvironmentManager.globalConfiguration
                                     .generalAssetIds.firstOrNull {
                                 it.assetId == assetInfoData.assetInfo.id
                             }

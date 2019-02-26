@@ -73,7 +73,7 @@ public class NodeManager {
 
         gson = new GsonBuilder().registerTypeAdapterFactory(typeFactory).create();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(EnvironmentManager.getServers().getNodeUrl())
+                .baseUrl(EnvironmentManager.Companion.getServers().getNodeUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();

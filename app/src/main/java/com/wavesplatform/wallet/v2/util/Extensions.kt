@@ -759,7 +759,7 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 }
 
 fun isShowTicker(assetId: String?): Boolean {
-    return EnvironmentManager.getGlobalConfiguration().generalAssetIds.any {
+    return EnvironmentManager.globalConfiguration.generalAssetIds.any {
         it.assetId == assetId || assetId.isNullOrEmpty()
     }
 }

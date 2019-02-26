@@ -88,7 +88,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
         if (allMarketsList.isEmpty()) {
-            return Observable.zip(apiService.loadGlobalConfiguration(EnvironmentManager.getEnvironment().url)
+            return Observable.zip(apiService.loadGlobalConfiguration(EnvironmentManager.environment.url)
                     .map {
                         val globalAssets = it.generalAssetIds.toMutableList()
                         globalAssets.add(Constants.MRTGeneralAsset)

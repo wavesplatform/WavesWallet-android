@@ -52,7 +52,7 @@ public class App extends DaggerApplication {
 
     @Override
     public void onCreate() {
-        EnvironmentManager.init(this);
+        EnvironmentManager.Companion.init(this);
         super.onCreate();
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
@@ -107,7 +107,7 @@ public class App extends DaggerApplication {
             }
         });
 
-        EnvironmentManager.updateConfiguration(matcherDataManager);
+        EnvironmentManager.Companion.updateConfiguration(matcherDataManager);
     }
 
     public static Context getAppContext() {

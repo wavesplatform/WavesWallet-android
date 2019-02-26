@@ -145,7 +145,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             return
         }
 
-        val currencyFrom = "${EnvironmentManager.getNetCode().toChar()}$currencyTo"
+        val currencyFrom = "${EnvironmentManager.netCode.toChar()}$currencyTo"
 
         val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY
                 && !this.moneroPaymentId.isNullOrEmpty()) {
