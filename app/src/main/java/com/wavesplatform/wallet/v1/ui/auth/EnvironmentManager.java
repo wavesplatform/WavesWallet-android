@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.wavesplatform.wallet.App;
@@ -49,22 +50,34 @@ public class EnvironmentManager {
     public static void init(Application application) {
         instance = new EnvironmentManager();
         instance.application = application;
-        instance.current = Environment.find(getEnvironmentName());
+
+        String envName = getEnvironmentName();
+        if (!TextUtils.isEmpty(envName)) {
+            for (Environment environment : Environment.environments) {
+                if (envName.equalsIgnoreCase(environment.name)) {
+                    SharedPreferences preferenceManager = PreferenceManager
+                            .getDefaultSharedPreferences(instance.application);
+                    String json = preferenceManager.getString(
+                            PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                            EnvironmentConstants.MAIN_NET_JSON);
+                    environment.setConfiguration(new Gson().fromJson(json, GlobalConfiguration.class));
+                    instance.current =  environment;
+                }
+            }
+        }
     }
 
     public static HostSelectionInterceptor createHostInterceptor() {
-        instance.interceptor = new HostSelectionInterceptor(instance.current.configuration.getServers());
+        instance.interceptor = new HostSelectionInterceptor(getEnvironment().configuration.getServers());
         return instance.interceptor;
     }
 
     public static void updateConfiguration(MatcherDataManager matcherDataManager) {
-        instance.disposable = matcherDataManager.apiService.loadGlobalConfiguration(instance.current.url)
+        instance.disposable = matcherDataManager.apiService.loadGlobalConfiguration(getEnvironment().url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(globalConfiguration -> {
-
                     instance.interceptor.setHosts(globalConfiguration.getServers());
-
                     SharedPreferences preferenceManager = PreferenceManager
                             .getDefaultSharedPreferences(App.getAppContext());
                     SharedPreferences.Editor editor = preferenceManager.edit();
@@ -83,10 +96,10 @@ public class EnvironmentManager {
     public static void setCurrentEnvironment(Environment current) {
         PreferenceManager.getDefaultSharedPreferences(App.getAppContext())
                 .edit()
-                .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.getName())
+                .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.name)
                 .remove(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA)
                 .apply();
-        handler.postDelayed(EnvironmentManager::restartApp, 500);
+        restartApp();
     }
 
     public static String getEnvironmentName() {
@@ -97,23 +110,28 @@ public class EnvironmentManager {
     }
 
     public static GlobalConfiguration.GeneralAssetId findAssetIdByAssetId(@NotNull String assetId) {
-        return instance.current.findAssetByAssetId(assetId);
+        for (GlobalConfiguration.GeneralAssetId asset : instance.current.configuration.getGeneralAssetIds()) {
+            if (asset.getAssetId().equals(assetId)) {
+                return asset;
+            }
+        }
+        return null;
     }
 
     public static byte getNetCode() {
-        return instance.current.getNetCode();
+        return (byte) getEnvironment().configuration.getScheme().charAt(0);
     }
 
     public static GlobalConfiguration getGlobalConfiguration() {
-        return instance.current.getGlobalConfiguration();
+        return getEnvironment().configuration;
     }
 
     public static String getName() {
-        return instance.current.name;
+        return getEnvironment().name;
     }
 
     public static GlobalConfiguration.Servers getServers() {
-        return instance.current.getGlobalConfiguration().getServers();
+        return getEnvironment().configuration.getServers();
     }
 
     public static Environment getEnvironment() {
@@ -121,13 +139,16 @@ public class EnvironmentManager {
     }
 
     private static void restartApp() {
-        PackageManager packageManager = App.getAppContext().getPackageManager();
-        Intent intent = packageManager.getLaunchIntentForPackage(App.getAppContext().getPackageName());
-        assert intent != null;
-        ComponentName componentName = intent.getComponent();
-        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
-        App.getAppContext().startActivity(mainIntent);
-        System.exit(0);
+        handler.postDelayed(() -> {
+            PackageManager packageManager = App.getAppContext().getPackageManager();
+            Intent intent = packageManager.getLaunchIntentForPackage(App.getAppContext().getPackageName());
+            if (intent != null) {
+                ComponentName componentName = intent.getComponent();
+                Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                App.getAppContext().startActivity(mainIntent);
+                System.exit(0);
+            }
+        }, 300);
     }
 
     public static class Environment {
@@ -135,11 +156,12 @@ public class EnvironmentManager {
         private String name;
         private String url;
         private GlobalConfiguration configuration;
+
+        static List<Environment> environments = new ArrayList<>();
         public static Environment TEST_NET = new Environment(
                 KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, EnvironmentConstants.TEST_NET_JSON);
         public static Environment MAIN_NET = new Environment(
                 KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, EnvironmentConstants.MAIN_NET_JSON);
-        static List<Environment> environments = new ArrayList<>();
 
         static {
             environments.add(TEST_NET);
@@ -156,46 +178,8 @@ public class EnvironmentManager {
             this.configuration = configuration;
         }
 
-        public String getName() {
-            return name;
-        }
-
         public String getUrl() {
             return url;
-        }
-
-        GlobalConfiguration getGlobalConfiguration() {
-            return configuration;
-        }
-
-        public byte getNetCode() {
-            return (byte) configuration.getScheme().charAt(0);
-        }
-
-        GlobalConfiguration.GeneralAssetId findAssetByAssetId(String assetId) {
-            for (GlobalConfiguration.GeneralAssetId asset : configuration.getGeneralAssetIds()) {
-                if (asset.getAssetId().equals(assetId)) {
-                    return asset;
-                }
-            }
-            return null;
-        }
-
-        static Environment find(String name) {
-            if (name != null) {
-                for (Environment environment : environments) {
-                    if (name.equalsIgnoreCase(environment.getName())) {
-                        SharedPreferences preferenceManager = PreferenceManager
-                                .getDefaultSharedPreferences(instance.application);
-                        String json = preferenceManager.getString(
-                                PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
-                                EnvironmentConstants.MAIN_NET_JSON);
-                        environment.setConfiguration(new Gson().fromJson(json, GlobalConfiguration.class));
-                        return environment;
-                    }
-                }
-            }
-            return null;
         }
     }
 }
