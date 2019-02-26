@@ -270,24 +270,11 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
             for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
                 if (recipient!!.matches("${asset.addressRegEx}$".toRegex())) {
-
-                    // todo check btc bsl bitcoincash same regexp
-                    /*if (assetBalance != null) {
-                        when {
-                            assetBalance.assetId == Constants.BITCOIN_ASSET_ID ->
-                                Constants.BITCOIN_ASSET_ID
-                            assetBalance.assetId == Constants.BITCOINCASH_ASSET_ID ->
-                                Constants.BITCOINCASH_ASSET_ID
-                            assetBalance.assetId == Constants.BITCOIN_SV_ASSET_ID ->
-                                Constants.BITCOIN_SV_ASSET_ID
-                            else -> null
-                        }
+                    return if (assetBalance != null) {
+                        asset.assetId
                     } else {
                         null
-                    }*/
-
-
-                    return asset.assetId
+                    }
                 }
             }
             return null
