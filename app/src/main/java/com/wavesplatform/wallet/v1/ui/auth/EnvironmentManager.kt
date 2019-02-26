@@ -1,10 +1,7 @@
 package com.wavesplatform.wallet.v1.ui.auth
 
 import android.app.Application
-import android.content.ComponentName
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.os.Handler
 import android.preference.PreferenceManager
 import android.text.TextUtils
@@ -12,7 +9,7 @@ import android.text.TextUtils
 import com.google.gson.Gson
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager
+import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.injection.module.HostSelectionInterceptor
 
@@ -93,12 +90,12 @@ class EnvironmentManager {
         }
 
         fun createHostInterceptor(): HostSelectionInterceptor {
-            instance!!.interceptor = HostSelectionInterceptor(environment!!.configuration!!.servers)
+            instance!!.interceptor = HostSelectionInterceptor(environment.configuration!!.servers)
             return instance!!.interceptor!!
         }
 
-        fun updateConfiguration(matcherDataManager: MatcherDataManager) {
-            instance!!.disposable = matcherDataManager.apiService.loadGlobalConfiguration(environment!!.url)
+        fun updateConfiguration(githubDataManager: GithubDataManager) {
+            instance!!.disposable = githubDataManager.globalConfiguration(EnvironmentManager.environment.url)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ globalConfiguration ->

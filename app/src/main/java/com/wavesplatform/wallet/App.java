@@ -21,9 +21,8 @@ import com.wavesplatform.wallet.v1.util.ApplicationLifeCycle;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
-import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager;
+import com.wavesplatform.wallet.v2.data.manager.GithubDataManager;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
-import com.wavesplatform.wallet.v2.data.remote.ApiService;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
 import com.wavesplatform.wallet.v2.util.Analytics;
 
@@ -44,7 +43,7 @@ public class App extends DaggerApplication {
     @Inject
     AuthHelper authHelper;
     @Inject
-    MatcherDataManager matcherDataManager;
+    GithubDataManager githubDataManager;
     private static Context sContext;
     private static AccessManager accessManager;
     private LocalizationApplicationDelegate localizationDelegate
@@ -107,7 +106,7 @@ public class App extends DaggerApplication {
             }
         });
 
-        EnvironmentManager.Companion.updateConfiguration(matcherDataManager);
+        EnvironmentManager.Companion.updateConfiguration(githubDataManager);
     }
 
     public static Context getAppContext() {

@@ -150,11 +150,11 @@ class NetworkModule {
     }
 
     @Singleton
-    @Named("SpamRetrofit")
+    @Named("GithubRetrofit")
     @Provides
-    internal fun provideSpamRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
+    internal fun provideGithubRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(Constants.URL_SPAM)
+                .baseUrl(Constants.URL_GITHUB_PROXY)
                 .client(httpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
@@ -217,8 +217,8 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    internal fun provideSpamService(@Named("SpamRetrofit") retrofit: Retrofit): SpamService {
-        return retrofit.create(SpamService::class.java)
+    internal fun provideGithubService(@Named("GithubRetrofit") retrofit: Retrofit): GithubService {
+        return retrofit.create(GithubService::class.java)
     }
 
     @Singleton

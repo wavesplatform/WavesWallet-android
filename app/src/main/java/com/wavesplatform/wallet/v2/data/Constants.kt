@@ -12,13 +12,12 @@ object Constants {
 
     // Production
     const val URL_COINOMAT = "https://coinomat.com/api/"
-    const val URL_SPAM = "https://github-proxy.wvservices.com/wavesplatform/waves-community/master/"
-    const val URL_SPAM_FILE = "https://github-proxy.wvservices.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv"
     const val URL_WAVES_FORUM = "https://forum.wavesplatform.com/"
     const val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
     const val URL_WHITEPAPER = "https://wavesplatform.com/files/whitepaper_v0.pdf"
     const val URL_TELEGRAM = "https://telegram.me/wavesnews"
     const val URL_GITHUB = "https://github.com/wavesplatform/"
+    const val URL_GITHUB_PROXY = "https://github-proxy.wvservices.com"
     const val URL_TWITTER = "https://twitter.com/wavesplatform"
     const val URL_FACEBOOK = "https://www.facebook.com/wavesplatform"
     const val URL_DISCORD = "https://discordapp.com/invite/cnFmDyA"
