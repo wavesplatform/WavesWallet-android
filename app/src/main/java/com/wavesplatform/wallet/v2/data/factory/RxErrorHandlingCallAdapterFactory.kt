@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.data.factory
 
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
+import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -46,15 +47,15 @@ class RxErrorHandlingCallAdapterFactory(private val mErrorManager: ErrorManager)
         private fun handleErrorToShow(throwable: Throwable, retrySubject: PublishSubject<Events.RetryEvent>): RetrofitException {
             val retrofitException = asRetrofitException(throwable)
             mErrorManager.handleError(retrofitException, retrySubject)
+            SentryHelper.logException(retrofitException)
             return retrofitException
         }
 
-
         private fun convert(o: Any): Observable<*> {
-            if (o is Completable)
-                return o.toObservable<Any>()
+            return if (o is Completable)
+                o.toObservable<Any>()
             else
-                return o as Observable<*>
+                o as Observable<*>
         }
 
         fun asRetrofitException(throwable: Throwable): RetrofitException {
