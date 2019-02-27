@@ -2,13 +2,11 @@ package com.wavesplatform.sdk.utils
 
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.AssetInfo
-
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.NumberFormat
-import java.util.ArrayList
-import java.util.Locale
+import java.util.*
 
 class MoneyUtil private constructor() {
     private val wavesFormat: DecimalFormat
@@ -28,12 +26,13 @@ class MoneyUtil private constructor() {
 
     companion object {
 
+        val ONE_B = BigDecimal(1000000000)
         val ONE_M = BigDecimal(1000000)
         val ONE_K = BigDecimal(1000)
 
         private val instance = MoneyUtil()
 
-        private val defaultSeparator: String? = null
+        const val DEFAULT_SEPARATOR_THIN_SPACE = '\u2009'
 
         fun createFormatter(decimals: Int): DecimalFormat {
             val formatter = NumberFormat.getInstance(Locale.US) as DecimalFormat
@@ -52,11 +51,11 @@ class MoneyUtil private constructor() {
         }
 
         fun getScaledText(amount: Long, decimals: Int): String {
-            try {
-                return get().getFormatter(decimals).format(
+            return try {
+                get().getFormatter(decimals).format(
                         BigDecimal.valueOf(amount, decimals))
             } catch (e: Exception) {
-                return get().getFormatter(8).format(
+                get().getFormatter(8).format(
                         BigDecimal.valueOf(amount, decimals))
             }
 

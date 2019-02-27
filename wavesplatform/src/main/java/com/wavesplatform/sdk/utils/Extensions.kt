@@ -27,7 +27,7 @@ fun ByteArray.arrayWithSize(): ByteArray {
 }
 
 fun String.clearBalance(): String {
-    return this.stripZeros().replace(",", "")
+    return this.stripZeros().replace(MoneyUtil.DEFAULT_SEPARATOR_THIN_SPACE.toString(), "")
 }
 
 fun Transaction.transactionType(): TransactionType {
@@ -94,9 +94,11 @@ fun getScaledAmount(amount: Long, decimals: Int): String {
     val sign = if (amount < 0) "-" else ""
 
     return sign + when {
-        value >= MoneyUtil.ONE_M -> value.divide(MoneyUtil.ONE_M, 1, RoundingMode.HALF_EVEN)
+        value >= MoneyUtil.ONE_B -> value.divide(MoneyUtil.ONE_B, 1, RoundingMode.FLOOR)
+                .toPlainString().stripZeros() + "B"
+        value >= MoneyUtil.ONE_M -> value.divide(MoneyUtil.ONE_M, 1, RoundingMode.FLOOR)
                 .toPlainString().stripZeros() + "M"
-        value >= MoneyUtil.ONE_K -> value.divide(MoneyUtil.ONE_K, 1, RoundingMode.HALF_EVEN)
+        value >= MoneyUtil.ONE_K -> value.divide(MoneyUtil.ONE_K, 1, RoundingMode.FLOOR)
                 .toPlainString().stripZeros() + "k"
         else -> MoneyUtil.createFormatter(decimals).format(BigDecimal.valueOf(absAmount, decimals))
                 .stripZeros() + ""

@@ -2,22 +2,22 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.Hash
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
-import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.sdk.model.request.TransactionsBroadcastRequest
 import com.wavesplatform.sdk.model.request.TransferTransactionRequest
 import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.TransactionUtil.Companion.countCommission
 import com.wavesplatform.sdk.utils.isValidAddress
 import com.wavesplatform.sdk.utils.isWaves
+import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.isSpamConsidered
 import io.reactivex.Observable
@@ -131,13 +131,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return if (isSameSendingAndFeeAssets()) {
             tx.amount + tx.fee <= selectedAsset!!.getAvailableBalance()
         } else {
-            val validFee = if (tx.feeAssetId?.isWaves() == true) {
-                tx.fee <= queryFirst<AssetBalance> {
+            val validFee = if (tx.feeAssetId.isWaves()) {
+                tx.fee <= queryFirst<AssetBalanceDb> {
                     equalTo("assetId", "") }?.convertFromDb()?.balance ?: 0
             } else {
                 true
             }
-
             tx.amount <= selectedAsset!!.balance!! && validFee
         }
     }

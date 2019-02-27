@@ -22,7 +22,6 @@ import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_trade_order.*
-import kotlinx.android.synthetic.main.transient_notification.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import java.math.BigDecimal
