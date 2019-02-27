@@ -44,14 +44,14 @@ public class App extends DaggerApplication {
     AuthHelper authHelper;
     @Inject
     GithubDataManager githubDataManager;
-    private static Context sContext;
+    private static App application;
     private static AccessManager accessManager;
     private LocalizationApplicationDelegate localizationDelegate
             = new LocalizationApplicationDelegate(this);
 
     @Override
     public void onCreate() {
-        EnvironmentManager.Companion.init(this);
+        EnvironmentManager.init(this);
         super.onCreate();
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
@@ -61,7 +61,7 @@ public class App extends DaggerApplication {
         Analytics.appsFlyerInit(this);
         FirebaseApp.initializeApp(this);
         Fabric.with(this, new Crashlytics());
-        sContext = this;
+        application = this;
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
         Realm.init(this);
@@ -106,11 +106,11 @@ public class App extends DaggerApplication {
             }
         });
 
-        EnvironmentManager.Companion.updateConfiguration(githubDataManager);
+        EnvironmentManager.updateConfiguration(githubDataManager);
     }
 
     public static Context getAppContext() {
-        return sContext;
+        return application;
     }
 
     public static AccessManager getAccessManager() {

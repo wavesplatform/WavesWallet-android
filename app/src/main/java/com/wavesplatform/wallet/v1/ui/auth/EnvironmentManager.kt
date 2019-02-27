@@ -69,6 +69,7 @@ class EnvironmentManager {
         private var instance: EnvironmentManager? = null
         private val handler = Handler()
 
+        @JvmStatic
         fun init(application: Application) {
             instance = EnvironmentManager()
             instance!!.application = application
@@ -95,7 +96,12 @@ class EnvironmentManager {
             return instance!!.interceptor!!
         }
 
+        @JvmStatic
         fun updateConfiguration(githubDataManager: GithubDataManager) {
+            if (instance == null) {
+                throw NullPointerException("EnvironmentManager must be init first!")
+            }
+
             instance!!.disposable = githubDataManager.globalConfiguration(EnvironmentManager.environment.url)
                     .map { globalConfiguration ->
                         instance!!.interceptor!!.setHosts(globalConfiguration.servers)
@@ -188,6 +194,7 @@ class EnvironmentManager {
         val name: String
             get() = environment.name
 
+        @JvmStatic
         val servers: GlobalConfiguration.Servers
             get() = environment.configuration!!.servers
 
