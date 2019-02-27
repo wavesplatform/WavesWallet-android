@@ -15,7 +15,7 @@ class ChooseAccountPresenter @Inject constructor() : BasePresenter<ChooseAccount
     fun getAddresses() {
         val list = arrayListOf<AddressBookUser>()
         val guids = prefsUtil.getGlobalValueList(
-                EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS)
+                EnvironmentManager.name + PrefsUtil.LIST_WALLET_GUIDS)
         val wallets = ArrayList<WalletItem>()
         for (i in guids.indices) {
             val pubKey = prefsUtil.getGlobalValue(guids[i] + PrefsUtil.KEY_PUB_KEY, "")

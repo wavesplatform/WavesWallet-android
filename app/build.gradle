@@ -195,6 +195,9 @@ dependencies {
     debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'
     releaseImplementation 'com.github.markzhai:blockcanary-no-op:1.5.0'
 
+    implementation 'io.sentry:sentry-android:1.7.16'
+    implementation 'org.slf4j:slf4j-nop:1.7.25'
+
     // OkHttp
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
     implementation('com.github.ihsanbal:LoggingInterceptor:3.0.0') {

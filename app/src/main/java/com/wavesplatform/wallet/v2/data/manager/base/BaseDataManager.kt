@@ -14,7 +14,7 @@ open class BaseDataManager @Inject constructor() {
     @Inject
     lateinit var apiService: ApiService
     @Inject
-    lateinit var spamService: SpamService
+    lateinit var githubService: GithubService
     @Inject
     lateinit var coinomatService: CoinomatService
     @Inject

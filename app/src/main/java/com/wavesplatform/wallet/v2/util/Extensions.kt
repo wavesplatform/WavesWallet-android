@@ -52,11 +52,14 @@ import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import okhttp3.Response
+import okhttp3.ResponseBody
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
@@ -687,7 +690,7 @@ fun findMyOrder(first: Order, second: Order, address: String?): Order {
 
 fun loadDbWavesBalance(): AssetBalance {
     return queryFirst<AssetBalance> { equalTo("assetId", "") }
-            ?: Constants.defaultAssets[0]
+            ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 }
 
 fun Throwable.errorBody(): ErrorResponse? {
@@ -696,6 +699,11 @@ fun Throwable.errorBody(): ErrorResponse? {
     } else {
         null
     }
+}
+
+fun ResponseBody.clone(): ResponseBody {
+    var bufferClone = this.source().buffer()?.clone()
+    return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone);
 }
 
 fun ErrorResponse.isSmartError(): Boolean {
@@ -763,7 +771,7 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 }
 
 fun isShowTicker(assetId: String?): Boolean {
-    return Constants.defaultAssets.any {
+    return EnvironmentManager.globalConfiguration.generalAssetIds.any {
         it.assetId == assetId || assetId.isNullOrEmpty()
     }
 }

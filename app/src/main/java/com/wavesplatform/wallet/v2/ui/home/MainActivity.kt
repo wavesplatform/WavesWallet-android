@@ -27,7 +27,6 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
-import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.remote.response.News
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
@@ -154,7 +153,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             showBackUpSeedWarning()
             val values = Bundle()
             values.put("wallets_count", prefsUtil.getGlobalValueList(
-                    EnvironmentManager.get().current().getName()
+                    EnvironmentManager.name
                             + PrefsUtil.LIST_WALLET_GUIDS).size.toString())
             Analytics.sendEvent(firebaseAnalytics, "new_wallet", values)
         }
