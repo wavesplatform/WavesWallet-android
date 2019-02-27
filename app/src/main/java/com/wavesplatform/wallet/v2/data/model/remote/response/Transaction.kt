@@ -149,6 +149,11 @@ open class Transaction(
         return 0
     }
 
+    fun isSponsorshipTransaction(): Boolean {
+        return transactionType() == TransactionType.RECEIVE_SPONSORSHIP_TYPE &&
+                transactionType() == TransactionType.CANCEL_SPONSORSHIP_TYPE
+    }
+
     companion object {
 
         const val GENESIS = 1
