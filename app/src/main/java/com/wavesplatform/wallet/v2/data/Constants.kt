@@ -6,7 +6,6 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
-import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 
 object Constants {
 
@@ -146,8 +145,8 @@ object Constants {
 
     fun defaultCrypto(): Array<String> {
         val list = mutableListOf<String>()
-        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
-            if (!asset.isFiat) {
+        for (asset in EnvironmentManager.defaultAssets) {
+            if (!asset.isFiatMoney) {
                 list.add(asset.assetId)
             }
         }
@@ -156,8 +155,8 @@ object Constants {
 
     fun defaultFiat(): Array<String> {
         val list = mutableListOf<String>()
-        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
-            if (asset.isFiat) {
+        for (asset in EnvironmentManager.defaultAssets) {
+            if (asset.isFiatMoney) {
                 list.add(asset.assetId)
             }
         }

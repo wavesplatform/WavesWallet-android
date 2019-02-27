@@ -133,10 +133,10 @@ class AssetAvatarView : AppCompatImageView {
     * Setup view with values
     * */
     private fun setValues(assetId: String, name: String, isSponsoredAsset: Boolean) {
-        val avatar = if (WCTGeneralAsset.assetId == assetId) {
-            R.drawable.ic_logo_wct_48
-        } else {
-            Constants.defaultAssetsAvatar()[assetId]
+        val avatar = when (assetId) {
+            WCTGeneralAsset.assetId -> R.drawable.ic_logo_wct_48
+            "" -> Constants.defaultAssetsAvatar()["WAVES"]
+            else -> Constants.defaultAssetsAvatar()[assetId]
         }
 
         val color = getPlaceholderColorFromAssetName(name)

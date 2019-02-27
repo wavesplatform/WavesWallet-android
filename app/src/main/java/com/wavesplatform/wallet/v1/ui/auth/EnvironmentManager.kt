@@ -5,20 +5,20 @@ import android.content.Intent
 import android.os.Handler
 import android.preference.PreferenceManager
 import android.text.TextUtils
-
 import com.google.gson.Gson
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
+import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 import com.wavesplatform.wallet.v2.injection.module.HostSelectionInterceptor
-
-import java.util.ArrayList
-
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import java.util.*
 
 class EnvironmentManager {
 
@@ -96,21 +96,58 @@ class EnvironmentManager {
 
         fun updateConfiguration(githubDataManager: GithubDataManager) {
             instance!!.disposable = githubDataManager.globalConfiguration(EnvironmentManager.environment.url)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ globalConfiguration ->
+                    .map { globalConfiguration ->
                         instance!!.interceptor!!.setHosts(globalConfiguration.servers)
-                        val preferenceManager = PreferenceManager
+                        PreferenceManager
                                 .getDefaultSharedPreferences(App.getAppContext())
-                        val editor = preferenceManager.edit()
-                        editor.putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
-                                Gson().toJson(globalConfiguration))
+                                .edit()
+                                .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                                        Gson().toJson(globalConfiguration))
                                 .apply()
                         instance!!.current!!.setConfiguration(globalConfiguration)
+
+                        val list = mutableListOf<String>()
+                        for (asset in globalConfiguration.generalAssetIds) {
+                            list.add(asset.assetId)
+                        }
+                        list
+                    }
+                    .flatMap { githubDataManager.apiService.assetsInfoByIds(it) }
+                    .map { info ->
+                        defaultAssets.clear()
+                        for (assetInfo in info.data) {
+                            val assetBalance = AssetBalance(
+                                    assetId = if (assetInfo.assetInfo.id == "WAVES") {
+                                        Constants.WAVES_ASSET_ID
+                                    } else {
+                                        assetInfo.assetInfo.id
+                                    },
+                                    quantity = assetInfo.assetInfo.quantity,
+                                    isFavorite = assetInfo.assetInfo.id == "WAVES",
+                                    issueTransaction = IssueTransaction(
+                                            id = assetInfo.assetInfo.id,
+                                            name = assetInfo.assetInfo.name,
+                                            decimals = assetInfo.assetInfo.precision,
+                                            quantity = assetInfo.assetInfo.quantity,
+                                            timestamp = assetInfo.assetInfo.timestamp.time),
+                                    isGateway = findAssetIdByAssetId(assetInfo.assetInfo.id)?.isGateway
+                                            ?: false)
+                            defaultAssets.add(assetBalance)
+                        }
+                    }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
                         instance!!.disposable!!.dispose()
                     }, { error ->
                         Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration")
                         error.printStackTrace()
+                        PreferenceManager
+                                .getDefaultSharedPreferences(App.getAppContext())
+                                .edit()
+                                .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                                        Gson().toJson(EnvironmentConstants.MAIN_NET_JSON))
+                                .apply()
                         instance!!.disposable!!.dispose()
                     })
         }
@@ -132,7 +169,7 @@ class EnvironmentManager {
                         PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, Environment.MAIN_NET.name)
             }
 
-        fun findAssetIdByAssetId(assetId: String): GlobalConfiguration.GeneralAssetId? {
+        private fun findAssetIdByAssetId(assetId: String): GlobalConfiguration.GeneralAssetId? {
             for (asset in instance!!.current!!.configuration!!.generalAssetIds) {
                 if (asset.assetId == assetId) {
                     return asset
@@ -152,6 +189,8 @@ class EnvironmentManager {
 
         val servers: GlobalConfiguration.Servers
             get() = environment.configuration!!.servers
+
+        val defaultAssets = mutableListOf<AssetBalance>()
 
         val environment: Environment
             get() = instance!!.current!!

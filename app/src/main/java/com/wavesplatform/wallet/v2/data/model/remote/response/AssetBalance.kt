@@ -32,7 +32,7 @@ open class AssetBalance(
         @SerializedName("minSponsoredAssetFee") var minSponsoredAssetFee: Long? = 0,
         @SerializedName("sponsorBalance") var sponsorBalance: Long? = 0,
         @SerializedName("quantity") var quantity: Long? = 0,
-        @SerializedName("issueTransaction") var issueTransaction: IssueTransaction? = IssueTransaction(),
+        @SerializedName("issueTransaction") var issueTransaction: IssueTransaction? = IssueTransaction(id = assetId),
         var isHidden: Boolean = false,
         var position: Int = -1,
         @Ignore var configureVisibleState: Boolean = false,

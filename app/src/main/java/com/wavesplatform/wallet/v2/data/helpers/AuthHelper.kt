@@ -2,26 +2,20 @@ package com.wavesplatform.wallet.v2.data.helpers
 
 import com.vicpin.krealmextensions.RealmConfigStore
 import com.vicpin.krealmextensions.queryFirst
-import com.vicpin.krealmextensions.saveAll
+import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.database.RealmMigrations
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.util.MigrationUtil
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import timber.log.Timber
 import javax.inject.Inject
 
 class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil, var nodeDataManager: NodeDataManager) {
-
-    private lateinit var disposable: Disposable
 
     fun configureDB(address: String?, guid: String) {
 
@@ -57,42 +51,12 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil, var nodeD
     }
 
     private fun saveDefaultAssets() {
-        val list = mutableListOf<String>()
-        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
-            list.add(asset.assetId)
+        EnvironmentManager.defaultAssets.forEach {
+            val asset = queryFirst<AssetBalance> { equalTo("assetId", it.assetId) }
+            if (asset == null) {
+                it.save()
+            }
         }
-        disposable = nodeDataManager.apiDataManager.assetsInfoByIds(list)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ list ->
-                    for (assetInfo in list) {
-                        val assetBalance = AssetBalance(assetId = assetInfo.id,
-                                quantity = assetInfo.quantity,
-                                isFavorite = assetInfo.id == "WAVES",
-                                issueTransaction = IssueTransaction(
-                                        name = assetInfo.name,
-                                        decimals = assetInfo.precision,
-                                        quantity = assetInfo.quantity,
-                                        timestamp = assetInfo.timestamp.time),
-                                isGateway = EnvironmentManager
-                                        .findAssetIdByAssetId(assetInfo.id)?.isGateway ?: false)
-
-                        val listToSave = arrayListOf<AssetBalance>()
-                        val asset = queryFirst<AssetBalance> {
-                            equalTo("assetId", assetInfo.id)
-                        }
-                        if (asset == null) {
-                            listToSave.add(assetBalance)
-                        }
-                        if (listToSave.isNotEmpty()) {
-                            listToSave.saveAll()
-                        }
-                    }
-                    prefsUtil.setValue(PrefsUtil.KEY_DEFAULT_ASSETS, true)
-                    disposable.dispose()
-                }, { error ->
-                    Timber.d("AuthHelper:saveDefaultAssets: ${error.localizedMessage}")
-                    disposable.dispose()
-                })
+        prefsUtil.setValue(PrefsUtil.KEY_DEFAULT_ASSETS, true)
     }
 }
