@@ -18,7 +18,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import java.io.IOException
+import java.nio.charset.Charset
 import java.util.*
+
 
 class EnvironmentManager {
 
@@ -27,11 +30,13 @@ class EnvironmentManager {
     private var disposable: Disposable? = null
     private var interceptor: HostSelectionInterceptor? = null
 
-    class Environment internal constructor(val name: String, val url: String, json: String) {
+    class Environment internal constructor(val name: String, val url: String, jsonFileName: String) {
         var configuration: GlobalConfiguration? = null
 
         init {
-            this.configuration = Gson().fromJson(json, GlobalConfiguration::class.java)
+            this.configuration = Gson().fromJson(
+                    loadJsonFromAsset(instance!!.application!!, jsonFileName),
+                    GlobalConfiguration::class.java)
         }
 
         internal fun setConfiguration(configuration: GlobalConfiguration) {
@@ -41,10 +46,8 @@ class EnvironmentManager {
         companion object {
 
             internal var environments: MutableList<Environment> = ArrayList()
-            var TEST_NET = Environment(
-                    KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, EnvironmentConstants.TEST_NET_JSON)
-            var MAIN_NET = Environment(
-                    KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, EnvironmentConstants.MAIN_NET_JSON)
+            var TEST_NET = Environment(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, FILENAME_TEST_NET)
+            var MAIN_NET = Environment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, FILENAME_MAIN_NET)
 
             init {
                 environments.add(TEST_NET)
@@ -58,10 +61,12 @@ class EnvironmentManager {
         const val KEY_ENV_TEST_NET = "env_testnet"
         const val URL_CONFIG_MAIN_NET = "https://github-proxy.wvservices.com/" +
                 "wavesplatform/waves-client-config/master/environment_mainnet.json"
+        const val FILENAME_TEST_NET = "environment_testnet.json"
 
         const val KEY_ENV_MAIN_NET = "env_prod"
         const val URL_CONFIG_TEST_NET = "https://github-proxy.wvservices.com/" +
                 "wavesplatform/waves-client-config/master/environment_testnet.json"
+        const val FILENAME_MAIN_NET = "environment_mainnet.json"
 
         const val URL_COMMISSION_MAIN_NET = "https://github-proxy.wvservices.com/" +
                 "wavesplatform/waves-client-config/master/fee.json"
@@ -80,12 +85,17 @@ class EnvironmentManager {
                     if (envName!!.equals(environment.name, ignoreCase = true)) {
                         val preferenceManager = PreferenceManager
                                 .getDefaultSharedPreferences(instance!!.application)
-                        val json = preferenceManager.getString(
-                                PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
-                                EnvironmentConstants.MAIN_NET_JSON)
-                        environment.setConfiguration(Gson()
-                                .fromJson(json, GlobalConfiguration::class.java))
+                        if (preferenceManager.contains(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA)) {
+                            val json = preferenceManager.getString(
+                                    PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                                    Gson().toJson(environment.configuration))
+                            environment.setConfiguration(Gson()
+                                    .fromJson(json, GlobalConfiguration::class.java))
+                        } else {
+                            environment.setConfiguration(environment.configuration!!)
+                        }
                         instance!!.current = environment
+                        break
                     }
                 }
             }
@@ -153,7 +163,7 @@ class EnvironmentManager {
                                 .getDefaultSharedPreferences(App.getAppContext())
                                 .edit()
                                 .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
-                                        Gson().toJson(EnvironmentConstants.MAIN_NET_JSON))
+                                        Gson().toJson(EnvironmentManager.Environment.MAIN_NET.configuration))
                                 .apply()
                         instance!!.disposable!!.dispose()
                     })
@@ -183,6 +193,20 @@ class EnvironmentManager {
                 }
             }
             return null
+        }
+
+        private fun loadJsonFromAsset(application: Application, fileName: String): String {
+            return try {
+                val inputStream = application.assets.open(fileName)
+                val size = inputStream.available()
+                val buffer = ByteArray(size)
+                inputStream.read(buffer)
+                inputStream.close()
+                String(buffer, Charset.defaultCharset())
+            } catch (ex: IOException) {
+                ex.printStackTrace()
+                ""
+            }
         }
 
         val netCode: Byte

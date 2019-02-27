@@ -48,9 +48,9 @@ class HostSelectionInterceptor(initServers: GlobalConfiguration.Servers) : Inter
         if (this.nodeHost != null || this.dataHost != null || this.matcherHost != null) {
 
             var host = chain.request().url().host()
-            val nodeHost = getHost(initServers.nodeUrl)
-            val dataHost = getHost(initServers.dataUrl)
-            val matcherHost = getHost(initServers.matcherUrl)
+            val nodeHost = getHost(this.nodeHost)
+            val dataHost = getHost(this.dataHost)
+            val matcherHost = getHost(this.matcherHost)
 
             when (host) {
                 nodeHost -> {
@@ -81,11 +81,13 @@ class HostSelectionInterceptor(initServers: GlobalConfiguration.Servers) : Inter
         return chain.proceed(request)
     }
 
-    private fun getHost(url: String): String? {
+    private fun getHost(url: String?): String? {
         var result: String? = null
-        HttpUrl.parse(url).notNull { httpUrl ->
-            httpUrl.host().notNull {
-                result = it
+        url.notNull {
+            HttpUrl.parse(it).notNull { httpUrl ->
+                httpUrl.host().notNull { host ->
+                    result = host
+                }
             }
         }
         return result
