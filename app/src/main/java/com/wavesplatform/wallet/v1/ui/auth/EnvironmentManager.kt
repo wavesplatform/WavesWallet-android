@@ -102,7 +102,7 @@ class EnvironmentManager {
         }
 
         fun createHostInterceptor(): HostSelectionInterceptor {
-            instance!!.interceptor = HostSelectionInterceptor()
+            instance!!.interceptor = HostSelectionInterceptor(servers)
             return instance!!.interceptor!!
         }
 

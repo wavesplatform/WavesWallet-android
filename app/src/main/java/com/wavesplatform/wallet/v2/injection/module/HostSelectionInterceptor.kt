@@ -6,7 +6,7 @@ import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import java.io.IOException
 
-class HostSelectionInterceptor : Interceptor {
+class HostSelectionInterceptor(initServers: GlobalConfiguration.Servers) : Interceptor {
 
     @Volatile
     private var nodeHost: String? = null
@@ -15,12 +15,15 @@ class HostSelectionInterceptor : Interceptor {
     @Volatile
     private var matcherHost: String? = null
 
+    private val initNodeHost = HttpUrl.parse(initServers.nodeUrl)?.host()
+    private val initDataHost = HttpUrl.parse(initServers.dataUrl)?.host()
+    private val initMatcherHost = HttpUrl.parse(initServers.matcherUrl)?.host()
+
     fun setHosts(servers: GlobalConfiguration.Servers) {
         nodeHost = HttpUrl.parse(servers.nodeUrl)?.host()
         dataHost = HttpUrl.parse(servers.dataUrl)?.host()
         matcherHost = HttpUrl.parse(servers.matcherUrl)?.host()
     }
-
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
@@ -28,14 +31,10 @@ class HostSelectionInterceptor : Interceptor {
         if (this.nodeHost != null || this.dataHost != null || this.matcherHost != null) {
 
             var host = chain.request().url().host()
-            val nodeHost = HttpUrl.parse(nodeHost ?: "")?.host()
-            val dataHost = HttpUrl.parse(dataHost ?: "")?.host()
-            val matcherHost = HttpUrl.parse(matcherHost ?: "")?.host()
-
             when (host) {
-                nodeHost -> nodeHost.notNull { host = it }
-                dataHost -> dataHost.notNull { host = it }
-                matcherHost -> matcherHost.notNull { host = it }
+                initNodeHost -> nodeHost.notNull { host = it }
+                initDataHost -> dataHost.notNull { host = it }
+                initMatcherHost -> matcherHost.notNull { host = it }
             }
 
             val newUrl = request.url().newBuilder()
@@ -47,9 +46,5 @@ class HostSelectionInterceptor : Interceptor {
                     .build()
         }
         return chain.proceed(request)
-    }
-
-    private fun getHost(url: String?): String? {
-        return HttpUrl.parse(url ?: "")?.host()
     }
 }
