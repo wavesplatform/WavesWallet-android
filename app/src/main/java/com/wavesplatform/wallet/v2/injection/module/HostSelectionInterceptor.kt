@@ -6,7 +6,7 @@ import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import java.io.IOException
 
-class HostSelectionInterceptor(initServers: GlobalConfiguration.Servers) : Interceptor {
+class HostSelectionInterceptor : Interceptor {
 
     @Volatile
     private var nodeHost: String? = null
@@ -14,31 +14,11 @@ class HostSelectionInterceptor(initServers: GlobalConfiguration.Servers) : Inter
     private var dataHost: String? = null
     @Volatile
     private var matcherHost: String? = null
-    @Volatile
-    private var initServers: GlobalConfiguration.Servers = GlobalConfiguration.Servers(
-            initServers.nodeUrl,
-            initServers.dataUrl,
-            initServers.spamUrl,
-            initServers.matcherUrl)
 
     fun setHosts(servers: GlobalConfiguration.Servers) {
-        HttpUrl.parse(servers.nodeUrl).notNull { httpUrl ->
-            httpUrl.host().notNull {
-                nodeHost = it
-            }
-        }
-
-        HttpUrl.parse(servers.dataUrl).notNull { httpUrl ->
-            httpUrl.host().notNull {
-                dataHost = it
-            }
-        }
-
-        HttpUrl.parse(servers.matcherUrl).notNull { httpUrl ->
-            httpUrl.host().notNull {
-                matcherHost = it
-            }
-        }
+        nodeHost = HttpUrl.parse(servers.nodeUrl)?.host()
+        dataHost = HttpUrl.parse(servers.dataUrl)?.host()
+        matcherHost = HttpUrl.parse(servers.matcherUrl)?.host()
     }
 
 
@@ -48,26 +28,14 @@ class HostSelectionInterceptor(initServers: GlobalConfiguration.Servers) : Inter
         if (this.nodeHost != null || this.dataHost != null || this.matcherHost != null) {
 
             var host = chain.request().url().host()
-            val nodeHost = getHost(this.nodeHost)
-            val dataHost = getHost(this.dataHost)
-            val matcherHost = getHost(this.matcherHost)
+            val nodeHost = HttpUrl.parse(nodeHost ?: "")?.host()
+            val dataHost = HttpUrl.parse(dataHost ?: "")?.host()
+            val matcherHost = HttpUrl.parse(matcherHost ?: "")?.host()
 
             when (host) {
-                nodeHost -> {
-                    nodeHost.notNull {
-                        host = it
-                    }
-                }
-                dataHost -> {
-                    dataHost.notNull {
-                        host = it
-                    }
-                }
-                matcherHost -> {
-                    matcherHost.notNull {
-                        host = it
-                    }
-                }
+                nodeHost -> nodeHost.notNull { host = it }
+                dataHost -> dataHost.notNull { host = it }
+                matcherHost -> matcherHost.notNull { host = it }
             }
 
             val newUrl = request.url().newBuilder()
@@ -82,14 +50,6 @@ class HostSelectionInterceptor(initServers: GlobalConfiguration.Servers) : Inter
     }
 
     private fun getHost(url: String?): String? {
-        var result: String? = null
-        url.notNull {
-            HttpUrl.parse(it).notNull { httpUrl ->
-                httpUrl.host().notNull { host ->
-                    result = host
-                }
-            }
-        }
-        return result
+        return HttpUrl.parse(url ?: "")?.host()
     }
 }
