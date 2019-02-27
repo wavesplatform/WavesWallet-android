@@ -95,8 +95,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun onResume() {
         super.onResume()
         showBackUpSeedWarning()
-        if (!prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true)
-                && App.getAccessManager().getWallet() != null) {
+        if (App.getAccessManager().getWallet() != null) {
             presenter.loadNews()
         }
     }

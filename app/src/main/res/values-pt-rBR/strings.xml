@@ -169,7 +169,6 @@
     <string name="common_msg_in_development">Desculpe, esse recurso estará disponível em breve</string>
     <string name="common_no_internet_bottom_msg">Sem conexão com a Internet</string>
     <string name="common_or">ou</string>
-    <string name="common_persist"><![CDATA[&amp;]]></string>
     <string name="common_server_error">Algo deu errado</string>
     <string name="common_transaction_fee">Taxa da transação</string>
     <string name="confirm_backup">Confirme o backup</string>
@@ -264,7 +263,7 @@
     <string name="history_details_active_now">ATIVAR AGORA</string>
     <string name="history_details_add_address">Salvar endereço</string>
     <string name="history_details_amount_per_transaction">Quantia por transação</string>
-    <string name="history_details_asset">Ativos</string>
+    <string name="history_details_asset">Ativo</string>
     <string name="history_details_block">Bloco</string>
     <string name="history_details_cancel_leasing">Cancelar aluguel</string>
     <string name="history_details_completed">CONCLUÍDO</string>
@@ -275,7 +274,7 @@
     <string name="history_details_edit_address">Editar nome</string>
     <string name="history_details_exchange_price">Preço</string>
     <string name="history_details_fee">Taxa</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">Ativo ID</string>
     <string name="history_details_leasing_from">Alugar para</string>
     <string name="history_details_leasing_to">Alugar para</string>
     <string name="history_details_node_address">Endereço do node</string>

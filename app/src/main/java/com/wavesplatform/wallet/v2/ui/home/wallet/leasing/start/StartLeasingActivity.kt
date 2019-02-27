@@ -202,10 +202,10 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }))
 
         presenter.wavesAssetBalance.notNull {
-            afterSuccessLoadWavesBalance(it)
-        }
+            text_asset_value.text = MoneyUtil.getScaledText(it, Constants.wavesAssetInfo)
 
-        presenter.loadCommission()
+            presenter.loadCommission(it)
+        }
     }
 
 
@@ -251,8 +251,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
     }
 
     override fun afterSuccessLoadWavesBalance(waves: Long) {
-        text_asset_value.text = MoneyUtil.getScaledText(waves, Constants.wavesAssetInfo)
-
         linear_quick_balance.children.forEach { children ->
             val quickBalanceView = children as AppCompatTextView
             when (quickBalanceView.tag) {

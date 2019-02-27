@@ -169,7 +169,6 @@
     <string name="common_msg_in_development">Lo sentimos, esta artículo estará disponible en un futuro próximo.</string>
     <string name="common_no_internet_bottom_msg">No hay conexión a internet</string>
     <string name="common_or">o</string>
-    <string name="common_persist"><![CDATA[&amp;]]></string>
     <string name="common_server_error">Algo fue mal</string>
     <string name="common_transaction_fee">Tarifa por transacción</string>
     <string name="confirm_backup">Confirmar el backup </string>
@@ -275,7 +274,7 @@
     <string name="history_details_edit_address">Editar su nombre</string>
     <string name="history_details_exchange_price">Precio</string>
     <string name="history_details_fee">Comisión </string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">Activo ID</string>
     <string name="history_details_leasing_from">Arrendamiento a</string>
     <string name="history_details_leasing_to">Arrendamiento a</string>
     <string name="history_details_node_address">Dirección del nodo</string>

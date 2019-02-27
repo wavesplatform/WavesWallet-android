@@ -15,6 +15,9 @@ jobs:
 #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
 #         command: sudo chmod +x ./gradlew
       - run:
+          name: Add sentry.properties
+          command: echo $SENTRY_DSN | base64 -di > app/src/main/resources/sentry.properties
+      - run:
           name: Add google-services.json
           command: echo $GOOGLE_SERVICES_KEY | base64 -di > app/google-services.json
       - run:

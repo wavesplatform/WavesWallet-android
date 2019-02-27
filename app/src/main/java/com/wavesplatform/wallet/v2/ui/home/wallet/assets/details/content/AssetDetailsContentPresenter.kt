@@ -24,15 +24,16 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
 
     var assetBalance: AssetBalance? = null
 
-    fun loadLastTransactionsFor(assetId: String, allTransactions: List<Transaction>) {
+    fun loadLastTransactionsFor(asset: AssetBalance, allTransactions: List<Transaction>) {
         runAsync {
             addSubscription(Observable.just(allTransactions)
                     .map {
                         return@map it.filter { transaction ->
                             isNotSpam(transaction)
-                                    && (assetId.isWavesId() && transaction.assetId.isNullOrEmpty())
-                                    || AssetDetailsContentPresenter.isAssetIdInExchange(transaction, assetId)
-                                    || transaction.assetId == assetId
+                                    && (asset.assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && !transaction.isSponsorshipTransaction())
+                                    || AssetDetailsContentPresenter.isAssetIdInExchange(transaction, asset.assetId)
+                                    || transaction.assetId == asset.assetId && transaction.transactionType() != TransactionType.RECEIVE_SPONSORSHIP_TYPE
+                                    || (transaction.feeAssetId == asset.assetId && transaction.isSponsorshipTransaction())
                         }
                                 .sortedByDescending { it.timestamp }
                                 .mapTo(ArrayList()) { HistoryItem(HistoryItem.TYPE_DATA, it) }

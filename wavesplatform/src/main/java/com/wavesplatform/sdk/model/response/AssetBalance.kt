@@ -71,16 +71,18 @@ open class AssetBalance(
     }
 
     fun getDisplayAvailableBalance(): String {
-        return MoneyUtil.getScaledText(balance
-                ?.minus(inOrderBalance ?: 0)
-                ?.minus(leasedBalance ?: 0),
-                this)
+        return MoneyUtil.getScaledText(getAvailableBalance(), this)
     }
 
     fun getAvailableBalance(): Long {
-        return balance
+        val availableBalance = balance
                 ?.minus(inOrderBalance ?: 0)
-                ?.minus(leasedBalance ?: 0) ?: 0
+                ?.minus(leasedBalance ?: 0) ?: 0L
+        return if (availableBalance < 0) {
+            0L
+        } else {
+            availableBalance
+        }
     }
 
     fun getSponsorBalance(): Long {

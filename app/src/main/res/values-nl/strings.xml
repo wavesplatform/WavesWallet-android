@@ -169,7 +169,6 @@
     <string name="common_msg_in_development">Sorry deze functie is momenteel nog niet beschikbaar</string>
     <string name="common_no_internet_bottom_msg">Geen verbinding met het internet</string>
     <string name="common_or">of</string>
-    <string name="common_persist"><![CDATA[&amp;]]></string>
     <string name="common_server_error">Er is iets fout gegaan</string>
     <string name="common_transaction_fee">Transactiekosten</string>
     <string name="confirm_backup">Bevestig backup</string>
@@ -275,7 +274,7 @@
     <string name="history_details_edit_address">Naam aanpassen</string>
     <string name="history_details_exchange_price">Prijs</string>
     <string name="history_details_fee">Transactiekosten</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">Asset ID</string>
     <string name="history_details_leasing_from">Van</string>
     <string name="history_details_leasing_to">Lease aan</string>
     <string name="history_details_node_address">Node adres</string>

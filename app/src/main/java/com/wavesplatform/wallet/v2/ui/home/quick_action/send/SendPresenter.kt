@@ -86,7 +86,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 feeAsset.assetId)
     }
 
-    fun validateTransfer(): Int {
+    private fun validateTransfer(): Int {
         if (selectedAsset == null) {
             return R.string.send_transaction_error_check_asset
         } else if (isRecipientValid() != true) {
@@ -131,8 +131,8 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         return if (isSameSendingAndFeeAssets()) {
             tx.amount + tx.fee <= selectedAsset!!.getAvailableBalance()
         } else {
-            val validFee = if (tx.feeAssetId.isWaves()) {
-                tx.fee <= queryFirst<AssetBalanceDb> {
+            val validFee = if (tx.feeAssetId?.isWaves() == true) {
+                tx.fee <= queryFirst<AssetBalance> {
                     equalTo("assetId", "") }?.convertFromDb()?.balance ?: 0
             } else {
                 true
@@ -269,18 +269,28 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         const val LANG: String = "ru_RU"
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
-        fun getAssetId(recipient: String?): String? {
+        fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
             return when {
                 recipient!!.matches("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
-                    Constants.BITCOIN_ASSET_ID
+                    if (assetBalance != null) {
+                        when {
+                            assetBalance.assetId == Constants.BITCOIN_ASSET_ID ->
+                                Constants.BITCOIN_ASSET_ID
+                            assetBalance.assetId == Constants.BITCOINCASH_ASSET_ID ->
+                                Constants.BITCOINCASH_ASSET_ID
+                            assetBalance.assetId == Constants.BITCOIN_SV_ASSET_ID ->
+                                Constants.BITCOIN_SV_ASSET_ID
+                            else -> null
+                        }
+                    } else {
+                        null
+                    }
                 recipient.matches("^0x[0-9a-fA-F]{40}$".toRegex()) ->
                     Constants.ETHEREUM_ASSET_ID
                 recipient.matches("^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$".toRegex()) ->
                     Constants.LIGHTCOIN_ASSET_ID
                 recipient.matches("^t1[a-zA-Z0-9]{33}$".toRegex()) ->
                     Constants.ZEC_ASSET_ID
-                recipient.matches("^([13][a-km-zA-HJ-NP-Z1-9]{25,34}|[qp][a-zA-Z0-9]{41})$".toRegex()) ->
-                    Constants.BITCOINCASH_ASSET_ID
                 recipient.matches("^X[a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
                     Constants.DASH_ASSET_ID
                 recipient.matches("^4([0-9]|[A-B])(.){93}".toRegex()) ->

@@ -17,19 +17,19 @@ public class MoneyUtilTest {
                 getScaledAmount(12300L, 2));
         assertEquals("1.2k",
                 getScaledAmount(123400L, 2));
-        assertEquals("1.3k",
+        assertEquals("1.2k",
                 getScaledAmount(128400L, 2));
         assertEquals("12.3k",
                 getScaledAmount(1234500L, 2));
-        assertEquals("123.5k",
+        assertEquals("123.4k",
                 getScaledAmount(12345600L, 2));
         assertEquals("1.2M",
                 getScaledAmount(123456700L, 2));
         assertEquals("12.3M",
                 getScaledAmount(1234567800L, 2));
-        assertEquals("123.5M",
+        assertEquals("123.4M",
                 getScaledAmount(12345678900L, 2));
-        assertEquals("1234.6M",
+        assertEquals("1.2B",
                 getScaledAmount(123456789800L, 2));
         assertEquals("0.12",
                 getScaledAmount(12L, 2));

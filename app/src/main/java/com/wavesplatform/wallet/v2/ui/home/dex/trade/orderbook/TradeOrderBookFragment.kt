@@ -208,6 +208,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     }
 
     override fun onDestroyView() {
+        presenter.clearSubscriptions()
         progress_bar.hide()
         super.onDestroyView()
     }
@@ -234,9 +235,5 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
             fragment.arguments = args
             return fragment
         }
-    }
-
-    interface OnSelectedOrderbookTabListener {
-        fun onSelected()
     }
 }

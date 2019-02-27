@@ -14,8 +14,11 @@ import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.database.TransactionSaver
+import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentPresenter
+import com.wavesplatform.wallet.v2.util.isWavesId
+import com.wavesplatform.wallet.v2.util.transactionType
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -122,9 +125,10 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
     private fun filterDetailed(transactions: List<Transaction>, assetId: String): List<Transaction> {
         return transactions.filter { transaction ->
-            assetId.isWavesId() && transaction.assetId.isNullOrEmpty()
+            (assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && !transaction.isSponsorshipTransaction())
                     || AssetDetailsContentPresenter.isAssetIdInExchange(transaction, assetId)
-                    || transaction.assetId == assetId
+                    || transaction.assetId == assetId && transaction.transactionType() != TransactionType.RECEIVE_SPONSORSHIP_TYPE
+                    || (transaction.feeAssetId == assetId && transaction.isSponsorshipTransaction())
         }
     }
 

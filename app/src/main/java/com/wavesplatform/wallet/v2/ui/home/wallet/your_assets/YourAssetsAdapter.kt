@@ -20,15 +20,12 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
                 .setText(R.id.text_asset_value, item.getDisplayAvailableBalance())
                 .setVisible(R.id.image_favourite, item.isFavorite)
         helper.itemView.text_asset_value.visibility =
-                if ((item.getDisplayAvailableBalance()
-                                .clearBalance()
-                                .toDouble()) == 0.toDouble()) {
+                if (item.getAvailableBalance() == 0L) {
                     View.GONE
                 } else {
                     View.VISIBLE
                 }
         helper.itemView.image_asset_icon.setAsset(item)
-
         helper.itemView.checkbox_choose.isChecked = item.assetId == currentAssetId
     }
 

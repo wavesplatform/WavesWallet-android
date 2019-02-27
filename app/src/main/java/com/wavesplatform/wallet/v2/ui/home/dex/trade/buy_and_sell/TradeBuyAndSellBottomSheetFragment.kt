@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order.TradeOrderFragment
+import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.buy_and_sell_bottom_sheet_dialog_layout.*
 import kotlinx.android.synthetic.main.buy_and_sell_bottom_sheet_dialog_layout.view.*
 import pers.victor.ext.dp2px
@@ -24,7 +25,8 @@ import pers.victor.ext.findColor
 import javax.inject.Inject
 
 
-class TradeBuyAndSellBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), TradeBuyAndSellView, SuccessOrderListener {
+class TradeBuyAndSellBottomSheetFragment : BaseBottomSheetDialogFragment(), TradeBuyAndSellView, OrderListener {
+
     @Inject
     @InjectPresenter
     lateinit var presenter: TradeBuyAndSellPresenter
@@ -57,18 +59,13 @@ class TradeBuyAndSellBottomSheetFragment : BaseSuperBottomSheetDialogFragment(),
 
         val fragments = arrayListOf<Fragment>(
                 TradeOrderFragment.newInstance(BUY_TYPE, presenter.data, this),
-                TradeOrderFragment.newInstance(SELL_TYPE, presenter.data, this)
-        )
+                TradeOrderFragment.newInstance(SELL_TYPE, presenter.data, this))
 
         val adapter = TradeBuyAndSellPageAdapter(childFragmentManager, fragments,
                 arrayOf(getString(R.string.buy_and_sell_dialog_buy_tab), getString(R.string.buy_and_sell_dialog_sell_tab)))
+
         rootView.viewpager_buy_sell.adapter = adapter
         rootView.stl_buy_sell.setViewPager(rootView.viewpager_buy_sell)
-        if (presenter.data?.orderType == BUY_TYPE) {
-            rootView.stl_buy_sell.currentTab = 0
-        } else if (presenter.data?.orderType == SELL_TYPE) {
-            rootView.stl_buy_sell.currentTab = 1
-        }
         rootView.stl_buy_sell.setOnTabSelectListener(object : OnTabSelectListener {
             override fun onTabSelect(position: Int) {
                 when (position) {
@@ -86,6 +83,12 @@ class TradeBuyAndSellBottomSheetFragment : BaseSuperBottomSheetDialogFragment(),
             }
         })
 
+        if (presenter.data?.orderType == BUY_TYPE) {
+            rootView.stl_buy_sell.currentTab = 0
+        } else if (presenter.data?.orderType == SELL_TYPE) {
+            rootView.stl_buy_sell.currentTab = 1
+        }
+
         rootView.appbar_layout.addOnOffsetChangedListener(
                 AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
                     val offsetForShowShadow = appbar_layout?.totalScrollRange?.minus(dp2px(9)) ?: 0
@@ -96,6 +99,12 @@ class TradeBuyAndSellBottomSheetFragment : BaseSuperBottomSheetDialogFragment(),
                     }
                 })
 
+        configureScrollColorAnimation(rootView, adapter)
+
+        return rootView
+    }
+
+    private fun configureScrollColorAnimation(rootView: View, adapter: TradeBuyAndSellPageAdapter) {
         val colors = arrayOf<Int>(findColor(R.color.submit400), findColor(R.color.error400))
         val argbEvaluator = ArgbEvaluator()
         val mColorAnimation = ValueAnimator.ofObject(argbEvaluator, findColor(R.color.submit400), findColor(R.color.error400))
@@ -131,9 +140,6 @@ class TradeBuyAndSellBottomSheetFragment : BaseSuperBottomSheetDialogFragment(),
             }
 
         })
-
-
-        return rootView
     }
 
     override fun onSuccessPlaceOrder() {
@@ -141,8 +147,13 @@ class TradeBuyAndSellBottomSheetFragment : BaseSuperBottomSheetDialogFragment(),
         dismiss()
     }
 
+    override fun showError(msg: String) {
+        showError(msg, R.id.nested_scroll_view)
+    }
+
 }
 
-interface SuccessOrderListener {
+interface OrderListener {
     fun onSuccessPlaceOrder()
+    fun showError(msg: String)
 }

@@ -1,2 +1,1 @@
-# Test Wallet config
-wallet.properties
+/src/main/resources/sentry.properties

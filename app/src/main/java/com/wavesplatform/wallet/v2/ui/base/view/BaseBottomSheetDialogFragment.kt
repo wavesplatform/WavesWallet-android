@@ -69,7 +69,7 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpV
             val bottomSheet = d.findViewById<FrameLayout>(android.support.design.R.id.design_bottom_sheet)
             bottomSheet.notNull {
                 if ((it.height > screenHeight - getStatusBarHeight() - it.context.getToolBarHeight()) || fullScreenHeightEnable) {
-                    it.setHeight(screenHeight - getStatusBarHeight() - it.context.getToolBarHeight() - extraTopMargin)
+                    it.setHeight(screenHeight - it.context.getToolBarHeight() - extraTopMargin)
                 }
                 val bottomSheetBehavior = BottomSheetBehavior.from(it)
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED

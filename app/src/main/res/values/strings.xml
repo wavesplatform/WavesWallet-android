@@ -169,7 +169,6 @@
     <string name="common_msg_in_development">Sorry, this feature will be available in the near future</string>
     <string name="common_no_internet_bottom_msg">No connection to the Internet</string>
     <string name="common_or">or</string>
-    <string name="common_persist"><![CDATA[&amp;]]></string>
     <string name="common_server_error">Something went wrong</string>
     <string name="common_transaction_fee">Transaction Fee</string>
     <string name="confirm_backup">Confirm backup</string>
@@ -275,7 +274,7 @@
     <string name="history_details_edit_address">Edit name</string>
     <string name="history_details_exchange_price">Price</string>
     <string name="history_details_fee">Fee</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">Asset ID</string>
     <string name="history_details_leasing_from">Leasing to</string>
     <string name="history_details_leasing_to">Leasing to</string>
     <string name="history_details_node_address">Node address</string>

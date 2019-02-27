@@ -169,7 +169,6 @@
     <string name="common_msg_in_development">对不起，此功能将在不久的将来推出</string>
     <string name="common_no_internet_bottom_msg">没有连接到互联网</string>
     <string name="common_or">或者</string>
-    <string name="common_persist"><![CDATA[&amp;]]></string>
     <string name="common_server_error">有问题</string>
     <string name="common_transaction_fee">交易费用</string>
     <string name="confirm_backup">确认备份</string>
@@ -276,7 +275,7 @@
     <string name="history_details_edit_address">编辑名称</string>
     <string name="history_details_exchange_price">价格</string>
     <string name="history_details_fee">费用</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">资产 ID</string>
     <string name="history_details_leasing_from">租赁给</string>
     <string name="history_details_leasing_to">租赁给</string>
     <string name="history_details_node_address">节点地址

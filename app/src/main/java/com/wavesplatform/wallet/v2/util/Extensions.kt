@@ -43,6 +43,9 @@ import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import okhttp3.Response
+import okhttp3.ResponseBody
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import pers.victor.ext.*
@@ -57,8 +60,19 @@ val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     null
 }
 
+val filterEmptySpace = InputFilter { source, start, end, dest, dstart, dend ->
+    if (dest.isNullOrEmpty() && source.startsWith(" ")) {
+        return@InputFilter ""
+    }
+    null
+}
+
 fun EditText.applyFilterStartWithDot() {
     this.filters = arrayOf(filterStartWithDot)
+}
+
+fun EditText.applyFilterStartEmptySpace() {
+    this.filters = arrayOf(filterEmptySpace)
 }
 
 fun Context.isNetworkConnection(): Boolean {
@@ -92,6 +106,26 @@ fun Long.currentDateAsTimeSpanString(context: Context): String {
     val timeHour = currentTime.asDateString("HH:mm")
 
     return context.getString(R.string.dex_last_update_value, "$timeDayRelative, $timeHour")
+}
+
+fun String.isWaves(): Boolean {
+    return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
+}
+
+fun getWavesDexFee(fee: Long): BigDecimal {
+    return MoneyUtil.getScaledText(fee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
+}
+
+fun String.isWavesId(): Boolean {
+    return this.toLowerCase() == Constants.wavesAssetInfo.id
+}
+
+fun ByteArray.arrayWithSize(): ByteArray {
+    return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
+}
+
+fun String.clearBalance(): String {
+    return this.stripZeros().replace(MoneyUtil.DEFAULT_SEPARATOR_THIN_SPACE.toString(), "")
 }
 
 fun View.makeBackgroundWithRippleEffect() {
@@ -187,7 +221,6 @@ fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
         this
     }
 }
-
 
 fun TextView.makeLinks(links: Array<String>, clickableSpans: Array<ClickableSpan>) {
     val spannableString = SpannableString(this.text)
@@ -336,7 +369,6 @@ fun View.copyToClipboard(text: String, textView: AppCompatTextView,
 /**
  * Extensions for simpler launching of Activities
  */
-
 inline fun <reified T : Any> Activity.launchActivity(
         requestCode: Int = -1,
         clear: Boolean = false,
@@ -467,6 +499,44 @@ fun Throwable.errorBody(): ErrorResponse? {
     }
 }
 
+fun ResponseBody.clone(): ResponseBody {
+    var bufferClone = this.source().buffer()?.clone()
+    return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone);
+}
+
+fun ErrorResponse.isSmartError(): Boolean {
+    return this.error in 305..307
+}
+
+fun AssetInfo.getTicker(): String {
+
+    if (this.id.isWavesId()) {
+        return Constants.wavesAssetInfo.name
+    }
+
+    return this.ticker ?: this.name
+}
+
+fun getScaledAmount(amount: Long, decimals: Int): String {
+    val absAmount = Math.abs(amount)
+    val value = BigDecimal.valueOf(absAmount, decimals)
+    if (amount == 0L) {
+        return "0"
+    }
+
+    val sign = if (amount < 0) "-" else ""
+
+    return sign + when {
+        value >= MoneyUtil.ONE_B -> value.divide(MoneyUtil.ONE_B, 1, RoundingMode.FLOOR)
+                .toPlainString().stripZeros() + "B"
+        value >= MoneyUtil.ONE_M -> value.divide(MoneyUtil.ONE_M, 1, RoundingMode.FLOOR)
+                .toPlainString().stripZeros() + "M"
+        value >= MoneyUtil.ONE_K -> value.divide(MoneyUtil.ONE_K, 1, RoundingMode.FLOOR)
+                .toPlainString().stripZeros() + "k"
+        else -> MoneyUtil.createFormatter(decimals).format(BigDecimal.valueOf(absAmount, decimals))
+                .stripZeros() + ""
+    }
+}
 
 fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { }) {
     val alertDialogBuilder = AlertDialog.Builder(this, R.style.DialogBackgroundTheme).create()

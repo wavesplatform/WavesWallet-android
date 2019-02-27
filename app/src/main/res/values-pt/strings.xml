@@ -169,7 +169,6 @@
     <string name="common_msg_in_development">Desculpa, esta funcionalidade ainda não está disponível</string>
     <string name="common_no_internet_bottom_msg">Não existe ligação à Internet</string>
     <string name="common_or">ou</string>
-    <string name="common_persist"><![CDATA[&amp;]]></string>
     <string name="common_server_error">Algo não correu bem</string>
     <string name="common_transaction_fee">Taxa de Transação</string>
     <string name="confirm_backup">Confirma o backup</string>
@@ -275,7 +274,7 @@
     <string name="history_details_edit_address">Modificar</string>
     <string name="history_details_exchange_price">Cotação</string>
     <string name="history_details_fee">Taxa</string>
-    <string name="history_details_id">ID</string>
+    <string name="history_details_id">Ativo ID</string>
     <string name="history_details_leasing_from">Concessionado a</string>
     <string name="history_details_leasing_to">Concessionado a</string>
     <string name="history_details_node_address">Endereço do Nó</string>
