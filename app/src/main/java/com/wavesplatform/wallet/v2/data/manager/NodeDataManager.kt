@@ -5,6 +5,7 @@ import android.arch.lifecycle.ProcessLifecycleOwner
 import android.text.TextUtils
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
@@ -37,7 +38,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     var transactions: List<Transaction> = ArrayList()
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
-        return spamService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM_FILE))
+        return githubService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, EnvironmentManager.servers.spamUrl))
                 .map {
                     val scanner = Scanner(it)
                     val spam = arrayListOf<SpamAsset>()
@@ -178,7 +179,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                             return@map it[Constants.wavesAssetInfo.name] ?: 0L
                         },
                 Function3 { totalBalance: Long, leasedBalance: Long, inOrderBalance: Long ->
-                    val currentWaves = Constants.defaultAssets[0]
+                    val currentWaves = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
                     currentWaves.balance = totalBalance
                     currentWaves.leasedBalance = leasedBalance
                     currentWaves.inOrderBalance = inOrderBalance
@@ -313,8 +314,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun assetDetails(assetId: String?): Observable<AssetsDetails> {
-        return if (TextUtils.isEmpty(assetId) || assetId == "WAVES") {
-            Observable.just(AssetsDetails(assetId = "WAVES", scripted = false))
+        return if (TextUtils.isEmpty(assetId) || assetId == Constants.WAVES_ASSET_ID_FILLED) {
+            Observable.just(AssetsDetails(assetId = Constants.WAVES_ASSET_ID_FILLED, scripted = false))
         } else {
             nodeService.assetDetails(assetId!!)
         }

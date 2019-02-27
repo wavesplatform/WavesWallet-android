@@ -16,7 +16,7 @@ import java.nio.charset.Charset
 data class CreateLeasingRequest(
         @SerializedName("type") val type: Int = Transaction.LEASE,
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
-        @SerializedName("scheme") var scheme: String? = EnvironmentManager.getGlobalConfiguration().scheme,
+        @SerializedName("scheme") var scheme: String? = EnvironmentManager.globalConfiguration.scheme,
         @SerializedName("amount") var amount: Long = 0,
         @SerializedName("fee") var fee: Long = 0,
         @SerializedName("recipient") var recipient: String = "",
@@ -45,7 +45,7 @@ data class CreateLeasingRequest(
     private fun resolveRecipientBytes(recipientIsAlias: Boolean): ByteArray? {
         return if (recipientIsAlias) {
             Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                    byteArrayOf(EnvironmentManager.getNetCode()),
+                    byteArrayOf(EnvironmentManager.netCode),
                     recipient.clearAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
         } else {
             Base58.decode(recipient)

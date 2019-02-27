@@ -16,7 +16,7 @@ fun String?.isValidAddress(): Boolean {
         val bytes = Base58.decode(this)
         if (bytes.size == AddressLength
                 && bytes[0] == AddressVersion
-                && bytes[1] == EnvironmentManager.getNetCode()) {
+                && bytes[1] == EnvironmentManager.netCode) {
             val checkSum = Arrays.copyOfRange(bytes, bytes.size - ChecksumLength, bytes.size)
             val checkSumGenerated = calcCheckSum(Arrays.copyOf(bytes, bytes.size - ChecksumLength))
             Arrays.equals(checkSum, checkSumGenerated)
@@ -29,7 +29,7 @@ fun String?.isValidAddress(): Boolean {
 }
 
 fun String.makeAsAlias(): String {
-    return "alias:${EnvironmentManager.getNetCode().toChar()}:$this"
+    return "alias:${EnvironmentManager.netCode.toChar()}:$this"
 }
 
 fun String.clearAlias(): String {
