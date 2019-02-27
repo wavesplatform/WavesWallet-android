@@ -179,7 +179,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                             return@map it[Constants.wavesAssetInfo.name] ?: 0L
                         },
                 Function3 { totalBalance: Long, leasedBalance: Long, inOrderBalance: Long ->
-                    val currentWaves = Constants.find(Constants.WAVES_ASSET_ID)!!
+                    val currentWaves = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
                     currentWaves.balance = totalBalance
                     currentWaves.leasedBalance = leasedBalance
                     currentWaves.inOrderBalance = inOrderBalance
@@ -314,8 +314,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun assetDetails(assetId: String?): Observable<AssetsDetails> {
-        return if (TextUtils.isEmpty(assetId) || assetId == "WAVES") {
-            Observable.just(AssetsDetails(assetId = "WAVES", scripted = false))
+        return if (TextUtils.isEmpty(assetId) || assetId == Constants.WAVES_ASSET_ID_FILLED) {
+            Observable.just(AssetsDetails(assetId = Constants.WAVES_ASSET_ID_FILLED, scripted = false))
         } else {
             nodeService.assetDetails(assetId!!)
         }

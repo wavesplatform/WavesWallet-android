@@ -82,7 +82,8 @@ class EnvironmentManager {
                         val json = preferenceManager.getString(
                                 PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
                                 EnvironmentConstants.MAIN_NET_JSON)
-                        environment.setConfiguration(Gson().fromJson(json, GlobalConfiguration::class.java))
+                        environment.setConfiguration(Gson()
+                                .fromJson(json, GlobalConfiguration::class.java))
                         instance!!.current = environment
                     }
                 }
@@ -117,13 +118,13 @@ class EnvironmentManager {
                         defaultAssets.clear()
                         for (assetInfo in info.data) {
                             val assetBalance = AssetBalance(
-                                    assetId = if (assetInfo.assetInfo.id == "WAVES") {
-                                        Constants.WAVES_ASSET_ID
+                                    assetId = if (assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED) {
+                                        Constants.WAVES_ASSET_ID_EMPTY
                                     } else {
                                         assetInfo.assetInfo.id
                                     },
                                     quantity = assetInfo.assetInfo.quantity,
-                                    isFavorite = assetInfo.assetInfo.id == "WAVES",
+                                    isFavorite = assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED,
                                     issueTransaction = IssueTransaction(
                                             id = assetInfo.assetInfo.id,
                                             name = assetInfo.assetInfo.name,

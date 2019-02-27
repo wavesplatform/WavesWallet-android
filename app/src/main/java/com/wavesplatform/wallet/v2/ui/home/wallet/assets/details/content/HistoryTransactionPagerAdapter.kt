@@ -187,7 +187,7 @@ class HistoryTransactionPagerAdapter constructor(
                 secondOrder.assetPair?.priceAssetObject?.name)
 
         val amountAssetTicker = if (amountAsset.name == "WAVES") {
-            "WAVES"
+            Constants.WAVES_ASSET_ID_FILLED
         } else {
             amountAsset.ticker
         }

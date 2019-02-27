@@ -71,7 +71,8 @@ object Constants {
     const val RESULT_SMART_ERROR = 307
 
     const val VERSION = 2
-    const val WAVES_ASSET_ID = ""
+    const val WAVES_ASSET_ID_EMPTY = ""
+    const val WAVES_ASSET_ID_FILLED = "WAVES"
     const val ENABLE_VIEW = 1f
     const val DISABLE_VIEW = 0.3f
 
@@ -104,7 +105,7 @@ object Constants {
             Pair("z", R.color.z),
             Pair("persist", R.color.persist))
 
-    val wavesAssetInfo = AssetInfo(id = WAVES_ASSET_ID, precision = 8, name = "WAVES", quantity = 10000000000000000L)
+    val wavesAssetInfo = AssetInfo(id = WAVES_ASSET_ID_EMPTY, precision = 8, name = "WAVES", quantity = 10000000000000000L)
 
     var MRTGeneralAsset = GlobalConfiguration.GeneralAssetId(assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
             gatewayId = "MRT", displayName = "MinersReward")
