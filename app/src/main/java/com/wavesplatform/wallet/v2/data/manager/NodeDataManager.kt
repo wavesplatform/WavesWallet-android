@@ -13,6 +13,7 @@ import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.request.*
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil
+import com.wavesplatform.wallet.v2.util.loadDbWavesBalance
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.sumByLong
 import io.reactivex.Observable
@@ -95,13 +96,13 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 })
                             }
                             .map { tripple ->
+                                val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
+
                                 if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
                                     // merge db data and API data
                                     tripple.third.balances.forEachIndexed { index, assetBalance ->
-                                        val dbAsset = assetsFromDb.firstOrNull { dbAsset ->
-                                            dbAsset.assetId == assetBalance.assetId
-                                        }
-                                        dbAsset.notNull {
+                                        val dbAsset = mapDbAssets?.get(assetBalance.assetId)
+                                        dbAsset?.let {
                                             assetBalance.isHidden = it.isHidden
                                             assetBalance.issueTransaction?.name = it.issueTransaction?.name
                                             assetBalance.issueTransaction?.quantity = it.issueTransaction?.quantity
@@ -119,10 +120,20 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 findElementsInDbWithZeroBalancesAndDelete(assetsFromDb, tripple)
 
                                 tripple.third.balances.forEachIndexed { index, assetBalance ->
-                                    assetBalance.inOrderBalance = tripple.second[assetBalance.assetId] ?: 0L
+                                    assetBalance.inOrderBalance = tripple.second[assetBalance.assetId]
+                                            ?: 0L
 
                                     assetBalance.isSpam = spamAssets.any {
                                         it.assetId == assetBalance.assetId
+                                    }
+                                    if (assetBalance.isSpam) {
+                                        assetBalance.isFavorite = false
+                                    }
+
+                                    mapDbAssets?.let {
+                                        if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
+                                            assetBalance.isFavorite = true
+                                        }
                                     }
                                 }
 
@@ -178,7 +189,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                             return@map it[Constants.wavesAssetInfo.name] ?: 0L
                         },
                 Function3 { totalBalance: Long, leasedBalance: Long, inOrderBalance: Long ->
-                    val currentWaves = Constants.defaultAssets[0]
+                    val currentWaves = loadDbWavesBalance()
                     currentWaves.balance = totalBalance
                     currentWaves.leasedBalance = leasedBalance
                     currentWaves.inOrderBalance = inOrderBalance

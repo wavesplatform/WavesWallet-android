@@ -685,6 +685,11 @@ fun findMyOrder(first: Order, second: Order, address: String?): Order {
     }
 }
 
+fun loadDbWavesBalance(): AssetBalance {
+    return queryFirst<AssetBalance> { equalTo("assetId", "") }
+            ?: Constants.defaultAssets[0]
+}
+
 fun Throwable.errorBody(): ErrorResponse? {
     return if (this is RetrofitException) {
         this.getErrorBodyAs(ErrorResponse::class.java)
