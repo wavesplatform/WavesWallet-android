@@ -12,7 +12,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 
 data class CancelLeasingRequest(
         @SerializedName("type") val type: Int = Transaction.LEASE_CANCEL,
-        @SerializedName("chainId") var scheme: Int? = EnvironmentManager.getNetCode().toInt(),
+        @SerializedName("chainId") var scheme: Int? = EnvironmentManager.netCode.toInt(),
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
         @SerializedName("leaseId") var leaseId: String = "",
         @SerializedName("timestamp") var timestamp: Long = 0,
@@ -25,7 +25,7 @@ data class CancelLeasingRequest(
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(Constants.VERSION.toByte()),
-                    byteArrayOf(EnvironmentManager.getNetCode()),
+                    byteArrayOf(EnvironmentManager.netCode),
                     Base58.decode(senderPublicKey),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp),
