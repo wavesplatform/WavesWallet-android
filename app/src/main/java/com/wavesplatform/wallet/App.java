@@ -33,6 +33,8 @@ import dagger.android.DaggerApplication;
 import io.fabric.sdk.android.Fabric;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.realm.Realm;
+import io.sentry.Sentry;
+import io.sentry.android.AndroidSentryClientFactory;
 import pers.victor.ext.Ext;
 import timber.log.Timber;
 
@@ -66,6 +68,8 @@ public class App extends DaggerApplication {
 
         Realm.init(this);
         Ext.INSTANCE.setCtx(this);
+
+        Sentry.init(new AndroidSentryClientFactory(this.getApplicationContext()));
 
         RxJavaPlugins.setErrorHandler(Timber::e);
 

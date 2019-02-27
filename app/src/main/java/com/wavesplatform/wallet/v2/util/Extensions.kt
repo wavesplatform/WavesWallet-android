@@ -58,6 +58,8 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import okhttp3.Response
+import okhttp3.ResponseBody
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
@@ -143,7 +145,7 @@ fun ByteArray.arrayWithSize(): ByteArray {
 }
 
 fun String.clearBalance(): String {
-    return this.stripZeros().replace("\u2009", "")  // Thin space
+    return this.stripZeros().replace(MoneyUtil.DEFAULT_SEPARATOR_THIN_SPACE.toString(), "")
 }
 
 fun View.makeBackgroundWithRippleEffect() {
@@ -692,6 +694,11 @@ fun Throwable.errorBody(): ErrorResponse? {
     } else {
         null
     }
+}
+
+fun ResponseBody.clone(): ResponseBody {
+    var bufferClone = this.source().buffer()?.clone()
+    return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone);
 }
 
 fun ErrorResponse.isSmartError(): Boolean {
