@@ -15,6 +15,7 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.support.annotation.ColorRes
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
@@ -61,6 +62,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import okhttp3.Response
 import okhttp3.ResponseBody
 import pers.victor.ext.*
+import pers.victor.ext.Ext.ctx
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.io.File
@@ -686,6 +688,10 @@ fun findMyOrder(first: Order, second: Order, address: String?): Order {
             second
         }
     }
+}
+
+fun getDeviceId(): String {
+    return "android:${Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID)}"
 }
 
 fun Throwable.errorBody(): ErrorResponse? {
