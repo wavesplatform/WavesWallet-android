@@ -58,7 +58,7 @@ class TransactionsBroadcastRequest(
     private fun getRecipientBytes(recipient: String): ByteArray {
         return if (recipient.length <= 30) {
             Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                    byteArrayOf(Constants.NET_CODE),
+                    byteArrayOf(EnvironmentManager.netCode),
                     recipient.clearAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
         } else {
             Base58.decode(recipient)

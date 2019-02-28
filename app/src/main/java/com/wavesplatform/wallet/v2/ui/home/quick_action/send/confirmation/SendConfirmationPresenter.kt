@@ -21,6 +21,8 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.errorBody
+import com.wavesplatform.wallet.v2.util.isSmartError
+import com.wavesplatform.wallet.v2.util.makeAsAlias
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -39,7 +41,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
     var blockchainCommission = 0L
-    var feeAsset: AssetBalance = Constants.defaultAssets[0]
+    var feeAsset: AssetBalance = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
 
     fun confirmSend() {
@@ -137,7 +139,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
 
     private fun createGateAndPayment() {
         val assetId = selectedAsset!!.assetId
-        val currencyTo = Constants.coinomatCryptoCurrencies[assetId]
+        val currencyTo = Constants.coinomatCryptoCurrencies()[assetId]
 
 
         if (currencyTo.isNullOrEmpty()) {
@@ -145,7 +147,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             return
         }
 
-        val currencyFrom = "${EnvironmentManager.getNetCode().toChar()}$currencyTo"
+        val currencyFrom = "${EnvironmentManager.netCode.toChar()}$currencyTo"
 
         val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY
                 && !this.moneroPaymentId.isNullOrEmpty()) {

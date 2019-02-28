@@ -10,9 +10,10 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.PrefsUtil
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.RxUtil // todo check
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.Function3
@@ -96,7 +97,7 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
     }
 
     fun loadNews() {
-        addSubscription(matcherDataManager.loadNews()
+        addSubscription(githubDataManager.loadNews()
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     viewState.showNews(it)

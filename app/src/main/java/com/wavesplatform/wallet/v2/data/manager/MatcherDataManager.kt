@@ -91,7 +91,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
         if (allMarketsList.isEmpty()) {
-            return Observable.zip(apiService.loadGlobalConfiguration(EnvironmentManager.get().current().url)
+            return Observable.zip(Observable.just(EnvironmentManager.globalConfiguration)
                     .map {
                         val globalAssets = it.generalAssetIds.toMutableList()
                         globalAssets.add(Constants.MRTGeneralAsset)
@@ -158,10 +158,6 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         }
     }
 
-    fun getGlobalCommission(): Observable<GlobalTransactionCommission> {
-        return apiService.loadGlobalCommission()
-    }
-
     private fun filterMarketsBySpamAndSelect(markets: List<MarketResponse>): Observable<MutableList<MarketResponse>> {
         return Observable.zip(Observable.just(markets), queryAllAsSingle<SpamAssetDb>().toObservable()
                 .map {
@@ -184,10 +180,6 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
             return@Function3 filteredSpamList
         })
-    }
-
-    fun loadNews(): Observable<News> {
-        return apiService.loadNews(News.URL)
     }
 
     companion object {

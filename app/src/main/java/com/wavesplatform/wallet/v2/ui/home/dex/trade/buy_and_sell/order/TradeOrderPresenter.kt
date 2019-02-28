@@ -75,7 +75,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                     currentPriceBalance = it[data?.watchMarket?.market?.priceAsset]
 
                     return@flatMap Observable.zip(
-                            matcherDataManager.getGlobalCommission(),
+                            githubDataManager.getGlobalCommission(),
                             nodeDataManager.assetDetails(data?.watchMarket?.market?.priceAsset),
                             nodeDataManager.assetDetails(data?.watchMarket?.market?.amountAsset),
                             Function3 { t1: GlobalTransactionCommission,

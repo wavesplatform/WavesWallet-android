@@ -27,8 +27,8 @@ data class AliasRequest(
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(Constants.NET_CODE),
                     Base58.decode(senderPublicKey),
-                    Bytes.concat(byteArrayOf(Constants.NET_CODE),
-                            byteArrayOf(Constants.NET_CODE),
+                    Bytes.concat(byteArrayOf(Constants.VERSION.toByte()), // todo check
+                            byteArrayOf(EnvironmentManager.netCode),
                             alias?.toByteArray(Charset.forName("UTF-8"))?.arrayWithSize())
                             .arrayWithSize(),
                     Longs.toByteArray(fee),

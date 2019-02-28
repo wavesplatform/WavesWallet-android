@@ -12,7 +12,7 @@ open class BaseDataManager @Inject constructor() {
 
     var nodeService: NodeService = Wavesplatform.getNodeService()
     var apiService: ApiService = Wavesplatform.getApiService()
-    var spamService: SpamService = Wavesplatform.getSpamService()
+    var githubService: GithubService = Wavesplatform.getGithubService()
     var coinomatService: CoinomatService = Wavesplatform.getCoinomatService()
     var matcherService: MatcherService = Wavesplatform.getMatcherService()
     var preferencesHelper: PreferencesHelper = PreferencesHelper(App.getAppContext())

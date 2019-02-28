@@ -15,7 +15,10 @@ import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.AssetInfo
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Constants // todo check
+import com.wavesplatform.wallet.v2.data.Constants.WCTGeneralAsset
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import pers.victor.ext.findColor
 import pers.victor.ext.resize
 import pers.victor.ext.sp
@@ -87,7 +90,7 @@ class AssetAvatarView : AppCompatImageView {
     * Set asset object to get initials for drawable
     * */
     fun setAsset(asset: AssetBalance?) {
-        setValues(asset?.assetId ?: "", asset?.getName() ?: "", asset?.isSponsored() == true)
+        setValues(asset?.assetId ?: " ", asset?.getName() ?: " ", asset?.isSponsored() == true)
     }
 
     /*
@@ -116,9 +119,10 @@ class AssetAvatarView : AppCompatImageView {
     }
 
     private fun getPlaceholderColorFromAssetName(text: String?): Int {
-        if (TextUtils.isEmpty(text)) {
-            findColor(R.color.persist)
+        if (TextUtils.isEmpty(text?.trim())) {
+            return findColor(R.color.persist)
         }
+
         val letterColor = Constants.alphabetColor[text!!.trim().substring(0, 1).toLowerCase()]
 
         return if (letterColor != null) {
@@ -132,7 +136,11 @@ class AssetAvatarView : AppCompatImageView {
     * Setup view with values
     * */
     private fun setValues(assetId: String, name: String, isSponsoredAsset: Boolean) {
-        val avatar = Constants.defaultAssetsAvatar[assetId]
+        val avatar = when (assetId) {
+            WCTGeneralAsset.assetId -> R.drawable.ic_logo_wct_48
+            "" -> Constants.defaultAssetsAvatar()[Constants.WAVES_ASSET_ID_FILLED]
+            else -> Constants.defaultAssetsAvatar()[assetId]
+        }
 
         val color = getPlaceholderColorFromAssetName(name)
         paint.color = color

@@ -86,6 +86,9 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                                     asset.position = assetsListFromDb.size + 1
                                 }
                             }
+                            if (asset.isSpam){
+                                asset.isFavorite = false
+                            }
                         }
 
                         assetsListFromDb.saveAll()
@@ -131,6 +134,9 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                                 if (asset.position == -1) {
                                     asset.position = assetsListFromDb.size + 1
                                 }
+                            }
+                            if (asset.isSpam){
+                                asset.isFavorite = false
                             }
                         }
 

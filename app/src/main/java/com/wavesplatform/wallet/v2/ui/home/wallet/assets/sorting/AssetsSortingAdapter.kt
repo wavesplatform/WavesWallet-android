@@ -51,11 +51,6 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
                         .addOnClickListener(R.id.image_favorite)
                         .setVisible(R.id.text_my_asset, item.issueTransaction?.sender == App.getAccessManager().getWallet()?.address)
 
-                if (item.isWaves()) {
-                    helper.itemView.image_blocked.visiable()
-                } else {
-                    helper.itemView.image_blocked.gone()
-                }
                 helper.itemView.image_asset_favorite_icon.setAsset(item)
             }
             AssetSortingItem.TYPE_NOT_FAVORITE -> {

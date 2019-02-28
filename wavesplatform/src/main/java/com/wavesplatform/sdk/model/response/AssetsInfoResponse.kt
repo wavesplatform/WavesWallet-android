@@ -3,6 +3,7 @@ package com.wavesplatform.sdk.model.response
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 
 data class AssetsInfoResponse(
@@ -23,7 +24,7 @@ open class AssetInfo(
         @SerializedName("precision") var precision: Int = 0,
         @SerializedName("description") var description: String = "",
         @SerializedName("height") var height: Int = 0,
-        @SerializedName("timestamp") var timestamp: String = "",
+        @SerializedName("timestamp") var timestamp: Date = Date(),
         @SerializedName("sender") var sender: String = "",
         @SerializedName("quantity") var quantity: Long = 0,
         @SerializedName("reissuable") var reissuable: Boolean = false,

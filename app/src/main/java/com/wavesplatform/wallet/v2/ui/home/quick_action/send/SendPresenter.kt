@@ -45,7 +45,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var gatewayMax: BigDecimal = BigDecimal.ZERO
     var fee = 0L
     var feeWaves = 0L
-    var feeAsset: AssetBalance = Constants.defaultAssets[0]
+    var feeAsset: AssetBalance = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
     fun sendClicked() {
         val res = validateTransfer()
@@ -105,7 +105,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     return R.string.insufficient_funds
                 } else if (isGatewayAmountError()) {
                     return R.string.insufficient_gateway_funds_error
-                } else if (Constants.MONERO_ASSET_ID == recipientAssetId
+                } else if (Constants.findByGatewayId("XMR")!!.assetId == recipientAssetId
                         && moneroPaymentId != null
                         && (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH
                                 || moneroPaymentId!!.contains(" ".toRegex()))) {
@@ -149,7 +149,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     fun loadXRate(assetId: String) {
-        val currencyTo = Constants.coinomatCryptoCurrencies[assetId]
+        val currencyTo = Constants.coinomatCryptoCurrencies()[assetId]
         if (currencyTo.isNullOrEmpty()) {
             type = SendPresenter.Type.UNKNOWN
             runOnUiThread {
@@ -210,7 +210,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         viewState.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
-                matcherDataManager.getGlobalCommission(),
+                githubDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(App.getAccessManager().getWallet()?.address!!),
                 nodeDataManager.assetDetails(assetId),
                 Function3 { t1: GlobalTransactionCommission,
@@ -269,33 +269,16 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
         fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
-            return when {
-                recipient!!.matches("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
-                    if (assetBalance != null) {
-                        when {
-                            assetBalance.assetId == Constants.BITCOIN_ASSET_ID ->
-                                Constants.BITCOIN_ASSET_ID
-                            assetBalance.assetId == Constants.BITCOINCASH_ASSET_ID ->
-                                Constants.BITCOINCASH_ASSET_ID
-                            assetBalance.assetId == Constants.BITCOIN_SV_ASSET_ID ->
-                                Constants.BITCOIN_SV_ASSET_ID
-                            else -> null
-                        }
+            for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
+                if (recipient!!.matches("${asset.addressRegEx}$".toRegex())) {
+                    return if (assetBalance != null) {
+                        asset.assetId
                     } else {
                         null
                     }
-                recipient.matches("^0x[0-9a-fA-F]{40}$".toRegex()) ->
-                    Constants.ETHEREUM_ASSET_ID
-                recipient.matches("^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$".toRegex()) ->
-                    Constants.LIGHTCOIN_ASSET_ID
-                recipient.matches("^t1[a-zA-Z0-9]{33}$".toRegex()) ->
-                    Constants.ZEC_ASSET_ID
-                recipient.matches("^X[a-km-zA-HJ-NP-Z1-9]{25,34}$".toRegex()) ->
-                    Constants.DASH_ASSET_ID
-                recipient.matches("^4([0-9]|[A-B])(.){93}".toRegex()) ->
-                    Constants.MONERO_ASSET_ID
-                else -> null
+                }
             }
+            return null
         }
 
         fun isWavesAddress(address: String?): Boolean {
@@ -306,7 +289,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             val addressBytes = Base58.decode(address)
 
             if (addressBytes[0] != 1.toByte()
-                    || addressBytes[1] != EnvironmentManager.getNetCode()) {
+                    || addressBytes[1] != EnvironmentManager.netCode) {
                 return false
             }
 

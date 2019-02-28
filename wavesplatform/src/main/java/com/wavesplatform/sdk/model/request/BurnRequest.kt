@@ -13,7 +13,7 @@ import pers.victor.ext.currentTimeMillis
 
 data class BurnRequest(
         @SerializedName("assetId") val assetId: String = "",
-        @SerializedName("chainId") val chainId: Byte = Constants.NET_CODE,
+        @SerializedName("chainId") val chainId: Byte = EnvironmentManager.netCode,
         @SerializedName("fee") var fee: Long = 100000L,
         @SerializedName("quantity") var quantity: Long = 1,
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",

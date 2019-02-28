@@ -42,6 +42,10 @@ import com.wavesplatform.sdk.model.response.TransactionType
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
+import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
@@ -469,6 +473,32 @@ fun TextView.makeTextHalfBold() {
     this.text = str.append(" $textAfter")
 }
 
+// todo check сравнить
+fun findMyOrder(first: Order, second: Order, address: String?): Order {
+    return if (first.sender == second.sender) {
+        if (first.timestamp > second.timestamp) {
+            first
+        } else {
+            second
+        }
+    } else if (first.sender == address) {
+        first
+    } else if (second.sender == address) {
+        second
+    } else {
+        if (first.timestamp > second.timestamp) {
+            first
+        } else {
+            second
+        }
+    }
+}
+
+fun loadDbWavesBalance(): AssetBalance {
+    return queryFirst<AssetBalance> { equalTo("assetId", "") }
+            ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+}
+
 fun Throwable.errorBody(): ErrorResponse? {
     return if (this is RetrofitException) {
         this.getErrorBodyAs(ErrorResponse::class.java)
@@ -512,6 +542,13 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
     }))
 }
 
+// todo check
+fun isShowTicker(assetId: String?): Boolean {
+    return EnvironmentManager.globalConfiguration.generalAssetIds.any {
+        it.assetId == assetId || assetId.isNullOrEmpty()
+    }
+}
+// todo check
 fun AssetBalance.getItemType(): Int {
     return when {
         isSpam -> AssetsAdapter.TYPE_SPAM_ASSET

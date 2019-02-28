@@ -89,7 +89,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         try {
             loggedInGuid = Wavesplatform.createWallet(seed)
             prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, loggedInGuid)
-            prefs.addGlobalListValue(EnvironmentManager.get().current().getName()
+            prefs.addGlobalListValue(EnvironmentManager.name
                     + PrefsUtil.LIST_WALLET_GUIDS, loggedInGuid)
             prefs.setValue(PrefsUtil.KEY_PUB_KEY, Wavesplatform.getWallet().publicKeyStr)
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
@@ -113,7 +113,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
 
     fun findGuidBy(address: String): String {
         val guids = prefs.getGlobalValueList(
-                EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS)
+                EnvironmentManager.name + PrefsUtil.LIST_WALLET_GUIDS)
         var resultGuid = ""
         for (guid in guids) {
             val publicKey = prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "")
@@ -130,7 +130,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         }
 
         val guids = prefs.getGlobalValueList(
-                EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS)
+                EnvironmentManager.name + PrefsUtil.LIST_WALLET_GUIDS)
         for (guid in guids) {
             if (checkedName == prefs.getValue(guid, PrefsUtil.KEY_WALLET_NAME, "")) {
                 return true
@@ -146,7 +146,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
 
         val tempWallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
         val guids = prefs.getGlobalValueList(
-                EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS)
+                EnvironmentManager.name + PrefsUtil.LIST_WALLET_GUIDS)
         for (guid in guids) {
             if (tempWallet.publicKeyStr == prefs.getValue(guid, PrefsUtil.KEY_PUB_KEY, "")) {
                 return true
@@ -253,7 +253,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_DEFAULT_ASSETS)
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS)
 
-        prefs.setGlobalValue(EnvironmentManager.get().current().getName()
+        prefs.setGlobalValue(EnvironmentManager.name
                 + PrefsUtil.LIST_WALLET_GUIDS, createGuidsListWithout(searchWalletGuid))
 
         if (searchWalletGuid == getLoggedInGuid()) {
@@ -267,7 +267,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
 
     private fun createGuidsListWithout(guidToRemove: String): Array<String> {
         val guids = prefs.getGlobalValueList(
-                EnvironmentManager.get().current().getName() + PrefsUtil.LIST_WALLET_GUIDS)
+                EnvironmentManager.name + PrefsUtil.LIST_WALLET_GUIDS)
         val resultGuidsList = ArrayList<String>()
         for (guid in guids) {
             if (guid != guidToRemove) {

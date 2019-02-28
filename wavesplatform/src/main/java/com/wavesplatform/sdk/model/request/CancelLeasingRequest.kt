@@ -11,8 +11,8 @@ import com.wavesplatform.sdk.model.response.Transaction
 
 data class CancelLeasingRequest(
         @SerializedName("type") val type: Int = Transaction.LEASE_CANCEL,
-        @SerializedName("chainId") var scheme: Int? = Constants.NET_CODE.toInt(),
-        @SerializedName("senderPublicKey") var senderPublicKey: String = "",
+        @SerializedName("chainId") var scheme: Int? = EnvironmentManager.netCode.toInt(),
+        @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
         @SerializedName("leaseId") var leaseId: String = "",
         @SerializedName("timestamp") var timestamp: Long = 0,
         @SerializedName("fee") var fee: Long = 0,
@@ -24,7 +24,7 @@ data class CancelLeasingRequest(
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(Constants.VERSION.toByte()),
-                    byteArrayOf(Constants.NET_CODE),
+                    byteArrayOf(EnvironmentManager.netCode),
                     Base58.decode(senderPublicKey),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp),

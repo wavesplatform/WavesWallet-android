@@ -5,6 +5,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
@@ -22,7 +23,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
     @Inject
     lateinit var coinomatManager: CoinomatManager
 
-    private var crypto: String = "WAVES"
+    private var crypto: String = Constants.WAVES_ASSET_ID_FILLED
     private var address: String? = App.getAccessManager().getWallet()!!.address
     private var amount: String = "0"
     var fiat: String = "USD"
