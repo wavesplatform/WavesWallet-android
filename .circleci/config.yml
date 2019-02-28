@@ -17,6 +17,7 @@ jobs:
       - run:
           name: Add Sentry SDK sentry.properties
           command: |
+            mkdir -p app/src/main/resources
             touch app/src/main/resources/sentry.properties
             echo $SENTRY_DSN | base64 -di > app/src/main/resources/sentry.properties
       - run:
