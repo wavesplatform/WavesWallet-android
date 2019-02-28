@@ -176,9 +176,9 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     private fun onSuccessRecognizedFingerprint() {
         fingerprintState = FingerprintState.SUCCESS
 
-        image_fingerprint_state.setImageResource(R.drawable.ic_fingerprint_recognized_48_submit_300)
-        text_fingerprint_state.setTextColor(findColor(R.color.black))
-        text_fingerprint_state.setText(R.string.fingerprint_dialog_recognized)
+        image_fingerprint_state?.setImageResource(R.drawable.ic_fingerprint_recognized_48_submit_300)
+        text_fingerprint_state?.setTextColor(findColor(R.color.black))
+        text_fingerprint_state?.setText(R.string.fingerprint_dialog_recognized)
     }
 
     private fun onDefaultState() {
@@ -192,9 +192,9 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     private fun onFingerprintLocked() {
         fingerprintState = FingerprintState.LOCKED
 
-        image_fingerprint_state.setImageResource(R.drawable.ic_fingerprint_lock_48_submit_300)
-        text_fingerprint_state.setTextColor(findColor(R.color.error500))
-        text_fingerprint_state.setText(R.string.fingerprint_dialog_too_many_attempts)
+        image_fingerprint_state?.setImageResource(R.drawable.ic_fingerprint_lock_48_submit_300)
+        text_fingerprint_state?.setTextColor(findColor(R.color.error500))
+        text_fingerprint_state?.setText(R.string.fingerprint_dialog_too_many_attempts)
         fingerPrintDialogListener.notNull {
             it.onFingerprintLocked(getString(R.string.fingerprint_dialog_too_many_attempts))
         }
@@ -203,9 +203,9 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     private fun onFingerprintDoNotMatchTryAgain() {
         fingerprintState = FingerprintState.NOT_RECOGNIZED
 
-        image_fingerprint_state.setImageResource(R.drawable.ic_fingerprint_sensor_48_submit_300)
-        text_fingerprint_state.setTextColor(findColor(R.color.error500))
-        text_fingerprint_state.setText(R.string.fingerprint_dialog_not_recognized)
+        image_fingerprint_state?.setImageResource(R.drawable.ic_fingerprint_sensor_48_submit_300)
+        text_fingerprint_state?.setTextColor(findColor(R.color.error500))
+        text_fingerprint_state?.setText(R.string.fingerprint_dialog_not_recognized)
     }
 
 
