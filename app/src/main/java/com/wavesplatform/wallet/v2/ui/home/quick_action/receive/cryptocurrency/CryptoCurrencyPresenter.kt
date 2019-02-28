@@ -1,14 +1,14 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
+import com.wavesplatform.sdk.Constants.Companion.coinomatCryptoCurrencies
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.coinomat.GetTunnel
+import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.RxUtil
 import javax.inject.Inject
 
 @InjectViewState
@@ -24,7 +24,7 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
 
 
     fun getTunnel(assetId: String) {
-        val currencyFrom = Constants.coinomatCryptoCurrencies()[assetId]
+        val currencyFrom = coinomatCryptoCurrencies()[assetId]
         if (currencyFrom.isNullOrEmpty()) {
             viewState.onShowError(App.getAppContext()
                     .getString(R.string.receive_error_network))

@@ -2,27 +2,22 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R
+import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
-import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.wallet.v2.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.sdk.model.request.TransactionsBroadcastRequest
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.AssetInfo
-import com.wavesplatform.sdk.utils.clearAlias
-import com.wavesplatform.sdk.utils.isSmartError
-import com.wavesplatform.sdk.utils.makeAsAlias
-import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.sdk.utils.*
+import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
+import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
+import com.wavesplatform.wallet.v2.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.errorBody
-import com.wavesplatform.wallet.v2.util.isSmartError
-import com.wavesplatform.wallet.v2.util.makeAsAlias
+import com.wavesplatform.wallet.v2.util.find
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -41,7 +36,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
     var blockchainCommission = 0L
-    var feeAsset: AssetBalance = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    var feeAsset: AssetBalance = find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
 
     fun confirmSend() {

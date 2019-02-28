@@ -8,6 +8,7 @@ import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 @RealmClass
 @Parcelize
@@ -34,7 +35,7 @@ open class AssetInfoDb(
             this.precision = it.precision
             this.description = it.description
             this.height = it.height
-            this.timestamp = it.timestamp
+            this.timestamp = it.timestamp.time.toString()
             this.sender = it.sender
             this.quantity = it.quantity
             this.reissuable = it.reissuable
@@ -50,7 +51,7 @@ open class AssetInfoDb(
                 precision = precision,
                 description = description,
                 height = height,
-                timestamp = timestamp,
+                timestamp = Date(timestamp.toLong()),
                 sender = sender,
                 quantity = quantity,
                 reissuable = reissuable,

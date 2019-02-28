@@ -2,7 +2,6 @@ package com.wavesplatform.sdk
 
 import android.app.Application
 import android.util.Log
-import com.wavesplatform.sdk.service.DataManager
 import com.wavesplatform.sdk.service.*
 import retrofit2.CallAdapter
 import java.util.*
@@ -89,8 +88,8 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             return Wavesplatform.get().dataManager.apiService
         }
 
-        fun getSpamService(): SpamService {
-            return Wavesplatform.get().dataManager.spamService
+        fun getGithubService(): GithubService {
+            return Wavesplatform.get().dataManager.githubService
         }
 
         fun getCoinomatService(): CoinomatService {

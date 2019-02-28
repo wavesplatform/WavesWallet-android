@@ -8,21 +8,24 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.sdk.utils.getTicker
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.model.request.TransactionsBroadcastRequest
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.getScaledAmount
+import com.wavesplatform.sdk.utils.getTicker
 import com.wavesplatform.sdk.utils.stripZeros
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
-import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
-import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.find
+import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.makeTextHalfBold
+import com.wavesplatform.wallet.v2.util.showError
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send_confirmation.*
 import pers.victor.ext.*
@@ -68,7 +71,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.type = intent!!.extras!!.getSerializable(KEY_INTENT_TYPE) as SendPresenter.Type
         presenter.blockchainCommission = intent!!.extras!!.getLong(KEY_INTENT_BLOCKCHAIN_COMMISSION)
         presenter.feeAsset = intent!!.extras!!.getParcelable(KEY_INTENT_FEE_ASSET)
-                ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+                ?: find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
         if (presenter.type == SendPresenter.Type.GATEWAY) {
             presenter.gatewayCommission = BigDecimal(
@@ -126,7 +129,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
     }
 
     override fun failedSendCauseSmart() {
-        setResult(Constants.RESULT_SMART_ERROR)
+        setResult(com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR)
         onBackPressed()
     }
 

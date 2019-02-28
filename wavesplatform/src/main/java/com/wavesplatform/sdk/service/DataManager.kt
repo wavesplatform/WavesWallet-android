@@ -31,7 +31,7 @@ open class DataManager(var context: Context,
     lateinit var nodeService: NodeService
     lateinit var apiService: ApiService
     lateinit var matcherService: MatcherService
-    lateinit var spamService: SpamService
+    lateinit var githubService: GithubService
     lateinit var coinomatService: CoinomatService
 
     init { createServices() }
@@ -44,7 +44,7 @@ open class DataManager(var context: Context,
                 createGsonFactory()).create(NodeService::class.java)
 
         apiService = createRetrofit(
-                Constants.URL_DATA,
+                Constants.URL_DATA, // todo check hosts
                 createClient(),
                 adapterFactory ?: RxJava2CallAdapterFactory.create(),
                 createGsonFactory()).create(ApiService::class.java)
@@ -55,11 +55,11 @@ open class DataManager(var context: Context,
                 adapterFactory ?: RxJava2CallAdapterFactory.create(),
                 createGsonFactory()).create(MatcherService::class.java)
 
-        spamService = createRetrofit(
+        githubService = createRetrofit(
                 Constants.URL_SPAM_FILE,
                 createClient(),
                 adapterFactory ?: RxJava2CallAdapterFactory.create(),
-                createGsonFactory()).create(SpamService::class.java)
+                createGsonFactory()).create(GithubService::class.java)
 
         coinomatService = createRetrofit(
                 Constants.URL_COINOMAT,

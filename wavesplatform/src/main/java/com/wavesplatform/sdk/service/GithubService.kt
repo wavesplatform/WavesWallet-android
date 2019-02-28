@@ -1,10 +1,9 @@
-package com.wavesplatform.wallet.v2.data.remote
+package com.wavesplatform.sdk.service
 
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
-import com.wavesplatform.wallet.v2.data.model.remote.response.News
+import com.wavesplatform.sdk.model.response.GlobalConfiguration
+import com.wavesplatform.sdk.model.response.GlobalTransactionCommission
+import com.wavesplatform.sdk.model.response.News
+import com.wavesplatform.sdk.utils.EnvironmentManager
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Url

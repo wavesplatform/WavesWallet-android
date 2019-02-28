@@ -7,10 +7,11 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
+import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.SignUtil
 import com.wavesplatform.sdk.utils.arrayWithSize
-import java.nio.charset.Charset
 import com.wavesplatform.sdk.utils.clearAlias
+import java.nio.charset.Charset
 
 
 class TransactionsBroadcastRequest(

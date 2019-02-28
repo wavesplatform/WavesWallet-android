@@ -8,16 +8,16 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.model.response.Alias
 import com.wavesplatform.sdk.utils.*
+import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.RxUtil
@@ -242,7 +242,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     Activity.RESULT_OK -> {
                         finish()
                     }
-                    Constants.RESULT_SMART_ERROR -> {
+                    com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR -> {
                         showAlertAboutScriptedAccount()
                     }
                 }

@@ -15,8 +15,6 @@ import javax.inject.Inject;
 
 public class PrefsUtil {
 
-    public static final String GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment";
-    public static final String GLOBAL_CURRENT_ENVIRONMENT_DATA = "global_current_environment_data";
     public static final String SHOWED_NEWS_IDS = "showed_news_ids";
     public static final String GLOBAL_LAST_LOGGED_IN_GUID = "global_logged_in_wallet_guid";
     public static final String GLOBAL_SCHEME_URL = "scheme_url";
@@ -227,9 +225,5 @@ public class PrefsUtil {
 
     public String getGuid() {
         return getGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, "");
-    }
-
-    public String getEnvironment() {
-        return getGlobalValue(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, EnvironmentManager.KEY_ENV_MAIN_NET);
     }
 }

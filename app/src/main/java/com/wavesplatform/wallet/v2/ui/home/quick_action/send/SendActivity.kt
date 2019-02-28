@@ -15,11 +15,11 @@ import com.ethanhua.skeleton.SkeletonScreen
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.coinomat.XRate
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
@@ -414,7 +414,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun checkMonero(assetId: String?) {
-        if (assetId == Constants.findByGatewayId("XMR")!!.assetId) {
+        if (assetId == findByGatewayId("XMR")!!.assetId) {
             monero_layout.visiable()
             eventSubscriptions.add(RxTextView.textChanges(edit_monero_payment_id)
                     .subscribe { paymentId ->
@@ -513,7 +513,7 @@ class SendActivity : BaseActivity(), SendView {
 
             REQUEST_SEND -> {
                 when (resultCode) {
-                    Constants.RESULT_SMART_ERROR -> {
+                    com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR -> {
                         showAlertAboutScriptedAccount()
                     }
                 }

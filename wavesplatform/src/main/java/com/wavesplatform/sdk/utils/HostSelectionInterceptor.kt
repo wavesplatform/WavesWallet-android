@@ -1,7 +1,6 @@
-package com.wavesplatform.wallet.v2.injection.module
+package com.wavesplatform.sdk.utils
 
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.model.response.GlobalConfiguration
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import java.io.IOException

@@ -2,23 +2,25 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.Hash
 import com.wavesplatform.sdk.model.request.TransactionsBroadcastRequest
 import com.wavesplatform.sdk.model.request.TransferTransactionRequest
 import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.TransactionUtil.Companion.countCommission
 import com.wavesplatform.sdk.utils.isValidAddress
 import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.find
+import com.wavesplatform.wallet.v2.util.findByGatewayId
 import com.wavesplatform.wallet.v2.util.isSpamConsidered
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
@@ -45,7 +47,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var gatewayMax: BigDecimal = BigDecimal.ZERO
     var fee = 0L
     var feeWaves = 0L
-    var feeAsset: AssetBalance = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    var feeAsset: AssetBalance = find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
     fun sendClicked() {
         val res = validateTransfer()
@@ -105,7 +107,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     return R.string.insufficient_funds
                 } else if (isGatewayAmountError()) {
                     return R.string.insufficient_gateway_funds_error
-                } else if (Constants.findByGatewayId("XMR")!!.assetId == recipientAssetId
+                } else if (findByGatewayId("XMR")!!.assetId == recipientAssetId
                         && moneroPaymentId != null
                         && (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH
                                 || moneroPaymentId!!.contains(" ".toRegex()))) {

@@ -10,15 +10,15 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
-import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.coinomat.GetTunnel
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
+import com.wavesplatform.wallet.v2.util.findByGatewayId
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
 import kotlinx.android.synthetic.main.layout_asset_card.*
@@ -116,7 +116,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         attention_subtitle?.text = getString(R.string.receive_warning_will_send,
                 min,
                 tunnel.tunnel?.currencyFrom)
-        if (Constants.findByGatewayId("ETH")!!.assetId == presenter.assetBalance!!.assetId) {
+        if (findByGatewayId("ETH")!!.assetId == presenter.assetBalance!!.assetId) {
             warning_crypto_title?.text = getString(R.string.receive_gateway_info_gateway_warning_eth_title)
             warning_crypto_subtitle?.text = getString(R.string.receive_gateway_info_gateway_warning_eth_subtitle)
         } else {

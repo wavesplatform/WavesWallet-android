@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_sponsored_fee_bottom_sheet_dialog.view.*

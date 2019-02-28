@@ -15,13 +15,13 @@ import com.google.firebase.FirebaseApp;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.squareup.leakcanary.LeakCanary;
 import com.wavesplatform.sdk.Wavesplatform;
+import com.wavesplatform.sdk.utils.EnvironmentManager;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
 import com.wavesplatform.wallet.v2.data.manager.GithubDataManager;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
 import com.wavesplatform.wallet.v2.util.Analytics;
-import com.wavesplatform.wallet.v2.util.EnvironmentManager;
 import com.wavesplatform.wallet.v2.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.util.connectivity.ConnectivityManager;
 
@@ -92,7 +92,12 @@ public class App extends DaggerApplication {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         SimpleChromeCustomTabs.initialize(this);
 
-        EnvironmentManager.updateConfiguration(githubDataManager);
+        EnvironmentManager.updateConfiguration(
+                githubDataManager.globalConfiguration(
+                        EnvironmentManager.Companion.getEnvironment().getUrl()),
+                githubDataManager.getApiService());
+
+
     }
 
     public static Context getAppContext() {

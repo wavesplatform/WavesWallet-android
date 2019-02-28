@@ -303,7 +303,7 @@
     !static !private <fields>;
 }
 
--keep class com.wavesplatform.wallet.v2.data.remote.GithubService { *; }
+-keep class com.wavesplatform.sdk.service.GithubService { *; }
 -keep class com.wavesplatform.wallet.v2.data.remote.NodeService { *; }
 -keep class com.wavesplatform.wallet.v2.data.remote.ApiService { *; }
 -keep class com.wavesplatform.wallet.v2.data.remote.MatcherService { *; }

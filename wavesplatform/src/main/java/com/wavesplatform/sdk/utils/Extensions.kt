@@ -113,7 +113,7 @@ fun randomString(): String {
 }
 
 fun isShowTicker(assetId: String?): Boolean {
-    return Constants.defaultAssets.any {
+    return EnvironmentManager.globalConfiguration.generalAssetIds.any {
         it.assetId == assetId || assetId.isNullOrEmpty()
     }
 }

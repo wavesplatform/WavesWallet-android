@@ -9,6 +9,7 @@ import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.sdk.utils.EnvironmentManager
 import pers.victor.ext.currentTimeMillis
 
 data class BurnRequest(

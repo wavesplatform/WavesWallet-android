@@ -8,6 +8,7 @@ import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.arrayWithSize
 import java.nio.charset.Charset
 
@@ -27,7 +28,7 @@ data class AliasRequest(
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(Constants.NET_CODE),
                     Base58.decode(senderPublicKey),
-                    Bytes.concat(byteArrayOf(Constants.VERSION.toByte()), // todo check
+                    Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
                             byteArrayOf(EnvironmentManager.netCode),
                             alias?.toByteArray(Charset.forName("UTF-8"))?.arrayWithSize())
                             .arrayWithSize(),

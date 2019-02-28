@@ -1,23 +1,21 @@
-package com.wavesplatform.wallet.v1.ui.auth
+package com.wavesplatform.sdk.utils
 
 import android.app.Application
 import android.content.Intent
 import android.os.Handler
 import android.preference.PreferenceManager
 import android.text.TextUtils
+import android.util.Log
 import com.google.gson.Gson
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
-import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
-import com.wavesplatform.wallet.v2.injection.module.HostSelectionInterceptor
+import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.model.response.GlobalConfiguration
+import com.wavesplatform.sdk.model.response.IssueTransaction
+import com.wavesplatform.sdk.service.ApiService
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
@@ -25,7 +23,7 @@ import java.util.*
 
 class EnvironmentManager {
 
-    private var current: Environment? = null
+    var current: Environment? = null
     private var application: Application? = null
     private var disposable: Disposable? = null
     private var interceptor: HostSelectionInterceptor? = null
@@ -74,6 +72,9 @@ class EnvironmentManager {
         private var instance: EnvironmentManager? = null
         private val handler = Handler()
 
+        private const val GLOBAL_CURRENT_ENVIRONMENT_DATA = "global_current_environment_data"
+        private const val GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment"
+
         @JvmStatic
         fun init(application: Application) {
             instance = EnvironmentManager()
@@ -85,9 +86,9 @@ class EnvironmentManager {
                     if (envName!!.equals(environment.name, ignoreCase = true)) {
                         val preferenceManager = PreferenceManager
                                 .getDefaultSharedPreferences(instance!!.application)
-                        if (preferenceManager.contains(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA)) {
+                        if (preferenceManager.contains(GLOBAL_CURRENT_ENVIRONMENT_DATA)) {
                             val json = preferenceManager.getString(
-                                    PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                                    GLOBAL_CURRENT_ENVIRONMENT_DATA,
                                     Gson().toJson(environment.configuration))
                             environment.setConfiguration(Gson()
                                     .fromJson(json, GlobalConfiguration::class.java))
@@ -107,18 +108,19 @@ class EnvironmentManager {
         }
 
         @JvmStatic
-        fun updateConfiguration(githubDataManager: GithubDataManager) {
+        fun updateConfiguration(globalConfigurationObserver: Observable<GlobalConfiguration>,
+                                apiService: ApiService) {
             if (instance == null) {
                 throw NullPointerException("EnvironmentManager must be init first!")
             }
 
-            instance!!.disposable = githubDataManager.globalConfiguration(EnvironmentManager.environment.url)
+            instance!!.disposable = globalConfigurationObserver
                     .map { globalConfiguration ->
                         instance!!.interceptor!!.setHosts(globalConfiguration.servers)
                         PreferenceManager
-                                .getDefaultSharedPreferences(App.getAppContext())
+                                .getDefaultSharedPreferences(instance!!.application)
                                 .edit()
-                                .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                                .putString(GLOBAL_CURRENT_ENVIRONMENT_DATA,
                                         Gson().toJson(globalConfiguration))
                                 .apply()
                         instance!!.current!!.setConfiguration(globalConfiguration)
@@ -129,7 +131,7 @@ class EnvironmentManager {
                         }
                         list
                     }
-                    .flatMap { githubDataManager.apiService.assetsInfoByIds(it) }
+                    .flatMap { apiService.assetsInfoByIds(it) }
                     .map { info ->
                         defaultAssets.clear()
                         for (assetInfo in info.data) {
@@ -157,25 +159,25 @@ class EnvironmentManager {
                     .subscribe({
                         instance!!.disposable!!.dispose()
                     }, { error ->
-                        Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration")
+                        Log.e("EnvironmentManager", "Can't download GlobalConfiguration")
                         error.printStackTrace()
                         PreferenceManager
-                                .getDefaultSharedPreferences(App.getAppContext())
+                                .getDefaultSharedPreferences(instance!!.application)
                                 .edit()
-                                .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
-                                        Gson().toJson(EnvironmentManager.Environment.MAIN_NET.configuration))
+                                .putString(GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                                        Gson().toJson(Environment.MAIN_NET.configuration))
                                 .apply()
                         instance!!.disposable!!.dispose()
                     })
         }
 
         fun setCurrentEnvironment(current: Environment) {
-            PreferenceManager.getDefaultSharedPreferences(App.getAppContext())
+            PreferenceManager.getDefaultSharedPreferences(instance!!.application)
                     .edit()
-                    .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, current.name)
-                    .remove(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA)
+                    .putString(GLOBAL_CURRENT_ENVIRONMENT, current.name)
+                    .remove(GLOBAL_CURRENT_ENVIRONMENT_DATA)
                     .apply()
-            restartApp()
+            restartApp(instance!!.application!!)
         }
 
         val environmentName: String?
@@ -183,7 +185,7 @@ class EnvironmentManager {
                 val preferenceManager = PreferenceManager
                         .getDefaultSharedPreferences(instance!!.application)
                 return preferenceManager.getString(
-                        PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, Environment.MAIN_NET.name)
+                        GLOBAL_CURRENT_ENVIRONMENT, Environment.MAIN_NET.name)
             }
 
         private fun findAssetIdByAssetId(assetId: String): GlobalConfiguration.GeneralAssetId? {
@@ -227,14 +229,14 @@ class EnvironmentManager {
         val environment: Environment
             get() = instance!!.current!!
 
-        private fun restartApp() {
+        private fun restartApp(application: Application) {
             handler.postDelayed({
-                val packageManager = App.getAppContext().packageManager
-                val intent = packageManager.getLaunchIntentForPackage(App.getAppContext().packageName)
+                val packageManager = application.packageManager
+                val intent = packageManager.getLaunchIntentForPackage(application.packageName)
                 if (intent != null) {
                     val componentName = intent.component
                     val mainIntent = Intent.makeRestartActivityTask(componentName)
-                    App.getAppContext().startActivity(mainIntent)
+                    application.startActivity(mainIntent)
                     System.exit(0)
                 }
             }, 300)

@@ -4,9 +4,9 @@ import android.app.Activity
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.wallet.R
+import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.showError
@@ -91,7 +91,7 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
     }
 
     override fun failedCancelLeasingCauseSmart() {
-        setResult(Constants.RESULT_SMART_ERROR)
+        setResult(com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR)
         onBackPressed()
     }
 

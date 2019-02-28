@@ -8,13 +8,14 @@ import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.arrayWithSize
 import com.wavesplatform.sdk.utils.clearAlias
 import java.nio.charset.Charset
 
 data class CreateLeasingRequest(
         @SerializedName("type") val type: Int = Transaction.LEASE,
-        @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+        @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("scheme") var scheme: String? = EnvironmentManager.globalConfiguration.scheme,
         @SerializedName("amount") var amount: Long = 0,
         @SerializedName("fee") var fee: Long = 0,

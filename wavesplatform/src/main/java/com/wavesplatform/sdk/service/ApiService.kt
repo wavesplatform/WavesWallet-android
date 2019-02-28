@@ -1,11 +1,7 @@
 package com.wavesplatform.sdk.service
 
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.sdk.model.response.*
 import io.reactivex.Observable
-import ren.yale.android.retrofitcachelibrx2.RetrofitCache
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
