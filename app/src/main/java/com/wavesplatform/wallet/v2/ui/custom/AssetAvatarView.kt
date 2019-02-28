@@ -88,7 +88,7 @@ class AssetAvatarView : AppCompatImageView {
     * Set asset object to get initials for drawable
     * */
     fun setAsset(asset: AssetBalance?) {
-        setValues(asset?.assetId ?: "", asset?.getName() ?: "", asset?.isSponsored() == true)
+        setValues(asset?.assetId ?: " ", asset?.getName() ?: " ", asset?.isSponsored() == true)
     }
 
     /*
@@ -117,9 +117,10 @@ class AssetAvatarView : AppCompatImageView {
     }
 
     private fun getPlaceholderColorFromAssetName(text: String?): Int {
-        if (TextUtils.isEmpty(text)) {
-            findColor(R.color.persist)
+        if (TextUtils.isEmpty(text?.trim())) {
+            return findColor(R.color.persist)
         }
+
         val letterColor = Constants.alphabetColor[text!!.trim().substring(0, 1).toLowerCase()]
 
         return if (letterColor != null) {

@@ -690,6 +690,11 @@ fun findMyOrder(first: Order, second: Order, address: String?): Order {
     }
 }
 
+fun loadDbWavesBalance(): AssetBalance {
+    return queryFirst<AssetBalance> { equalTo("assetId", Constants.WAVES_ASSET_ID_EMPTY) }
+            ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+}
+
 fun getDeviceId(): String {
     return "android:${Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID)}"
 }
