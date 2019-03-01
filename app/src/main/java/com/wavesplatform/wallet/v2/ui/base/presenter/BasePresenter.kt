@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.base.presenter
 
-import android.util.Log
 import com.arellomobile.mvp.MvpPresenter
 import com.arellomobile.mvp.MvpView
 import com.wavesplatform.wallet.v1.util.AppUtil
@@ -23,7 +22,7 @@ open class BasePresenter<T : MvpView> @Inject constructor(): MvpPresenter<T>(){
     @Inject lateinit var nodeDataManager: NodeDataManager
     @Inject lateinit var apiDataManager: ApiDataManager
     @Inject lateinit var matcherDataManager: MatcherDataManager
-    @Inject lateinit var spamDataManager: SpamDataManager
+    @Inject lateinit var githubDataManager: GithubDataManager
     @Inject lateinit var prefsUtil: PrefsUtil
     @Inject lateinit var rxEventBus: RxEventBus
     @Inject lateinit var appUtil: AppUtil

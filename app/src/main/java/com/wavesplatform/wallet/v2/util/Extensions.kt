@@ -52,6 +52,7 @@ import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
@@ -687,6 +688,11 @@ fun findMyOrder(first: Order, second: Order, address: String?): Order {
     }
 }
 
+fun loadDbWavesBalance(): AssetBalance {
+    return queryFirst<AssetBalance> { equalTo("assetId", "") }
+            ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+}
+
 fun Throwable.errorBody(): ErrorResponse? {
     return if (this is RetrofitException) {
         this.getErrorBodyAs(ErrorResponse::class.java)
@@ -765,7 +771,7 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 }
 
 fun isShowTicker(assetId: String?): Boolean {
-    return Constants.defaultAssets.any {
+    return EnvironmentManager.globalConfiguration.generalAssetIds.any {
         it.assetId == assetId || assetId.isNullOrEmpty()
     }
 }

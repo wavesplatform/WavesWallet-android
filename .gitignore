@@ -52,3 +52,6 @@ urls.properties
 
 # Crashlytics config
 fabric.properties
+
+# Sentry config
+sentry.properties
