@@ -39,7 +39,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
     var blockchainCommission = 0L
-    var feeAsset: AssetBalance = Constants.defaultAssets[0]
+    var feeAsset: AssetBalance = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
     fun confirmSend() {
         val singed = signTransaction()
@@ -136,14 +136,14 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
 
     private fun createGateAndPayment() {
         val assetId = selectedAsset!!.assetId
-        val currencyTo = Constants.coinomatCryptoCurrencies[assetId]
+        val currencyTo = Constants.coinomatCryptoCurrencies()[assetId]
 
         if (currencyTo.isNullOrEmpty()) {
             viewState.onShowError(R.string.receive_error_network)
             return
         }
 
-        val currencyFrom = "${EnvironmentManager.getNetCode().toChar()}$currencyTo"
+        val currencyFrom = "${EnvironmentManager.netCode.toChar()}$currencyTo"
 
         val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY &&
                 !this.moneroPaymentId.isNullOrEmpty()) {

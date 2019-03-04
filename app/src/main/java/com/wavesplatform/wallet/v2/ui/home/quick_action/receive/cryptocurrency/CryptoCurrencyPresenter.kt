@@ -23,7 +23,7 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
     var nextStepValidation = false
 
     fun getTunnel(assetId: String) {
-        val currencyFrom = Constants.coinomatCryptoCurrencies[assetId]
+        val currencyFrom = Constants.coinomatCryptoCurrencies()[assetId]
         if (currencyFrom.isNullOrEmpty()) {
             viewState.onShowError(App.getAppContext()
                     .getString(R.string.receive_error_network))

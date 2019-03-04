@@ -73,17 +73,6 @@
                 android:text="@string/wallet_assets_my_asset"
                 />
 
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_blocked"
-                android:visibility="gone"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_alignParentEnd="true"
-                app:srcCompat="@drawable/ic_draglock_22_disabled_400" />
-
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

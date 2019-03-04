@@ -94,8 +94,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     private fun setEnvButton() {
         if (BuildConfig.DEBUG) {
             button_switch_net.visiable()
-            val newEnvironment = when (prefsUtil.getGlobalValue(
-                    PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, EnvironmentManager.KEY_ENV_MAIN_NET)) {
+            val newEnvironment = when (EnvironmentManager.environmentName) {
                 EnvironmentManager.KEY_ENV_MAIN_NET -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_test)
                     EnvironmentManager.Environment.TEST_NET
@@ -111,7 +110,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             }
             button_switch_net.click {
                 button_switch_net.isEnabled = false
-                EnvironmentManager.get().setCurrent(newEnvironment)
+                EnvironmentManager.setCurrentEnvironment(newEnvironment)
             }
         }
     }

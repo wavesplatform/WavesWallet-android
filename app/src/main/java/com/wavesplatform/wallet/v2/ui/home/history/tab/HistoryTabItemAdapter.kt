@@ -19,7 +19,6 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import kotlinx.android.synthetic.main.recycle_item_history.view.*
-import org.spongycastle.asn1.x500.style.RFC4519Style.title
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -205,8 +204,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)
 
-        val amountAssetTicker = if (amountAsset.name == "WAVES") {
-            "WAVES"
+        val amountAssetTicker = if (amountAsset.name == Constants.WAVES_ASSET_ID_FILLED) {
+            Constants.WAVES_ASSET_ID_FILLED
         } else {
             amountAsset.ticker
         }

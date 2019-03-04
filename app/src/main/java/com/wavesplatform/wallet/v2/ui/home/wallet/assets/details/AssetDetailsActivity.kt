@@ -178,12 +178,10 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     private fun changeFavorite() {
-        if (!adapterAvatar.items[view_pager.currentItem].isWaves()) {
-            if (adapterAvatar.items[view_pager.currentItem].isFavorite) {
-                unmarkAsFavorite()
-            } else {
-                markAsFavorite()
-            }
+        if (adapterAvatar.items[view_pager.currentItem].isFavorite) {
+            unmarkAsFavorite()
+        } else {
+            markAsFavorite()
         }
     }
 

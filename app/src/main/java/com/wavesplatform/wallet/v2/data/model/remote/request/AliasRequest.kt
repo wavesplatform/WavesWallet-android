@@ -28,7 +28,7 @@ data class AliasRequest(
                     byteArrayOf(Constants.VERSION.toByte()),
                     Base58.decode(senderPublicKey),
                     Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                            byteArrayOf(EnvironmentManager.getNetCode()),
+                            byteArrayOf(EnvironmentManager.netCode),
                             alias?.toByteArray(Charset.forName("UTF-8"))?.arrayWithSize())
                             .arrayWithSize(),
                     Longs.toByteArray(fee),

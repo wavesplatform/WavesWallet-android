@@ -804,8 +804,8 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)
 
-        val amountAssetTicker = if (amountAsset.name == "WAVES") {
-            "WAVES"
+        val amountAssetTicker = if (amountAsset.name == Constants.WAVES_ASSET_ID_FILLED) {
+            Constants.WAVES_ASSET_ID_FILLED
         } else {
             amountAsset.ticker
         }

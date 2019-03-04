@@ -415,7 +415,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun checkMonero(assetId: String?) {
-        if (assetId == Constants.MONERO_ASSET_ID) {
+        if (assetId == Constants.findByGatewayId("XMR")!!.assetId) {
             monero_layout.visiable()
             eventSubscriptions.add(RxTextView.textChanges(edit_monero_payment_id)
                     .subscribe { paymentId ->
@@ -554,7 +554,7 @@ class SendActivity : BaseActivity(), SendView {
                 }
 
                 var assetId = uri.path.split("/")[2]
-                if ("waves".equalsIgnoreCase(assetId)) {
+                if (Constants.WAVES_ASSET_ID_FILLED.equalsIgnoreCase(assetId)) {
                     assetId = ""
                 }
                 val assetBalance = queryFirst<AssetBalance> {
