@@ -16,11 +16,7 @@ class TradeMyOrdersPresenter @Inject constructor() : BasePresenter<TradeMyOrders
         addSubscription(matcherDataManager.loadMyOrders(watchMarket)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
-                    val sortedByTimestamp = it
-                            .sortedByDescending { it.timestamp }
-                            .toMutableList()
-
-                    viewState.afterSuccessLoadMyOrders(sortedByTimestamp)
+                    viewState.afterSuccessLoadMyOrders(it)
                 }, {
                     viewState.afterFailedLoadMyOrders()
                 }))
