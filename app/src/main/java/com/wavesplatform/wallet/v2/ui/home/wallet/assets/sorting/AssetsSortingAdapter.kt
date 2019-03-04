@@ -13,8 +13,6 @@ import kotlinx.android.synthetic.main.wallet_asset_sorting_favorite_item.view.*
 import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.findColor
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<AssetSortingItem, BaseViewHolder>(null),

@@ -22,7 +22,6 @@ import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
 
-
 class EnvironmentManager {
 
     private var current: Environment? = null

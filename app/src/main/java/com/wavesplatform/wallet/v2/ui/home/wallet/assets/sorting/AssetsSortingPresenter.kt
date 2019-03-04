@@ -2,8 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.vicpin.krealmextensions.queryFirst
-import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance

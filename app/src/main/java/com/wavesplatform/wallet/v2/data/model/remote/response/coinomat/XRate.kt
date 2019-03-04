@@ -23,5 +23,4 @@ data class XRate(
         @SerializedName("fee") var fee: Double? = null
     )
 }
-
         

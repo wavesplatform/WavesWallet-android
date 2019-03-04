@@ -122,10 +122,10 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
     private fun filterDetailed(transactions: List<Transaction>, assetId: String): List<Transaction> {
         return transactions.filter { transaction ->
-            (assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && !transaction.isSponsorshipTransaction())
-                    || AssetDetailsContentPresenter.isAssetIdInExchange(transaction, assetId)
-                    || transaction.assetId == assetId && transaction.transactionType() != TransactionType.RECEIVE_SPONSORSHIP_TYPE
-                    || (transaction.feeAssetId == assetId && transaction.isSponsorshipTransaction())
+            (assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && !transaction.isSponsorshipTransaction()) ||
+                    AssetDetailsContentPresenter.isAssetIdInExchange(transaction, assetId) ||
+                    transaction.assetId == assetId && transaction.transactionType() != TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
+                    (transaction.feeAssetId == assetId && transaction.isSponsorshipTransaction())
         }
     }
 
@@ -186,5 +186,4 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         totalHeaders = 0
         hashOfTimestamp = hashMapOf()
     }
-
 }
