@@ -33,6 +33,7 @@ class Analytics {
 
                 }
             }
+            // TODO: change key and put in a separate file
             AppsFlyerLib.getInstance().init("4di8SsYap4CM4XYMdh8uT6", conversionDataListener,
                     app.applicationContext)
             AppsFlyerLib.getInstance().startTracking(app)
