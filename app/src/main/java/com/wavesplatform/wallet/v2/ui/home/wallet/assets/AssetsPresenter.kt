@@ -1,9 +1,9 @@
-
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.vicpin.krealmextensions.queryAllAsSingle
+import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -34,16 +34,18 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
             addSubscription(queryAllAsSingle<AssetBalance>().toObservable()
                     .subscribeOn(Schedulers.io())
                     .map {
-                        dbAssets = it.toMutableList()
-                        for (item in dbAssets) {
+                        val assetBalanceList = it.toMutableList()
+                        for (item in assetBalanceList) {
                             val assetBalance = savedAssetPrefs[item.assetId]
                             assetBalance.notNull { storedAssetBalance ->
                                 item.isFavorite = storedAssetBalance.isFavorite
                                 item.position = storedAssetBalance.position
                                 item.isHidden = storedAssetBalance.isHidden
+                                item.save()
                             }
                         }
-                        return@map createTripleSortedLists(it.toMutableList())
+                        dbAssets = assetBalanceList
+                        return@map createTripleSortedLists(assetBalanceList)
                     }
                     .doOnNext { postSuccess(it, withApiUpdate, true) }
                     .flatMap { tryUpdateWithApi(withApiUpdate, dbAssets) }
@@ -93,7 +95,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                                     asset.position = assetsListFromDb.size + 1
                                 }
                             }
-                            if (asset.isSpam){
+                            if (asset.isSpam) {
                                 asset.isFavorite = false
                             }
                         }
@@ -143,7 +145,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                                     asset.position = assetsListFromDb.size + 1
                                 }
                             }
-                            if (asset.isSpam){
+                            if (asset.isSpam) {
                                 asset.isFavorite = false
                             }
                         }
@@ -206,10 +208,22 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
     }
 
-    private fun createTripleSortedLists(list: MutableList<AssetBalance>): Triple<MutableList<AssetBalance>, MutableList<AssetBalance>, MutableList<AssetBalance>> {
-        val hiddenList = list.filter { it.isHidden && !it.isSpam }.sortedBy { it.position }.toMutableList()
-        val sortedToFirstFavoriteList = list.filter { !it.isHidden && !it.isSpam }.sortedByDescending({ it.isGateway }).sortedBy { it.position }.sortedByDescending({ it.isFavorite }).toMutableList()
-        val spamList = list.filter { it.isSpam }.toMutableList()
+    private fun createTripleSortedLists(list: MutableList<AssetBalance>):
+            Triple<MutableList<AssetBalance>, MutableList<AssetBalance>, MutableList<AssetBalance>> {
+        val hiddenList = list
+                .filter { it.isHidden && !it.isSpam }
+                .sortedBy { it.position }
+                .toMutableList()
+        val sortedToFirstFavoriteList = list
+                .asSequence()
+                .filter { !it.isHidden && !it.isSpam }
+                .sortedByDescending { it.isGateway }
+                .sortedBy { it.position }
+                .sortedByDescending { it.isFavorite }
+                .toMutableList()
+        val spamList = list
+                .filter { it.isSpam }
+                .toMutableList()
         return Triple(sortedToFirstFavoriteList, hiddenList, spamList)
     }
 

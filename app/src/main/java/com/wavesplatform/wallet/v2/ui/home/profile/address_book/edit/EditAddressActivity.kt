@@ -64,7 +64,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
                 .and(NotEmptyTrimRule(R.string.address_book_name_validation_required_error))
                 .and(MinTrimRule(2, R.string.address_book_name_validation_min_length_error))
                 .and(MaxRule(24, R.string.address_book_name_validation_max_length_error))
-                .and(AddressBookNameRule(R.string.address_book_name_validation_already_use_error))
+                .and(AddressBookNameRule(prefsUtil, R.string.address_book_name_validation_already_use_error))
 
         edit_address.setDrawableClickListener(object : onDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
@@ -142,7 +142,8 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         } else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE) {
             val addressValidation = Validation(til_address)
                     .and(NotEmptyTrimRule(R.string.address_book_address_validation_required_error))
-                    .and(AddressBookAddressRule(R.string.address_book_address_validation_already_use_error))
+                    .and(AddressBookAddressRule(prefsUtil,
+                            R.string.address_book_address_validation_already_use_error))
 
             edit_address.addTextChangedListener {
                 on { s, start, before, count ->

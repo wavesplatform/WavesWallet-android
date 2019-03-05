@@ -3,12 +3,8 @@ package com.wavesplatform.wallet.v2.data.rules
 import android.support.annotation.StringRes
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import io.github.anderscheow.validator.rules.BaseRule
-import javax.inject.Inject
 
-class AddressBookNameRule(@StringRes errorRes: Int) : BaseRule(errorRes) {
-
-    @Inject
-    lateinit var prefsUtil: PrefsUtil
+class AddressBookNameRule(var prefsUtil: PrefsUtil, @StringRes errorRes: Int) : BaseRule(errorRes) {
 
     override fun validate(value: Any?): Boolean {
         if (value == null) {

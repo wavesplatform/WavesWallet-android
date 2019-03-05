@@ -1,8 +1,12 @@
 package com.wavesplatform.wallet.v2.util
 
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalanceStore
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
+import io.realm.DynamicRealm
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import java.io.File
 import javax.inject.Inject
 
@@ -58,6 +62,43 @@ class MigrationUtil @Inject constructor() {
                 oldDbFile.renameTo(newDbFile)
                 oldDbLockFile.renameTo(newDbLockFile)
                 oldDbManagementFile.renameTo(newDbManagementFile)
+            }
+        }
+
+        @JvmStatic
+        fun copyPrefDataFromDb(prefsUtil: PrefsUtil, guid: String) {
+            val initConfig = RealmConfiguration.Builder()
+                    .name(String.format("%s.realm", guid))
+                    .build()
+            val tempRealm = DynamicRealm.getInstance(initConfig)
+            if (tempRealm!!.version < 3) {
+                val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
+                val addressBookUsers = prefsUtil.allAddressBookUsers
+                for (item in addressBookUsersDb) {
+                    val addressBookUser = AddressBookUser(
+                            item.getString("address"),
+                            item.getString("name"))
+                    addressBookUsers.add(addressBookUser)
+                }
+                prefsUtil.setAddressBookUsers(addressBookUsers)
+
+                val assetBalances = hashMapOf<String, AssetBalanceStore>()
+                val assetBalancesDb = tempRealm.where("AssetBalance").findAll()
+                for (item in assetBalancesDb) {
+                    val assetId = item.getString("assetId")
+                    assetBalances[assetId] =
+                            AssetBalanceStore(
+                                    assetId = assetId,
+                                    isHidden = item.getBoolean("isHidden"),
+                                    position = item.getInt("position"),
+                                    isFavorite = item.getBoolean("isFavorite"))
+                }
+                prefsUtil.saveAssetBalances(assetBalances)
+
+                tempRealm.close()
+                App.getAccessManager().deleteRealm(guid)
+            } else {
+                tempRealm.close()
             }
         }
     }

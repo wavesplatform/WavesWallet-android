@@ -329,13 +329,11 @@ public class PrefsUtil {
         String guid = App.getAccessManager().getLoggedInGuid();
         Map<String, AssetBalanceStore> map = getAssetBalances();
         for (AssetBalance assetBalance : assetsList) {
-            if (!TextUtils.isEmpty(assetBalance.getAssetId())) {
-                map.put(assetBalance.getAssetId(), new AssetBalanceStore(
-                        assetBalance.getAssetId(),
-                        assetBalance.isHidden(),
-                        assetBalance.getPosition(),
-                        assetBalance.isFavorite()));
-            }
+            map.put(assetBalance.getAssetId(), new AssetBalanceStore(
+                    assetBalance.getAssetId(),
+                    assetBalance.isHidden(),
+                    assetBalance.getPosition(),
+                    assetBalance.isFavorite()));
         }
         setGlobalValue(KEY_ASSET_BALANCES + "_" + guid, new Gson().toJson(map));
     }
