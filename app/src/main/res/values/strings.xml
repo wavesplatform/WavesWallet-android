@@ -435,6 +435,7 @@
     <string name="profile_general_feedback_body_extra_device_model">Device Model: %s</string>
     <string name="profile_general_feedback_body_extra_language">Language: %s</string>
     <string name="profile_general_feedback_body_extra_os_version">OS Version: %s</string>
+    <string name="profile_general_feedback_body_extra_device_id">Device ID: %s</string>
     <string name="profile_general_feedback_body_extra_title">---Device Info---</string>
     <string name="profile_general_fingerprint">Fingerprint</string>
     <string name="profile_general_language">Language</string>
