@@ -87,6 +87,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
                             // Save to DB
                             asset.save()
+                            prefsUtil.saveAssetBalance(asset)
                         }
                         AssetSortingItem.TYPE_NOT_FAVORITE -> {
                             // remove from current list
@@ -105,6 +106,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
                             // Save to DB
                             asset.save()
+                            prefsUtil.saveAssetBalance(asset)
                         }
                     }
                 }
@@ -117,6 +119,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 presenter.needToUpdate = true
                 item.isHidden = !checked
                 item.save()
+                prefsUtil.saveAssetBalance(item)
             }
         }
 

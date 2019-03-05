@@ -104,16 +104,16 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                     tripple.third.balances.forEachIndexed { index, assetBalance ->
                                         val dbAsset = mapDbAssets?.get(assetBalance.assetId)
                                         dbAsset?.let {
-                                            assetBalance.isHidden = it.isHidden
                                             assetBalance.issueTransaction?.name = it.issueTransaction?.name
                                             assetBalance.issueTransaction?.quantity = it.issueTransaction?.quantity
                                             assetBalance.issueTransaction?.decimals = it.issueTransaction?.decimals
                                             assetBalance.issueTransaction?.timestamp = it.issueTransaction?.timestamp
-                                            assetBalance.isFavorite = it.isFavorite
                                             assetBalance.isFiatMoney = it.isFiatMoney
                                             assetBalance.isGateway = it.isGateway
                                             assetBalance.isSpam = it.isSpam
+                                            assetBalance.isFavorite = it.isFavorite
                                             assetBalance.position = it.position
+                                            assetBalance.isHidden = it.isHidden
                                         }
                                     }
                                 }
@@ -147,6 +147,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 }
 
                                 tripple.third.balances.saveAll()
+                                prefsUtil.saveAssetBalances(tripple.third.balances)
 
                                 return@map queryAll<AssetBalance>()
                             }

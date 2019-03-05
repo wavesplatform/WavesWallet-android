@@ -1,19 +1,15 @@
 package com.wavesplatform.wallet.v2.data.rules
 
 import android.support.annotation.StringRes
-import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 
 import io.github.anderscheow.validator.rules.BaseRule
+import javax.inject.Inject
 
-class AddressBookAddressRule : BaseRule {
+class AddressBookAddressRule(@StringRes errorRes: Int) : BaseRule(errorRes) {
 
-    constructor() : super("Value must not be empty") {}
-
-    constructor(@StringRes errorRes: Int) : super(errorRes) {}
-
-    constructor(errorMessage: String) : super(errorMessage) {}
+    @Inject
+    lateinit var prefsUtil: PrefsUtil
 
     override fun validate(value: Any?): Boolean {
         if (value == null) {
@@ -21,7 +17,7 @@ class AddressBookAddressRule : BaseRule {
         }
 
         if (value is String) {
-            val user = queryFirst<AddressBookUser> { equalTo("address", value) }
+            val user = prefsUtil.getAddressBookUser(value)
             return user == null
         }
 

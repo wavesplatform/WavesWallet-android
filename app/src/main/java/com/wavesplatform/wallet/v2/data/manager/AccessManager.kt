@@ -13,14 +13,13 @@ import com.wavesplatform.wallet.v1.data.services.PinStoreService
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
-import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.util.AddressUtil
-import com.wavesplatform.wallet.v2.util.MigrationUtil
 import com.wavesplatform.wallet.v2.util.deleteRecursive
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.reactivex.Completable
@@ -115,7 +114,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
             prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet!!.getEncryptedData(password))
             authHelper.configureDB(wallet?.address, guid)
-            MigrationUtil.checkOldAddressBook(prefs, loggedInGuid)
             prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, skipBackup)
             return guid
         } catch (e: Exception) {
@@ -202,7 +200,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         wallet = WavesWallet(getWalletData(guid), password)
         setLastLoggedInGuid(guid)
         authHelper.configureDB(wallet?.address, guid)
-        MigrationUtil.checkOldAddressBook(prefs, guid)
     }
 
     fun getWallet(): WavesWallet? {
@@ -278,7 +275,11 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             prefs.removeGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID)
         }
 
-        deleteRealmDBForAccount(searchWalletGuid)
+        deleteRealm(searchWalletGuid)
+    }
+
+    fun deleteRealm(guid: String) {
+        deleteRealmDBForAccount(guid)
         clearRealmConfiguration()
     }
 

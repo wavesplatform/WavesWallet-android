@@ -136,7 +136,8 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
             edit_address.isFocusableInTouchMode = false
             edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 
-            edit_address.setText(intent.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM).address)
+            edit_address.setText(intent.getParcelableExtra<AddressBookUser>(
+                    AddressBookActivity.BUNDLE_ADDRESS_ITEM).address)
             presenter.addressFieldValid = edit_address.text.isNotEmpty()
         } else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE) {
             val addressValidation = Validation(til_address)
