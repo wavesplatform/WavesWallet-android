@@ -6,9 +6,7 @@ import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.database.DBHelper
-import com.wavesplatform.wallet.v2.data.database.RealmMigrations
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.util.MigrationUtil
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -18,13 +16,12 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
 
     fun configureDB(address: String?, guid: String) {
 
-        // check db with old name
-        MigrationUtil.checkPrevDbAndRename(address, guid)
+        migration(guid, address)
 
         val config = RealmConfiguration.Builder()
                 .name(String.format("%s.realm", guid))
-                .schemaVersion(2)
-                .migration(RealmMigrations())
+                .schemaVersion(3)
+                .deleteRealmIfMigrationNeeded()
                 .build()
 
         Realm.compactRealm(config)
@@ -39,7 +36,6 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
         RealmConfigStore.init(Lease::class.java, config)
         RealmConfigStore.init(Alias::class.java, config)
         RealmConfigStore.init(SpamAsset::class.java, config)
-        RealmConfigStore.init(AddressBookUser::class.java, config)
         RealmConfigStore.init(AssetInfo::class.java, config)
         RealmConfigStore.init(MarketResponse::class.java, config)
 
@@ -47,6 +43,12 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
         Realm.getInstance(config).isAutoRefresh = false
 
         saveDefaultAssets()
+    }
+
+    private fun migration(guid: String, address: String?) {
+        MigrationUtil.copyPrefDataFromDb(prefsUtil, guid)
+        MigrationUtil.checkPrevDbAndRename(address, guid)
+        MigrationUtil.checkOldAddressBook(prefsUtil, guid)
     }
 
     private fun saveDefaultAssets() {
