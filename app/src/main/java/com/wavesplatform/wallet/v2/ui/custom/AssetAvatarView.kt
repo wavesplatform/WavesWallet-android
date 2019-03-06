@@ -96,7 +96,7 @@ class AssetAvatarView : AppCompatImageView {
    * Set asset info object to get initials for drawable
    * */
     fun setAssetInfo(asset: AssetInfo) {
-        setValues(asset.id, asset.name, isSponsoredAsset = false, isScriptAsset = false) // TODO: check if need to show sponsor asset icon here
+        setValues(asset.id, asset.name, asset.isSponsored(), asset.hasScript)
     }
 
     /*
