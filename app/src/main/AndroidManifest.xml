@@ -102,10 +102,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
-            android:name=".v2.ui.auth.new_account.backup_info.BackupInfoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
-        <activity
             android:name=".v2.ui.home.wallet.assets.sorting.AssetsSortingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.AssetsSoring" />
