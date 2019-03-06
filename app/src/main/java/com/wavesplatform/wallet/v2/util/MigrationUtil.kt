@@ -9,7 +9,6 @@ import javax.inject.Inject
 
 class MigrationUtil @Inject constructor() {
 
-
     companion object {
 
         private const val KEY_AB_NAMES = "address_book_names"
@@ -17,14 +16,14 @@ class MigrationUtil @Inject constructor() {
 
         @JvmStatic
         fun checkOldAddressBook(prefs: PrefsUtil, guid: String) {
-            if (prefs.has(guid + KEY_AB_NAMES)
-                    && prefs.has(guid + KEY_AB_ADDRESSES)) {
+            if (prefs.has(guid + KEY_AB_NAMES) &&
+                    prefs.has(guid + KEY_AB_ADDRESSES)) {
                 val names = prefs.getGlobalValueList(
                         guid + KEY_AB_NAMES)
                 val addresses = prefs.getGlobalValueList(
                         guid + KEY_AB_ADDRESSES)
-                if (names.isNotEmpty() && addresses.isNotEmpty()
-                        && names.size == addresses.size) {
+                if (names.isNotEmpty() && addresses.isNotEmpty() &&
+                        names.size == addresses.size) {
                     val addressBookUsers = arrayListOf<AddressBookUser>()
                     for (i in 0 until names.size) {
                         addressBookUsers.add(AddressBookUser(addresses[i], names[i]))

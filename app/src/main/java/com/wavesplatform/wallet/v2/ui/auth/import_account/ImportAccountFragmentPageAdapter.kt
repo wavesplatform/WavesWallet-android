@@ -26,4 +26,3 @@ class ImportAccountFragmentPageAdapter(fm: FragmentManager?, var titles: Array<S
         return titles[position]
     }
 }
-

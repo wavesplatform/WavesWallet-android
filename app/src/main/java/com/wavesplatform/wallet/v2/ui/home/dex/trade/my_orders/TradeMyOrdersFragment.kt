@@ -20,7 +20,6 @@ import pers.victor.ext.inflate
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-
 class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
 
     @Inject
@@ -34,7 +33,6 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
     fun providePresenter(): TradeMyOrdersPresenter = presenter
 
     override fun configLayoutRes() = R.layout.fragment_trade_my_orders
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)

@@ -4,4 +4,4 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class AliasModel(var name: String): Parcelable
+data class AliasModel(var name: String) : Parcelable

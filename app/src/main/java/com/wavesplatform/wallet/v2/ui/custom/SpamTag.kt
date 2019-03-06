@@ -25,4 +25,3 @@ class SpamTag : AppCompatTextView {
         this.background = findDrawable(R.drawable.bg_spam_tag)
     }
 }
-

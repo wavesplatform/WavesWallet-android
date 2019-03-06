@@ -26,7 +26,6 @@ class EnterPassCodePresenter @Inject constructor() : BasePresenter<EnterPasscode
                 }))
     }
 
-
     companion object {
         private const val MAX_AVAILABLE_TIMES = 5
 

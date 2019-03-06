@@ -33,7 +33,6 @@ import pers.victor.ext.isNetworkConnected
 import java.util.*
 import javax.inject.Inject
 
-
 class DexFragment : BaseFragment(), DexView {
 
     @Inject
@@ -47,7 +46,6 @@ class DexFragment : BaseFragment(), DexView {
     lateinit var adapter: DexAdapter
     var menu: Menu? = null
     private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
-
 
     override fun configLayoutRes(): Int = R.layout.fragment_dex_new
 
@@ -152,7 +150,6 @@ class DexFragment : BaseFragment(), DexView {
             }
         }
     }
-
 
     override fun afterSuccessLoadPairInfo(watchMarket: WatchMarket, index: Int) {
         adapter.headerLayout?.text_last_update?.text = presenter.prefsUtil

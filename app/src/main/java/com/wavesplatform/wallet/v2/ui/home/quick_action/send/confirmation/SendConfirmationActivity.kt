@@ -26,9 +26,7 @@ import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import java.math.BigDecimal
 import javax.inject.Inject
 
-
 class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
-
 
     @Inject
     @InjectPresenter

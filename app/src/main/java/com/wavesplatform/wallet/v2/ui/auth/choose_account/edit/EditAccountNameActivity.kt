@@ -87,6 +87,5 @@ class EditAccountNameActivity : BaseActivity(), EditAccountNameView {
                         }, nameValidation)
             }
         }
-
     }
 }
