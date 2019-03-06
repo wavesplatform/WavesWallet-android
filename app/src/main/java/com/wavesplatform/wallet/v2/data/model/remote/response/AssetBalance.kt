@@ -54,6 +54,10 @@ open class AssetBalance(
         return minSponsoredAssetFee ?: 0 > 0
     }
 
+    fun isScripted(): Boolean {
+        return issueTransaction?.script != null
+    }
+
     fun isMyWavesToken(): Boolean {
         return issueTransaction?.sender == App.getAccessManager().getWallet()?.address
     }
