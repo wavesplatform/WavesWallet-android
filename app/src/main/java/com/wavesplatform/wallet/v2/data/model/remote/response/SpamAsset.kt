@@ -10,5 +10,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @RealmClass
 open class SpamAsset(
-        @PrimaryKey
-        @SerializedName("assetId") var assetId: String? = "") : RealmModel, Parcelable
+    @PrimaryKey
+    @SerializedName("assetId") var assetId: String? = ""
+) : RealmModel, Parcelable

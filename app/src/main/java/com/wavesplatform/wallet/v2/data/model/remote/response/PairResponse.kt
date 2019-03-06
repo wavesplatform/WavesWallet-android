@@ -7,15 +7,15 @@ import java.math.BigDecimal
 
 @Parcelize
 data class PairResponse(
-        @SerializedName("__type") var type: String = "",
-        @SerializedName("data") var data: Data = Data()
+    @SerializedName("__type") var type: String = "",
+    @SerializedName("data") var data: Data = Data()
 ) : Parcelable {
 
     @Parcelize
     data class Data(
-            @SerializedName("firstPrice") var firstPrice: BigDecimal = BigDecimal(0),
-            @SerializedName("lastPrice") var lastPrice: BigDecimal = BigDecimal(0),
-            @SerializedName("volume") var volume: BigDecimal = BigDecimal(0),
-            @SerializedName("volumeWaves") var volumeWaves: BigDecimal? = BigDecimal(0)
+        @SerializedName("firstPrice") var firstPrice: BigDecimal = BigDecimal(0),
+        @SerializedName("lastPrice") var lastPrice: BigDecimal = BigDecimal(0),
+        @SerializedName("volume") var volume: BigDecimal = BigDecimal(0),
+        @SerializedName("volumeWaves") var volumeWaves: BigDecimal? = BigDecimal(0)
     ) : Parcelable
 }

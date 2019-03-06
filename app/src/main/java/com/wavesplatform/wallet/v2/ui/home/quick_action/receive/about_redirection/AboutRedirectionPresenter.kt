@@ -5,6 +5,4 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
-class AboutRedirectionPresenter @Inject constructor():BasePresenter<AboutRedirectionView>(){
-
-}
+class AboutRedirectionPresenter @Inject constructor() : BasePresenter<AboutRedirectionView>()

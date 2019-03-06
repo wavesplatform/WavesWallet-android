@@ -5,5 +5,4 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface ReceiveAddressView : BaseMvpView {
     fun showQRCode(it: Bitmap?)
-
 }

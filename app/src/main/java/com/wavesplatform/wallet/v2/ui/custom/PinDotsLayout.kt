@@ -42,7 +42,7 @@ class PinDotsLayout : LinearLayout {
 
     fun fillDot(position: Int) {
         val dot = linear_dots.getChildAt(position)
-        if (dot != null){
+        if (dot != null) {
             (dot as AppCompatImageView).setImageResource(R.drawable.shape_circle_dot_submit400)
             listener?.onDotFilled(position)
         }
@@ -50,7 +50,7 @@ class PinDotsLayout : LinearLayout {
 
     fun emptyDot(position: Int) {
         val dot = linear_dots.getChildAt(position)
-        if (dot != null){
+        if (dot != null) {
             (dot as AppCompatImageView).setImageResource(R.drawable.shape_circle_dot_basic100)
             listener?.onDotFilled(position)
         }
@@ -63,7 +63,7 @@ class PinDotsLayout : LinearLayout {
         listener?.onDotsCleared()
     }
 
-    fun passCodesNotMatches(){
+    fun passCodesNotMatches() {
         linear_dots.children.forEach {
             (it as AppCompatImageView).setImageResource(R.drawable.shape_circle_dot_error400)
         }

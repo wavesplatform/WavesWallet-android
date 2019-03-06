@@ -21,13 +21,11 @@ import pers.victor.ext.dp2px
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-
 class ChooseLanguageActivity : BaseActivity(), LanguageView {
 
     @Inject
     @InjectPresenter
     lateinit var presenter: LanguagePresenter
-
 
     @Inject
     lateinit var adapter: LanguageAdapter
@@ -85,8 +83,8 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
     private fun enterAnimation() {
         image_logo.post {
             image_logo.animate()
-                    .translationY(- image_logo.y
-                            + ViewUtils.convertDpToPixel(12f, this))
+                    .translationY(- image_logo.y +
+                            ViewUtils.convertDpToPixel(12f, this))
                     .setDuration(500)
                     .withEndAction {
                         recycle_language.animate()

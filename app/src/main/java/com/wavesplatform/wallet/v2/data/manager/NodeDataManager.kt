@@ -258,9 +258,11 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun startLeasing(createLeasingRequest: CreateLeasingRequest,
-                     recipientIsAlias: Boolean,
-                     fee: Long): Observable<Transaction> {
+    fun startLeasing(
+        createLeasingRequest: CreateLeasingRequest,
+        recipientIsAlias: Boolean,
+        fee: Long
+    ): Observable<Transaction> {
         createLeasingRequest.senderPublicKey = getPublicKeyStr()
         createLeasingRequest.fee = fee
         createLeasingRequest.timestamp = currentTimeMillis

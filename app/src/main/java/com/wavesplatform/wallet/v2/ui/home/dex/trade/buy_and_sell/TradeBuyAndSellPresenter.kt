@@ -8,5 +8,4 @@ import javax.inject.Inject
 @InjectViewState
 class TradeBuyAndSellPresenter @Inject constructor() : BasePresenter<TradeBuyAndSellView>() {
      var data: BuySellData? = BuySellData()
-
 }

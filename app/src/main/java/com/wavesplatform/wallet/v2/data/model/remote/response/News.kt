@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.data.model.remote.response
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.wallet.v2.data.model.local.Language
 
 class News {
 

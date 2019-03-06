@@ -39,7 +39,6 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var blockchainCommission = 0L
     var feeAsset: AssetBalance = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
-
     fun confirmSend() {
         val singed = signTransaction()
         if (singed != null) {
@@ -50,8 +49,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     fun getTicker(): String {
         return if (assetInfo == null) {
             ""
-        } else if (assetInfo!!.ticker.equals(null)
-                || assetInfo!!.ticker.equals("")) {
+        } else if (assetInfo!!.ticker.equals(null) ||
+                assetInfo!!.ticker.equals("")) {
             assetInfo!!.name
         } else {
             assetInfo!!.ticker ?: ""
@@ -135,7 +134,6 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         val assetId = selectedAsset!!.assetId
         val currencyTo = Constants.coinomatCryptoCurrencies()[assetId]
 
-
         if (currencyTo.isNullOrEmpty()) {
             viewState.onShowError(R.string.receive_error_network)
             return
@@ -143,8 +141,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
 
         val currencyFrom = "${EnvironmentManager.netCode.toChar()}$currencyTo"
 
-        val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY
-                && !this.moneroPaymentId.isNullOrEmpty()) {
+        val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY &&
+                !this.moneroPaymentId.isNullOrEmpty()) {
             this.moneroPaymentId
         } else {
             null

@@ -5,6 +5,4 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
-class ImportAccountPresenter @Inject constructor() : BasePresenter<ImportAccountView>() {
-
-}
+class ImportAccountPresenter @Inject constructor() : BasePresenter<ImportAccountView>()

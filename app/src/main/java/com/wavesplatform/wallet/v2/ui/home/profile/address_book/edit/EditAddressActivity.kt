@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit
 
-
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
@@ -34,7 +33,6 @@ import kotlinx.android.synthetic.main.activity_edit_address.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import javax.inject.Inject
-
 
 class EditAddressActivity : BaseActivity(), EditAddressView {
 
@@ -207,7 +205,6 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
             }
         }
     }
-
 
     override fun onBackPressed() {
         finish()

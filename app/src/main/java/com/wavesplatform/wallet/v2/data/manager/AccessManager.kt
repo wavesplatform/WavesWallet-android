@@ -32,7 +32,6 @@ import java.io.File
 import java.security.SecureRandom
 import java.util.*
 
-
 class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, private var authHelper: AuthHelper) {
 
     private val pinStore = PinStoreService()
@@ -108,8 +107,8 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             val guid = UUID.randomUUID().toString()
             loggedInGuid = guid
             prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, guid)
-            prefs.addGlobalListValue(EnvironmentManager.name
-                    + PrefsUtil.LIST_WALLET_GUIDS, guid)
+            prefs.addGlobalListValue(EnvironmentManager.name +
+                    PrefsUtil.LIST_WALLET_GUIDS, guid)
             prefs.setValue(PrefsUtil.KEY_PUB_KEY, wallet!!.publicKeyStr)
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
             prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet!!.getEncryptedData(password))
@@ -217,7 +216,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         return if (TextUtils.isEmpty(publicKey) || TextUtils.isEmpty(name)) {
             null
         } else AddressBookUser(AddressUtil.addressFromPublicKey(publicKey), name)
-
     }
 
     fun deleteCurrentWavesWallet(): Boolean {
@@ -232,7 +230,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
 
     private fun clearRealmConfiguration() {
         app.stopService(Intent(app, UpdateApiDataService::class.java))
-        val f = RealmConfigStore::class.java.getDeclaredField("configMap") //NoSuchFieldException
+        val f = RealmConfigStore::class.java.getDeclaredField("configMap") // NoSuchFieldException
         f.isAccessible = true
         val configMap = f.get(RealmConfigStore::class.java) as MutableMap<*, *>
         configMap.clear()
@@ -267,8 +265,8 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_DEFAULT_ASSETS)
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS)
 
-        prefs.setGlobalValue(EnvironmentManager.name
-                + PrefsUtil.LIST_WALLET_GUIDS, createGuidsListWithout(searchWalletGuid))
+        prefs.setGlobalValue(EnvironmentManager.name +
+                PrefsUtil.LIST_WALLET_GUIDS, createGuidsListWithout(searchWalletGuid))
 
         if (searchWalletGuid == getLoggedInGuid()) {
             loggedInGuid = ""
@@ -294,7 +292,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         }
         return resultGuidsList.toTypedArray()
     }
-
 
     fun getWalletData(guid: String): String {
         return if (TextUtils.isEmpty(guid)) {

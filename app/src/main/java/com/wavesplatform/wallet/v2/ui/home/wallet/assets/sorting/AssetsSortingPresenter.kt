@@ -57,5 +57,4 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
                 }
                 .saveAll()
     }
-
 }

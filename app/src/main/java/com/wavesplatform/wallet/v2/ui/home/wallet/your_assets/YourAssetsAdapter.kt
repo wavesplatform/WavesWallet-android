@@ -28,7 +28,6 @@ class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, B
         helper.itemView.checkbox_choose.isChecked = item.assetId == currentAssetId
     }
 
-
     fun filter(text: String) {
         data.clear()
         if (text.trim().isEmpty()) {
