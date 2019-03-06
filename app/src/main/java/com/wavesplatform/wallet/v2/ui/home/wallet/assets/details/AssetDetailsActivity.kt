@@ -22,7 +22,6 @@ import kotlinx.android.synthetic.main.activity_asset_details.*
 import pers.victor.ext.*
 import javax.inject.Inject
 
-
 class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
     @Inject
@@ -179,12 +178,10 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     }
 
     private fun changeFavorite() {
-        if (!adapterAvatar.items[view_pager.currentItem].isWaves()) {
-            if (adapterAvatar.items[view_pager.currentItem].isFavorite) {
-                unmarkAsFavorite()
-            } else {
-                markAsFavorite()
-            }
+        if (adapterAvatar.items[view_pager.currentItem].isFavorite) {
+            unmarkAsFavorite()
+        } else {
+            markAsFavorite()
         }
     }
 
@@ -195,6 +192,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     private fun unmarkAsFavorite() {
         val item = adapterAvatar.items[view_pager.currentItem]
         item.isFavorite = false
+        prefsUtil.saveAssetBalance(item)
         item.save()
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_off))
     }
@@ -204,6 +202,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         item.isFavorite = true
         item.isHidden = false
         item.save()
+        prefsUtil.saveAssetBalance(item)
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_on))
     }
 

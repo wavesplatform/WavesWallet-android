@@ -21,6 +21,7 @@ import com.wavesplatform.wallet.v1.util.ApplicationLifeCycle;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
+import com.wavesplatform.wallet.v2.data.manager.GithubDataManager;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
 import com.wavesplatform.wallet.v2.util.Analytics;
@@ -32,6 +33,8 @@ import dagger.android.DaggerApplication;
 import io.fabric.sdk.android.Fabric;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.realm.Realm;
+import io.sentry.Sentry;
+import io.sentry.android.AndroidSentryClientFactory;
 import pers.victor.ext.Ext;
 import timber.log.Timber;
 
@@ -41,13 +44,16 @@ public class App extends DaggerApplication {
     PrefsUtil mPrefsUtil;
     @Inject
     AuthHelper authHelper;
-    private static Context sContext;
+    @Inject
+    GithubDataManager githubDataManager;
+    private static App application;
     private static AccessManager accessManager;
     private LocalizationApplicationDelegate localizationDelegate
             = new LocalizationApplicationDelegate(this);
 
     @Override
     public void onCreate() {
+        EnvironmentManager.init(this);
         super.onCreate();
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
@@ -57,16 +63,17 @@ public class App extends DaggerApplication {
         Analytics.appsFlyerInit(this);
         FirebaseApp.initializeApp(this);
         Fabric.with(this, new Crashlytics());
-        sContext = this;
+        application = this;
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
         Realm.init(this);
         Ext.INSTANCE.setCtx(this);
 
+        Sentry.init(new AndroidSentryClientFactory(this.getApplicationContext()));
+
         RxJavaPlugins.setErrorHandler(Timber::e);
 
         AppUtil appUtil = new AppUtil(this);
-        EnvironmentManager.init(this);
         accessManager = new AccessManager(mPrefsUtil, appUtil, authHelper);
 
         if (BuildConfig.DEBUG) {
@@ -85,10 +92,12 @@ public class App extends DaggerApplication {
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         SimpleChromeCustomTabs.initialize(this);
+
+        EnvironmentManager.updateConfiguration(githubDataManager);
     }
 
     public static Context getAppContext() {
-        return sContext;
+        return application;
     }
 
     public static AccessManager getAccessManager() {

@@ -12,5 +12,4 @@ class ScreenReceiver : BroadcastReceiver() {
             App.getAccessManager().resetWallet()
         }
     }
-
 }

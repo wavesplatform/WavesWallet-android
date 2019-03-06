@@ -13,7 +13,6 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
-import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity
@@ -22,11 +21,9 @@ import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_aliases_layout.view.*
 import pers.victor.ext.click
-import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
-
 
 class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView {
 
@@ -49,8 +46,11 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
     lateinit var feeTransaction: TextView
     lateinit var buttonCreateAlias: View
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         when (type) {
             TYPE_EMPTY -> {
@@ -71,7 +71,6 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
                 rootView.recycle_aliases.adapter = adapter
 
                 buttonCreateAlias = rootView.findViewById<View>(R.id.button_create_alias)
-
 
                 rootView.relative_about_alias.click {
                     if (rootView.expandable_layout_hidden.isExpanded) {

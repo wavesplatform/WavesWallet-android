@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.*
 import javax.inject.Inject
 
-
 class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
     @Inject
@@ -68,34 +67,36 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
                     val globalItem = this.adapter.getItem(position) as AssetSortingItem
                     val asset = globalItem.asset
-                    val linePosition = getLinePosition()
 
                     when (globalItem.itemType) {
                         AssetSortingItem.TYPE_FAVORITE -> {
-                            if (!asset.assetId.isEmpty()) {
-                                asset.isFavorite = false
-                                asset.configureVisibleState = presenter.visibilityConfigurationActive
+                            val linePosition = getLinePosition(false)
 
-                                // remove from favorite list
-                                this.adapter.data.removeAt(position)
-                                this.adapter.notifyItemRemoved(position)
+                            asset.isFavorite = false
+                            asset.configureVisibleState = presenter.visibilityConfigurationActive
 
-                                // add to not favorite list
-                                globalItem.type = AssetSortingItem.TYPE_NOT_FAVORITE
-                                globalItem.asset = asset
-                                this.adapter.addData(linePosition, globalItem)
+                            // remove from favorite list
+                            this.adapter.data.removeAt(position)
+                            this.adapter.notifyItemRemoved(position)
 
-                                // Save to DB
-                                asset.save()
-                            }
+                            // add to not favorite list
+                            globalItem.type = AssetSortingItem.TYPE_NOT_FAVORITE
+                            globalItem.asset = asset
+                            this.adapter.addData(linePosition, globalItem)
+
+                            // Save to DB
+                            asset.save()
+                            prefsUtil.saveAssetBalance(asset)
                         }
                         AssetSortingItem.TYPE_NOT_FAVORITE -> {
-                            asset.isFavorite = true
-                            asset.isHidden = false
-
                             // remove from current list
                             this.adapter.data.removeAt(position)
                             this.adapter.notifyItemRemoved(position)
+
+                            val linePosition = getLinePosition(true)
+
+                            asset.isFavorite = true
+                            asset.isHidden = false
 
                             // add to favorite list
                             globalItem.type = AssetSortingItem.TYPE_FAVORITE
@@ -104,18 +105,19 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
                             // Save to DB
                             asset.save()
+                            prefsUtil.saveAssetBalance(asset)
                         }
                     }
                 }
             }
         }
 
-
         adapter.onHiddenChangeListener = object : AssetsSortingAdapter.OnHiddenChangeListener {
             override fun onHiddenStateChanged(item: AssetBalance, checked: Boolean) {
                 presenter.needToUpdate = true
                 item.isHidden = !checked
                 item.save()
+                prefsUtil.saveAssetBalance(item)
             }
         }
 
@@ -153,12 +155,17 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         presenter.loadAssets()
     }
 
-    private fun getLinePosition(): Int {
+    private fun getLinePosition(toFavorite: Boolean): Int {
         var position = adapter.data.indexOfFirst { it.itemType == AssetSortingItem.TYPE_LINE }
         if (position == -1) {
             // add line
             val line = AssetSortingItem(AssetSortingItem.TYPE_LINE)
-            adapter.addData(line)
+
+            if (toFavorite) {
+                adapter.addData(0, line)
+            } else {
+                adapter.addData(line)
+            }
             position = adapter.data.indexOfFirst { it.itemType == AssetSortingItem.TYPE_LINE }
         }
         return position

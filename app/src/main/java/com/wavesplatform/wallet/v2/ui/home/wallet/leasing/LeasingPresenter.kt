@@ -8,7 +8,6 @@ import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.sumByLong
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -34,11 +33,10 @@ class LeasingPresenter @Inject constructor() : BasePresenter<LeasingView>() {
                     .subscribe({
                         viewState.showBalances(it.first)
                         viewState.showActiveLeasingTransaction(it.second)
-                    },{
+                    }, {
                         it.printStackTrace()
                         viewState.afterFailedLoadLeasing()
                     }))
         }
     }
-
 }

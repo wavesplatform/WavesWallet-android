@@ -14,15 +14,15 @@ import com.wavesplatform.wallet.v2.util.clearAlias
 import java.nio.charset.Charset
 
 data class CreateLeasingRequest(
-        @SerializedName("type") val type: Int = Transaction.LEASE,
-        @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
-        @SerializedName("scheme") var scheme: String? = EnvironmentManager.getGlobalConfiguration().scheme,
-        @SerializedName("amount") var amount: Long = 0,
-        @SerializedName("fee") var fee: Long = 0,
-        @SerializedName("recipient") var recipient: String = "",
-        @SerializedName("timestamp") var timestamp: Long = 0,
-        @SerializedName("version") var version: Int = Constants.VERSION,
-        @SerializedName("proofs") var proofs: MutableList<String?>? = null
+    @SerializedName("type") val type: Int = Transaction.LEASE,
+    @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+    @SerializedName("scheme") var scheme: String? = EnvironmentManager.globalConfiguration.scheme,
+    @SerializedName("amount") var amount: Long = 0,
+    @SerializedName("fee") var fee: Long = 0,
+    @SerializedName("recipient") var recipient: String = "",
+    @SerializedName("timestamp") var timestamp: Long = 0,
+    @SerializedName("version") var version: Int = Constants.VERSION,
+    @SerializedName("proofs") var proofs: MutableList<String?>? = null
 ) {
 
     fun toSignBytes(recipientIsAlias: Boolean): ByteArray {
@@ -39,13 +39,12 @@ data class CreateLeasingRequest(
             Log.e("CreateLeasingRequest", "Couldn't create toSignBytes", e)
             ByteArray(0)
         }
-
     }
 
     private fun resolveRecipientBytes(recipientIsAlias: Boolean): ByteArray? {
         return if (recipientIsAlias) {
             Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                    byteArrayOf(EnvironmentManager.getNetCode()),
+                    byteArrayOf(EnvironmentManager.netCode),
                     recipient.clearAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
         } else {
             Base58.decode(recipient)
@@ -55,5 +54,4 @@ data class CreateLeasingRequest(
     fun sign(privateKey: ByteArray, recipientIsAlias: Boolean) {
         proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytes(recipientIsAlias))))
     }
-
 }

@@ -1,15 +1,12 @@
 package com.wavesplatform.wallet.v2.ui.base.view
 
 import android.app.Dialog
-import android.graphics.Color
 import android.os.Bundle
 import android.support.annotation.NonNull
-import android.support.annotation.Nullable
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.widget.FrameLayout
-import com.andrefrsousa.superbottomsheet.SuperBottomSheetFragment
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.R
@@ -21,7 +18,6 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import pers.victor.ext.findColor
 import pers.victor.ext.getStatusBarHeight
 import pers.victor.ext.screenHeight
 import pers.victor.ext.setHeight
@@ -56,7 +52,6 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpV
                     it.printStackTrace()
                 }))
     }
-
 
     @NonNull
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

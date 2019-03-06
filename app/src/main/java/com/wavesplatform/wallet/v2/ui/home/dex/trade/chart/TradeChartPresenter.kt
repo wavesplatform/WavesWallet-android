@@ -43,7 +43,6 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
         simpleDateFormat.format(date)
     }
 
-
     fun startLoad() {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) - 2)
@@ -147,6 +146,5 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
                 .subscribe({ tradesMarket ->
                     viewState.successGetTrades(tradesMarket)
                 }, { it.printStackTrace() }))
-
     }
 }

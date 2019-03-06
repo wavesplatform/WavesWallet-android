@@ -13,10 +13,7 @@ import kotlinx.android.synthetic.main.wallet_asset_sorting_favorite_item.view.*
 import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.findColor
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
 import javax.inject.Inject
-
 
 class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<AssetSortingItem, BaseViewHolder>(null),
         ItemTouchHelperAdapter {
@@ -51,11 +48,6 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
                         .addOnClickListener(R.id.image_favorite)
                         .setVisible(R.id.text_my_asset, item.issueTransaction?.sender == App.getAccessManager().getWallet()?.address)
 
-                if (item.isWaves()) {
-                    helper.itemView.image_blocked.visiable()
-                } else {
-                    helper.itemView.image_blocked.gone()
-                }
                 helper.itemView.image_asset_favorite_icon.setAsset(item)
             }
             AssetSortingItem.TYPE_NOT_FAVORITE -> {
@@ -101,7 +93,6 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
                 // nothing
             }
         }
-
     }
 
     interface OnHiddenChangeListener {

@@ -10,14 +10,13 @@ class NetworkPresenter @Inject constructor() : BasePresenter<NetworkView>() {
     var spamUrlFieldValid: Boolean = false
     var spamFilterEnableValid: Boolean = false
 
-
     fun isAllFieldsValid(): Boolean {
         return spamUrlFieldValid || spamFilterEnableValid
     }
 
     fun checkValidUrl(url: String) {
         viewState.showProgressBar(true)
-        addSubscription(spamDataManager.isValidNewSpamUrl(url)
+        addSubscription(githubDataManager.isValidNewSpamUrl(url)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ isValid ->
                     viewState.showProgressBar(false)
@@ -28,6 +27,4 @@ class NetworkPresenter @Inject constructor() : BasePresenter<NetworkView>() {
                     it.printStackTrace()
                 }))
     }
-
-
 }

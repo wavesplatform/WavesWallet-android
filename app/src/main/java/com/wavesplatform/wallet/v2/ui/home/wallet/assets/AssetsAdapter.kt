@@ -96,7 +96,6 @@ class AssetsAdapter @Inject constructor() :
                 helper.itemView.text_asset_value.makeTextHalfBold()
             }
         }
-
     }
 
     interface ScrollToHeaderListener {

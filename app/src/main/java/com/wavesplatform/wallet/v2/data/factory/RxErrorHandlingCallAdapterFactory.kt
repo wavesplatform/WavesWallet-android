@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.data.factory
 
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
+import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -18,7 +19,6 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 
-
 class RxErrorHandlingCallAdapterFactory(private val mErrorManager: ErrorManager) : CallAdapter.Factory() {
     private val original: RxJava2CallAdapterFactory = RxJava2CallAdapterFactory.create()
 
@@ -28,7 +28,6 @@ class RxErrorHandlingCallAdapterFactory(private val mErrorManager: ErrorManager)
     override fun get(returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit): CallAdapter<*, *> {
         return RxCallAdapterWrapper(retrofit, original.get(returnType, annotations, retrofit) as CallAdapter<out Any, *>, returnType)
     }
-
 
     inner class RxCallAdapterWrapper<R>(private val retrofit: Retrofit, private val wrapped: CallAdapter<R, *>, private val returnType: Type) : CallAdapter<R, Any> {
 
@@ -46,15 +45,15 @@ class RxErrorHandlingCallAdapterFactory(private val mErrorManager: ErrorManager)
         private fun handleErrorToShow(throwable: Throwable, retrySubject: PublishSubject<Events.RetryEvent>): RetrofitException {
             val retrofitException = asRetrofitException(throwable)
             mErrorManager.handleError(retrofitException, retrySubject)
+            SentryHelper.logException(retrofitException)
             return retrofitException
         }
 
-
         private fun convert(o: Any): Observable<*> {
-            if (o is Completable)
-                return o.toObservable<Any>()
+            return if (o is Completable)
+                o.toObservable<Any>()
             else
-                return o as Observable<*>
+                o as Observable<*>
         }
 
         fun asRetrofitException(throwable: Throwable): RetrofitException {

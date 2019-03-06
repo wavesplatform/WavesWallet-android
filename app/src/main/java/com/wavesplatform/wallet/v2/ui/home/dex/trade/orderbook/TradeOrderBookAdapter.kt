@@ -13,7 +13,6 @@ import com.wavesplatform.wallet.v2.util.stripZeros
 import pers.victor.ext.findColor
 import javax.inject.Inject
 
-
 class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder>(null) {
     var market: MarketResponse = MarketResponse()
 
@@ -43,7 +42,6 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
                         .setText(R.id.text_amount_value, amountUIValue)
                         .setText(R.id.text_price_value, priceUIValue)
                         .setText(R.id.text_sum_value, MoneyUtil.getFormattedTotal(item.sum, market.priceAssetDecimals))
-
             }
             BID_TYPE -> {
                 val item = item as OrderBook.Bid

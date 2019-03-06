@@ -2,8 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R

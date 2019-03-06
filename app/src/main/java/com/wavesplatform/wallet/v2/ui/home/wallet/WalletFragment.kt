@@ -18,7 +18,6 @@ import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
-
 class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabBarVisibilityListener {
 
     @Inject

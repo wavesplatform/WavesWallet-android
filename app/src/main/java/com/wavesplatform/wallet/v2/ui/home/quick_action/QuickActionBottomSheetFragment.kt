@@ -12,11 +12,13 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.quick_action_bottom_sheet_dialog_layout.view.*
 import pers.victor.ext.click
 
-
 class QuickActionBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val rootView = inflater.inflate(R.layout.quick_action_bottom_sheet_dialog_layout, container, false)
 
@@ -26,11 +28,11 @@ class QuickActionBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
         rootView.relative_send.click {
             dismiss()
-            launchActivity<SendActivity> {  }
+            launchActivity<SendActivity> { }
         }
         rootView.relative_receive.click {
             dismiss()
-            launchActivity<ReceiveActivity> {  }
+            launchActivity<ReceiveActivity> { }
         }
         rootView.relative_exchange.click {
         }

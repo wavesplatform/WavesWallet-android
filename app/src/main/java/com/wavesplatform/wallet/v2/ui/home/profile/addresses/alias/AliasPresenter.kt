@@ -37,7 +37,7 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
         callback.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
-                matcherDataManager.getGlobalCommission(),
+                githubDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(
                         App.getAccessManager().getWallet()?.address ?: ""),
                 BiFunction { t1: GlobalTransactionCommission,
@@ -59,7 +59,6 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
                     callback.showCommissionError()
                 }))
     }
-
 
     interface OnCommissionGetListener {
         fun showCommissionLoading()

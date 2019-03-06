@@ -11,6 +11,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
@@ -42,7 +43,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         const val INVOICE_SCREEN = "invoice"
 
         fun newInstance(assetBalance: AssetBalance?): InvoiceFragment {
-            val fragment =  InvoiceFragment()
+            val fragment = InvoiceFragment()
             if (assetBalance == null) {
                 return fragment
             }
@@ -121,7 +122,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         }
 
         val assetId = if (presenter.assetBalance?.assetId.isNullOrEmpty()) {
-            "WAVES"
+            Constants.WAVES_ASSET_ID_FILLED
         } else {
             presenter.assetBalance!!.assetId!!
         }
@@ -146,10 +147,8 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
                     activity!!, R.color.white))
         } else {
             text_asset.click {
-
             }
             container_asset.click {
-
             }
             image_change.visibility = View.GONE
             ViewCompat.setElevation(edit_asset_card, 0F)

@@ -31,4 +31,3 @@ class AliasesAdapter @Inject constructor() : BaseQuickAdapter<Alias, BaseViewHol
         }
     }
 }
-

@@ -28,7 +28,7 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
                                 .mapTo(mutableListOf()) {
                                     AssetSortingItem(AssetSortingItem.TYPE_FAVORITE, it)
                                 }
-                        val notFavoriteList = it.filter({ !it.isFavorite && !it.isSpam })
+                        val notFavoriteList = it.filter { !it.isFavorite && !it.isSpam }
                                 .sortedBy { it.position }
                                 .mapTo(mutableListOf()) {
                                     AssetSortingItem(AssetSortingItem.TYPE_NOT_FAVORITE, it)
@@ -48,15 +48,13 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
     }
 
     fun saveSortedPositions(data: MutableList<AssetSortingItem>) {
-        val list = data
-                .mapTo(mutableListOf()) {
-                    it.asset
+        data
+                .filter { it.type != AssetSortingItem.TYPE_LINE }
+                .mapIndexedTo(mutableListOf()) { position, item ->
+                    item.asset.position = position
+                    prefsUtil.saveAssetBalance(item.asset)
+                    return@mapIndexedTo item.asset
                 }
-                .filter { !it.isWaves() }
-        list.forEachIndexed { index, assetBalance ->
-            assetBalance.position = index
-        }
-        list.saveAll()
+                .saveAll()
     }
-
 }

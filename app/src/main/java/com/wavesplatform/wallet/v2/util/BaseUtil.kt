@@ -76,7 +76,6 @@ class BaseUtil {
                         e2.printStackTrace()
                         return null
                     }
-
                 }
 
                 if (src != rotated) {
@@ -115,6 +114,5 @@ class BaseUtil {
 
             return f
         }
-
     }
 }

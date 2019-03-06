@@ -69,11 +69,11 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
             val singleData: Single<List<AssetBalance>> = if (this.greaterZeroBalance) {
                 queryAsSingle {
                     greaterThan("balance", 0)
-                            .`in`("assetId", Constants.defaultCrypto)
+                            .`in`("assetId", Constants.defaultCrypto())
                 }
             } else {
                 queryAsSingle {
-                    `in`("assetId", Constants.defaultCrypto)
+                    `in`("assetId", Constants.defaultCrypto())
                 }
             }
 
@@ -90,7 +90,6 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
                             viewState.showAssets(assets)
                         }
                     }, {
-
                     }))
         }
     }

@@ -55,4 +55,3 @@ class OrderResponse {
         var API_SELL_TYPE = "sell"
     }
 }
-

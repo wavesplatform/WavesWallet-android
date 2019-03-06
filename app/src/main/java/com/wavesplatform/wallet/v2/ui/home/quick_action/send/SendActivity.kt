@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatTextView
-import android.text.TextUtils
 import android.view.View
 import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -17,7 +16,6 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v1.util.ViewUtils
@@ -49,7 +47,6 @@ import pers.victor.ext.*
 import java.math.BigDecimal
 import java.net.URI
 import javax.inject.Inject
-
 
 class SendActivity : BaseActivity(), SendView {
 
@@ -236,9 +233,7 @@ class SendActivity : BaseActivity(), SendView {
         for (address in addresses) {
             val lastRecipient = layoutInflater
                     .inflate(R.layout.view_text_tag, null) as AppCompatTextView
-            val addressBookUser = queryFirst<AddressBookUser> {
-                equalTo("address", address)
-            }
+            val addressBookUser = prefsUtil.getAddressBookUser(address)
             lastRecipient.text = addressBookUser?.name ?: address
             lastRecipient.click {
                 edit_address.setText(address)
@@ -294,8 +289,8 @@ class SendActivity : BaseActivity(), SendView {
                         assetBalance.getName() ?: "")
                 presenter.amount = BigDecimal.ZERO
             }
-        } else if (presenter.type == SendPresenter.Type.WAVES
-                && assetBalance.assetId.isWavesId()) {
+        } else if (presenter.type == SendPresenter.Type.WAVES &&
+                assetBalance.assetId.isWavesId()) {
             val total = BigDecimal.valueOf(amount - presenter.fee,
                     assetBalance.getDecimals())
             if (total.toFloat() > 0) {
@@ -417,7 +412,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun checkMonero(assetId: String?) {
-        if (assetId == Constants.MONERO_ASSET_ID) {
+        if (assetId == Constants.findByGatewayId("XMR")!!.assetId) {
             monero_layout.visiable()
             eventSubscriptions.add(RxTextView.textChanges(edit_monero_payment_id)
                     .subscribe { paymentId ->
@@ -556,7 +551,7 @@ class SendActivity : BaseActivity(), SendView {
                 }
 
                 var assetId = uri.path.split("/")[2]
-                if ("waves".equalsIgnoreCase(assetId)) {
+                if (Constants.WAVES_ASSET_ID_FILLED.equalsIgnoreCase(assetId)) {
                     assetId = ""
                 }
                 val assetBalance = queryFirst<AssetBalance> {

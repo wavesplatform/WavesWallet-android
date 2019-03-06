@@ -85,10 +85,9 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
         if (allMarketsList.isEmpty()) {
-            return Observable.zip(apiService.loadGlobalConfiguration(EnvironmentManager.get().current().url)
+            return Observable.zip(Observable.just(EnvironmentManager.globalConfiguration)
                     .map {
                         val globalAssets = it.generalAssetIds.toMutableList()
                         globalAssets.add(Constants.MRTGeneralAsset)
@@ -155,10 +154,6 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         }
     }
 
-    fun getGlobalCommission(): Observable<GlobalTransactionCommission> {
-        return apiService.loadGlobalCommission()
-    }
-
     private fun filterMarketsBySpamAndSelect(markets: List<MarketResponse>): Observable<MutableList<MarketResponse>> {
         return Observable.zip(Observable.just(markets), queryAllAsSingle<SpamAsset>().toObservable()
                 .map {
@@ -169,8 +164,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                         .map {
                             val map = it.associateBy { it.id }
                             return@map map
-                        }
-                , Function3 { apiMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAsset>, dbMarkets: Map<String?, MarketResponse> ->
+                        }, Function3 { apiMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAsset>, dbMarkets: Map<String?, MarketResponse> ->
             val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
                 apiMarkets.filter { market -> spamAssets[market.amountAsset] == null && spamAssets[market.priceAsset] == null }
             } else {
@@ -183,10 +177,6 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
 
             return@Function3 filteredSpamList
         })
-    }
-
-    fun loadNews(): Observable<News> {
-        return apiService.loadNews(News.URL)
     }
 
     companion object {

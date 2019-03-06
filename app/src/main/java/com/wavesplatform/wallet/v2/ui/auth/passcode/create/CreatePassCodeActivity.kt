@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.create
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v7.widget.AppCompatTextView
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -18,7 +17,6 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_create_passcode.*
 import javax.inject.Inject
-
 
 open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
@@ -85,9 +83,9 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     override fun onSuccessCreatePassCode(guid: String, passCode: String) {
         showProgressBar(false)
-        if ((intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION)
-                        || intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT))
-                && FingerprintAuthDialogFragment.isAvailable(this)) {
+        if ((intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_CREATION) ||
+                        intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT)) &&
+                FingerprintAuthDialogFragment.isAvailable(this)) {
             launchActivity<UseFingerprintActivity>(intent.extras) {
                 putExtra(CreatePassCodeActivity.KEY_INTENT_GUID, guid)
                 putExtra(CreatePassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
