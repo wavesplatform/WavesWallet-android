@@ -24,7 +24,6 @@ class TransferAdapter @Inject constructor() : BaseQuickAdapter<TransferModel, Ba
             }
         }
 
-
         helper.setText(R.id.text_transfer_name, item.name)
                 .setText(R.id.text_transfer_address, addressStr)
 
@@ -43,4 +42,3 @@ class TransferAdapter @Inject constructor() : BaseQuickAdapter<TransferModel, Ba
         }
     }
 }
-

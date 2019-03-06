@@ -11,19 +11,19 @@ import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import pers.victor.ext.currentTimeMillis
 
-
 data class OrderRequest(
-        @SerializedName("matcherPublicKey") var matcherPublicKey: String? = "",
-        @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
-        @SerializedName("assetPair") var assetPair: OrderBook.Pair = OrderBook.Pair(),
-        @SerializedName("orderType") var orderType: OrderType = OrderType.BUY,
-        @SerializedName("price") var price: Long = 0L,
-        @SerializedName("amount") var amount: Long = 0L,
-        @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,
-        @SerializedName("expiration") var expiration: Long = 0L,
-        @SerializedName("matcherFee") var matcherFee: Long = 300000,
-        @SerializedName("version") var version: Int = Constants.VERSION,
-        @SerializedName("proofs") var proofs: MutableList<String?>? = null) {
+    @SerializedName("matcherPublicKey") var matcherPublicKey: String? = "",
+    @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+    @SerializedName("assetPair") var assetPair: OrderBook.Pair = OrderBook.Pair(),
+    @SerializedName("orderType") var orderType: OrderType = OrderType.BUY,
+    @SerializedName("price") var price: Long = 0L,
+    @SerializedName("amount") var amount: Long = 0L,
+    @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,
+    @SerializedName("expiration") var expiration: Long = 0L,
+    @SerializedName("matcherFee") var matcherFee: Long = 300000,
+    @SerializedName("version") var version: Int = Constants.VERSION,
+    @SerializedName("proofs") var proofs: MutableList<String?>? = null
+) {
 
     fun toSignBytes(): ByteArray {
         return try {
@@ -42,11 +42,9 @@ data class OrderRequest(
             Log.e("OrderRequest", "Couldn't create toSignBytes", e)
             ByteArray(0)
         }
-
     }
 
     fun sign(privateKey: ByteArray) {
         proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytes())))
     }
-
 }

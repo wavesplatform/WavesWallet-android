@@ -30,7 +30,6 @@ import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import javax.inject.Inject
 
-
 class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
 
     @Inject

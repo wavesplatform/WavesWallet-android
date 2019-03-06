@@ -25,7 +25,6 @@ class ErrorManager @Inject constructor(val mRxEventBus: RxEventBus, val mPrefere
         this.mActivity = context as BaseActivity
         this.retrySubject = retrySubject
 
-
         if (retrofitException.kind === RetrofitException.Kind.NETWORK || retrofitException.response!!.code() == 504) {
             handleNetworkError(retrofitException)
         } else if (retrofitException.kind === RetrofitException.Kind.HTTP) {
@@ -39,7 +38,6 @@ class ErrorManager @Inject constructor(val mRxEventBus: RxEventBus, val mPrefere
         // TODO: call method from activity or show here
 //        mActivity.showNetworkError()
     }
-
 
     private fun handleHttpError(error: RetrofitException) {
         when (error.response!!.code()) {

@@ -35,7 +35,7 @@ class SentryHelper {
             return "Error: ${retrofitException.kind.name}\n" +
                     "Url: ${retrofitException.url}\n" +
                     "Code: ${retrofitException.response?.code()}\n" +
-                    "Response: ${retrofitException.response?.errorBody()?.clone()?.string().toString()}"
+                    "Response: ${retrofitException.response?.errorBody()?.clone()?.string()}"
         }
     }
 }

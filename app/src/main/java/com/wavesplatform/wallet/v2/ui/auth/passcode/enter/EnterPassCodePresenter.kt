@@ -4,7 +4,6 @@ import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.data.auth.IncorrectPinException
-import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
@@ -26,7 +25,6 @@ class EnterPassCodePresenter @Inject constructor() : BasePresenter<EnterPasscode
                     viewState.onFailValidatePassCode(overMaxWrongPassCodes(guid), error.message)
                 }))
     }
-
 
     companion object {
         private const val MAX_AVAILABLE_TIMES = 5

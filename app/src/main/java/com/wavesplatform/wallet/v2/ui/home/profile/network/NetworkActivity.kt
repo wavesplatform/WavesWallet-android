@@ -6,7 +6,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.data.rules.UrlRule
@@ -20,7 +19,6 @@ import pers.victor.ext.app
 import pers.victor.ext.click
 import pers.victor.ext.isNetworkConnected
 import javax.inject.Inject
-
 
 class NetworkActivity : BaseActivity(), NetworkView {
 

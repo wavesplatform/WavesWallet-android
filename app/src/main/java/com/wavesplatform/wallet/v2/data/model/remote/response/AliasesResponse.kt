@@ -7,22 +7,21 @@ import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 
-
 data class AliasesResponse(
-        @SerializedName("__type") var type: String = "list",
-        @SerializedName("data") var data: List<AliasData> = listOf()
+    @SerializedName("__type") var type: String = "list",
+    @SerializedName("data") var data: List<AliasData> = listOf()
 )
 
 data class AliasData(
-        @SerializedName("__type") var type: String = "alias",
-        @SerializedName("data") var alias: Alias = Alias()
+    @SerializedName("__type") var type: String = "alias",
+    @SerializedName("data") var alias: Alias = Alias()
 )
 
 @Parcelize
 @RealmClass
 open class Alias(
-        @PrimaryKey
-        @SerializedName("alias") var alias: String? = "",
-        @SerializedName("address") var address: String? = "",
-        var own: Boolean = false
+    @PrimaryKey
+    @SerializedName("alias") var alias: String? = "",
+    @SerializedName("address") var address: String? = "",
+    var own: Boolean = false
 ) : RealmModel, Parcelable

@@ -22,7 +22,6 @@ import pers.victor.ext.resize
 import pers.victor.ext.sp
 import pyxis.uzuki.live.richutilskt.utils.drawableToBitmap
 
-
 class AssetAvatarView : AppCompatImageView {
 
     /*
@@ -157,7 +156,6 @@ class AssetAvatarView : AppCompatImageView {
         }
     }
 
-
     /*
     * Create placeholder drawable
     * */
@@ -185,7 +183,6 @@ class AssetAvatarView : AppCompatImageView {
                     * */
                     canvas.drawText(text!!, centerX - textWidth, centerY + textBaseLineHeight, textPaint)
 
-
                     /*
                     * Draw sponsor icon
                     * */
@@ -199,16 +196,13 @@ class AssetAvatarView : AppCompatImageView {
                                 (canvas.width - sponsorIconSize).toFloat(),
                                 paint)
                     }
-
                 }
             }
 
             override fun setAlpha(alpha: Int) {
-
             }
 
             override fun setColorFilter(colorFilter: ColorFilter?) {
-
             }
 
             override fun getOpacity(): Int {

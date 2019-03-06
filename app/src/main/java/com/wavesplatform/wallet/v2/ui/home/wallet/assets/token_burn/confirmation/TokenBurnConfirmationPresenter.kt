@@ -43,7 +43,6 @@ class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<Token
                             viewState.onShowError(it.message)
                         }
                     }
-
                 }))
     }
 }

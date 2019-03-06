@@ -29,7 +29,6 @@ class DexPresenter @Inject constructor() : BasePresenter<DexView>() {
                         it.printStackTrace()
                     }))
         }
-
     }
 
     fun loadDexPairInfo(watchMarket: WatchMarket, index: Int) {
@@ -43,8 +42,7 @@ class DexPresenter @Inject constructor() : BasePresenter<DexView>() {
                 }))
     }
 
-    fun clearOldPairsSubscriptions(){
+    fun clearOldPairsSubscriptions() {
         pairSubscriptions.clear()
     }
-
 }

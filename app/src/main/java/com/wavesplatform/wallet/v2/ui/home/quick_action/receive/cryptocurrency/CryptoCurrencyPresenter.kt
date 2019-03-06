@@ -9,8 +9,6 @@ import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import pyxis.uzuki.live.richutilskt.utils.runAsync
-import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 @InjectViewState
@@ -23,7 +21,6 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
     private var address: String? = App.getAccessManager().getWallet()!!.address
     private var lang: String = "ru_RU"
     var nextStepValidation = false
-
 
     fun getTunnel(assetId: String) {
         val currencyFrom = Constants.coinomatCryptoCurrencies()[assetId]

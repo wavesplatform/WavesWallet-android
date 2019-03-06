@@ -35,6 +35,6 @@ class SpeedyLinearLayoutManager : LinearLayoutManager {
 
     companion object {
 
-        private val MILLISECONDS_PER_INCH = 3f //default is 25f (bigger = slower)
+        private val MILLISECONDS_PER_INCH = 3f // default is 25f (bigger = slower)
     }
 }

@@ -28,7 +28,6 @@ import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-
 class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
     @Inject
@@ -130,7 +129,6 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     }
                 })
                 .build()
-
 
         eventSubscriptions.add(RxTextView.textChanges(edit_amount)
                 .skipInitialValue()
@@ -306,10 +304,9 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
                     it.printStackTrace()
                 }))
 
-
         horizontal_limit_price_suggestion.goneIf {
-            presenter.data?.lastPrice == null
-                    && presenter.data?.askPrice == null && presenter.data?.bidPrice == null
+            presenter.data?.lastPrice == null &&
+                    presenter.data?.askPrice == null && presenter.data?.bidPrice == null
         }
         text_bid.goneIf { presenter.data?.bidPrice == null }
         text_ask.goneIf { presenter.data?.askPrice == null }
@@ -416,11 +413,11 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         return if (presenter.wavesBalance.getAvailableBalance() ?: 0 > presenter.fee) {
             true
         } else {
-            if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true
-                    && presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
+            if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true &&
+                    presenter.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
                 edit_amount.text.toString().toBigDecimal() > getWavesDexFee(presenter.fee)
-            } else if (presenter.data?.watchMarket?.market?.priceAsset?.isWaves() == true
-                    && presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
+            } else if (presenter.data?.watchMarket?.market?.priceAsset?.isWaves() == true &&
+                    presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
                 edit_total_price.text.toString().toBigDecimal() > getWavesDexFee(presenter.fee)
             } else {
                 false

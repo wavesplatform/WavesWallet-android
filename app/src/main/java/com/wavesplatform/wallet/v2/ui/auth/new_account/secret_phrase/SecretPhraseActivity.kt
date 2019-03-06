@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.activity_secret_phrase.*
 import pers.victor.ext.click
 import javax.inject.Inject
 
-
 class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
 
     @Inject
@@ -65,7 +64,6 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
         menuInflater.inflate(R.menu.menu_close, menu)
         return super.onCreateOptionsMenu(menu)
     }
-
 
     override fun onBackPressed() {
         finish()

@@ -16,7 +16,6 @@ import com.wavesplatform.wallet.v2.util.setSystemBarTheme
 import pyxis.uzuki.live.richutilskt.utils.setStatusNavBarColor
 import javax.inject.Inject
 
-
 class SplashActivity : BaseActivity(), SplashView {
 
     @Inject

@@ -43,7 +43,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         const val INVOICE_SCREEN = "invoice"
 
         fun newInstance(assetBalance: AssetBalance?): InvoiceFragment {
-            val fragment =  InvoiceFragment()
+            val fragment = InvoiceFragment()
             if (assetBalance == null) {
                 return fragment
             }
@@ -147,10 +147,8 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
                     activity!!, R.color.white))
         } else {
             text_asset.click {
-
             }
             container_asset.click {
-
             }
             image_change.visibility = View.GONE
             ViewCompat.setElevation(edit_asset_card, 0F)

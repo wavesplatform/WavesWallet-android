@@ -83,7 +83,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                                     asset.position = assetsListFromDb.size + 1
                                 }
                             }
-                            if (asset.isSpam){
+                            if (asset.isSpam) {
                                 asset.isFavorite = false
                             }
                         }
@@ -132,7 +132,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                                     asset.position = assetsListFromDb.size + 1
                                 }
                             }
-                            if (asset.isSpam){
+                            if (asset.isSpam) {
                                 asset.isFavorite = false
                             }
                         }
@@ -151,7 +151,6 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
     }
 
-
     private fun tryUpdateWithApi(withApiUpdate: Boolean, it: List<AssetBalance>): Observable<List<AssetBalance>> {
         return if (withApiUpdate) {
             nodeDataManager.loadAssets(it)
@@ -160,9 +159,11 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
     }
 
-    private fun postSuccess(it: Triple<MutableList<AssetBalance>, MutableList<AssetBalance>, MutableList<AssetBalance>>,
-                            withApiUpdate: Boolean,
-                            fromDb: Boolean) {
+    private fun postSuccess(
+        it: Triple<MutableList<AssetBalance>, MutableList<AssetBalance>, MutableList<AssetBalance>>,
+        withApiUpdate: Boolean,
+        fromDb: Boolean
+    ) {
         val listToShow = arrayListOf<MultiItemEntity>()
 
         // add all main assets

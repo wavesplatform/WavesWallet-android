@@ -19,7 +19,6 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 
-
 class RxErrorHandlingCallAdapterFactory(private val mErrorManager: ErrorManager) : CallAdapter.Factory() {
     private val original: RxJava2CallAdapterFactory = RxJava2CallAdapterFactory.create()
 
@@ -29,7 +28,6 @@ class RxErrorHandlingCallAdapterFactory(private val mErrorManager: ErrorManager)
     override fun get(returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit): CallAdapter<*, *> {
         return RxCallAdapterWrapper(retrofit, original.get(returnType, annotations, retrofit) as CallAdapter<out Any, *>, returnType)
     }
-
 
     inner class RxCallAdapterWrapper<R>(private val retrofit: Retrofit, private val wrapped: CallAdapter<R, *>, private val returnType: Type) : CallAdapter<R, Any> {
 

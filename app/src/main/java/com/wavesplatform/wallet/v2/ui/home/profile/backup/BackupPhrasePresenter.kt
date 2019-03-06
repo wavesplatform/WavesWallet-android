@@ -5,6 +5,4 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
-class BackupPhrasePresenter @Inject constructor() :BasePresenter<BackupPhraseView>(){
-
-}
+class BackupPhrasePresenter @Inject constructor() : BasePresenter<BackupPhraseView>()
