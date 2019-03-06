@@ -64,3 +64,4 @@ workflows:
                 - master
                 - develop
                 - feature/circle-ci
+                - /^release/v.*/
