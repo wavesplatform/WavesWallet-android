@@ -15,10 +15,8 @@ import kotlinx.android.synthetic.main.activity_qr_code_scanner.*
 import pers.victor.ext.click
 import javax.inject.Inject
 
-
 class QrCodeScannerActivity : BaseActivity(), QrCodeScannerView,
         DecoratedBarcodeView.TorchListener {
-
 
     private lateinit var capture: CaptureManager
     @Inject

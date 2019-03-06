@@ -5,9 +5,11 @@ import android.support.annotation.StringRes
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 
-enum class TransactionType(var id: Int,
-                           @DrawableRes var image: Int,
-                           @StringRes var title: Int) {
+enum class TransactionType(
+    var id: Int,
+    @DrawableRes var image: Int,
+    @StringRes var title: Int
+) {
     RECEIVED_TYPE(Constants.ID_RECEIVED_TYPE, R.drawable.ic_t_receive_48,
             R.string.history_type_receive),
     SENT_TYPE(Constants.ID_SENT_TYPE, R.drawable.ic_t_send_48,
@@ -67,15 +69,15 @@ enum class TransactionType(var id: Int,
         }
 
         fun isZeroTransferOrExchange(type: TransactionType): Boolean {
-            return (type == TransactionType.CREATE_ALIAS_TYPE
-                    || type == TransactionType.DATA_TYPE
-                    || type == TransactionType.SET_ADDRESS_SCRIPT_TYPE
-                    || type == TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE
-                    || type == TransactionType.SET_SPONSORSHIP_TYPE
-                    || type == TransactionType.RECEIVE_SPONSORSHIP_TYPE
-                    || type == TransactionType.CANCEL_SPONSORSHIP_TYPE
-                    || type == TransactionType.UPDATE_ASSET_SCRIPT_TYPE
-                    || type == TransactionType.EXCHANGE_TYPE)
+            return (type == TransactionType.CREATE_ALIAS_TYPE ||
+                    type == TransactionType.DATA_TYPE ||
+                    type == TransactionType.SET_ADDRESS_SCRIPT_TYPE ||
+                    type == TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE ||
+                    type == TransactionType.SET_SPONSORSHIP_TYPE ||
+                    type == TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
+                    type == TransactionType.CANCEL_SPONSORSHIP_TYPE ||
+                    type == TransactionType.UPDATE_ASSET_SCRIPT_TYPE ||
+                    type == TransactionType.EXCHANGE_TYPE)
         }
     }
 }

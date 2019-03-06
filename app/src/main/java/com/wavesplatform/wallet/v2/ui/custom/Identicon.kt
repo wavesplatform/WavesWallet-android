@@ -36,7 +36,6 @@ class Identicon {
         return bitmap
     }
 
-
     private fun matrix(hash: String, grid: Options.Size): Array<Array<Int?>> {
         var i = 0
         val hashMatrix = Array(grid.rows) { arrayOfNulls<Int?>(grid.cells) }
@@ -165,19 +164,21 @@ class Identicon {
     }
 
     data class Options(
-            val grid: Size,
-            val sideSizePx: Int,
-            val palette: Palette,
-            val mainRange: Range,
-            val hollowRange: Range,
-            val backgroundRange: Range) {
+        val grid: Size,
+        val sideSizePx: Int,
+        val palette: Palette,
+        val mainRange: Range,
+        val hollowRange: Range,
+        val backgroundRange: Range
+    ) {
 
         sealed class Palette {
             object RandomColor : Palette()
             data class Colors(
-                    val background: Array<Int>,
-                    val main: Array<Int>,
-                    val hollow: Array<Int>) : Palette() {
+                val background: Array<Int>,
+                val main: Array<Int>,
+                val hollow: Array<Int>
+            ) : Palette() {
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) return true
@@ -202,12 +203,14 @@ class Identicon {
         }
 
         data class Range(
-                val step: Float,
-                val length: Float)
+            val step: Float,
+            val length: Float
+        )
 
         data class Size(
-                val cells: Int,
-                val rows: Int)
+            val cells: Int,
+            val rows: Int
+        )
     }
 
     companion object {

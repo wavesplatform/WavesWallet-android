@@ -143,7 +143,6 @@ class SpacesItemDecoration private constructor(private val itemSplitMarginEven: 
             return itemPosition >= latestCheckedPosition
         }
     }
-
 }
 
 internal object SpanLookupFactory {
@@ -177,7 +176,6 @@ internal object SpanLookupFactory {
             }
         }
     }
-
 }
 
 internal interface SpanLookup {
@@ -198,5 +196,4 @@ internal interface SpanLookup {
      * @return number of spans the item at the given adapterActiveAdapter position occupies
      */
     fun getSpanSize(itemPosition: Int): Int
-
 }

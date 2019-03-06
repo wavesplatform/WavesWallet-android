@@ -11,7 +11,6 @@ import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import kotlinx.android.synthetic.main.pager_whats_new_item.view.*
 import javax.inject.Inject
 
-
 class WhatsNewAdapter @Inject constructor(@ApplicationContext var mContext: Context) : PagerAdapter() {
     var items: ArrayList<WhatsNewItem> = arrayListOf()
 
@@ -43,5 +42,4 @@ class WhatsNewAdapter @Inject constructor(@ApplicationContext var mContext: Cont
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return view === `object`
     }
-
 }

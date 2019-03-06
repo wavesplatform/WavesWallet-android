@@ -49,12 +49,12 @@ android {
     }
 
     applicationVariants.all { variant ->
-        def SEP = "_"
         def version = variant.versionName
+        def versionCode = variant.versionCode
         def buildType = variant.variantData.variantConfiguration.buildType.name
         def date = new Date()
-        def formattedDate = date.format('dd-MM-yy')
-        def newApkName = appName + SEP + buildType + SEP + version + SEP + formattedDate + ".apk"
+        def formattedDate = date.format('dd.MM.yy')
+        def newApkName = "[" + buildType + "|" + version + "|" + versionCode + "] " + appName + " (" +formattedDate + ")" +  ".apk"
         variant.outputs.all { output ->
             outputFileName = newApkName
         }

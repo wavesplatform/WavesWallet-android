@@ -42,7 +42,6 @@ class MyAddressQrPresenter @Inject constructor() : BasePresenter<MyAddressQrView
         }
     }
 
-
     fun generateAvatars(address: String?, image: AppCompatImageView) {
         Observable.fromCallable {
             return@fromCallable identicon.create(address)

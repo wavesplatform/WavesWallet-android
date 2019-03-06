@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.AppCompatTextView
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -34,12 +33,12 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
+import io.sentry.Sentry
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import pers.victor.ext.finish
 import pers.victor.ext.telephonyManager
 import javax.inject.Inject
-
 
 class ProfileFragment : BaseFragment(), ProfileView {
 
@@ -49,7 +48,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @Inject
     lateinit var nodeDataManager: NodeDataManager
     private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
-
 
     @ProvidePresenter
     fun providePresenter(): ProfilePresenter = presenter
@@ -126,7 +124,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         initFingerPrintControl()
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             root_scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 onElevationAppBarChangeListener.notNull {
@@ -179,7 +176,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
         textView_height.text = presenter.preferenceHelper.currentBlocksHeight.toString()
     }
 
-
     override fun onStart() {
         super.onStart()
         checkBackUp()
@@ -200,7 +196,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 "${getString(R.string.profile_general_feedback_body_extra_device_model, getDeviceName())}\n" +
                 "${getString(R.string.profile_general_feedback_body_extra_language,
                         presenter.preferenceHelper.getLanguage())}\n" +
-                "${getString(R.string.profile_general_feedback_body_extra_carrier, telephonyManager.networkOperatorName)}\n"
+                "${getString(R.string.profile_general_feedback_body_extra_carrier, telephonyManager.networkOperatorName)}\n" +
+                "${getString(R.string.profile_general_feedback_body_extra_device_id, getDeviceId())}\n"
     }
 
     private fun openAppInPlayMarket() {

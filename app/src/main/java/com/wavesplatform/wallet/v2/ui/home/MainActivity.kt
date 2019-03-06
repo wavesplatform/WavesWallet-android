@@ -46,7 +46,6 @@ import pyxis.uzuki.live.richutilskt.utils.put
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
-
 class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedListener {
 
     @Inject
@@ -114,7 +113,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         }
     }
 
-
     /**
      * Setup bottom navigation with custom tabs
      * **/
@@ -165,7 +163,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         historyFragment.setOnElevationChangeListener(elevationListener)
         profileFragment.setOnElevationChangeListener(elevationListener)
 
-
         fragments.add(walletFragment)
         fragments.add(dexFragment)
         fragments.add(QuickActionBottomSheetFragment.newInstance())
@@ -187,7 +184,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab?) {
-
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -299,8 +295,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     }
 
     private fun showBackUpSeedWarning() {
-        if (!prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true)
-                && App.getAccessManager().isCurrentAccountBackupSkipped()) {
+        if (!prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true) &&
+                App.getAccessManager().isCurrentAccountBackupSkipped()) {
             val currentGuid = App.getAccessManager().getLastLoggedInGuid()
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
             val now = System.currentTimeMillis()

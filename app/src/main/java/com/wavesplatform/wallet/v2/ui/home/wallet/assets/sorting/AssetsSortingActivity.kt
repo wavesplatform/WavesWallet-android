@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.*
 import javax.inject.Inject
 
-
 class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
     @Inject
@@ -87,6 +86,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
                             // Save to DB
                             asset.save()
+                            prefsUtil.saveAssetBalance(asset)
                         }
                         AssetSortingItem.TYPE_NOT_FAVORITE -> {
                             // remove from current list
@@ -105,18 +105,19 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
                             // Save to DB
                             asset.save()
+                            prefsUtil.saveAssetBalance(asset)
                         }
                     }
                 }
             }
         }
 
-
         adapter.onHiddenChangeListener = object : AssetsSortingAdapter.OnHiddenChangeListener {
             override fun onHiddenStateChanged(item: AssetBalance, checked: Boolean) {
                 presenter.needToUpdate = true
                 item.isHidden = !checked
                 item.save()
+                prefsUtil.saveAssetBalance(item)
             }
         }
 

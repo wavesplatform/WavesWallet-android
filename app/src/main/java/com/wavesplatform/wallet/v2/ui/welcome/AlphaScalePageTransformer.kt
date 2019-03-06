@@ -5,7 +5,6 @@ import android.view.View
 import kotlinx.android.synthetic.main.item_asset_details_avatar.view.*
 import pers.victor.ext.dp2px
 
-
 class AlphaScalePageTransformer(var minScale: Float = 0.32f, var minAlpha: Float = 0.4f) : ViewPager.PageTransformer {
     var decimal = -1f
     var size = dp2px(48)
@@ -15,7 +14,6 @@ class AlphaScalePageTransformer(var minScale: Float = 0.32f, var minAlpha: Float
 
         val scaleFactor = Math.max(minScale, 1 - Math.abs(position - (1 + decimal)))
         val alphaFactor = Math.max(minAlpha, 1 - Math.abs(position - (1 + decimal)))
-
 
         view.image_welcome_photo.layoutParams.height = (size * scaleFactor).toInt()
         view.image_welcome_photo.layoutParams.width = (size * scaleFactor).toInt()

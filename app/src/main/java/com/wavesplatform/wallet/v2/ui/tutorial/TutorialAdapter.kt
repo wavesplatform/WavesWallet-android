@@ -103,5 +103,4 @@ class TutorialAdapter @Inject constructor(@ApplicationContext var mContext: Cont
         fun onSiteClicked(site: String)
         fun canBegin(allCheckedToStart: Boolean)
     }
-
 }

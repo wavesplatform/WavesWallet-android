@@ -9,7 +9,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.markets.DexMarketInformationBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.chart.TradeChartFragment
@@ -19,7 +18,6 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook.TradeOrderBookFra
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_trade.*
 import javax.inject.Inject
-
 
 class TradeActivity : BaseActivity(), TradeView {
 
@@ -31,7 +29,6 @@ class TradeActivity : BaseActivity(), TradeView {
     fun providePresenter(): TradePresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_trade
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
@@ -54,11 +51,9 @@ class TradeActivity : BaseActivity(), TradeView {
         viewpageer_trade.offscreenPageLimit = 4
         viewpageer_trade.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(p0: Int) {
-
             }
 
             override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
-
             }
 
             override fun onPageSelected(position: Int) {

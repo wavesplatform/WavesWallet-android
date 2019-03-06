@@ -22,8 +22,10 @@ interface NodeService {
     fun wavesBalance(@Path("address") address: String?): Observable<WavesBalance>
 
     @GET("assets/balance/{address}/{assetId}")
-    fun addressAssetBalance(@Path("address") address: String?,
-                            @Path("assetId") assetId: String?): Observable<AddressAssetBalance>
+    fun addressAssetBalance(
+        @Path("address") address: String?,
+        @Path("assetId") assetId: String?
+    ): Observable<AddressAssetBalance>
 
     @GET("transactions/address/{address}/limit/{limit}")
     fun transactionList(@Path("address") address: String?, @Path("limit") limit: Int): Observable<List<List<Transaction>>>
@@ -69,5 +71,4 @@ interface NodeService {
 
     @GET("/assets/details/{assetId}")
     fun assetDetails(@Path("assetId") assetId: String): Observable<AssetsDetails>
-
 }

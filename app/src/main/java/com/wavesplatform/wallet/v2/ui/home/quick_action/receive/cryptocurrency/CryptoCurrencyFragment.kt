@@ -101,9 +101,9 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
 
     override fun onShowTunnel(tunnel: GetTunnel?) {
         skeletonView?.hide()
-        if (tunnel?.tunnel == null
-                || tunnel.tunnel?.inMin.isNullOrEmpty()
-                || tunnel.tunnel?.currencyFrom.isNullOrEmpty()) {
+        if (tunnel?.tunnel == null ||
+                tunnel.tunnel?.inMin.isNullOrEmpty() ||
+                tunnel.tunnel?.currencyFrom.isNullOrEmpty()) {
             presenter.nextStepValidation = false
             needMakeButtonEnable()
             onGatewayError()
@@ -206,7 +206,6 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
             }
         }
     }
-
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)

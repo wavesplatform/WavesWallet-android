@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
-import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
@@ -15,7 +14,6 @@ import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadca
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.clearAlias
 import com.wavesplatform.wallet.v2.util.errorBody
@@ -41,7 +39,6 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var blockchainCommission = 0L
     var feeAsset: AssetBalance = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
-
     fun confirmSend() {
         val singed = signTransaction()
         if (singed != null) {
@@ -52,8 +49,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     fun getTicker(): String {
         return if (assetInfo == null) {
             ""
-        } else if (assetInfo!!.ticker.equals(null)
-                || assetInfo!!.ticker.equals("")) {
+        } else if (assetInfo!!.ticker.equals(null) ||
+                assetInfo!!.ticker.equals("")) {
             assetInfo!!.name
         } else {
             assetInfo!!.ticker ?: ""
@@ -125,9 +122,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     }
 
     fun getAddressName(address: String) {
-        val addressBookUser = queryFirst<AddressBookUser> {
-            equalTo("address", address)
-        }
+        val addressBookUser = prefsUtil.getAddressBookUser(address)
         if (addressBookUser == null) {
             viewState.hideAddressBookUser()
         } else {
@@ -139,7 +134,6 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
         val assetId = selectedAsset!!.assetId
         val currencyTo = Constants.coinomatCryptoCurrencies()[assetId]
 
-
         if (currencyTo.isNullOrEmpty()) {
             viewState.onShowError(R.string.receive_error_network)
             return
@@ -147,8 +141,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
 
         val currencyFrom = "${EnvironmentManager.netCode.toChar()}$currencyTo"
 
-        val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY
-                && !this.moneroPaymentId.isNullOrEmpty()) {
+        val moneroPaymentId = if (type == SendPresenter.Type.GATEWAY &&
+                !this.moneroPaymentId.isNullOrEmpty()) {
             this.moneroPaymentId
         } else {
             null

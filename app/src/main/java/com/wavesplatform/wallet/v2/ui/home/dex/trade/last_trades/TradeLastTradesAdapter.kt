@@ -8,7 +8,6 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.util.clearBalance
-import com.wavesplatform.wallet.v2.util.stripZeros
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import java.math.BigDecimal
 import java.text.ParsePosition

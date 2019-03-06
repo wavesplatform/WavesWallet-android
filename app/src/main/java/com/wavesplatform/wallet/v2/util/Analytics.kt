@@ -8,7 +8,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.wallet.App
 import pyxis.uzuki.live.richutilskt.utils.toMap
 
-
 class Analytics {
 
     companion object {
@@ -18,19 +17,15 @@ class Analytics {
             val conversionDataListener = object : AppsFlyerConversionListener {
 
                 override fun onInstallConversionDataLoaded(conversionData: Map<String, String>) {
-
                 }
 
                 override fun onInstallConversionFailure(errorMessage: String) {
-
                 }
 
                 override fun onAppOpenAttribution(attributionData: Map<String, String>) {
-
                 }
 
                 override fun onAttributionFailure(errorMessage: String) {
-
                 }
             }
             // TODO: change key and put in a separate file
@@ -39,8 +34,11 @@ class Analytics {
             AppsFlyerLib.getInstance().startTracking(app)
         }
 
-        fun sendEvent(firebaseAnalytics: FirebaseAnalytics,
-                      eventName: String, eventBundle: Bundle) {
+        fun sendEvent(
+            firebaseAnalytics: FirebaseAnalytics,
+            eventName: String,
+            eventBundle: Bundle
+        ) {
             AppsFlyerLib.getInstance().trackEvent(App.getAppContext(), eventName, eventBundle.toMap())
             firebaseAnalytics.logEvent(eventName, eventBundle)
         }

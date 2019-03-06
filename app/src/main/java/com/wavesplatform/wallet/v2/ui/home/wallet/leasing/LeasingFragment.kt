@@ -187,13 +187,12 @@ class LeasingFragment : BaseFragment(), LeasingView {
         text_total.text = wavesAsset.getDisplayTotalBalance()
         wavesAsset.balance.notNull { wavesBalance ->
             if (wavesBalance != 0L) {
-                progress_of_leasing.progress = ((wavesAsset.leasedBalance ?: 0
-                * 100) / wavesBalance).toInt()
+                progress_of_leasing.progress = ((wavesAsset.leasedBalance ?: 0 *
+                100) / wavesBalance).toInt()
             } else {
                 progress_of_leasing.progress = 0
             }
         }
-
 
         button_start_lease.click {
             launchActivity<StartLeasingActivity> {

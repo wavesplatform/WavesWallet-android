@@ -98,22 +98,33 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                             }
                             .map { tripple ->
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
+                                val savedAssetPrefs = prefsUtil.assetBalances
 
                                 if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
                                     // merge db data and API data
                                     tripple.third.balances.forEachIndexed { index, assetBalance ->
                                         val dbAsset = mapDbAssets?.get(assetBalance.assetId)
                                         dbAsset?.let {
-                                            assetBalance.isHidden = it.isHidden
-                                            assetBalance.issueTransaction?.name = it.issueTransaction?.name
-                                            assetBalance.issueTransaction?.quantity = it.issueTransaction?.quantity
-                                            assetBalance.issueTransaction?.decimals = it.issueTransaction?.decimals
-                                            assetBalance.issueTransaction?.timestamp = it.issueTransaction?.timestamp
-                                            assetBalance.isFavorite = it.isFavorite
+                                            assetBalance.issueTransaction?.name =
+                                                    it.issueTransaction?.name
+                                            assetBalance.issueTransaction?.quantity =
+                                                    it.issueTransaction?.quantity
+                                            assetBalance.issueTransaction?.decimals =
+                                                    it.issueTransaction?.decimals
+                                            assetBalance.issueTransaction?.timestamp =
+                                                    it.issueTransaction?.timestamp
                                             assetBalance.isFiatMoney = it.isFiatMoney
                                             assetBalance.isGateway = it.isGateway
                                             assetBalance.isSpam = it.isSpam
-                                            assetBalance.position = it.position
+                                            assetBalance.isFavorite =
+                                                    savedAssetPrefs[assetBalance.assetId]
+                                                            ?.isFavorite ?: it.isFavorite
+                                            assetBalance.position =
+                                                    savedAssetPrefs[assetBalance.assetId]
+                                                            ?.position ?: it.position
+                                            assetBalance.isHidden =
+                                                    savedAssetPrefs[assetBalance.assetId]
+                                                            ?.isHidden ?: it.isHidden
                                         }
                                     }
                                 }
@@ -121,6 +132,17 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 findElementsInDbWithZeroBalancesAndDelete(assetsFromDb, tripple)
 
                                 tripple.third.balances.forEachIndexed { index, assetBalance ->
+                                    assetBalance.isFavorite =
+                                            savedAssetPrefs[assetBalance.assetId]?.isFavorite
+                                                    ?: assetBalance.isFavorite
+                                    assetBalance.position =
+                                            savedAssetPrefs[assetBalance.assetId]?.position
+                                                    ?: assetBalance.position
+                                    assetBalance.isHidden =
+                                            savedAssetPrefs[assetBalance.assetId]?.isHidden
+                                                    ?: assetBalance.isHidden
+
+
                                     assetBalance.inOrderBalance = tripple.second[assetBalance.assetId]
                                             ?: 0L
 
@@ -147,6 +169,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 }
 
                                 tripple.third.balances.saveAll()
+                                prefsUtil.saveAssetBalances(tripple.third.balances)
 
                                 return@map queryAll<AssetBalance>()
                             }
@@ -235,9 +258,11 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun startLeasing(createLeasingRequest: CreateLeasingRequest,
-                     recipientIsAlias: Boolean,
-                     fee: Long): Observable<Transaction> {
+    fun startLeasing(
+        createLeasingRequest: CreateLeasingRequest,
+        recipientIsAlias: Boolean,
+        fee: Long
+    ): Observable<Transaction> {
         createLeasingRequest.senderPublicKey = getPublicKeyStr()
         createLeasingRequest.fee = fee
         createLeasingRequest.timestamp = currentTimeMillis

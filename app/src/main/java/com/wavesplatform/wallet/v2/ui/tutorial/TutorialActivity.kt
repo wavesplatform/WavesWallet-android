@@ -18,7 +18,6 @@ import pers.victor.ext.dp
 import pers.victor.ext.findColor
 import javax.inject.Inject
 
-
 class TutorialActivity : BaseActivity(), TutorialView {
 
     @Inject

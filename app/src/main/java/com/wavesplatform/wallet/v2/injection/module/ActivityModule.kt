@@ -7,7 +7,6 @@ import com.wavesplatform.wallet.v2.ui.auth.fingerprint.UseFingerprintActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.new_account.backup_info.BackupInfoActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
@@ -39,8 +38,8 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingAc
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation.ConfirmationStartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
@@ -82,10 +81,6 @@ abstract class ActivityModule {
 
     @PerActivity
     @ContributesAndroidInjector
-    internal abstract fun backupInfoActivity(): BackupInfoActivity
-
-    @PerActivity
-    @ContributesAndroidInjector
     internal abstract fun mainActivity(): MainActivity
 
     @PerActivity
@@ -115,7 +110,6 @@ abstract class ActivityModule {
     @PerActivity
     @ContributesAndroidInjector
     internal abstract fun backupPharseActivity(): BackupPhraseActivity
-
 
     @PerActivity
     @ContributesAndroidInjector

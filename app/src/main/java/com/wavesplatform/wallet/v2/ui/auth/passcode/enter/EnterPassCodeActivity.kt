@@ -25,7 +25,6 @@ import pers.victor.ext.inflate
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-
 class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     @Inject
     @InjectPresenter
@@ -54,11 +53,10 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         val isAvailable = FingerprintAuthDialogFragment.isAvailable(this)
         guid = getGuid()
 
-        useFingerprint = isAvailable
-                && !isProcessSetFingerprint
-                && !TextUtils.isEmpty(guid)
-                && App.getAccessManager().isGuidUseFingerPrint(guid)
-
+        useFingerprint = isAvailable &&
+                !isProcessSetFingerprint &&
+                !TextUtils.isEmpty(guid) &&
+                App.getAccessManager().isGuidUseFingerPrint(guid)
 
         if (EnterPassCodePresenter.overMaxWrongPassCodes(guid)) {
             startUsePasswordScreen(true)

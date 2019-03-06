@@ -12,7 +12,6 @@ import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.sp2px
 
-
 class TopRightErrorTextInputLayout(context: Context, attrs: AttributeSet) : TextInputLayout(context, attrs) {
     var topRightAlignedErrorText: TextView = TextView(context)
 
@@ -20,7 +19,7 @@ class TopRightErrorTextInputLayout(context: Context, attrs: AttributeSet) : Text
         topRightAlignedErrorText.setTextColor(ContextCompat.getColor(context, R.color.error500))
         topRightAlignedErrorText.textSize = 12f
         val params = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
-        params.rightMargin =  dp2px(4)
+        params.rightMargin = dp2px(4)
         topRightAlignedErrorText.layoutParams = params
         topRightAlignedErrorText.gravity = Gravity.END
         addView(topRightAlignedErrorText)
@@ -37,9 +36,9 @@ class TopRightErrorTextInputLayout(context: Context, attrs: AttributeSet) : Text
 
     override fun setError(error: CharSequence?) {
         topRightAlignedErrorText.text = error
-        if (error.isNullOrEmpty()){
+        if (error.isNullOrEmpty()) {
             super.setError(error)
-        }else{
+        } else {
             super.setError(" ")
         }
     }
