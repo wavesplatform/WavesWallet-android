@@ -71,4 +71,7 @@ interface NodeService {
 
     @GET("/assets/details/{assetId}")
     fun assetDetails(@Path("assetId") assetId: String): Observable<AssetsDetails>
+
+    @GET("/utils/time")
+    fun utilsTime(): Observable<UtilsTime>
 }

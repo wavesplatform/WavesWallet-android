@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.Process;
 import android.util.Log;
 
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -149,7 +151,7 @@ public final class PRNGFixes {
             ByteArrayOutputStream seedBuffer = new ByteArrayOutputStream();
             DataOutputStream seedBufferOut =
                     new DataOutputStream(seedBuffer);
-            seedBufferOut.writeLong(System.currentTimeMillis());
+            seedBufferOut.writeLong(EnvironmentManager.getTime());
             seedBufferOut.writeLong(System.nanoTime());
             seedBufferOut.writeInt(Process.myPid());
             seedBufferOut.writeInt(Process.myUid());

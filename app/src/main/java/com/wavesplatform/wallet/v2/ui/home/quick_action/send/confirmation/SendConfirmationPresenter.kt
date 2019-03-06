@@ -117,7 +117,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 App.getAccessManager().getWallet()!!.publicKeyStr,
                 recipient!!,
                 MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
-                System.currentTimeMillis(),
+                EnvironmentManager.getTime(),
                 blockchainCommission,
                 attachment,
                 feeAsset.assetId)
