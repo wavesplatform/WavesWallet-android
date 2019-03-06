@@ -20,4 +20,3 @@ class TradeFragmentPageAdapter(fm: FragmentManager?, private var pages: ArrayLis
         return pages[position].second
     }
 }
-

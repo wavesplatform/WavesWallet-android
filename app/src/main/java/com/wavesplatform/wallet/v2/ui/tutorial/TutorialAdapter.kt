@@ -12,7 +12,6 @@ import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import com.wavesplatform.sdk.utils.notNull
 import javax.inject.Inject
 
-
 class TutorialAdapter @Inject constructor(@ApplicationContext var mContext: Context) : PagerAdapter() {
     var items: ArrayList<Int> = arrayListOf()
     var listener: EndOfScrollListener? = null
@@ -68,5 +67,4 @@ class TutorialAdapter @Inject constructor(@ApplicationContext var mContext: Cont
         fun onEndOfScroll(position: Int)
         fun onNotEndOfScroll(position: Int)
     }
-
 }

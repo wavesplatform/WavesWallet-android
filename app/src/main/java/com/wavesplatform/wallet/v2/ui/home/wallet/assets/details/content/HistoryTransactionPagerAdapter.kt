@@ -21,7 +21,9 @@ import kotlinx.android.synthetic.main.assets_detailed_history_item.view.*
 import pers.victor.ext.*
 
 class HistoryTransactionPagerAdapter constructor(
-        var fragmentManager: FragmentManager?, var prefsUtil: PrefsUtil) : PagerAdapter() {
+    var fragmentManager: FragmentManager?,
+    var prefsUtil: PrefsUtil
+) : PagerAdapter() {
 
     var items: List<HistoryItem> = arrayListOf()
 
@@ -63,7 +65,7 @@ class HistoryTransactionPagerAdapter constructor(
                 TransactionType.RECEIVE_SPONSORSHIP_TYPE -> {
                     item.data.fee.notNull {
                         layout.text_transaction_value.text =
-                                "+${getScaledAmount(it,  item.data.feeAssetObject?.precision
+                                "+${getScaledAmount(it, item.data.feeAssetObject?.precision
                                         ?: 8)} ${item.data.feeAssetObject?.name}"
                     }
                 }
@@ -136,7 +138,6 @@ class HistoryTransactionPagerAdapter constructor(
             }
         }
         layout.text_transaction_value.makeTextHalfBold()
-
 
         collection.addView(layout)
         return layout

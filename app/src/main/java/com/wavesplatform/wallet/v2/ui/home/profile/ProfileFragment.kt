@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.AppCompatTextView
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -42,7 +41,6 @@ import pers.victor.ext.finish
 import pers.victor.ext.telephonyManager
 import javax.inject.Inject
 
-
 class ProfileFragment : BaseFragment(), ProfileView {
 
     @Inject
@@ -51,7 +49,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @Inject
     lateinit var nodeDataManager: NodeDataManager
     private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
-
 
     @ProvidePresenter
     fun providePresenter(): ProfilePresenter = presenter
@@ -128,7 +125,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         initFingerPrintControl()
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             root_scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 onElevationAppBarChangeListener.notNull {
@@ -180,7 +176,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
         textView_version.text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
         textView_height.text = presenter.preferenceHelper.currentBlocksHeight.toString()
     }
-
 
     override fun onStart() {
         super.onStart()

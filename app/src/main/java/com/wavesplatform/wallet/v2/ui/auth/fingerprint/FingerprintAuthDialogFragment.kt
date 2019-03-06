@@ -1,6 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.auth.fingerprint
 
-
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
@@ -29,7 +28,6 @@ import pers.victor.ext.click
 import pers.victor.ext.findColor
 import timber.log.Timber
 
-
 class FingerprintAuthDialogFragment : DialogFragment() {
 
     private var fingerprintState = FingerprintState.DEFAULT
@@ -51,8 +49,11 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fingerprint_dialog, container, false)
         view.text_cancel.click { cancelDialog() }
         mode = arguments?.getInt(KEY_INTENT_MODE, ENCRYPT)
@@ -102,8 +103,8 @@ class FingerprintAuthDialogFragment : DialogFragment() {
                 fingerprintIdentify.cancelIdentify()
                 onFingerprintDoNotMatchTryAgain()
                 handler.postDelayed({
-                    if (fingerprintState == FingerprintState.NOT_RECOGNIZED
-                            || fingerprintState == FingerprintState.DEFAULT) {
+                    if (fingerprintState == FingerprintState.NOT_RECOGNIZED ||
+                            fingerprintState == FingerprintState.DEFAULT) {
                         onDefaultState()
                         fingerprintIdentify.resumeIdentify()
                     }
@@ -208,7 +209,6 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         text_fingerprint_state?.setText(R.string.fingerprint_dialog_not_recognized)
     }
 
-
     fun setFingerPrintDialogListener(fingerPrintDialogListener: FingerPrintDialogListener) {
         this.fingerPrintDialogListener = fingerPrintDialogListener
     }
@@ -223,26 +223,20 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         }
 
         fun onSuccessRecognizedFingerprint() {
-
         }
 
         fun onSuccessRecognizedFingerprint(passCode: String) {
-
         }
 
         fun onFingerprintLocked(message: String) {
-
         }
 
         fun onShowErrorMessage(message: String) {
-
         }
 
         fun onShowMessage(message: String) {
-
         }
     }
-
 
     companion object {
         const val AVAILABLE_TIMES = 5

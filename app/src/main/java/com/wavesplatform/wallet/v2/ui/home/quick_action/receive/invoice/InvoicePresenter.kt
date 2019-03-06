@@ -8,7 +8,7 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
-class InvoicePresenter @Inject constructor() :BasePresenter<InvoiceView>(){
+class InvoicePresenter @Inject constructor() : BasePresenter<InvoiceView>() {
 
     @Inject
     lateinit var coinomatManager: CoinomatManager

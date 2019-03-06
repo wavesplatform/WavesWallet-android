@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_asset_details.*
 import pers.victor.ext.*
 import javax.inject.Inject
 
-
 class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
     @Inject

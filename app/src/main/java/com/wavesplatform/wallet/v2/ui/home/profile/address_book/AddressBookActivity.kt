@@ -33,7 +33,6 @@ import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-
 class AddressBookActivity : BaseActivity(), AddressBookView {
 
     @Inject
@@ -72,8 +71,6 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                 .subscribe {
                     adapter.filter(it)
                 })
-
-
 
         edit_search.setDrawableClickListener(object : OnDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
@@ -147,7 +144,6 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
                             }
                         }
                     }
-
                 } else if (resultCode == Constants.RESULT_OK_NO_RESULT) {
                     val position = data?.getIntExtra(BUNDLE_POSITION, -1)
                     position?.let {
@@ -167,7 +163,6 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         if (adapter.allData.isEmpty()) edit_search.gone()
         else edit_search.visiable()
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

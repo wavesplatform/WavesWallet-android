@@ -37,9 +37,11 @@ class TransactionSaver @Inject constructor() {
     private var prevLimit = DEFAULT_LIMIT
     private var needCheckToUpdateBalance = false
 
-
-    fun saveTransactions(sortedList: List<Transaction>, limit: Int = DEFAULT_LIMIT,
-                         changeListener: OnTransactionLimitChangeListener? = null) {
+    fun saveTransactions(
+        sortedList: List<Transaction>,
+        limit: Int = DEFAULT_LIMIT,
+        changeListener: OnTransactionLimitChangeListener? = null
+    ) {
         currentLimit = limit
         if (sortedList.isEmpty() || limit < 1) {
             rxEventBus.post(Events.NeedUpdateHistoryScreen())
@@ -77,7 +79,6 @@ class TransactionSaver @Inject constructor() {
                             changeListener.notNull { listener ->
                                 listener.onChange(currentLimit)
                             }
-
                         } else {
                             // check if exist first transaction
                             queryAsync<TransactionDb>({ equalTo("id", sortedList[0].id) },
@@ -178,7 +179,6 @@ class TransactionSaver @Inject constructor() {
                                             allAssets.firstOrNull { it.id == trans.order1?.assetPair?.priceAsset }
                                         }
 
-
                                 trans.order1?.assetPair?.amountAssetObject = amountAsset
                                 trans.order1?.assetPair?.priceAssetObject = priceAsset
                                 trans.order2.notNull {
@@ -220,7 +220,6 @@ class TransactionSaver @Inject constructor() {
                         }
                     }
                 })
-
     }
 
     private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfo>, callback: (ArrayList<AssetInfo>) -> Unit) {

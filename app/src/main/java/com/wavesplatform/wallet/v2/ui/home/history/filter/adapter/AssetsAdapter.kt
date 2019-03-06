@@ -23,4 +23,3 @@ class AssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalance, BaseV
         }
     }
 }
-

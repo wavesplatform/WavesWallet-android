@@ -8,15 +8,28 @@ import io.reactivex.schedulers.Schedulers
 
 object RxUtil {
 
-    fun <T> applyObservableDefaultSchedulers(): ObservableTransformer<T, T> {
+    fun unsubscribe(subscription: Disposable?) {
+        if (subscription != null && !subscription.isDisposed) {
+            subscription.dispose()
+        }
+    }
+
+    fun <T> applyObservableDefaultSchedulers(): ObservableTransformer<T, T> { // compose
         return ObservableTransformer { observable ->
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
         }
     }
 
-    fun <T> applySingleDefaultSchedulers(): SingleTransformer<T, T> {
+    fun <T> applySingleDefaultSchedulers(): SingleTransformer<T, T> { // compose
         return SingleTransformer { observable ->
+            observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+        }
+    }
+
+    fun <T> applyFlowableDefaultSchedulers(): FlowableTransformer<T, T> { // compose
+        return FlowableTransformer { observable ->
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
         }

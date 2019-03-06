@@ -7,5 +7,4 @@ interface SplashView : BaseMvpView {
     fun onNotLoggedIn()
 
     fun onStartMainActivity(publicKey: String)
-
 }

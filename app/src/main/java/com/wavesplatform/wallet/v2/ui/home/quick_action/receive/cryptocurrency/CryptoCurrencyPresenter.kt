@@ -22,7 +22,6 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
     private var lang: String = "ru_RU"
     var nextStepValidation = false
 
-
     fun getTunnel(assetId: String) {
         val currencyFrom = coinomatCryptoCurrencies()[assetId]
         if (currencyFrom.isNullOrEmpty()) {

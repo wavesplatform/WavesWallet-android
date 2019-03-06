@@ -15,7 +15,7 @@ class LanguageAdapter @Inject constructor() : BaseQuickAdapter<LanguageItem, Bas
     var changeRootPadding = false
 
     override fun convert(helper: BaseViewHolder, item: LanguageItem) {
-        if (changeRootPadding){
+        if (changeRootPadding) {
             helper.itemView.root.setPaddingEnd(dp2px(16))
             helper.itemView.root.setPaddingStart(dp2px(16))
         }

@@ -5,5 +5,4 @@ import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 
 interface AddAddressView : BaseMvpView {
     fun successSaveAddress(addressBookUser: AddressBookUserDb)
-
 }

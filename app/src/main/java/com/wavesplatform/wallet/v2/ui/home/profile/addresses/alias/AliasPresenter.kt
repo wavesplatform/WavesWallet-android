@@ -61,7 +61,6 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
                 }))
     }
 
-
     interface OnCommissionGetListener {
         fun showCommissionLoading()
         fun showCommissionSuccess(unscaledAmount: Long)

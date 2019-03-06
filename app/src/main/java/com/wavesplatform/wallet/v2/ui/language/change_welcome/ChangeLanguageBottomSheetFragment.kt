@@ -17,7 +17,6 @@ import pers.victor.ext.click
 import pers.victor.ext.invisiable
 import pers.victor.ext.visiable
 
-
 class ChangeLanguageBottomSheetFragment : BaseSuperBottomSheetDialogFragment() {
 
     var adapter: LanguageAdapter = LanguageAdapter()
@@ -25,11 +24,13 @@ class ChangeLanguageBottomSheetFragment : BaseSuperBottomSheetDialogFragment() {
     var currentLanguagePosition: Int = -1
     lateinit var behavior: BottomSheetBehavior<View>
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val rootView = inflater.inflate(com.wavesplatform.wallet.R.layout.fragment_bottom_sheet_change_language_layout, container, false)
-
 
         rootView.recycle_language.layoutManager = LinearLayoutManager(activity)
         rootView.recycle_language.adapter = adapter

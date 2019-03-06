@@ -15,5 +15,4 @@ class ChartModel : BaseObservable() {
     var data = CombinedData()
     var lastLoadDate: Date = Date()
     var pairModel: WatchMarket? = null
-
 }

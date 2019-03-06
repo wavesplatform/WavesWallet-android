@@ -17,7 +17,6 @@ class DexMarketsAdapter @Inject constructor() : BaseQuickAdapter<MarketResponse,
                 .addOnClickListener(R.id.image_info)
     }
 
-
     fun filter(text: String) {
         data.clear()
         if (text.trim().isEmpty()) {
@@ -34,6 +33,4 @@ class DexMarketsAdapter @Inject constructor() : BaseQuickAdapter<MarketResponse,
         }
         notifyDataSetChanged()
     }
-
-
 }

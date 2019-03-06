@@ -56,5 +56,4 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
                 }
         AssetBalanceDb.convertToDb(list).saveAll()
     }
-
 }

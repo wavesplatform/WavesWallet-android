@@ -17,10 +17,8 @@ interface GithubService {
     fun news(@Url url: String = News.URL): Observable<News>
 
     @GET
-    fun globalConfiguration(@Url url: String = EnvironmentManager.environment.url)
-            : Observable<GlobalConfiguration>
+    fun globalConfiguration(@Url url: String = EnvironmentManager.environment.url): Observable<GlobalConfiguration>
 
     @GET
-    fun globalCommission(@Url url: String = EnvironmentManager.URL_COMMISSION_MAIN_NET)
-            : Observable<GlobalTransactionCommission>
+    fun globalCommission(@Url url: String = EnvironmentManager.URL_COMMISSION_MAIN_NET): Observable<GlobalTransactionCommission>
 }

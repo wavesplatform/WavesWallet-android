@@ -29,7 +29,6 @@ import pers.victor.ext.visiableIf
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-
 class CardFragment : BaseFragment(), CardView {
     @Inject
     @InjectPresenter
@@ -122,10 +121,8 @@ class CardFragment : BaseFragment(), CardView {
 
     private fun assetChangeDisable() {
         text_asset.click {
-
         }
         container_asset.click {
-
         }
         image_change.visibility = View.GONE
         ViewCompat.setElevation(edit_asset_card, 0F)
@@ -200,7 +197,6 @@ class CardFragment : BaseFragment(), CardView {
             else -> value!!
         }
     }
-
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)

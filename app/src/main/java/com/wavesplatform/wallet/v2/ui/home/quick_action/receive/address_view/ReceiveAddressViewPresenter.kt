@@ -12,8 +12,8 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 @InjectViewState
-class ReceiveAddressViewPresenter @Inject constructor():BasePresenter<ReceiveAddressView>(){
-    fun generateQRCode(text: String, size: Int){
+class ReceiveAddressViewPresenter @Inject constructor() : BasePresenter<ReceiveAddressView>() {
+    fun generateQRCode(text: String, size: Int) {
         addSubscription(generateQrCodeObservable(text, size)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {

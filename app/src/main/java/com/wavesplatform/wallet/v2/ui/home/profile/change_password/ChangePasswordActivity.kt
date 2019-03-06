@@ -25,7 +25,6 @@ import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import javax.inject.Inject
 
-
 class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
 
     @Inject
@@ -42,7 +41,6 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
     }
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true,
@@ -178,7 +176,6 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         setResult(Constants.RESULT_OK)
         finish()
     }
-
 
     override fun onBackPressed() {
         finish()

@@ -44,7 +44,6 @@ import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import java.util.*
 import javax.inject.Inject
 
-
 class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListener {
 
     @Inject
@@ -57,7 +56,6 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     fun providePresenter(): TradeChartPresenter = presenter
 
     override fun configLayoutRes() = com.wavesplatform.wallet.R.layout.fragment_trade_chart
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
@@ -210,9 +208,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         bar_chart.xAxis.setDrawAxisLine(false)
         bar_chart.xAxis.isGranularityEnabled = true
         bar_chart.xAxis.labelCount = 3
-
     }
-
 
     private fun checkInterval() {
         val dataSetByIndex = candle_chart.candleData.getDataSetByIndex(0)
@@ -251,13 +247,11 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         presenter.resume()
     }
 
-
     inner class BarChartListener : OnChartGestureListener {
 
         private var prevScaleX = 0f
 
         override fun onChartGestureStart(me: MotionEvent, lastPerformedGesture: ChartTouchListener.ChartGesture) {
-
         }
 
         override fun onChartGestureEnd(me: MotionEvent, lastPerformedGesture: ChartTouchListener.ChartGesture) {
@@ -265,19 +259,15 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         }
 
         override fun onChartLongPressed(me: MotionEvent) {
-
         }
 
         override fun onChartDoubleTapped(me: MotionEvent) {
-
         }
 
         override fun onChartSingleTapped(me: MotionEvent) {
-
         }
 
         override fun onChartFling(me1: MotionEvent, me2: MotionEvent, velocityX: Float, velocityY: Float) {
-
         }
 
         override fun onChartScale(me: MotionEvent, scaleX: Float, scaleY: Float) {
@@ -307,17 +297,15 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     }
 
     override fun onChartLongPressed(me: MotionEvent) {
-
     }
 
     override fun onChartDoubleTapped(me: MotionEvent) {
-        //checkInterval();
+        // checkInterval();
     }
 
     override fun onChartSingleTapped(me: MotionEvent) {}
 
     override fun onChartFling(me1: MotionEvent, me2: MotionEvent, velocityX: Float, velocityY: Float) {
-
     }
 
     private var prevScaleX = 0f
@@ -329,7 +317,6 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         bar_chart.zoom(z1, 1f, xPos, yPos)
         prevScaleX = scaleX
     }
-
 
     override fun onChartTranslate(me: MotionEvent, dX: Float, dY: Float) {
         bar_chart.moveViewToX(candle_chart.lowestVisibleX)
@@ -349,7 +336,6 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             candle_chart.axisRight.addLimitLine(limitLine)
             candle_chart.axisRight.setDrawLimitLinesBehindData(false)
             candle_chart.invalidate()
-
         }
     }
 
@@ -411,7 +397,6 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
                 }
             }
         }
-
     }
 
     private fun updateCandles(candles: List<CandleEntry>, barEntries: List<BarEntry>) {
@@ -459,7 +444,6 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
             isLoading = false
         }
     }
-
 
     override fun onRefreshCandles(candles: ArrayList<CandleEntry>, barEntries: ArrayList<BarEntry>) {
         if (candles.isEmpty() || barEntries.isEmpty())

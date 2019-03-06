@@ -48,5 +48,4 @@ class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressBookU
             }
         }
     }
-
 }

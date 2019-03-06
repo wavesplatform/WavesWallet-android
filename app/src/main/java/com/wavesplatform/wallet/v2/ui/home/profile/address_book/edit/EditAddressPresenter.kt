@@ -36,5 +36,4 @@ class EditAddressPresenter @Inject constructor() : BasePresenter<EditAddressView
             viewState.successEditAddress(addressBookUser)
         }
     }
-
 }

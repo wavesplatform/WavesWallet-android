@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.activity_success.*
 import pers.victor.ext.click
 import javax.inject.Inject
 
-
 class SuccessActivity : BaseActivity(), SuccessView {
 
     @Inject

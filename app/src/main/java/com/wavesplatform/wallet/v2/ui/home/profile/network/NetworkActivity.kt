@@ -20,7 +20,6 @@ import pers.victor.ext.click
 import pers.victor.ext.isNetworkConnected
 import javax.inject.Inject
 
-
 class NetworkActivity : BaseActivity(), NetworkView {
 
     @Inject

@@ -29,7 +29,6 @@ import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.*
 import javax.inject.Inject
 
-
 class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
 
     @Inject
@@ -57,7 +56,6 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
         recycle_markets.layoutManager = LinearLayoutManager(this)
         recycle_markets.itemAnimator = FadeInWithoutDelayAnimator()
         adapter.bindToRecyclerView(recycle_markets)
-
 
         recycle_markets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -141,5 +139,4 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
         view.text_empty.text = getString(R.string.dex_sorting_empty)
         return view
     }
-
 }

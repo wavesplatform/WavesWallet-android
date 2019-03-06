@@ -20,8 +20,12 @@ class CoinomatManager @Inject constructor() : BaseDataManager() {
         return coinomatService.limits(crypto, address, fiat)
     }
 
-    fun createTunnel(currencyFrom: String?, currencyTo: String?, address: String?,
-                     moneroPaymentId: String?): Observable<CreateTunnel> {
+    fun createTunnel(
+        currencyFrom: String?,
+        currencyTo: String?,
+        address: String?,
+        moneroPaymentId: String?
+    ): Observable<CreateTunnel> {
         return coinomatService.createTunnel(currencyFrom, currencyTo, address, moneroPaymentId)
     }
 

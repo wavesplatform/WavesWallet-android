@@ -18,7 +18,7 @@ import javax.inject.Inject
  * attachView() and detachView(). It also handles keeping a reference to the mvpView that
  * can be accessed from the children classes by calling getMvpView().
  */
-open class BasePresenter<T : MvpView> @Inject constructor(): MvpPresenter<T>(){
+open class BasePresenter<T : MvpView> @Inject constructor() : MvpPresenter<T>() {
 
     @Inject lateinit var preferenceHelper: PreferencesHelper
     @Inject lateinit var nodeDataManager: NodeDataManager
@@ -39,4 +39,3 @@ open class BasePresenter<T : MvpView> @Inject constructor(): MvpPresenter<T>(){
         mCompositeDisposable.add(subscription)
     }
 }
-

@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @RealmClass
 open class AddressBookUserDb(
-        @PrimaryKey
-        @SerializedName("address") var address: String = "",
-        @SerializedName("name") var name: String = ""
+    @PrimaryKey
+    @SerializedName("address") var address: String = "",
+    @SerializedName("name") var name: String = ""
 ) : RealmModel, Parcelable

@@ -27,7 +27,6 @@ class AddressBookAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUse
         }
     }
 
-
     fun filter(text: String) {
         data.clear()
         if (text.trim().isEmpty()) {

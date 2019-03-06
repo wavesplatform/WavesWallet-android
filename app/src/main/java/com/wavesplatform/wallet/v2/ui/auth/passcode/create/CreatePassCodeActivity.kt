@@ -18,7 +18,6 @@ import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_create_passcode.*
 import javax.inject.Inject
 
-
 open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
 
     @Inject

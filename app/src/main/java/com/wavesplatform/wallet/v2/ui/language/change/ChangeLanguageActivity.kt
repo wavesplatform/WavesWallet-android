@@ -22,7 +22,6 @@ import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-
 class ChangeLanguageActivity : BaseActivity(), LanguageView {
 
     @Inject
@@ -37,7 +36,6 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
 
     override fun configLayoutRes() = R.layout.activity_change_language
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
@@ -45,7 +43,6 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.profile_language_toolbar_title), R.drawable.ic_toolbar_back_black)
-
 
         recycle_language.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -89,7 +86,6 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
                 item.checked = true
                 adapter.setData(position, item)
             }
-
         }
 
         button_save.click {
@@ -115,5 +111,4 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
-
 }

@@ -51,7 +51,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.start_leasing_toolbar), R.drawable.ic_toolbar_back_black)
 
-
         presenter.wavesAssetBalance = intent.getLongExtra(BUNDLE_WAVES, 0L)
 
         text_choose_from_address.click {
@@ -154,7 +153,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     it.printStackTrace()
                 }))
 
-
         eventSubscriptions.add(RxTextView.textChanges(edit_amount)
                 .skipInitialValue()
                 .map(CharSequence::toString)
@@ -207,7 +205,6 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
             presenter.loadCommission(it)
         }
     }
-
 
     private fun makeButtonEnableIfValid() {
         val valid = presenter.isAllFieldsValid() && isNetworkConnected()

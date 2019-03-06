@@ -135,5 +135,4 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
         var BUNDLE_ADDRESS = "address"
         var BUNDLE_AMOUNT = "amount"
     }
-
 }

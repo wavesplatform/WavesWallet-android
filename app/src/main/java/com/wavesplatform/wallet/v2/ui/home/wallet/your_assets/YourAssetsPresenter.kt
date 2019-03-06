@@ -90,7 +90,6 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
                             viewState.showAssets(AssetBalanceDb.convertFromDb(assets))
                         }
                     }, {
-
                     }))
         }
     }

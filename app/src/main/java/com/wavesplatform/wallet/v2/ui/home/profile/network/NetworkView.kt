@@ -4,5 +4,4 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface NetworkView : BaseMvpView {
     fun afterSuccessCheckSpamUrl(isValid: Boolean)
-
 }

@@ -137,7 +137,6 @@ fun deleteRecursive(fileOrDirectory: File) {
     fileOrDirectory.delete()
 }
 
-
 fun Activity.openUrlWithChromeTab(url: String) {
     SimpleChromeCustomTabs.getInstance()
             .withFallback {
@@ -156,7 +155,6 @@ fun Fragment.openUrlWithChromeTab(url: String) {
                 it.withToolbarColor(findColor(R.color.submit400))
             }
             .navigateTo(Uri.parse(url), activity)
-
 }
 
 fun Activity.openUrlWithIntent(url: String) {
@@ -313,7 +311,6 @@ fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_1
             this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, copyIcon)) }
         }
     }
-
 }
 
 fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: Int = R.drawable.ic_copy_18_black) {
@@ -328,8 +325,12 @@ fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: In
     }
 }
 
-fun View.copyToClipboard(text: String, textView: AppCompatTextView,
-                         copyIcon: Int = R.drawable.ic_copy_18_black, copyColor: Int = R.color.black) {
+fun View.copyToClipboard(
+    text: String,
+    textView: AppCompatTextView,
+    copyIcon: Int = R.drawable.ic_copy_18_black,
+    copyColor: Int = R.color.black
+) {
     clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), text)
     showSnackbar(R.string.common_copied_to_clipboard, R.color.success500_0_94, Snackbar.LENGTH_SHORT)
 
@@ -353,11 +354,12 @@ fun View.copyToClipboard(text: String, textView: AppCompatTextView,
  * Extensions for simpler launching of Activities
  */
 inline fun <reified T : Any> Activity.launchActivity(
-        requestCode: Int = -1,
-        clear: Boolean = false,
-        withoutAnimation: Boolean = false,
-        options: Bundle? = null,
-        noinline init: Intent.() -> Unit = {}) {
+    requestCode: Int = -1,
+    clear: Boolean = false,
+    withoutAnimation: Boolean = false,
+    options: Bundle? = null,
+    noinline init: Intent.() -> Unit = {}
+) {
 
     var intent = newIntent<T>(this)
     if (options != null) intent.putExtras(options)
@@ -380,11 +382,12 @@ inline fun <reified T : Any> Activity.launchActivity(
 }
 
 inline fun <reified T : Any> Fragment.launchActivity(
-        requestCode: Int = -1,
-        clear: Boolean = false,
-        withoutAnimation: Boolean = false,
-        options: Bundle? = null,
-        noinline init: Intent.() -> Unit = {}) {
+    requestCode: Int = -1,
+    clear: Boolean = false,
+    withoutAnimation: Boolean = false,
+    options: Bundle? = null,
+    noinline init: Intent.() -> Unit = {}
+) {
 
     var intent = newIntent<T>(activity!!)
     if (options != null) intent.putExtras(options)
@@ -406,9 +409,10 @@ inline fun <reified T : Any> Fragment.launchActivity(
 }
 
 inline fun <reified T : Any> Context.launchActivity(
-        options: Bundle? = null,
-        clear: Boolean = false,
-        noinline init: Intent.() -> Unit = {}) {
+    options: Bundle? = null,
+    clear: Boolean = false,
+    noinline init: Intent.() -> Unit = {}
+) {
 
     var intent = newIntent<T>(this)
     if (options != null) intent.putExtras(options)
@@ -416,7 +420,6 @@ inline fun <reified T : Any> Context.launchActivity(
     if (clear) {
         intent = newClearIntent<T>(this)
     }
-
 
     intent.init()
     startActivity(intent, options)
@@ -438,10 +441,10 @@ inline fun <reified T : Any> newClearIntent(context: Context): Intent {
 }
 
 fun View.setMargins(
-        left: Int? = null,
-        top: Int? = null,
-        right: Int? = null,
-        bottom: Int? = null
+    left: Int? = null,
+    top: Int? = null,
+    right: Int? = null,
+    bottom: Int? = null
 ) {
     val lp = layoutParams as? ViewGroup.MarginLayoutParams
             ?: return
@@ -507,7 +510,7 @@ fun Throwable.errorBody(): ErrorResponse? {
 
 fun ResponseBody.clone(): ResponseBody {
     var bufferClone = this.source().buffer()?.clone()
-    return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone);
+    return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone)
 }
 
 fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { }) {

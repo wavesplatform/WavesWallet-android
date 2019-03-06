@@ -23,7 +23,6 @@ import pers.victor.ext.invisiable
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-
 class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView {
 
     @Inject
@@ -120,5 +119,4 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         super.onNetworkConnectionChanged(networkConnected)
         button_confirm.isEnabled = networkConnected
     }
-
 }

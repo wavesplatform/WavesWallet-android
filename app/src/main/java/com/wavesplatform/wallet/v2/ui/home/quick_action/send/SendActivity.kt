@@ -47,7 +47,6 @@ import java.math.BigDecimal
 import java.net.URI
 import javax.inject.Inject
 
-
 class SendActivity : BaseActivity(), SendView {
 
     @Inject
@@ -291,8 +290,8 @@ class SendActivity : BaseActivity(), SendView {
                         assetBalance.getName() ?: "")
                 presenter.amount = BigDecimal.ZERO
             }
-        } else if (presenter.type == SendPresenter.Type.WAVES
-                && assetBalance.assetId.isWavesId()) {
+        } else if (presenter.type == SendPresenter.Type.WAVES &&
+                assetBalance.assetId.isWavesId()) {
             val total = BigDecimal.valueOf(amount - presenter.fee,
                     assetBalance.getDecimals())
             if (total.toFloat() > 0) {

@@ -9,10 +9,12 @@ import kotlinx.android.parcel.Parcelize
  */
 
 @Parcelize
-class BuySellData(var watchMarket: WatchMarket? = null,
-                  var orderType: Int? = null,
-                  var initPrice: Long? = null,
-                  var initAmount: Long? = null,
-                  var lastPrice: Long? = null,
-                  var askPrice: Long? = null,
-                  var bidPrice: Long? = null) : Parcelable
+class BuySellData(
+    var watchMarket: WatchMarket? = null,
+    var orderType: Int? = null,
+    var initPrice: Long? = null,
+    var initAmount: Long? = null,
+    var lastPrice: Long? = null,
+    var askPrice: Long? = null,
+    var bidPrice: Long? = null
+) : Parcelable

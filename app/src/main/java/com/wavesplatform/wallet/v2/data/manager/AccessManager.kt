@@ -29,8 +29,7 @@ import timber.log.Timber
 import java.io.File
 import java.util.*
 
-
-class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHelper) {
+class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, private var authHelper: AuthHelper) {
 
     private val pinStore = PinStoreService()
     private var loggedInGuid: String = ""
@@ -93,8 +92,8 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         try {
             loggedInGuid = Wavesplatform.createWallet(seed)
             prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, loggedInGuid)
-            prefs.addGlobalListValue(EnvironmentManager.name
-                    + PrefsUtil.LIST_WALLET_GUIDS, loggedInGuid)
+            prefs.addGlobalListValue(EnvironmentManager.name +
+                    PrefsUtil.LIST_WALLET_GUIDS, loggedInGuid)
             prefs.setValue(PrefsUtil.KEY_PUB_KEY, Wavesplatform.getWallet().publicKeyStr)
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
             prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, Wavesplatform.getWallet().getEncryptedData(password))
@@ -222,7 +221,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
 
     private fun clearRealmConfiguration() {
         app.stopService(Intent(app, UpdateApiDataService::class.java))
-        val f = RealmConfigStore::class.java.getDeclaredField("configMap") //NoSuchFieldException
+        val f = RealmConfigStore::class.java.getDeclaredField("configMap") // NoSuchFieldException
         f.isAccessible = true
         val configMap = f.get(RealmConfigStore::class.java) as MutableMap<*, *>
         configMap.clear()
@@ -257,8 +256,8 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_DEFAULT_ASSETS)
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS)
 
-        prefs.setGlobalValue(EnvironmentManager.name
-                + PrefsUtil.LIST_WALLET_GUIDS, createGuidsListWithout(searchWalletGuid))
+        prefs.setGlobalValue(EnvironmentManager.name +
+                PrefsUtil.LIST_WALLET_GUIDS, createGuidsListWithout(searchWalletGuid))
 
         if (searchWalletGuid == getLoggedInGuid()) {
             loggedInGuid = ""
@@ -280,7 +279,6 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         }
         return resultGuidsList.toTypedArray()
     }
-
 
     fun getWalletData(guid: String): String {
         return if (TextUtils.isEmpty(guid)) {

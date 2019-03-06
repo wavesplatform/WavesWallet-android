@@ -30,7 +30,6 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
 
     override fun configLayoutRes(): Int = R.layout.activity_profile_addresses_and_keys
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)

@@ -84,7 +84,6 @@ class HistoryFragment : BaseFragment(), HistoryView {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (!hidden) {

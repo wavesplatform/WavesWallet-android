@@ -23,7 +23,6 @@ import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-
 class HistoryTabItemAdapter @Inject constructor() :
         BaseMultiItemQuickAdapter<HistoryItem, BaseViewHolder>(null) {
 
@@ -35,7 +34,6 @@ class HistoryTabItemAdapter @Inject constructor() :
         addItemType(HistoryItem.TYPE_DATA, R.layout.recycle_item_history)
         addItemType(HistoryItem.TYPE_EMPTY, R.layout.layout_history_tab_header_space)
     }
-
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)

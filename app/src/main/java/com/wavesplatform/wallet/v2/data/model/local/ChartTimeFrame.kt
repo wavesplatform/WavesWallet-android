@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.data.model.local
 
 import com.wavesplatform.wallet.R
 
-
 enum class ChartTimeFrame(val timeUI: Int, val timeServer: Int) {
     FIVE_MINUTES(R.string.chart_time_frame_5_min, 5),
     FIFTEEN_MINUTES(R.string.chart_time_frame_15_min, 15),

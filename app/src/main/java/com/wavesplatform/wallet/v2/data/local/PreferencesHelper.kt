@@ -23,7 +23,6 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         get() = mPref.getInt(KEY_CURRENT_BLOCKS_HEIGHT, 0)
         set(value) = mPref.edit().putInt(KEY_CURRENT_BLOCKS_HEIGHT, value).apply()
 
-
     fun setTutorialPassed(value: Boolean) {
         mPref.edit().putBoolean(KEY_TUTORIAL, value).apply()
     }

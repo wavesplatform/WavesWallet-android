@@ -11,14 +11,14 @@ import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.sdk.utils.EnvironmentManager
 
 data class CancelLeasingRequest(
-        @SerializedName("type") val type: Int = Transaction.LEASE_CANCEL,
-        @SerializedName("chainId") var scheme: Int? = EnvironmentManager.netCode.toInt(),
-        @SerializedName("senderPublicKey") var senderPublicKey: String = "",
-        @SerializedName("leaseId") var leaseId: String = "",
-        @SerializedName("timestamp") var timestamp: Long = 0,
-        @SerializedName("fee") var fee: Long = 0,
-        @SerializedName("version") var version: Int = Constants.VERSION,
-        @SerializedName("proofs") var proofs: MutableList<String?>? = null
+    @SerializedName("type") val type: Int = Transaction.LEASE_CANCEL,
+    @SerializedName("chainId") var scheme: Int? = EnvironmentManager.netCode.toInt(),
+    @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+    @SerializedName("leaseId") var leaseId: String = "",
+    @SerializedName("timestamp") var timestamp: Long = 0,
+    @SerializedName("fee") var fee: Long = 0,
+    @SerializedName("version") var version: Int = Constants.VERSION,
+    @SerializedName("proofs") var proofs: MutableList<String?>? = null
 ) {
 
     fun toSignBytes(): ByteArray {
@@ -35,11 +35,9 @@ data class CancelLeasingRequest(
             Log.e("CancelLeasingRequest", "Couldn't create toSignBytes", e)
             ByteArray(0)
         }
-
     }
 
     fun sign(privateKey: ByteArray) {
         proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytes())))
     }
-
 }

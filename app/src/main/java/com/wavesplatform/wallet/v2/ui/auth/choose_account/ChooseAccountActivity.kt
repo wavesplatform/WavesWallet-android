@@ -57,7 +57,6 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         adapter.bindToRecyclerView(recycle_addresses)
         adapter.chooseAccountOnClickListener = this
 
-
         presenter.getAddresses()
     }
 

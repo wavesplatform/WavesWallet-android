@@ -87,7 +87,6 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-
     fun getAllMarkets(): Observable<MutableList<MarketResponse>> {
         if (allMarketsList.isEmpty()) {
             return Observable.zip(Observable.just(EnvironmentManager.globalConfiguration)

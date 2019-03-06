@@ -20,7 +20,6 @@ import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.activity_trade.*
 import javax.inject.Inject
 
-
 class TradeActivity : BaseActivity(), TradeView {
 
     @Inject
@@ -31,7 +30,6 @@ class TradeActivity : BaseActivity(), TradeView {
     fun providePresenter(): TradePresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_trade
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true
@@ -54,11 +52,9 @@ class TradeActivity : BaseActivity(), TradeView {
         viewpageer_trade.offscreenPageLimit = 4
         viewpageer_trade.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(p0: Int) {
-
             }
 
             override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
-
             }
 
             override fun onPageSelected(position: Int) {

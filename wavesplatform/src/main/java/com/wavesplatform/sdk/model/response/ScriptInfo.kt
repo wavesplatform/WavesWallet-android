@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ScriptInfo(
-        @SerializedName("address") var address: String = "",
-        @SerializedName("complexity") var complexity: Long = 0L,
-        @SerializedName("extraFee") var extraFee: Long = 0L
+    @SerializedName("address") var address: String = "",
+    @SerializedName("complexity") var complexity: Long = 0L,
+    @SerializedName("extraFee") var extraFee: Long = 0L
 ) : Parcelable

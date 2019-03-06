@@ -26,7 +26,6 @@ import pers.victor.ext.*
 import java.math.RoundingMode
 import javax.inject.Inject
 
-
 class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
 
     @Inject
@@ -114,8 +113,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         return if (itemEntity != null) {
             (itemEntity as LastPriceItem).lastTrade?.price?.toBigDecimal()?.setScale(8.plus(presenter.watchMarket?.market?.priceAssetDecimals
                     ?: 0)
-                    .minus(presenter.watchMarket?.market?.amountAssetDecimals ?: 0)
-                    , RoundingMode.HALF_UP)?.unscaledValue()?.toLong()
+                    .minus(presenter.watchMarket?.market?.amountAssetDecimals ?: 0), RoundingMode.HALF_UP)?.unscaledValue()?.toLong()
         } else {
             null
         }
@@ -127,7 +125,6 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         data.orderType =
                 if (buy) TradeBuyAndSellBottomSheetFragment.BUY_TYPE
                 else TradeBuyAndSellBottomSheetFragment.SELL_TYPE
-
 
         val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(data)
         dialog.show(fragmentManager, dialog::class.java.simpleName)

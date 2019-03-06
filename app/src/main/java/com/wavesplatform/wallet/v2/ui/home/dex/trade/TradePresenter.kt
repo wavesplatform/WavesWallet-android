@@ -9,5 +9,4 @@ import javax.inject.Inject
 @InjectViewState
 class TradePresenter @Inject constructor() : BasePresenter<TradeView>() {
     var watchMarket: WatchMarket? = null
-
 }

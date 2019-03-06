@@ -17,5 +17,4 @@ class LanguagePresenter @Inject constructor() : BasePresenter<LanguageView>() {
     fun saveLanguage(lang: String) {
         preferenceHelper.setLanguage(lang)
     }
-
 }

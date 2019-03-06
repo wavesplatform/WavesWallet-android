@@ -25,7 +25,6 @@ import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-
 class YourAssetsActivity : BaseActivity(), YourAssetsView {
 
     @Inject
@@ -39,7 +38,6 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
     fun providePresenter(): YourAssetsPresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_your_assets
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)

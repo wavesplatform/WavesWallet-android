@@ -98,8 +98,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             if (TransactionsBroadcastRequest.getAttachmentSize(tx.attachment)
                     > TransferTransactionRequest.MaxAttachmentSize) {
                 return R.string.attachment_too_long
-            } else
-                if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
+            } else if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
                     return R.string.invalid_amount
                 } else if (tx.fee <= 0 || (feeAsset.isWaves() && tx.fee < Constants.WAVES_MIN_FEE)) {
                     return R.string.insufficient_fee
@@ -122,9 +121,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             val totalAmount = amount + gatewayCommission
             val balance = BigDecimal.valueOf(selectedAsset!!.getAvailableBalance(),
                     selectedAsset!!.getDecimals())
-            return !(balance >= totalAmount
-                    && totalAmount >= gatewayMin
-                    && totalAmount <= gatewayMax)
+            return !(balance >= totalAmount &&
+                    totalAmount >= gatewayMin &&
+                    totalAmount <= gatewayMax)
         }
         return false
     }
@@ -290,8 +289,8 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
             val addressBytes = Base58.decode(address)
 
-            if (addressBytes[0] != 1.toByte()
-                    || addressBytes[1] != EnvironmentManager.netCode) {
+            if (addressBytes[0] != 1.toByte() ||
+                    addressBytes[1] != EnvironmentManager.netCode) {
                 return false
             }
 

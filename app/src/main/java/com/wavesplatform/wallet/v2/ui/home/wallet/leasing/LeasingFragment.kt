@@ -192,7 +192,6 @@ class LeasingFragment : BaseFragment(), LeasingView {
             progress_of_leasing.progress = 0
         }
 
-
         button_start_lease.click {
             launchActivity<StartLeasingActivity> {
                 val bundle = Bundle()

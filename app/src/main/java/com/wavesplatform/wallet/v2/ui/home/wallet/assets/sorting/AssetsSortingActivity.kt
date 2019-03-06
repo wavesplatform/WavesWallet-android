@@ -27,7 +27,6 @@ import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.*
 import javax.inject.Inject
 
-
 class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
     @Inject
@@ -111,7 +110,6 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 }
             }
         }
-
 
         adapter.onHiddenChangeListener = object : AssetsSortingAdapter.OnHiddenChangeListener {
             override fun onHiddenStateChanged(item: AssetBalance, checked: Boolean) {

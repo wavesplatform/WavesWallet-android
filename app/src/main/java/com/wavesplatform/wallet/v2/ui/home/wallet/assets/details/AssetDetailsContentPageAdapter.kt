@@ -19,4 +19,3 @@ class AssetDetailsContentPageAdapter(fm: FragmentManager?, var assets: List<Asse
 
     override fun getCount(): Int = assets.size
 }
-

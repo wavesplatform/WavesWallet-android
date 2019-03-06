@@ -25,7 +25,6 @@ import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-
 class TokenBurnActivity : BaseActivity(), TokenBurnView {
 
     @Inject
@@ -148,7 +147,6 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         }
     }
 
-
     private fun makeButtonEnableIfValid() {
         button_continue.isEnabled = presenter.isAllFieldsValid() && isNetworkConnected()
     }
@@ -163,10 +161,10 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
         when (requestCode) {
             REQUEST_BURN_CONFIRM -> {
                 when (resultCode) {
-                    Constants.RESULT_OK ->{
+                    Constants.RESULT_OK -> {
                         finish()
                     }
-                    Constants.RESULT_SMART_ERROR ->{
+                    Constants.RESULT_SMART_ERROR -> {
                         showAlertAboutScriptedAccount()
                     }
                 }

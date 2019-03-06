@@ -14,8 +14,8 @@ class CandleTouchListener
 /**
  * Constructor with initialization parameters.
  *
- * @param chart               instance of the chart
- * @param touchMatrix         the touch-matrix of the chart
+ * @param chart instance of the chart
+ * @param touchMatrix the touch-matrix of the chart
  * @param dragTriggerDistance the minimum movement distance that will be interpreted as a "drag" gesture in dp (3dp equals
  */
 (chart: BarLineChartBase<out BarLineScatterCandleBubbleData<out IBarLineScatterCandleBubbleDataSet<out Entry>>>, touchMatrix: Matrix, dragTriggerDistance: Float) : BarLineChartTouchListener(chart, touchMatrix, dragTriggerDistance) {

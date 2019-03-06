@@ -25,7 +25,6 @@ import pers.victor.ext.visiable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-
 class DexMarketsActivity : BaseActivity(), DexMarketsView {
 
     @Inject
@@ -35,12 +34,10 @@ class DexMarketsActivity : BaseActivity(), DexMarketsView {
     @Inject
     lateinit var adapter: DexMarketsAdapter
 
-
     @ProvidePresenter
     fun providePresenter(): DexMarketsPresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_dex_markets
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)

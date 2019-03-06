@@ -8,11 +8,10 @@ import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 
 class CancelOrderRequest(
-        @SerializedName("orderId") var orderId: String = "",
-        @SerializedName("sender") var sender: String = "",
-        @SerializedName("signature") var signature: String? = null
+    @SerializedName("orderId") var orderId: String? = "",
+    @SerializedName("sender") var sender: String? = "",
+    @SerializedName("signature") var signature: String? = null
 ) {
-
 
     fun toSignBytes(): ByteArray {
         return try {
@@ -24,7 +23,6 @@ class CancelOrderRequest(
             Log.e("Wallet", "Couldn't create CancelOrderRequest bytes", e)
             ByteArray(0)
         }
-
     }
 
     fun sign(privateKey: ByteArray) {

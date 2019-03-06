@@ -69,7 +69,6 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                             it.printStackTrace()
                             viewState.afterFailedOrderbook()
                         }))
-
     }
 
     private fun getCalculatedBids(list: List<OrderBook.Bid>): List<MultiItemEntity> {
@@ -114,5 +113,4 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
     fun clearSubscriptions() {
         subscriptions.clear()
     }
-
 }

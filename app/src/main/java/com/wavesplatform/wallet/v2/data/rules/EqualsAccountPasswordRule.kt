@@ -38,7 +38,6 @@ class EqualsAccountPasswordRule : BaseRule {
                             value.trim())
                     true
                 }
-
             } catch (e: Exception) {
                 false
             }

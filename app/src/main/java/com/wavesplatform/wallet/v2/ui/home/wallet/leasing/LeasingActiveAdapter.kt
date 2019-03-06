@@ -24,4 +24,3 @@ class LeasingActiveAdapter @Inject constructor() : BaseQuickAdapter<Transaction,
         helper.itemView.text_transaction_value.makeTextHalfBold()
     }
 }
-

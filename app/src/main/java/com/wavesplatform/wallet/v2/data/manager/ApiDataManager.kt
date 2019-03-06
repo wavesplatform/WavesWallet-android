@@ -109,10 +109,12 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                 .onErrorResumeNext(Observable.just(arrayListOf()))
     }
 
-    fun loadCandles(watchMarket: WatchMarket?,
-                    timeFrame: Int,
-                    from: Long,
-                    to: Long): Observable<List<CandlesResponse.Candle>> {
+    fun loadCandles(
+        watchMarket: WatchMarket?,
+        timeFrame: Int,
+        from: Long,
+        to: Long
+    ): Observable<List<CandlesResponse.Candle>> {
         return apiService.loadCandles(watchMarket?.market?.amountAsset,
                 watchMarket?.market?.priceAsset, "${timeFrame}m", from, to)
                 .map {

@@ -12,15 +12,14 @@ import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.arrayWithSize
 import java.nio.charset.Charset
 
-
 data class AliasRequest(
-        @SerializedName("type") val type: Int = Transaction.CREATE_ALIAS,
-        @SerializedName("senderPublicKey") var senderPublicKey: String = "",
-        @SerializedName("fee") var fee: Long = 0,
-        @SerializedName("timestamp") var timestamp: Long = 0,
-        @SerializedName("version") var version: Int = Constants.NET_CODE.toInt(),
-        @SerializedName("proofs") var proofs: MutableList<String?>? = null,
-        @SerializedName("alias") var alias: String? = ""
+    @SerializedName("type") val type: Int = Transaction.CREATE_ALIAS,
+    @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+    @SerializedName("fee") var fee: Long = 0,
+    @SerializedName("timestamp") var timestamp: Long = 0,
+    @SerializedName("version") var version: Int = Constants.VERSION,
+    @SerializedName("proofs") var proofs: MutableList<String?>? = null,
+    @SerializedName("alias") var alias: String? = ""
 ) {
 
     fun toSignBytes(): ByteArray {
@@ -38,11 +37,9 @@ data class AliasRequest(
             Log.e("AliasRequest", "Couldn't create toSignBytes", e)
             ByteArray(0)
         }
-
     }
 
     fun sign(privateKey: ByteArray) {
         proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytes())))
     }
-
 }

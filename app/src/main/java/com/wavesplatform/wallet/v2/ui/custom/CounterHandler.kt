@@ -74,7 +74,6 @@ class CounterHandler private constructor(builder: Builder) {
             }
             false
         }
-
     }
 
     private fun initDecrementalView() {
@@ -95,7 +94,6 @@ class CounterHandler private constructor(builder: Builder) {
             }
             false
         }
-
     }
 
     private fun clearAutoUpdating() {

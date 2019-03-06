@@ -75,7 +75,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     @Inject
     lateinit var frameworkFragmentInjector: DispatchingAndroidInjector<android.app.Fragment>
 
-
     @Inject
     lateinit var mRxEventBus: RxEventBus
     @Inject
@@ -104,7 +103,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(localizationDelegate.attachBaseContext(newBase))
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -212,16 +210,19 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     @JvmOverloads
-    inline fun setupToolbar(toolbar: Toolbar, homeEnable: Boolean = false,
-                            title: String = "", @DrawableRes icon: Int = R.drawable.ic_arrow_back_white_24dp,
-                            crossinline onClickListener: () -> Unit = { onBackPressed() }) {
+    inline fun setupToolbar(
+        toolbar: Toolbar,
+        homeEnable: Boolean = false,
+        title: String = "",
+        @DrawableRes icon: Int = R.drawable.ic_arrow_back_white_24dp,
+        crossinline onClickListener: () -> Unit = { onBackPressed() }
+    ) {
         this.toolbar = toolbar
         setSupportActionBar(toolbar)
         mActionBar = supportActionBar
 
         mActionBar?.setHomeButtonEnabled(homeEnable)
         mActionBar?.setDisplayHomeAsUpEnabled(homeEnable)
-
 
         mActionBar?.setHomeAsUpIndicator(AppCompatResources.getDrawable(this, icon))
 

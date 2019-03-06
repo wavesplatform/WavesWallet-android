@@ -11,8 +11,11 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card.CardFragmen
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency.CryptoCurrencyFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
 
-class ReceivePageAdapter(fm: FragmentManager?, var context: Context,
-                         var assetBalance: AssetBalance?) : FragmentStatePagerAdapter(fm) {
+class ReceivePageAdapter(
+    fm: FragmentManager?,
+    var context: Context,
+    var assetBalance: AssetBalance?
+) : FragmentStatePagerAdapter(fm) {
 
     var data: MutableList<BaseFragment>
     private var titles: Array<String>

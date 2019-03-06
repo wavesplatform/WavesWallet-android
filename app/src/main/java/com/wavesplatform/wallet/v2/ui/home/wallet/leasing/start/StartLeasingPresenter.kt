@@ -51,5 +51,4 @@ class StartLeasingPresenter @Inject constructor() : BasePresenter<StartLeasingVi
                     viewState.showCommissionError()
                 }))
     }
-
 }

@@ -42,7 +42,6 @@ import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
-
 class AssetsFragment : BaseFragment(), AssetsView {
 
     @Inject
@@ -142,7 +141,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
             }
         })
 
-
         skeletonScreen = Skeleton.bind(recycle_assets)
                 .adapter(recycle_assets.adapter)
                 .shimmer(true)
@@ -226,7 +224,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
         } else {
             swipe_container?.isRefreshing = false
         }
-
 
         adapter.setNewData(assets)
     }
