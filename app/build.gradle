@@ -26,8 +26,8 @@ android {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 417
-        versionName "2.2.1"
+        versionCode 418
+        versionName "2.2.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -51,12 +51,12 @@ android {
     }
 
     applicationVariants.all { variant ->
-        def SEP = "_"
         def version = variant.versionName
+        def versionCode = variant.versionCode
         def buildType = variant.variantData.variantConfiguration.buildType.name
         def date = new Date()
-        def formattedDate = date.format('dd-MM-yy')
-        def newApkName = appName + SEP + buildType + SEP + version + SEP + formattedDate + ".apk"
+        def formattedDate = date.format('dd.MM.yy')
+        def newApkName = "[" + buildType + "|" + version + "|" + versionCode + "] " + appName + " (" +formattedDate + ")" +  ".apk"
         variant.outputs.all { output ->
             outputFileName = newApkName
         }
@@ -168,9 +168,10 @@ dependencies {
     implementation "com.android.support:preference-v7:$supportVersion"
     implementation "com.android.support:preference-v14:$supportVersion"
     // Enable crash reporting only for release version
-    implementation 'com.google.firebase:firebase-core:16.0.5'
-    implementation "com.google.firebase:firebase-database:16.0.5"
-    implementation "com.google.firebase:firebase-messaging:17.3.4"
+    implementation "com.google.firebase:firebase-core:16.0.7"
+    implementation "com.google.firebase:firebase-database:16.1.0"
+    implementation "com.google.firebase:firebase-messaging:17.4.0"
+    implementation "com.google.firebase:firebase-inappmessaging-display:17.1.0"
     releaseImplementation "com.google.firebase:firebase-crash:16.2.1"
     implementation 'commons-io:commons-io:2.4'
 

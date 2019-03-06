@@ -35,6 +35,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
+import io.sentry.Sentry
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import pers.victor.ext.finish
@@ -201,7 +202,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 "${getString(R.string.profile_general_feedback_body_extra_device_model, getDeviceName())}\n" +
                 "${getString(R.string.profile_general_feedback_body_extra_language,
                         presenter.preferenceHelper.getLanguage())}\n" +
-                "${getString(R.string.profile_general_feedback_body_extra_carrier, telephonyManager.networkOperatorName)}\n"
+                "${getString(R.string.profile_general_feedback_body_extra_carrier, telephonyManager.networkOperatorName)}\n" +
+                "${getString(R.string.profile_general_feedback_body_extra_device_id, getDeviceId())}\n"
     }
 
     private fun openAppInPlayMarket() {
