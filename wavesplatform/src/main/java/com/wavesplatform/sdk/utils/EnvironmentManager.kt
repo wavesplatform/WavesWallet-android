@@ -16,6 +16,8 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import pers.victor.ext.currentTimeMillis
+import timber.log.Timber
 import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
@@ -24,7 +26,8 @@ class EnvironmentManager {
 
     var current: Environment? = null
     private var application: Application? = null
-    private var disposable: Disposable? = null
+    private var configurationDisposable: Disposable? = null
+    private var timeDisposable: Disposable? = null
     private var interceptor: HostSelectionInterceptor? = null
 
     class Environment internal constructor(val name: String, val url: String, jsonFileName: String) {
@@ -113,7 +116,7 @@ class EnvironmentManager {
                 throw NullPointerException("EnvironmentManager must be init first!")
             }
 
-            instance!!.disposable = globalConfigurationObserver
+            instance!!.configurationDisposable = globalConfigurationObserver
                     .map { globalConfiguration ->
                         instance!!.interceptor!!.setHosts(globalConfiguration.servers)
                         PreferenceManager
@@ -144,11 +147,14 @@ class EnvironmentManager {
                                     isFavorite = assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED,
                                     issueTransaction = IssueTransaction(
                                             id = assetInfo.assetInfo.id,
-                                            name = assetInfo.assetInfo.name,
+                                            name = findAssetIdByAssetId(
+                                                    assetInfo.assetInfo.id)?.displayName
+                                                    ?: assetInfo.assetInfo.name,
                                             decimals = assetInfo.assetInfo.precision,
                                             quantity = assetInfo.assetInfo.quantity,
                                             timestamp = assetInfo.assetInfo.timestamp.time),
-                                    isGateway = findAssetIdByAssetId(assetInfo.assetInfo.id)?.isGateway
+                                    isGateway = findAssetIdByAssetId(
+                                            assetInfo.assetInfo.id)?.isGateway
                                             ?: false)
                             defaultAssets.add(assetBalance)
                         }
@@ -156,9 +162,9 @@ class EnvironmentManager {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        instance!!.disposable!!.dispose()
+                        instance!!.configurationDisposable!!.dispose()
                     }, { error ->
-                        Log.e("EnvironmentManager", "Can't download GlobalConfiguration")
+                        Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration!")
                         error.printStackTrace()
                         PreferenceManager
                                 .getDefaultSharedPreferences(instance!!.application)
@@ -166,8 +172,37 @@ class EnvironmentManager {
                                 .putString(GLOBAL_CURRENT_ENVIRONMENT_DATA,
                                         Gson().toJson(Environment.MAIN_NET.configuration))
                                 .apply()
-                        instance!!.disposable!!.dispose()
+                        instance!!.configurationDisposable!!.dispose()
                     })
+
+            instance!!.timeDisposable = githubDataManager.nodeService.utilsTime()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        PreferenceManager
+                                .getDefaultSharedPreferences(App.getAppContext())
+                                .edit()
+                                .putLong(PrefsUtil.GLOBAL_CURRENT_TIME_CORRECTION,
+                                        it.ntp - currentTimeMillis)
+                                .apply()
+                        instance!!.timeDisposable!!.dispose()
+                    }, { error ->
+                        Timber.e(error, "EnvironmentManager: Can't download time correction!")
+                        error.printStackTrace()
+                        instance!!.timeDisposable!!.dispose()
+                    })
+        }
+
+        @JvmStatic
+        fun getTime(): Long {
+            val timeCorrection = if (App.getAppContext() == null) {
+                0L
+            } else {
+                PreferenceManager
+                        .getDefaultSharedPreferences(App.getAppContext())
+                        .getLong(PrefsUtil.GLOBAL_CURRENT_TIME_CORRECTION, 0L)
+            }
+            return currentTimeMillis + timeCorrection
         }
 
         fun setCurrentEnvironment(current: Environment) {

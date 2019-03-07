@@ -82,7 +82,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 App.getAccessManager().getWallet()!!.publicKeyStr,
                 recipient ?: "",
                 MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
-                System.currentTimeMillis(),
+                EnvironmentManager.getTime(),
                 fee,
                 "",
                 feeAsset.assetId)

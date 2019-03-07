@@ -22,7 +22,6 @@ import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
-import pers.victor.ext.currentTimeMillis
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,7 +30,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     var allMarketsList = mutableListOf<MarketResponse>()
 
     fun loadReservedBalances(): Observable<Map<String, Long>> {
-        val timestamp = currentTimeMillis
+        val timestamp = EnvironmentManager.getTime()
         var signature = ""
         App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
             val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()),
@@ -42,7 +41,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadMyOrders(watchMarket: WatchMarket?): Observable<List<OrderResponse>> {
-        val timestamp = currentTimeMillis
+        val timestamp = EnvironmentManager.getTime()
         var signature = ""
         App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
             val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()),

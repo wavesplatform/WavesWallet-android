@@ -17,13 +17,12 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
 
     fun configureDB(address: String?, guid: String) {
 
-        // check db with old name
-        MigrationUtil.checkPrevDbAndRename(address, guid)
+        migration(guid, address)
 
         val config = RealmConfiguration.Builder()
                 .name(String.format("%s.realm", guid))
-                .schemaVersion(2)
-                .migration(RealmMigrations())
+                .schemaVersion(3)
+                .deleteRealmIfMigrationNeeded()
                 .build()
 
         Realm.compactRealm(config)
@@ -38,7 +37,6 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
         RealmConfigStore.init(LeaseDb::class.java, config)
         RealmConfigStore.init(AliasDb::class.java, config)
         RealmConfigStore.init(SpamAssetDb::class.java, config)
-        RealmConfigStore.init(AddressBookUserDb::class.java, config)
         RealmConfigStore.init(AssetInfoDb::class.java, config)
         RealmConfigStore.init(MarketResponseDb::class.java, config)
 
@@ -46,6 +44,12 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
         Realm.getInstance(config).isAutoRefresh = false
 
         saveDefaultAssets()
+    }
+
+    private fun migration(guid: String, address: String?) {
+        MigrationUtil.copyPrefDataFromDb(prefsUtil, guid)
+        MigrationUtil.checkPrevDbAndRename(address, guid)
+        MigrationUtil.checkOldAddressBook(prefsUtil, guid)
     }
 
     private fun saveDefaultAssets() {

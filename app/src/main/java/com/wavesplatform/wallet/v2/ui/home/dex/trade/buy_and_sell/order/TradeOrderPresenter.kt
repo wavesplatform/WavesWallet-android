@@ -17,7 +17,6 @@ import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.errorBody
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
-import pers.victor.ext.currentTimeMillis
 import java.math.RoundingMode
 import javax.inject.Inject
 
@@ -114,7 +113,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
 
         orderRequest.orderType = if (orderType == 0) OrderType.BUY else OrderType.SELL
         orderRequest.assetPair = createPair()
-        orderRequest.timestamp = currentTimeMillis
+        orderRequest.timestamp = EnvironmentManager.getTime()
         orderRequest.expiration = orderRequest.timestamp + expirationList[selectedExpiration].timeServer
 
         addSubscription(matcherDataManager.placeOrder(orderRequest)

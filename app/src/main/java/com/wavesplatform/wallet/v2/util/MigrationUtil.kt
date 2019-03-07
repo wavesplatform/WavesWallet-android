@@ -1,8 +1,10 @@
 package com.wavesplatform.wallet.v2.util
 
-import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
+import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
+import io.realm.DynamicRealm
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import java.io.File
 import javax.inject.Inject
 
@@ -23,11 +25,12 @@ class MigrationUtil @Inject constructor() {
                         guid + KEY_AB_ADDRESSES)
                 if (names.isNotEmpty() && addresses.isNotEmpty()
                         && names.size == addresses.size) {
-                    val addressBookUsers = arrayListOf<AddressBookUserDb>()
+                    val addressBookUsers = prefs.allAddressBookUsers
                     for (i in 0 until names.size) {
-                        addressBookUsers.add(AddressBookUserDb(addresses[i], names[i]))
+                        val addressBookUser = AddressBookUser(addresses[i], names[i])
+                        addressBookUsers.add(addressBookUser)
                     }
-                    addressBookUsers.saveAll()
+                    prefs.setAddressBookUsers(addressBookUsers)
                     prefs.removeGlobalValue(guid + KEY_AB_NAMES)
                     prefs.removeGlobalValue(guid + KEY_AB_ADDRESSES)
                 }
@@ -57,6 +60,46 @@ class MigrationUtil @Inject constructor() {
                 oldDbLockFile.renameTo(newDbLockFile)
                 oldDbManagementFile.renameTo(newDbManagementFile)
             }
+        }
+
+        @JvmStatic
+        fun copyPrefDataFromDb(prefsUtil: PrefsUtil, guid: String) {
+            val initConfig = RealmConfiguration.Builder()
+                    .name(String.format("%s.realm", guid))
+                    .build()
+            if (Realm.getGlobalInstanceCount(initConfig) == 0) {
+                val tempRealm = DynamicRealm.getInstance(initConfig)
+                if (tempRealm!!.version != -1L && tempRealm.version < 3L) {
+                    val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
+                    val addressBookUsers = prefsUtil.allAddressBookUsers
+                    for (item in addressBookUsersDb) {
+                        val addressBookUser = AddressBookUser(
+                                item.getString("address"),
+                                item.getString("name"))
+                        addressBookUsers.add(addressBookUser)
+                    }
+                    prefsUtil.setAddressBookUsers(addressBookUsers)
+
+                    val assetBalances = hashMapOf<String, AssetBalanceStore>() // todo check
+                    val assetBalancesDb = tempRealm.where("AssetBalance").findAll()
+                    for (item in assetBalancesDb) {
+                        val assetId = item.getString("assetId")
+                        assetBalances[assetId] =
+                                AssetBalanceStore(
+                                        assetId = assetId,
+                                        isHidden = item.getBoolean("isHidden"),
+                                        position = item.getInt("position"),
+                                        isFavorite = item.getBoolean("isFavorite"))
+                    }
+                    prefsUtil.saveAssetBalances(assetBalances)
+
+                    tempRealm.close()
+                    App.getAccessManager().deleteRealm(guid)
+                } else {
+                    tempRealm.close()
+                }
+            }
+
         }
     }
 }

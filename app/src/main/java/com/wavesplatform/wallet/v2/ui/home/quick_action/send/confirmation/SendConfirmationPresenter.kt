@@ -1,23 +1,15 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
-import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.model.request.TransactionsBroadcastRequest
-import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.sdk.model.response.AssetInfo
-import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.errorBody
-import com.wavesplatform.wallet.v2.util.find
+import com.wavesplatform.wallet.v2.util.find // todo check
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -114,16 +106,14 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 App.getAccessManager().getWallet()!!.publicKeyStr,
                 recipient!!,
                 MoneyUtil.getUnscaledValue(totalAmount.toPlainString(), selectedAsset),
-                System.currentTimeMillis(),
+                EnvironmentManager.getTime(),
                 blockchainCommission,
                 attachment,
                 feeAsset.assetId)
     }
 
     fun getAddressName(address: String) {
-        val addressBookUser = queryFirst<AddressBookUserDb> {
-            equalTo("address", address)
-        }
+        val addressBookUser = prefsUtil.getAddressBookUser(address)
         if (addressBookUser == null) {
             viewState.hideAddressBookUser()
         } else {

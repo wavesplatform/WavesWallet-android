@@ -18,7 +18,7 @@ data class BurnRequest(
     @SerializedName("fee") var fee: Long = 100000L,
     @SerializedName("quantity") var quantity: Long = 1,
     @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
-    @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,
+    @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
     @SerializedName("type") val type: Int = Transaction.BURN,
     @SerializedName("version") val version: Int = Constants.VERSION,
     @SerializedName("proofs") var proofs: MutableList<String?>? = null,

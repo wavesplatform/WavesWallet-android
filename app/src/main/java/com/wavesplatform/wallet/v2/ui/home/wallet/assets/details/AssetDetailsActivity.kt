@@ -12,7 +12,7 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.Constants // todo check
 import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
@@ -193,6 +193,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     private fun unmarkAsFavorite() {
         val item = adapterAvatar.items[view_pager.currentItem]
         item.isFavorite = false
+        prefsUtil.saveAssetBalance(item)
         AssetBalanceDb(item).save()
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_off))
     }
@@ -202,6 +203,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         item.isFavorite = true
         item.isHidden = false
         AssetBalanceDb(item).save()
+        prefsUtil.saveAssetBalance(item)
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_on))
     }
 

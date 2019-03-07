@@ -353,7 +353,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 App.getAccessManager().isCurrentAccountBackupSkipped()) {
             val currentGuid = App.getAccessManager().getLastLoggedInGuid()
             val lastTime = preferencesHelper.getShowSaveSeedWarningTime(currentGuid)
-            val now = System.currentTimeMillis()
+            val now = EnvironmentManager.getTime()
             if (now > lastTime + MIN_15) {
                 implementSwipeToDismiss()
 
@@ -419,7 +419,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 val startDate = notification.startDate ?: Long.MAX_VALUE
                 val endDate = notification.endDate ?: Long.MAX_VALUE
 
-                if ((System.currentTimeMillis() / 1000) in startDate..endDate) {
+                if ((EnvironmentManager.getTime() / 1000) in startDate..endDate) {
                     var accountFirstOpenDialog: AlertDialog? = null
                     val view = LayoutInflater.from(this)
                             .inflate(R.layout.dialog_news, null)

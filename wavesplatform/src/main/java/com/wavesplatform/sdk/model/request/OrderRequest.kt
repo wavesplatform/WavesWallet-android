@@ -18,7 +18,7 @@ data class OrderRequest(
     @SerializedName("orderType") var orderType: OrderType = OrderType.BUY,
     @SerializedName("price") var price: Long = 0L,
     @SerializedName("amount") var amount: Long = 0L,
-    @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,
+    @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
     @SerializedName("expiration") var expiration: Long = 0L,
     @SerializedName("matcherFee") var matcherFee: Long = 300000,
     @SerializedName("version") var version: Int = Constants.VERSION,

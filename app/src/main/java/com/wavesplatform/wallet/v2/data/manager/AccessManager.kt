@@ -29,7 +29,7 @@ import timber.log.Timber
 import java.io.File
 import java.util.*
 
-class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, private var authHelper: AuthHelper) {
+class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHelper) {
 
     private val pinStore = PinStoreService()
     private var loggedInGuid: String = ""
@@ -264,7 +264,11 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             prefs.removeGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID)
         }
 
-        deleteRealmDBForAccount(searchWalletGuid)
+        deleteRealm(searchWalletGuid)
+    }
+
+    fun deleteRealm(guid: String) {
+        deleteRealmDBForAccount(guid)
         clearRealmConfiguration()
     }
 

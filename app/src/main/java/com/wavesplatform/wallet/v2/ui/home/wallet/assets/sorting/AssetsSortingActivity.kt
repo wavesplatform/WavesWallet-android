@@ -86,6 +86,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             this.adapter.addData(linePosition, globalItem)
 
                             // Save to DB
+                            prefsUtil.saveAssetBalance(asset)
                             AssetBalanceDb(asset).save()
                         }
                         AssetSortingItem.TYPE_NOT_FAVORITE -> {
@@ -104,6 +105,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             this.adapter.addData(linePosition, globalItem)
 
                             // Save to DB
+                            prefsUtil.saveAssetBalance(asset)
                             AssetBalanceDb(asset).save()
                         }
                     }
@@ -115,7 +117,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             override fun onHiddenStateChanged(item: AssetBalance, checked: Boolean) {
                 presenter.needToUpdate = true
                 item.isHidden = !checked
-                AssetBalanceDb(item).save()
+                prefsUtil.saveAssetBalance(item)
+                AssetBalanceDb(item).save() // todo check
             }
         }
 

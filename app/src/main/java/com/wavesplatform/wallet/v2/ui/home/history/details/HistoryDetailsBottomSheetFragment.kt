@@ -840,8 +840,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                     !transaction.recipientAddress.equals(CoinomatService.GATEWAY_ADDRESS))
 
     private fun resolveExistOrNoAddress(textViewName: TextView?, textViewAddress: TextView?, textAddressAction: AppCompatTextView?) {
-        val addressBookUser = queryFirst<AddressBookUserDb> { equalTo("address", textViewAddress?.text.toString()) }
-
+        val addressBookUser = prefsUtil.getAddressBookUser(textViewAddress?.text.toString())
         makeAddressActionViewClickableStyled(textAddressAction)
 
         if (addressBookUser == null) {
@@ -892,7 +891,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
     }
 
     private fun resolveExistOrNoAddressForMassSend(textViewName: TextView?, textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
-        val addressBookUser = queryFirst<AddressBookUserDb> { equalTo("address", textViewAddress?.text.toString()) }
+        val addressBookUser = prefsUtil.getAddressBookUser(textViewAddress?.text.toString())
 
         makeAddressActionViewClickableStyled(imageAddressAction)
 

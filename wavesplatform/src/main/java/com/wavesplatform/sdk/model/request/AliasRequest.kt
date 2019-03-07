@@ -16,7 +16,7 @@ data class AliasRequest(
     @SerializedName("type") val type: Int = Transaction.CREATE_ALIAS,
     @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
     @SerializedName("fee") var fee: Long = 0,
-    @SerializedName("timestamp") var timestamp: Long = 0,
+    @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
     @SerializedName("version") var version: Int = Constants.VERSION,
     @SerializedName("proofs") var proofs: MutableList<String?>? = null,
     @SerializedName("alias") var alias: String? = ""

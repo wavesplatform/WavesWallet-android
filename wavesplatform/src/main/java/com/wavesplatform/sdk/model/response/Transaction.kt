@@ -137,7 +137,7 @@ open class Transaction(
     }
 
     fun isSponsorshipTransaction(): Boolean {
-        return transactionType() == TransactionType.RECEIVE_SPONSORSHIP_TYPE &&
+        return transactionType() == TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
                 transactionType() == TransactionType.CANCEL_SPONSORSHIP_TYPE
     }
 

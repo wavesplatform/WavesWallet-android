@@ -15,7 +15,6 @@ import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Observable
-import pers.victor.ext.currentTimeMillis
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -46,7 +45,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                 .flatMap {
                     apiService.loadDexPairInfo(watchMarket.market.amountAsset, watchMarket.market.priceAsset)
                             .map {
-                                prefsUtil.setValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, currentTimeMillis)
+                                prefsUtil.setValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, EnvironmentManager.getTime())
                                 watchMarket.pairResponse = it
                                 return@map watchMarket
                             }

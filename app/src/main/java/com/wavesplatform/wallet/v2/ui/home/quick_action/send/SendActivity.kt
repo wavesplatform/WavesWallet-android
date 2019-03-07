@@ -232,9 +232,7 @@ class SendActivity : BaseActivity(), SendView {
         for (address in addresses) {
             val lastRecipient = layoutInflater
                     .inflate(R.layout.view_text_tag, null) as AppCompatTextView
-            val addressBookUser = queryFirst<AddressBookUserDb> {
-                equalTo("address", address)
-            }
+            val addressBookUser = prefsUtil.getAddressBookUser(address)
             lastRecipient.text = addressBookUser?.name ?: address
             lastRecipient.click {
                 edit_address.setText(address)

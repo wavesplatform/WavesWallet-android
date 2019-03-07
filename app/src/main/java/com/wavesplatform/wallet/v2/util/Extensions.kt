@@ -35,6 +35,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.common.primitives.Bytes
+import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.Constants
@@ -55,6 +57,9 @@ import pers.victor.ext.Ext.ctx
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.io.File
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.util.*
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     if (dest.isNullOrEmpty() && source.startsWith(".")) {
@@ -347,6 +352,10 @@ fun View.copyToClipboard(
             }
         }
     }
+}
+
+fun <T : Any> T?.notNull(f: (it: T) -> Unit) {
+    if (this != null) f(this)
 }
 
 
