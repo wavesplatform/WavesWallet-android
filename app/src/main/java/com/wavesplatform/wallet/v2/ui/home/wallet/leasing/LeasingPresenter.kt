@@ -21,20 +21,20 @@ class LeasingPresenter @Inject constructor() : BasePresenter<LeasingView>() {
         if (Wavesplatform.isAuthenticated()) {
             runAsync {
                 addSubscription(Observable.zip(nodeDataManager.loadWavesBalance(),
-                        queryAsSingle<Transaction> {
+                        queryAsSingle<TransactionDb> {
                             equalTo("status", LeasingStatus.ACTIVE.status)
                                     .and()
                                     .equalTo("transactionTypeId", Constants.ID_STARTED_LEASING_TYPE)
                         }.map {
                             return@map ArrayList(it.sortedByDescending { it.timestamp })
                         }.toObservable(),
-                        BiFunction { t1: AssetBalance, t2: List<Transaction> ->
+                        BiFunction { t1: AssetBalance, t2: List<TransactionDb> ->
                             return@BiFunction Pair(t1, t2)
                         })
                         .compose(RxUtil.applySchedulersToObservable())
                         .subscribe({
                             viewState.showBalances(it.first)
-                            viewState.showActiveLeasingTransaction(it.second)
+                            viewState.showActiveLeasingTransaction(TransactionDb.convertFromDb(it.second))
                         }, {
                             it.printStackTrace()
                             viewState.afterFailedLoadLeasing()

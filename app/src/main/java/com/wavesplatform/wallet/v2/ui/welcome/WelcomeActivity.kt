@@ -12,7 +12,6 @@ import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
