@@ -152,7 +152,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
                 else TradeBuyAndSellBottomSheetFragment.SELL_TYPE
 
         val dialog = TradeBuyAndSellBottomSheetFragment.newInstance(data)
-        dialog.show(fragmentManager, dialog::class.java.simpleName)
+        dialog.show(childFragmentManager, dialog::class.java.simpleName)
     }
 
     private fun getBidPrice(): Long? {
