@@ -144,11 +144,14 @@ class EnvironmentManager {
                                     isFavorite = assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED,
                                     issueTransaction = IssueTransaction(
                                             id = assetInfo.assetInfo.id,
-                                            name = assetInfo.assetInfo.name,
+                                            name = findAssetIdByAssetId(
+                                                    assetInfo.assetInfo.id)?.displayName
+                                                    ?: assetInfo.assetInfo.name,
                                             decimals = assetInfo.assetInfo.precision,
                                             quantity = assetInfo.assetInfo.quantity,
                                             timestamp = assetInfo.assetInfo.timestamp.time),
-                                    isGateway = findAssetIdByAssetId(assetInfo.assetInfo.id)?.isGateway
+                                    isGateway = findAssetIdByAssetId(
+                                            assetInfo.assetInfo.id)?.isGateway
                                             ?: false)
                             defaultAssets.add(assetBalance)
                         }

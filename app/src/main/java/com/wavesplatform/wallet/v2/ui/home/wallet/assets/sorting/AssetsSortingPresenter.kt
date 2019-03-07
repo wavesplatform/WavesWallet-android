@@ -52,6 +52,7 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
                 .filter { it.type != AssetSortingItem.TYPE_LINE }
                 .mapIndexedTo(mutableListOf()) { position, item ->
                     item.asset.position = position
+                    prefsUtil.saveAssetBalance(item.asset)
                     return@mapIndexedTo item.asset
                 }
                 .saveAll()

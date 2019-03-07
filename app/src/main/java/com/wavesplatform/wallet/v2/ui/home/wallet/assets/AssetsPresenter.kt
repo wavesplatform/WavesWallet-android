@@ -1,9 +1,9 @@
-
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.vicpin.krealmextensions.queryAllAsSingle
+import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -13,6 +13,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
@@ -28,12 +29,23 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
         viewState.startServiceToLoadData()
         runAsync {
+            val savedAssetPrefs = prefsUtil.assetBalances
             var dbAssets = mutableListOf<AssetBalance>()
             addSubscription(queryAllAsSingle<AssetBalance>().toObservable()
                     .subscribeOn(Schedulers.io())
                     .map {
-                        dbAssets = it.toMutableList()
-                        return@map createTripleSortedLists(it.toMutableList())
+                        val assetBalanceList = it.toMutableList()
+                        for (item in assetBalanceList) {
+                            val assetBalance = savedAssetPrefs[item.assetId]
+                            assetBalance.notNull { storedAssetBalance ->
+                                item.isFavorite = storedAssetBalance.isFavorite
+                                item.position = storedAssetBalance.position
+                                item.isHidden = storedAssetBalance.isHidden
+                                item.save()
+                            }
+                        }
+                        dbAssets = assetBalanceList
+                        return@map createTripleSortedLists(assetBalanceList)
                     }
                     .doOnNext { postSuccess(it, withApiUpdate, true) }
                     .flatMap { tryUpdateWithApi(withApiUpdate, dbAssets) }
@@ -89,6 +101,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         }
 
                         assetsListFromDb.saveAll()
+                        prefsUtil.saveAssetBalances(assetsListFromDb)
                         return@map assetsListFromDb
                     }
                     .map { createTripleSortedLists(it.toMutableList()) }
@@ -138,6 +151,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         }
 
                         assetsListFromDb.saveAll()
+                        prefsUtil.saveAssetBalances(assetsListFromDb)
                         return@map assetsListFromDb
                     }
                     .map { createTripleSortedLists(it.toMutableList()) }
@@ -195,10 +209,22 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
     }
 
-    private fun createTripleSortedLists(list: MutableList<AssetBalance>): Triple<MutableList<AssetBalance>, MutableList<AssetBalance>, MutableList<AssetBalance>> {
-        val hiddenList = list.filter { it.isHidden && !it.isSpam }.sortedBy { it.position }.toMutableList()
-        val sortedToFirstFavoriteList = list.filter { !it.isHidden && !it.isSpam }.sortedByDescending({ it.isGateway }).sortedBy { it.position }.sortedByDescending({ it.isFavorite }).toMutableList()
-        val spamList = list.filter { it.isSpam }.toMutableList()
+    private fun createTripleSortedLists(list: MutableList<AssetBalance>):
+            Triple<MutableList<AssetBalance>, MutableList<AssetBalance>, MutableList<AssetBalance>> {
+        val hiddenList = list
+                .filter { it.isHidden && !it.isSpam }
+                .sortedBy { it.position }
+                .toMutableList()
+        val sortedToFirstFavoriteList = list
+                .asSequence()
+                .filter { !it.isHidden && !it.isSpam }
+                .sortedByDescending { it.isGateway }
+                .sortedBy { it.position }
+                .sortedByDescending { it.isFavorite }
+                .toMutableList()
+        val spamList = list
+                .filter { it.isSpam }
+                .toMutableList()
         return Triple(sortedToFirstFavoriteList, hiddenList, spamList)
     }
 
