@@ -1,15 +1,21 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
+import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.model.request.TransactionsBroadcastRequest
+import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.model.response.AssetInfo
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.find // todo check
+import com.wavesplatform.wallet.v2.util.errorBody
+import com.wavesplatform.wallet.v2.util.find
 import java.math.BigDecimal
 import javax.inject.Inject
 

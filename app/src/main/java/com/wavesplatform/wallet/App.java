@@ -95,7 +95,8 @@ public class App extends DaggerApplication {
         EnvironmentManager.updateConfiguration(
                 githubDataManager.globalConfiguration(
                         EnvironmentManager.Companion.getEnvironment().getUrl()),
-                githubDataManager.getApiService());
+                githubDataManager.getApiService(),
+                githubDataManager.getNodeService());
 
 
     }

@@ -20,11 +20,11 @@ import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.coinomat.XRate
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_BLOCKCHAIN_COMMISSION
@@ -497,7 +497,7 @@ class SendActivity : BaseActivity(), SendView {
 
             StartLeasingActivity.REQUEST_CHOOSE_ADDRESS -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    val addressTestObject = data?.getParcelableExtra<AddressBookUserDb>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
+                    val addressTestObject = data?.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
                     edit_address.setText(addressTestObject?.address)
                 }
             }

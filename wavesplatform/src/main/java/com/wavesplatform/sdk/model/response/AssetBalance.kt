@@ -8,7 +8,7 @@ import com.wavesplatform.sdk.utils.MoneyUtil
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
-open data class AssetBalances(
+open class AssetBalances(
     @SerializedName("address") var address: String? = null,
     @SerializedName("balances") var balances: List<AssetBalance> = ArrayList()
 )
@@ -26,8 +26,8 @@ open class AssetBalance(
     @SerializedName("issueTransaction") var issueTransaction: IssueTransaction? = IssueTransaction(id = assetId),
     var isHidden: Boolean = false,
     var position: Int = -1,
-    @Ignore var configureVisibleState: Boolean = false,
-    @Ignore var isChecked: Boolean = false,
+    var configureVisibleState: Boolean = false,
+    var isChecked: Boolean = false,
     var isFiatMoney: Boolean = false,
     var isFavorite: Boolean = false,
     var isGateway: Boolean = false,

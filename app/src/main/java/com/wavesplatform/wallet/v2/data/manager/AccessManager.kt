@@ -12,9 +12,9 @@ import com.wavesplatform.sdk.utils.randomString
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.util.MigrationUtil
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.util.RxUtil
@@ -196,7 +196,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
         return Wavesplatform.getWallet()
     }
 
-    private fun createAddressBookCurrentAccount(): AddressBookUserDb? {
+    private fun createAddressBookCurrentAccount(): AddressBookUser? {
         if (TextUtils.isEmpty(loggedInGuid)) {
             return null
         }
@@ -206,7 +206,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
 
         return if (TextUtils.isEmpty(publicKey) || TextUtils.isEmpty(name)) {
             null
-        } else AddressBookUserDb(addressFromPublicKey(publicKey), name)
+        } else AddressBookUser(addressFromPublicKey(publicKey), name)
     }
 
     fun deleteCurrentWavesWallet(): Boolean {

@@ -9,20 +9,20 @@ import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.model.OrderType
 import com.wavesplatform.sdk.model.response.OrderBook
-import pers.victor.ext.currentTimeMillis
+import com.wavesplatform.sdk.utils.EnvironmentManager
 
 data class OrderRequest(
-    @SerializedName("matcherPublicKey") var matcherPublicKey: String? = "",
-    @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
-    @SerializedName("assetPair") var assetPair: OrderBook.Pair = OrderBook.Pair(),
-    @SerializedName("orderType") var orderType: OrderType = OrderType.BUY,
-    @SerializedName("price") var price: Long = 0L,
-    @SerializedName("amount") var amount: Long = 0L,
-    @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
-    @SerializedName("expiration") var expiration: Long = 0L,
-    @SerializedName("matcherFee") var matcherFee: Long = 300000,
-    @SerializedName("version") var version: Int = Constants.VERSION,
-    @SerializedName("proofs") var proofs: MutableList<String?>? = null
+        @SerializedName("matcherPublicKey") var matcherPublicKey: String = "",
+        @SerializedName("senderPublicKey") var senderPublicKey: String = "",
+        @SerializedName("assetPair") var assetPair: OrderBook.Pair = OrderBook.Pair(),
+        @SerializedName("orderType") var orderType: OrderType = OrderType.BUY,
+        @SerializedName("price") var price: Long = 0L,
+        @SerializedName("amount") var amount: Long = 0L,
+        @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
+        @SerializedName("expiration") var expiration: Long = 0L,
+        @SerializedName("matcherFee") var matcherFee: Long = 300000,
+        @SerializedName("version") var version: Int = Constants.VERSION,
+        @SerializedName("proofs") var proofs: MutableList<String?>? = null
 ) {
 
     fun toSignBytes(): ByteArray {

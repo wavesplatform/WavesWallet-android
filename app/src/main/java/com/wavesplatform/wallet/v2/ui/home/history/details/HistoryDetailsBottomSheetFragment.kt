@@ -32,7 +32,6 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
@@ -40,6 +39,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragme
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
 import com.wavesplatform.wallet.v2.ui.custom.SpamTag
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
@@ -231,7 +231,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         val showCommentBlock = !transaction.attachment.isNullOrEmpty()
         if (showCommentBlock) {
             commentBlock.visiable()
-            textComment?.text = String(Base58.decode(transaction.attachment))
+            textComment?.text = String(Base58.decode(transaction.attachment!!))
         } else {
             commentBlock.gone()
         }
@@ -736,7 +736,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                                             transaction.recipientAddress)
                                     if (!transaction.attachment.isNullOrEmpty()) {
                                         putExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT,
-                                                String(Base58.decode(transaction.attachment)))
+                                                String(Base58.decode(transaction.attachment!!)))
                                     } else {
                                         putExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT, "")
                                     }
@@ -854,7 +854,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
             textAddressAction?.click {
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), ""))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
                 }
             }
         } else {
@@ -869,7 +869,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
             textAddressAction?.click {
                 launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), addressBookUser.name))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), addressBookUser.name))
                 }
             }
         }
@@ -905,7 +905,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
             imageAddressAction?.click {
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), ""))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
                 }
             }
         } else {
@@ -919,7 +919,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
             imageAddressAction?.click {
                 launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), addressBookUser.name))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), addressBookUser.name))
                 }
             }
         }

@@ -8,13 +8,9 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.wavesplatform.sdk.model.response.AssetBalance;
+import com.wavesplatform.sdk.model.response.AssetBalanceStore;
 import com.wavesplatform.wallet.App;
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalanceStore; // todo check
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.wavesplatform.wallet.App;
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUser;
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext;
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser;
 
@@ -23,21 +19,15 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 
 public class PrefsUtil {
 
-    public static final String GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment";
-    public static final String GLOBAL_CURRENT_ENVIRONMENT_DATA = "global_current_environment_data";
-    public static final String GLOBAL_CURRENT_TIME_CORRECTION = "global_current_time_correction";
     public static final String SHOWED_NEWS_IDS = "showed_news_ids";
     public static final String GLOBAL_LAST_LOGGED_IN_GUID = "global_logged_in_wallet_guid";
     public static final String GLOBAL_SCHEME_URL = "scheme_url";

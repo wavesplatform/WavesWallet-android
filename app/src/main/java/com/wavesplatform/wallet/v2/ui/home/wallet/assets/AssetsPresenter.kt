@@ -6,17 +6,17 @@ import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
 import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
+import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
@@ -38,7 +38,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     .subscribeOn(Schedulers.io())
                     .map {
                         val assetBalanceList = it.toMutableList()
-                        for (item in assetBalanceList) { // todo check
+                        for (item in assetBalanceList) {
                             val assetBalance = savedAssetPrefs[item.assetId]
                             assetBalance.notNull { storedAssetBalance ->
                                 item.isFavorite = storedAssetBalance.isFavorite
@@ -104,7 +104,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         }
 
                         assetsListFromDb.saveAll()
-                        prefsUtil.saveAssetBalances(assetsListFromDb)
+                        prefsUtil.saveAssetBalances(AssetBalanceDb.convertFromDb(assetsListFromDb))
                         return@map assetsListFromDb
                     }
                     .map { createTripleSortedLists(it.toMutableList()) }
@@ -154,7 +154,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         }
 
                         assetsListFromDb.saveAll()
-                        prefsUtil.saveAssetBalances(assetsListFromDb)
+                        prefsUtil.saveAssetBalances(AssetBalanceDb.convertFromDb(assetsListFromDb))
                         return@map assetsListFromDb
                     }
                     .map { createTripleSortedLists(it.toMutableList()) }

@@ -21,7 +21,7 @@ class TransactionsBroadcastRequest(
     @SerializedName("timestamp") var timestamp: Long,
     @SerializedName("fee") var fee: Long,
     @SerializedName("attachment") var attachment: String?,
-    @SerializedName("feeAssetId") var feeAssetId: String? = ""
+    @SerializedName("feeAssetId") var feeAssetId: String = ""
 ) {
 
     @SerializedName("type")

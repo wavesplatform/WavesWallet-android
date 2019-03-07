@@ -15,11 +15,11 @@ import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.sdk.utils.getTicker
 import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
 import com.wavesplatform.wallet.v2.util.find
@@ -180,7 +180,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             add_address.click {
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(signed.recipient, ""))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(signed.recipient, ""))
                 }
             }
         } else {

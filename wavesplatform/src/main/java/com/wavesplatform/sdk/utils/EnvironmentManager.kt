@@ -12,12 +12,12 @@ import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.GlobalConfiguration
 import com.wavesplatform.sdk.model.response.IssueTransaction
 import com.wavesplatform.sdk.service.ApiService
+import com.wavesplatform.sdk.service.NodeService
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.currentTimeMillis
-import timber.log.Timber
 import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
@@ -76,6 +76,7 @@ class EnvironmentManager {
 
         private const val GLOBAL_CURRENT_ENVIRONMENT_DATA = "global_current_environment_data"
         private const val GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment"
+        private const val GLOBAL_CURRENT_TIME_CORRECTION = "global_current_time_correction"
 
         @JvmStatic
         fun init(application: Application) {
@@ -111,7 +112,8 @@ class EnvironmentManager {
 
         @JvmStatic
         fun updateConfiguration(globalConfigurationObserver: Observable<GlobalConfiguration>,
-                                apiService: ApiService) {
+                                apiService: ApiService,
+                                nodeService: NodeService) {
             if (instance == null) {
                 throw NullPointerException("EnvironmentManager must be init first!")
             }
@@ -164,7 +166,7 @@ class EnvironmentManager {
                     .subscribe({
                         instance!!.configurationDisposable!!.dispose()
                     }, { error ->
-                        Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration!")
+                        Log.e("EnvironmentManager", "Can't download GlobalConfiguration!")
                         error.printStackTrace()
                         PreferenceManager
                                 .getDefaultSharedPreferences(instance!!.application)
@@ -175,19 +177,18 @@ class EnvironmentManager {
                         instance!!.configurationDisposable!!.dispose()
                     })
 
-            instance!!.timeDisposable = githubDataManager.nodeService.utilsTime()
+            instance!!.timeDisposable = nodeService.utilsTime()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         PreferenceManager
-                                .getDefaultSharedPreferences(App.getAppContext())
+                                .getDefaultSharedPreferences(instance!!.application)
                                 .edit()
-                                .putLong(PrefsUtil.GLOBAL_CURRENT_TIME_CORRECTION,
-                                        it.ntp - currentTimeMillis)
+                                .putLong(GLOBAL_CURRENT_TIME_CORRECTION, it.ntp - currentTimeMillis)
                                 .apply()
                         instance!!.timeDisposable!!.dispose()
                     }, { error ->
-                        Timber.e(error, "EnvironmentManager: Can't download time correction!")
+                        Log.e("EnvironmentManager", "Can't download time correction!")
                         error.printStackTrace()
                         instance!!.timeDisposable!!.dispose()
                     })
@@ -195,12 +196,12 @@ class EnvironmentManager {
 
         @JvmStatic
         fun getTime(): Long {
-            val timeCorrection = if (App.getAppContext() == null) {
+            val timeCorrection = if (instance == null || instance!!.application == null) {
                 0L
             } else {
                 PreferenceManager
-                        .getDefaultSharedPreferences(App.getAppContext())
-                        .getLong(PrefsUtil.GLOBAL_CURRENT_TIME_CORRECTION, 0L)
+                        .getDefaultSharedPreferences(instance!!.application)
+                        .getLong(GLOBAL_CURRENT_TIME_CORRECTION, 0L)
             }
             return currentTimeMillis + timeCorrection
         }

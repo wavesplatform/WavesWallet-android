@@ -26,7 +26,7 @@ import javax.inject.Singleton
 
 @Singleton
 open class DataManager(var context: Context,
-                       var adapterFactory: CallAdapter.Factory? = RxJava2CallAdapterFactory.create()) {
+                       private var adapterFactory: CallAdapter.Factory? = RxJava2CallAdapterFactory.create()) {
 
     lateinit var nodeService: NodeService
     lateinit var apiService: ApiService
@@ -44,7 +44,7 @@ open class DataManager(var context: Context,
                 createGsonFactory()).create(NodeService::class.java)
 
         apiService = createRetrofit(
-                Constants.URL_DATA, // todo check hosts
+                Constants.URL_DATA,
                 createClient(),
                 adapterFactory ?: RxJava2CallAdapterFactory.create(),
                 createGsonFactory()).create(ApiService::class.java)

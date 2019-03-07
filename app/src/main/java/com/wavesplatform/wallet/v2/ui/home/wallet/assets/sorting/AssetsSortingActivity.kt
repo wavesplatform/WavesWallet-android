@@ -118,7 +118,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 presenter.needToUpdate = true
                 item.isHidden = !checked
                 prefsUtil.saveAssetBalance(item)
-                AssetBalanceDb(item).save() // todo check
+                AssetBalanceDb(item).save()
             }
         }
 

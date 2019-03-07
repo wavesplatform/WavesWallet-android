@@ -229,7 +229,7 @@ open class Transaction(
             return if (transaction.attachment.isNullOrEmpty()) {
                 ""
             } else {
-                "\nAttachment: ${String(Base58.decode(transaction.attachment))}"
+                "\nAttachment: ${String(Base58.decode(transaction.attachment!!))}"
             }
         }
 

@@ -12,7 +12,7 @@ class AddressBookPresenter @Inject constructor() : BasePresenter<AddressBookView
     fun getAddresses() {
         runAsync {
             addSubscription(Observable.fromArray(prefsUtil.allAddressBookUsers)
-                    .compose(RxUtil.applyObservableDefaultSchedulers()) // todo check
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
                         val addresses = it.sortedBy { it.name }.toMutableList()
                         viewState.afterSuccessGetAddress(addresses)

@@ -15,14 +15,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.OnDrawableClickListener
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.showSnackbar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_address_book.*
@@ -90,7 +89,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         presenter.getAddresses()
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as AddressBookUserDb
+            val item = adapter.getItem(position) as AddressBookUser
             if (this.adapter.screenType == AddressBookScreenType.EDIT.type) {
                 launchActivity<EditAddressActivity>(REQUEST_EDIT_ADDRESS) {
                     putExtra(BUNDLE_ADDRESS_ITEM, item)
@@ -122,7 +121,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         when (requestCode) {
             REQUEST_ADD_ADDRESS -> {
                 if (resultCode == Constants.RESULT_OK) {
-                    val item = data?.getParcelableExtra<AddressBookUserDb>(BUNDLE_ADDRESS_ITEM)
+                    val item = data?.getParcelableExtra<AddressBookUser>(BUNDLE_ADDRESS_ITEM)
                     item.notNull {
                         adapter.allData.add(it)
                         adapter.allData.sortBy { it.name }
@@ -134,7 +133,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
             REQUEST_EDIT_ADDRESS -> {
                 if (resultCode == Constants.RESULT_OK) {
                     val position = data?.getIntExtra(BUNDLE_POSITION, -1)
-                    val item = data?.getParcelableExtra<AddressBookUserDb>(BUNDLE_ADDRESS_ITEM)
+                    val item = data?.getParcelableExtra<AddressBookUser>(BUNDLE_ADDRESS_ITEM)
                     position.notNull { position ->
                         if (position != -1) {
                             item.notNull {
@@ -181,7 +180,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun afterSuccessGetAddress(list: MutableList<AddressBookUserDb>) {
+    override fun afterSuccessGetAddress(list: MutableList<AddressBookUser>) {
         adapter.allData = ArrayList(list)
         adapter.setNewData(list)
         adapter.emptyView = getEmptyView()

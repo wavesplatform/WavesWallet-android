@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.util
 
+import com.wavesplatform.sdk.model.response.AssetBalanceStore
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import io.realm.DynamicRealm
@@ -80,7 +81,7 @@ class MigrationUtil @Inject constructor() {
                     }
                     prefsUtil.setAddressBookUsers(addressBookUsers)
 
-                    val assetBalances = hashMapOf<String, AssetBalanceStore>() // todo check
+                    val assetBalances = hashMapOf<String, AssetBalanceStore>()
                     val assetBalancesDb = tempRealm.where("AssetBalance").findAll()
                     for (item in assetBalancesDb) {
                         val assetId = item.getString("assetId")

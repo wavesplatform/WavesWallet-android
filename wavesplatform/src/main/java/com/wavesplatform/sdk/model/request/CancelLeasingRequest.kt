@@ -13,7 +13,7 @@ import com.wavesplatform.sdk.utils.EnvironmentManager
 data class CancelLeasingRequest(
     @SerializedName("type") val type: Int = Transaction.LEASE_CANCEL,
     @SerializedName("chainId") var scheme: Int? = EnvironmentManager.netCode.toInt(),
-    @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+    @SerializedName("senderPublicKey") var senderPublicKey: String = "",
     @SerializedName("leaseId") var leaseId: String = "",
     @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
     @SerializedName("fee") var fee: Long = 0,

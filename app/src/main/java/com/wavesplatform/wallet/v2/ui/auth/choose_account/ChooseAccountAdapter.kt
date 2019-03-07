@@ -6,19 +6,19 @@ import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.daimajia.swipe.SwipeLayout
-import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.Identicon
-import com.wavesplatform.wallet.v2.data.model.db.AddressBookUserDb
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
-class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUserDb, BaseViewHolder>(R.layout.choose_address_layout, null) {
+class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUser, BaseViewHolder>(R.layout.choose_address_layout, null) {
 
     var chooseAccountOnClickListener: ChooseAccountOnClickListener? = null
     private val identicon = Identicon()
 
-    override fun convert(helper: BaseViewHolder, item: AddressBookUserDb) {
+    override fun convert(helper: BaseViewHolder, item: AddressBookUser) {
         helper.setText(R.id.text_address, item.address)
                 .setText(R.id.text_name, item.name)
 
