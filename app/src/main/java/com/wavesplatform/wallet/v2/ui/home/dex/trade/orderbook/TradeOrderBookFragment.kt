@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.smart_info.SmartPairInfoBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.fragment_trade_orderbook.*
@@ -48,9 +49,9 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.DexOrderButtonClickEvent::class.java)
                 .subscribe {
                     if (it.buy) {
-                        openOrderDialog(true, getAskPrice())
+                        tryOpenOrderDialog(true, getAskPrice())
                     } else {
-                        openOrderDialog(false, getBidPrice())
+                        tryOpenOrderDialog(false, getBidPrice())
                     }
                 })
 
@@ -79,11 +80,11 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
                 when (item.itemType) {
                     TradeOrderBookAdapter.ASK_TYPE -> {
                         item as OrderBook.Ask
-                        openOrderDialog(true, item.price, item.amount)
+                        tryOpenOrderDialog(true, item.price, item.amount)
                     }
                     TradeOrderBookAdapter.BID_TYPE -> {
                         item as OrderBook.Bid
-                        openOrderDialog(false, item.price, item.amount)
+                        tryOpenOrderDialog(false, item.price, item.amount)
                     }
                 }
             }
@@ -98,11 +99,11 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         }
 
         linear_buy.click {
-            openOrderDialog(true, getAskPrice())
+            tryOpenOrderDialog(true, getAskPrice())
         }
 
         linear_sell.click {
-            openOrderDialog(false, getBidPrice())
+            tryOpenOrderDialog(false, getBidPrice())
         }
 
         presenter.loadOrderBook()
@@ -113,13 +114,37 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         return if (itemEntity != null) {
             (itemEntity as LastPriceItem).lastTrade?.price?.toBigDecimal()?.setScale(8.plus(presenter.watchMarket?.market?.priceAssetDecimals
                     ?: 0)
-                    .minus(presenter.watchMarket?.market?.amountAssetDecimals ?: 0), RoundingMode.HALF_UP)?.unscaledValue()?.toLong()
+                    .minus(presenter.watchMarket?.market?.amountAssetDecimals
+                            ?: 0), RoundingMode.HALF_UP)?.unscaledValue()?.toLong()
         } else {
             null
         }
     }
 
-    private fun openOrderDialog(buy: Boolean, initPriceValue: Long?, initAmountValue: Long? = null) {
+    private fun tryOpenOrderDialog(buy: Boolean, initPriceValue: Long?, initAmountValue: Long? = null) {
+        val amountAssetInfo = (activity as TradeActivity).presenter.amountAssetInfo
+        val priceAssetInfo = (activity as TradeActivity).presenter.priceAssetInfo
+        if (amountAssetInfo?.hasScript == true ||
+                priceAssetInfo?.hasScript == true) {
+            val smartPairInfoDialog = SmartPairInfoBottomSheetFragment()
+            val listener = object : SmartPairInfoBottomSheetFragment.SmartPairDialogListener {
+                override fun onContinueClicked(notShowAgain: Boolean) {
+                    openOrderDialog(initAmountValue, initPriceValue, buy)
+                }
+
+                override fun onCancelClicked(notShowAgain: Boolean) {
+                    // do nothing
+                }
+
+            }
+            smartPairInfoDialog.configureDialog(amountAssetInfo!!, priceAssetInfo!!, listener)
+            smartPairInfoDialog.show(fragmentManager, SmartPairInfoBottomSheetFragment::class.java.simpleName)
+        } else {
+            openOrderDialog(initAmountValue, initPriceValue, buy)
+        }
+    }
+
+    private fun openOrderDialog(initAmountValue: Long?, initPriceValue: Long?, buy: Boolean) {
         val data = BuySellData(watchMarket = presenter.watchMarket, initAmount = initAmountValue, initPrice = initPriceValue,
                 bidPrice = getBidPrice(), askPrice = getAskPrice(), lastPrice = getLastPrice())
         data.orderType =
@@ -131,7 +156,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     }
 
     private fun getBidPrice(): Long? {
-        val itemEntity = adapter.data.filter { it.itemType == TradeOrderBookAdapter.BID_TYPE }.firstOrNull()
+        val itemEntity = adapter.data.firstOrNull { it.itemType == TradeOrderBookAdapter.BID_TYPE }
         return if (itemEntity != null) {
             (itemEntity as OrderBook.Bid).price
         } else {
@@ -140,7 +165,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     }
 
     private fun getAskPrice(): Long? {
-        val itemEntity = adapter.data.filter { it.itemType == TradeOrderBookAdapter.ASK_TYPE }.lastOrNull()
+        val itemEntity = adapter.data.lastOrNull { it.itemType == TradeOrderBookAdapter.ASK_TYPE }
         return if (itemEntity != null) {
             (itemEntity as OrderBook.Ask).price
         } else {
