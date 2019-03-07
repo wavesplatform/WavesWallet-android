@@ -248,7 +248,7 @@ public class PrefsUtil {
         Type listType = new TypeToken<ArrayList<AddressBookUser>>() {
         }.getType();
         List<AddressBookUser> list = new Gson().fromJson(
-                getGlobalValue(KEY_ADDRESS_BOOK, ""), listType);
+                getValue(KEY_ADDRESS_BOOK, ""), listType);
         if (list == null) {
             return new ArrayList<>();
         } else {
@@ -276,7 +276,7 @@ public class PrefsUtil {
     }
 
     public void setAddressBookUsers(List<AddressBookUser> addressBookUsers) {
-        setGlobalValue(KEY_ADDRESS_BOOK, new Gson().toJson(addressBookUsers));
+        setValue(KEY_ADDRESS_BOOK, new Gson().toJson(addressBookUsers));
     }
 
     public void saveAddressBookUsers(AddressBookUser addressBookUser) {
@@ -295,25 +295,22 @@ public class PrefsUtil {
     }
 
     public void saveAssetBalance(AssetBalance assetBalance) {
-        String guid = App.getAccessManager().getLoggedInGuid();
         Map<String, AssetBalanceStore> map = getAssetBalances();
         map.put(assetBalance.getAssetId(), new AssetBalanceStore(
                 assetBalance.getAssetId(),
                 assetBalance.isHidden(),
                 assetBalance.getPosition(),
                 assetBalance.isFavorite()));
-        setGlobalValue(KEY_ASSET_BALANCES + "_" + guid, new Gson().toJson(map));
+        setValue(KEY_ASSET_BALANCES, new Gson().toJson(map));
     }
 
     public void saveAssetBalances(Map<String, AssetBalanceStore> assetBalances) {
-        String guid = App.getAccessManager().getLoggedInGuid();
-        setGlobalValue(KEY_ASSET_BALANCES + "_" + guid, new Gson().toJson(assetBalances));
+        setValue(KEY_ASSET_BALANCES, new Gson().toJson(assetBalances));
     }
 
     public Map<String, AssetBalanceStore> getAssetBalances() {
-        String guid = App.getAccessManager().getLoggedInGuid();
         Map<String, AssetBalanceStore> map = new Gson().fromJson(
-                getGlobalValue(KEY_ASSET_BALANCES + "_" + guid, ""),
+                getValue(KEY_ASSET_BALANCES, ""),
                 TypeToken.getParameterized(
                         HashMap.class,
                         String.class,
@@ -326,7 +323,6 @@ public class PrefsUtil {
     }
 
     public void saveAssetBalances(@NotNull List<AssetBalance> assetsList) {
-        String guid = App.getAccessManager().getLoggedInGuid();
         Map<String, AssetBalanceStore> map = getAssetBalances();
         for (AssetBalance assetBalance : assetsList) {
             map.put(assetBalance.getAssetId(), new AssetBalanceStore(
@@ -335,6 +331,6 @@ public class PrefsUtil {
                     assetBalance.getPosition(),
                     assetBalance.isFavorite()));
         }
-        setGlobalValue(KEY_ASSET_BALANCES + "_" + guid, new Gson().toJson(map));
+        setValue(KEY_ASSET_BALANCES, new Gson().toJson(map));
     }
 }
