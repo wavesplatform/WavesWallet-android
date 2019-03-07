@@ -23,13 +23,15 @@ class EditAddressPresenter @Inject constructor() : BasePresenter<EditAddressView
     fun editAddress(address: String, name: String) {
         val oldAddress = prefsUtil.getAddressBookUser(addressBookUser?.address)
         if (addressBookUser?.address == address) {
-            oldAddress?.name = name
-            prefsUtil.saveAddressBookUsers(oldAddress)
-            viewState.successEditAddress(oldAddress)
+            oldAddress?.let {
+                oldAddress.name = name
+                prefsUtil.saveOrUpdateAddressBookUser(oldAddress)
+                viewState.successEditAddress(oldAddress)
+            }
         } else {
             prefsUtil.deleteAddressBookUsers(addressBookUser?.address)
             val addressBookUser = AddressBookUser(address, name)
-            prefsUtil.saveAddressBookUsers(addressBookUser)
+            prefsUtil.saveOrUpdateAddressBookUser(addressBookUser)
             viewState.successEditAddress(addressBookUser)
         }
     }
