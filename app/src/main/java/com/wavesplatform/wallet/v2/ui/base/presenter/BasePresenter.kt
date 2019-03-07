@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.base.presenter
 
 import com.arellomobile.mvp.MvpPresenter
 import com.arellomobile.mvp.MvpView
-import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.*
@@ -25,7 +24,6 @@ open class BasePresenter<T : MvpView> @Inject constructor() : MvpPresenter<T>() 
     @Inject lateinit var githubDataManager: GithubDataManager
     @Inject lateinit var prefsUtil: PrefsUtil
     @Inject lateinit var rxEventBus: RxEventBus
-    @Inject lateinit var appUtil: AppUtil
 
     private val mCompositeDisposable = CompositeDisposable()
 

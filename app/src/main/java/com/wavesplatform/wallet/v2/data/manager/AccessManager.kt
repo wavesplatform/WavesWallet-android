@@ -11,7 +11,6 @@ import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
 import com.wavesplatform.wallet.v1.data.services.PinStoreService
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
@@ -32,7 +31,7 @@ import java.io.File
 import java.security.SecureRandom
 import java.util.*
 
-class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, private var authHelper: AuthHelper) {
+class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHelper) {
 
     private val pinStore = PinStoreService()
     private var loggedInGuid: String = ""
@@ -63,8 +62,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
     }
 
     fun writePassCodeObservable(guid: String, password: String?, passCode: String): Completable {
-        appUtil.applyPRNGFixes()
-
         return Completable.create { subscriber ->
             if (passCode.length != 4) {
                 subscriber.onError(RuntimeException("Prohibited pin"))
