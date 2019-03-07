@@ -70,7 +70,7 @@ class MigrationUtil @Inject constructor() {
                     .name(String.format("%s.realm", guid))
                     .build()
             val tempRealm = DynamicRealm.getInstance(initConfig)
-            if (tempRealm!!.version < 3) {
+            if (tempRealm!!.version != -1L && tempRealm.version < 3L) {
                 val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
                 val addressBookUsers = prefsUtil.allAddressBookUsers
                 for (item in addressBookUsersDb) {
