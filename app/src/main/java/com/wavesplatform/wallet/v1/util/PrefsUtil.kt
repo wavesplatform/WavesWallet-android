@@ -25,14 +25,13 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         get() {
             val listType = object : TypeToken<MutableList<AddressBookUser>>() {}.type
             return Gson().fromJson<MutableList<AddressBookUser>>(
-                    getGlobalValue(KEY_ADDRESS_BOOK, ""), listType) ?: mutableListOf()
+                    getValue(KEY_ADDRESS_BOOK, ""), listType) ?: mutableListOf()
         }
 
     val assetBalances: MutableMap<String, AssetBalanceStore>
         get() {
-            val guid = App.getAccessManager().getLoggedInGuid()
             val map = Gson().fromJson<MutableMap<String, AssetBalanceStore>>(
-                    getGlobalValue(KEY_ASSET_BALANCES + "_" + guid, ""),
+                    getValue(KEY_ASSET_BALANCES, ""),
                     TypeToken.getParameterized(
                             MutableMap::class.java,
                             String::class.java,
@@ -224,7 +223,7 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
     }
 
     fun setAddressBookUsers(addressBookUsers: List<AddressBookUser>) {
-        setGlobalValue(KEY_ADDRESS_BOOK, Gson().toJson(addressBookUsers))
+        setValue(KEY_ADDRESS_BOOK, Gson().toJson(addressBookUsers))
     }
 
     fun saveOrUpdateAddressBookUser(addressBookUser: AddressBookUser) {
@@ -239,23 +238,20 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
     }
 
     fun saveAssetBalance(assetBalance: AssetBalance) {
-        val guid = App.getAccessManager().getLoggedInGuid()
         val map = assetBalances
         map[assetBalance.assetId] = AssetBalanceStore(
                 assetBalance.assetId,
                 assetBalance.isHidden,
                 assetBalance.position,
                 assetBalance.isFavorite)
-        setGlobalValue(KEY_ASSET_BALANCES + "_" + guid, Gson().toJson(map))
+        setGlobalValue(KEY_ASSET_BALANCES, Gson().toJson(map))
     }
 
     fun saveAssetBalances(assetBalances: Map<String, AssetBalanceStore>) {
-        val guid = App.getAccessManager().getLoggedInGuid()
-        setGlobalValue(KEY_ASSET_BALANCES + "_" + guid, Gson().toJson(assetBalances))
+        setGlobalValue(KEY_ASSET_BALANCES, Gson().toJson(assetBalances))
     }
 
     fun saveAssetBalances(assetsList: List<AssetBalance>) {
-        val guid = App.getAccessManager().getLoggedInGuid()
         val map = assetBalances
         for (assetBalance in assetsList) {
             map[assetBalance.assetId] = AssetBalanceStore(
@@ -264,7 +260,7 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
                     assetBalance.position,
                     assetBalance.isFavorite)
         }
-        setGlobalValue(KEY_ASSET_BALANCES + "_" + guid, Gson().toJson(map))
+        setGlobalValue(KEY_ASSET_BALANCES, Gson().toJson(map))
     }
 
     companion object {
