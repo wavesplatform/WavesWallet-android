@@ -69,36 +69,39 @@ class MigrationUtil @Inject constructor() {
             val initConfig = RealmConfiguration.Builder()
                     .name(String.format("%s.realm", guid))
                     .build()
-            val tempRealm = DynamicRealm.getInstance(initConfig)
-            if (tempRealm!!.version != -1L && tempRealm.version < 3L) {
-                val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
-                val addressBookUsers = prefsUtil.allAddressBookUsers
-                for (item in addressBookUsersDb) {
-                    val addressBookUser = AddressBookUser(
-                            item.getString("address"),
-                            item.getString("name"))
-                    addressBookUsers.add(addressBookUser)
-                }
-                prefsUtil.setAddressBookUsers(addressBookUsers)
+            if (Realm.getGlobalInstanceCount(initConfig) == 0) {
+                val tempRealm = DynamicRealm.getInstance(initConfig)
+                if (tempRealm!!.version != -1L && tempRealm.version < 3L) {
+                    val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
+                    val addressBookUsers = prefsUtil.allAddressBookUsers
+                    for (item in addressBookUsersDb) {
+                        val addressBookUser = AddressBookUser(
+                                item.getString("address"),
+                                item.getString("name"))
+                        addressBookUsers.add(addressBookUser)
+                    }
+                    prefsUtil.setAddressBookUsers(addressBookUsers)
 
-                val assetBalances = hashMapOf<String, AssetBalanceStore>()
-                val assetBalancesDb = tempRealm.where("AssetBalance").findAll()
-                for (item in assetBalancesDb) {
-                    val assetId = item.getString("assetId")
-                    assetBalances[assetId] =
-                            AssetBalanceStore(
-                                    assetId = assetId,
-                                    isHidden = item.getBoolean("isHidden"),
-                                    position = item.getInt("position"),
-                                    isFavorite = item.getBoolean("isFavorite"))
-                }
-                prefsUtil.saveAssetBalances(assetBalances)
+                    val assetBalances = hashMapOf<String, AssetBalanceStore>()
+                    val assetBalancesDb = tempRealm.where("AssetBalance").findAll()
+                    for (item in assetBalancesDb) {
+                        val assetId = item.getString("assetId")
+                        assetBalances[assetId] =
+                                AssetBalanceStore(
+                                        assetId = assetId,
+                                        isHidden = item.getBoolean("isHidden"),
+                                        position = item.getInt("position"),
+                                        isFavorite = item.getBoolean("isFavorite"))
+                    }
+                    prefsUtil.saveAssetBalances(assetBalances)
 
-                tempRealm.close()
-                App.getAccessManager().deleteRealm(guid)
-            } else {
-                tempRealm.close()
+                    tempRealm.close()
+                    App.getAccessManager().deleteRealm(guid)
+                } else {
+                    tempRealm.close()
+                }
             }
+
         }
     }
 }
