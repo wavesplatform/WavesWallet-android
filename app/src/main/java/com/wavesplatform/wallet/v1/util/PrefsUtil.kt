@@ -28,6 +28,14 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
                     getValue(KEY_ADDRESS_BOOK, ""), listType) ?: mutableListOf()
         }
 
+    val dexNotShownAlertAboutPairList: MutableList<String>
+        get() {
+            val listType = object : TypeToken<MutableList<String>>() {}.type
+            return Gson().fromJson<MutableList<String>>(
+                    getValue(KEY_DEX_PAIR_SMART_INFO_NOT_SHOW_LIST, ""), listType)
+                    ?: mutableListOf()
+        }
+
     val assetBalances: MutableMap<String, AssetBalanceStore>
         get() {
             val map = Gson().fromJson<MutableMap<String, AssetBalanceStore>>(
@@ -263,6 +271,24 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         setGlobalValue(KEY_ASSET_BALANCES, Gson().toJson(map))
     }
 
+    fun setNotShownSmartAlertForPair(amount: String, price: String, notShowAgain: Boolean) {
+        if (notShowAgain) {
+            val shownAlertAboutPairList = dexNotShownAlertAboutPairList
+            val uniqueId = amount + price
+            shownAlertAboutPairList.add(uniqueId)
+            saveNotShownSmartAlertForPairList(shownAlertAboutPairList)
+        }
+    }
+
+    fun saveNotShownSmartAlertForPairList(list: MutableList<String>) {
+        setValue(KEY_DEX_PAIR_SMART_INFO_NOT_SHOW_LIST, Gson().toJson(list))
+    }
+
+    fun isNotShownSmartAlertForPair(amount: String, price: String): Boolean {
+        val uniqueId = amount + price
+        return dexNotShownAlertAboutPairList.firstOrNull { it == uniqueId } != null
+    }
+
     companion object {
         const val GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment"
         const val GLOBAL_CURRENT_ENVIRONMENT_DATA = "global_current_environment_data"
@@ -289,6 +315,7 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         const val KEY_GLOBAL_NODE_COOKIES = "node_cookies"
         const val KEY_ADDRESS_BOOK = "address_book"
         const val KEY_ASSET_BALANCES = "asset_balances"
+        const val KEY_DEX_PAIR_SMART_INFO_NOT_SHOW_LIST = "dex_pair_smart_info_not_show_list"
     }
 
 

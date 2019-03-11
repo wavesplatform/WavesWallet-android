@@ -19,6 +19,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.smart_info.SmartPairInfoBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.safeLet
 import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.fragment_trade_orderbook.*
 import kotlinx.android.synthetic.main.global_server_error_layout.*
@@ -124,21 +125,28 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     private fun tryOpenOrderDialog(buy: Boolean, initPriceValue: Long?, initAmountValue: Long? = null) {
         val amountAssetInfo = (activity as TradeActivity).presenter.amountAssetInfo
         val priceAssetInfo = (activity as TradeActivity).presenter.priceAssetInfo
-        if (amountAssetInfo?.hasScript == true ||
-                priceAssetInfo?.hasScript == true) {
-            val smartPairInfoDialog = SmartPairInfoBottomSheetFragment()
-            val listener = object : SmartPairInfoBottomSheetFragment.SmartPairDialogListener {
-                override fun onContinueClicked(notShowAgain: Boolean) {
+        if ((amountAssetInfo?.hasScript == true || priceAssetInfo?.hasScript == true)) {
+            safeLet(amountAssetInfo, priceAssetInfo) { amountAssetInfo, priceAssetInfo ->
+                if (presenter.prefsUtil.isNotShownSmartAlertForPair(amountAssetInfo.id, priceAssetInfo.id)) {
                     openOrderDialog(initAmountValue, initPriceValue, buy)
-                }
+                } else {
+                    val smartPairInfoDialog = SmartPairInfoBottomSheetFragment()
+                    val listener = object : SmartPairInfoBottomSheetFragment.SmartPairDialogListener {
+                        override fun onContinueClicked(notShowAgain: Boolean) {
+                            presenter.prefsUtil.setNotShownSmartAlertForPair(amountAssetInfo.id, priceAssetInfo.id, notShowAgain)
+                            openOrderDialog(initAmountValue, initPriceValue, buy)
+                        }
 
-                override fun onCancelClicked(notShowAgain: Boolean) {
-                    // do nothing
-                }
+                        override fun onCancelClicked(notShowAgain: Boolean) {
+                            presenter.prefsUtil.setNotShownSmartAlertForPair(amountAssetInfo.id, priceAssetInfo.id, notShowAgain)
+                            // do nothing
+                        }
 
+                    }
+                    smartPairInfoDialog.configureDialog(amountAssetInfo, priceAssetInfo, listener)
+                    smartPairInfoDialog.show(fragmentManager, SmartPairInfoBottomSheetFragment::class.java.simpleName)
+                }
             }
-            smartPairInfoDialog.configureDialog(amountAssetInfo!!, priceAssetInfo!!, listener)
-            smartPairInfoDialog.show(fragmentManager, SmartPairInfoBottomSheetFragment::class.java.simpleName)
         } else {
             openOrderDialog(initAmountValue, initPriceValue, buy)
         }
