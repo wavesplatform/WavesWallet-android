@@ -67,6 +67,7 @@
             android:hint="@string/edit_address_name"
             android:textColorHint="@color/basic500"
             android:backgroundTint="@color/accent50"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:paddingBottom="20dp"
             android:singleLine="true" />
