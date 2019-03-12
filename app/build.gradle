@@ -217,9 +217,8 @@ dependencies {
     implementation 'com.github.MindorksOpenSource:EditDrawableText:1.1.0'
 
     implementation 'com.madgag.spongycastle:core:1.58.0.0'
-    implementation 'com.google.guava:guava:27.0.1-jre'
 
-    kapt 'com.google.guava:guava:27.0.1-jre'
+    api 'com.google.guava:guava:27.1-android'
 
     // Fingerprint authentication
     implementation 'com.wei.android.lib:fingerprintidentify:1.2.1'
