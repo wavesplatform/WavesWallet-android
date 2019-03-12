@@ -1,0 +1,115 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/linear_assets_avatars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp">
+
+        <com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
+            android:id="@+id/image_asset_amount"
+            android:layout_width="@dimen/asset_icon_size"
+            android:layout_height="@dimen/asset_icon_size"
+            android:layout_gravity="center"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/asset_gray_icon"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
+            android:id="@+id/image_asset_price"
+            android:layout_width="@dimen/asset_icon_size"
+            android:layout_height="@dimen/asset_icon_size"
+            android:layout_gravity="center"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/asset_gray_icon"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear_assets_avatars"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:text="@string/dex_smart_pair_dialog_title"
+        android:textColor="@color/black"
+        app:fontFamily="@font/roboto_medium" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_dash"
+        style="@style/DashedLine"
+        android:layout_below="@+id/text_title"
+        android:layout_marginTop="24dp" />
+
+    <TextView
+        android:id="@+id/text_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_dash"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/dex_smart_pair_dialog_description"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_continue"
+        style="@style/WavesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_description"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/dex_smart_pair_dialog_continue" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_cancel"
+        style="@style/WavesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_continue"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/roboto"
+        app:fontFamily="@font/roboto"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/selector_waves_secondary_button"
+        android:text="@string/dex_smart_pair_dialog_cancel"
+        android:textColor="@color/basic500" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/checkbox_not_show_again"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:button="@drawable/selector_rounded_checkbox"
+        android:paddingStart="14dp"
+        android:text="@string/dex_smart_pair_dialog_do_not_show_again"
+        android:textColor="@color/basic500"
+        android:textSize="12sp" />
+
+
+</RelativeLayout>

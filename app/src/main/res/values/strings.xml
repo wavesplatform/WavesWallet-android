@@ -640,4 +640,9 @@
     <string name="your_asset_activity_greater_zero">With balance</string>
     <string name="your_assets_empty_state">Nothing Here… \nYou do not have assets with funds</string>
     <string name="your_assets_toolbar_title">Your assets</string>
+    <string name="dex_smart_pair_dialog_title">Order placement for a pair that includes a Smart Asset</string>
+    <string name="dex_smart_pair_dialog_description">Smart assets are assets that include a script that sets the conditions for the circulation of the token.\n\nWe do not recommend you perform operations with smart assets if you are an inexperienced user. Before making a transaction, please read the information about the asset and its script carefully.</string>
+    <string name="dex_smart_pair_dialog_continue">Continue</string>
+    <string name="dex_smart_pair_dialog_cancel">Cancel</string>
+    <string name="dex_smart_pair_dialog_do_not_show_again">Do not show again</string>
 </resources>
