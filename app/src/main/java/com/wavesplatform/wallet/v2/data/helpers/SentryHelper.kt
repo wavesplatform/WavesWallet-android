@@ -1,27 +1,29 @@
 package com.wavesplatform.wallet.v2.data.helpers
 
-import com.google.firebase.FirebaseApp
-import com.google.firebase.iid.FirebaseInstanceId
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
+import com.wavesplatform.wallet.v2.data.model.local.NetworkType
 import com.wavesplatform.wallet.v2.util.clone
 import io.sentry.Sentry
 import io.sentry.event.Event
 import io.sentry.event.EventBuilder
 import io.sentry.event.interfaces.ExceptionInterface
-import java.lang.Exception
+import pers.victor.ext.app
+import pyxis.uzuki.live.richutilskt.utils.checkNetwork
 import java.util.*
 
 class SentryHelper {
 
     companion object {
         const val TAG_HTTP_CODE = "http.error"
+        const val TAG_NETWORK_TYPE = "network.type"
 
         fun logException(exception: Exception) {
             if (exception is RetrofitException) {
                 Sentry.capture(EventBuilder()
                         .withTimestamp(Date())
                         .withTag(TAG_HTTP_CODE, exception.response?.code()?.toString())
+                        .withTag(TAG_NETWORK_TYPE, NetworkType.getByType(app.checkNetwork())?.typeName)
                         .withLevel(Event.Level.ERROR)
                         .withSentryInterface(ExceptionInterface(exception))
                         .withRelease(BuildConfig.VERSION_NAME)
