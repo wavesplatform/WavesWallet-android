@@ -13,12 +13,10 @@ import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
+import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
-import com.wavesplatform.wallet.v2.util.clearAlias
-import com.wavesplatform.wallet.v2.util.errorBody
-import com.wavesplatform.wallet.v2.util.isSmartError
-import com.wavesplatform.wallet.v2.util.makeAsAlias
+import com.wavesplatform.wallet.v2.util.*
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -122,7 +120,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     }
 
     fun getAddressName(address: String) {
-        val addressBookUser = prefsUtil.getAddressBookUser(address)
+        val addressBookUser = queryFirstUserData<AddressBookUser> { equalTo("address", address)}
         if (addressBookUser == null) {
             viewState.hideAddressBookUser()
         } else {

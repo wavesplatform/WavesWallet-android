@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.data.model.remote.request.CancelOrderRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.OrderRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.queryAllUserData
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
@@ -160,7 +161,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                     val map = it.associateBy { it.assetId }
                     return@map map
                 },
-                queryAllAsSingle<MarketResponse>().toObservable()
+                Observable.just(queryAllUserData<MarketResponse>())
                         .map {
                             val map = it.associateBy { it.id }
                             return@map map

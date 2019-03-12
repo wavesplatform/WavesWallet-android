@@ -16,11 +16,13 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
 import com.wavesplatform.wallet.v2.util.drag_helper.SimpleItemTouchHelperCallback
+import com.wavesplatform.wallet.v2.util.saveUserData
 import kotlinx.android.synthetic.main.activity_assets_sorting.*
 import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.*
@@ -86,7 +88,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
                             // Save to DB
                             asset.save()
-                            prefsUtil.saveAssetBalance(asset)
+                            AssetBalanceStore(asset.assetId, asset.isHidden, asset.position, asset.isFavorite).saveUserData()
                         }
                         AssetSortingItem.TYPE_NOT_FAVORITE -> {
                             // remove from current list
@@ -105,7 +107,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
                             // Save to DB
                             asset.save()
-                            prefsUtil.saveAssetBalance(asset)
+                            AssetBalanceStore(asset.assetId, asset.isHidden, asset.position,
+                                    asset.isFavorite).saveUserData()
                         }
                     }
                 }
@@ -117,7 +120,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 presenter.needToUpdate = true
                 item.isHidden = !checked
                 item.save()
-                prefsUtil.saveAssetBalance(item)
+                AssetBalanceStore(item.assetId, item.isHidden, item.position,
+                        item.isFavorite).saveUserData()
             }
         }
 

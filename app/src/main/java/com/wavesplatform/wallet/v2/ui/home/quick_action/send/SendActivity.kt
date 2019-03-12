@@ -23,10 +23,10 @@ import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
+import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_BLOCKCHAIN_COMMISSION
@@ -234,7 +234,7 @@ class SendActivity : BaseActivity(), SendView {
         for (address in addresses) {
             val lastRecipient = layoutInflater
                     .inflate(R.layout.view_text_tag, null) as AppCompatTextView
-            val addressBookUser = prefsUtil.getAddressBookUser(address)
+            val addressBookUser = queryFirstUserData<AddressBookUser> { equalTo("address", address) }
             lastRecipient.text = addressBookUser?.name ?: address
             lastRecipient.click {
                 edit_address.setText(address)

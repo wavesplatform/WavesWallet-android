@@ -5,8 +5,10 @@ import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.wallet.v2.util.saveUserData
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
@@ -52,7 +54,10 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
                 .filter { it.type != AssetSortingItem.TYPE_LINE }
                 .mapIndexedTo(mutableListOf()) { position, item ->
                     item.asset.position = position
-                    prefsUtil.saveAssetBalance(item.asset)
+                    AssetBalanceStore(item.asset.assetId,
+                            item.asset.isHidden,
+                            item.asset.position,
+                            item.asset.isFavorite).saveUserData()
                     return@mapIndexedTo item.asset
                 }
                 .saveAll()
