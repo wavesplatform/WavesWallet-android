@@ -214,11 +214,11 @@
     <string name="dex_trade_tab_last_trades">Сделки</string>
     <string name="dex_trade_tab_my_orders">Мои ордера</string>
     <string name="dex_trade_tab_orderbook">Ордербук</string>
-    <string name="dialog_account_first_open_about_backup">Я понимаю, что если это приложение установлено на другом устройстве или удалено, то я получу доступ к своим средствам только с помощью секретной фразы</string>
-    <string name="dialog_account_first_open_about_fund_on_device">Я понимаю, что мои средства хранятся на этом устройстве, а не у компании</string>
-    <string name="dialog_account_first_open_about_terms">Я прочитал, понял и согласился с \nУсловиями использования</string>
-    <string name="dialog_account_first_open_about_terms_key">Условиями использования</string>
-    <string name="dialog_account_first_open_confirm_and_begin">Подтвердить и начать</string>
+    <string name="confirm_card_tutorial_about_backup">Я понимаю, что если это приложение установлено на другом устройстве или удалено, то я получу доступ к своим средствам только с помощью секретной фразы</string>
+    <string name="confirm_card_tutorial_about_fund_on_device">Я понимаю, что мои средства хранятся на этом устройстве, а не у компании</string>
+    <string name="confirm_card_tutorial_about_terms">Я прочитал, понял и согласился с \nУсловиями использования</string>
+    <string name="confirm_card_tutorial_terms_of_use">Условиями использования</string>
+    <string name="confirm_card_tutorial_title">Подтвердить и начать</string>
     <string name="dialog_account_first_open_subtitle">Кошелёк Waves хранится только на вашем устройстве</string>
     <string name="dialog_account_first_open_title">Готово!</string>
     <string name="dialog_processing">Подождите…</string>
