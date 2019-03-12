@@ -26,9 +26,7 @@ import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import java.math.BigDecimal
 import javax.inject.Inject
 
-
 class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
-
 
     @Inject
     @InjectPresenter
@@ -106,14 +104,9 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             }
         }
 
-        edit_optional_message.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                hideKeyboard()
-                goNext()
-                true
-            } else {
-                false
-            }
+        edit_optional_message.onAction(EditorInfo.IME_ACTION_DONE) {
+            hideKeyboard()
+            goNext()
         }
 
         button_confirm.click { goNext() }
@@ -166,9 +159,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
     }
 
     private fun setSaveAddress(signed: TransactionsBroadcastRequest) {
-        val addressBookUser = queryFirst<AddressBookUser> {
-            equalTo("address", signed.recipient)
-        }
+        val addressBookUser = prefsUtil.getAddressBookUser(signed.recipient)
         if (addressBookUser == null) {
             sent_to_address.text = signed.recipient
             add_address.visiable()

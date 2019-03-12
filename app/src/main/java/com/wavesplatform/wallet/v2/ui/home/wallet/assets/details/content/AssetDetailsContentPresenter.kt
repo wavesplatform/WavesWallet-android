@@ -28,11 +28,11 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
             addSubscription(Observable.just(allTransactions)
                     .map {
                         return@map it.filter { transaction ->
-                            isNotSpam(transaction)
-                                    && (asset.assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && !transaction.isSponsorshipTransaction())
-                                    || AssetDetailsContentPresenter.isAssetIdInExchange(transaction, asset.assetId)
-                                    || transaction.assetId == asset.assetId && transaction.transactionType() != TransactionType.RECEIVE_SPONSORSHIP_TYPE
-                                    || (transaction.feeAssetId == asset.assetId && transaction.isSponsorshipTransaction())
+                            isNotSpam(transaction) &&
+                                    (asset.assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && !transaction.isSponsorshipTransaction()) ||
+                                    AssetDetailsContentPresenter.isAssetIdInExchange(transaction, asset.assetId) ||
+                                    transaction.assetId == asset.assetId && transaction.transactionType() != TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
+                                    (transaction.feeAssetId == asset.assetId && transaction.isSponsorshipTransaction())
                         }
                                 .sortedByDescending { it.timestamp }
                                 .mapTo(ArrayList()) { HistoryItem(HistoryItem.TYPE_DATA, it) }
@@ -71,15 +71,14 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
                 })
     }
 
-
     companion object {
         fun isAssetIdInExchange(transaction: Transaction, assetId: String) =
-                transaction.transactionType() == TransactionType.EXCHANGE_TYPE
-                        && (transaction.order1?.assetPair?.amountAssetObject?.id == assetId
-                        || transaction.order1?.assetPair?.priceAssetObject?.id == assetId)
+                transaction.transactionType() == TransactionType.EXCHANGE_TYPE &&
+                        (transaction.order1?.assetPair?.amountAssetObject?.id == assetId ||
+                        transaction.order1?.assetPair?.priceAssetObject?.id == assetId)
 
         private fun isNotSpam(transaction: Transaction) =
-                transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE
-                        || transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
+                transaction.transactionType() != TransactionType.MASS_SPAM_RECEIVE_TYPE ||
+                        transaction.transactionType() != TransactionType.SPAM_RECEIVE_TYPE
     }
 }

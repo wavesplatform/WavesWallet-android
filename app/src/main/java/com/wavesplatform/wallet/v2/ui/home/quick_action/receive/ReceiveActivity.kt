@@ -18,7 +18,6 @@ class ReceiveActivity : BaseActivity(), ReceiveView {
 
     override fun configLayoutRes(): Int = R.layout.activity_receive
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
@@ -112,7 +111,6 @@ class ReceiveActivity : BaseActivity(), ReceiveView {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
     }
-
 
     override fun needToShowNetworkMessage(): Boolean = true
 }

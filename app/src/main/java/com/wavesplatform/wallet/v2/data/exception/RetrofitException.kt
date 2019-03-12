@@ -4,15 +4,18 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.IOException
 
-class RetrofitException internal constructor(message: String?,
-                                             /** The request URL which produced the error.  */
-                                             val url: String?,
-                                             /** Response object containing status code, headers, body, etc.  */
-                                             val response: Response<*>?,
-                                             /** The event kind which triggered this error.  */
-                                             val kind: RetrofitException.Kind, exception: Throwable?,
-                                             /** The Retrofit this request was executed on  */
-                                             val retrofit: Retrofit?) : RuntimeException(message, exception) {
+class RetrofitException internal constructor(
+    message: String?,
+    /** The request URL which produced the error.  */
+    val url: String?,
+    /** Response object containing status code, headers, body, etc.  */
+    val response: Response<*>?,
+    /** The event kind which triggered this error.  */
+    val kind: RetrofitException.Kind,
+    exception: Throwable?,
+    /** The Retrofit this request was executed on  */
+    val retrofit: Retrofit?
+) : RuntimeException(message, exception) {
 
     /** Identifies the event kind which triggered a [RetrofitException].  */
     enum class Kind {
@@ -62,6 +65,4 @@ class RetrofitException internal constructor(message: String?,
             return RetrofitException(exception.message, null, null, Kind.UNEXPECTED, exception, null)
         }
     }
-
-
 }

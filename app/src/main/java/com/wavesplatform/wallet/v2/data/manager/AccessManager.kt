@@ -13,14 +13,13 @@ import com.wavesplatform.wallet.v1.data.services.PinStoreService
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.AppUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
-import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.util.AddressUtil
-import com.wavesplatform.wallet.v2.util.MigrationUtil
 import com.wavesplatform.wallet.v2.util.deleteRecursive
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.reactivex.Completable
@@ -32,7 +31,6 @@ import pers.victor.ext.app
 import java.io.File
 import java.security.SecureRandom
 import java.util.*
-
 
 class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, private var authHelper: AuthHelper) {
 
@@ -109,13 +107,12 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             val guid = UUID.randomUUID().toString()
             loggedInGuid = guid
             prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, guid)
-            prefs.addGlobalListValue(EnvironmentManager.name
-                    + PrefsUtil.LIST_WALLET_GUIDS, guid)
+            prefs.addGlobalListValue(EnvironmentManager.name +
+                    PrefsUtil.LIST_WALLET_GUIDS, guid)
             prefs.setValue(PrefsUtil.KEY_PUB_KEY, wallet!!.publicKeyStr)
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
             prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, wallet!!.getEncryptedData(password))
             authHelper.configureDB(wallet?.address, guid)
-            MigrationUtil.checkOldAddressBook(prefs, loggedInGuid)
             prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, skipBackup)
             return guid
         } catch (e: Exception) {
@@ -202,7 +199,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         wallet = WavesWallet(getWalletData(guid), password)
         setLastLoggedInGuid(guid)
         authHelper.configureDB(wallet?.address, guid)
-        MigrationUtil.checkOldAddressBook(prefs, guid)
     }
 
     fun getWallet(): WavesWallet? {
@@ -220,7 +216,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         return if (TextUtils.isEmpty(publicKey) || TextUtils.isEmpty(name)) {
             null
         } else AddressBookUser(AddressUtil.addressFromPublicKey(publicKey), name)
-
     }
 
     fun deleteCurrentWavesWallet(): Boolean {
@@ -235,7 +230,7 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
 
     private fun clearRealmConfiguration() {
         app.stopService(Intent(app, UpdateApiDataService::class.java))
-        val f = RealmConfigStore::class.java.getDeclaredField("configMap") //NoSuchFieldException
+        val f = RealmConfigStore::class.java.getDeclaredField("configMap") // NoSuchFieldException
         f.isAccessible = true
         val configMap = f.get(RealmConfigStore::class.java) as MutableMap<*, *>
         configMap.clear()
@@ -270,15 +265,19 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_DEFAULT_ASSETS)
         prefs.removeValue(searchWalletGuid, PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS)
 
-        prefs.setGlobalValue(EnvironmentManager.name
-                + PrefsUtil.LIST_WALLET_GUIDS, createGuidsListWithout(searchWalletGuid))
+        prefs.setGlobalValue(EnvironmentManager.name +
+                PrefsUtil.LIST_WALLET_GUIDS, createGuidsListWithout(searchWalletGuid))
 
         if (searchWalletGuid == getLoggedInGuid()) {
             loggedInGuid = ""
             prefs.removeGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID)
         }
 
-        deleteRealmDBForAccount(searchWalletGuid)
+        deleteRealm(searchWalletGuid)
+    }
+
+    fun deleteRealm(guid: String) {
+        deleteRealmDBForAccount(guid)
         clearRealmConfiguration()
     }
 
@@ -293,7 +292,6 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         }
         return resultGuidsList.toTypedArray()
     }
-
 
     fun getWalletData(guid: String): String {
         return if (TextUtils.isEmpty(guid)) {

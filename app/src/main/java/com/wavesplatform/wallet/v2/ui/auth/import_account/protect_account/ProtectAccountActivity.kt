@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivit
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.onAction
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -27,7 +28,6 @@ import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import pers.victor.ext.isNetworkConnected
 import javax.inject.Inject
-
 
 class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
 
@@ -46,7 +46,6 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
     }
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, icon = R.drawable.ic_toolbar_back_black)
@@ -136,13 +135,8 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
             }
         }
 
-        edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                goNext()
-                true
-            } else {
-                false
-            }
+        edit_confirm_password.onAction(EditorInfo.IME_ACTION_DONE) {
+            goNext()
         }
 
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_SEED)) {
@@ -180,7 +174,6 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
                 .into(image_account_icon)
         text_account_address.text = wallet.address
     }
-
 
     fun isFieldsValid() {
         button_create_account.isEnabled = presenter.isAllFieldsValid() && isNetworkConnected()

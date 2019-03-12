@@ -49,7 +49,6 @@ import java.math.BigDecimal
 import java.net.URI
 import javax.inject.Inject
 
-
 class SendActivity : BaseActivity(), SendView {
 
     @Inject
@@ -235,9 +234,7 @@ class SendActivity : BaseActivity(), SendView {
         for (address in addresses) {
             val lastRecipient = layoutInflater
                     .inflate(R.layout.view_text_tag, null) as AppCompatTextView
-            val addressBookUser = queryFirst<AddressBookUser> {
-                equalTo("address", address)
-            }
+            val addressBookUser = prefsUtil.getAddressBookUser(address)
             lastRecipient.text = addressBookUser?.name ?: address
             lastRecipient.click {
                 edit_address.setText(address)
@@ -293,8 +290,8 @@ class SendActivity : BaseActivity(), SendView {
                         assetBalance.getName() ?: "")
                 presenter.amount = BigDecimal.ZERO
             }
-        } else if (presenter.type == SendPresenter.Type.WAVES
-                && assetBalance.assetId.isWavesId()) {
+        } else if (presenter.type == SendPresenter.Type.WAVES &&
+                assetBalance.assetId.isWavesId()) {
             val total = BigDecimal.valueOf(amount - presenter.fee,
                     assetBalance.getDecimals())
             if (total.toFloat() > 0) {

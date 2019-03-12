@@ -34,5 +34,4 @@ class SponsoredFeeAdapter @Inject constructor() : BaseQuickAdapter<SponsoredAsse
 
         helper.itemView.checkbox_choose.isChecked = item.assetBalance.assetId == currentAssetId
     }
-
 }

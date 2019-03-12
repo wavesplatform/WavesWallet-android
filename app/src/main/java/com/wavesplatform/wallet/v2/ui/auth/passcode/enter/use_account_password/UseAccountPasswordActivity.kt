@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.onAction
 import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -29,7 +30,6 @@ import kotlinx.android.synthetic.main.activity_use_account_password.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import javax.inject.Inject
-
 
 class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
 
@@ -85,13 +85,8 @@ class UseAccountPasswordActivity : BaseActivity(), UseAccountPasswordView {
             }
         }
 
-        edit_account_password.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE && button_sign_in.isEnabled) {
-                goNext()
-                true
-            } else {
-                false
-            }
+        edit_account_password.onAction(EditorInfo.IME_ACTION_DONE) {
+            goNext()
         }
 
         button_sign_in.click {

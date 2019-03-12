@@ -8,7 +8,6 @@ import io.realm.annotations.RealmClass
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
-
 data class AssetsInfoResponse(
         @SerializedName("__type") var type: String = "list",
         @SerializedName("data") var data: List<AssetsInfoData> = listOf()
@@ -32,6 +31,12 @@ open class AssetInfo(
         @SerializedName("timestamp") var timestamp: Date = Date(),
         @SerializedName("sender") var sender: String = "",
         @SerializedName("quantity") var quantity: Long = 0,
+        @SerializedName("hasScript") var hasScript: Boolean = false,
+        @SerializedName("minSponsoredFee") var minSponsoredFee: Long = 0,
         @SerializedName("reissuable") var reissuable: Boolean = false,
         var isSpam: Boolean = false
-) : Parcelable, RealmModel
+) : Parcelable, RealmModel {
+    fun isSponsored(): Boolean {
+        return minSponsoredFee > 0
+    }
+}

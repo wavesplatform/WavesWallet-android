@@ -3,8 +3,6 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.view.WindowManager
-import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
@@ -20,9 +18,7 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_receive_address_view.*
 import pers.victor.ext.click
-import pers.victor.ext.gone
 import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -36,7 +32,6 @@ class ReceiveAddressViewActivity : BaseActivity(), ReceiveAddressView {
     fun providePresenter(): ReceiveAddressViewPresenter = presenter
 
     override fun configLayoutRes(): Int = R.layout.activity_receive_address_view
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         translucentStatusBar = true

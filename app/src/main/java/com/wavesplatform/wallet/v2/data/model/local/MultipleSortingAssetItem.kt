@@ -10,9 +10,9 @@ class MultipleSortingAssetItem(val itemTypeValue: Int, val assetBalance: AssetBa
     }
 
     companion object {
-        val POSITION_FAVORITE_ASSET= 1
+        val POSITION_FAVORITE_ASSET = 1
         val POSITION_ASSET = 2
-        val VISIBILITY_FAVORITE_ASSET= 3
+        val VISIBILITY_FAVORITE_ASSET = 3
         val VISIBILITY_ASSET = 4
     }
 }

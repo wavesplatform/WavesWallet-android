@@ -2,8 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -137,5 +135,4 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
         var BUNDLE_ADDRESS = "address"
         var BUNDLE_AMOUNT = "amount"
     }
-
 }

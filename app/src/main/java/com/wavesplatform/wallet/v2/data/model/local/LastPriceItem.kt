@@ -8,7 +8,6 @@ class LastPriceItem : MultiItemEntity {
     var lastTrade: LastTradesResponse.Data.ExchangeTransaction? = null
     var spreadPercent: Double? = 0.0
 
-
     constructor(spreadPercent: Double?, item: LastTradesResponse.Data.ExchangeTransaction) {
         this.lastTrade = item
         this.spreadPercent = spreadPercent

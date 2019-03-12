@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.onAction
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -24,7 +25,6 @@ import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import javax.inject.Inject
-
 
 class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
 
@@ -42,7 +42,6 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
     }
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true,
@@ -130,14 +129,9 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
             }
         }
 
-        edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                hideKeyboard()
-                goNext()
-                true
-            } else {
-                false
-            }
+        edit_confirm_password.onAction(EditorInfo.IME_ACTION_DONE) {
+            hideKeyboard()
+            goNext()
         }
 
         button_confirm.click {
@@ -178,7 +172,6 @@ class ChangePasswordActivity : BaseActivity(), ChangePasswordView {
         setResult(Constants.RESULT_OK)
         finish()
     }
-
 
     override fun onBackPressed() {
         finish()

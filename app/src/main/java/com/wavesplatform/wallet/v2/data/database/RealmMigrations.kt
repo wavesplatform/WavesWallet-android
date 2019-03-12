@@ -4,7 +4,6 @@ import com.wavesplatform.wallet.v2.util.notNull
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
 
-
 class RealmMigrations : RealmMigration {
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {

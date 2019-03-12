@@ -3,11 +3,12 @@ package com.wavesplatform.wallet.v2.ui.home.wallet
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
-import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
 
 class WalletFragmentPageAdapter(
-        fm: FragmentManager?, var fragments: ArrayList<Fragment>, var titles: Array<String>) : FragmentPagerAdapter(fm) {
+    fm: FragmentManager?,
+    var fragments: ArrayList<Fragment>,
+    var titles: Array<String>
+) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         when (position) {

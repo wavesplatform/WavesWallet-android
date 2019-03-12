@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.auth.import_account.manually
 
 import android.os.Bundle
-import android.text.InputType
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -20,6 +19,7 @@ import com.wavesplatform.wallet.v2.ui.custom.Identicon
 import com.wavesplatform.wallet.v2.util.applyFilterStartEmptySpace
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.onAction
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -30,7 +30,6 @@ import pers.victor.ext.click
 import pers.victor.ext.isNetworkConnected
 import javax.inject.Inject
 
-
 class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
 
     @Inject
@@ -38,12 +37,10 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
     lateinit var presenter: EnterSeedManuallyPresenter
     lateinit var validator: Validator
 
-
     @ProvidePresenter
     fun providePresenter(): EnterSeedManuallyPresenter = presenter
 
     override fun configLayoutRes() = R.layout.fragment_enter_seed_manually
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setSkeleton()
@@ -97,15 +94,12 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
             }
         }
 
-        edit_seed.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE && button_continue.isEnabled) {
+        edit_seed.onAction(EditorInfo.IME_ACTION_DONE) {
+            if (button_continue.isEnabled) {
                 launchActivity<ProtectAccountActivity> {
                     putExtra(NewAccountActivity.KEY_INTENT_SEED, edit_seed.text.toString().trim())
                     putExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT, true)
                 }
-                true
-            } else {
-                false
             }
         }
 

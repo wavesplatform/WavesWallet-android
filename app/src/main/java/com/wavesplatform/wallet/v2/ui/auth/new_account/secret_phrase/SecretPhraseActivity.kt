@@ -7,14 +7,13 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
-import com.wavesplatform.wallet.v2.ui.auth.new_account.backup_info.BackupInfoActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_secret_phrase.*
 import pers.victor.ext.click
 import javax.inject.Inject
-
 
 class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
 
@@ -38,7 +37,7 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
         setupToolbar(toolbar_view)
 
         button_confirm.click {
-            launchActivity<BackupInfoActivity>(options = intent.extras) {
+            launchActivity<BackupPhraseActivity>(options = intent.extras) {
                 putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, false)
             }
         }
@@ -65,7 +64,6 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
         menuInflater.inflate(R.menu.menu_close, menu)
         return super.onCreateOptionsMenu(menu)
     }
-
 
     override fun onBackPressed() {
         finish()

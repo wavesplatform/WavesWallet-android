@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase.SecretPhraseActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.onAction
 import com.wavesplatform.wallet.v2.util.showError
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -32,7 +33,6 @@ import pers.victor.ext.isNetworkConnected
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
-
 
 class NewAccountActivity : BaseActivity(), NewAccountView {
 
@@ -135,15 +135,10 @@ class NewAccountActivity : BaseActivity(), NewAccountView {
             }
         }
 
-        edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                hideKeyboard()
-                runDelayed(250) {
-                    goNext()
-                }
-                true
-            } else {
-                false
+        edit_confirm_password.onAction(EditorInfo.IME_ACTION_DONE) {
+            hideKeyboard()
+            runDelayed(250) {
+                goNext()
             }
         }
 
