@@ -160,10 +160,10 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     private fun updateMenuTitle() {
         val bedMenuItem = menu?.findItem(R.id.action_change_language)
         val langCode = preferencesHelper.getLanguage()
-        if (langCode == Language.BRAZILIAN.code) {
-            bedMenuItem?.title = "br"
-        } else {
-            bedMenuItem?.title = preferencesHelper.getLanguage()
+        when (langCode) {
+            Language.BRAZILIAN.code -> bedMenuItem?.title = "br"
+            Language.CHINESE_SIMPLIFIED.code -> bedMenuItem?.title = "zh"
+            else -> bedMenuItem?.title = langCode
         }
     }
 
