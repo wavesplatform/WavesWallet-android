@@ -1,16 +1,19 @@
 package com.wavesplatform.wallet.v2.data.manager
 
+import com.vicpin.krealmextensions.query
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.CandlesResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
+import com.wavesplatform.wallet.v2.util.isWavesId
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import java.util.*
@@ -90,6 +93,42 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                     }
         }
     }
+//
+//    fun assetsInfoByIdsWithDb(ids: MutableList<String?>): Observable<List<AssetInfo>> {
+//        val wavesIndex = ids.indexOfFirst { it == Constants.WAVES_ASSET_ID_FILLED }
+//        if (wavesIndex != -1) {
+//            ids[wavesIndex] = ""
+//        }
+//        if (ids.isEmpty()) {
+//            return Observable.just(listOf())
+//        } else {
+//            val dbAssetsInfo = query<AssetInfo> { `in`("id", ids.toTypedArray()) }
+//            if (dbAssetsInfo.size == ids.size) {
+//                return Observable.just(dbAssetsInfo)
+//            } else {
+//                val existsIds = dbAssetsInfo.map { it.id }
+//                val notExistsIds = ids.minus(existsIds)
+//                return apiService.assetsInfoByIds(notExistsIds)
+//                        .map { response ->
+//                            val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
+//                                val defaultAsset = EnvironmentManager.defaultAssets.firstOrNull {
+//                                    it.assetId == assetInfoData.assetInfo.id
+//                                }
+//
+//                                defaultAsset.notNull { assetBalance ->
+//                                    assetBalance.getName().notNull {
+//                                        assetInfoData.assetInfo.name = it
+//                                    }
+//                                }
+//
+//                                return@mapTo assetInfoData.assetInfo
+//                            }
+//                            assetsInfo.saveAll()
+//                            return@map assetsInfo
+//                        }
+//            }
+//        }
+//    }
 
     fun loadLastTradesByPair(watchMarket: WatchMarket?): Observable<ArrayList<LastTradesResponse.Data.ExchangeTransaction>> {
         return apiService.loadLastTradesByPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, DEFAULT_LAST_TRADES_LIMIT)

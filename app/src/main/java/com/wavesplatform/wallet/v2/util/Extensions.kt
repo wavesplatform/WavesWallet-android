@@ -32,6 +32,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -122,6 +123,35 @@ fun String.isWaves(): Boolean {
 
 fun getWavesDexFee(fee: Long): BigDecimal {
     return MoneyUtil.getScaledText(fee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
+}
+
+/**
+ * @param action constant from EditorInfo
+ * @see android.view.inputmethod.EditorInfo
+ */
+fun EditText.onAction(action: Int, runAction: () -> Unit) {
+    this.setOnEditorActionListener { v, actionId, event ->
+        return@setOnEditorActionListener when (actionId) {
+            action -> {
+                runAction.invoke()
+                true
+            }
+            else -> false
+        }
+    }
+}
+
+fun <T1: Any, T2: Any, R: Any> safeLet(p1: T1?, p2: T2?, block: (T1, T2)->R?): R? {
+    return if (p1 != null && p2 != null) block(p1, p2) else null
+}
+fun <T1: Any, T2: Any, T3: Any, R: Any> safeLet(p1: T1?, p2: T2?, p3: T3?, block: (T1, T2, T3)->R?): R? {
+    return if (p1 != null && p2 != null && p3 != null) block(p1, p2, p3) else null
+}
+fun <T1: Any, T2: Any, T3: Any, T4: Any, R: Any> safeLet(p1: T1?, p2: T2?, p3: T3?, p4: T4?, block: (T1, T2, T3, T4)->R?): R? {
+    return if (p1 != null && p2 != null && p3 != null && p4 != null) block(p1, p2, p3, p4) else null
+}
+fun <T1: Any, T2: Any, T3: Any, T4: Any, T5: Any, R: Any> safeLet(p1: T1?, p2: T2?, p3: T3?, p4: T4?, p5: T5?, block: (T1, T2, T3, T4, T5)->R?): R? {
+    return if (p1 != null && p2 != null && p3 != null && p4 != null && p5 != null) block(p1, p2, p3, p4, p5) else null
 }
 
 fun String.isWavesId(): Boolean {
@@ -377,10 +407,10 @@ fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: In
 }
 
 fun View.copyToClipboard(
-    text: String,
-    textView: AppCompatTextView,
-    copyIcon: Int = R.drawable.ic_copy_18_black,
-    copyColor: Int = R.color.black
+        text: String,
+        textView: AppCompatTextView,
+        copyIcon: Int = R.drawable.ic_copy_18_black,
+        copyColor: Int = R.color.black
 ) {
     clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), text)
     showSnackbar(R.string.common_copied_to_clipboard, R.color.success500_0_94, Snackbar.LENGTH_SHORT)
@@ -417,11 +447,11 @@ fun <T : Any> T?.notNull(f: (it: T) -> Unit) {
  */
 
 inline fun <reified T : Any> Activity.launchActivity(
-    requestCode: Int = -1,
-    clear: Boolean = false,
-    withoutAnimation: Boolean = false,
-    options: Bundle? = null,
-    noinline init: Intent.() -> Unit = {}
+        requestCode: Int = -1,
+        clear: Boolean = false,
+        withoutAnimation: Boolean = false,
+        options: Bundle? = null,
+        noinline init: Intent.() -> Unit = {}
 ) {
 
     var intent = newIntent<T>(this)
@@ -445,11 +475,11 @@ inline fun <reified T : Any> Activity.launchActivity(
 }
 
 inline fun <reified T : Any> Fragment.launchActivity(
-    requestCode: Int = -1,
-    clear: Boolean = false,
-    withoutAnimation: Boolean = false,
-    options: Bundle? = null,
-    noinline init: Intent.() -> Unit = {}
+        requestCode: Int = -1,
+        clear: Boolean = false,
+        withoutAnimation: Boolean = false,
+        options: Bundle? = null,
+        noinline init: Intent.() -> Unit = {}
 ) {
 
     var intent = newIntent<T>(activity!!)
@@ -472,9 +502,9 @@ inline fun <reified T : Any> Fragment.launchActivity(
 }
 
 inline fun <reified T : Any> Context.launchActivity(
-    options: Bundle? = null,
-    clear: Boolean = false,
-    noinline init: Intent.() -> Unit = {}
+        options: Bundle? = null,
+        clear: Boolean = false,
+        noinline init: Intent.() -> Unit = {}
 ) {
 
     var intent = newIntent<T>(this)
@@ -508,10 +538,10 @@ inline fun <reified T : Any> newClearIntent(context: Context): Intent {
 }
 
 fun View.setMargins(
-    left: Int? = null,
-    top: Int? = null,
-    right: Int? = null,
-    bottom: Int? = null
+        left: Int? = null,
+        top: Int? = null,
+        right: Int? = null,
+        bottom: Int? = null
 ) {
     val lp = layoutParams as? ViewGroup.MarginLayoutParams
             ?: return
@@ -646,8 +676,8 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
 fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
     return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true) &&
             (null != queryFirst<SpamAsset> {
-        equalTo("assetId", assetId)
-    }))
+                equalTo("assetId", assetId)
+            }))
 }
 
 fun isShowTicker(assetId: String?): Boolean {
