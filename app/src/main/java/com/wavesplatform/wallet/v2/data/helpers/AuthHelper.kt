@@ -4,10 +4,10 @@ import com.vicpin.krealmextensions.RealmConfigStore
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.model.db.*
 import com.wavesplatform.wallet.v2.util.MigrationUtil
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import javax.inject.Inject

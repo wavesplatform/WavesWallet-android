@@ -31,7 +31,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -46,6 +45,7 @@ import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
@@ -112,14 +112,6 @@ fun Long.currentDateAsTimeSpanString(context: Context): String {
     return context.getString(R.string.dex_last_update_value, "$timeDayRelative, $timeHour")
 }
 
-fun String.isWaves(): Boolean {  // todo check
-    return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
-}
-
-fun getWavesDexFee(fee: Long): BigDecimal {
-    return MoneyUtil.getScaledText(fee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
-}
-
 /**
  * @param action constant from EditorInfo
  * @see android.view.inputmethod.EditorInfo
@@ -151,14 +143,6 @@ fun <T1: Any, T2: Any, T3: Any, T4: Any, T5: Any, R: Any> safeLet(p1: T1?, p2: T
 
 fun String.isWavesId(): Boolean {
     return this.toLowerCase() == Constants.wavesAssetInfo.id
-}
-
-fun ByteArray.arrayWithSize(): ByteArray {
-    return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
-}
-
-fun String.clearBalance(): String {
-    return this.stripZeros().replace(MoneyUtil.DEFAULT_SEPARATOR_THIN_SPACE.toString(), "")
 }
 
 fun View.makeBackgroundWithRippleEffect() {
@@ -559,7 +543,7 @@ fun Throwable.errorBody(): ErrorResponse? {
 }
 
 fun ResponseBody.clone(): ResponseBody {
-    var bufferClone = this.source().buffer()?.clone()
+    val bufferClone = this.source().buffer()?.clone()
     return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone)
 }
 
@@ -588,7 +572,7 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
 
 fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
     return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true) &&
-            (null != queryFirst<SpamAsset> {
+            (null != queryFirst<SpamAssetDb> {
                 equalTo("assetId", assetId)
             }))
 }

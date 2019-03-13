@@ -3,9 +3,9 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.your_assets
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.sdk.Constants
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

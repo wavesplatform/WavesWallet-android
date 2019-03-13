@@ -410,7 +410,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     }
 
     private fun isValidWavesFee(): Boolean {
-        return if (presenter.wavesBalance.getAvailableBalance() ?: 0 > presenter.fee) {
+        return if (presenter.wavesBalance.getAvailableBalance() > presenter.fee) {
             true
         } else {
             if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true &&

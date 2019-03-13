@@ -1,10 +1,8 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade
 
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.model.WatchMarket
-import com.wavesplatform.sdk.model.response.MarketResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo // todo check
+import com.wavesplatform.sdk.model.response.AssetInfo
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import javax.inject.Inject
@@ -22,7 +20,6 @@ class TradePresenter @Inject constructor() : BasePresenter<TradeView>() {
                     val map = assetsInfo.associateBy { it.id }
                     amountAssetInfo = map[watchMarket?.market?.amountAsset]
                     priceAssetInfo = map[watchMarket?.market?.priceAsset]
-                    Log.d("test", "test")
                 })
     }
 }

@@ -18,7 +18,6 @@ data class AssetsInfoData(
 @Parcelize
 open class AssetInfo(
         @SerializedName("ticker") var ticker: String? = "",
-        @PrimaryKey
         @SerializedName("id") var id: String = "",
         @SerializedName("name") var name: String = "",
         @SerializedName("precision") var precision: Int = 0,
@@ -31,7 +30,7 @@ open class AssetInfo(
         @SerializedName("minSponsoredFee") var minSponsoredFee: Long = 0,
         @SerializedName("reissuable") var reissuable: Boolean = false,
         var isSpam: Boolean = false
-) : Parcelable, RealmModel {
+) : Parcelable {
     fun isSponsored(): Boolean {
         return minSponsoredFee > 0
     }

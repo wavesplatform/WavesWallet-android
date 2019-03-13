@@ -16,6 +16,7 @@ fun String.isWaves(): Boolean {
 
 fun getWavesDexFee(fee: Long): BigDecimal {
     return MoneyUtil.getScaledText(fee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
+
 }
 
 fun String.isWavesId(): Boolean {

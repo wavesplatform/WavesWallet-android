@@ -1,20 +1,19 @@
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.vicpin.krealmextensions.query
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.sdk.model.WatchMarket // todo check
+import com.wavesplatform.sdk.model.WatchMarket
 import com.wavesplatform.sdk.model.response.Alias
 import com.wavesplatform.sdk.model.response.AssetInfo
 import com.wavesplatform.sdk.model.response.CandlesResponse
 import com.wavesplatform.sdk.model.response.LastTradesResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Observable
 import java.util.*
 import java.util.concurrent.TimeUnit
