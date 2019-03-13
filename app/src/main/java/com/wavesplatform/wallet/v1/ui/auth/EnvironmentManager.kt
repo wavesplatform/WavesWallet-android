@@ -14,9 +14,8 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 import com.wavesplatform.wallet.v2.injection.module.HostSelectionInterceptor
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.currentTimeMillis
 import timber.log.Timber
 import java.io.IOException
@@ -156,8 +155,7 @@ class EnvironmentManager {
                             defaultAssets.add(assetBalance)
                         }
                     }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
                         instance!!.configurationDisposable!!.dispose()
                     }, { error ->
@@ -173,15 +171,17 @@ class EnvironmentManager {
                     })
 
             instance!!.timeDisposable = githubDataManager.nodeService.utilsTime()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
-                        PreferenceManager
-                                .getDefaultSharedPreferences(App.getAppContext())
-                                .edit()
-                                .putLong(PrefsUtil.GLOBAL_CURRENT_TIME_CORRECTION,
-                                        it.ntp - currentTimeMillis)
-                                .apply()
+                        val timeCorrection = it.ntp - currentTimeMillis
+                        if (Math.abs(timeCorrection) > 30_000) {
+                            PreferenceManager
+                                    .getDefaultSharedPreferences(App.getAppContext())
+                                    .edit()
+                                    .putLong(PrefsUtil.KEY_GLOBAL_CURRENT_TIME_CORRECTION,
+                                            timeCorrection)
+                                    .apply()
+                        }
                         instance!!.timeDisposable!!.dispose()
                     }, { error ->
                         Timber.e(error, "EnvironmentManager: Can't download time correction!")
@@ -197,7 +197,7 @@ class EnvironmentManager {
             } else {
                 PreferenceManager
                         .getDefaultSharedPreferences(App.getAppContext())
-                        .getLong(PrefsUtil.GLOBAL_CURRENT_TIME_CORRECTION, 0L)
+                        .getLong(PrefsUtil.KEY_GLOBAL_CURRENT_TIME_CORRECTION, 0L)
             }
             return currentTimeMillis + timeCorrection
         }
