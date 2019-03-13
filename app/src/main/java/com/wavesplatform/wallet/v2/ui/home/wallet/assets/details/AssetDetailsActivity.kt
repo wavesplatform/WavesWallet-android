@@ -19,7 +19,6 @@ import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.ui.welcome.AlphaScalePageTransformer
-import com.wavesplatform.wallet.v2.util.saveUserData
 import kotlinx.android.synthetic.main.activity_asset_details.*
 import pers.victor.ext.*
 import javax.inject.Inject
@@ -195,7 +194,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         val item = adapterAvatar.items[view_pager.currentItem]
         item.isFavorite = false
         item.save()
-        AssetBalanceStore(item.assetId, item.isHidden, item.position, item.isFavorite).saveUserData()
+        AssetBalanceStore(item.assetId, item.isHidden, item.position, item.isFavorite).save()
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_off))
     }
 
@@ -204,7 +203,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         item.isFavorite = true
         item.isHidden = false
         item.save()
-        AssetBalanceStore(item.assetId, item.isHidden, item.position, item.isFavorite).saveUserData()
+        AssetBalanceStore(item.assetId, item.isHidden, item.position, item.isFavorite).save()
         image_favorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_toolbar_favorite_on))
     }
 

@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
@@ -15,7 +16,6 @@ import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.queryAllUserData
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
@@ -31,7 +31,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
         viewState.startServiceToLoadData()
         runAsync {
-            val savedAssetPrefs = queryAllUserData<AssetBalanceStore>()
+            val savedAssetPrefs = queryAll<AssetBalanceStore>()
             var dbAssets = mutableListOf<AssetBalance>()
             addSubscription(queryAllAsSingle<AssetBalance>().toObservable()
                     .subscribeOn(Schedulers.io())

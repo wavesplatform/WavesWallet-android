@@ -2,8 +2,8 @@ package com.wavesplatform.wallet.v2.data.model.userdb
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.util.saveAllUserData
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
@@ -30,7 +30,7 @@ open class AssetBalanceStore(
                         assetBalance.position,
                         assetBalance.isFavorite))
             }
-            list.saveAllUserData()
+            list.saveAll()
         }
     }
 }

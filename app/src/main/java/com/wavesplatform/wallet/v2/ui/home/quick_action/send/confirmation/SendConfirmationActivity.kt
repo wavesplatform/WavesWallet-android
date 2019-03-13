@@ -164,7 +164,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
     }
 
     private fun setSaveAddress(signed: TransactionsBroadcastRequest) {
-        val addressBookUser = queryFirstUserData<AddressBookUser> { equalTo("address", signed.recipient)}
+        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", signed.recipient)}
         if (addressBookUser == null) {
             sent_to_address.text = signed.recipient
             add_address.visiable()

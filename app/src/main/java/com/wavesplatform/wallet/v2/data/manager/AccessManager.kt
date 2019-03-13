@@ -236,17 +236,17 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
         configMap.clear()
     }
 
-    private fun deleteRealmDBForAccount(address: String) {
+    private fun deleteRealmDBForAccount(guid: String) {
         // force delete db
         try {
             val dbFile = File(DBHelper.getInstance().realmConfig.realmDirectory,
-                    String.format("%s.realm", address))
+                    String.format("%s.realm", guid))
             val dbLockFile = File(DBHelper.getInstance().realmConfig.realmDirectory,
-                    String.format("%s.realm.lock", address))
+                    String.format("%s.realm.lock", guid))
             dbFile.delete()
             dbLockFile.delete()
             deleteRecursive(File(DBHelper.getInstance().realmConfig.realmDirectory,
-                    String.format("%s.realm.management", address)))
+                    String.format("%s.realm.management", guid)))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -273,10 +273,10 @@ class AccessManager(private var prefs: PrefsUtil, private var appUtil: AppUtil, 
             prefs.removeGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID)
         }
 
-        deleteRealm(searchWalletGuid)
+        deleteRealmAndCleanConfigs(searchWalletGuid)
     }
 
-    fun deleteRealm(guid: String) {
+    fun deleteRealmAndCleanConfigs(guid: String) {
         deleteRealmDBForAccount(guid)
         clearRealmConfiguration()
     }

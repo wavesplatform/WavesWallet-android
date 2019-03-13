@@ -234,7 +234,7 @@ class SendActivity : BaseActivity(), SendView {
         for (address in addresses) {
             val lastRecipient = layoutInflater
                     .inflate(R.layout.view_text_tag, null) as AppCompatTextView
-            val addressBookUser = queryFirstUserData<AddressBookUser> { equalTo("address", address) }
+            val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", address) }
             lastRecipient.text = addressBookUser?.name ?: address
             lastRecipient.click {
                 edit_address.setText(address)

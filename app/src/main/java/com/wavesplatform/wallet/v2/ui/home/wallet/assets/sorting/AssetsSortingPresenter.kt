@@ -2,13 +2,13 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
+import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.saveUserData
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
@@ -57,7 +57,7 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
                     AssetBalanceStore(item.asset.assetId,
                             item.asset.isHidden,
                             item.asset.position,
-                            item.asset.isFavorite).saveUserData()
+                            item.asset.isFavorite).save()
                     return@mapIndexedTo item.asset
                 }
                 .saveAll()

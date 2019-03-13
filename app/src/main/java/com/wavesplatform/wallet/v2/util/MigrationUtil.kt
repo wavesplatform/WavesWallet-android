@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v2.util
 
-import com.wavesplatform.wallet.App
+import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
@@ -33,7 +33,7 @@ class MigrationUtil @Inject constructor() {
                         val addressBookUser = AddressBookUser(addresses[i], names[i])
                         addressBookUsers.add(addressBookUser)
                     }
-                    addressBookUsers.saveAllUserData()
+                    addressBookUsers.saveAll()
                     prefs.removeGlobalValue(guid + KEY_AB_NAMES)
                     prefs.removeGlobalValue(guid + KEY_AB_ADDRESSES)
                 }
@@ -70,7 +70,7 @@ class MigrationUtil @Inject constructor() {
             val initConfig = RealmConfiguration.Builder()
                     .name(String.format("%s.realm", guid))
                     .build()
-            if (Realm.getGlobalInstanceCount(initConfig) < 2) {
+            if (Realm.getGlobalInstanceCount(initConfig) < 3) {
                 val tempRealm = DynamicRealm.getInstance(initConfig)
                 if (tempRealm!!.version != -1L && tempRealm.version < 3L) {
                     val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
@@ -81,7 +81,7 @@ class MigrationUtil @Inject constructor() {
                                 item.getString("name"))
                         addressBookUsers.add(addressBookUser)
                     }
-                    addressBookUsers.saveAllUserData()
+                    addressBookUsers.saveAll()
 
                     val assetBalancesStore = mutableListOf<AssetBalanceStore>()
                     val assetBalancesDb = tempRealm.where("AssetBalance").findAll()
@@ -93,7 +93,7 @@ class MigrationUtil @Inject constructor() {
                                 position = item.getInt("position"),
                                 isFavorite = item.getBoolean("isFavorite")))
                     }
-                    assetBalancesStore.saveAllUserData()
+                    assetBalancesStore.saveAll()
 
                     val newMarketResponses = mutableListOf<MarketResponse>()
                     val marketResponses = tempRealm.where("MarketResponse").findAll()
@@ -118,10 +118,9 @@ class MigrationUtil @Inject constructor() {
                                 position = item.getInt("position"),
                                 currentTimeFrame = item.getInt("currentTimeFrame")))
                     }
-                    newMarketResponses.saveAllUserData()
+                    newMarketResponses.saveAll()
 
                     tempRealm.close()
-                    App.getAccessManager().deleteRealm(guid)
                 } else {
                     tempRealm.close()
                 }

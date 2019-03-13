@@ -14,7 +14,10 @@ import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.request.*
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
-import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.TransactionUtil
+import com.wavesplatform.wallet.v2.util.loadDbWavesBalance
+import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.util.sumByLong
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
@@ -96,7 +99,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                             }
                             .map { tripple ->
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
-                                val savedAssetPrefs = queryAllUserData<AssetBalanceStore>()
+                                val savedAssetPrefs = queryAll<AssetBalanceStore>()
 
                                 if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
                                     // merge db data and API data
