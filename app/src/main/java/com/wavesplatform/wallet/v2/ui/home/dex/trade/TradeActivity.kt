@@ -42,6 +42,8 @@ class TradeActivity : BaseActivity(), TradeView {
 
         setupToolbar(toolbar_view, true, getToolbarTitle(), R.drawable.ic_toolbar_back_white)
 
+        presenter.loadAssetsInfoOfPair()
+
         val pages = arrayListOf<Pair<Fragment, String>>(
                 TradeOrderBookFragment.newInstance(presenter.watchMarket) to getString(R.string.dex_trade_tab_orderbook),
                 TradeChartFragment.newInstance(presenter.watchMarket) to getString(R.string.dex_trade_tab_chart),

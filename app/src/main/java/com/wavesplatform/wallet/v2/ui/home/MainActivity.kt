@@ -1,7 +1,5 @@
 package com.wavesplatform.wallet.v2.ui.home
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.TabLayout
@@ -9,8 +7,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AlertDialog
-import android.text.TextPaint
-import android.text.style.ClickableSpan
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -42,9 +38,11 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeLinks
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.backup_seed_warning_snackbar.*
-import kotlinx.android.synthetic.main.dialog_account_first_open.view.*
 import kotlinx.android.synthetic.main.dialog_news.view.*
-import pers.victor.ext.*
+import pers.victor.ext.click  // todo check
+import pers.victor.ext.gone
+import pers.victor.ext.isNetworkConnected
+import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.put
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
@@ -54,7 +52,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     @Inject
     @InjectPresenter
     lateinit var presenter: MainPresenter
-    private var accountFirstOpenDialog: AlertDialog? = null
     private val fragments = arrayListOf<Fragment>()
     private var activeFragment = Fragment()
     private var seedWarningBehavior: BottomSheetBehavior<LinearLayout>? = null
@@ -69,9 +66,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         setNavigationBarColor(R.color.white)
         setupToolbar(toolbar_general)
 
-        showFirstOpenAlert(prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true))
-
         setupBottomNavigation()
+
+        logFirstOpen()
+
 
         if (savedInstanceState == null) {
             onTabSelected(tab_navigation.getTabAt(WALLET_SCREEN))
@@ -90,73 +88,22 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                 })
     }
 
+    private fun logFirstOpen() {
+        if (prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true)) {
+            val values = Bundle()
+            values.put("wallets_count", prefsUtil.getGlobalValueList(
+                    EnvironmentManager.name
+                            + PrefsUtil.LIST_WALLET_GUIDS).size.toString())
+            Analytics.sendEvent(firebaseAnalytics, "new_wallet", values)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         showBackUpSeedWarning()
         if (App.getAccessManager().getWallet() != null) {
             presenter.loadNews()
         }
-    }
-
-    private fun showFirstOpenAlert(firstOpen: Boolean) {
-        if (firstOpen) {
-            val alertDialogBuilder = AlertDialog.Builder(this)
-            accountFirstOpenDialog = alertDialogBuilder
-                    .setCancelable(false)
-                    .setView(getFirstOpenAlertView())
-                    .create()
-
-            accountFirstOpenDialog?.show()
-        }
-    }
-
-    private fun getFirstOpenAlertView(): View? {
-        val view = LayoutInflater.from(this)
-                .inflate(R.layout.dialog_account_first_open, null)
-
-        view.checkbox_funds_on_device.setOnCheckedChangeListener { _, isChecked ->
-            presenter.checkedAboutBackup = isChecked
-            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
-        }
-
-        view.checkbox_backup.setOnCheckedChangeListener { _, isChecked ->
-            presenter.checkedAboutFundsOnDevice = isChecked
-            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
-        }
-
-        view.checkbox_terms_of_use.setOnCheckedChangeListener { _, isChecked ->
-            presenter.checkedAboutTerms = isChecked
-            view.button_confirm.isEnabled = presenter.isAllCheckedToStart()
-        }
-
-        val siteClick = object : ClickableSpan() {
-            override fun onClick(p0: View?) {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_TERMS))
-                startActivity(browserIntent)
-            }
-
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.color = findColor(R.color.black)
-            }
-        }
-
-        view.checkbox_terms_of_use.makeLinks(
-                arrayOf(getString(R.string.dialog_account_first_open_about_terms_key)),
-                arrayOf(siteClick))
-
-        view.button_confirm.click {
-            prefsUtil.setValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, false)
-            accountFirstOpenDialog?.cancel()
-            showBackUpSeedWarning()
-            val values = Bundle()
-            values.put("wallets_count", prefsUtil.getGlobalValueList(
-                    EnvironmentManager.name +
-                            PrefsUtil.LIST_WALLET_GUIDS).size.toString())
-            Analytics.sendEvent(firebaseAnalytics, "new_wallet", values)
-        }
-
-        return view
     }
 
     fun enableElevation(enable: Boolean) {

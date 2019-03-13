@@ -113,14 +113,9 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
             }
         }
 
-        edit_optional_message.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                hideKeyboard()
-                goNext()
-                true
-            } else {
-                false
-            }
+        edit_optional_message.onAction(EditorInfo.IME_ACTION_DONE) {
+            hideKeyboard()
+            goNext()
         }
 
         button_confirm.click { goNext() }

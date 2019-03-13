@@ -7,7 +7,8 @@ object Constants {
     // Production
     const val URL_COINOMAT = "https://coinomat.com/api/"
     const val URL_WAVES_FORUM = "https://forum.wavesplatform.com/"
-    const val URL_TERMS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
+    const val URL_TERMS = "https://wavesplatform.com/files/docs/Privacy%20Policy_SW.pdf"
+    const val URL_TERMS_AND_CONDITIONS = "https://wavesplatform.com/files/docs/Waves_terms_and_conditions.pdf"
     const val URL_WHITEPAPER = "https://wavesplatform.com/files/whitepaper_v0.pdf"
     const val URL_TELEGRAM = "https://telegram.me/wavesnews"
     const val URL_GITHUB = "https://github.com/wavesplatform/"

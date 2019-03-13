@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
@@ -23,12 +24,14 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import io.github.anderscheow.validator.Validation
+import com.wavesplatform.wallet.v2.util.onAction
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
 import io.github.anderscheow.validator.rules.common.MaxRule
 import kotlinx.android.synthetic.main.activity_add_address.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
+import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
 import javax.inject.Inject
 
 class AddAddressActivity : BaseActivity(), AddAddressView {
@@ -72,6 +75,11 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
                     }
                 }, nameValidation)
             }
+        }
+
+        edit_name.onAction(EditorInfo.IME_ACTION_DONE) {
+            hideKeyboard()
+            presenter.saveAddress(edit_address.text.toString(), edit_name.text.toString())
         }
 
         if (edit_address.text.isEmpty()) edit_address.tag = R.drawable.ic_qrcode_24_basic_500

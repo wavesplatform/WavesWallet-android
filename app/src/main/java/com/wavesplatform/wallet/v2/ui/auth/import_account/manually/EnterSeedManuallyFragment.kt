@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.wallet.v2.util.applyFilterStartEmptySpace
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.onAction
 import com.wavesplatform.sdk.utils.notNull
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -93,15 +94,12 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
             }
         }
 
-        edit_seed.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE && button_continue.isEnabled) {
+        edit_seed.onAction(EditorInfo.IME_ACTION_DONE) {
+            if (button_continue.isEnabled) {
                 launchActivity<ProtectAccountActivity> {
                     putExtra(NewAccountActivity.KEY_INTENT_SEED, edit_seed.text.toString().trim())
                     putExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT, true)
                 }
-                true
-            } else {
-                false
             }
         }
 

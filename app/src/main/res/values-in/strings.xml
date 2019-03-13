@@ -214,11 +214,11 @@
     <string name="dex_trade_tab_last_trades">Perdagangan Terakhir</string>
     <string name="dex_trade_tab_my_orders">pesananku</string>
     <string name="dex_trade_tab_orderbook">Buku pesanan</string>
-    <string name="dialog_account_first_open_about_backup">Saya memahami bahwa jika aplikasi ini dipindahkan ke perangkat lain atau dihapus, Waves saya hanya dapat dipulihkan dengan frasa cadangan</string>
-    <string name="dialog_account_first_open_about_fund_on_device">Saya memahami bahwa dana saya disimpan dengan aman di perangkat ini, bukan oleh perusahaan</string>
-    <string name="dialog_account_first_open_about_terms">Saya telah membaca, memahami, dan menyetujui \nSyarat Penggunaan</string>
-    <string name="dialog_account_first_open_about_terms_key">Syarat Penggunaan</string>
-    <string name="dialog_account_first_open_confirm_and_begin">Konfirmasi dan Mulai</string>
+    <string name="confirm_card_tutorial_about_backup">Saya memahami bahwa jika aplikasi ini dipindahkan ke perangkat lain atau dihapus, Waves saya hanya dapat dipulihkan dengan frasa cadangan</string>
+    <string name="confirm_card_tutorial_about_fund_on_device">Saya memahami bahwa dana saya disimpan dengan aman di perangkat ini, bukan oleh perusahaan</string>
+    <string name="confirm_card_tutorial_about_terms">Saya telah membaca, memahami, dan menyetujui \nSyarat Penggunaan</string>
+    <string name="confirm_card_tutorial_terms_of_use">Syarat Penggunaan</string>
+    <string name="confirm_card_tutorial_title">Konfirmasi dan Mulai</string>
     <string name="dialog_account_first_open_subtitle">Waves itu berbeda — tidak dapat ditahan dengan aman oleh bank atau layanan web</string>
     <string name="dialog_account_first_open_title">Selesai!</string>
     <string name="dialog_processing">Tunggu…</string>

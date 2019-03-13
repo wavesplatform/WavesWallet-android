@@ -16,7 +16,7 @@ class AddAddressPresenter @Inject constructor() : BasePresenter<AddAddressView>(
 
     fun saveAddress(address: String, name: String) {
         val addressBookUser = AddressBookUser(address, name)
-        prefsUtil.saveAddressBookUsers(addressBookUser)
+        prefsUtil.saveOrUpdateAddressBookUser(addressBookUser)
         viewState.successSaveAddress(addressBookUser)
     }
 }

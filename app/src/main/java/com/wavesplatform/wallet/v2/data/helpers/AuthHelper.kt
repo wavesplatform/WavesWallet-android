@@ -20,7 +20,7 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
 
         val config = RealmConfiguration.Builder()
                 .name(String.format("%s.realm", guid))
-                .schemaVersion(3)
+                 .schemaVersion(3)
                 .deleteRealmIfMigrationNeeded()
                 .build()
 

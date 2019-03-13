@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivit
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.sdk.utils.Identicon
 import com.wavesplatform.wallet.v2.util.launchActivity
+import com.wavesplatform.wallet.v2.util.onAction
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -134,13 +135,8 @@ class ProtectAccountActivity : BaseActivity(), ProtectAccountView {
             }
         }
 
-        edit_confirm_password.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                goNext()
-                true
-            } else {
-                false
-            }
+        edit_confirm_password.onAction(EditorInfo.IME_ACTION_DONE) {
+            goNext()
         }
 
         if (intent.hasExtra(NewAccountActivity.KEY_INTENT_SEED)) {
