@@ -20,6 +20,7 @@ import com.wavesplatform.sdk.model.response.AssetBalance
 import com.wavesplatform.sdk.model.response.coinomat.XRate
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity

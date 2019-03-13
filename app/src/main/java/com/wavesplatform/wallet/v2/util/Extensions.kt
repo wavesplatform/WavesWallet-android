@@ -141,10 +141,6 @@ fun <T1: Any, T2: Any, T3: Any, T4: Any, T5: Any, R: Any> safeLet(p1: T1?, p2: T
     return if (p1 != null && p2 != null && p3 != null && p4 != null && p5 != null) block(p1, p2, p3, p4, p5) else null
 }
 
-fun String.isWavesId(): Boolean {
-    return this.toLowerCase() == Constants.wavesAssetInfo.id
-}
-
 fun View.makeBackgroundWithRippleEffect() {
     val typedArray = context.obtainStyledAttributes(intArrayOf(R.attr.selectableItemBackground))
     val backgroundResource = typedArray.getResourceId(0, 0)

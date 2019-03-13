@@ -219,8 +219,6 @@
     <string name="confirm_card_tutorial_about_terms">Li, entendi e concordo com os \nTermos de uso</string>
     <string name="confirm_card_tutorial_terms_of_use">Termos de uso</string>
     <string name="confirm_card_tutorial_title">Confirmar e iniciar</string>
-    <string name="dialog_account_first_open_subtitle">A Waves é diferente — não pode ser retida em um banco ou serviço da web</string>
-    <string name="dialog_account_first_open_title">Feito!</string>
     <string name="dialog_processing">Aguarde…</string>
     <string name="edit_account_name">Editar nome</string>
     <string name="edit_account_new_name">Novo nome da conta</string>

@@ -219,8 +219,6 @@
     <string name="confirm_card_tutorial_about_terms">나는 본 이용 약관을 읽었으며 \n이해하고 동의합니다</string>
     <string name="confirm_card_tutorial_terms_of_use">이용 약관을</string>
     <string name="confirm_card_tutorial_title">승인하고 시작</string>
-    <string name="dialog_account_first_open_subtitle">Waves는 특별합니다 — 은행 또는 웹 서비스에서 안전하게 보관될 수 없습니다</string>
-    <string name="dialog_account_first_open_title">완료!</string>
     <string name="dialog_processing">기다려주세요…</string>
     <string name="edit_account_name">이름 변경ㅎ</string>
     <string name="edit_account_new_name">신규 계정 이름</string>

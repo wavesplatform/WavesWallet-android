@@ -219,8 +219,6 @@
     <string name="confirm_card_tutorial_about_terms">मैंने पढ़ा, समझ लिया है, और सहमत हूं \nउपयोग की शर्तें</string>
     <string name="confirm_card_tutorial_terms_of_use">उपयोग की शर्तें</string>
     <string name="confirm_card_tutorial_title">पुष्टि करें और शुरू करें</string>
-    <string name="dialog_account_first_open_subtitle">वेव्स अलग हैं - इसे किसी बैंक या वेब सेवा द्वारा सुरक्षित रूप से नहीं रखा जा सकता है</string>
-    <string name="dialog_account_first_open_title">पूर्ण हुआ!</string>
     <string name="dialog_processing">रुकिए…</string>
     <string name="edit_account_name">नाम संपादित करें</string>
     <string name="edit_account_new_name">नया खाता नाम</string>
