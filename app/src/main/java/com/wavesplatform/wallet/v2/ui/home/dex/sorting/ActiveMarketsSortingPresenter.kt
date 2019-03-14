@@ -1,12 +1,11 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.sorting
 
 import com.arellomobile.mvp.InjectViewState
-import com.vicpin.krealmextensions.queryAll
+import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
-import io.reactivex.Observable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 
@@ -16,7 +15,7 @@ class ActiveMarketsSortingPresenter @Inject constructor() : BasePresenter<Active
 
     fun loadMarkets() {
         runAsync {
-            addSubscription(Observable.just(queryAll<MarketResponse>())
+            addSubscription(queryAllAsSingle<MarketResponse>().toObservable()
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
                         val markets = it.sortedBy { it.position }.toMutableList()

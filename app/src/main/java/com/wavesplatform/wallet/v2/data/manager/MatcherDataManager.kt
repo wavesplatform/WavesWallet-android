@@ -3,7 +3,6 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.internal.LinkedTreeMap
-import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.crypto.Base58
@@ -161,7 +160,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                     val map = it.associateBy { it.assetId }
                     return@map map
                 },
-                Observable.just(queryAll<MarketResponse>())
+                queryAllAsSingle<MarketResponse>().toObservable()
                         .map {
                             val map = it.associateBy { it.id }
                             return@map map
