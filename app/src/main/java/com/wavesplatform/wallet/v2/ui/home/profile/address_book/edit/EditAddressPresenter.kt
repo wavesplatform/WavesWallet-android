@@ -1,8 +1,11 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit
 
 import com.arellomobile.mvp.InjectViewState
+import com.vicpin.krealmextensions.delete
+import com.vicpin.krealmextensions.queryFirst
+import com.vicpin.krealmextensions.save
+import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import javax.inject.Inject
 
 @InjectViewState
@@ -16,20 +19,20 @@ class EditAddressPresenter @Inject constructor() : BasePresenter<EditAddressView
     }
 
     fun deleteAddress() {
-        prefsUtil.deleteAddressBookUsers(addressBookUser?.address)
+        delete<AddressBookUser> { equalTo("address", addressBookUser?.address) }
         viewState.successDeleteAddress()
     }
 
     fun editAddress(address: String, name: String) {
-        val oldAddress = prefsUtil.getAddressBookUser(addressBookUser?.address)
+        val oldAddress = queryFirst<AddressBookUser> { equalTo("address", addressBookUser?.address) }
         if (addressBookUser?.address == address) {
             oldAddress?.name = name
-            prefsUtil.saveAddressBookUsers(oldAddress)
+            oldAddress?.save()
             viewState.successEditAddress(oldAddress)
         } else {
-            prefsUtil.deleteAddressBookUsers(addressBookUser?.address)
+            delete<AddressBookUser> { equalTo("address", addressBookUser?.address) }
             val addressBookUser = AddressBookUser(address, name)
-            prefsUtil.saveAddressBookUsers(addressBookUser)
+            addressBookUser.save()
             viewState.successEditAddress(addressBookUser)
         }
     }

@@ -6,22 +6,9 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.wavesplatform.wallet.App;
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance;
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalanceStore;
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext;
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -56,8 +43,6 @@ public class PrefsUtil {
     public static final String KEY_LAST_UPDATE_DEX_INFO = "last_update_dex_info";
 
     public static final String KEY_GLOBAL_NODE_COOKIES = "node_cookies";
-    public static final String KEY_ADDRESS_BOOK = "address_book";
-    public static final String KEY_ASSET_BALANCES = "asset_balances";
 
     private SharedPreferences preferenceManager;
 
@@ -242,95 +227,5 @@ public class PrefsUtil {
 
     public String getGuid() {
         return getGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, "");
-    }
-
-    public List<AddressBookUser> getAllAddressBookUsers() {
-        Type listType = new TypeToken<ArrayList<AddressBookUser>>() {
-        }.getType();
-        List<AddressBookUser> list = new Gson().fromJson(
-                getValue(KEY_ADDRESS_BOOK, ""), listType);
-        if (list == null) {
-            return new ArrayList<>();
-        } else {
-            return list;
-        }
-    }
-
-    public AddressBookUser getAddressBookUser(String address) {
-        for (AddressBookUser addressBook : getAllAddressBookUsers()) {
-            if (addressBook.getAddress().equals(address)) {
-                return addressBook;
-            }
-        }
-        return null;
-    }
-
-    public void deleteAddressBookUsers(String address) {
-        List<AddressBookUser> list = new ArrayList<>();
-        for (AddressBookUser addressBook : getAllAddressBookUsers()) {
-            if (!addressBook.getAddress().equals(address)) {
-                list.add(addressBook);
-            }
-        }
-        setAddressBookUsers(list);
-    }
-
-    public void setAddressBookUsers(List<AddressBookUser> addressBookUsers) {
-        setValue(KEY_ADDRESS_BOOK, new Gson().toJson(addressBookUsers));
-    }
-
-    public void saveAddressBookUsers(AddressBookUser addressBookUser) {
-        List<AddressBookUser> result = getAllAddressBookUsers();
-        boolean add = true;
-        for (int i = 0; i < result.size(); i++) {
-            if (result.get(i).getAddress().equals(addressBookUser.getAddress())) {
-                result.set(i, addressBookUser);
-                add = false;
-            }
-        }
-        if (add) {
-            result.add(addressBookUser);
-        }
-        setAddressBookUsers(result);
-    }
-
-    public void saveAssetBalance(AssetBalance assetBalance) {
-        Map<String, AssetBalanceStore> map = getAssetBalances();
-        map.put(assetBalance.getAssetId(), new AssetBalanceStore(
-                assetBalance.getAssetId(),
-                assetBalance.isHidden(),
-                assetBalance.getPosition(),
-                assetBalance.isFavorite()));
-        setValue(KEY_ASSET_BALANCES, new Gson().toJson(map));
-    }
-
-    public void saveAssetBalances(Map<String, AssetBalanceStore> assetBalances) {
-        setValue(KEY_ASSET_BALANCES, new Gson().toJson(assetBalances));
-    }
-
-    public Map<String, AssetBalanceStore> getAssetBalances() {
-        Map<String, AssetBalanceStore> map = new Gson().fromJson(
-                getValue(KEY_ASSET_BALANCES, ""),
-                TypeToken.getParameterized(
-                        HashMap.class,
-                        String.class,
-                        AssetBalanceStore.class).getType());
-        if (map == null) {
-            return new HashMap<>();
-        } else {
-            return map;
-        }
-    }
-
-    public void saveAssetBalances(@NotNull List<AssetBalance> assetsList) {
-        Map<String, AssetBalanceStore> map = getAssetBalances();
-        for (AssetBalance assetBalance : assetsList) {
-            map.put(assetBalance.getAssetId(), new AssetBalanceStore(
-                    assetBalance.getAssetId(),
-                    assetBalance.isHidden(),
-                    assetBalance.getPosition(),
-                    assetBalance.isFavorite()));
-        }
-        setValue(KEY_ASSET_BALANCES, new Gson().toJson(map));
     }
 }
