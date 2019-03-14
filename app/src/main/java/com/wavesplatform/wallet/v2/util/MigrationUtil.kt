@@ -71,7 +71,7 @@ class MigrationUtil @Inject constructor() {
             val initConfig = RealmConfiguration.Builder()
                     .name(String.format("%s.realm", guid))
                     .build()
-            if (Realm.getGlobalInstanceCount(initConfig) < 3) {
+            if (Realm.getGlobalInstanceCount(initConfig) < 2) {
                 val tempRealm = DynamicRealm.getInstance(initConfig)
                 if (tempRealm!!.version != -1L && tempRealm.version < 3L) {
                     val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
