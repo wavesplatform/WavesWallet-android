@@ -522,7 +522,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun parseDataFromQr(result: String) {
         if (result.isNullOrEmpty()) {
-            showError(R.string.send_error_get_data_from_qr, R.id.root_view)
+            showError(R.string.send_error_get_data_from_qr, R.id.root)
             assetEnable(false)
             recipientEnable(false)
             amountEnable(false)
@@ -566,7 +566,7 @@ class SendActivity : BaseActivity(), SendView {
                     assetEnable(false)
                 }
             } catch (error: Exception) {
-                showError(R.string.send_error_get_data_from_qr, R.id.root_view)
+                showError(R.string.send_error_get_data_from_qr, R.id.root)
                 assetEnable(false)
                 recipientEnable(false)
                 amountEnable(false)
