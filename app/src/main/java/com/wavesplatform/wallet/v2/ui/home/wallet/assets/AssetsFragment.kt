@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -209,7 +210,9 @@ class AssetsFragment : BaseFragment(), AssetsView {
         runOnUiThread {
             if (!isMyServiceRunning(UpdateApiDataService::class.java)) {
                 val intent = Intent(activity, UpdateApiDataService::class.java)
-                activity?.startService(intent)
+                activity?.let {
+                    ContextCompat.startForegroundService(it, intent)
+                }
             }
         }
     }
