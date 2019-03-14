@@ -3,6 +3,7 @@ package com.wavesplatform.sdk
 import android.app.Application
 import android.util.Log
 import com.wavesplatform.sdk.service.*
+import com.wavesplatform.sdk.utils.EnvironmentManager
 import retrofit2.CallAdapter
 import java.util.*
 
@@ -18,8 +19,13 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         private var instance: Wavesplatform? = null
 
         @JvmStatic
-        fun init(context: Application, factory: CallAdapter.Factory? = null) {
-            instance = Wavesplatform(context, factory)
+        fun init(application: Application, factory: CallAdapter.Factory? = null) {
+            EnvironmentManager.init(application)
+            instance = Wavesplatform(application, factory)
+            EnvironmentManager.updateConfiguration(
+                    getGithubService().globalConfiguration(EnvironmentManager.environment.url),
+                    getApiService(),
+                    getNodeService())
         }
 
         private fun get(): Wavesplatform {

@@ -9,6 +9,7 @@ import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.sdk.BuildConfig
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.utils.EnvironmentManager
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -97,6 +98,7 @@ open class DataManager(var context: Context,
                 .addInterceptor(receivedCookiesInterceptor())
                 .addInterceptor(addCookiesInterceptor())
                 .addInterceptor(CacheForceInterceptorNoNet())
+                .addInterceptor(EnvironmentManager.createHostInterceptor())
                 .addNetworkInterceptor(CacheInterceptorOnNet())
                 .addInterceptor(LoggingInterceptor.Builder()
                         .loggable(BuildConfig.DEBUG)

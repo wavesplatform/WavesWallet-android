@@ -43,8 +43,6 @@ public class App extends DaggerApplication {
     PrefsUtil mPrefsUtil;
     @Inject
     AuthHelper authHelper;
-    @Inject
-    GithubDataManager githubDataManager;
     private static App application;
     private static AccessManager accessManager;
     private LocalizationApplicationDelegate localizationDelegate
@@ -52,7 +50,6 @@ public class App extends DaggerApplication {
 
     @Override
     public void onCreate() {
-        EnvironmentManager.init(this);
         super.onCreate();
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
@@ -91,14 +88,6 @@ public class App extends DaggerApplication {
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         SimpleChromeCustomTabs.initialize(this);
-
-        EnvironmentManager.updateConfiguration(
-                githubDataManager.globalConfiguration(
-                        EnvironmentManager.Companion.getEnvironment().getUrl()),
-                githubDataManager.getApiService(),
-                githubDataManager.getNodeService());
-
-
     }
 
     public static Context getAppContext() {
