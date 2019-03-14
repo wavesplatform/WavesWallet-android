@@ -9,12 +9,15 @@ import io.realm.DynamicRealm
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import java.io.File
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class MigrationUtil @Inject constructor() {
 
     companion object {
 
+        const val VER_DB_WITHOUT_USER_DATA = 3L
+        private const val VER_DB_NEW = -1L
         private const val KEY_AB_NAMES = "address_book_names"
         private const val KEY_AB_ADDRESSES = "address_book_addresses"
 
@@ -71,8 +74,12 @@ class MigrationUtil @Inject constructor() {
                     .name(String.format("%s.realm", guid))
                     .build()
             if (Realm.getGlobalInstanceCount(initConfig) < 2) {
-                val tempRealm = DynamicRealm.getInstance(initConfig)
-                if (tempRealm!!.version != -1L && tempRealm.version < 3L) {
+                val tempRealm = try {
+                    DynamicRealm.getInstance(initConfig)
+                } catch (exception: IllegalArgumentException) {
+                    return
+                }
+                if (tempRealm!!.version != VER_DB_NEW && tempRealm.version < VER_DB_WITHOUT_USER_DATA) {
                     val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
                     val addressBookUsers = mutableListOf<AddressBookUser>()
                     for (item in addressBookUsersDb) {
@@ -119,11 +126,8 @@ class MigrationUtil @Inject constructor() {
                                 currentTimeFrame = item.getInt("currentTimeFrame")))
                     }
                     newMarketResponses.saveAll()
-
-                    tempRealm.close()
-                } else {
-                    tempRealm.close()
                 }
+                tempRealm.close()
             }
         }
     }
