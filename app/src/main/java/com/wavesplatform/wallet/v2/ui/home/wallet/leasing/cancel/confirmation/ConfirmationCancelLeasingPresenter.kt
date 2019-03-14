@@ -49,7 +49,7 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
         fee = 0L
         addSubscription(Observable.zip(
                 githubDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(App.getAccessManager().getWallet()?.address!!),
+                nodeDataManager.scriptAddressInfo(),
                 BiFunction { t1: GlobalTransactionCommission,
                              t2: ScriptInfo ->
                     return@BiFunction Pair(t1, t2)

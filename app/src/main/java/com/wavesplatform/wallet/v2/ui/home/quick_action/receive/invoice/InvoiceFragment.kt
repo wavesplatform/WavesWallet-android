@@ -65,11 +65,13 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         }
 
         button_continue.click {
-            launchActivity<ReceiveAddressViewActivity> {
-                putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
-                putExtra(YourAssetsActivity.BUNDLE_ADDRESS, App.getAccessManager().getWallet()?.address ?: "")
-                putExtra(INVOICE_SCREEN, true)
-                putExtra(ReceiveAddressViewActivity.KEY_INTENT_QR_DATA, createLink())
+            App.getAccessManager().getWallet()?.address?.let { address ->
+                launchActivity<ReceiveAddressViewActivity> {
+                    putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
+                    putExtra(YourAssetsActivity.BUNDLE_ADDRESS, address)
+                    putExtra(INVOICE_SCREEN, true)
+                    putExtra(ReceiveAddressViewActivity.KEY_INTENT_QR_DATA, createLink(address))
+                }
             }
         }
     }
@@ -114,7 +116,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         button_continue.isEnabled = presenter.assetBalance != null
     }
 
-    private fun createLink(): String {
+    private fun createLink(address: String): String {
         val amount = if (TextUtils.isEmpty(edit_amount.text)) {
             "0"
         } else {
@@ -128,7 +130,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         }
 
         return "https://client.wavesplatform.com/#send/$assetId?" +
-                "recipient=${presenter.address}&" +
+                "recipient=$address&" +
                 "amount=$amount"
     }
 

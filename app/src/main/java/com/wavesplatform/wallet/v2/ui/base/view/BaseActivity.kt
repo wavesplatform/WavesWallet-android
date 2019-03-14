@@ -119,7 +119,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         Timber.tag(javaClass.simpleName)
         onViewReady(savedInstanceState)
 
-        noInternetLayout = inflate(R.layout.no_internet_bottom_message_layout)
+        noInternetLayout = layoutInflater.inflate(R.layout.no_internet_bottom_message_layout, null)
 
         eventSubscriptions.add(ReactiveNetwork
                 .observeInternetConnectivity()
@@ -211,11 +211,11 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     @JvmOverloads
     inline fun setupToolbar(
-        toolbar: Toolbar,
-        homeEnable: Boolean = false,
-        title: String = "",
-        @DrawableRes icon: Int = R.drawable.ic_arrow_back_white_24dp,
-        crossinline onClickListener: () -> Unit = { onBackPressed() }
+            toolbar: Toolbar,
+            homeEnable: Boolean = false,
+            title: String = "",
+            @DrawableRes icon: Int = R.drawable.ic_arrow_back_white_24dp,
+            crossinline onClickListener: () -> Unit = { onBackPressed() }
     ) {
         this.toolbar = toolbar
         setSupportActionBar(toolbar)

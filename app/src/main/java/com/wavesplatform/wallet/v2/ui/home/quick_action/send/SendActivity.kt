@@ -320,7 +320,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun showXRate(xRate: XRate, ticker: String) {
-        xRateSkeletonView!!.hide()
+        xRateSkeletonView?.hide()
 
         val fee = if (xRate.feeOut == null) {
             "-"
@@ -340,11 +340,11 @@ class SendActivity : BaseActivity(), SendView {
             BigDecimal(xRate.inMax).toString()
         }
 
-        gateway_fee.text = getString(R.string.send_gateway_info_gateway_fee,
+        gateway_fee?.text = getString(R.string.send_gateway_info_gateway_fee,
                 fee, ticker)
-        gateway_limits.text = getString(R.string.send_gateway_info_gateway_limits,
+        gateway_limits?.text = getString(R.string.send_gateway_info_gateway_limits,
                 ticker, inMin, inMax)
-        gateway_warning.text = getString(R.string.send_gateway_info_gateway_warning,
+        gateway_warning?.text = getString(R.string.send_gateway_info_gateway_warning,
                 ticker)
         setRecipientValid(presenter.isRecipientValid())
     }
@@ -521,7 +521,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun parseDataFromQr(result: String) {
         if (result.isNullOrEmpty()) {
-            showError(R.string.send_error_get_data_from_qr, R.id.root_view)
+            showError(R.string.send_error_get_data_from_qr, R.id.root)
             assetEnable(false)
             recipientEnable(false)
             amountEnable(false)
@@ -565,7 +565,7 @@ class SendActivity : BaseActivity(), SendView {
                     assetEnable(false)
                 }
             } catch (error: Exception) {
-                showError(R.string.send_error_get_data_from_qr, R.id.root_view)
+                showError(R.string.send_error_get_data_from_qr, R.id.root)
                 assetEnable(false)
                 recipientEnable(false)
                 amountEnable(false)
