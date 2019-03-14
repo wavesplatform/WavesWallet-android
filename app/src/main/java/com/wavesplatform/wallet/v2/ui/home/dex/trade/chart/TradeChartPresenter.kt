@@ -5,6 +5,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.vicpin.krealmextensions.save
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.model.local.ChartModel
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
@@ -45,6 +46,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
 
     fun startLoad() {
         val calendar = Calendar.getInstance()
+        calendar.timeInMillis = EnvironmentManager.getTime()
         calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) - 2)
         chartModel.lastLoadDate = calendar.time
 

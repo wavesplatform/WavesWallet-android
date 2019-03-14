@@ -10,7 +10,6 @@ import com.wavesplatform.wallet.v1.crypto.CryptoProvider
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import pers.victor.ext.currentTimeMillis
 
 data class BurnRequest(
     @SerializedName("assetId") val assetId: String = "",
@@ -18,7 +17,7 @@ data class BurnRequest(
     @SerializedName("fee") var fee: Long = 100000L,
     @SerializedName("quantity") var quantity: Long = 1,
     @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
-    @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,
+    @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
     @SerializedName("type") val type: Int = Transaction.BURN,
     @SerializedName("version") val version: Int = Constants.VERSION,
     @SerializedName("proofs") var proofs: MutableList<String?>? = null,

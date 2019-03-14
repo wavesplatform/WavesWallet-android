@@ -1,23 +1,17 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.order
 
 import com.arellomobile.mvp.InjectViewState
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.remote.request.OrderRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.TransactionUtil
-import com.wavesplatform.wallet.v2.util.clearBalance
-import com.wavesplatform.wallet.v2.util.errorBody
-import com.wavesplatform.wallet.v2.util.isWaves
+import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
-import pers.victor.ext.currentTimeMillis
 import java.math.RoundingMode
 import javax.inject.Inject
 
@@ -114,7 +108,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
 
         orderRequest.orderType = if (orderType == 0) OrderType.BUY else OrderType.SELL
         orderRequest.assetPair = createPair()
-        orderRequest.timestamp = currentTimeMillis
+        orderRequest.timestamp = EnvironmentManager.getTime()
         orderRequest.expiration = orderRequest.timestamp + expirationList[selectedExpiration].timeServer
 
         addSubscription(matcherDataManager.placeOrder(orderRequest)

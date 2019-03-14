@@ -1,8 +1,5 @@
 package com.wavesplatform.wallet.v2.util
 
-import android.animation.Animator
-import android.animation.AnimatorSet
-import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.ClipData
@@ -35,19 +32,10 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
@@ -67,7 +55,6 @@ import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.text.SimpleDateFormat
 import java.util.*
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
@@ -452,117 +439,6 @@ inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
 
 fun <T : Any> T?.notNull(f: (it: T) -> Unit) {
     if (this != null) f(this)
-}
-
-fun String?.getAge(): String {
-    if (this.isNullOrEmpty()) return ""
-
-    val dob = Calendar.getInstance()
-    val today = Calendar.getInstance()
-
-    val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-    dob.time = sdf.parse(this)
-
-    var age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR)
-
-    if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
-        age--
-    }
-
-    val ageInt = age
-
-    return ageInt.toString()
-}
-
-fun ImageView.loadImage(url: String?, centerCrop: Boolean = true) {
-    this.post {
-        val options = RequestOptions()
-                .override(this.width, this.height)
-
-        if (centerCrop) options.transform(CenterCrop())
-
-        Glide.with(this)
-                .asBitmap()
-                .load(url)
-                .apply(options)
-                .into(this)
-    }
-}
-
-fun Context.getViewScaleAnimator(from: View, target: View, additionalPadding: Int = 0): Animator {
-    // height resize animation
-    val animatorSet = AnimatorSet()
-    val desiredHeight = from.height
-    val currentHeight = target.height
-    val heightAnimator = ValueAnimator.ofInt(currentHeight, desiredHeight - additionalPadding)
-    heightAnimator.addUpdateListener { animation ->
-        val params = target.layoutParams as ViewGroup.LayoutParams
-        params.height = animation.animatedValue as Int
-        target.layoutParams = params
-    }
-    animatorSet.play(heightAnimator)
-
-    // width resize animation
-    val desiredWidth = from.width
-    val currentWidth = target.width
-    val widthAnimator = ValueAnimator.ofInt(currentWidth, desiredWidth - additionalPadding)
-    widthAnimator.addUpdateListener { animation ->
-        val params = target.layoutParams as ViewGroup.LayoutParams
-        params.width = animation.animatedValue as Int
-        target.layoutParams = params
-    }
-    animatorSet.play(widthAnimator)
-    return animatorSet
-}
-
-fun ImageView.loadImage(drawableRes: Int?, centerCrop: Boolean = true) {
-    this.post {
-        val options = RequestOptions()
-                .override(this.width, this.height)
-
-        if (centerCrop) options.transform(CenterCrop())
-
-        Glide.with(this)
-                .asBitmap()
-                .load(drawableRes)
-                .apply(options)
-                .into(this)
-    }
-}
-
-fun ImageView.loadImage(file: File?, centerCrop: Boolean = true, circleCrop: Boolean = false, deleteImmediately: Boolean = true) {
-    this.post {
-        val options = RequestOptions()
-                .override(this.width, this.height)
-
-        if (centerCrop) options.transform(CenterCrop())
-        if (circleCrop) options.transform(CircleCrop())
-
-        Glide.with(this)
-                .load(file)
-                .apply(options)
-                .listener(object : RequestListener<Drawable> {
-                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        this@loadImage.setImageDrawable(resource)
-                        if (deleteImmediately) file?.delete()
-                        return true
-                    }
-
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                        return true
-                    }
-                })
-                .into(this)
-    }
-}
-
-@SuppressWarnings("deprecation")
-fun Context.fromHtml(source: String): Spanned {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY)
-    } else {
-        return Html.fromHtml(source)
-    }
 }
 
 /**

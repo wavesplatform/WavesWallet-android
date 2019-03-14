@@ -108,7 +108,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 App.getAccessManager().deleteCurrentWavesWallet()
 
                 presenter.prefsUtil.logOut()
-                presenter.appUtil.restartApp()
+                App.getAccessManager().restartApp(activity!!)
                 dialog.dismiss()
             }
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.profile_general_delete_account_dialog_cancel)) { dialog, _ ->

@@ -6,7 +6,6 @@ import android.preference.PreferenceManager
 import android.text.TextUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalanceStore
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
@@ -316,7 +315,6 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         const val KEY_ADDRESS_BOOK = "address_book"
         const val KEY_ASSET_BALANCES = "asset_balances"
         const val KEY_DEX_PAIR_SMART_INFO_NOT_SHOW_LIST = "dex_pair_smart_info_not_show_list"
+        const val KEY_GLOBAL_CURRENT_TIME_CORRECTION = "global_current_time_correction"
     }
-
-
 }
