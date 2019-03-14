@@ -17,6 +17,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
+import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
@@ -86,8 +87,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             this.adapter.addData(linePosition, globalItem)
 
                             // Save to DB
-                            prefsUtil.saveAssetBalance(asset)
                             AssetBalanceDb(asset).save()
+                            AssetBalanceStore(asset.assetId, asset.isHidden, asset.position, asset.isFavorite).save()
                         }
                         AssetSortingItem.TYPE_NOT_FAVORITE -> {
                             // remove from current list
@@ -105,8 +106,9 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             this.adapter.addData(linePosition, globalItem)
 
                             // Save to DB
-                            prefsUtil.saveAssetBalance(asset)
                             AssetBalanceDb(asset).save()
+                            AssetBalanceStore(asset.assetId, asset.isHidden, asset.position,
+                                    asset.isFavorite).save()
                         }
                     }
                 }
@@ -117,8 +119,9 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             override fun onHiddenStateChanged(item: AssetBalance, checked: Boolean) {
                 presenter.needToUpdate = true
                 item.isHidden = !checked
-                prefsUtil.saveAssetBalance(item)
                 AssetBalanceDb(item).save()
+                AssetBalanceStore(item.assetId, item.isHidden, item.position,
+                        item.isFavorite).save()
             }
         }
 

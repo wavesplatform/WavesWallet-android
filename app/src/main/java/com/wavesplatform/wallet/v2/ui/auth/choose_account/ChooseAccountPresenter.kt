@@ -5,8 +5,8 @@ import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.addressFromPublicKey
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.model.local.WalletItem
+import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import java.util.*
 import javax.inject.Inject
 

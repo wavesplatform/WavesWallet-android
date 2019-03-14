@@ -152,11 +152,4 @@ open class IssueTransaction(
     @SerializedName("decimals") var decimals: Int? = 0,
     @SerializedName("description") var description: String? = "",
     @SerializedName("script") var script: String? = ""
-) : Parcelable
-
-@Parcelize
-open class AssetBalanceStore(
-        @SerializedName("assetId") var assetId: String = "",
-        @SerializedName("isHidden") var isHidden: Boolean = false,
-        @SerializedName("position") var position: Int = -1,
-        @SerializedName("isFavorite") var isFavorite: Boolean = false) : Parcelable
+) : RealmModel, Parcelable

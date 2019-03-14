@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
@@ -16,6 +17,7 @@ import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
+import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -32,14 +34,14 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
         viewState.startServiceToLoadData()
         runAsync {
-            val savedAssetPrefs = prefsUtil.assetBalances
+            val savedAssetPrefs = queryAll<AssetBalanceStore>()
             var dbAssets = mutableListOf<AssetBalanceDb>()
             addSubscription(queryAllAsSingle<AssetBalanceDb>().toObservable()
                     .subscribeOn(Schedulers.io())
                     .map {
                         val assetBalanceList = it.toMutableList()
                         for (item in assetBalanceList) {
-                            val assetBalance = savedAssetPrefs[item.assetId]
+                            val assetBalance = savedAssetPrefs.firstOrNull { it.assetId == item.assetId }
                             assetBalance.notNull { storedAssetBalance ->
                                 item.isFavorite = storedAssetBalance.isFavorite
                                 item.position = storedAssetBalance.position
@@ -104,7 +106,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         }
 
                         assetsListFromDb.saveAll()
-                        prefsUtil.saveAssetBalances(AssetBalanceDb.convertFromDb(assetsListFromDb))
+                        AssetBalanceStore.saveAssetBalanceStore(AssetBalanceDb.convertFromDb(assetsListFromDb))
                         return@map assetsListFromDb
                     }
                     .map { createTripleSortedLists(it.toMutableList()) }
@@ -154,7 +156,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         }
 
                         assetsListFromDb.saveAll()
-                        prefsUtil.saveAssetBalances(AssetBalanceDb.convertFromDb(assetsListFromDb))
+                        AssetBalanceStore.saveAssetBalanceStore(AssetBalanceDb.convertFromDb(assetsListFromDb))
                         return@map assetsListFromDb
                     }
                     .map { createTripleSortedLists(it.toMutableList()) }
@@ -176,11 +178,8 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
     }
 
-    private fun postSuccess(
-        it: Triple<MutableList<AssetBalanceDb>, MutableList<AssetBalanceDb>, MutableList<AssetBalanceDb>>,
-        withApiUpdate: Boolean,
-        fromDb: Boolean
-    ) {
+    private fun postSuccess(it: Triple<MutableList<AssetBalanceDb>, MutableList<AssetBalanceDb>,
+            MutableList<AssetBalanceDb>>, withApiUpdate: Boolean, fromDb: Boolean) {
         val listToShow = arrayListOf<MultiItemEntity>()
 
         // add all main assets

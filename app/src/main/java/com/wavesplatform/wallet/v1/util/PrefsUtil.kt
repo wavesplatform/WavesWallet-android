@@ -7,9 +7,9 @@ import android.text.TextUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.sdk.model.response.AssetBalanceStore
+import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
+import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import java.util.*
 import javax.inject.Inject
 
@@ -316,6 +316,4 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         const val KEY_ASSET_BALANCES = "asset_balances"
         const val KEY_DEX_PAIR_SMART_INFO_NOT_SHOW_LIST = "dex_pair_smart_info_not_show_list"
     }
-
-
 }
