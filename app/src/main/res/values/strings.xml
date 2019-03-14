@@ -646,4 +646,9 @@
     <string name="dex_smart_pair_dialog_continue">Continue</string>
     <string name="dex_smart_pair_dialog_cancel">Cancel</string>
     <string name="dex_smart_pair_dialog_do_not_show_again">Do not show again</string>
+
+    <string name="enter_seed_manually_validation_seed_is_address_title">You have entered an address, not a Seed phrase</string>
+    <string name="enter_seed_manually_validation_seed_is_address_description">We do not recommend using an address as a Seed phrase, as this is not secure. Are you sure you want to continue?</string>
+    <string name="enter_seed_manually_validation_seed_is_simple_title">Your Seed phrase is too simple</string>
+    <string name="enter_seed_manually_validation_seed_is_simple_description">This is not secure. You should avoid using a Seed phrase that might be easy for someone else to guess. Are you sure you want to continue?</string>
 </resources>
