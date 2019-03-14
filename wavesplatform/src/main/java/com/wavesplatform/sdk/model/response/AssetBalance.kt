@@ -152,4 +152,4 @@ open class IssueTransaction(
     @SerializedName("decimals") var decimals: Int? = 0,
     @SerializedName("description") var description: String? = "",
     @SerializedName("script") var script: String? = ""
-) : RealmModel, Parcelable
+) : Parcelable
