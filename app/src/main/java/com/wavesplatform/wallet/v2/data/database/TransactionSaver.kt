@@ -224,7 +224,7 @@ class TransactionSaver @Inject constructor() {
 
     private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfo>, callback: (ArrayList<AssetInfo>) -> Unit) {
         runAsync {
-            queryAllAsync<SpamAssetDb> { spams -> // todo chech
+            queryAllAsync<SpamAssetDb> { spams ->
                 val spamMap = spams.associateBy { it.assetId }
                 val allAssetMap = allAssets.associateBy { it.id }
                 arrayList.iterator().forEach { newAsset ->
