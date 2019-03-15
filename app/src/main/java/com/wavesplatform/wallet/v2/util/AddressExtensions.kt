@@ -10,7 +10,7 @@ var ChecksumLength = 4
 var HashLength = 20
 var AddressLength = 1 + 1 + ChecksumLength + HashLength
 
-fun String?.isValidAddress(): Boolean {
+fun String?.isValidWavesAddress(): Boolean {
     if (this.isNullOrEmpty()) return false
     return try {
         val bytes = Base58.decode(this)

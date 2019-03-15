@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.auth.import_account.manually
 
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -16,10 +17,7 @@ import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.Protec
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
-import com.wavesplatform.wallet.v2.util.applyFilterStartEmptySpace
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.onAction
+import com.wavesplatform.wallet.v2.util.*
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
@@ -28,6 +26,7 @@ import org.apache.commons.io.Charsets
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import pers.victor.ext.isNetworkConnected
+import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
@@ -54,6 +53,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
 
         edit_seed.applyFilterStartEmptySpace()
 
+        // TODO: rewrite logic to Rx with debounce,
         edit_seed.addTextChangedListener {
             on { s, start, before, count ->
                 validator
@@ -67,7 +67,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                                         Glide.with(it)
                                                 .load(identicon.create(wallet.address))
                                                 .apply(RequestOptions().circleCrop())
-                                                .into(image_asset!!)
+                                                .into(image_asset)
                                     }
                                     address_asset.text = wallet.address
                                     address_asset.visibility = View.VISIBLE
@@ -84,7 +84,7 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
                                     Glide.with(baseActivity)
                                             .load(identicon.create(wallet.address))
                                             .apply(RequestOptions().circleCrop())
-                                            .into(image_asset!!)
+                                            .into(image_asset)
                                     address_asset.text = wallet.address
                                     address_asset.visibility = View.VISIBLE
                                     skeleton_address_asset.visibility = View.GONE
@@ -104,9 +104,32 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
         }
 
         button_continue.click {
-            launchActivity<ProtectAccountActivity> {
-                putExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT, true)
-                putExtra(NewAccountActivity.KEY_INTENT_SEED, edit_seed.text.toString().trim())
+            if (presenter.simpleValidationAlertShown || isSimpleValidationPassed()) {
+                launchActivity<ProtectAccountActivity> {
+                    putExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT, true)
+                    putExtra(NewAccountActivity.KEY_INTENT_SEED, edit_seed.text.toString().trim())
+                }
+            }
+        }
+    }
+
+    private fun isSimpleValidationPassed(): Boolean {
+        presenter.simpleValidationAlertShown = true
+        return when {
+            edit_seed.text.toString().trim().isValidWavesAddress() -> {
+                relative_validation_error.visiable()
+                text_validation_title.text = getString(R.string.enter_seed_manually_validation_seed_is_address_title)
+                text_validation_description.text = getString(R.string.enter_seed_manually_validation_seed_is_address_description)
+                false
+            }
+            edit_seed.text.toString().isWebUrl() -> {
+                relative_validation_error.visiable()
+                text_validation_title.text = getString(R.string.enter_seed_manually_validation_seed_is_simple_title)
+                text_validation_description.text = getString(R.string.enter_seed_manually_validation_seed_is_simple_description)
+                false
+            }
+            else -> {
+                true
             }
         }
     }

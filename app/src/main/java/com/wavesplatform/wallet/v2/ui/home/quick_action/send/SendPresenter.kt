@@ -17,7 +17,7 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
 import com.wavesplatform.wallet.v2.util.isSpamConsidered
-import com.wavesplatform.wallet.v2.util.isValidAddress
+import com.wavesplatform.wallet.v2.util.isValidWavesAddress
 import com.wavesplatform.wallet.v2.util.isWaves
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
@@ -280,7 +280,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
 
         fun isWavesAddress(address: String?): Boolean {
-            if (address == null || !address.isValidAddress()) {
+            if (address == null || !address.isValidWavesAddress()) {
                 return false
             }
 
