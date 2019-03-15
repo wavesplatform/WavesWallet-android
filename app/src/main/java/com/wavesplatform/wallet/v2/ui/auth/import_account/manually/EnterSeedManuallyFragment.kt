@@ -11,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
+import com.wavesplatform.wallet.v2.data.model.local.Complexity
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.data.rules.SeedRule
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity
@@ -23,10 +24,7 @@ import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
 import kotlinx.android.synthetic.main.fragment_enter_seed_manually.*
 import org.apache.commons.io.Charsets
-import pers.victor.ext.addTextChangedListener
-import pers.victor.ext.click
-import pers.victor.ext.isNetworkConnected
-import pers.victor.ext.visiable
+import pers.victor.ext.*
 import javax.inject.Inject
 
 class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
@@ -56,6 +54,8 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
         // TODO: rewrite logic to Rx with debounce,
         edit_seed.addTextChangedListener {
             on { s, start, before, count ->
+                presenter.simpleValidationAlertShown = false
+                relative_validation_error.gone()
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
@@ -117,15 +117,17 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
         presenter.simpleValidationAlertShown = true
         return when {
             edit_seed.text.toString().trim().isValidWavesAddress() -> {
-                relative_validation_error.visiable()
+                hideInputMethod()
                 text_validation_title.text = getString(R.string.enter_seed_manually_validation_seed_is_address_title)
                 text_validation_description.text = getString(R.string.enter_seed_manually_validation_seed_is_address_description)
+                relative_validation_error.visiable()
                 false
             }
-            edit_seed.text.toString().isWebUrl() -> {
-                relative_validation_error.visiable()
+            edit_seed.text.toString().isWebUrl() || Complexity.complexity(edit_seed.text.toString()).isTooSimple() -> {
+                hideInputMethod()
                 text_validation_title.text = getString(R.string.enter_seed_manually_validation_seed_is_simple_title)
                 text_validation_description.text = getString(R.string.enter_seed_manually_validation_seed_is_simple_description)
+                relative_validation_error.visiable()
                 false
             }
             else -> {
