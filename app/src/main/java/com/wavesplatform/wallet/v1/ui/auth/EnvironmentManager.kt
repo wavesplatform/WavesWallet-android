@@ -59,16 +59,16 @@ class EnvironmentManager {
 
         const val KEY_ENV_TEST_NET = "env_testnet"
         const val URL_CONFIG_MAIN_NET = "https://github-proxy.wvservices.com/" +
-                "wavesplatform/waves-client-config/master/environment_mainnet.json"
+                "wavesplatform/waves-client-config/mobile/v2.2/environment_mainnet.json"
         const val FILENAME_TEST_NET = "environment_testnet.json"
 
         const val KEY_ENV_MAIN_NET = "env_prod"
         const val URL_CONFIG_TEST_NET = "https://github-proxy.wvservices.com/" +
-                "wavesplatform/waves-client-config/master/environment_testnet.json"
+                "wavesplatform/waves-client-config/mobile/v2.2/environment_testnet.json"
         const val FILENAME_MAIN_NET = "environment_mainnet.json"
 
         const val URL_COMMISSION_MAIN_NET = "https://github-proxy.wvservices.com/" +
-                "wavesplatform/waves-client-config/master/fee.json"
+                "wavesplatform/waves-client-config/mobile/v2.2/fee.json"
 
         private var instance: EnvironmentManager? = null
         private val handler = Handler()
