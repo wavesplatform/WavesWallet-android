@@ -82,7 +82,6 @@ class EnvironmentManager {
         fun init(application: Application) {
             instance = EnvironmentManager()
             instance!!.application = application
-
             val envName = environmentName
             if (!TextUtils.isEmpty(envName)) {
                 for (environment in Environment.environments) {

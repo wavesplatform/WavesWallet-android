@@ -70,7 +70,7 @@ public class App extends DaggerApplication {
         RxJavaPlugins.setErrorHandler(Timber::e);
 
         accessManager = new AccessManager(mPrefsUtil, authHelper);
-        Wavesplatform.init(this, null);
+        Wavesplatform.init(this, true, null);
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

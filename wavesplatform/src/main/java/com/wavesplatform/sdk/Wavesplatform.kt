@@ -10,7 +10,6 @@ import java.util.*
 class Wavesplatform private constructor(var context: Application, factory: CallAdapter.Factory?) {
 
     private var dataManager: DataManager = DataManager(context, factory)
-    private var cookies: HashSet<String> = hashSetOf()
     private var wavesWallet: WavesWallet? = null
     private var guid: String = UUID.randomUUID().toString()
 
@@ -19,8 +18,11 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         private var instance: Wavesplatform? = null
 
         @JvmStatic
-        fun init(application: Application, factory: CallAdapter.Factory? = null) {
+        fun init(application: Application, mainNet: Boolean = true, factory: CallAdapter.Factory? = null) {
             EnvironmentManager.init(application)
+            if (!mainNet) {
+                EnvironmentManager.setCurrentEnvironment(EnvironmentManager.Environment.TEST_NET)
+            }
             instance = Wavesplatform(application, factory)
             EnvironmentManager.updateConfiguration(
                     getGithubService().globalConfiguration(EnvironmentManager.environment.url),
@@ -108,14 +110,6 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
 
         fun getNodeService(): NodeService {
             return Wavesplatform.get().dataManager.nodeService
-        }
-
-        fun getCookies(): HashSet<String> {
-            return Wavesplatform.get().cookies
-        }
-
-        fun setCookies(cookies: HashSet<String>) {
-            Wavesplatform.get().cookies = cookies
         }
 
         fun setCallAdapterFactory(factory: CallAdapter.Factory) {

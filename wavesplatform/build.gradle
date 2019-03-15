@@ -24,16 +24,13 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     implementation "org.whispersystems:curve25519-java:0.4.1"
     implementation 'com.madgag.spongycastle:core:1.58.0.0'
-    implementation 'com.google.guava:guava:27.0.1-jre'
-    kapt 'com.google.guava:guava:27.0.1-jre'
+    api 'com.google.guava:guava:27.1-android'
     implementation 'commons-codec:commons-codec:1.10'
     implementation 'org.apache.commons:commons-lang3:3.4'
 

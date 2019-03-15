@@ -8,7 +8,6 @@ import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.sdk.BuildConfig
 import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import okhttp3.Cache
 import okhttp3.Interceptor
@@ -22,6 +21,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -34,8 +34,11 @@ open class DataManager(var context: Context,
     lateinit var matcherService: MatcherService
     lateinit var githubService: GithubService
     lateinit var coinomatService: CoinomatService
+    private var cookies: HashSet<String> = hashSetOf()
 
-    init { createServices() }
+    init {
+        createServices()
+    }
 
     private fun createServices() {
         nodeService = createRetrofit(
@@ -116,10 +119,10 @@ open class DataManager(var context: Context,
             if (originalResponse.request().url().url().toString()
                             .contains(Constants.URL_NODE)
                     && originalResponse.headers("Set-Cookie").isNotEmpty()
-                    && Wavesplatform.getCookies().isEmpty()) {
+                    && this.cookies.isEmpty()) {
                 val cookies = originalResponse.headers("Set-Cookie")
                         .toHashSet()
-                Wavesplatform.setCookies(cookies)
+                this.cookies = cookies
             }
             originalResponse
         }
@@ -127,11 +130,10 @@ open class DataManager(var context: Context,
 
     private fun addCookiesInterceptor(): Interceptor {
         return Interceptor { chain ->
-            val cookies = Wavesplatform.getCookies()
-            if (cookies.isNotEmpty() && chain.request().url().url().toString()
+            if (this.cookies.isNotEmpty() && chain.request().url().url().toString()
                             .contains(Constants.URL_NODE)) {
                 val builder = chain.request().newBuilder()
-                cookies.forEach {
+                this.cookies.forEach {
                     builder.addHeader("Cookie", it)
                 }
                 chain.proceed(builder.build())
