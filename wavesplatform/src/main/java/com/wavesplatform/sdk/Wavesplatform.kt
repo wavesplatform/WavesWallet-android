@@ -30,6 +30,8 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
                     getNodeService())
         }
 
+        @JvmStatic
+        @Throws(NullPointerException::class)
         private fun get(): Wavesplatform {
             if (instance == null) {
                 throw NullPointerException("Wavesplatform must be init first!")
@@ -37,10 +39,14 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             return instance!!
         }
 
+        @JvmStatic
+        @Throws(NullPointerException::class)
         fun generateSeed(): String {
             return WalletManager.createWalletSeed(Wavesplatform.get().context)
         }
 
+        @JvmStatic
+        @Throws(Exception::class)
         fun createWallet(seed: String,
                          guid: String = UUID.randomUUID().toString()): String {
             return try {
@@ -54,6 +60,8 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             }
         }
 
+        @JvmStatic
+        @Throws(Exception::class)
         fun createWallet(encrypted: String,
                          password: String,
                          guid: String = UUID.randomUUID().toString()): String {
@@ -68,6 +76,8 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             }
         }
 
+        @JvmStatic
+        @Throws(NullPointerException::class)
         fun getWallet(): WavesWallet {
             if (get().wavesWallet == null) {
                 throw NullPointerException("Wavesplatform wallet must be created first!")
@@ -76,42 +86,52 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             }
         }
 
+        @JvmStatic
         fun resetWallet() {
             get().wavesWallet = null
         }
 
+        @JvmStatic
         fun isAuthenticated(): Boolean {
             return get().wavesWallet != null
         }
 
+        @JvmStatic
         fun getAddress(): String {
             return Wavesplatform.getWallet().address
         }
 
+        @JvmStatic
         fun getPublicKeyStr(): String {
             return Wavesplatform.getWallet().publicKeyStr
         }
 
+        @JvmStatic
         fun getApiService(): ApiService {
             return Wavesplatform.get().dataManager.apiService
         }
 
+        @JvmStatic
         fun getGithubService(): GithubService {
             return Wavesplatform.get().dataManager.githubService
         }
 
+        @JvmStatic
         fun getCoinomatService(): CoinomatService {
             return Wavesplatform.get().dataManager.coinomatService
         }
 
+        @JvmStatic
         fun getMatcherService(): MatcherService {
             return Wavesplatform.get().dataManager.matcherService
         }
 
+        @JvmStatic
         fun getNodeService(): NodeService {
             return Wavesplatform.get().dataManager.nodeService
         }
 
+        @JvmStatic
         fun setCallAdapterFactory(factory: CallAdapter.Factory) {
             Wavesplatform.get().dataManager.setCallAdapterFactory(factory)
         }
