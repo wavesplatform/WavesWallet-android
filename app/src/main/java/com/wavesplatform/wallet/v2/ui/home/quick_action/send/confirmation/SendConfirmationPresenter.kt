@@ -4,9 +4,9 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.model.request.TransactionsBroadcastRequest
-import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.sdk.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.request.TransactionsBroadcastRequest
+import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetInfo
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R

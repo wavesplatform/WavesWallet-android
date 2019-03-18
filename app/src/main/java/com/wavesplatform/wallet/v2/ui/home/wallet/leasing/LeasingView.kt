@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 
-import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface LeasingView : BaseMvpView {

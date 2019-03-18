@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data.model.local
 
 import android.os.Parcelable
-import com.wavesplatform.sdk.model.WatchMarket
+import com.wavesplatform.sdk.net.model.WatchMarket
 import kotlinx.android.parcel.Parcelize
 
 /**

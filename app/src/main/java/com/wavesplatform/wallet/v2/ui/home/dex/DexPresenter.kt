@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.sdk.model.WatchMarket
+import com.wavesplatform.sdk.net.model.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.db.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil

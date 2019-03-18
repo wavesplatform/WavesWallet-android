@@ -6,8 +6,8 @@ import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.model.response.Transaction
-import com.wavesplatform.sdk.model.response.TransactionType
+import com.wavesplatform.sdk.net.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R

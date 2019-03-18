@@ -8,7 +8,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment

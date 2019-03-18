@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentFragment
 
 class AssetDetailsContentPageAdapter(fm: FragmentManager?, var assets: List<AssetBalance>) : FragmentStatePagerAdapter(fm) {

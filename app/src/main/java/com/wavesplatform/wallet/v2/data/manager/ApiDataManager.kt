@@ -3,11 +3,11 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.sdk.model.WatchMarket
-import com.wavesplatform.sdk.model.response.Alias
-import com.wavesplatform.sdk.model.response.AssetInfo
-import com.wavesplatform.sdk.model.response.CandlesResponse
-import com.wavesplatform.sdk.model.response.LastTradesResponse
+import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.response.Alias
+import com.wavesplatform.sdk.net.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.response.CandlesResponse
+import com.wavesplatform.sdk.net.model.response.LastTradesResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v1.util.PrefsUtil

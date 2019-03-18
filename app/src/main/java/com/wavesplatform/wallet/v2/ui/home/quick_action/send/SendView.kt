@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
-import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.sdk.model.response.coinomat.XRate
+import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.coinomat.XRate
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface SendView : BaseMvpView {

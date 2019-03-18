@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data.manager.base
 
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.service.*
+import com.wavesplatform.sdk.net.service.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper

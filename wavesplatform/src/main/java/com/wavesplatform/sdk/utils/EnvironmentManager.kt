@@ -8,13 +8,12 @@ import android.text.TextUtils
 import android.util.Log
 import com.google.gson.Gson
 import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.sdk.model.response.GlobalConfiguration
-import com.wavesplatform.sdk.model.response.IssueTransaction
-import com.wavesplatform.sdk.service.ApiService
-import com.wavesplatform.sdk.service.NodeService
+import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.GlobalConfiguration
+import com.wavesplatform.sdk.net.model.response.IssueTransaction
+import com.wavesplatform.sdk.net.service.ApiService
+import com.wavesplatform.sdk.net.service.NodeService
 import io.reactivex.Observable // todo check
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import pers.victor.ext.currentTimeMillis
 import java.io.IOException

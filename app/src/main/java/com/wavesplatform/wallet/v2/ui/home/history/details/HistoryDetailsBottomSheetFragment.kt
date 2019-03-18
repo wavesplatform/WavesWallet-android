@@ -22,11 +22,11 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.sdk.model.response.Transaction
-import com.wavesplatform.sdk.model.response.TransactionType
-import com.wavesplatform.sdk.model.response.Transfer
-import com.wavesplatform.sdk.service.CoinomatService
+import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.TransactionType
+import com.wavesplatform.sdk.net.model.response.Transfer
+import com.wavesplatform.sdk.net.service.CoinomatService
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -708,7 +708,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    openUrlWithChromeTab(String.format(com.wavesplatform.sdk.Constants.WAVES_EXPLORER, transaction.id))
+                    openUrlWithChromeTab(String.format(com.wavesplatform.sdk.Constants.URL_WAVES_EXPLORER, transaction.id))
                 })
 
         when (transaction.transactionType()) {

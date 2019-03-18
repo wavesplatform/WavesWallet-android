@@ -529,7 +529,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
         text_fee_value.text = "${getScaledAmount(unscaledAmount, 8)} " +
-                "${Constants.wavesAssetInfo.name}"
+                "${Constants.WAVES_ASSET_INFO.name}"
         progress_bar_fee_transaction.hide()
         text_fee_value.visiable()
     }

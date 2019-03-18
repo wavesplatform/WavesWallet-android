@@ -3,7 +3,7 @@ package com.wavesplatform.wallet.v2.data.manager
 import android.content.Intent
 import android.text.TextUtils
 import com.vicpin.krealmextensions.RealmConfigStore
-import com.wavesplatform.sdk.WavesWallet
+import com.wavesplatform.sdk.crypto.WavesWallet
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.crypto.AESUtil
 import com.wavesplatform.sdk.utils.EnvironmentManager

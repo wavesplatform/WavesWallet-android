@@ -6,7 +6,7 @@ import android.preference.PreferenceManager
 import android.text.TextUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext

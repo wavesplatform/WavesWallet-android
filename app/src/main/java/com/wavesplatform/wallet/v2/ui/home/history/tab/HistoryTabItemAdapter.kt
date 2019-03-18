@@ -10,8 +10,8 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
 import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.model.response.Transaction
-import com.wavesplatform.sdk.model.response.TransactionType
+import com.wavesplatform.sdk.net.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R

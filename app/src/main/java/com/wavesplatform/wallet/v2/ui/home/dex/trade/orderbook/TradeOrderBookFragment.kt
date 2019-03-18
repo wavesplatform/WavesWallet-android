@@ -7,8 +7,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.sdk.model.WatchMarket
-import com.wavesplatform.sdk.model.response.OrderBook
+import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.response.OrderBook
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.stripZeros

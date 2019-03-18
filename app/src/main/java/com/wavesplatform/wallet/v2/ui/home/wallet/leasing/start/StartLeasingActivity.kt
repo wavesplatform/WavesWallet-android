@@ -9,7 +9,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.model.response.Alias
+import com.wavesplatform.sdk.net.model.response.Alias
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -173,9 +173,9 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }
                 .map {
                     if (it.toDouble() != 0.0) {
-                        val feeValue = MoneyUtil.getScaledText(presenter.fee, Constants.wavesAssetInfo).toBigDecimal()
+                        val feeValue = MoneyUtil.getScaledText(presenter.fee, Constants.WAVES_ASSET_INFO).toBigDecimal()
                         val currentValueWithFee = it.toBigDecimal() + feeValue
-                        val isValid = currentValueWithFee <= MoneyUtil.getScaledText(presenter.wavesAssetBalance, Constants.wavesAssetInfo).clearBalance().toBigDecimal() && currentValueWithFee > feeValue
+                        val isValid = currentValueWithFee <= MoneyUtil.getScaledText(presenter.wavesAssetBalance, Constants.WAVES_ASSET_INFO).clearBalance().toBigDecimal() && currentValueWithFee > feeValue
                         presenter.amountValidation = isValid
 
                         if (isValid) {
@@ -200,7 +200,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                 }))
 
         presenter.wavesAssetBalance.notNull {
-            text_asset_value.text = MoneyUtil.getScaledText(it, Constants.wavesAssetInfo)
+            text_asset_value.text = MoneyUtil.getScaledText(it, Constants.WAVES_ASSET_INFO)
 
             presenter.loadCommission(it)
         }
@@ -258,14 +258,14 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                         } else {
                             waves.minus(presenter.fee)
                         }
-                        edit_amount.setText(MoneyUtil.getScaledText(balance, Constants.wavesAssetInfo).clearBalance().toBigDecimal().toString())
+                        edit_amount.setText(MoneyUtil.getScaledText(balance, Constants.WAVES_ASSET_INFO).clearBalance().toBigDecimal().toString())
                         edit_amount.setSelection(edit_amount.text.length)
                     }
                 }
                 else -> {
                     val percentBalance = (waves.times((quickBalanceView.tag.toString().toDouble().div(100)))).toLong()
                     quickBalanceView.click {
-                        edit_amount.setText(MoneyUtil.getScaledText(percentBalance, Constants.wavesAssetInfo).clearBalance().toBigDecimal().toString())
+                        edit_amount.setText(MoneyUtil.getScaledText(percentBalance, Constants.WAVES_ASSET_INFO).clearBalance().toBigDecimal().toString())
                         edit_amount.setSelection(edit_amount.text.length)
                     }
                 }

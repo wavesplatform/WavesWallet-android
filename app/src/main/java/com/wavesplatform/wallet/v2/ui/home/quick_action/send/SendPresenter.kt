@@ -5,9 +5,9 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.Hash
-import com.wavesplatform.sdk.model.request.TransactionsBroadcastRequest
-import com.wavesplatform.sdk.model.request.TransferTransactionRequest
-import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.net.model.request.TransactionsBroadcastRequest
+import com.wavesplatform.sdk.net.model.request.TransferTransactionRequest
+import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.TransactionUtil.Companion.countCommission

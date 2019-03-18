@@ -7,7 +7,7 @@ import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R

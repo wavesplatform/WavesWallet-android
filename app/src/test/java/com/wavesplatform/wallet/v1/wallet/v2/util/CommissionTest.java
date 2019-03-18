@@ -1,8 +1,8 @@
 package com.wavesplatform.wallet.v1.wallet.v2.util;
 
 import com.wavesplatform.sdk.utils.TransactionUtil;
-import com.wavesplatform.sdk.model.response.GlobalTransactionCommission;
-import com.wavesplatform.sdk.model.response.Transaction;
+import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommission;
+import com.wavesplatform.sdk.net.model.response.Transaction;
 
 import org.junit.Test;
 

@@ -109,7 +109,7 @@ class ConfirmationCancelLeasingActivity : BaseActivity(), ConfirmationCancelLeas
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
-        text_fee_value.text = "${MoneyUtil.getScaledText(unscaledAmount, 8)} ${Constants.wavesAssetInfo.name}"
+        text_fee_value.text = "${MoneyUtil.getScaledText(unscaledAmount, 8)} ${Constants.WAVES_ASSET_INFO.name}"
         button_okay.isEnabled = true
         progress_bar_fee_transaction.hide()
         text_fee_value.visiable()

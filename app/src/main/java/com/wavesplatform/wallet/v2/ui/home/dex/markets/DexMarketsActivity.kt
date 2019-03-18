@@ -12,7 +12,7 @@ import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.OnDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.sdk.model.response.MarketResponse
+import com.wavesplatform.sdk.net.model.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.util.showError

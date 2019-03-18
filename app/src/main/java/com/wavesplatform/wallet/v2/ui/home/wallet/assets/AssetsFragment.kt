@@ -21,14 +21,12 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.REQUEST_SORTING
-import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity

@@ -15,14 +15,12 @@ import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.vicpin.krealmextensions.delete
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.sdk.model.response.MarketResponse
+import com.wavesplatform.sdk.net.model.response.MarketResponse
 import com.wavesplatform.wallet.v2.data.model.db.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
 import com.wavesplatform.sdk.utils.notNull
-import io.realm.kotlin.deleteFromRealm
 import kotlinx.android.synthetic.main.activity_active_markets_sorting.*
 import kotlinx.android.synthetic.main.dex_active_markets_sorting_item.view.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*

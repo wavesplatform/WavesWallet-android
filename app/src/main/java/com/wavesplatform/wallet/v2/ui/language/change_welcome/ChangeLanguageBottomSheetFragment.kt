@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.Language
-import com.wavesplatform.sdk.model.LanguageItem
+import com.wavesplatform.sdk.net.model.Language
+import com.wavesplatform.sdk.net.model.LanguageItem
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_change_language_layout.view.*

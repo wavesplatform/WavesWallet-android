@@ -13,9 +13,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
 import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.Constants.Companion.WCTGeneralAsset
-import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.sdk.model.response.AssetInfo
+import com.wavesplatform.sdk.Constants.Companion.WCT_GENERAL_ASSET
+import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetInfo
 import com.wavesplatform.wallet.R
 import pers.victor.ext.findColor
 import pers.victor.ext.resize
@@ -136,7 +136,7 @@ class AssetAvatarView : AppCompatImageView {
     * */
     private fun setValues(assetId: String, name: String, isSponsoredAsset: Boolean, isScriptAsset: Boolean) {
         val avatar = when (assetId) {
-            WCTGeneralAsset.assetId -> R.drawable.ic_logo_wct_48
+            WCT_GENERAL_ASSET.assetId -> R.drawable.ic_logo_wct_48
             "" -> Constants.defaultAssetsAvatar()[Constants.WAVES_ASSET_ID_FILLED]
             else -> Constants.defaultAssetsAvatar()[assetId]
         }

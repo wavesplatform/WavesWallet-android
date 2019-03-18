@@ -3,10 +3,10 @@ package com.wavesplatform.sdk.utils
 
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.model.response.AssetInfo
-import com.wavesplatform.sdk.model.response.GlobalTransactionCommission
-import com.wavesplatform.sdk.model.response.Transaction
-import com.wavesplatform.sdk.model.response.TransactionType
+import com.wavesplatform.sdk.net.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommission
+import com.wavesplatform.sdk.net.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.TransactionType
 import javax.inject.Inject
 
 /**

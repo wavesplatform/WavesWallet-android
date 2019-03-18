@@ -16,7 +16,7 @@ import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
-import com.wavesplatform.sdk.model.response.News
+import com.wavesplatform.sdk.net.model.response.News
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App

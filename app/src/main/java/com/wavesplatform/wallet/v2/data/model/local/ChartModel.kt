@@ -3,8 +3,8 @@ package com.wavesplatform.wallet.v2.data.model.local
 import android.databinding.BaseObservable
 
 import com.github.mikephil.charting.data.CombinedData
-import com.wavesplatform.sdk.model.WatchMarket
-import com.wavesplatform.sdk.model.response.CandlesResponse
+import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.response.CandlesResponse
 
 import java.util.ArrayList
 import java.util.Date

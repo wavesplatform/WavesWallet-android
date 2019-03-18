@@ -81,7 +81,7 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
 
                         transactionListFromDb.forEach { transaction ->
                             transaction.asset = if (transaction.assetId.isNullOrEmpty()) {
-                                AssetInfoDb(Constants.wavesAssetInfo)
+                                AssetInfoDb(Constants.WAVES_ASSET_INFO)
                             } else {
                                 assetsInfoListFromDb.firstOrNull { it.id == transaction.assetId }
                             }

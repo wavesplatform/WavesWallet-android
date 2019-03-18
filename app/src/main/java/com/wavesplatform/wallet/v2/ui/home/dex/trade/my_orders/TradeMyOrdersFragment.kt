@@ -8,8 +8,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.sdk.model.WatchMarket
-import com.wavesplatform.sdk.model.response.OrderResponse
+import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.response.OrderResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.sdk.utils.notNull

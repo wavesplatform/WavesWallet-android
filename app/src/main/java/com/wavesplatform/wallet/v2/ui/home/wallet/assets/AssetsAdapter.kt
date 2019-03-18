@@ -9,7 +9,7 @@ import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
-import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.setMargins

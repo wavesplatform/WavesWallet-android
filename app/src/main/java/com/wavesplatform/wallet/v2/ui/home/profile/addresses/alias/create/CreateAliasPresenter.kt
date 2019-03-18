@@ -1,8 +1,8 @@
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.model.request.AliasRequest
-import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.request.AliasRequest
+import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.utils.isSmartError
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil

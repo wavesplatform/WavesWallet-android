@@ -10,7 +10,7 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R

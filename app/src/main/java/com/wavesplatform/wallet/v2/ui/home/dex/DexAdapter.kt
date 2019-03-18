@@ -3,7 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home.dex
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.WatchMarket
+import com.wavesplatform.sdk.net.model.WatchMarket
 import com.wavesplatform.sdk.utils.notNull
 import pers.victor.ext.findDrawable
 import java.math.BigDecimal

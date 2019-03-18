@@ -3,7 +3,7 @@ package com.wavesplatform.sdk.utils
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.net.model.response.*
 import org.spongycastle.util.encoders.Hex
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -11,16 +11,16 @@ import java.security.SecureRandom
 
 
 fun String.isWaves(): Boolean {
-    return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
+    return this.toLowerCase() == Constants.WAVES_ASSET_INFO.name.toLowerCase()
 }
 
 fun getWavesDexFee(fee: Long): BigDecimal {
-    return MoneyUtil.getScaledText(fee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
+    return MoneyUtil.getScaledText(fee, Constants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal()
 
 }
 
 fun String.isWavesId(): Boolean {
-    return this.toLowerCase() == Constants.wavesAssetInfo.id
+    return this.toLowerCase() == Constants.WAVES_ASSET_INFO.id
 }
 
 fun ByteArray.arrayWithSize(): ByteArray {
@@ -79,7 +79,7 @@ fun ErrorResponse.isSmartError(): Boolean {
 fun AssetInfo.getTicker(): String {
 
     if (this.id.isWavesId()) {
-        return Constants.wavesAssetInfo.name
+        return Constants.WAVES_ASSET_INFO.name
     }
 
     return this.ticker ?: this.name

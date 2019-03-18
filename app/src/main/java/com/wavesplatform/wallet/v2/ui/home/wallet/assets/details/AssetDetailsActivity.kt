@@ -11,8 +11,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.Transaction
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb

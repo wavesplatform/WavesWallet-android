@@ -5,7 +5,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.sdk.model.WatchMarket
+import com.wavesplatform.sdk.net.model.WatchMarket
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.db.MarketResponseDb

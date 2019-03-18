@@ -7,10 +7,10 @@ import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
-import com.wavesplatform.sdk.model.WatchMarket
-import com.wavesplatform.sdk.model.request.CancelOrderRequest
-import com.wavesplatform.sdk.model.request.OrderRequest
-import com.wavesplatform.sdk.model.response.*
+import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.request.CancelOrderRequest
+import com.wavesplatform.sdk.net.model.request.OrderRequest
+import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
@@ -91,8 +91,8 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
             return Observable.zip(Observable.just(EnvironmentManager.globalConfiguration)
                     .map {
                         val globalAssets = it.generalAssetIds.toMutableList()
-                        globalAssets.add(Constants.MRTGeneralAsset)
-                        globalAssets.add(Constants.WCTGeneralAsset)
+                        globalAssets.add(Constants.MRT_GENERAL_ASSET)
+                        globalAssets.add(Constants.WCT_GENERAL_ASSET)
                         return@map globalAssets.associateBy { it.assetId }
                     },
                     matcherService.getAllMarkets()

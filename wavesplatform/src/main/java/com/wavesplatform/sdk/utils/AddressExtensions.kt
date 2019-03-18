@@ -45,7 +45,8 @@ fun calcCheckSum(bytes: ByteArray): ByteArray {
 fun addressFromPublicKey(publicKey: ByteArray): String {
     return try {
         val publicKeyHash = Hash.secureHash(publicKey).copyOf(HASH_LENGTH)
-        val withoutChecksum = Bytes.concat(byteArrayOf(ADDRESS_VERSION, Constants.NET_CODE), publicKeyHash)
+        val withoutChecksum = Bytes.concat(byteArrayOf(ADDRESS_VERSION, EnvironmentManager.netCode),
+                publicKeyHash)
         Base58.encode(Bytes.concat(withoutChecksum, calcCheckSum(withoutChecksum)))
     } catch (e: Exception) {
         "Unknown address"

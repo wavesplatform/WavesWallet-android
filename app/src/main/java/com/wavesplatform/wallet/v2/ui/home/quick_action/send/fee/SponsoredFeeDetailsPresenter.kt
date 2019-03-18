@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.clearBalance
 import com.wavesplatform.sdk.utils.stripZeros
@@ -39,14 +39,14 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
     }
 
     private fun isValidBalanceForSponsoring(item: AssetBalance, fee: String): Boolean {
-        val sponsorBalance = MoneyUtil.getScaledText(item.getSponsorBalance(), Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
+        val sponsorBalance = MoneyUtil.getScaledText(item.getSponsorBalance(), Constants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal()
         val feeDecimalValue = fee.clearBalance().toBigDecimal()
         val availableBalance = MoneyUtil.getScaledText(item.getAvailableBalance()
                 ?: 0, item.getDecimals()).clearBalance().toBigDecimal()
 
         return ((sponsorBalance >= Constants.MIN_WAVES_SPONSORED_BALANCE.toBigDecimal() && availableBalance >= feeDecimalValue) ||
 
-                (sponsorBalance >= MoneyUtil.getScaledText(wavesFee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal() &&
+                (sponsorBalance >= MoneyUtil.getScaledText(wavesFee, Constants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal() &&
                         availableBalance >= feeDecimalValue &&
                         item.isMyWavesToken()) ||
 
@@ -55,7 +55,7 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
 
     private fun getFee(item: AssetBalance): String {
         return if (item.isWaves()) {
-            MoneyUtil.getScaledText(wavesFee, Constants.wavesAssetInfo.precision).stripZeros()
+            MoneyUtil.getScaledText(wavesFee, Constants.WAVES_ASSET_INFO.precision).stripZeros()
         } else {
             calculateFeeForSponsoredAsset(item).stripZeros()
         }
@@ -63,8 +63,8 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
 
     private fun calculateFeeForSponsoredAsset(item: AssetBalance): String {
         val sponsorFee = MoneyUtil.getScaledText(item.minSponsoredAssetFee, item).clearBalance().toBigDecimal()
-        val value = ((MoneyUtil.getScaledText(wavesFee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal() /
-                MoneyUtil.getScaledText(Constants.WAVES_MIN_FEE, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()) * sponsorFee)
+        val value = ((MoneyUtil.getScaledText(wavesFee, Constants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal() /
+                MoneyUtil.getScaledText(Constants.WAVES_MIN_FEE, Constants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal()) * sponsorFee)
 
         return value.toString()
     }

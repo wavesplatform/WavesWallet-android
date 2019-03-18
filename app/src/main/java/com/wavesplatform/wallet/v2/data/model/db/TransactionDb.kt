@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data.model.db
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.Transaction
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmList
 import io.realm.RealmModel

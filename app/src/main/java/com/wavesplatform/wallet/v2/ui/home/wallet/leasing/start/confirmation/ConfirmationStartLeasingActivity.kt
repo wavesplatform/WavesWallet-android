@@ -44,11 +44,11 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
 
         text_leasing_value.text = presenter.amount
         text_leasing_value.makeTextHalfBold()
-        text_free_value.text = "${getScaledAmount(presenter.fee, 8)} ${Constants.wavesAssetInfo.name}"
+        text_free_value.text = "${getScaledAmount(presenter.fee, 8)} ${Constants.WAVES_ASSET_INFO.name}"
 
         text_node_address.text = presenter.address
 
-        text_leasing_result_value.text = getString(R.string.confirm_leasing_result_value, presenter.amount, Constants.wavesAssetInfo.name)
+        text_leasing_result_value.text = getString(R.string.confirm_leasing_result_value, presenter.amount, Constants.WAVES_ASSET_INFO.name)
 
         button_confirm.click {
             supportActionBar?.setDisplayShowTitleEnabled(false)

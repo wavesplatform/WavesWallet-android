@@ -16,8 +16,8 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.sdk.model.response.coinomat.XRate
+import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.coinomat.XRate
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil

@@ -1,8 +1,8 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.model.WatchMarket
-import com.wavesplatform.sdk.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.response.AssetInfo
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import javax.inject.Inject

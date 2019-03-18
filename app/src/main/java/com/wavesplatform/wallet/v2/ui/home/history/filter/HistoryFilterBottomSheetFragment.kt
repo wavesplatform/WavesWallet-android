@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import com.vicpin.krealmextensions.queryAllAsync
-import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment

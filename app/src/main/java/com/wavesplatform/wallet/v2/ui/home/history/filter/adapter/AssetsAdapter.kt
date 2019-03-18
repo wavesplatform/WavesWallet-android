@@ -3,7 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home.history.filter.adapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
 import kotlinx.android.synthetic.main.history_asset_item.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.visiable

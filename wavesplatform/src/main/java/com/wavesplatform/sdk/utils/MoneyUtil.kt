@@ -1,7 +1,7 @@
 package com.wavesplatform.sdk.utils
 
-import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.sdk.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetInfo
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat

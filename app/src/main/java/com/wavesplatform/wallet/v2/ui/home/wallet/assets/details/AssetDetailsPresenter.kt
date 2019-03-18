@@ -2,8 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.sdk.model.response.AssetBalance
-import com.wavesplatform.sdk.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter

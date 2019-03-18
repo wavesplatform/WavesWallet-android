@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.data.local
 
 import android.content.Context
 import com.pddstudio.preferences.encrypted.EncryptedPreferences
-import com.wavesplatform.sdk.model.Language
+import com.wavesplatform.sdk.net.model.Language
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import javax.inject.Inject
 

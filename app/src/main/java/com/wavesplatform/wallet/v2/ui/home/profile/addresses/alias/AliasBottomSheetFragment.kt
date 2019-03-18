@@ -12,7 +12,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.sdk.model.response.Alias
+import com.wavesplatform.sdk.net.model.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
 import com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias.create.CreateAliasActivity

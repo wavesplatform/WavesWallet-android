@@ -19,7 +19,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
-import com.wavesplatform.sdk.model.Language
+import com.wavesplatform.sdk.net.model.Language
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.create.CreatePassCodeActivity
@@ -34,7 +34,6 @@ import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
-import io.sentry.Sentry
 import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import pers.victor.ext.finish

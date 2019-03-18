@@ -2,11 +2,11 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.wavesplatform.sdk.model.OrderStatus
+import com.wavesplatform.sdk.net.model.OrderStatus
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
-import com.wavesplatform.sdk.model.response.MarketResponse
-import com.wavesplatform.sdk.model.response.OrderResponse
+import com.wavesplatform.sdk.net.model.response.MarketResponse
+import com.wavesplatform.sdk.net.model.response.OrderResponse
 import com.wavesplatform.sdk.utils.stripZeros
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import java.math.BigInteger

@@ -7,7 +7,7 @@ import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.asksira.loopingviewpager.LoopingViewPager
-import com.wavesplatform.sdk.model.Language
+import com.wavesplatform.sdk.net.model.Language
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.BuildConfig

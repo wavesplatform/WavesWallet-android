@@ -4,7 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter

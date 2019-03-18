@@ -2,7 +2,9 @@ package com.wavesplatform.sdk
 
 import android.app.Application
 import android.util.Log
-import com.wavesplatform.sdk.service.*
+import com.wavesplatform.sdk.crypto.WalletManager
+import com.wavesplatform.sdk.crypto.WavesWallet
+import com.wavesplatform.sdk.net.service.*
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import retrofit2.CallAdapter
 import java.util.*

@@ -1,9 +1,9 @@
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.wavesplatform.sdk.model.response.GlobalConfiguration
-import com.wavesplatform.sdk.model.response.GlobalTransactionCommission
-import com.wavesplatform.sdk.model.response.News
-import com.wavesplatform.sdk.model.response.SpamAsset
+import com.wavesplatform.sdk.net.model.response.GlobalConfiguration
+import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommission
+import com.wavesplatform.sdk.net.model.response.News
+import com.wavesplatform.sdk.net.model.response.SpamAsset
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import io.reactivex.Observable
 import java.util.*

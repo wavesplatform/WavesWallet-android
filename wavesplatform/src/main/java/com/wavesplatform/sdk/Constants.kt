@@ -1,40 +1,38 @@
 package com.wavesplatform.sdk
 
-import com.wavesplatform.sdk.model.response.AssetInfo
-import com.wavesplatform.sdk.model.response.GlobalConfiguration
+import com.wavesplatform.sdk.net.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.response.GlobalConfiguration
 import com.wavesplatform.sdk.utils.EnvironmentManager
 
 
 class Constants {
+
     companion object {
-        const val VERSION: Int = 2
-        const val NET_CODE = 'W'.toByte()
 
         const val URL_NODE = "https://nodes.wavesnodes.com"
         const val URL_DATA = "https://api.wavesplatform.com"
         const val URL_MATCHER = "https://matcher.wavesplatform.com"
         const val URL_SPAM_FILE = "https://github-proxy.wvservices.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv/"
         const val URL_COINOMAT = "https://coinomat.com/api/"
-        const val WAVES_EXPLORER = "http://wavesexplorer.com/tx/%s"
-        const val URL_COMMISSION = "https://github-proxy.wvservices.com/" + "wavesplatform/waves-client-config/master/fee.json"
-        const val URL_CONFIG = "https://github-proxy.wvservices.com/" + "wavesplatform/waves-client-config/master/environment_mainnet.json"
+        const val URL_WAVES_EXPLORER = "http://wavesexplorer.com/tx/%s"
 
+        const val VERSION: Int = 2
         const val WAVES_ASSET_ID_EMPTY = ""
         const val WAVES_ASSET_ID_FILLED = "WAVES"
-
-        val wavesAssetInfo = AssetInfo(id = WAVES_ASSET_ID_EMPTY, precision = 8, name = "WAVES", quantity = 10000000000000000L)
-        var MRTGeneralAsset = GlobalConfiguration.GeneralAssetId(assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
-                gatewayId = "MRT", displayName = "MinersReward")
-
-        var WCTGeneralAsset = GlobalConfiguration.GeneralAssetId(assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
-                gatewayId = "WCT", displayName = "WavesCommunity")
-
         const val SELL_ORDER_TYPE = "sell"
         const val BUY_ORDER_TYPE = "buy"
-
         const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
-        const val WAVES_MIN_FEE: Long = 100000L
-        const val MIN_WAVES_SPONSORED_BALANCE: Double = 1.005
+        const val WAVES_MIN_FEE = 100000L
+        const val MIN_WAVES_SPONSORED_BALANCE = 1.005
+
+        val WAVES_ASSET_INFO = AssetInfo(id = WAVES_ASSET_ID_EMPTY, precision = 8, name = "WAVES",
+                quantity = 10000000000000000L)
+        val MRT_GENERAL_ASSET = GlobalConfiguration.GeneralAssetId(
+                assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
+                gatewayId = "MRT", displayName = "MinersReward")
+        val WCT_GENERAL_ASSET = GlobalConfiguration.GeneralAssetId(
+                assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
+                gatewayId = "WCT", displayName = "WavesCommunity")
 
         // Transaction view types non Transaction block-chain type
         const val ID_RECEIVED_TYPE = 0
