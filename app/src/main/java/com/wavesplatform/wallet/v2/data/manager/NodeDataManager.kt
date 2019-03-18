@@ -34,6 +34,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     @Inject
     lateinit var apiDataManager: ApiDataManager
     @Inject
+    lateinit var githubDataManager: GithubDataManager
+    @Inject
     lateinit var matcherDataManager: MatcherDataManager
     var transactions: List<Transaction> = ArrayList()
 
@@ -258,9 +260,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun startLeasing(
-        createLeasingRequest: CreateLeasingRequest,
-        recipientIsAlias: Boolean,
-        fee: Long
+            createLeasingRequest: CreateLeasingRequest,
+            recipientIsAlias: Boolean,
+            fee: Long
     ): Observable<Transaction> {
         createLeasingRequest.senderPublicKey = getPublicKeyStr()
         createLeasingRequest.fee = fee
@@ -354,6 +356,29 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         } else {
             nodeService.assetDetails(assetId!!)
         }
+    }
+
+    fun getCommissionForPair(amountAsset: String?, priceAsset: String?): Observable<Long> {
+        return Observable.zip(
+                githubDataManager.getGlobalCommission(),
+                assetDetails(amountAsset),
+                assetDetails(priceAsset),
+                Function3 { t1: GlobalTransactionCommission,
+                            t2: AssetsDetails,
+                            t3: AssetsDetails ->
+                    return@Function3 Triple(t1, t2, t3)
+                })
+                .flatMap {
+                    val commission = it.first
+                    val amountAssetsDetails = it.second
+                    val priceAssetsDetails = it.third
+                    val params = GlobalTransactionCommission.Params()
+                    params.transactionType = Transaction.EXCHANGE
+                    params.smartPriceAsset = priceAssetsDetails.scripted
+                    params.smartAmountAsset = amountAssetsDetails.scripted
+                    return@flatMap Observable.just(TransactionUtil.countCommission(commission, params))
+                }
+
     }
 
     fun addressAssetBalance(address: String, assetId: String): Observable<AddressAssetBalance> {
