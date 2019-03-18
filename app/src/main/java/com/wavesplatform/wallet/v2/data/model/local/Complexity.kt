@@ -1,5 +1,7 @@
 package com.wavesplatform.wallet.v2.data.model.local
 
+import java.util.regex.Pattern
+
 data class Complexity(var score: Int, var complexityType: ComplexityType) {
 
     fun isTooSimple(): Boolean {
@@ -30,25 +32,25 @@ data class Complexity(var score: Int, var complexityType: ComplexityType) {
 //            score += (checkRepetition(4, password).length - password.length);
 
             //password has 3 numbers
-            if (password.matches(Regex("/(.*[0-9].*[0-9].*[0-9])/"))) score += 5
+            if (Pattern.compile(".*[0-9].*[0-9].*[0-9]").matcher(password).find()) score += 5
 
             //password has 2 symbols
-            if (password.matches(Regex("/(.*[!,@#$%^&*?_~].*[!,@#$%^&*?_~])/"))) score += 5
+            if (Pattern.compile(".*[!,@#$%^&*?_~].*[!,@#$%^&*?_~]").matcher(password).find()) score += 5
 
             //password has Upper and Lower chars
-            if (password.matches(Regex("/([a-z].*[A-Z])|([A-Z].*[a-z])/"))) score += 10
+            if (Pattern.compile("([a-z].*[A-Z])|([A-Z].*[a-z])").matcher(password).find()) score += 10
 
             //password has number and chars
-            if (password.matches(Regex("/([a-zA-Z])/")) && password.matches(Regex("/([0-9])/"))) score += 15
+            if (Pattern.compile("[a-zA-Z]").matcher(password).find() && Pattern.compile("[0-9]").matcher(password).find()) score += 15
             //
             //password has number and symbol
-            if (password.matches(Regex("/([!,@#$%^&*?_~])/")) && password.matches(Regex("/([0-9])/"))) score += 15
+            if (Pattern.compile("[!,@#$%^&*?_~]").matcher(password).find() && Pattern.compile("[0-9]").matcher(password).find()) score += 15
 
             //password has char and symbol
-            if (password.matches(Regex("/([!,@#$%^&*?_~])/")) && password.matches(Regex("/([a-zA-Z])/"))) score += 15
+            if (Pattern.compile("[!,@#$%^&*?_~]").matcher(password).find() && Pattern.compile("[a-zA-Z]").matcher(password).find()) score += 15
 
             //password is just a numbers or chars
-            if (password.matches(Regex("/[^\\w+$/]")) || password.matches(Regex("/[^\\d+$/]"))) score -= 10
+            if (Pattern.compile("[^\\w+$/]").matcher(password).matches() || Pattern.compile("[^\\d+$/]").matcher(password).matches()) score -= 10
 
             return when {
                 score < 25 ->
@@ -61,7 +63,7 @@ data class Complexity(var score: Int, var complexityType: ComplexityType) {
                     Complexity(score, ComplexityType.STRONG)
             }
         }
-
+//
 //        private fun checkRepetition(pLen: Int, str: String): String {
 //            var res = ""
 //            var repeated: Boolean
@@ -83,6 +85,33 @@ data class Complexity(var score: Int, var complexityType: ComplexityType) {
 //                        }
 //                    }
 //                }
+//            }
+//            return res
+//        }
+
+
+//        fun checkRepetition(pLen: Int, str: String): String {
+//            var res = "";
+//            var repeated = false;
+//            var j = 0;
+//            var i = 0;
+//
+//            while (i < str.length) {
+//                repeated = true
+//                while (j < pLen && (j + i + pLen) < str.length) {
+//                    repeated = repeated && (str[j + i] == str[j + i + pLen])
+//                    j++
+//                }
+//                if (j < pLen) {
+//                    repeated = false
+//                }
+//                if (repeated) {
+//                    i += pLen - 1;
+//                    repeated = false
+//                } else {
+//                    res += str[i]
+//                }
+//                i++
 //            }
 //            return res
 //        }
