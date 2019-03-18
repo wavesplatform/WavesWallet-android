@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
@@ -68,6 +67,7 @@
             android:textColorHint="@color/basic500"
             android:backgroundTint="@color/accent50"
             android:inputType="text"
+            android:imeOptions="actionDone"
             android:paddingBottom="20dp"
             android:singleLine="true" />
     </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>

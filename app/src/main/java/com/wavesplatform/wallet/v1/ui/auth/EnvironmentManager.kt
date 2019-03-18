@@ -14,9 +14,9 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalConfiguration
 import com.wavesplatform.wallet.v2.data.model.remote.response.IssueTransaction
 import com.wavesplatform.wallet.v2.injection.module.HostSelectionInterceptor
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.wavesplatform.wallet.v2.util.RxUtil
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import pers.victor.ext.currentTimeMillis
 import timber.log.Timber
 import java.io.IOException
 import java.nio.charset.Charset
@@ -26,7 +26,8 @@ class EnvironmentManager {
 
     private var current: Environment? = null
     private var application: Application? = null
-    private var disposable: Disposable? = null
+    private var configurationDisposable: Disposable? = null
+    private var timeDisposable: Disposable? = null
     private var interceptor: HostSelectionInterceptor? = null
 
     class Environment internal constructor(val name: String, val url: String, jsonFileName: String) {
@@ -111,7 +112,7 @@ class EnvironmentManager {
                 throw NullPointerException("EnvironmentManager must be init first!")
             }
 
-            instance!!.disposable = githubDataManager.globalConfiguration(EnvironmentManager.environment.url)
+            instance!!.configurationDisposable = githubDataManager.globalConfiguration(EnvironmentManager.environment.url)
                     .map { globalConfiguration ->
                         instance!!.interceptor!!.setHosts(globalConfiguration.servers)
                         PreferenceManager
@@ -154,12 +155,11 @@ class EnvironmentManager {
                             defaultAssets.add(assetBalance)
                         }
                     }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
-                        instance!!.disposable!!.dispose()
+                        instance!!.configurationDisposable!!.dispose()
                     }, { error ->
-                        Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration")
+                        Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration!")
                         error.printStackTrace()
                         PreferenceManager
                                 .getDefaultSharedPreferences(App.getAppContext())
@@ -167,8 +167,39 @@ class EnvironmentManager {
                                 .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
                                         Gson().toJson(EnvironmentManager.Environment.MAIN_NET.configuration))
                                 .apply()
-                        instance!!.disposable!!.dispose()
+                        instance!!.configurationDisposable!!.dispose()
                     })
+
+            instance!!.timeDisposable = githubDataManager.nodeService.utilsTime()
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe({
+                        val timeCorrection = it.ntp - currentTimeMillis
+                        if (Math.abs(timeCorrection) > 30_000) {
+                            PreferenceManager
+                                    .getDefaultSharedPreferences(App.getAppContext())
+                                    .edit()
+                                    .putLong(PrefsUtil.KEY_GLOBAL_CURRENT_TIME_CORRECTION,
+                                            timeCorrection)
+                                    .apply()
+                        }
+                        instance!!.timeDisposable!!.dispose()
+                    }, { error ->
+                        Timber.e(error, "EnvironmentManager: Can't download time correction!")
+                        error.printStackTrace()
+                        instance!!.timeDisposable!!.dispose()
+                    })
+        }
+
+        @JvmStatic
+        fun getTime(): Long {
+            val timeCorrection = if (App.getAppContext() == null) {
+                0L
+            } else {
+                PreferenceManager
+                        .getDefaultSharedPreferences(App.getAppContext())
+                        .getLong(PrefsUtil.KEY_GLOBAL_CURRENT_TIME_CORRECTION, 0L)
+            }
+            return currentTimeMillis + timeCorrection
         }
 
         fun setCurrentEnvironment(current: Environment) {

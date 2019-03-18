@@ -6,10 +6,10 @@ import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
-import pers.victor.ext.currentTimeMillis
 
 data class OrderRequest(
     @SerializedName("matcherPublicKey") var matcherPublicKey: String? = "",
@@ -18,7 +18,7 @@ data class OrderRequest(
     @SerializedName("orderType") var orderType: OrderType = OrderType.BUY,
     @SerializedName("price") var price: Long = 0L,
     @SerializedName("amount") var amount: Long = 0L,
-    @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,
+    @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
     @SerializedName("expiration") var expiration: Long = 0L,
     @SerializedName("matcherFee") var matcherFee: Long = 300000,
     @SerializedName("version") var version: Int = Constants.VERSION,

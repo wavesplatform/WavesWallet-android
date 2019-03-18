@@ -22,9 +22,9 @@
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="${appIcon}"
-        android:roundIcon="${appIconRound}"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="${appIconRound}"
         android:theme="@style/AppTheme"
         tools:replace="allowBackup">
 
@@ -34,6 +34,7 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        <!--TODO: change key and put in a separate file-->
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="532ed93ff155abe216f69842dbea9997d5ebb665" />
@@ -51,14 +52,15 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <data android:scheme="waves" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
         <activity
             android:name=".v2.ui.home.MainActivity"
-            android:screenOrientation="portrait"
             android:configChanges="orientation|locale|layoutDirection"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -73,9 +75,9 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.welcome.WelcomeActivity"
+            android:configChanges="orientation|locale"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|locale"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.home.profile.addresses.AddressesAndKeysActivity"
@@ -131,8 +133,8 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".v2.ui.language.change_welcome.ChangeLanguageActivity"
-            android:screenOrientation="portrait"
             android:configChanges="orientation|locale"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.home.profile.change_password.ChangePasswordActivity"
@@ -214,10 +216,10 @@
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
         <activity
             android:name=".v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity"
-            android:screenOrientation="portrait"
             android:noHistory="true"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity"
             android:screenOrientation="portrait"
@@ -241,8 +243,8 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity"
-            android:screenOrientation="portrait"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
         <activity
             android:name=".v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity"
@@ -264,6 +266,7 @@
             android:name="com.wavesplatform.wallet.v2.ui.success.SuccessActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+
         <service
             android:name=".v2.data.service.UpdateApiDataService"
             android:stopWithTask="true" />
@@ -276,7 +279,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <receiver android:name="com.appsflyer.SingleInstallBroadcastReceiver" android:exported="true">
+        <receiver
+            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>

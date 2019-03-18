@@ -20,7 +20,7 @@ data class CreateLeasingRequest(
     @SerializedName("amount") var amount: Long = 0,
     @SerializedName("fee") var fee: Long = 0,
     @SerializedName("recipient") var recipient: String = "",
-    @SerializedName("timestamp") var timestamp: Long = 0,
+    @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
     @SerializedName("version") var version: Int = Constants.VERSION,
     @SerializedName("proofs") var proofs: MutableList<String?>? = null
 ) {

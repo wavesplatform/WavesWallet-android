@@ -592,7 +592,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 val imageAssetIcon = tokenView?.findViewById<AssetAvatarView>(R.id.image_asset_icon)
 
                 transaction.asset?.let {
-                    imageAssetIcon?.setAssetInfo(it)
+                    imageAssetIcon?.setAsset(it)
                 }
 
                 textAssetValue?.text = transaction.asset?.name

@@ -1,8 +1,5 @@
 package com.wavesplatform.wallet.v2.util
 
-import android.animation.Animator
-import android.animation.AnimatorSet
-import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.ClipData
@@ -39,14 +36,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
@@ -66,7 +55,6 @@ import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.text.SimpleDateFormat
 import java.util.*
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
@@ -134,6 +122,35 @@ fun String.isWaves(): Boolean {
 
 fun getWavesDexFee(fee: Long): BigDecimal {
     return MoneyUtil.getScaledText(fee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
+}
+
+/**
+ * @param action constant from EditorInfo
+ * @see android.view.inputmethod.EditorInfo
+ */
+fun EditText.onAction(action: Int, runAction: () -> Unit) {
+    this.setOnEditorActionListener { v, actionId, event ->
+        return@setOnEditorActionListener when (actionId) {
+            action -> {
+                runAction.invoke()
+                true
+            }
+            else -> false
+        }
+    }
+}
+
+fun <T1: Any, T2: Any, R: Any> safeLet(p1: T1?, p2: T2?, block: (T1, T2)->R?): R? {
+    return if (p1 != null && p2 != null) block(p1, p2) else null
+}
+fun <T1: Any, T2: Any, T3: Any, R: Any> safeLet(p1: T1?, p2: T2?, p3: T3?, block: (T1, T2, T3)->R?): R? {
+    return if (p1 != null && p2 != null && p3 != null) block(p1, p2, p3) else null
+}
+fun <T1: Any, T2: Any, T3: Any, T4: Any, R: Any> safeLet(p1: T1?, p2: T2?, p3: T3?, p4: T4?, block: (T1, T2, T3, T4)->R?): R? {
+    return if (p1 != null && p2 != null && p3 != null && p4 != null) block(p1, p2, p3, p4) else null
+}
+fun <T1: Any, T2: Any, T3: Any, T4: Any, T5: Any, R: Any> safeLet(p1: T1?, p2: T2?, p3: T3?, p4: T4?, p5: T5?, block: (T1, T2, T3, T4, T5)->R?): R? {
+    return if (p1 != null && p2 != null && p3 != null && p4 != null && p5 != null) block(p1, p2, p3, p4, p5) else null
 }
 
 fun String.isWavesId(): Boolean {
@@ -389,10 +406,10 @@ fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: In
 }
 
 fun View.copyToClipboard(
-    text: String,
-    textView: AppCompatTextView,
-    copyIcon: Int = R.drawable.ic_copy_18_black,
-    copyColor: Int = R.color.black
+        text: String,
+        textView: AppCompatTextView,
+        copyIcon: Int = R.drawable.ic_copy_18_black,
+        copyColor: Int = R.color.black
 ) {
     clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), text)
     showSnackbar(R.string.common_copied_to_clipboard, R.color.success500_0_94, Snackbar.LENGTH_SHORT)
@@ -424,127 +441,16 @@ fun <T : Any> T?.notNull(f: (it: T) -> Unit) {
     if (this != null) f(this)
 }
 
-fun String?.getAge(): String {
-    if (this.isNullOrEmpty()) return ""
-
-    val dob = Calendar.getInstance()
-    val today = Calendar.getInstance()
-
-    val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-    dob.time = sdf.parse(this)
-
-    var age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR)
-
-    if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
-        age--
-    }
-
-    val ageInt = age
-
-    return ageInt.toString()
-}
-
-fun ImageView.loadImage(url: String?, centerCrop: Boolean = true) {
-    this.post {
-        val options = RequestOptions()
-                .override(this.width, this.height)
-
-        if (centerCrop) options.transform(CenterCrop())
-
-        Glide.with(this)
-                .asBitmap()
-                .load(url)
-                .apply(options)
-                .into(this)
-    }
-}
-
-fun Context.getViewScaleAnimator(from: View, target: View, additionalPadding: Int = 0): Animator {
-    // height resize animation
-    val animatorSet = AnimatorSet()
-    val desiredHeight = from.height
-    val currentHeight = target.height
-    val heightAnimator = ValueAnimator.ofInt(currentHeight, desiredHeight - additionalPadding)
-    heightAnimator.addUpdateListener { animation ->
-        val params = target.layoutParams as ViewGroup.LayoutParams
-        params.height = animation.animatedValue as Int
-        target.layoutParams = params
-    }
-    animatorSet.play(heightAnimator)
-
-    // width resize animation
-    val desiredWidth = from.width
-    val currentWidth = target.width
-    val widthAnimator = ValueAnimator.ofInt(currentWidth, desiredWidth - additionalPadding)
-    widthAnimator.addUpdateListener { animation ->
-        val params = target.layoutParams as ViewGroup.LayoutParams
-        params.width = animation.animatedValue as Int
-        target.layoutParams = params
-    }
-    animatorSet.play(widthAnimator)
-    return animatorSet
-}
-
-fun ImageView.loadImage(drawableRes: Int?, centerCrop: Boolean = true) {
-    this.post {
-        val options = RequestOptions()
-                .override(this.width, this.height)
-
-        if (centerCrop) options.transform(CenterCrop())
-
-        Glide.with(this)
-                .asBitmap()
-                .load(drawableRes)
-                .apply(options)
-                .into(this)
-    }
-}
-
-fun ImageView.loadImage(file: File?, centerCrop: Boolean = true, circleCrop: Boolean = false, deleteImmediately: Boolean = true) {
-    this.post {
-        val options = RequestOptions()
-                .override(this.width, this.height)
-
-        if (centerCrop) options.transform(CenterCrop())
-        if (circleCrop) options.transform(CircleCrop())
-
-        Glide.with(this)
-                .load(file)
-                .apply(options)
-                .listener(object : RequestListener<Drawable> {
-                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        this@loadImage.setImageDrawable(resource)
-                        if (deleteImmediately) file?.delete()
-                        return true
-                    }
-
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                        return true
-                    }
-                })
-                .into(this)
-    }
-}
-
-@SuppressWarnings("deprecation")
-fun Context.fromHtml(source: String): Spanned {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY)
-    } else {
-        return Html.fromHtml(source)
-    }
-}
-
 /**
  * Extensions for simpler launching of Activities
  */
 
 inline fun <reified T : Any> Activity.launchActivity(
-    requestCode: Int = -1,
-    clear: Boolean = false,
-    withoutAnimation: Boolean = false,
-    options: Bundle? = null,
-    noinline init: Intent.() -> Unit = {}
+        requestCode: Int = -1,
+        clear: Boolean = false,
+        withoutAnimation: Boolean = false,
+        options: Bundle? = null,
+        noinline init: Intent.() -> Unit = {}
 ) {
 
     var intent = newIntent<T>(this)
@@ -568,11 +474,11 @@ inline fun <reified T : Any> Activity.launchActivity(
 }
 
 inline fun <reified T : Any> Fragment.launchActivity(
-    requestCode: Int = -1,
-    clear: Boolean = false,
-    withoutAnimation: Boolean = false,
-    options: Bundle? = null,
-    noinline init: Intent.() -> Unit = {}
+        requestCode: Int = -1,
+        clear: Boolean = false,
+        withoutAnimation: Boolean = false,
+        options: Bundle? = null,
+        noinline init: Intent.() -> Unit = {}
 ) {
 
     var intent = newIntent<T>(activity!!)
@@ -595,9 +501,9 @@ inline fun <reified T : Any> Fragment.launchActivity(
 }
 
 inline fun <reified T : Any> Context.launchActivity(
-    options: Bundle? = null,
-    clear: Boolean = false,
-    noinline init: Intent.() -> Unit = {}
+        options: Bundle? = null,
+        clear: Boolean = false,
+        noinline init: Intent.() -> Unit = {}
 ) {
 
     var intent = newIntent<T>(this)
@@ -631,10 +537,10 @@ inline fun <reified T : Any> newClearIntent(context: Context): Intent {
 }
 
 fun View.setMargins(
-    left: Int? = null,
-    top: Int? = null,
-    right: Int? = null,
-    bottom: Int? = null
+        left: Int? = null,
+        top: Int? = null,
+        right: Int? = null,
+        bottom: Int? = null
 ) {
     val lp = layoutParams as? ViewGroup.MarginLayoutParams
             ?: return
@@ -769,8 +675,8 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
 fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
     return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true) &&
             (null != queryFirst<SpamAsset> {
-        equalTo("assetId", assetId)
-    }))
+                equalTo("assetId", assetId)
+            }))
 }
 
 fun isShowTicker(assetId: String?): Boolean {

@@ -6,6 +6,7 @@ import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
 import com.wavesplatform.wallet.v1.crypto.Base58;
 import com.wavesplatform.wallet.v1.crypto.CryptoProvider;
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 
 public class OrderRequest {
 
@@ -37,7 +38,7 @@ public class OrderRequest {
         this.orderType = orderType;
         this.price = price;
         this.amount = amount;
-        this.timestamp = System.currentTimeMillis();
+        this.timestamp = EnvironmentManager.getTime();
         this.expiration = this.timestamp + 29L*24*60*60*1000;
         this.matcherFee = MinFee;
     }
@@ -45,7 +46,7 @@ public class OrderRequest {
     public OrderRequest(String senderPublicKey, AssetPair assetPair) {
         this.senderPublicKey = senderPublicKey;
         this.assetPair = assetPair;
-        this.timestamp = System.currentTimeMillis();
+        this.timestamp = EnvironmentManager.getTime();
         this.expiration = this.timestamp + 29L*24*60*60*1000;
         this.matcherFee = MinFee;
     }
