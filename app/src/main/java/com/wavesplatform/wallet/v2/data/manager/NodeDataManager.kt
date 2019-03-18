@@ -154,9 +154,11 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                         assetBalance.isFavorite = false
                                     }
 
-                                    mapDbAssets?.let {
-                                        if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
-                                            assetBalance.isFavorite = true
+                                    if (savedAssetPrefs.isEmpty()) {
+                                        mapDbAssets?.let {
+                                            if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
+                                                assetBalance.isFavorite = true
+                                            }
                                         }
                                     }
                                 }
