@@ -35,7 +35,10 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
     override fun configLayoutRes() = R.layout.fragment_trade_my_orders
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
+        arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)?.let {
+            presenter.watchMarket = it
+            adapter.market = it.market
+        }
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateMyOrdersScreen::class.java)
                 .subscribe {
@@ -47,19 +50,10 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
             loadOrders()
         }
 
-        presenter.watchMarket?.market.notNull {
-            adapter.market = it
-        }
-
         recycle_my_orders.layoutManager = LinearLayoutManager(baseActivity)
         adapter.bindToRecyclerView(recycle_my_orders)
-        adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
-            val item = this.adapter.getItem(position)
-            when (view.id) {
-                R.id.image_delete -> {
-                    presenter.cancelOrder(item?.id)
-                }
-            }
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+
         }
 
         loadOrders()

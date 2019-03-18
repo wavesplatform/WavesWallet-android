@@ -355,10 +355,10 @@
     <string name="my_address_qr_share">Share</string>
     <string name="my_orders_amount">Amount</string>
     <string name="my_orders_amount_sum">Amount/Sum</string>
-    <string name="my_orders_date_time">Date</string>
+    <string name="my_orders_date_time">Time</string>
+    <string name="my_orders_side_price">Type/Price</string>
     <string name="my_orders_empty">Nothing Here… \nYou do not have any orders</string>
     <string name="my_orders_price">Price</string>
-    <string name="my_orders_side_price">Side/Price</string>
     <string name="my_orders_status">Status</string>
     <string name="my_orders_status_canceled">Cancelled</string>
     <string name="my_orders_status_filled">Filled</string>
