@@ -73,7 +73,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
             return Observable.just(listOf())
         } else {
             return apiService.assetsInfoByIds(ids)
-                    .map { response ->
+                    .map { response -> // todo check
                         val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
                             val defaultAsset = EnvironmentManager.defaultAssets.firstOrNull {
                                 it.assetId == assetInfoData.assetInfo.id

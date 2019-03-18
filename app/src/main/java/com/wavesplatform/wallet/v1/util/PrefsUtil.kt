@@ -289,8 +289,6 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
     }
 
     companion object {
-        const val GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment"
-        const val GLOBAL_CURRENT_ENVIRONMENT_DATA = "global_current_environment_data"
         const val SHOWED_NEWS_IDS = "showed_news_ids"
         const val GLOBAL_LAST_LOGGED_IN_GUID = "global_logged_in_wallet_guid"
         const val GLOBAL_SCHEME_URL = "scheme_url"

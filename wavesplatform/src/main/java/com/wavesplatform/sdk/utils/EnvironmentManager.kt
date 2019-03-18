@@ -13,10 +13,9 @@ import com.wavesplatform.sdk.model.response.GlobalConfiguration
 import com.wavesplatform.sdk.model.response.IssueTransaction
 import com.wavesplatform.sdk.service.ApiService
 import com.wavesplatform.sdk.service.NodeService
-import io.reactivex.Observable
+import io.reactivex.Observable // todo check
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import pers.victor.ext.currentTimeMillis
 import java.io.IOException
 import java.nio.charset.Charset
@@ -160,8 +159,7 @@ class EnvironmentManager {
                             defaultAssets.add(assetBalance)
                         }
                     }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
                         instance!!.configurationDisposable!!.dispose()
                     }, { error ->
@@ -177,14 +175,17 @@ class EnvironmentManager {
                     })
 
             instance!!.timeDisposable = nodeService.utilsTime()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
-                        PreferenceManager
-                                .getDefaultSharedPreferences(instance!!.application)
-                                .edit()
-                                .putLong(GLOBAL_CURRENT_TIME_CORRECTION, it.ntp - currentTimeMillis)
-                                .apply()
+                        val timeCorrection = it.ntp - currentTimeMillis
+                        if (Math.abs(timeCorrection) > 30_000) {
+                            PreferenceManager
+                                    .getDefaultSharedPreferences(instance!!.application)
+                                    .edit()
+                                    .putLong(GLOBAL_CURRENT_TIME_CORRECTION,
+                                            timeCorrection)
+                                    .apply()
+                        }
                         instance!!.timeDisposable!!.dispose()
                     }, { error ->
                         Log.e("EnvironmentManager", "Can't download time correction!")
