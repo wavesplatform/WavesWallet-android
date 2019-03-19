@@ -15,23 +15,16 @@ import javax.inject.Inject
 class AddressesAndKeysPresenter @Inject constructor() : BasePresenter<AddressesAndKeysView>() {
 
     fun loadAliases() {
-        runAsync {
             addSubscription(
                     queryAllAsSingle<AliasDb>().toObservable()
-                            .observeOn(AndroidSchedulers.mainThread())
                             .map { aliases ->
                                 val ownAliases = aliases.filter { it.own }
-                                runOnUiThread { viewState.afterSuccessLoadAliases(
-                                        AliasDb.convertFromDb(ownAliases)) }
+                                viewState.afterSuccessLoadAliases(AliasDb.convertFromDb(ownAliases))
                             }
-                            .observeOn(Schedulers.io())
-                            .flatMap {
-                                apiDataManager.loadAliases()
-                            }
+                            .flatMap { apiDataManager.loadAliases() }
                             .compose(RxUtil.applyObservableDefaultSchedulers())
                             .subscribe {
-                                runOnUiThread { viewState.afterSuccessLoadAliases(it) }
+                                viewState.afterSuccessLoadAliases(it)
                             })
-        }
     }
 }

@@ -17,6 +17,7 @@ import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+import com.wavesplatform.sdk.utils.RxUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -61,8 +62,7 @@ abstract class BaseFragment : MvpAppCompatFragment(), BaseView, BaseMvpView, Has
         eventSubscriptions.add(ReactiveNetwork
                 .observeInternetConnectivity()
                 .onErrorResumeNext(Observable.empty())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ connected ->
                     onNetworkConnectionChanged(connected)
                 }, {

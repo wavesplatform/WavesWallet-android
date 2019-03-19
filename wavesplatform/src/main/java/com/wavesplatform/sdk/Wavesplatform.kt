@@ -19,6 +19,13 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
 
         private var instance: Wavesplatform? = null
 
+        /**
+         * Initialisation Wavesplatform method must be call first.
+         * @param application Application context ot the app
+         * @param mainNet Define net to use. Default true means use MainNet. False - TestNet
+         * @param factory Add a call adapter factory for supporting service method return types
+         * other than Call
+         */
         @JvmStatic
         fun init(application: Application, mainNet: Boolean = true, factory: CallAdapter.Factory? = null) {
             EnvironmentManager.init(application)
@@ -41,14 +48,22 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             return instance!!
         }
 
+        /**
+         * @return Generated random secret seed-phrase, seed recovery phrase or backup seed phrase
+         * and contains 15 different words from dictionary.
+         */
         @JvmStatic
         @Throws(NullPointerException::class)
         fun generateSeed(): String {
             return WalletManager.createWalletSeed(Wavesplatform.get().context)
         }
 
+        /**
+         * Create wallet from secret seed-phrase.
+         * @param seed secret seed-phrase
+         * @param guid
+         */
         @JvmStatic
-        @Throws(Exception::class)
         fun createWallet(seed: String,
                          guid: String = UUID.randomUUID().toString()): String {
             return try {
@@ -62,8 +77,10 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             }
         }
 
+        /**
+         * Create wallet from secret seed-phrase.
+         */
         @JvmStatic
-        @Throws(Exception::class)
         fun createWallet(encrypted: String,
                          password: String,
                          guid: String = UUID.randomUUID().toString()): String {

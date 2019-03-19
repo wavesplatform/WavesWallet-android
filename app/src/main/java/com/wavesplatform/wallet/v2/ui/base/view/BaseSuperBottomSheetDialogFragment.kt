@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.base.view
 import android.os.Bundle
 import com.andrefrsousa.superbottomsheet.SuperBottomSheetFragment
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
@@ -40,8 +41,7 @@ open class BaseSuperBottomSheetDialogFragment : SuperBottomSheetFragment(), Base
                 .observeInternetConnectivity()
                 .distinctUntilChanged()
                 .onErrorResumeNext(Observable.empty())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ connected ->
                     onNetworkConnectionChanged(connected)
                 }, {

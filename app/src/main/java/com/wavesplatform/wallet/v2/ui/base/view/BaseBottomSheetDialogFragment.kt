@@ -8,6 +8,7 @@ import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.widget.FrameLayout
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.RxEventBus
@@ -44,8 +45,7 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment(), BaseMvpV
                 .observeInternetConnectivity()
                 .distinctUntilChanged()
                 .onErrorResumeNext(Observable.empty())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ connected ->
                     onNetworkConnectionChanged(connected)
                 }, {

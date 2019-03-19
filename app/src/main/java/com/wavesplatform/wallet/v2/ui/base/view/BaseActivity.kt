@@ -125,8 +125,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                 .observeInternetConnectivity()
                 .distinctUntilChanged()
                 .onErrorResumeNext(Observable.empty())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ connected ->
                     onNetworkConnectionChanged(connected)
                 }, {
