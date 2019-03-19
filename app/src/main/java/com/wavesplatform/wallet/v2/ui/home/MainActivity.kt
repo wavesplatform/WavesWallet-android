@@ -69,7 +69,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
         logFirstOpen()
 
-
         if (savedInstanceState == null) {
             onTabSelected(tab_navigation.getTabAt(WALLET_SCREEN))
         }
@@ -89,6 +88,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     private fun logFirstOpen() {
         if (prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true)) {
+            prefsUtil.setValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, false)
             val values = Bundle()
             values.put("wallets_count", prefsUtil.getGlobalValueList(
                     EnvironmentManager.name

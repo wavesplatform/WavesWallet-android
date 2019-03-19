@@ -49,22 +49,6 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_close -> {
-                launchActivity<CreatePassCodeActivity>(options = intent.extras) {
-                    putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, true)
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_close, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
     override fun onBackPressed() {
         finish()
         overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
