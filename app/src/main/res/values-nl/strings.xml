@@ -217,7 +217,7 @@
     <string name="confirm_card_tutorial_about_backup">Ik begrijp dat als deze app wordt verplaatst naar een ander apparaat of wordt verwijderd, mijn Waves alleen kunnen worden hersteld met de back-up regel.</string>
     <string name="confirm_card_tutorial_about_fund_on_device">Ik begrijp dat mijn geld veilig wordt opgeslagen op dit apparaat, niet door een bedrijf.</string>
     <string name="confirm_card_tutorial_about_terms">Ik heb de Gebruiksvoorwaarden gelezen, \nbegrepen en ga ermee akkoord</string>
-    <string name="confirm_card_tutorial_terms_of_use">Gebruiksvoorwaarden</string>
+    <string name="confirm_card_tutorial_privacy_policy">Gebruiksvoorwaarden</string>
     <string name="confirm_card_tutorial_title">Bevestig en begin</string>
     <string name="dialog_account_first_open_subtitle">Waves is anders — het kan niet veilig worden bewaard door een bank of webservice</string>
     <string name="dialog_account_first_open_title">Klaar!</string>
