@@ -33,6 +33,7 @@ class MoneyUtil private constructor() {
         private val instance = MoneyUtil()
 
         const val DEFAULT_SEPARATOR_THIN_SPACE = '\u2009'
+        const val DEFAULT_SEPARATOR_COMMA = ','
 
         fun createFormatter(decimals: Int): DecimalFormat {
             val formatter = NumberFormat.getInstance(Locale.US) as DecimalFormat
