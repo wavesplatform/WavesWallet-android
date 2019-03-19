@@ -3,6 +3,7 @@ package com.wavesplatform.wallet.v2.ui.home.profile.address_book
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import kotlinx.android.synthetic.main.address_book_item.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.visiable

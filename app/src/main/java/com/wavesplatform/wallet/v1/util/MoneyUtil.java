@@ -17,6 +17,7 @@ public class MoneyUtil {
     public static BigDecimal ONE_B = new BigDecimal(1000000000);
     public static BigDecimal ONE_M = new BigDecimal(1000000);
     public static BigDecimal ONE_K = new BigDecimal(1000);
+    public static char DEFAULT_SEPARATOR_COMMA = ',';
     public static char DEFAULT_SEPARATOR_THIN_SPACE = '\u2009';
 
     private static MoneyUtil instance = new MoneyUtil();

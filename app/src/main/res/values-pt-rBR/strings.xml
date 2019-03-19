@@ -217,7 +217,7 @@
     <string name="confirm_card_tutorial_about_backup">Eu entendo que se este aplicativo for movido para outro dispositivo ou excluído, minhas Waves só poderão ser recuperadas com a frase de backup</string>
     <string name="confirm_card_tutorial_about_fund_on_device">Eu entendo que meus fundos são mantidos com segurança neste dispositivo, não por uma empresa</string>
     <string name="confirm_card_tutorial_about_terms">Li, entendi e concordo com os \nTermos de uso</string>
-    <string name="confirm_card_tutorial_terms_of_use">Termos de uso</string>
+    <string name="confirm_card_tutorial_privacy_policy">Termos de uso</string>
     <string name="confirm_card_tutorial_title">Confirmar e iniciar</string>
     <string name="dialog_account_first_open_subtitle">A Waves é diferente — não pode ser retida em um banco ou serviço da web</string>
     <string name="dialog_account_first_open_title">Feito!</string>
