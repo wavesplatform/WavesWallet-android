@@ -1,5 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders
 
+import android.databinding.adapters.TextViewBindingAdapter.setText
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -20,11 +21,11 @@ class TradeMyOrdersAdapter @Inject constructor() : BaseQuickAdapter<OrderRespons
     override fun convert(helper: BaseViewHolder, item: OrderResponse) {
         helper
                 .setText(R.id.text_side, mContext.getString(item.getType().typeUI))
-                .setText(R.id.text_price, MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals).stripZeros())
+                .setText(R.id.text_price, item.getScaledPrice(market.amountAssetDecimals, market.priceAssetDecimals))
                 .setText(R.id.text_date, item.timestamp.asDateString("dd.MM.yy"))
                 .setText(R.id.text_time, item.timestamp.asDateString("HH:mm:ss"))
                 .setText(R.id.text_status, mContext.getString(item.getStatus().status))
-                .setText(R.id.text_failed_value, MoneyUtil.getTextStripZeros(MoneyUtil.getTextStripZeros(item.filled, market.amountAssetDecimals)))
+                .setText(R.id.text_failed_value, item.getScaledFilled(market.amountAssetDecimals))
                 .setVisible(R.id.text_failed_value, Arrays.asList(OrderStatus.Filled, OrderStatus.Cancelled, OrderStatus.PartiallyFilled).contains(item.getStatus()))
                 .setTextColor(R.id.text_side, item.getType().color)
                 .addOnClickListener(R.id.image_delete)
@@ -38,6 +39,10 @@ class TradeMyOrdersAdapter @Inject constructor() : BaseQuickAdapter<OrderRespons
             view.linear_time.alpha = 0.3f
             view.linear_status.alpha = 0.3f
             view.linear_type.alpha = 0.3f
+        }else{
+            view.linear_time.alpha = 1f
+            view.linear_status.alpha = 1f
+            view.linear_type.alpha = 1f
         }
     }
 }

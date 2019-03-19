@@ -65,6 +65,11 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
                 )
 
                 bottomSheetFragment.configureData(viewModel, position)
+                bottomSheetFragment.cancelOrderListener = object : MyOrderDetailsBottomSheetFragment.CancelOrderListener {
+                    override fun successCancelOrder() {
+                        loadOrders()
+                    }
+                }
                 bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
             }
         }

@@ -2,16 +2,15 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details
 
 import android.support.v7.widget.AppCompatTextView
 import android.view.View
-import android.widget.LinearLayout
 import com.jakewharton.rxbinding2.view.RxView
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderTransaction
 import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
+import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
@@ -20,9 +19,8 @@ import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_la
 import kotlinx.android.synthetic.main.history_details_layout.view.*
 import kotlinx.android.synthetic.main.layout_bottom_sheet_my_orders_body.view.*
 import kotlinx.android.synthetic.main.layout_my_orders_bottom_sheet_bottom_btns.view.*
-import pers.victor.ext.date
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
+import kotlinx.android.synthetic.main.spinner_item.view.*
+import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -30,6 +28,8 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
 
     @Inject
     lateinit var matcherDataManager: MatcherDataManager
+
+    var cancelOrderListener: CancelOrderListener? = null
 
     override fun configLayoutRes(): Int {
         return R.layout.history_details_bottom_sheet_dialog
@@ -51,62 +51,38 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
     }
 
     override fun setupBody(data: MyOrderTransaction): View? {
-        val view = inflater?.inflate(
-                R.layout.layout_bottom_sheet_my_orders_body,
-                null, false)
+        val view = inflater?.inflate(R.layout.layout_bottom_sheet_my_orders_body, null, false)
 
         view?.let {
-            if (data.orderResponse.getType() == OrderType.BUY) {
-                view.text_type.text = getString(R.string.history_exchange_sell)
-            } else {
-                view.text_type.text = getString(R.string.history_exchange_buy)
-            }
+            view.text_amount_value.text = data.orderResponse.getScaledAmount(data.amountAssetInfo?.precision)
+            view.text_price_value.text = data.orderResponse.getScaledPrice(data.amountAssetInfo?.precision, data.priceAssetInfo?.precision)
+            view.text_total_value.text = data.orderResponse.getScaledTotal(data.priceAssetInfo?.precision)
 
-//            // show value for price
-//            if (isShowTicker(myOrder.assetPair?.priceAssetObject?.id)) {
-//                textPriceValue?.text = MoneyUtil.getScaledPrice(transaction.price,
-//                        myOrder?.assetPair?.amountAssetObject?.precision ?: 0,
-//                        myOrder?.assetPair?.priceAssetObject?.precision ?: 0)
-//
-//                val ticker = myOrder.assetPair?.priceAssetObject?.getTicker()
-//                if (!ticker.isNullOrBlank()) {
-//                    textPriceTag?.text = ticker
-//                    textPriceTag?.visiable()
-//                }
-//            } else {
-//                textPriceValue?.text = "${MoneyUtil.getScaledPrice(transaction.price,
-//                        myOrder.assetPair?.amountAssetObject?.precision ?: 0,
-//                        myOrder.assetPair?.priceAssetObject?.precision ?: 0)} " +
-//                        "${myOrder.assetPair?.priceAssetObject?.name}"
-//            }
-//
-//            // show value for amount
-//            if (isShowTicker(myOrder.assetPair?.priceAssetObject?.id)) {
-//                textExchangeValue?.text = MoneyUtil.getScaledPrice(transaction.getOrderSum(),
-//                        myOrder.assetPair?.amountAssetObject?.precision ?: 0,
-//                        myOrder.assetPair?.priceAssetObject?.precision ?: 0)
-//
-//                val ticker = myOrder.assetPair?.priceAssetObject?.getTicker()
-//                if (!ticker.isNullOrBlank()) {
-//                    textExchangeTag?.text = ticker
-//                    textExchangeTag?.visiable()
-//                }
-//            } else {
-//                textExchangeValue?.text = "${MoneyUtil.getScaledPrice(transaction.getOrderSum(),
-//                        myOrder.assetPair?.amountAssetObject?.precision ?: 0,
-//                        myOrder.assetPair?.priceAssetObject?.precision ?: 0)} " +
-//                        "${myOrder.assetPair?.priceAssetObject?.name}"
-//            }
-
+            showTickerOrSimple(view.text_amount_value, view.text_amount_tag, data.amountAssetInfo)
+            showTickerOrSimple(view.text_price_value, view.text_price_tag, data.priceAssetInfo)
+            showTickerOrSimple(view.text_total_value, view.text_total_tag, data.priceAssetInfo)
         }
 
         return view
+    }
+
+    private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfo?) {
+        if (isShowTicker(assetInfo?.id)) {
+            val ticker = assetInfo?.getTicker()
+            if (!ticker.isNullOrBlank()) {
+                tickerView.text = ticker
+                tickerView.visiable()
+            }
+        } else {
+            valueView.text = valueView.text.toString().plus(" ${assetInfo?.name}}")
+        }
     }
 
     override fun setupInfo(data: MyOrderTransaction): View? {
         val view = inflater?.inflate(R.layout.fragment_history_bottom_sheet_base_info_layout, null, false)
 
         view?.let {
+            view.setPaddingTop(15.dp)
             // hide unused fields
             view.relative_block.gone()
             view.relative_confirmations.gone()
@@ -125,19 +101,23 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
             when (data.orderResponse.getStatus()) {
                 OrderStatus.Filled -> {
                     // force string, bcz percent with commission
-                    view.text_status?.text = "100%"
+                    view.text_status?.text = FILLED_ORDER_PERCENT
                 }
                 OrderStatus.Cancelled -> {
                     // with template "Canceled ({percent}%)"
-                    view.text_status?.text = getString(R.string.my_orders_details_canceled_status, "%.2f".format(percent).plus("%"))
+                    view.text_status?.text = getString(R.string.my_orders_details_canceled_status, percent
+                            .roundTo(2)
+                            .toString()
+                            .plus("%"))
                 }
                 else -> {
                     // with template "{percent}%"
-                    view.text_status?.text = "%.2f".format(percent).plus("%")
+                    view.text_status?.text = percent
+                            .roundTo(2)
+                            .toString()
+                            .plus("%")
                 }
             }
-
-
         }
 
         return view
@@ -145,7 +125,6 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
 
     override fun setupFooter(data: MyOrderTransaction): View? {
         val view = inflater?.inflate(R.layout.layout_my_orders_bottom_sheet_bottom_btns, null, false)
-
 
         view?.let {
             eventSubscriptions.add(RxView.clicks(view.image_close)
@@ -176,6 +155,9 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
                     showProgressBar(false)
+                    cancelOrderListener?.successCancelOrder()
+
+                    selectedItem?.orderResponse?.status = OrderResponse.API_STATUS_CANCELLED
                     configureView()
                 }, {
                     showProgressBar(false)
@@ -186,7 +168,12 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
     private fun setExchangeItem(data: MyOrderTransaction, view: View) {
         val directionStringResId: Int
         val directionSign: String
-        val amountValue = getScaledAmount(data.orderResponse.amount,
+        val notScaledValue = if (data.orderResponse.getStatus() == OrderStatus.Filled) {
+            data.orderResponse.amount
+        } else {
+            data.orderResponse.filled
+        }
+        val amountValue = getScaledAmount(notScaledValue,
                 data.amountAssetInfo?.precision ?: 8)
 
         if (data.orderResponse.type == Constants.SELL_ORDER_TYPE) {
@@ -217,5 +204,13 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
         }
 
         view.text_transaction_value.text = directionSign + amountValue + assetName
+    }
+
+    interface CancelOrderListener {
+        fun successCancelOrder()
+    }
+
+    companion object {
+        const val FILLED_ORDER_PERCENT = "100%"
     }
 }
