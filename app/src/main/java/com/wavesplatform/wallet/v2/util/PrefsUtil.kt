@@ -20,30 +20,12 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
     val guid: String
         get() = getGlobalValue(GLOBAL_LAST_LOGGED_IN_GUID, "")
 
-    val allAddressBookUsers: MutableList<AddressBookUser>
-        get() {
-            val listType = object : TypeToken<MutableList<AddressBookUser>>() {}.type
-            return Gson().fromJson<MutableList<AddressBookUser>>(
-                    getValue(KEY_ADDRESS_BOOK, ""), listType) ?: mutableListOf()
-        }
-
-    val dexNotShownAlertAboutPairList: MutableList<String>
+    private val dexNotShownAlertAboutPairList: MutableList<String>
         get() {
             val listType = object : TypeToken<MutableList<String>>() {}.type
             return Gson().fromJson<MutableList<String>>(
                     getValue(KEY_DEX_PAIR_SMART_INFO_NOT_SHOW_LIST, ""), listType)
                     ?: mutableListOf()
-        }
-
-    val assetBalances: MutableMap<String, AssetBalanceStore>
-        get() {
-            val map = Gson().fromJson<MutableMap<String, AssetBalanceStore>>(
-                    getValue(KEY_ASSET_BALANCES, ""),
-                    TypeToken.getParameterized(
-                            MutableMap::class.java,
-                            String::class.java,
-                            AssetBalanceStore::class.java).type)
-            return map ?: mutableMapOf()
         }
 
     fun getValue(name: String, value: String): String {
@@ -220,56 +202,6 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         setGlobalValue(name, org.apache.commons.lang3.StringUtils.join(value, "|"))
     }
 
-    fun getAddressBookUser(address: String?): AddressBookUser? {
-        return allAddressBookUsers.firstOrNull { it.address == address }
-    }
-
-    fun deleteAddressBookUsers(address: String?) {
-        val clearedList = allAddressBookUsers.filter { it.address != address }
-        setAddressBookUsers(clearedList)
-    }
-
-    fun setAddressBookUsers(addressBookUsers: List<AddressBookUser>) {
-        setValue(KEY_ADDRESS_BOOK, Gson().toJson(addressBookUsers))
-    }
-
-    fun saveOrUpdateAddressBookUser(addressBookUser: AddressBookUser) {
-        val bookUsers = allAddressBookUsers
-        val indexOfExistUser = bookUsers.indexOfFirst { it.address == addressBookUser.address }
-        if (indexOfExistUser != -1) {
-            bookUsers[indexOfExistUser] = addressBookUser
-        } else {
-            bookUsers.add(addressBookUser)
-        }
-        setAddressBookUsers(bookUsers)
-    }
-
-    fun saveAssetBalance(assetBalance: AssetBalance) {
-        val map = assetBalances
-        map[assetBalance.assetId] = AssetBalanceStore(
-                assetBalance.assetId,
-                assetBalance.isHidden,
-                assetBalance.position,
-                assetBalance.isFavorite)
-        setGlobalValue(KEY_ASSET_BALANCES, Gson().toJson(map))
-    }
-
-    fun saveAssetBalances(assetBalances: Map<String, AssetBalanceStore>) {
-        setGlobalValue(KEY_ASSET_BALANCES, Gson().toJson(assetBalances))
-    }
-
-    fun saveAssetBalances(assetsList: List<AssetBalance>) {
-        val map = assetBalances
-        for (assetBalance in assetsList) {
-            map[assetBalance.assetId] = AssetBalanceStore(
-                    assetBalance.assetId,
-                    assetBalance.isHidden,
-                    assetBalance.position,
-                    assetBalance.isFavorite)
-        }
-        setGlobalValue(KEY_ASSET_BALANCES, Gson().toJson(map))
-    }
-
     fun setNotShownSmartAlertForPair(amount: String, price: String, notShowAgain: Boolean) {
         if (notShowAgain) {
             val shownAlertAboutPairList = dexNotShownAlertAboutPairList
@@ -310,8 +242,6 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         const val KEY_SCRIPTED_ACCOUNT = "scripted_account"
         const val KEY_LAST_UPDATE_DEX_INFO = "last_update_dex_info"
         const val KEY_GLOBAL_NODE_COOKIES = "node_cookies"
-        const val KEY_ADDRESS_BOOK = "address_book"
-        const val KEY_ASSET_BALANCES = "asset_balances"
         const val KEY_DEX_PAIR_SMART_INFO_NOT_SHOW_LIST = "dex_pair_smart_info_not_show_list"
     }
 }
