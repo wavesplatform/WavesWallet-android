@@ -34,9 +34,9 @@ class TransactionSaver @Inject constructor() {
     private var needCheckToUpdateBalance = false
 
     fun saveTransactions(
-        sortedList: List<Transaction>,
-        limit: Int = DEFAULT_LIMIT,
-        changeListener: OnTransactionLimitChangeListener? = null
+            sortedList: List<Transaction>,
+            limit: Int = DEFAULT_LIMIT,
+            changeListener: OnTransactionLimitChangeListener? = null
     ) {
         currentLimit = limit
         if (sortedList.isEmpty() || limit < 1) {
@@ -221,11 +221,11 @@ class TransactionSaver @Inject constructor() {
     private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfo>, callback: (ArrayList<AssetInfo>) -> Unit) {
         runAsync {
             queryAllAsync<SpamAsset> { spams ->
-                arrayList.forEach { newAsset ->
-                    if (!allAssets.any { it.id == newAsset.id }) {
-                        if (spams.any { it.assetId == newAsset.id }) {
-                            newAsset.isSpam = true
-                        }
+                val spamMap = spams.associateBy { it.assetId }
+                val allAssetMap = allAssets.associateBy { it.id }
+                arrayList.iterator().forEach { newAsset ->
+                    if (allAssetMap[newAsset.id] == null) {
+                        newAsset.isSpam = spamMap[newAsset.id] != null
                         allAssets.add(newAsset)
                     }
                 }
