@@ -92,42 +92,6 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                     }
         }
     }
-//
-//    fun assetsInfoByIdsWithDb(ids: MutableList<String?>): Observable<List<AssetInfo>> {
-//        val wavesIndex = ids.indexOfFirst { it == Constants.WAVES_ASSET_ID_FILLED }
-//        if (wavesIndex != -1) {
-//            ids[wavesIndex] = ""
-//        }
-//        if (ids.isEmpty()) {
-//            return Observable.just(listOf())
-//        } else {
-//            val dbAssetsInfo = query<AssetInfo> { `in`("id", ids.toTypedArray()) }
-//            if (dbAssetsInfo.size == ids.size) {
-//                return Observable.just(dbAssetsInfo)
-//            } else {
-//                val existsIds = dbAssetsInfo.map { it.id }
-//                val notExistsIds = ids.minus(existsIds)
-//                return apiService.assetsInfoByIds(notExistsIds)
-//                        .map { response ->
-//                            val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
-//                                val defaultAsset = EnvironmentManager.defaultAssets.firstOrNull {
-//                                    it.assetId == assetInfoData.assetInfo.id
-//                                }
-//
-//                                defaultAsset.notNull { assetBalance ->
-//                                    assetBalance.getName().notNull {
-//                                        assetInfoData.assetInfo.name = it
-//                                    }
-//                                }
-//
-//                                return@mapTo assetInfoData.assetInfo
-//                            }
-//                            assetsInfo.saveAll()
-//                            return@map assetsInfo
-//                        }
-//            }
-//        }
-//    }
 
     fun loadLastTradesByPair(watchMarket: WatchMarket?): Observable<ArrayList<LastTradesResponse.Data.ExchangeTransaction>> {
         return apiService.loadLastTradesByPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, DEFAULT_LAST_TRADES_LIMIT)

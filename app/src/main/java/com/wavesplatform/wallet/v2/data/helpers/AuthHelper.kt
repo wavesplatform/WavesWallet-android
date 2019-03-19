@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.model.db.*
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
+import com.wavesplatform.wallet.v2.data.model.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.util.MigrationUtil
 import io.realm.Realm
 import io.realm.RealmConfiguration

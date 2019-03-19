@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.util
 
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.wallet.v2.data.model.db.MarketResponseDb
+import com.wavesplatform.wallet.v2.data.model.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import io.realm.DynamicRealm

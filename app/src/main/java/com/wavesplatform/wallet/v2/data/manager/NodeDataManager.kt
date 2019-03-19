@@ -364,8 +364,4 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     fun addressAssetBalance(address: String, assetId: String): Observable<AddressAssetBalance> {
         return nodeService.addressAssetBalance(address, assetId)
     }
-
-    fun utilsTime(): Observable<UtilsTime> {
-        return nodeService.utilsTime()
-    }
 }

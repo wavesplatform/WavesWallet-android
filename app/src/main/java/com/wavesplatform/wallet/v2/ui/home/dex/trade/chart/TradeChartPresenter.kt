@@ -8,7 +8,7 @@ import com.vicpin.krealmextensions.save
 import com.wavesplatform.sdk.net.model.WatchMarket
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
-import com.wavesplatform.wallet.v2.data.model.db.MarketResponseDb
+import com.wavesplatform.wallet.v2.data.model.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.data.model.local.ChartModel
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
