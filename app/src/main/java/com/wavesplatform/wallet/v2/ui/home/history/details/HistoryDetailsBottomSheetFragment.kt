@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
-import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -874,15 +873,5 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             if (resultCode == Activity.RESULT_OK) {
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        SimpleChromeCustomTabs.getInstance().connectTo(requireActivity())
-    }
-
-    override fun onPause() {
-        SimpleChromeCustomTabs.getInstance().disconnectFrom(requireActivity())
-        super.onPause()
     }
 }

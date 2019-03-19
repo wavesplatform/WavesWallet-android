@@ -8,11 +8,12 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.model.local.MyOrderTransaction
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details.MyOrderDetailsBottomSheetFragment
 import kotlinx.android.synthetic.main.fragment_trade_my_orders.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.gone
@@ -53,10 +54,23 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
         recycle_my_orders.layoutManager = LinearLayoutManager(baseActivity)
         adapter.bindToRecyclerView(recycle_my_orders)
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            val item = this.adapter.getItem(position)
+            item?.let {
+                val bottomSheetFragment = MyOrderDetailsBottomSheetFragment()
 
+                val viewModel = MyOrderTransaction(item,
+                        (activity as TradeActivity).presenter.amountAssetInfo,
+                        (activity as TradeActivity).presenter.priceAssetInfo,
+                        presenter.fee
+                )
+
+                bottomSheetFragment.configureData(viewModel, position)
+                bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
+            }
         }
 
         loadOrders()
+        presenter.loadCommission()
     }
 
     override fun afterSuccessLoadMyOrders(data: List<OrderResponse>) {
