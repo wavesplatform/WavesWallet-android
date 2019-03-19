@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
-import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.Transaction
 import com.wavesplatform.sdk.net.model.response.TransactionType
 import com.wavesplatform.sdk.utils.*

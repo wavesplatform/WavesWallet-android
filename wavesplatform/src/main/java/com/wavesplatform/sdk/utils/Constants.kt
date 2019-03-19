@@ -1,8 +1,7 @@
-package com.wavesplatform.sdk
+package com.wavesplatform.sdk.utils
 
 import com.wavesplatform.sdk.net.model.response.AssetInfo
 import com.wavesplatform.sdk.net.model.response.GlobalConfiguration
-import com.wavesplatform.sdk.utils.EnvironmentManager
 
 
 class Constants {

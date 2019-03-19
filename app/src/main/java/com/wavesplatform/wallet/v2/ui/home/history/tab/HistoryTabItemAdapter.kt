@@ -9,7 +9,7 @@ import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
-import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.Transaction
 import com.wavesplatform.sdk.net.model.response.TransactionType
 import com.wavesplatform.sdk.utils.*

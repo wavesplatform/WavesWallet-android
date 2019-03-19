@@ -1,7 +1,7 @@
 package com.wavesplatform.sdk.net.model.response
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.net.model.OrderType

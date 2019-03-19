@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.Constants.Companion.coinomatCryptoCurrencies
+import com.wavesplatform.sdk.utils.Constants.Companion.coinomatCryptoCurrencies
 import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnel
 import com.wavesplatform.sdk.utils.RxUtil

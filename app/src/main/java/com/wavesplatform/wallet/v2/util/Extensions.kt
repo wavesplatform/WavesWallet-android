@@ -37,7 +37,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.net.model.response.ErrorResponse
 import com.wavesplatform.sdk.net.model.response.TransactionType

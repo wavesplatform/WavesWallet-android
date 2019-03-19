@@ -4,7 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.wallet.v2.util.PrefsUtil

@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.net.model.response.Transaction
@@ -14,15 +14,15 @@ import com.wavesplatform.sdk.utils.clearAlias
 import java.nio.charset.Charset
 
 data class CreateLeasingRequest(
-    @SerializedName("type") val type: Int = Transaction.LEASE,
-    @SerializedName("senderPublicKey") var senderPublicKey: String = "",
-    @SerializedName("scheme") var scheme: String? = EnvironmentManager.globalConfiguration.scheme,
-    @SerializedName("amount") var amount: Long = 0,
-    @SerializedName("fee") var fee: Long = 0,
-    @SerializedName("recipient") var recipient: String = "",
-    @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
-    @SerializedName("version") var version: Int = Constants.VERSION,
-    @SerializedName("proofs") var proofs: MutableList<String?>? = null
+        @SerializedName("type") val type: Int = Transaction.LEASE,
+        @SerializedName("senderPublicKey") var senderPublicKey: String = "",
+        @SerializedName("scheme") var scheme: String? = EnvironmentManager.globalConfiguration.scheme,
+        @SerializedName("amount") var amount: Long = 0,
+        @SerializedName("fee") var fee: Long = 0,
+        @SerializedName("recipient") var recipient: String = "",
+        @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
+        @SerializedName("version") var version: Int = Constants.VERSION,
+        @SerializedName("proofs") var proofs: MutableList<String?>? = null
 ) {
 
     fun toSignBytes(recipientIsAlias: Boolean): ByteArray {

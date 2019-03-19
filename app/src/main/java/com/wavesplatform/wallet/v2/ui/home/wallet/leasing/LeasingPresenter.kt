@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.leasing
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
-import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.utils.RxUtil

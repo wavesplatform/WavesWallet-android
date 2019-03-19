@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.net.model.request.TransactionsBroadcastRequest
 import com.wavesplatform.sdk.net.model.response.AssetBalance

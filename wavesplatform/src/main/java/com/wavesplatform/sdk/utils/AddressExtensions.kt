@@ -1,7 +1,6 @@
 package com.wavesplatform.sdk.utils
 
 import com.google.common.primitives.Bytes
-import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.Hash
 import java.util.*

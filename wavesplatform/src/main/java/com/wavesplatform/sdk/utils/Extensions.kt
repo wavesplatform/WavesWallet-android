@@ -2,7 +2,6 @@ package com.wavesplatform.sdk.utils
 
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
-import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.net.model.response.*
 import org.spongycastle.util.encoders.Hex
 import java.math.BigDecimal

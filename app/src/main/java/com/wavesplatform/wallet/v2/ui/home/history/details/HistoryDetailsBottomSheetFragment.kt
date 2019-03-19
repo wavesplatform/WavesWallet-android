@@ -708,7 +708,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    openUrlWithChromeTab(String.format(com.wavesplatform.sdk.Constants.URL_WAVES_EXPLORER, transaction.id))
+                    openUrlWithChromeTab(String.format(com.wavesplatform.sdk.utils.Constants.URL_WAVES_EXPLORER, transaction.id))
                 })
 
         when (transaction.transactionType()) {
@@ -791,7 +791,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         val amountValue = getScaledAmount(transaction.amount,
                 transaction.asset?.precision ?: 8)
 
-        if (myOrder.orderType == com.wavesplatform.sdk.Constants.SELL_ORDER_TYPE) {
+        if (myOrder.orderType == com.wavesplatform.sdk.utils.Constants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell
             directionSign = "-"
         } else {
@@ -804,8 +804,8 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)
 
-        val amountAssetTicker = if (amountAsset.name == com.wavesplatform.sdk.Constants.WAVES_ASSET_ID_FILLED) {
-            com.wavesplatform.sdk.Constants.WAVES_ASSET_ID_FILLED
+        val amountAssetTicker = if (amountAsset.name == com.wavesplatform.sdk.utils.Constants.WAVES_ASSET_ID_FILLED) {
+            com.wavesplatform.sdk.utils.Constants.WAVES_ASSET_ID_FILLED
         } else {
             amountAsset.ticker
         }

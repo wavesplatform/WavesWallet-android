@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.request.BurnRequest
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R

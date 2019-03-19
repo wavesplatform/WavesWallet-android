@@ -1,7 +1,6 @@
 package com.wavesplatform.sdk.utils
 
 
-import com.wavesplatform.sdk.Constants
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.net.model.response.AssetInfo
 import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommission

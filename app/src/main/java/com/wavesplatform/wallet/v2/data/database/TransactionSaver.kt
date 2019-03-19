@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data.database
 
 import com.vicpin.krealmextensions.*
-import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.AssetInfo
 import com.wavesplatform.sdk.net.model.response.Transaction
 import com.wavesplatform.sdk.net.model.response.TransactionType

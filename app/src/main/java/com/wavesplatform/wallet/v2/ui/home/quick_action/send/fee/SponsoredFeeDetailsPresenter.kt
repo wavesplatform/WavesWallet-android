@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.clearBalance

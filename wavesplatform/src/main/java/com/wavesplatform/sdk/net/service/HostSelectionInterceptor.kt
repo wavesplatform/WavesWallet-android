@@ -1,6 +1,7 @@
-package com.wavesplatform.sdk.utils
+package com.wavesplatform.sdk.net.service
 
 import com.wavesplatform.sdk.net.model.response.GlobalConfiguration
+import com.wavesplatform.sdk.utils.notNull
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import java.io.IOException

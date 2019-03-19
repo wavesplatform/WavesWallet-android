@@ -2,7 +2,7 @@ package com.wavesplatform.sdk.net.model.response
 
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
-import com.wavesplatform.sdk.Constants
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.R
 
 enum class TransactionType(

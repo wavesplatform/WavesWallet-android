@@ -12,8 +12,8 @@ import android.util.AttributeSet
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
-import com.wavesplatform.sdk.Constants
-import com.wavesplatform.sdk.Constants.Companion.WCT_GENERAL_ASSET
+import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.Constants.Companion.WCT_GENERAL_ASSET
 import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.net.model.response.AssetInfo
 import com.wavesplatform.wallet.R
