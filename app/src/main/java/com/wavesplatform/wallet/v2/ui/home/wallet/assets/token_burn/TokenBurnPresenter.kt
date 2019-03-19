@@ -33,9 +33,8 @@ class TokenBurnPresenter @Inject constructor() : BasePresenter<TokenBurnView>() 
         viewState.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
-                matcherDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(
-                        App.getAccessManager().getWallet()?.address ?: ""),
+                githubDataManager.getGlobalCommission(),
+                nodeDataManager.scriptAddressInfo(),
                 nodeDataManager.assetDetails(assetId),
                 Function3 { t1: GlobalTransactionCommission,
                             t2: ScriptInfo,

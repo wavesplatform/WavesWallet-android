@@ -5,7 +5,6 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 /**
  * A simple event bus built with RxJava
  */

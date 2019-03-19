@@ -39,7 +39,7 @@ class NetworkModule {
     @Singleton
     internal fun provideCache(@ApplicationContext context: Context): Cache {
         val cacheSize = 200 * 1024 * 1024
-        val cacheDirectory = File(context.getCacheDir(), "httpcache")
+        val cacheDirectory = File(context.cacheDir, "httpcache")
 
         return Cache(cacheDirectory, cacheSize.toLong())
     }
@@ -51,9 +51,9 @@ class NetworkModule {
         return Interceptor { chain ->
             val originalResponse = chain.proceed(chain.request())
             if (originalResponse.request().url().url().toString()
-                            .contains(EnvironmentManager.get().current().globalConfiguration.servers.nodeUrl)
-                    && originalResponse.headers("Set-Cookie").isNotEmpty()
-                    && prefsUtil.getGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES).isEmpty()) {
+                            .contains(EnvironmentManager.servers.nodeUrl) &&
+                    originalResponse.headers("Set-Cookie").isNotEmpty() &&
+                    prefsUtil.getGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES).isEmpty()) {
                 val cookies = originalResponse.headers("Set-Cookie")
                         .toHashSet()
                 prefsUtil.setGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES, cookies)
@@ -69,7 +69,7 @@ class NetworkModule {
         return Interceptor { chain ->
             val cookies = prefsUtil.getGlobalValue(PrefsUtil.KEY_GLOBAL_NODE_COOKIES)
             if (cookies.isNotEmpty() && chain.request().url().url().toString()
-                            .contains(EnvironmentManager.get().current().globalConfiguration.servers.nodeUrl)) {
+                            .contains(EnvironmentManager.servers.nodeUrl)) {
                 val builder = chain.request().newBuilder()
                 cookies.forEach {
                     builder.addHeader("Cookie", it)
@@ -81,12 +81,13 @@ class NetworkModule {
         }
     }
 
-
     @Singleton
     @Provides
-    internal fun provideOkHttpClient(cache: Cache, @Named("timeout") timeout: Int,
-                                     @Named("ReceivedCookiesInterceptor") receivedCookiesInterceptor: Interceptor,
-                                     @Named("AddCookiesInterceptor") addCookiesInterceptor: Interceptor
+    internal fun provideOkHttpClient(
+        cache: Cache,
+        @Named("timeout") timeout: Int,
+        @Named("ReceivedCookiesInterceptor") receivedCookiesInterceptor: Interceptor,
+        @Named("AddCookiesInterceptor") addCookiesInterceptor: Interceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
                 .cache(cache)
@@ -95,6 +96,7 @@ class NetworkModule {
                 .addInterceptor(receivedCookiesInterceptor)
                 .addInterceptor(addCookiesInterceptor)
                 .addInterceptor(CacheForceInterceptorNoNet())
+                .addInterceptor(EnvironmentManager.createHostInterceptor())
                 .addNetworkInterceptor(CacheInterceptorOnNet())
                 .addInterceptor(LoggingInterceptor.Builder()
                         .loggable(BuildConfig.DEBUG)
@@ -117,13 +119,12 @@ class NetworkModule {
                 .create()
     }
 
-
     @Singleton
     @Named("NodeRetrofit")
     @Provides
     internal fun provideNodeRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.get().current().globalConfiguration.servers.nodeUrl)
+                .baseUrl(EnvironmentManager.servers.nodeUrl)
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -138,7 +139,7 @@ class NetworkModule {
     @Provides
     internal fun provideMatcherRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.get().current().globalConfiguration.servers.matcherUrl)
+                .baseUrl(EnvironmentManager.servers.matcherUrl)
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -149,11 +150,11 @@ class NetworkModule {
     }
 
     @Singleton
-    @Named("SpamRetrofit")
+    @Named("GithubRetrofit")
     @Provides
-    internal fun provideSpamRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
+    internal fun provideGithubRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(Constants.URL_SPAM)
+                .baseUrl(Constants.URL_GITHUB_PROXY)
                 .client(httpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
@@ -180,13 +181,12 @@ class NetworkModule {
         return retrofit
     }
 
-
     @Singleton
     @Named("ApiRetrofit")
     @Provides
     internal fun provideApiRetrofit(gson: Gson, httpClient: OkHttpClient, errorManager: ErrorManager): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(EnvironmentManager.get().current().globalConfiguration.servers.dataUrl)
+                .baseUrl(EnvironmentManager.servers.dataUrl)
                 .client(httpClient)
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory(errorManager))
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -216,8 +216,8 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    internal fun provideSpamService(@Named("SpamRetrofit") retrofit: Retrofit): SpamService {
-        return retrofit.create(SpamService::class.java)
+    internal fun provideGithubService(@Named("GithubRetrofit") retrofit: Retrofit): GithubService {
+        return retrofit.create(GithubService::class.java)
     }
 
     @Singleton

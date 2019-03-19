@@ -3,11 +3,14 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
+import com.wavesplatform.wallet.v2.data.model.remote.response.CandlesResponse
+import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import pers.victor.ext.currentTimeMillis
@@ -69,15 +72,16 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
             return Observable.just(listOf())
         } else {
             return apiService.assetsInfoByIds(ids)
-                    .map { it ->
-                        val assetsInfo = it.data.mapTo(ArrayList()) { assetInfoData ->
-                            val defaultAsset = Constants.defaultAssets.firstOrNull { it.assetId == assetInfoData.assetInfo.id }
+                    .map { response ->
+                        val assetsInfo = response.data.mapTo(ArrayList()) { assetInfoData ->
+                            val defaultAsset = EnvironmentManager.defaultAssets.firstOrNull {
+                                it.assetId == assetInfoData.assetInfo.id
+                            }
 
                             defaultAsset.notNull { assetBalance ->
                                 assetBalance.getName().notNull {
                                     assetInfoData.assetInfo.name = it
                                 }
-
                             }
 
                             return@mapTo assetInfoData.assetInfo
@@ -103,15 +107,16 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                 .onErrorResumeNext(Observable.just(arrayListOf()))
     }
 
-    fun loadCandles(watchMarket: WatchMarket?,
-                    timeFrame: Int,
-                    from: Long,
-                    to: Long): Observable<List<CandlesResponse.Candle>> {
+    fun loadCandles(
+        watchMarket: WatchMarket?,
+        timeFrame: Int,
+        from: Long,
+        to: Long
+    ): Observable<List<CandlesResponse.Candle>> {
         return apiService.loadCandles(watchMarket?.market?.amountAsset,
                 watchMarket?.market?.priceAsset, "${timeFrame}m", from, to)
                 .map {
                     return@map it.candles.sortedBy { it.time }
                 }
     }
-
 }

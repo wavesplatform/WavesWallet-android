@@ -9,9 +9,7 @@ import android.view.ViewTreeObserver
 import android.widget.ScrollView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
-import com.wavesplatform.wallet.v2.util.notNull
 import javax.inject.Inject
-
 
 class TutorialAdapter @Inject constructor(@ApplicationContext var mContext: Context) : PagerAdapter() {
     var items: ArrayList<Int> = arrayListOf()
@@ -68,5 +66,4 @@ class TutorialAdapter @Inject constructor(@ApplicationContext var mContext: Cont
         fun onEndOfScroll(position: Int)
         fun onNotEndOfScroll(position: Int)
     }
-
 }

@@ -73,7 +73,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     @Inject
     lateinit var frameworkFragmentInjector: DispatchingAndroidInjector<android.app.Fragment>
 
-
     @Inject
     lateinit var mRxEventBus: RxEventBus
     @Inject
@@ -103,7 +102,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         super.attachBaseContext(localizationDelegate.attachBaseContext(newBase))
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         localizationDelegate.addOnLocaleChangedListener(this)
@@ -119,7 +117,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         Timber.tag(javaClass.simpleName)
         onViewReady(savedInstanceState)
 
-        noInternetLayout = inflate(R.layout.no_internet_bottom_message_layout)
+        noInternetLayout = layoutInflater.inflate(R.layout.no_internet_bottom_message_layout, null)
 
         eventSubscriptions.add(ReactiveNetwork
                 .observeInternetConnectivity()
@@ -208,16 +206,19 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     }
 
     @JvmOverloads
-    inline fun setupToolbar(toolbar: Toolbar, homeEnable: Boolean = false,
-                            title: String = "", @DrawableRes icon: Int = R.drawable.ic_arrow_back_white_24dp,
-                            crossinline onClickListener: () -> Unit = { onBackPressed() }) {
+    inline fun setupToolbar(
+            toolbar: Toolbar,
+            homeEnable: Boolean = false,
+            title: String = "",
+            @DrawableRes icon: Int = R.drawable.ic_arrow_back_white_24dp,
+            crossinline onClickListener: () -> Unit = { onBackPressed() }
+    ) {
         this.toolbar = toolbar
         setSupportActionBar(toolbar)
         mActionBar = supportActionBar
 
         mActionBar?.setHomeButtonEnabled(homeEnable)
         mActionBar?.setDisplayHomeAsUpEnabled(homeEnable)
-
 
         mActionBar?.setHomeAsUpIndicator(AppCompatResources.getDrawable(this, icon))
 

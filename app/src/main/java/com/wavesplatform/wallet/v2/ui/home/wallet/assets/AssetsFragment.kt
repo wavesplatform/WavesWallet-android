@@ -2,6 +2,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -39,11 +40,9 @@ import kotlinx.android.synthetic.main.wallet_header_item.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.isVisible
-import pers.victor.ext.toast
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
-
 
 class AssetsFragment : BaseFragment(), AssetsView {
 
@@ -144,7 +143,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
             }
         })
 
-
         skeletonScreen = Skeleton.bind(recycle_assets)
                 .adapter(recycle_assets.adapter)
                 .shimmer(true)
@@ -212,7 +210,9 @@ class AssetsFragment : BaseFragment(), AssetsView {
         runOnUiThread {
             if (!isMyServiceRunning(UpdateApiDataService::class.java)) {
                 val intent = Intent(activity, UpdateApiDataService::class.java)
-                activity?.startService(intent)
+                activity?.let {
+                    ContextCompat.startForegroundService(it, intent)
+                }
             }
         }
     }
@@ -228,7 +228,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
         } else {
             swipe_container?.isRefreshing = false
         }
-
 
         adapter.setNewData(assets)
     }

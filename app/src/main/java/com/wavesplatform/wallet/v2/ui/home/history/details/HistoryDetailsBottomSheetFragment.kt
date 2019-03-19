@@ -33,12 +33,12 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
+import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.data.remote.CoinomatService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
 import com.wavesplatform.wallet.v2.ui.custom.SpamTag
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
@@ -55,7 +55,6 @@ import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-
 class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), HistoryDetailsView {
     var selectedItem: Transaction? = null
     var selectedItemPosition: Int = 0
@@ -68,7 +67,6 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
 
     @ProvidePresenter
     fun providePresenter(): HistoryDetailsPresenter = presenter
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -630,7 +628,6 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 historyContainer.addView(tokenView)
             }
             else -> {
-
             }
         }
 
@@ -723,8 +720,8 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 val assetBalance = queryFirst<AssetBalance> {
                     equalTo("assetId", transaction.assetId ?: "")
                 }
-                if (assetBalance != null && (nonGateway(assetBalance, transaction)
-                                || assetBalance.isWaves() || assetBalance.isFiatMoney)) {
+                if (assetBalance != null && (nonGateway(assetBalance, transaction) ||
+                                assetBalance.isWaves() || assetBalance.isFiatMoney)) {
                     eventSubscriptions.add(RxView.clicks(view.text_send_again)
                             .throttleFirst(1500, TimeUnit.MILLISECONDS)
                             .observeOn(AndroidSchedulers.mainThread())
@@ -792,7 +789,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         val directionSign: String
         val amountAsset = myOrder.assetPair?.amountAssetObject!!
         val amountValue = getScaledAmount(transaction.amount,
-                transaction.asset?.precision ?: 8)
+                amountAsset.precision)
 
         if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell
@@ -807,8 +804,8 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)
 
-        val amountAssetTicker = if (amountAsset.name == "WAVES") {
-            "WAVES"
+        val amountAssetTicker = if (amountAsset.name == Constants.WAVES_ASSET_ID_FILLED) {
+            Constants.WAVES_ASSET_ID_FILLED
         } else {
             amountAsset.ticker
         }
@@ -839,12 +836,11 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
     }
 
     private fun nonGateway(assetBalance: AssetBalance, transaction: Transaction) =
-            !assetBalance.isGateway || (assetBalance.isGateway
-                    && !transaction.recipientAddress.equals(CoinomatService.GATEWAY_ADDRESS))
+            !assetBalance.isGateway || (assetBalance.isGateway &&
+                    !transaction.recipientAddress.equals(CoinomatService.GATEWAY_ADDRESS))
 
     private fun resolveExistOrNoAddress(textViewName: TextView?, textViewAddress: TextView?, textAddressAction: AppCompatTextView?) {
         val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
-
         makeAddressActionViewClickableStyled(textAddressAction)
 
         if (addressBookUser == null) {
@@ -869,7 +865,6 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
 
             textAddressAction?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_edit_address_submit_300, 0, 0, 0)
             textAddressAction?.text = getString(R.string.history_details_edit_address)
-
 
             textAddressAction?.click {
                 launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
@@ -951,10 +946,8 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 }
             }
             if (resultCode == Activity.RESULT_OK) {
-
             }
         }
-
     }
 
     override fun onResume() {

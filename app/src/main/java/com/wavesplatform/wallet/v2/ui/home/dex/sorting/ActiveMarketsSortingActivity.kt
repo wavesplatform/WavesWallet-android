@@ -19,15 +19,12 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.TestObject
 import com.wavesplatform.wallet.v2.util.notNull
-import io.realm.kotlin.deleteFromRealm
 import kotlinx.android.synthetic.main.activity_active_markets_sorting.*
 import kotlinx.android.synthetic.main.dex_active_markets_sorting_item.view.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.*
 import javax.inject.Inject
-
 
 class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
 
@@ -56,7 +53,6 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
         recycle_markets.layoutManager = LinearLayoutManager(this)
         recycle_markets.itemAnimator = FadeInWithoutDelayAnimator()
         adapter.bindToRecyclerView(recycle_markets)
-
 
         recycle_markets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -140,5 +136,4 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
         view.text_empty.text = getString(R.string.dex_sorting_empty)
         return view
     }
-
 }

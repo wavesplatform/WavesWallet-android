@@ -33,9 +33,11 @@ class TransactionSaver @Inject constructor() {
     private var prevLimit = DEFAULT_LIMIT
     private var needCheckToUpdateBalance = false
 
-
-    fun saveTransactions(sortedList: List<Transaction>, limit: Int = DEFAULT_LIMIT,
-                         changeListener: OnTransactionLimitChangeListener? = null) {
+    fun saveTransactions(
+            sortedList: List<Transaction>,
+            limit: Int = DEFAULT_LIMIT,
+            changeListener: OnTransactionLimitChangeListener? = null
+    ) {
         currentLimit = limit
         if (sortedList.isEmpty() || limit < 1) {
             rxEventBus.post(Events.NeedUpdateHistoryScreen())
@@ -73,7 +75,6 @@ class TransactionSaver @Inject constructor() {
                             changeListener.notNull { listener ->
                                 listener.onChange(currentLimit)
                             }
-
                         } else {
                             // check if exist first transaction
                             queryAsync<Transaction>({ equalTo("id", sortedList[0].id) },
@@ -174,7 +175,6 @@ class TransactionSaver @Inject constructor() {
                                             allAssets.firstOrNull { it.id == trans.order1?.assetPair?.priceAsset }
                                         }
 
-
                                 trans.order1?.assetPair?.amountAssetObject = amountAsset
                                 trans.order1?.assetPair?.priceAssetObject = priceAsset
                                 trans.order2.notNull {
@@ -216,17 +216,16 @@ class TransactionSaver @Inject constructor() {
                         }
                     }
                 })
-
     }
 
     private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfo>, callback: (ArrayList<AssetInfo>) -> Unit) {
         runAsync {
             queryAllAsync<SpamAsset> { spams ->
-                arrayList.forEach { newAsset ->
-                    if (!allAssets.any { it.id == newAsset.id }) {
-                        if (spams.any { it.assetId == newAsset.id }) {
-                            newAsset.isSpam = true
-                        }
+                val spamMap = spams.associateBy { it.assetId }
+                val allAssetMap = allAssets.associateBy { it.id }
+                arrayList.iterator().forEach { newAsset ->
+                    if (allAssetMap[newAsset.id] == null) {
+                        newAsset.isSpam = spamMap[newAsset.id] != null
                         allAssets.add(newAsset)
                     }
                 }

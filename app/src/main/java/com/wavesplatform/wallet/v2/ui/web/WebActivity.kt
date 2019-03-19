@@ -12,7 +12,6 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_web.*
 import javax.inject.Inject
 
-
 class WebActivity : BaseActivity(), WebView {
 
     @Inject
@@ -23,7 +22,6 @@ class WebActivity : BaseActivity(), WebView {
     fun providePresenter(): WebPresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_web
-
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewReady(savedInstanceState: Bundle?) {
@@ -41,7 +39,7 @@ class WebActivity : BaseActivity(), WebView {
             Uri.parse(link).host
         }
 
-        setupToolbar(toolbar_view,true, title, R.drawable.ic_toolbar_back_black)
+        setupToolbar(toolbar_view, true, title, R.drawable.ic_toolbar_back_black)
 
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = WebViewClient()

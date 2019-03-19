@@ -8,13 +8,13 @@ import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
-import android.content.res.TypedArray
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.support.annotation.ColorRes
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
@@ -52,12 +52,15 @@ import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import okhttp3.ResponseBody
 import pers.victor.ext.*
+import pers.victor.ext.Ext.ctx
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.io.File
@@ -171,7 +174,6 @@ fun deleteRecursive(fileOrDirectory: File) {
     fileOrDirectory.delete()
 }
 
-
 fun Activity.openUrlWithChromeTab(url: String) {
     SimpleChromeCustomTabs.getInstance()
             .withFallback {
@@ -190,7 +192,6 @@ fun Fragment.openUrlWithChromeTab(url: String) {
                 it.withToolbarColor(findColor(R.color.submit400))
             }
             .navigateTo(Uri.parse(url), activity)
-
 }
 
 fun Activity.openUrlWithIntent(url: String) {
@@ -230,8 +231,8 @@ fun Context.isAppOnForeground(): Boolean {
             ?: return false
     val packageName = packageName
     appProcesses?.forEach {
-        if (it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
-                && it.processName.equals(packageName)) {
+        if (it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND &&
+                it.processName.equals(packageName)) {
             return true
         }
     }
@@ -296,7 +297,6 @@ fun String.stripZeros(): String {
     if (this == "0.0") return this
     return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
 }
-
 
 fun Fragment.showSuccess(@StringRes msgId: Int, @IdRes viewId: Int) {
     showSuccess(getString(msgId), viewId)
@@ -374,7 +374,6 @@ fun ImageView.copyToClipboard(text: String, copyIcon: Int = R.drawable.ic_copy_1
             this.context.notNull { image.setImageDrawable(ContextCompat.getDrawable(it, copyIcon)) }
         }
     }
-
 }
 
 fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: Int = R.drawable.ic_copy_18_black) {
@@ -389,8 +388,12 @@ fun TextView.copyToClipboard(imageView: AppCompatImageView? = null, copyIcon: In
     }
 }
 
-fun View.copyToClipboard(text: String, textView: AppCompatTextView,
-                         copyIcon: Int = R.drawable.ic_copy_18_black, copyColor: Int = R.color.black) {
+fun View.copyToClipboard(
+    text: String,
+    textView: AppCompatTextView,
+    copyIcon: Int = R.drawable.ic_copy_18_black,
+    copyColor: Int = R.color.black
+) {
     clipboardManager.primaryClip = ClipData.newPlainText(this.context.getString(R.string.app_name), text)
     showSnackbar(R.string.common_copied_to_clipboard, R.color.success500_0_94, Snackbar.LENGTH_SHORT)
 
@@ -440,7 +443,6 @@ fun String?.getAge(): String {
 
     return ageInt.toString()
 }
-
 
 fun ImageView.loadImage(url: String?, centerCrop: Boolean = true) {
     this.post {
@@ -519,17 +521,15 @@ fun ImageView.loadImage(file: File?, centerCrop: Boolean = true, circleCrop: Boo
                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                         return true
                     }
-
                 })
                 .into(this)
     }
 }
 
-
 @SuppressWarnings("deprecation")
 fun Context.fromHtml(source: String): Spanned {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
+        return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY)
     } else {
         return Html.fromHtml(source)
     }
@@ -540,11 +540,12 @@ fun Context.fromHtml(source: String): Spanned {
  */
 
 inline fun <reified T : Any> Activity.launchActivity(
-        requestCode: Int = -1,
-        clear: Boolean = false,
-        withoutAnimation: Boolean = false,
-        options: Bundle? = null,
-        noinline init: Intent.() -> Unit = {}) {
+    requestCode: Int = -1,
+    clear: Boolean = false,
+    withoutAnimation: Boolean = false,
+    options: Bundle? = null,
+    noinline init: Intent.() -> Unit = {}
+) {
 
     var intent = newIntent<T>(this)
     if (options != null) intent.putExtras(options)
@@ -567,11 +568,12 @@ inline fun <reified T : Any> Activity.launchActivity(
 }
 
 inline fun <reified T : Any> Fragment.launchActivity(
-        requestCode: Int = -1,
-        clear: Boolean = false,
-        withoutAnimation: Boolean = false,
-        options: Bundle? = null,
-        noinline init: Intent.() -> Unit = {}) {
+    requestCode: Int = -1,
+    clear: Boolean = false,
+    withoutAnimation: Boolean = false,
+    options: Bundle? = null,
+    noinline init: Intent.() -> Unit = {}
+) {
 
     var intent = newIntent<T>(activity!!)
     if (options != null) intent.putExtras(options)
@@ -593,9 +595,10 @@ inline fun <reified T : Any> Fragment.launchActivity(
 }
 
 inline fun <reified T : Any> Context.launchActivity(
-        options: Bundle? = null,
-        clear: Boolean = false,
-        noinline init: Intent.() -> Unit = {}) {
+    options: Bundle? = null,
+    clear: Boolean = false,
+    noinline init: Intent.() -> Unit = {}
+) {
 
     var intent = newIntent<T>(this)
     if (options != null) intent.putExtras(options)
@@ -603,7 +606,6 @@ inline fun <reified T : Any> Context.launchActivity(
     if (clear) {
         intent = newClearIntent<T>(this)
     }
-
 
     intent.init()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -629,10 +631,10 @@ inline fun <reified T : Any> newClearIntent(context: Context): Intent {
 }
 
 fun View.setMargins(
-        left: Int? = null,
-        top: Int? = null,
-        right: Int? = null,
-        bottom: Int? = null
+    left: Int? = null,
+    top: Int? = null,
+    right: Int? = null,
+    bottom: Int? = null
 ) {
     val lp = layoutParams as? ViewGroup.MarginLayoutParams
             ?: return
@@ -685,12 +687,26 @@ fun findMyOrder(first: Order, second: Order, address: String?): Order {
     }
 }
 
+fun loadDbWavesBalance(): AssetBalance {
+    return queryFirst<AssetBalance> { equalTo("assetId", Constants.WAVES_ASSET_ID_EMPTY) }
+            ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+}
+
+fun getDeviceId(): String {
+    return "android:${Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID)}"
+}
+
 fun Throwable.errorBody(): ErrorResponse? {
     return if (this is RetrofitException) {
         this.getErrorBodyAs(ErrorResponse::class.java)
     } else {
         null
     }
+}
+
+fun ResponseBody.clone(): ResponseBody {
+    var bufferClone = this.source().buffer()?.clone()
+    return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone)
 }
 
 fun ErrorResponse.isSmartError(): Boolean {
@@ -751,14 +767,14 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
 }
 
 fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
-    return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
-            && (null != queryFirst<SpamAsset> {
+    return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true) &&
+            (null != queryFirst<SpamAsset> {
         equalTo("assetId", assetId)
     }))
 }
 
 fun isShowTicker(assetId: String?): Boolean {
-    return Constants.defaultAssets.any {
+    return EnvironmentManager.globalConfiguration.generalAssetIds.any {
         it.assetId == assetId || assetId.isNullOrEmpty()
     }
 }

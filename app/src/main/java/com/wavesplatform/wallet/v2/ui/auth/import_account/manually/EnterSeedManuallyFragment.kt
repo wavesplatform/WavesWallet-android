@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.auth.import_account.manually
 
 import android.os.Bundle
-import android.text.InputType
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -30,7 +29,6 @@ import pers.victor.ext.click
 import pers.victor.ext.isNetworkConnected
 import javax.inject.Inject
 
-
 class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
 
     @Inject
@@ -38,12 +36,10 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
     lateinit var presenter: EnterSeedManuallyPresenter
     lateinit var validator: Validator
 
-
     @ProvidePresenter
     fun providePresenter(): EnterSeedManuallyPresenter = presenter
 
     override fun configLayoutRes() = R.layout.fragment_enter_seed_manually
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setSkeleton()

@@ -11,6 +11,7 @@ import com.mindorks.editdrawabletext.DrawablePosition
 import com.mindorks.editdrawabletext.onDrawableClickListener
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.data.rules.AddressBookAddressRule
 import com.wavesplatform.wallet.v2.data.rules.AddressBookNameRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
@@ -19,7 +20,6 @@ import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.util.AddressUtil
 import com.wavesplatform.wallet.v2.util.notNull
 import io.github.anderscheow.validator.Validation
@@ -30,7 +30,6 @@ import kotlinx.android.synthetic.main.activity_add_address.*
 import pers.victor.ext.addTextChangedListener
 import pers.victor.ext.click
 import javax.inject.Inject
-
 
 class AddAddressActivity : BaseActivity(), AddAddressView {
     lateinit var validator: Validator
@@ -44,12 +43,10 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
 
     override fun configLayoutRes() = R.layout.activity_add_address
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(R.anim.slide_in_right, R.anim.null_animation)
         super.onCreate(savedInstanceState)
     }
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.add_address_toolbar_title), R.drawable.ic_toolbar_back_black)
@@ -59,7 +56,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
                 .and(NotEmptyTrimRule(R.string.address_book_name_validation_required_error))
                 .and(MinTrimRule(2, R.string.address_book_name_validation_min_length_error))
                 .and(MaxRule(24, R.string.address_book_name_validation_max_length_error))
-                .and(AddressBookNameRule(R.string.address_book_name_validation_already_use_error))
+                .and(AddressBookNameRule(prefsUtil, R.string.address_book_name_validation_already_use_error))
 
         edit_name.addTextChangedListener {
             on { s, start, before, count ->
@@ -120,7 +117,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
         } else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE) {
             val addressValidation = Validation(til_address)
                     .and(NotEmptyTrimRule(R.string.address_book_address_validation_required_error))
-                    .and(AddressBookAddressRule(R.string.address_book_address_validation_already_use_error))
+                    .and(AddressBookAddressRule(prefsUtil, R.string.address_book_address_validation_already_use_error))
 
             edit_address.addTextChangedListener {
                 on { s, start, before, count ->

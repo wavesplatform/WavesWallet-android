@@ -21,5 +21,4 @@ class TradeLastTradesPresenter @Inject constructor() : BasePresenter<TradeLastTr
                     viewState.afterFailedLoadLastTrades()
                 }))
     }
-
 }

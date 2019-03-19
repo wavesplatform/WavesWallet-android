@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.activity_whats_new.*
 import pers.victor.ext.click
 import javax.inject.Inject
 
-
 class WhatsNewActivity : BaseActivity(), WhatsNewView {
 
     @Inject
@@ -26,7 +25,6 @@ class WhatsNewActivity : BaseActivity(), WhatsNewView {
     fun providePresenter(): WhatsNewPresenter = presenter
 
     override fun configLayoutRes() = R.layout.activity_whats_new
-
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
@@ -66,20 +64,18 @@ class WhatsNewActivity : BaseActivity(), WhatsNewView {
             }
 
             override fun onPageSelected(position: Int) {
-
             }
         })
     }
 
     private fun populateList(): ArrayList<WhatsNewItem> {
-        return arrayListOf(WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
+        return arrayListOf(WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name), WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
                 WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
                 WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
                 WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
                 WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name),
                 WhatsNewItem(R.drawable.text_logo, R.string.app_name, R.string.app_name))
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -94,6 +90,4 @@ class WhatsNewActivity : BaseActivity(), WhatsNewView {
         menuInflater.inflate(R.menu.menu_close, menu)
         return super.onCreateOptionsMenu(menu)
     }
-
-
 }

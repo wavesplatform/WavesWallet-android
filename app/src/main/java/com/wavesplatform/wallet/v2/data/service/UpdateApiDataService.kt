@@ -1,16 +1,21 @@
 package com.wavesplatform.wallet.v2.data.service
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ProcessLifecycleOwner
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
+import android.support.v4.app.NotificationCompat
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.database.TransactionSaver
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.database.TransactionSaver
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.RxUtil
 import dagger.android.AndroidInjection
@@ -32,12 +37,29 @@ class UpdateApiDataService : Service() {
     override fun onCreate() {
         AndroidInjection.inject(this)
         super.onCreate()
+        showServiceNotification()
+    }
+
+    private fun showServiceNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationId = (System.currentTimeMillis() % 10000).toInt()
+            val channelId = "update_wavesplatform_history_data_service"
+            val channel = NotificationChannel(channelId, "Wavesplatform Channel",
+                    NotificationManager.IMPORTANCE_MIN)
+            (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+                    .createNotificationChannel(channel)
+            startForeground(notificationId, NotificationCompat.Builder(this, channelId).build())
+        }
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (App.getAccessManager().getWallet() == null
-                || ProcessLifecycleOwner.get().lifecycle.currentState != Lifecycle.State.RESUMED) {
-            stopSelf()
+        if (App.getAccessManager().getWallet() == null ||
+                ProcessLifecycleOwner.get().lifecycle.currentState != Lifecycle.State.RESUMED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                stopForeground(true)
+            } else {
+                stopSelf()
+            }
             return Service.START_NOT_STICKY
         }
 
@@ -64,11 +86,9 @@ class UpdateApiDataService : Service() {
                 }))
         subscriptions.add(nodeDataManager.currentBlocksHeight()
                 .subscribe {
-
                 })
         return Service.START_NOT_STICKY
     }
-
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -78,5 +98,4 @@ class UpdateApiDataService : Service() {
         subscriptions.clear()
         super.onDestroy()
     }
-
 }

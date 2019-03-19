@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatTextView
-import android.text.TextUtils
 import android.view.View
 import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -17,7 +16,6 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.assets.PaymentConfirmationDetails
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v1.util.MoneyUtil.getWavesStripZeros
 import com.wavesplatform.wallet.v1.util.PrefsUtil
@@ -25,10 +23,10 @@ import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
+import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_ATTACHMENT
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation.SendConfirmationActivity.Companion.KEY_INTENT_BLOCKCHAIN_COMMISSION
@@ -50,7 +48,6 @@ import pers.victor.ext.*
 import java.math.BigDecimal
 import java.net.URI
 import javax.inject.Inject
-
 
 class SendActivity : BaseActivity(), SendView {
 
@@ -237,9 +234,7 @@ class SendActivity : BaseActivity(), SendView {
         for (address in addresses) {
             val lastRecipient = layoutInflater
                     .inflate(R.layout.view_text_tag, null) as AppCompatTextView
-            val addressBookUser = queryFirst<AddressBookUser> {
-                equalTo("address", address)
-            }
+            val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", address) }
             lastRecipient.text = addressBookUser?.name ?: address
             lastRecipient.click {
                 edit_address.setText(address)
@@ -295,8 +290,8 @@ class SendActivity : BaseActivity(), SendView {
                         assetBalance.getName() ?: "")
                 presenter.amount = BigDecimal.ZERO
             }
-        } else if (presenter.type == SendPresenter.Type.WAVES
-                && assetBalance.assetId.isWavesId()) {
+        } else if (presenter.type == SendPresenter.Type.WAVES &&
+                assetBalance.assetId.isWavesId()) {
             val total = BigDecimal.valueOf(amount - presenter.fee,
                     assetBalance.getDecimals())
             if (total.toFloat() > 0) {
@@ -326,7 +321,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun showXRate(xRate: XRate, ticker: String) {
-        xRateSkeletonView!!.hide()
+        xRateSkeletonView?.hide()
 
         val fee = if (xRate.feeOut == null) {
             "-"
@@ -346,11 +341,11 @@ class SendActivity : BaseActivity(), SendView {
             BigDecimal(xRate.inMax).toString()
         }
 
-        gateway_fee.text = getString(R.string.send_gateway_info_gateway_fee,
+        gateway_fee?.text = getString(R.string.send_gateway_info_gateway_fee,
                 fee, ticker)
-        gateway_limits.text = getString(R.string.send_gateway_info_gateway_limits,
+        gateway_limits?.text = getString(R.string.send_gateway_info_gateway_limits,
                 ticker, inMin, inMax)
-        gateway_warning.text = getString(R.string.send_gateway_info_gateway_warning,
+        gateway_warning?.text = getString(R.string.send_gateway_info_gateway_warning,
                 ticker)
         setRecipientValid(presenter.isRecipientValid())
     }
@@ -418,7 +413,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun checkMonero(assetId: String?) {
-        if (assetId == Constants.MONERO_ASSET_ID) {
+        if (assetId == Constants.findByGatewayId("XMR")!!.assetId) {
             monero_layout.visiable()
             eventSubscriptions.add(RxTextView.textChanges(edit_monero_payment_id)
                     .subscribe { paymentId ->
@@ -527,7 +522,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun parseDataFromQr(result: String) {
         if (result.isNullOrEmpty()) {
-            showError(R.string.send_error_get_data_from_qr, R.id.root_view)
+            showError(R.string.send_error_get_data_from_qr, R.id.root)
             assetEnable(false)
             recipientEnable(false)
             amountEnable(false)
@@ -557,7 +552,7 @@ class SendActivity : BaseActivity(), SendView {
                 }
 
                 var assetId = uri.path.split("/")[2]
-                if ("waves".equalsIgnoreCase(assetId)) {
+                if (Constants.WAVES_ASSET_ID_FILLED.equalsIgnoreCase(assetId)) {
                     assetId = ""
                 }
                 val assetBalance = queryFirst<AssetBalance> {
@@ -571,7 +566,7 @@ class SendActivity : BaseActivity(), SendView {
                     assetEnable(false)
                 }
             } catch (error: Exception) {
-                showError(R.string.send_error_get_data_from_qr, R.id.root_view)
+                showError(R.string.send_error_get_data_from_qr, R.id.root)
                 assetEnable(false)
                 recipientEnable(false)
                 amountEnable(false)

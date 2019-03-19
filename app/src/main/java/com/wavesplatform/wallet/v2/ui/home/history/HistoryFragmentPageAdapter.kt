@@ -17,4 +17,3 @@ class HistoryFragmentPageAdapter(fm: FragmentManager?, var data: MutableList<Pai
         return data[position].second
     }
 }
-

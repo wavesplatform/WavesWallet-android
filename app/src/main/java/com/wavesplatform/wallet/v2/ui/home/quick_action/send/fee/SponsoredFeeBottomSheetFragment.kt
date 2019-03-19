@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_sponsored_fee_bottom_sheet_dialog
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
-
 class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), SponsoredFeeDetailsView {
     private var rootView: View? = null
 
@@ -37,7 +36,6 @@ class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), Sp
 
     @ProvidePresenter
     fun providePresenter(): SponsoredFeeDetailsPresenter = presenter
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)

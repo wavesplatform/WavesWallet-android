@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.fragment_scan_seed.*
 import pers.victor.ext.click
 import javax.inject.Inject
 
-
 class ScanSeedFragment : BaseFragment(), ScanSeedView {
 
     @Inject
@@ -24,7 +23,6 @@ class ScanSeedFragment : BaseFragment(), ScanSeedView {
 
     override fun configLayoutRes() = R.layout.fragment_scan_seed
 
-
     override fun onViewReady(savedInstanceState: Bundle?) {
         button_scan.click {
             IntentIntegrator(baseActivity)
@@ -33,7 +31,6 @@ class ScanSeedFragment : BaseFragment(), ScanSeedView {
                     .setBeepEnabled(false)
                     .setCaptureActivity(QrCodeScannerActivity::class.java)
                     .initiateScan()
-
         }
     }
 

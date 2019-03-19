@@ -10,7 +10,6 @@ import com.asksira.loopingviewpager.LoopingViewPager
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
@@ -25,7 +24,6 @@ import pers.victor.ext.click
 import pers.victor.ext.visiable
 import java.util.*
 import javax.inject.Inject
-
 
 class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
 
@@ -75,7 +73,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             } else if (position == 0.0F) {
                 root.alpha = 1.0F
             } else {
-                root.alpha = 1.0F - Math.abs(position);
+                root.alpha = 1.0F - Math.abs(position)
             }
         }
         view_pager.adapter = WelcomeItemsPagerAdapter(this, populateList(), true)
@@ -95,8 +93,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     private fun setEnvButton() {
         if (BuildConfig.DEBUG) {
             button_switch_net.visiable()
-            val newEnvironment = when (prefsUtil.getGlobalValue(
-                    PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, EnvironmentManager.KEY_ENV_MAIN_NET)) {
+            val newEnvironment = when (EnvironmentManager.environmentName) {
                 EnvironmentManager.KEY_ENV_MAIN_NET -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_test)
                     EnvironmentManager.Environment.TEST_NET
@@ -112,7 +109,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
             }
             button_switch_net.click {
                 button_switch_net.isEnabled = false
-                EnvironmentManager.get().setCurrent(newEnvironment)
+                EnvironmentManager.setCurrentEnvironment(newEnvironment)
             }
         }
     }

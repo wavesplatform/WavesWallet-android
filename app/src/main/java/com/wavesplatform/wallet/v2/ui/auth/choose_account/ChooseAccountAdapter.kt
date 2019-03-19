@@ -7,8 +7,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.daimajia.swipe.SwipeLayout
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.custom.Identicon
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
@@ -48,5 +48,4 @@ class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressBookU
             }
         }
     }
-
 }

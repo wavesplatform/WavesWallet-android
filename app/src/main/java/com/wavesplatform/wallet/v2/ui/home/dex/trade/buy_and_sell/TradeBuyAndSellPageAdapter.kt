@@ -16,4 +16,3 @@ class TradeBuyAndSellPageAdapter(fm: FragmentManager?, var fragments: ArrayList<
         return titles[position]
     }
 }
-

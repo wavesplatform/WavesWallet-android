@@ -97,9 +97,9 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         val animation = AnimationUtils.loadAnimation(context, R.anim.shake_error)
         dots?.startAnimation(animation)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
-            vibrator.vibrate(500);
+            vibrator.vibrate(500)
         }
         runDelayed(500) {
             dots?.clearDots()
@@ -166,6 +166,5 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         fun onDeleteClicked() {}
 
         fun onFingerprintClicked() {}
-
     }
 }

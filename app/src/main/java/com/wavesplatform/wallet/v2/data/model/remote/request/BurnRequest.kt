@@ -13,18 +13,17 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import pers.victor.ext.currentTimeMillis
 
 data class BurnRequest(
-        @SerializedName("assetId") val assetId: String = "",
-        @SerializedName("chainId") val chainId: Byte = EnvironmentManager.getNetCode(),
-        @SerializedName("fee") var fee: Long = 100000L,
-        @SerializedName("quantity") var quantity: Long = 1,
-        @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
-        @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,
-        @SerializedName("type") val type: Int = Transaction.BURN,
-        @SerializedName("version") val version: Int = Constants.VERSION,
-        @SerializedName("proofs") var proofs: MutableList<String?>? = null,
-        @SerializedName("id") var id: String? = null
+    @SerializedName("assetId") val assetId: String = "",
+    @SerializedName("chainId") val chainId: Byte = EnvironmentManager.netCode,
+    @SerializedName("fee") var fee: Long = 100000L,
+    @SerializedName("quantity") var quantity: Long = 1,
+    @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
+    @SerializedName("timestamp") var timestamp: Long = currentTimeMillis,
+    @SerializedName("type") val type: Int = Transaction.BURN,
+    @SerializedName("version") val version: Int = Constants.VERSION,
+    @SerializedName("proofs") var proofs: MutableList<String?>? = null,
+    @SerializedName("id") var id: String? = null
 ) {
-
 
     fun toSignBytes(): ByteArray {
         return try {
@@ -41,11 +40,9 @@ data class BurnRequest(
             Log.e("BurnRequest", "Couldn't create toSignBytes", e)
             ByteArray(0)
         }
-
     }
 
     fun sign(privateKey: ByteArray) {
         proofs = mutableListOf(Base58.encode(CryptoProvider.sign(privateKey, toSignBytes())))
     }
-
 }

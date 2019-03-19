@@ -6,7 +6,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 @StateStrategyType(AddToEndSingleStrategy::class)
-interface AssetsView :BaseMvpView{
+interface AssetsView : BaseMvpView {
     fun afterSuccessLoadAssets(assets: ArrayList<MultiItemEntity>, fromDB: Boolean, withApiUpdate: Boolean)
     fun afterFailedLoadAssets()
     fun afterFailedUpdateAssets()

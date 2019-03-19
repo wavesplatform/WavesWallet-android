@@ -29,8 +29,8 @@ class StartLeasingPresenter @Inject constructor() : BasePresenter<StartLeasingVi
         viewState.showCommissionLoading()
         fee = 0L
         addSubscription(Observable.zip(
-                matcherDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(App.getAccessManager().getWallet()?.address!!),
+                githubDataManager.getGlobalCommission(),
+                nodeDataManager.scriptAddressInfo(),
                 BiFunction { t1: GlobalTransactionCommission,
                              t2: ScriptInfo ->
                     return@BiFunction Pair(t1, t2)
@@ -51,5 +51,4 @@ class StartLeasingPresenter @Inject constructor() : BasePresenter<StartLeasingVi
                     viewState.showCommissionError()
                 }))
     }
-
 }

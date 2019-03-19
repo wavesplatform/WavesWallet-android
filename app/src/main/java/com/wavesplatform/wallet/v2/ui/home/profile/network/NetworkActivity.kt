@@ -4,8 +4,8 @@ import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.data.rules.UrlRule
@@ -19,7 +19,6 @@ import pers.victor.ext.app
 import pers.victor.ext.click
 import pers.victor.ext.isNetworkConnected
 import javax.inject.Inject
-
 
 class NetworkActivity : BaseActivity(), NetworkView {
 
@@ -42,7 +41,7 @@ class NetworkActivity : BaseActivity(), NetworkView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupToolbar(toolbar_view, true, getString(R.string.network_toolbar_title), R.drawable.ic_toolbar_back_black)
 
-        edit_spam_filter.setText(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM_FILE))
+        edit_spam_filter.setText(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, EnvironmentManager.servers.spamUrl))
 
         switch_spam_filter.isChecked = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
         switch_spam_filter.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -58,7 +57,9 @@ class NetworkActivity : BaseActivity(), NetworkView {
                 validator
                         .validate(object : Validator.OnValidateListener {
                             override fun onValidateSuccess(values: List<String>) {
-                                presenter.spamUrlFieldValid = prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, Constants.URL_SPAM_FILE) != edit_spam_filter.text.toString()
+                                presenter.spamUrlFieldValid = prefsUtil.getValue(
+                                        PrefsUtil.KEY_SPAM_URL,
+                                        EnvironmentManager.servers.spamUrl) != edit_spam_filter.text.toString()
                                 isFieldsValid()
                             }
 
@@ -71,8 +72,8 @@ class NetworkActivity : BaseActivity(), NetworkView {
         }
 
         button_set_default.click {
-            if (edit_spam_filter.text.toString() != Constants.URL_SPAM_FILE) {
-                edit_spam_filter.setText(Constants.URL_SPAM_FILE)
+            if (edit_spam_filter.text.toString() != EnvironmentManager.servers.spamUrl) {
+                edit_spam_filter.setText(EnvironmentManager.servers.spamUrl)
             }
             switch_spam_filter.isChecked = true
         }

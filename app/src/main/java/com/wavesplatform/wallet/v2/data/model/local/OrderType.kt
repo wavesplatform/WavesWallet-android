@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.wallet.R
 import pers.victor.ext.findColor
 
-
 enum class OrderType(private val typeServerByte: Int, val typeUI: Int, val color: Int) {
     @SerializedName("buy")
     BUY(0, R.string.my_orders_type_buy, findColor(R.color.submit400)),
@@ -14,5 +13,4 @@ enum class OrderType(private val typeServerByte: Int, val typeUI: Int, val color
     fun toBytes(): ByteArray {
         return byteArrayOf(typeServerByte.toByte())
     }
-
 }

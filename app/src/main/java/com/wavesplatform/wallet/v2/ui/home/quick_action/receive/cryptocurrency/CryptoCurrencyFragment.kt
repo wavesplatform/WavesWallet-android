@@ -101,9 +101,9 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
 
     override fun onShowTunnel(tunnel: GetTunnel?) {
         skeletonView?.hide()
-        if (tunnel?.tunnel == null
-                || tunnel.tunnel?.inMin.isNullOrEmpty()
-                || tunnel.tunnel?.currencyFrom.isNullOrEmpty()) {
+        if (tunnel?.tunnel == null ||
+                tunnel.tunnel?.inMin.isNullOrEmpty() ||
+                tunnel.tunnel?.currencyFrom.isNullOrEmpty()) {
             presenter.nextStepValidation = false
             needMakeButtonEnable()
             onGatewayError()
@@ -116,7 +116,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         attention_subtitle?.text = getString(R.string.receive_warning_will_send,
                 min,
                 tunnel.tunnel?.currencyFrom)
-        if (Constants.ETHEREUM_ASSET_ID == presenter.assetBalance!!.assetId) {
+        if (Constants.findByGatewayId("ETH")!!.assetId == presenter.assetBalance!!.assetId) {
             warning_crypto_title?.text = getString(R.string.receive_gateway_info_gateway_warning_eth_title)
             warning_crypto_subtitle?.text = getString(R.string.receive_gateway_info_gateway_warning_eth_subtitle)
         } else {
@@ -206,7 +206,6 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
             }
         }
     }
-
 
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)

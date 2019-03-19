@@ -15,6 +15,17 @@ jobs:
 #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
 #         command: sudo chmod +x ./gradlew
       - run:
+          name: Add Sentry SDK sentry.properties
+          command: |
+            mkdir -p app/src/main/resources
+            touch app/src/main/resources/sentry.properties
+            echo $SENTRY_DSN | base64 -di > app/src/main/resources/sentry.properties
+      - run:
+          name: Add Sentry cli sentry.properties
+          command: |
+            touch sentry.properties
+            echo $SENTRY_CLI_CONFIGS | base64 -di > sentry.properties
+      - run:
           name: Add google-services.json
           command: echo $GOOGLE_SERVICES_KEY | base64 -di > app/google-services.json
       - run:
@@ -53,3 +64,4 @@ workflows:
                 - master
                 - develop
                 - feature/circle-ci
+                - /^release/v.*/
