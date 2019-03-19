@@ -3,8 +3,8 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmatio
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.net.model.request.BurnRequest
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.isSmartError
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.errorBody

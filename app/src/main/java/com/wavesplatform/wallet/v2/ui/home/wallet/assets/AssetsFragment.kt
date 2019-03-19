@@ -31,6 +31,7 @@ import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.fragment_assets.*
 import kotlinx.android.synthetic.main.wallet_header_item.view.*

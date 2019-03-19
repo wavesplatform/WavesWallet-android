@@ -14,7 +14,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.sdk.net.model.WatchMarket
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment

@@ -7,7 +7,7 @@ import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommission
 import com.wavesplatform.sdk.net.model.response.ScriptInfo
 import com.wavesplatform.sdk.net.model.response.Transaction
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import io.reactivex.Observable

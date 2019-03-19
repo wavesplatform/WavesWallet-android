@@ -8,11 +8,11 @@ object SignUtil {
 
     @Throws(Base58.InvalidBase58::class)
     fun arrayWithSize(s: String?): ByteArray {
-        if (s != null && s.length > 0) {
+        return if (s != null && s.isNotEmpty()) {
             val b = Base58.decode(s)
-            return Bytes.concat(Shorts.toByteArray(b.size.toShort()), b)
+            Bytes.concat(Shorts.toByteArray(b.size.toShort()), b)
         } else {
-            return Shorts.toByteArray(0.toShort())
+            Shorts.toByteArray(0.toShort())
         }
     }
 

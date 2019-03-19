@@ -7,7 +7,7 @@ import com.wavesplatform.sdk.crypto.WavesWallet
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.Identicon
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
 import io.reactivex.Observable
 import org.apache.commons.io.Charsets
 import javax.inject.Inject

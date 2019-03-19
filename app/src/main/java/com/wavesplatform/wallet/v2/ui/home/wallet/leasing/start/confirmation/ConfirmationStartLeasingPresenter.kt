@@ -6,7 +6,7 @@ import com.wavesplatform.sdk.net.model.request.CreateLeasingRequest
 import com.wavesplatform.sdk.utils.isSmartError
 import com.wavesplatform.sdk.utils.makeAsAlias
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.util.errorBody
 import javax.inject.Inject
 

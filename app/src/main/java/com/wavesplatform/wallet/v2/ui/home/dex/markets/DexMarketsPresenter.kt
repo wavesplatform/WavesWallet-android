@@ -6,7 +6,7 @@ import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.sdk.net.model.response.MarketResponse
 import com.wavesplatform.wallet.v2.data.model.db.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import javax.inject.Inject
 

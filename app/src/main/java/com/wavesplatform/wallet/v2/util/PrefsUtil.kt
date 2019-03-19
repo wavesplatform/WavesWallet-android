@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v1.util
+package com.wavesplatform.wallet.v2.util
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -18,7 +18,7 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
     private val preferenceManager: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     val guid: String
-        get() = getGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, "")
+        get() = getGlobalValue(GLOBAL_LAST_LOGGED_IN_GUID, "")
 
     val allAddressBookUsers: MutableList<AddressBookUser>
         get() {
@@ -196,7 +196,7 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
      * Clears everything but the GUID for logging back in
      */
     fun logOut() {
-        removeGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID)
+        removeGlobalValue(GLOBAL_LAST_LOGGED_IN_GUID)
     }
 
     fun addGlobalListValue(name: String, value: String) {

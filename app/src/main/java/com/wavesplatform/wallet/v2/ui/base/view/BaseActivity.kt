@@ -29,7 +29,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
@@ -48,11 +48,11 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import com.wavesplatform.sdk.utils.RxUtil
 import kotlinx.android.synthetic.main.no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
-import pyxis.uzuki.live.richutilskt.utils.inflate
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject

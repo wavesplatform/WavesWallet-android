@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.andrefrsousa.superbottomsheet.SuperBottomSheetFragment
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.getToolBarHeight

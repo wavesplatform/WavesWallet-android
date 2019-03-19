@@ -4,11 +4,11 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.Constants.Companion.coinomatCryptoCurrencies
 import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnel
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
 import javax.inject.Inject
 
 @InjectViewState
