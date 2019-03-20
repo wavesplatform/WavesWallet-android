@@ -13,7 +13,7 @@ import com.wavesplatform.sdk.net.model.response.IssueTransaction
 import com.wavesplatform.sdk.net.service.ApiService
 import com.wavesplatform.sdk.net.service.HostSelectionInterceptor
 import com.wavesplatform.sdk.net.service.NodeService
-import io.reactivex.Observable // todo check
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import pers.victor.ext.currentTimeMillis
 import java.io.IOException
@@ -22,7 +22,7 @@ import java.util.*
 
 class EnvironmentManager {
 
-    var current: Environment? = null
+    private var current: Environment? = null
     private var application: Application? = null
     private var configurationDisposable: Disposable? = null
     private var timeDisposable: Disposable? = null
