@@ -106,6 +106,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
+        Wavesplatform.setCallAdapterFactory(RxErrorHandlingCallAdapterFactory(mErrorManager))
         localizationDelegate.addOnLocaleChangedListener(this)
         localizationDelegate.onCreate(savedInstanceState)
         super.onCreate(savedInstanceState)
@@ -177,8 +178,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         mCompositeDisposable.add(mRxEventBus.filteredObservable(Events.ErrorEvent::class.java)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ errorEvent ->
-                    mErrorManager.showError(this,
-                            errorEvent.retrofitException, errorEvent.retrySubject)
+                    mErrorManager.showError(this, errorEvent.retrofitException,
+                            errorEvent.retrySubject)
                 }, { t: Throwable? -> t?.printStackTrace() }))
     }
 

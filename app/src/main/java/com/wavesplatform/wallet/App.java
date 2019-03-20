@@ -15,12 +15,12 @@ import com.google.firebase.FirebaseApp;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.squareup.leakcanary.LeakCanary;
 import com.wavesplatform.sdk.Wavesplatform;
-import com.wavesplatform.wallet.v2.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
 import com.wavesplatform.wallet.v2.util.Analytics;
+import com.wavesplatform.wallet.v2.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.util.connectivity.ConnectivityManager;
 
 import javax.inject.Inject;

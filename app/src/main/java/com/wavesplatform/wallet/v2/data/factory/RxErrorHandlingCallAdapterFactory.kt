@@ -20,16 +20,21 @@ import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 
 class RxErrorHandlingCallAdapterFactory(private val mErrorManager: ErrorManager) : CallAdapter.Factory() {
+
     private val original: RxJava2CallAdapterFactory = RxJava2CallAdapterFactory.create()
 
     /**
      * Returns an [RxCallAdapterWrapper] instance
      */
-    override fun get(returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit): CallAdapter<*, *> {
-        return RxCallAdapterWrapper(retrofit, original.get(returnType, annotations, retrofit) as CallAdapter<out Any, *>, returnType)
+    override fun get(returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit)
+            : CallAdapter<*, *> {
+        return RxCallAdapterWrapper(retrofit, original.get(returnType, annotations, retrofit)
+                as CallAdapter<out Any, *>, returnType)
     }
 
-    inner class RxCallAdapterWrapper<R>(private val retrofit: Retrofit, private val wrapped: CallAdapter<R, *>, private val returnType: Type) : CallAdapter<R, Any> {
+    inner class RxCallAdapterWrapper<R>(private val retrofit: Retrofit,
+                                        private val wrapped: CallAdapter<R, *>,
+                                        private val returnType: Type) : CallAdapter<R, Any> {
 
         override fun responseType(): Type {
             return wrapped.responseType()
@@ -37,12 +42,15 @@ class RxErrorHandlingCallAdapterFactory(private val mErrorManager: ErrorManager)
 
         override fun adapt(call: Call<R>): Observable<*> {
             val retrySubject = PublishSubject.create<Events.RetryEvent>()
-            var observable = convert(wrapped.adapt(call))
-                    .onErrorResumeNext { t: Throwable -> Observable.error(handleErrorToShow(t, retrySubject)) }
-            return observable
+            return convert(wrapped.adapt(call))
+                    .onErrorResumeNext { t: Throwable ->
+                        Observable.error(handleErrorToShow(t, retrySubject))
+                    }
         }
 
-        private fun handleErrorToShow(throwable: Throwable, retrySubject: PublishSubject<Events.RetryEvent>): RetrofitException {
+        private fun handleErrorToShow(throwable: Throwable,
+                                      retrySubject: PublishSubject<Events.RetryEvent>)
+                : RetrofitException {
             val retrofitException = asRetrofitException(throwable)
             mErrorManager.handleError(retrofitException, retrySubject)
             SentryHelper.logException(retrofitException)
@@ -56,12 +64,13 @@ class RxErrorHandlingCallAdapterFactory(private val mErrorManager: ErrorManager)
                 o as Observable<*>
         }
 
-        fun asRetrofitException(throwable: Throwable): RetrofitException {
+        private fun asRetrofitException(throwable: Throwable): RetrofitException {
             // We had non-200 http error
             if (throwable is HttpException) {
                 val response = throwable.response()
 
-                return RetrofitException.httpError(response.raw().request().url().toString(), response, retrofit)
+                return RetrofitException.httpError(
+                        response.raw().request().url().toString(), response, retrofit)
             }
             // A network error happened
             if (throwable is TimeoutException || throwable is ConnectException ||
