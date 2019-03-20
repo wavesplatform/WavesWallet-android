@@ -120,7 +120,7 @@
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:fontFamily="@font/roboto_bold"
-                    tools:text="@string/enter_seed_manually_validation_seed_is_address_title" />
+                    tools:text="@string/enter_seed_manually_validation_seed_is_simple_title" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_validation_description"
@@ -132,7 +132,7 @@
                     android:layout_toEndOf="@+id/image_validation"
                     android:textColor="@color/black"
                     android:textSize="12sp"
-                    tools:text="@string/enter_seed_manually_validation_seed_is_address_description" />
+                    tools:text="@string/enter_seed_manually_validation_seed_is_simple_description" />
 
             </RelativeLayout>
 
