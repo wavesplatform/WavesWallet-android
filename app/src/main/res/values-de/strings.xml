@@ -217,7 +217,7 @@
     <string name="confirm_card_tutorial_about_backup">Ich verstehe, dass meine Waves nur mit dem Sicherungssatz wiederhergestellt werden können, wenn diese App auf ein anderes Gerät verschoben oder gelöscht wird</string>
     <string name="confirm_card_tutorial_about_fund_on_device">Ich verstehe, dass mein Geld auf diesem Gerät sicher aufbewahrt wird und nicht von einem Unternehmen</string>
     <string name="confirm_card_tutorial_about_terms">Ich habe die Nutzungsbedingungen gelesen, \nverstanden und bin damit einverstanden</string>
-    <string name="confirm_card_tutorial_terms_of_use">Nutzungsbedingungen</string>
+    <string name="confirm_card_tutorial_privacy_policy">Nutzungsbedingungen</string>
     <string name="confirm_card_tutorial_title">Bestätigen Sie und beginnen Sie</string>
     <string name="dialog_processing">Warten…</string>
     <string name="edit_account_name">Namen bearbeiten</string>

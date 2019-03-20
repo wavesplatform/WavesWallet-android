@@ -217,7 +217,7 @@
     <string name="confirm_card_tutorial_about_backup">Entiendo que si esta aplicación se mueve a otro dispositivo o se elimina, mis Waves solo se pueden recuperar con la SEED frase </string>
     <string name="confirm_card_tutorial_about_fund_on_device">Entiendo que mis fondos se mantienen de forma segura en este dispositivo, no por una empresa</string>
     <string name="confirm_card_tutorial_about_terms">He leído, entiendo y acepto los \nTérminos de Uso</string>
-    <string name="confirm_card_tutorial_terms_of_use">Términos de Uso</string>
+    <string name="confirm_card_tutorial_privacy_policy">Términos de Uso</string>
     <string name="confirm_card_tutorial_title">Confirmar y comenzar</string>
     <string name="dialog_processing">Espera…</string>
     <string name="edit_account_name">Editar nombre</string>

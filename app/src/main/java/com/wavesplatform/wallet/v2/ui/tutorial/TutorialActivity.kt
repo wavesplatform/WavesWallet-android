@@ -102,13 +102,13 @@ class TutorialActivity : BaseActivity(), TutorialView {
                         text_next.text = getString(R.string.card_tutorial_understand)
                     }
                     view_pager.currentItem == adapter.items.size - 1 -> {
-                        adapter.listener?.canBegin(adapter.isAllCheckedToStart())
-
                         text_next.text = getString(R.string.confirm_card_tutorial_submit)
                         text_next.click {
                             preferencesHelper.setTutorialPassed(true)
                             exitAnimation()
                         }
+
+                        adapter.listener?.canBegin(adapter.isAllCheckedToStart())
                     }
                     else -> {
                         text_next.text = getString(R.string.card_tutorial_next)

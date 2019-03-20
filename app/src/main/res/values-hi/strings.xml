@@ -217,7 +217,7 @@
     <string name="confirm_card_tutorial_about_backup">मैं समझता हूं कि यदि यह ऐप किसी अन्य डिवाइस पर ले जाया गया है या हटा दिया गया है, तो मेरी वेव्स केवल बैकअप फ्रेज से पुनर्प्राप्त की जा सकती हैं</string>
     <string name="confirm_card_tutorial_about_fund_on_device">मैं समझता हूं कि मेरे फंड इस डिवाइस पर सुरक्षित रूप से आयोजित किए जाते हैं, न कि किसी कंपनी द्वारा</string>
     <string name="confirm_card_tutorial_about_terms">मैंने पढ़ा, समझ लिया है, और सहमत हूं \nउपयोग की शर्तें</string>
-    <string name="confirm_card_tutorial_terms_of_use">उपयोग की शर्तें</string>
+    <string name="confirm_card_tutorial_privacy_policy">उपयोग की शर्तें</string>
     <string name="confirm_card_tutorial_title">पुष्टि करें और शुरू करें</string>
     <string name="dialog_processing">रुकिए…</string>
     <string name="edit_account_name">नाम संपादित करें</string>

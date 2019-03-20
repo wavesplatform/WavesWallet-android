@@ -217,7 +217,7 @@
     <string name="confirm_card_tutorial_about_backup">我了解如果将此应用程序移动到其他设备或删除，我的Waves币只能通过备份短语恢复</string>
     <string name="confirm_card_tutorial_about_fund_on_device">我知道我的资金是安全地保存在这个设备上，而不是保持在一家公司里</string>
     <string name="confirm_card_tutorial_about_terms">我已阅读，理解并同意 \n使用条款</string>
-    <string name="confirm_card_tutorial_terms_of_use">使用条款</string>
+    <string name="confirm_card_tutorial_privacy_policy">使用条款</string>
     <string name="confirm_card_tutorial_title">确认并开始</string>
     <string name="dialog_processing">等待中…</string>
     <string name="edit_account_name">编辑名称</string>

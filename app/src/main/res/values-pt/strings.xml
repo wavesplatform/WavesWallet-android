@@ -217,7 +217,7 @@
     <string name="confirm_card_tutorial_about_backup">Percebi que no caso de mover esta App para outro dispositivo ou a apagar, só poderei recuperar os ativos presentes na minha Carteira usando as palavras as respetivas palavras de recuperação.</string>
     <string name="confirm_card_tutorial_about_fund_on_device">Percebi que os meus fundos se encontram guardados de forma segura neste dispositivo e que não estão sob custódia de nenhuma empresa.</string>
     <string name="confirm_card_tutorial_about_terms">Li, entendi e aceitei os \nTermos de Utilização</string>
-    <string name="confirm_card_tutorial_terms_of_use">Termos de Utilização</string>
+    <string name="confirm_card_tutorial_privacy_policy">Termos de Utilização</string>
     <string name="confirm_card_tutorial_title">Confirmar e começar a usar</string>
     <string name="dialog_processing">Espera um pouco…</string>
     <string name="edit_account_name">Editar o nome da conta</string>
