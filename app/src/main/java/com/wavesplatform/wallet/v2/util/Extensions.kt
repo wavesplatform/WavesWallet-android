@@ -28,6 +28,7 @@ import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.util.Patterns
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -310,6 +311,10 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
             lFlags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
     }
+}
+
+fun String.isWebUrl() : Boolean{
+    return Patterns.WEB_URL.matcher(this.trim()).matches()
 }
 
 fun String.stripZeros(): String {
