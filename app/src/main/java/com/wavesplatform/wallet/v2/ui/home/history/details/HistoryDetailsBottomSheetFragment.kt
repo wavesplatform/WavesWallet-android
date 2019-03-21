@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
@@ -643,11 +644,19 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                             R.string.history_details_copy_all_data)
                 })
 
+        if (BuildConfig.DEBUG) {
+            view.check_box_staging_on_explorer.visibility = View.VISIBLE
+        }
+
         eventSubscriptions.add(RxView.clicks(view.text_view_on_explorer)
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    openUrlWithChromeTab(String.format(Constants.WAVES_EXPLORER, transaction.id))
+                    if (view.check_box_staging_on_explorer.isChecked) {
+                        openUrlWithChromeTab(String.format(Constants.URL_WAVES_STAGE_EXPLORER, transaction.id))
+                    } else {
+                        openUrlWithChromeTab(String.format(Constants.URL_WAVES_EXPLORER, transaction.id))
+                    }
                 })
 
         when (transaction.transactionType()) {
