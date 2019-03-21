@@ -53,13 +53,14 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return matcherService.getOrderBook(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset)
     }
 
-    fun cancelOrder(orderId: String?, watchMarket: WatchMarket?, cancelOrderRequest: CancelOrderRequest): Observable<Any> {
-        cancelOrderRequest.sender = getPublicKeyStr()
-        cancelOrderRequest.orderId = orderId
+    fun cancelOrder(orderId: String?, amountAsset: String?, priceAsset: String?): Observable<Any> {
+        val request = CancelOrderRequest()
+        request.sender = getPublicKeyStr()
+        request.orderId = orderId
         App.getAccessManager().getWallet()?.privateKey.notNull {
-            cancelOrderRequest.sign(it)
+            request.sign(it)
         }
-        return matcherService.cancelOrder(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, cancelOrderRequest)
+        return matcherService.cancelOrder(amountAsset, priceAsset, request)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }

@@ -12,6 +12,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSel
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
+import pers.victor.ext.second
 import java.math.RoundingMode
 import javax.inject.Inject
 
@@ -68,26 +69,12 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                     currentAmountBalance = it[data?.watchMarket?.market?.amountAsset]
                     currentPriceBalance = it[data?.watchMarket?.market?.priceAsset]
 
-                    return@flatMap Observable.zip(
-                            githubDataManager.getGlobalCommission(),
-                            nodeDataManager.assetDetails(data?.watchMarket?.market?.priceAsset),
-                            nodeDataManager.assetDetails(data?.watchMarket?.market?.amountAsset),
-                            Function3 { t1: GlobalTransactionCommission,
-                                        t2: AssetsDetails,
-                                        t3: AssetsDetails ->
-                                return@Function3 Triple(t1, t2, t3)
-                            })
+                    return@flatMap nodeDataManager.getCommissionForPair(data?.watchMarket?.market?.amountAsset,
+                            data?.watchMarket?.market?.priceAsset)
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())
-                .subscribe({
-                    val commission = it.first
-                    val priceAssetsDetails = it.second
-                    val amountAssetsDetails = it.third
-                    val params = GlobalTransactionCommission.Params()
-                    params.transactionType = Transaction.EXCHANGE
-                    params.smartPriceAsset = priceAssetsDetails.scripted
-                    params.smartAmountAsset = amountAssetsDetails.scripted
-                    fee = TransactionUtil.countCommission(commission, params)
+                .subscribe({ calculatedFee ->
+                    fee = calculatedFee
                     orderRequest.matcherFee = fee
 
                     viewState.showCommissionSuccess(fee)

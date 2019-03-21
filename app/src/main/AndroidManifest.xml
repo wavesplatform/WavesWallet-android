@@ -34,10 +34,9 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-        <!--TODO: change key and put in a separate file-->
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="532ed93ff155abe216f69842dbea9997d5ebb665" />
+            android:value="${fabricApiKey}" />
 
         <activity
             android:name=".v2.ui.splash.SplashActivity"
