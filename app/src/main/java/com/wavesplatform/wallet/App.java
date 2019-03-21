@@ -17,12 +17,14 @@ import com.squareup.leakcanary.LeakCanary;
 import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
+import com.wavesplatform.wallet.v2.data.analytics.Analytics;
+import com.wavesplatform.wallet.v2.data.analytics.providers.AppsFlyerProvider;
+import com.wavesplatform.wallet.v2.data.analytics.providers.FirebaseProvider;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
 import com.wavesplatform.wallet.v2.data.manager.GithubDataManager;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
 import com.wavesplatform.wallet.v2.injection.component.DaggerApplicationV2Component;
-import com.wavesplatform.wallet.v2.util.Analytics;
 
 import javax.inject.Inject;
 
@@ -58,7 +60,10 @@ public class App extends DaggerApplication {
         }
         LeakCanary.install(this);
 
-        Analytics.appsFlyerInit(this);
+        Analytics.Companion.getInstance().register(new FirebaseProvider(this));
+        Analytics.Companion.getInstance().register(new AppsFlyerProvider(this, BuildConfig.APPS_FLYER_KEY));
+
+        com.wavesplatform.wallet.v2.util.Analytics.appsFlyerInit(this);
         FirebaseApp.initializeApp(this);
         Fabric.with(this, new Crashlytics());
         application = this;
