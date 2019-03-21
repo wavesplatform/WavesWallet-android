@@ -22,7 +22,9 @@ import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.util.find
 import com.wavesplatform.wallet.v2.util.findByGatewayId
 import com.wavesplatform.wallet.v2.util.isSpamConsidered
-import io.reactivex.Observable
+import com.wavesplatform.wallet.v2.util.isValidWavesAddress
+import com.wavesplatform.wallet.v2.util.isWaves
+import io.reactivex.Observable // todo check
 import io.reactivex.functions.Function3
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
@@ -283,7 +285,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
 
         fun isWavesAddress(address: String?): Boolean {
-            if (address == null || !address.isValidAddress()) {
+            if (address == null || !address.isValidWavesAddress()) {
                 return false
             }
 

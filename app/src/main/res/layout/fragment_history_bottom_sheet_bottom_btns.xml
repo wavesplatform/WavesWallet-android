@@ -57,6 +57,14 @@
                 android:visibility="gone"
                 tools:visibility="visible" />
 
+            <CheckBox
+                android:id="@+id/check_box_staging_on_explorer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Staging"
+                android:visibility="gone" />
+
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_on_explorer"
                 android:layout_width="wrap_content"

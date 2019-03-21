@@ -27,6 +27,7 @@ import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.util.Patterns
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -223,6 +224,10 @@ fun Context.getToolBarHeight(): Int {
     return mActionBarSize
 }
 
+fun Number.roundTo(numFractionDigits: Int?) = String.format(
+        "%.${numFractionDigits}f",
+        toDouble()).clearBalance().toDouble() // todo check
+
 fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
     return if (numDecimalPlaces != null) {
         val factor = Math.pow(10.0, numDecimalPlaces.toDouble())
@@ -262,6 +267,16 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
             lFlags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
     }
+}
+
+// todo check <>
+fun String.isWebUrl() : Boolean{
+    return Patterns.WEB_URL.matcher(this.trim()).matches()
+}
+
+fun String.stripZeros(): String {
+    if (this == "0.0") return this
+    return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
 }
 
 fun Fragment.showSuccess(@StringRes msgId: Int, @IdRes viewId: Int) {
@@ -540,6 +555,40 @@ fun Throwable.errorBody(): ErrorResponse? {
 fun ResponseBody.clone(): ResponseBody {
     val bufferClone = this.source().buffer()?.clone()
     return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone)
+}
+// todo check
+fun ErrorResponse.isSmartError(): Boolean {
+    return this.error in 305..308
+}
+// todo check
+fun AssetInfo.getTicker(): String {
+
+    if (this.id.isWavesId()) {
+        return Constants.wavesAssetInfo.name
+    }
+
+    return this.ticker ?: this.name
+}
+// todo check
+fun getScaledAmount(amount: Long, decimals: Int): String {
+    val absAmount = Math.abs(amount)
+    val value = BigDecimal.valueOf(absAmount, decimals)
+    if (amount == 0L) {
+        return "0"
+    }
+
+    val sign = if (amount < 0) "-" else ""
+
+    return sign + when {
+        value >= MoneyUtil.ONE_B -> value.divide(MoneyUtil.ONE_B, 1, RoundingMode.FLOOR)
+                .toPlainString().stripZeros() + "B"
+        value >= MoneyUtil.ONE_M -> value.divide(MoneyUtil.ONE_M, 1, RoundingMode.FLOOR)
+                .toPlainString().stripZeros() + "M"
+        value >= MoneyUtil.ONE_K -> value.divide(MoneyUtil.ONE_K, 1, RoundingMode.FLOOR)
+                .toPlainString().stripZeros() + "k"
+        else -> MoneyUtil.createFormatter(decimals).format(BigDecimal.valueOf(absAmount, decimals))
+                .stripZeros() + ""
+    }
 }
 
 fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { }) {

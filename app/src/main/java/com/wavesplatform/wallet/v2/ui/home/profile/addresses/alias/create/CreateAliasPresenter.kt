@@ -52,10 +52,10 @@ class CreateAliasPresenter @Inject constructor() : BasePresenter<CreateAliasView
                     it.printStackTrace()
                     viewState.showProgressBar(false)
 
-                    if (it.errorBody()?.isSmartError() == true) {
-                        viewState.failedCreateAliasCauseSmart()
-                    } else {
-                        it.errorBody()?.let {
+                    it.errorBody()?.let { error ->
+                        if (error.isSmartError()) {
+                            viewState.failedCreateAliasCauseSmart()
+                        } else {
                             viewState.failedCreateAlias(it.message)
                         }
                     }
