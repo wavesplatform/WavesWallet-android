@@ -266,7 +266,7 @@ fun Context.getToolBarHeight(): Int {
     return mActionBarSize
 }
 
-fun Number.roundTo(numFractionDigits: Int?) = String.format("%.${numFractionDigits}f", toDouble()).toDouble()
+fun Number.roundTo(numFractionDigits: Int?) = String.format("%.${numFractionDigits}f", toDouble()).clearBalance().toDouble()
 
 fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
     return if (numDecimalPlaces != null) {
