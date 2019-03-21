@@ -23,7 +23,7 @@ jobs:
       - run:
           name: Add Api-keys file
           command: |
-            echo API_KEYS_FILE | base64 -di > app/api-keys.properties
+            echo $API_KEYS_FILE | base64 -di > app/api-keys.properties
       - run:
           name: Add Sentry cli sentry.properties
           command: |
