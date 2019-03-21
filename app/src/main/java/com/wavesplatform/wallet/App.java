@@ -21,6 +21,7 @@ import com.wavesplatform.wallet.v2.data.analytics.Analytics;
 import com.wavesplatform.wallet.v2.data.analytics.providers.AmplitudeProvider;
 import com.wavesplatform.wallet.v2.data.analytics.providers.AppsFlyerProvider;
 import com.wavesplatform.wallet.v2.data.analytics.providers.FirebaseProvider;
+import com.wavesplatform.wallet.v2.data.analytics.providers.LoggerProvider;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
 import com.wavesplatform.wallet.v2.data.manager.GithubDataManager;
@@ -61,6 +62,7 @@ public class App extends DaggerApplication {
         }
         LeakCanary.install(this);
 
+        Analytics.Companion.getInstance().register(new LoggerProvider());
         Analytics.Companion.getInstance().register(new FirebaseProvider(this));
         Analytics.Companion.getInstance().register(new AppsFlyerProvider(this, BuildConfig.APPS_FLYER_KEY));
         Analytics.Companion.getInstance().register(new AmplitudeProvider(this, BuildConfig.AMPLITUDE_API_KEY));
