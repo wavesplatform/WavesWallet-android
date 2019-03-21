@@ -7,6 +7,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
@@ -23,11 +24,11 @@ import com.wavesplatform.wallet.v2.util.onAction
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
 import io.github.anderscheow.validator.constant.Mode
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_enter_seed_manually.*
 import org.apache.commons.io.Charsets
-import pers.victor.ext.addTextChangedListener
-import pers.victor.ext.click
-import pers.victor.ext.isNetworkConnected
+import pers.victor.ext.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
@@ -54,45 +55,51 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
 
         edit_seed.applyFilterStartEmptySpace()
 
-        edit_seed.addTextChangedListener {
-            on { s, start, before, count ->
-                validator
-                        .validate(object : Validator.OnValidateListener {
-                            override fun onValidateSuccess(values: List<String>) {
-                                presenter.nextStepValidation = true
-                                makeButtonEnableIfValid()
-                                if (values.isNotEmpty() && values[0].length > 24) {
-                                    val wallet = WavesWallet(values[0].trim().toByteArray(Charsets.UTF_8))
-                                    activity?.let {
-                                        Glide.with(it)
+        eventSubscriptions.add(RxTextView.textChanges(edit_seed)
+                .skipInitialValue()
+                .map { it.toString() }
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    presenter.simpleValidationAlertShown = false
+                    relative_validation_error.gone()
+                    validator
+                            .validate(object : Validator.OnValidateListener {
+                                override fun onValidateSuccess(values: List<String>) {
+                                    presenter.nextStepValidation = true
+                                    makeButtonEnableIfValid()
+                                    if (values.isNotEmpty() && values[0].length > 24) {
+                                        val wallet = WavesWallet(values[0].trim().toByteArray(Charsets.UTF_8))
+                                        activity?.let {
+                                            Glide.with(it)
+                                                    .load(identicon.create(wallet.address))
+                                                    .apply(RequestOptions().circleCrop())
+                                                    .into(image_asset)
+                                        }
+                                        address_asset.text = wallet.address
+                                        address_asset.visibility = View.VISIBLE
+                                        skeleton_address_asset.visibility = View.GONE
+                                    } else {
+                                        setSkeleton()
+                                    }
+                                }
+
+                                override fun onValidateFailed() {
+                                    setSkeleton()
+                                    if (App.getAccessManager().isAccountWithSeedExist(edit_seed.text.toString().trim())) {
+                                        val wallet = WavesWallet(edit_seed.text.toString().trim().toByteArray(Charsets.UTF_8))
+                                        Glide.with(baseActivity)
                                                 .load(identicon.create(wallet.address))
                                                 .apply(RequestOptions().circleCrop())
-                                                .into(image_asset!!)
+                                                .into(image_asset)
+                                        address_asset.text = wallet.address
+                                        address_asset.visibility = View.VISIBLE
+                                        skeleton_address_asset.visibility = View.GONE
                                     }
-                                    address_asset.text = wallet.address
-                                    address_asset.visibility = View.VISIBLE
-                                    skeleton_address_asset.visibility = View.GONE
-                                } else {
-                                    setSkeleton()
                                 }
-                            }
-
-                            override fun onValidateFailed() {
-                                setSkeleton()
-                                if (App.getAccessManager().isAccountWithSeedExist(edit_seed.text.toString().trim())) {
-                                    val wallet = WavesWallet(edit_seed.text.toString().trim().toByteArray(Charsets.UTF_8))
-                                    Glide.with(baseActivity)
-                                            .load(identicon.create(wallet.address))
-                                            .apply(RequestOptions().circleCrop())
-                                            .into(image_asset!!)
-                                    address_asset.text = wallet.address
-                                    address_asset.visibility = View.VISIBLE
-                                    skeleton_address_asset.visibility = View.GONE
-                                }
-                            }
-                        }, seedValidation)
-            }
-        }
+                            }, seedValidation)
+                })
 
         edit_seed.onAction(EditorInfo.IME_ACTION_DONE) {
             if (button_continue.isEnabled) {
@@ -104,9 +111,27 @@ class EnterSeedManuallyFragment : BaseFragment(), EnterSeedManuallyView {
         }
 
         button_continue.click {
-            launchActivity<ProtectAccountActivity> {
-                putExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT, true)
-                putExtra(NewAccountActivity.KEY_INTENT_SEED, edit_seed.text.toString().trim())
+            if (presenter.simpleValidationAlertShown || isSimpleValidationPassed()) {
+                launchActivity<ProtectAccountActivity> {
+                    putExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT, true)
+                    putExtra(NewAccountActivity.KEY_INTENT_SEED, edit_seed.text.toString().trim())
+                }
+            }
+        }
+    }
+
+    private fun isSimpleValidationPassed(): Boolean {
+        presenter.simpleValidationAlertShown = true
+        return when {
+            edit_seed.text.toString().length < 59 -> {
+                hideInputMethod()
+                text_validation_title.text = getString(R.string.enter_seed_manually_validation_seed_is_simple_title)
+                text_validation_description.text = getString(R.string.enter_seed_manually_validation_seed_is_simple_description)
+                relative_validation_error.visiable()
+                false
+            }
+            else -> {
+                true
             }
         }
     }

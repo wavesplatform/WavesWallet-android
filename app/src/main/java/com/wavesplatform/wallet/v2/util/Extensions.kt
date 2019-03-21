@@ -28,6 +28,7 @@ import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.util.Patterns
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -266,7 +267,7 @@ fun Context.getToolBarHeight(): Int {
     return mActionBarSize
 }
 
-fun Number.roundTo(numFractionDigits: Int?) = String.format("%.${numFractionDigits}f", toDouble()).toDouble()
+fun Number.roundTo(numFractionDigits: Int?) = String.format("%.${numFractionDigits}f", toDouble()).clearBalance().toDouble()
 
 fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
     return if (numDecimalPlaces != null) {
@@ -310,6 +311,10 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
             lFlags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
     }
+}
+
+fun String.isWebUrl() : Boolean{
+    return Patterns.WEB_URL.matcher(this.trim()).matches()
 }
 
 fun String.stripZeros(): String {
