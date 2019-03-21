@@ -1,25 +1,16 @@
 package com.wavesplatform.wallet.v2.ui.home.history.details
 
 import android.app.Activity
-import android.content.ClipData
 import android.content.Intent
 import android.graphics.Typeface
-import android.os.Bundle
-import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
-import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -33,12 +24,12 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
+import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.data.remote.CoinomatService
-import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
+import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
 import com.wavesplatform.wallet.v2.ui.custom.SpamTag
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
@@ -51,67 +42,15 @@ import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_la
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
 import kotlinx.android.synthetic.main.history_details_layout.view.*
 import pers.victor.ext.*
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), HistoryDetailsView {
-    var selectedItem: Transaction? = null
-    var selectedItemPosition: Int = 0
-    var rootView: View? = null
-    var inflater: LayoutInflater? = null
+class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Transaction>() {
 
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: HistoryDetailsPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): HistoryDetailsPresenter = presenter
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        this.inflater = inflater
-        rootView = inflater.inflate(R.layout.history_details_bottom_sheet_dialog, container, false)
-
-        configureView()
-
-        return rootView
+    override fun configLayoutRes(): Int {
+        return R.layout.history_details_bottom_sheet_dialog
     }
 
-    private fun configureView() {
-        val container = rootView?.findViewById<LinearLayout>(R.id.main_container)
-        container?.removeAllViews()
-
-        selectedItem?.let {
-            container?.apply {
-                addView(setupHeader(it))
-                addView(setupBody(it))
-                addView(setupTransactionInfo(it))
-                addView(setupFooter(it))
-            }
-            configCloseButton()
-        }
-    }
-
-    private fun configCloseButton() {
-        val close = rootView?.findViewById<AppCompatImageView>(R.id.image_close)
-        close?.post {
-            val closeOriginalPos = IntArray(2)
-            close.getLocationOnScreen(closeOriginalPos)
-
-            val dialogHeight = dialog.findViewById<CoordinatorLayout>(R.id.coordinator).height
-            val imageCloseBottomY = (closeOriginalPos[1] + close.height)
-            val difference = dialogHeight - imageCloseBottomY
-
-            if (imageCloseBottomY < dialogHeight && difference > 0) {
-                val lp = close.layoutParams as RelativeLayout.LayoutParams
-                lp.setMargins(0, dp2px(34) + difference, dp2px(24), 0)
-                close.layoutParams = lp
-            }
-        }
-    }
-
-    private fun setupHeader(transaction: Transaction): View? {
+    override fun setupHeader(transaction: Transaction): View? {
         val view = inflate(R.layout.history_details_layout)
 
         view.text_tag.gone()
@@ -218,7 +157,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         return view
     }
 
-    private fun setupBody(transaction: Transaction): View? {
+    override fun setupBody(transaction: Transaction): View? {
         val historyContainer = LinearLayout(activity)
         historyContainer.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         historyContainer.orientation = LinearLayout.VERTICAL
@@ -636,7 +575,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         return historyContainer
     }
 
-    private fun setupTransactionInfo(transaction: Transaction): View? {
+    override fun setupInfo(transaction: Transaction): View? {
         val layout = inflate(R.layout.fragment_history_bottom_sheet_base_info_layout)
 
         fun showTransactionFee() {
@@ -673,7 +612,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         return layout
     }
 
-    private fun setupFooter(transaction: Transaction): View? {
+    override fun setupFooter(transaction: Transaction): View? {
         val view = inflater?.inflate(R.layout.fragment_history_bottom_sheet_bottom_btns, null, false)
 
         fun changeViewMargin(view: View) {
@@ -789,7 +728,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         val directionSign: String
         val amountAsset = myOrder.assetPair?.amountAssetObject!!
         val amountValue = getScaledAmount(transaction.amount,
-                transaction.asset?.precision ?: 8)
+                amountAsset.precision)
 
         if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell
@@ -821,26 +760,12 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         view.text_transaction_value.text = directionSign + amountValue + assetName
     }
 
-    private fun copyToClipboard(textToCopy: String, view: TextView, btnText: Int) {
-        clipboardManager.primaryClip = ClipData.newPlainText(getString(R.string.app_name), textToCopy)
-        view.text = getString(R.string.common_copied)
-        view.setTextColor(findColor(R.color.success400))
-        view.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_18_success_400, 0, 0, 0)
-        runDelayed(1500) {
-            this.context.notNull {
-                view.text = getString(btnText)
-                view.setTextColor(findColor(R.color.black))
-                view.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_copy_18_black, 0, 0, 0)
-            }
-        }
-    }
-
     private fun nonGateway(assetBalance: AssetBalance, transaction: Transaction) =
             !assetBalance.isGateway || (assetBalance.isGateway &&
                     !transaction.recipientAddress.equals(CoinomatService.GATEWAY_ADDRESS))
 
     private fun resolveExistOrNoAddress(textViewName: TextView?, textViewAddress: TextView?, textAddressAction: AppCompatTextView?) {
-        val addressBookUser = prefsUtil.getAddressBookUser(textViewAddress?.text.toString())
+        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
         makeAddressActionViewClickableStyled(textAddressAction)
 
         if (addressBookUser == null) {
@@ -891,7 +816,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
     }
 
     private fun resolveExistOrNoAddressForMassSend(textViewName: TextView?, textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
-        val addressBookUser = prefsUtil.getAddressBookUser(textViewAddress?.text.toString())
+        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
 
         makeAddressActionViewClickableStyled(imageAddressAction)
 
@@ -948,20 +873,5 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
             if (resultCode == Activity.RESULT_OK) {
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        SimpleChromeCustomTabs.getInstance().connectTo(requireActivity())
-    }
-
-    override fun onPause() {
-        SimpleChromeCustomTabs.getInstance().disconnectFrom(requireActivity())
-        super.onPause()
-    }
-
-    fun configureData(selectedItem: Transaction, selectedPosition: Int) {
-        this.selectedItem = selectedItem
-        this.selectedItemPosition = selectedPosition
     }
 }

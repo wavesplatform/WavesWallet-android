@@ -6,6 +6,7 @@ import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.BuildConfig
 import pyxis.uzuki.live.richutilskt.utils.toMap
 
 class Analytics {
@@ -28,8 +29,7 @@ class Analytics {
                 override fun onAttributionFailure(errorMessage: String) {
                 }
             }
-            // TODO: change key and put in a separate file
-            AppsFlyerLib.getInstance().init("4di8SsYap4CM4XYMdh8uT6", conversionDataListener,
+            AppsFlyerLib.getInstance().init(BuildConfig.APPS_FLYER_KEY, conversionDataListener,
                     app.applicationContext)
             AppsFlyerLib.getInstance().startTracking(app)
         }

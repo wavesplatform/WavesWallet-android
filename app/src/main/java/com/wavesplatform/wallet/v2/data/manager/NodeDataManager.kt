@@ -13,6 +13,7 @@ import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.request.*
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.util.TransactionUtil
 import com.wavesplatform.wallet.v2.util.loadDbWavesBalance
 import com.wavesplatform.wallet.v2.util.notNull
@@ -33,6 +34,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     lateinit var transactionUtil: TransactionUtil
     @Inject
     lateinit var apiDataManager: ApiDataManager
+    @Inject
+    lateinit var githubDataManager: GithubDataManager
     @Inject
     lateinit var matcherDataManager: MatcherDataManager
     var transactions: List<Transaction> = ArrayList()
@@ -97,7 +100,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                             }
                             .map { tripple ->
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
-                                val savedAssetPrefs = prefsUtil.assetBalances
+                                val savedAssetPrefs = queryAll<AssetBalanceStore>()
 
                                 if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
                                     // merge db data and API data
@@ -115,15 +118,16 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                             assetBalance.isFiatMoney = it.isFiatMoney
                                             assetBalance.isGateway = it.isGateway
                                             assetBalance.isSpam = it.isSpam
-                                            assetBalance.isFavorite =
-                                                    savedAssetPrefs[assetBalance.assetId]
-                                                            ?.isFavorite ?: it.isFavorite
-                                            assetBalance.position =
-                                                    savedAssetPrefs[assetBalance.assetId]
-                                                            ?.position ?: it.position
-                                            assetBalance.isHidden =
-                                                    savedAssetPrefs[assetBalance.assetId]
-                                                            ?.isHidden ?: it.isHidden
+
+                                            val assetPref = savedAssetPrefs.firstOrNull {
+                                                it.assetId == assetBalance.assetId
+                                            }
+                                            assetBalance.isFavorite = assetPref?.isFavorite
+                                                    ?: it.isFavorite
+                                            assetBalance.position = assetPref?.position
+                                                    ?: it.position
+                                            assetBalance.isHidden = assetPref?.isHidden
+                                                    ?: it.isHidden
                                         }
                                     }
                                 }
@@ -131,15 +135,13 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 findElementsInDbWithZeroBalancesAndDelete(assetsFromDb, tripple)
 
                                 tripple.third.balances.forEachIndexed { index, assetBalance ->
-                                    assetBalance.isFavorite =
-                                            savedAssetPrefs[assetBalance.assetId]?.isFavorite
-                                                    ?: assetBalance.isFavorite
-                                    assetBalance.position =
-                                            savedAssetPrefs[assetBalance.assetId]?.position
-                                                    ?: assetBalance.position
-                                    assetBalance.isHidden =
-                                            savedAssetPrefs[assetBalance.assetId]?.isHidden
-                                                    ?: assetBalance.isHidden
+                                    val assetPref = savedAssetPrefs.firstOrNull { it.assetId == assetBalance.assetId }
+                                    assetBalance.isFavorite = assetPref?.isFavorite
+                                            ?: assetBalance.isFavorite
+                                    assetBalance.position = assetPref?.position
+                                            ?: assetBalance.position
+                                    assetBalance.isHidden = assetPref?.isHidden
+                                            ?: assetBalance.isHidden
 
 
                                     assetBalance.inOrderBalance = tripple.second[assetBalance.assetId]
@@ -152,9 +154,11 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                         assetBalance.isFavorite = false
                                     }
 
-                                    mapDbAssets?.let {
-                                        if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
-                                            assetBalance.isFavorite = true
+                                    if (savedAssetPrefs.isEmpty()) {
+                                        mapDbAssets?.let {
+                                            if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
+                                                assetBalance.isFavorite = true
+                                            }
                                         }
                                     }
                                 }
@@ -168,7 +172,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 }
 
                                 tripple.third.balances.saveAll()
-                                prefsUtil.saveAssetBalances(tripple.third.balances)
+                                AssetBalanceStore.saveAssetBalanceStore(tripple.third.balances)
 
                                 return@map queryAll<AssetBalance>()
                             }
@@ -258,9 +262,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun startLeasing(
-        createLeasingRequest: CreateLeasingRequest,
-        recipientIsAlias: Boolean,
-        fee: Long
+            createLeasingRequest: CreateLeasingRequest,
+            recipientIsAlias: Boolean,
+            fee: Long
     ): Observable<Transaction> {
         createLeasingRequest.senderPublicKey = getPublicKeyStr()
         createLeasingRequest.fee = fee
@@ -341,7 +345,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun scriptAddressInfo(address: String): Observable<ScriptInfo> {
+    fun scriptAddressInfo(address: String = getAddress() ?: ""): Observable<ScriptInfo> {
         return nodeService.scriptAddressInfo(address)
                 .doOnNext {
                     prefsUtil.setValue(PrefsUtil.KEY_SCRIPTED_ACCOUNT, it.extraFee != 0L)
@@ -354,6 +358,29 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         } else {
             nodeService.assetDetails(assetId!!)
         }
+    }
+
+    fun getCommissionForPair(amountAsset: String?, priceAsset: String?): Observable<Long> {
+        return Observable.zip(
+                githubDataManager.getGlobalCommission(),
+                assetDetails(amountAsset),
+                assetDetails(priceAsset),
+                Function3 { t1: GlobalTransactionCommission,
+                            t2: AssetsDetails,
+                            t3: AssetsDetails ->
+                    return@Function3 Triple(t1, t2, t3)
+                })
+                .flatMap {
+                    val commission = it.first
+                    val amountAssetsDetails = it.second
+                    val priceAssetsDetails = it.third
+                    val params = GlobalTransactionCommission.Params()
+                    params.transactionType = Transaction.EXCHANGE
+                    params.smartPriceAsset = priceAssetsDetails.scripted
+                    params.smartAmountAsset = amountAssetsDetails.scripted
+                    return@flatMap Observable.just(TransactionUtil.countCommission(commission, params))
+                }
+
     }
 
     fun addressAssetBalance(address: String, assetId: String): Observable<AddressAssetBalance> {

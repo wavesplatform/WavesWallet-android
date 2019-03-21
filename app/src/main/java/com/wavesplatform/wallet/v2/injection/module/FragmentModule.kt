@@ -11,6 +11,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.smart_info.Sma
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.chart.TradeChartFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.last_trades.TradeLastTradesFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.TradeMyOrdersFragment
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details.MyOrderDetailsBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook.TradeOrderBookFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
@@ -42,6 +43,10 @@ abstract class FragmentModule {
     @PerFragment
     @ContributesAndroidInjector
     internal abstract fun dexFragment(): DexFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun myOrderDetailsBottomSheetFragment(): MyOrderDetailsBottomSheetFragment
 
     @PerFragment
     @ContributesAndroidInjector

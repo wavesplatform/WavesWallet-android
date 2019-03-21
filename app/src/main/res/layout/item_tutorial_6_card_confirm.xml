@@ -113,7 +113,7 @@
                     android:paddingTop="10dp"
                     android:paddingEnd="14dp"
                     android:paddingBottom="10dp"
-                    android:text="@string/confirm_card_tutorial_terms_of_use"
+                    android:text="@string/confirm_card_tutorial_privacy_policy"
                     android:textColor="@color/black" />
 
                 <android.support.v7.widget.AppCompatTextView

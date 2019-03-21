@@ -36,11 +36,14 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
                     viewState.showProgressBar(false)
                     it.printStackTrace()
 
-                    if (it.errorBody()?.isSmartError() == true) {
-                        viewState.failedCancelLeasingCauseSmart()
-                    } else {
-                        viewState.failedCancelLeasing(it.errorBody()?.message)
+                    it.errorBody()?.let { error ->
+                        if (error.isSmartError()) {
+                            viewState.failedCancelLeasingCauseSmart()
+                        } else {
+                            viewState.failedCancelLeasing(error.message)
+                        }
                     }
+
                 }))
     }
 
@@ -49,7 +52,7 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
         fee = 0L
         addSubscription(Observable.zip(
                 githubDataManager.getGlobalCommission(),
-                nodeDataManager.scriptAddressInfo(App.getAccessManager().getWallet()?.address!!),
+                nodeDataManager.scriptAddressInfo(),
                 BiFunction { t1: GlobalTransactionCommission,
                              t2: ScriptInfo ->
                     return@BiFunction Pair(t1, t2)

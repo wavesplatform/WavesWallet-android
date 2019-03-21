@@ -355,10 +355,10 @@
     <string name="my_address_qr_share">Share</string>
     <string name="my_orders_amount">Amount</string>
     <string name="my_orders_amount_sum">Amount/Sum</string>
-    <string name="my_orders_date_time">Date</string>
+    <string name="my_orders_date_time">Time</string>
+    <string name="my_orders_side_price">Type/Price</string>
     <string name="my_orders_empty">Nothing Here… \nYou do not have any orders</string>
     <string name="my_orders_price">Price</string>
-    <string name="my_orders_side_price">Side/Price</string>
     <string name="my_orders_status">Status</string>
     <string name="my_orders_status_canceled">Cancelled</string>
     <string name="my_orders_status_filled">Filled</string>
@@ -637,8 +637,8 @@
     <string name="confirm_card_tutorial_description">All the data on your Waves Wallet is encrypted and stored only on your device</string>
     <string name="confirm_card_tutorial_about_fund_on_device">I understand that my funds are held securely on this device, not by a company</string>
     <string name="confirm_card_tutorial_about_backup">I understand that if this app is moved to another device or deleted, my Waves can only be recovered with the backup phrase</string>
-    <string name="confirm_card_tutorial_about_terms">I have read, understood, and agree to the \nTerms of Use</string>
-    <string name="confirm_card_tutorial_terms_of_use">Terms of Use</string>
+    <string name="confirm_card_tutorial_about_terms">I have read, understood, and agree to the Privacy policy, Terms and conditions</string>
+    <string name="confirm_card_tutorial_privacy_policy">Privacy policy</string>
     <string name="confirm_card_tutorial_terms_and_conditions">Terms and conditions</string>
     <string name="confirm_card_tutorial_submit">Begin</string>
     <string name="dex_smart_pair_dialog_title">Order placement for a pair that includes a Smart Asset</string>
@@ -646,6 +646,14 @@
     <string name="dex_smart_pair_dialog_continue">Continue</string>
     <string name="dex_smart_pair_dialog_cancel">Cancel</string>
     <string name="dex_smart_pair_dialog_do_not_show_again">Do not show again</string>
+
+    <string name="my_orders_details_type_buy">Buy: %1$s/%2$s</string>
+    <string name="my_orders_details_type_sell">Sell: %1$s/%2$s</string>
+    <string name="my_orders_details_cancel">Cancel order</string>
+    <string name="my_orders_details_canceled_status">Canceled (%1$s)</string>
+    <string name="my_orders_details_amount_hint">Amount</string>
+    <string name="my_orders_details_price_hint">Price</string>
+    <string name="my_orders_details_total_hint">Total</string>
 
     <string name="enter_seed_manually_validation_seed_is_simple_title">Your Seed phrase is too simple</string>
     <string name="enter_seed_manually_validation_seed_is_simple_description">This is not secure. You should avoid using a Seed phrase that might be easy for someone else to guess. Are you sure you want to continue?</string>

@@ -1,11 +1,20 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
-apply from: 'environment.gradle'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 apply plugin: 'io.sentry.android.gradle'
+apply from: 'api-keys.properties'
+
+def getGitHash = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
 
 android {
     signingConfigs {
@@ -26,13 +35,19 @@ android {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 418
-        versionName "2.2.2"
+        versionCode 419
+        versionName "2.2.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         archivesBaseName = "waves-wallet-$versionName"
+        buildConfigField "String", "APPS_FLYER_KEY", "\"" + appsFlyerKey + "\""
+        manifestPlaceholders = [
+                appIcon: "@mipmap/ic_launcher",
+                appIconRound: "@mipmap/ic_launcher_round",
+                fabricApiKey: fabricApiKey]
     }
+
     buildTypes {
         release {
             debuggable false
@@ -51,10 +66,11 @@ android {
     applicationVariants.all { variant ->
         def version = variant.versionName
         def versionCode = variant.versionCode
+        def gitHash = getGitHash()
         def buildType = variant.variantData.variantConfiguration.buildType.name
         def date = new Date()
         def formattedDate = date.format('dd.MM.yy')
-        def newApkName = "[" + buildType + "|" + version + "|" + versionCode + "] " + appName + " (" +formattedDate + ")" +  ".apk"
+        def newApkName = "[" + buildType + "|" + version + "|" + versionCode + "|" + gitHash + "] " + appName + " (" +formattedDate + ")" +  ".apk"
         variant.outputs.all { output ->
             outputFileName = newApkName
         }
@@ -64,15 +80,24 @@ android {
     productFlavors {
         prod {
             signingConfig signingConfigs.config
-            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher", appIconRound: "@mipmap/ic_launcher_round"]
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher",
+                    appIconRound: "@mipmap/ic_launcher_round",
+                    fabricApiKey: fabricApiKey]
         }
         dev {
             applicationIdSuffix ".dev"
-            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev", appIconRound: "@mipmap/ic_launcher_dev_round"]
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher_dev",
+                    appIconRound: "@mipmap/ic_launcher_dev_round",
+                    fabricApiKey: fabricApiKey]
         }
         devTest {
             applicationIdSuffix ".test"
-            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test", appIconRound: "@mipmap/ic_launcher_test_round"]
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher_test",
+                    appIconRound: "@mipmap/ic_launcher_test_round",
+                    fabricApiKey: fabricApiKey]
         }
     }
     compileOptions {
@@ -217,9 +242,8 @@ dependencies {
     implementation 'com.github.MindorksOpenSource:EditDrawableText:1.1.0'
 
     implementation 'com.madgag.spongycastle:core:1.58.0.0'
-    implementation 'com.google.guava:guava:27.0.1-jre'
 
-    kapt 'com.google.guava:guava:27.0.1-jre'
+    api 'com.google.guava:guava:27.1-android'
 
     // Fingerprint authentication
     implementation 'com.wei.android.lib:fingerprintidentify:1.2.1'
