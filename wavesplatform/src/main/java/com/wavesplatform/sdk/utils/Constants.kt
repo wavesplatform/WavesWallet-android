@@ -14,6 +14,7 @@ class Constants {
         const val URL_SPAM_FILE = "https://github-proxy.wvservices.com/wavesplatform/waves-community/master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv/"
         const val URL_COINOMAT = "https://coinomat.com/api/"
         const val URL_WAVES_EXPLORER = "http://wavesexplorer.com/tx/%s"
+        const val URL_WAVES_STAGE_EXPLORER = "http://stage.wavesexplorer.com/tx/%s"
 
         const val VERSION: Int = 2
         const val WAVES_ASSET_ID_EMPTY = ""

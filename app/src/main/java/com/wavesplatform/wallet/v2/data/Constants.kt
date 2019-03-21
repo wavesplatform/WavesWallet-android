@@ -26,7 +26,6 @@ object Constants {
     const val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
 
 
-
     // Custom Result code
     const val RESULT_CANCELED = 404
     const val RESULT_OK = 200

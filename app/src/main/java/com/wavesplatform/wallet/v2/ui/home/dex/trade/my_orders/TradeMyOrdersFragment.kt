@@ -10,9 +10,10 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.sdk.net.model.WatchMarket
 import com.wavesplatform.sdk.net.model.response.OrderResponse
+import com.wavesplatform.wallet.v2.data.model.local.MyOrderTransaction
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
-import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details.MyOrderDetailsBottomSheetFragment
 import kotlinx.android.synthetic.main.fragment_trade_my_orders.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.gone
@@ -35,7 +36,10 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
     override fun configLayoutRes() = R.layout.fragment_trade_my_orders
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
+        arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)?.let {
+            presenter.watchMarket = it
+            adapter.market = it.market
+        }
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.NeedUpdateMyOrdersScreen::class.java)
                 .subscribe {
@@ -47,22 +51,31 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
             loadOrders()
         }
 
-        presenter.watchMarket?.market.notNull {
-            adapter.market = it
-        }
-
         recycle_my_orders.layoutManager = LinearLayoutManager(baseActivity)
         adapter.bindToRecyclerView(recycle_my_orders)
-        adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = this.adapter.getItem(position)
-            when (view.id) {
-                R.id.image_delete -> {
-                    presenter.cancelOrder(item?.id ?: "")
+            item?.let {
+                val bottomSheetFragment = MyOrderDetailsBottomSheetFragment()
+
+                val viewModel = MyOrderTransaction(item,
+                        (activity as TradeActivity).presenter.amountAssetInfo,
+                        (activity as TradeActivity).presenter.priceAssetInfo,
+                        presenter.fee
+                )
+
+                bottomSheetFragment.configureData(viewModel, position)
+                bottomSheetFragment.cancelOrderListener = object : MyOrderDetailsBottomSheetFragment.CancelOrderListener {
+                    override fun successCancelOrder() {
+                        loadOrders()
+                    }
                 }
+                bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
             }
         }
 
         loadOrders()
+        presenter.loadCommission()
     }
 
     override fun afterSuccessLoadMyOrders(data: List<OrderResponse>) {

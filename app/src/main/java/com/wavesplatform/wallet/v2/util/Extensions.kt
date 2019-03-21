@@ -27,6 +27,7 @@ import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.util.Patterns
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup

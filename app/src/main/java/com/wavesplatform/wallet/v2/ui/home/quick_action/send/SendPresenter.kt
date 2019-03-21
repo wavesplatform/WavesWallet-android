@@ -2,23 +2,18 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.Hash
 import com.wavesplatform.sdk.net.model.request.TransactionsBroadcastRequest
 import com.wavesplatform.sdk.net.model.request.TransferTransactionRequest
 import com.wavesplatform.sdk.net.model.response.*
-import com.wavesplatform.sdk.utils.EnvironmentManager
-import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.sdk.utils.TransactionUtil.Companion.countCommission
-import com.wavesplatform.sdk.utils.isValidAddress
-import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.util.find
 import com.wavesplatform.wallet.v2.util.findByGatewayId
 import com.wavesplatform.wallet.v2.util.isSpamConsidered
@@ -283,7 +278,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         }
 
         fun isWavesAddress(address: String?): Boolean {
-            if (address == null || !address.isValidAddress()) {
+            if (address == null || !address.isValidWavesAddress()) {
                 return false
             }
 

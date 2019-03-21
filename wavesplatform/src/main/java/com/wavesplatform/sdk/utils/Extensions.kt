@@ -1,5 +1,6 @@
 package com.wavesplatform.sdk.utils
 
+import android.util.Patterns
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.wavesplatform.sdk.net.model.response.*
@@ -41,6 +42,14 @@ fun String.stripZeros(): String {
     return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
 }
 
+fun Number.roundTo(numFractionDigits: Int?) = String.format(
+        "%.${numFractionDigits}f",
+        toDouble()).clearBalance().toDouble()
+
+fun String.isWebUrl() : Boolean{
+    return Patterns.WEB_URL.matcher(this.trim()).matches()
+}
+
 inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
     var sum = 0L
     for (element in this) {
@@ -74,7 +83,7 @@ fun findMyOrder(first: Order, second: Order, address: String?): Order {
 }
 
 fun ErrorResponse.isSmartError(): Boolean {
-    return this.error in 305..307
+    return this.error in 305..308
 }
 
 fun AssetInfo.getTicker(): String {
