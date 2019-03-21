@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
-apply from: 'environment.gradle'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 apply plugin: 'io.sentry.android.gradle'
+apply from: 'api-keys.properties'
 
 def getGitHash = { ->
     def stdout = new ByteArrayOutputStream()
@@ -41,7 +41,13 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         archivesBaseName = "waves-wallet-$versionName"
+        buildConfigField "String", "APPS_FLYER_KEY", "\"" + appsFlyerKey + "\""
+        manifestPlaceholders = [
+                appIcon: "@mipmap/ic_launcher",
+                appIconRound: "@mipmap/ic_launcher_round",
+                fabricApiKey: fabricApiKey]
     }
+
     buildTypes {
         release {
             debuggable false
@@ -74,15 +80,24 @@ android {
     productFlavors {
         prod {
             signingConfig signingConfigs.config
-            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher", appIconRound: "@mipmap/ic_launcher_round"]
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher",
+                    appIconRound: "@mipmap/ic_launcher_round",
+                    fabricApiKey: fabricApiKey]
         }
         dev {
             applicationIdSuffix ".dev"
-            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_dev", appIconRound: "@mipmap/ic_launcher_dev_round"]
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher_dev",
+                    appIconRound: "@mipmap/ic_launcher_dev_round",
+                    fabricApiKey: fabricApiKey]
         }
         devTest {
             applicationIdSuffix ".test"
-            manifestPlaceholders = [appIcon: "@mipmap/ic_launcher_test", appIconRound: "@mipmap/ic_launcher_test_round"]
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher_test",
+                    appIconRound: "@mipmap/ic_launcher_test_round",
+                    fabricApiKey: fabricApiKey]
         }
     }
     compileOptions {
