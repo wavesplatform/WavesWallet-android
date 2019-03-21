@@ -13,8 +13,9 @@ import org.json.JSONObject
 import pers.victor.ext.app
 import timber.log.Timber
 
-class AmplitudeProvider(private val context: Context, private val key: String) : ProviderType {
-    override fun init() {
+class AmplitudeProvider(context: Context, key: String) : ProviderType {
+
+    init {
         Amplitude.getInstance()
                 .initialize(context, key)
                 .enableForegroundTracking(app)

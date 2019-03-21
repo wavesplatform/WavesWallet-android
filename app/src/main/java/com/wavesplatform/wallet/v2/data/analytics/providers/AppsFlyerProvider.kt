@@ -10,8 +10,9 @@ import com.wavesplatform.wallet.v2.util.toBundle
 import pers.victor.ext.app
 import timber.log.Timber
 
-class AppsFlyerProvider(private val context: Context, private val key: String) : ProviderType {
-    override fun init() {
+class AppsFlyerProvider(private val context: Context, key: String) : ProviderType {
+
+    init {
         AppsFlyerLib.getInstance().init(key, null, context)
         AppsFlyerLib.getInstance().startTracking(app)
     }

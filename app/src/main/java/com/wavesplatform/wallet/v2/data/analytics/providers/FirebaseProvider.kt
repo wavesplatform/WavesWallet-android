@@ -7,9 +7,6 @@ import com.wavesplatform.wallet.v2.util.toBundle
 import timber.log.Timber
 
 class FirebaseProvider(private val context: Context) : ProviderType {
-    override fun init() {
-        // nothing
-    }
 
     override fun log(eventName: String, parameters: HashMap<String, Any>?) {
         try {
@@ -18,4 +15,5 @@ class FirebaseProvider(private val context: Context) : ProviderType {
             Timber.d(e)
         }
     }
+
 }

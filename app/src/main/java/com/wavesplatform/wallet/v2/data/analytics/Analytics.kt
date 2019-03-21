@@ -13,7 +13,6 @@ interface AnalyticsType {
 }
 
 interface ProviderType {
-    fun init()
     fun log(eventName: String, parameters: HashMap<String, Any>?)
 }
 
