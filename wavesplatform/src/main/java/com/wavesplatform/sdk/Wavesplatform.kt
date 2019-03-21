@@ -22,8 +22,8 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         /**
          * Initialisation Wavesplatform method must be call first.
          * @param application Application context ot the app
-         * @param mainNet Define net to use. Default true means use MainNet. False - TestNet
-         * @param factory Add a call adapter factory for supporting service method return types
+         * @param mainNet Optional parameter. Default true. Define net to use. Default true means use MainNet. False - TestNet
+         * @param factory Optional parameter. Add a call adapter factory for supporting service method return types
          * other than Call
          */
         @JvmStatic
@@ -37,6 +37,11 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
                     getGithubService().globalConfiguration(EnvironmentManager.environment.url),
                     getApiService(),
                     getNodeService())
+        }
+
+        @JvmStatic
+        fun init(application: Application) {
+            init(application, true, null)
         }
 
         @JvmStatic
