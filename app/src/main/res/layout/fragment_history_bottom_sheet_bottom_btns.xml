@@ -59,11 +59,11 @@
 
             <CheckBox
                 android:id="@+id/check_box_staging_on_explorer"
-                android:text="Staging"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:visibility="gone"/>
+                android:text="Staging"
+                android:visibility="gone" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_on_explorer"
@@ -79,8 +79,6 @@
                 android:paddingBottom="10dp"
                 android:text="@string/history_details_view_on_explorer"
                 android:textColor="@color/black" />
-
-
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_copy_tx_id"
