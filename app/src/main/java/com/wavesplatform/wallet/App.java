@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v1.data.connectivity.ConnectivityManager;
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 import com.wavesplatform.wallet.v1.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.data.analytics.Analytics;
+import com.wavesplatform.wallet.v2.data.analytics.providers.AmplitudeProvider;
 import com.wavesplatform.wallet.v2.data.analytics.providers.AppsFlyerProvider;
 import com.wavesplatform.wallet.v2.data.analytics.providers.FirebaseProvider;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
@@ -62,6 +63,7 @@ public class App extends DaggerApplication {
 
         Analytics.Companion.getInstance().register(new FirebaseProvider(this));
         Analytics.Companion.getInstance().register(new AppsFlyerProvider(this, BuildConfig.APPS_FLYER_KEY));
+        Analytics.Companion.getInstance().register(new AmplitudeProvider(this, BuildConfig.AMPLITUDE_API_KEY));
 
         com.wavesplatform.wallet.v2.util.Analytics.appsFlyerInit(this);
         FirebaseApp.initializeApp(this);
