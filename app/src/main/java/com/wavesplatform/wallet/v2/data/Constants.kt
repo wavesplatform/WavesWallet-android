@@ -26,16 +26,6 @@ object Constants {
     const val PRODUCATION_PACKAGE_NAME = "com.wavesplatform.wallet"
 
 
-    // // todo check move
-    const val URL_WAVES_EXPLORER = "http://wavesexplorer.com/tx/%s"
-    const val URL_WAVES_STAGE_EXPLORER = "http://stage.wavesexplorer.com/tx/%s"
-
-    // todo check move
-    const val CUSTOM_FEE_ASSET_NAME: String = "Waves"
-    const val WAVES_MIN_FEE: Long = 100000L
-    const val MIN_WAVES_SPONSORED_BALANCE: Double = 1.005
-
-
     // Custom Result code
     const val RESULT_CANCELED = 404
     const val RESULT_OK = 200

@@ -3,11 +3,9 @@ package com.wavesplatform.sdk.net.model.response
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.net.model.OrderStatus
 import com.wavesplatform.sdk.net.model.OrderType
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.util.stripZeros
-import java.math.BigInteger // todo check
+import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.utils.stripZeros
+import java.math.BigInteger
 
 class OrderResponse {
 

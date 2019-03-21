@@ -10,7 +10,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.wavesplatform.sdk.crypto.WavesWallet
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.R // todo check
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.rules.NotEmptyTrimRule
 import com.wavesplatform.wallet.v2.data.rules.SeedRule
 import com.wavesplatform.wallet.v2.ui.auth.import_account.protect_account.ProtectAccountActivity

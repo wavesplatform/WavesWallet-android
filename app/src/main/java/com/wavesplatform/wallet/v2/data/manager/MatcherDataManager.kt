@@ -58,8 +58,8 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     fun cancelOrder(orderId: String?, amountAsset: String?, priceAsset: String?): Observable<Any> {
         val request = CancelOrderRequest()
         request.sender = getPublicKeyStr()
-        request.orderId = orderId
-        App.getAccessManager().getWallet()?.privateKey.notNull {
+        request.orderId = orderId ?: ""
+        App.getAccessManager().getWallet().privateKey.notNull {
             request.sign(it)
         }
         return matcherService.cancelOrder(amountAsset, priceAsset, request)

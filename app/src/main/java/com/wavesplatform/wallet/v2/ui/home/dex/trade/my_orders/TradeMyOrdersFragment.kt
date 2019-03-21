@@ -11,11 +11,8 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.sdk.net.model.WatchMarket
 import com.wavesplatform.sdk.net.model.response.OrderResponse
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderTransaction
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
-import com.wavesplatform.sdk.utils.notNull // todo check
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details.MyOrderDetailsBottomSheetFragment
 import kotlinx.android.synthetic.main.fragment_trade_my_orders.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*

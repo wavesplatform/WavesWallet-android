@@ -3,15 +3,14 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details
 import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
+import com.wavesplatform.sdk.net.model.OrderStatus
+import com.wavesplatform.sdk.net.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.response.OrderResponse
+import com.wavesplatform.sdk.net.model.response.TransactionType
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager
 import com.wavesplatform.wallet.v2.data.model.local.MyOrderTransaction
-import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
-import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_la
 import kotlinx.android.synthetic.main.history_details_layout.view.*
 import kotlinx.android.synthetic.main.layout_bottom_sheet_my_orders_body.view.*
 import kotlinx.android.synthetic.main.layout_my_orders_bottom_sheet_bottom_btns.view.*
-import kotlinx.android.synthetic.main.spinner_item.view.*
+//import kotlinx.android.synthetic.main.spinner_item.view.* // todo check
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -88,7 +87,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
             view.relative_confirmations.gone()
 
             // fill fee field
-            view.text_fee?.text = MoneyUtil.getScaledText(data.fee, Constants.wavesAssetInfo.precision).stripZeros()
+            view.text_fee?.text = MoneyUtil.getScaledText(data.fee, Constants.WAVES_ASSET_INFO.precision).stripZeros()
             view.text_base_info_tag.visiable()
 
             // fill time field

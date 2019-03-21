@@ -11,13 +11,13 @@ const val HASH_LENGTH = 20
 const val ADDRESS_LENGTH = 1 + 1 + CHECK_SUM_LENGTH + HASH_LENGTH
 const val WAVES_PREFIX = "waves://"
 
-fun String?.isValidAddress(): Boolean {
+fun String?.isValidWavesAddress(): Boolean {
     if (this.isNullOrEmpty()) return false
     return try {
         val bytes = Base58.decode(this)
-        if (bytes.size == ADDRESS_LENGTH
-                && bytes[0] == ADDRESS_VERSION
-                && bytes[1] == EnvironmentManager.netCode) {
+        if (bytes.size == ADDRESS_LENGTH &&
+                bytes[0] == ADDRESS_VERSION &&
+                bytes[1] == EnvironmentManager.netCode) {
             val checkSum = Arrays.copyOfRange(bytes, bytes.size - CHECK_SUM_LENGTH, bytes.size)
             val checkSumGenerated = calcCheckSum(Arrays.copyOf(bytes, bytes.size - CHECK_SUM_LENGTH))
             Arrays.equals(checkSum, checkSumGenerated)
