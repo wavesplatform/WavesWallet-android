@@ -504,6 +504,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     override fun successPlaceOrder() {
         launchActivity<TradeBuyAndSendSuccessActivity> {
             putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_OPERATION_TYPE, presenter.orderType)
+            putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_AMOUNT_ASSET_NAME, presenter.data?.watchMarket?.market?.amountAssetLongName)
+            putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_PRICE_ASSET_NAME, presenter.data?.watchMarket?.market?.priceAssetLongName)
             putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_AMOUNT, edit_amount.text.toString())
             putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_PRICE, edit_limit_price.text.toString())
             putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_TIME, presenter.orderRequest.timestamp.asDateString("HH:mm:ss"))
