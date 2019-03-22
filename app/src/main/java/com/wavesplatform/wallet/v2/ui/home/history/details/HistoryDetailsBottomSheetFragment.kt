@@ -379,7 +379,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                             imageCopy.copyToClipboard(textIdValue?.text.toString())
                         })
 
-                historyContainer?.addView(tokenView)
+                historyContainer.addView(tokenView)
             }
             TransactionType.CREATE_ALIAS_TYPE,
             TransactionType.DATA_TYPE,
