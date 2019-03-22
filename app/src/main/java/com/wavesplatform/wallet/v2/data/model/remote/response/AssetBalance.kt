@@ -55,7 +55,7 @@ open class AssetBalance(
     }
 
     fun isScripted(): Boolean {
-        return issueTransaction?.script != null
+        return !issueTransaction?.script.isNullOrEmpty()
     }
 
     fun isMyWavesToken(): Boolean {
