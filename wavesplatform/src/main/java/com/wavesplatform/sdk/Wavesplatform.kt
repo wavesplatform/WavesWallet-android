@@ -6,6 +6,7 @@ import com.wavesplatform.sdk.crypto.WalletManager
 import com.wavesplatform.sdk.crypto.WavesWallet
 import com.wavesplatform.sdk.net.CallAdapterFactory
 import com.wavesplatform.sdk.net.DataManager
+import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.service.*
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import retrofit2.CallAdapter
@@ -24,12 +25,13 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         /**
          * Initialisation Wavesplatform method must be call first.
          * @param application Application context ot the app
-         * @param mainNet Optional parameter. Default true. Define net to use. Default true means use MainNet. False - TestNet
-         * @param factory Optional parameter. Add a call adapter factory for supporting service method return types
-         * other than Call
+         * @param mainNet Optional parameter. Default true. Define net to use.
+         * Default true means use MainNet. False - TestNet
+         * @param factory Optional parameter. Add a call adapter factory
+         * for supporting service method return types other than Call
          */
         @JvmStatic
-        fun init(application: Application, mainNet: Boolean = true, factory: CallAdapter.Factory? = null) {
+        fun init(application: Application, mainNet: Boolean = true, factory: CallAdapterFactory? = null) {
             EnvironmentManager.init(application)
             if (!mainNet) {
                 EnvironmentManager.setCurrentEnvironment(EnvironmentManager.Environment.TEST_NET)
@@ -41,6 +43,10 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
                     getNodeService())
         }
 
+        /**
+         * Initialisation Wavesplatform method must be call first.
+         * @param application Application context ot the app
+         */
         @JvmStatic
         fun init(application: Application) {
             init(application, true, null)
@@ -158,8 +164,8 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         }
 
         @JvmStatic
-        fun setCallAdapterFactory(factory: CallAdapterFactory) {
-            Wavesplatform.get().dataManager.setCallAdapterFactory(factory)
+        fun setOnErrorListener(errorListener: OnErrorListener) {
+            Wavesplatform.get().dataManager.setCallAdapterFactory(CallAdapterFactory(errorListener))
         }
     }
 }
