@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.data.analytics.providers
 
 import android.content.Context
+import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.wallet.App
@@ -13,7 +14,13 @@ import timber.log.Timber
 class AppsFlyerProvider(private val context: Context, key: String) : ProviderType {
 
     init {
-        AppsFlyerLib.getInstance().init(key, null, context)
+        val conversionDataListener = object : AppsFlyerConversionListener {
+            override fun onAppOpenAttribution(p0: MutableMap<String, String>?) {}
+            override fun onAttributionFailure(p0: String?) {}
+            override fun onInstallConversionDataLoaded(p0: MutableMap<String, String>?) {}
+            override fun onInstallConversionFailure(p0: String?) {}
+        }
+        AppsFlyerLib.getInstance().init(key, conversionDataListener, context)
         AppsFlyerLib.getInstance().startTracking(app)
     }
 
