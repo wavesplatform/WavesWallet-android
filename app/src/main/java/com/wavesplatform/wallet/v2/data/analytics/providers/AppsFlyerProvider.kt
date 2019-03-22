@@ -24,7 +24,7 @@ class AppsFlyerProvider(private val context: Context, key: String) : ProviderTyp
         AppsFlyerLib.getInstance().startTracking(app)
     }
 
-    override fun log(eventName: String, parameters: HashMap<String, Any>?) {
+    override fun log(eventName: String, parameters: HashMap<String, Any>) {
         try {
             AppsFlyerLib.getInstance().trackEvent(context, eventName, parameters)
         } catch (e: Exception) {

@@ -4,7 +4,7 @@ var analytics = Analytics.instance
 
 interface EventType {
     fun provideName(provider: ProviderType): String?
-    fun provideParameters(provider: ProviderType): HashMap<String, Any>?
+    fun provideParameters(provider: ProviderType): HashMap<String, Any>
 }
 
 interface AnalyticsType {
@@ -13,7 +13,7 @@ interface AnalyticsType {
 }
 
 interface ProviderType {
-    fun log(eventName: String, parameters: HashMap<String, Any>?)
+    fun log(eventName: String, parameters: HashMap<String, Any>)
 }
 
 class Analytics : AnalyticsType {

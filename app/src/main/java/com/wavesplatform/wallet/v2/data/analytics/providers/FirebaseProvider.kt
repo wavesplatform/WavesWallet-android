@@ -8,9 +8,9 @@ import timber.log.Timber
 
 class FirebaseProvider(private val context: Context) : ProviderType {
 
-    override fun log(eventName: String, parameters: HashMap<String, Any>?) {
+    override fun log(eventName: String, parameters: HashMap<String, Any>) {
         try {
-            FirebaseAnalytics.getInstance(context).logEvent(eventName, parameters?.toBundle())
+            FirebaseAnalytics.getInstance(context).logEvent(eventName, parameters.toBundle())
         } catch (e: Exception) {
             Timber.d(e)
         }

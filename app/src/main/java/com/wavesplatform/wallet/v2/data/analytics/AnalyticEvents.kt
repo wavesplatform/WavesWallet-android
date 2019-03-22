@@ -44,7 +44,7 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
         return this.eventName
     }
 
-    override fun provideParameters(provider: ProviderType): HashMap<String, Any>? {
+    override fun provideParameters(provider: ProviderType): HashMap<String, Any> {
         return when (this) {
             is DexEvent -> {
                 hashMapOf(PAIR_KEY to "$amountAssetName/$priceAssetName")

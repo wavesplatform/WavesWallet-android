@@ -21,7 +21,7 @@ class AmplitudeProvider(context: Context, key: String) : ProviderType {
                 .enableForegroundTracking(app)
     }
 
-    override fun log(eventName: String, parameters: HashMap<String, Any>?) {
+    override fun log(eventName: String, parameters: HashMap<String, Any>) {
         try {
             Amplitude.getInstance().logEvent(eventName, JSONObject(parameters))
         } catch (e: Exception) {
