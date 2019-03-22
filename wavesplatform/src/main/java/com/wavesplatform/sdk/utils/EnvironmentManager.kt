@@ -11,7 +11,7 @@ import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.net.model.response.GlobalConfiguration
 import com.wavesplatform.sdk.net.model.response.IssueTransaction
 import com.wavesplatform.sdk.net.service.ApiService
-import com.wavesplatform.sdk.net.service.HostSelectionInterceptor
+import com.wavesplatform.sdk.net.HostSelectionInterceptor
 import com.wavesplatform.sdk.net.service.NodeService
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable

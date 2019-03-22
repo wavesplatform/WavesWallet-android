@@ -4,6 +4,8 @@ import android.app.Application
 import android.util.Log
 import com.wavesplatform.sdk.crypto.WalletManager
 import com.wavesplatform.sdk.crypto.WavesWallet
+import com.wavesplatform.sdk.net.CallAdapterFactory
+import com.wavesplatform.sdk.net.DataManager
 import com.wavesplatform.sdk.net.service.*
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import retrofit2.CallAdapter
@@ -156,7 +158,7 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         }
 
         @JvmStatic
-        fun setCallAdapterFactory(factory: CallAdapter.Factory) {
+        fun setCallAdapterFactory(factory: CallAdapterFactory) {
             Wavesplatform.get().dataManager.setCallAdapterFactory(factory)
         }
     }

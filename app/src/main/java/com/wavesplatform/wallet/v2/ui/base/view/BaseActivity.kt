@@ -27,11 +27,13 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.net.CallAdapterFactory
+import com.wavesplatform.sdk.net.OnErrorListener
+import com.wavesplatform.sdk.net.RetrofitException
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.factory.RxErrorHandlingCallAdapterFactory
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
@@ -45,10 +47,10 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
 import pers.victor.ext.click
@@ -106,7 +108,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
-        Wavesplatform.setCallAdapterFactory(RxErrorHandlingCallAdapterFactory(mErrorManager))
         localizationDelegate.addOnLocaleChangedListener(this)
         localizationDelegate.onCreate(savedInstanceState)
         super.onCreate(savedInstanceState)
@@ -133,7 +134,14 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                     it.printStackTrace()
                 }))
 
-        Wavesplatform.setCallAdapterFactory(RxErrorHandlingCallAdapterFactory(mErrorManager))
+        Wavesplatform.setCallAdapterFactory(CallAdapterFactory(object : OnErrorListener {
+            override fun onError(exception: RetrofitException) {
+                SentryHelper.logException(exception)
+                val retrySubject = PublishSubject.create<Events.RetryEvent>()
+                // mErrorManager.handleError(exception, retrySubject)
+                mErrorManager.showError(this@BaseActivity, exception, retrySubject)
+            }
+        }))
     }
 
     protected fun checkInternet() {

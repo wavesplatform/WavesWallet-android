@@ -1,14 +1,14 @@
 package com.wavesplatform.wallet.v2.data.manager
 
 import android.content.Context
+import com.wavesplatform.sdk.net.RetrofitException
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-class ErrorManager @Inject constructor(val mRxEventBus: RxEventBus) {
+class ErrorManager @Inject constructor(private val mRxEventBus: RxEventBus) {
 
     private lateinit var mActivity: BaseActivity
     private lateinit var retrySubject: PublishSubject<Events.RetryEvent>

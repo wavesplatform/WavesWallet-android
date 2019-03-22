@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.data.exception
+package com.wavesplatform.sdk.net
 
 import retrofit2.Response
 import retrofit2.Retrofit

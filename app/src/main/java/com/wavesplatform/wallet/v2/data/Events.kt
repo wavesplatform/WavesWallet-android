@@ -1,6 +1,6 @@
 package com.wavesplatform.wallet.v2.data
 
-import com.wavesplatform.wallet.v2.data.exception.RetrofitException
+import com.wavesplatform.sdk.net.RetrofitException
 import io.reactivex.subjects.PublishSubject
 
 /**
