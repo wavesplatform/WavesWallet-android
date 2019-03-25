@@ -32,7 +32,6 @@ import com.wavesplatform.wallet.v2.ui.home.profile.ProfileFragment
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
-import com.wavesplatform.wallet.v2.util.Analytics
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
@@ -42,7 +41,6 @@ import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.isNetworkConnected
 import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.put
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
@@ -89,11 +87,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     private fun logFirstOpen() {
         if (prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true)) {
             prefsUtil.setValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, false)
-            val values = Bundle()
-            values.put("wallets_count", prefsUtil.getGlobalValueList(
-                    EnvironmentManager.name
-                            + PrefsUtil.LIST_WALLET_GUIDS).size.toString())
-            Analytics.sendEvent(firebaseAnalytics, "new_wallet", values)
         }
     }
 
