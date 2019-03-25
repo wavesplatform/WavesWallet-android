@@ -1,1 +1,2 @@
-include ':wavesplatform', ':app'
+include ':WavesSDK-android:wavesplatform'
+include ':app'
