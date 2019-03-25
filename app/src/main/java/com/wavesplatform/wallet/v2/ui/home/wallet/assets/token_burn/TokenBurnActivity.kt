@@ -123,7 +123,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
                 }))
 
         button_continue.click {
-            analytics.log(AnalyticEvents.BurnTokenContinueTapEvent)
+            analytics.trackEvent(AnalyticEvents.BurnTokenContinueTapEvent)
             launchActivity<TokenBurnConfirmationActivity>(REQUEST_BURN_CONFIRM) {
                 putExtra(KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
                 putExtra(KEY_INTENT_BLOCKCHAIN_FEE, presenter.fee)

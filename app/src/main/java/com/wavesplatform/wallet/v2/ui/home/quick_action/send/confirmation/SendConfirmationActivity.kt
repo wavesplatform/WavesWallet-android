@@ -121,7 +121,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
 
     private fun goNext() {
         presenter.selectedAsset?.getName()?.let { name ->
-            analytics.log(AnalyticEvents.WalletAssetsSendConfirmEvent(name))
+            analytics.trackEvent(AnalyticEvents.WalletAssetsSendConfirmEvent(name))
         }
         showTransactionProcessing()
         presenter.confirmSend()

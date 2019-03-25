@@ -252,7 +252,7 @@ class SendActivity : BaseActivity(), SendView {
 
     override fun onShowPaymentDetails() {
         presenter.selectedAsset?.getName()?.let { name ->
-            analytics.log(AnalyticEvents.WalletAssetsSendTapEvent(name))
+            analytics.trackEvent(AnalyticEvents.WalletAssetsSendTapEvent(name))
         }
         launchActivity<SendConfirmationActivity>(REQUEST_SEND) {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)

@@ -53,7 +53,7 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
         text_leasing_result_value.text = getString(R.string.confirm_leasing_result_value, presenter.amount, Constants.wavesAssetInfo.name)
 
         button_confirm.click {
-            analytics.log(AnalyticEvents.LeasingConfirmTapEvent)
+            analytics.trackEvent(AnalyticEvents.LeasingConfirmTapEvent)
 
             supportActionBar?.setDisplayShowTitleEnabled(false)
             supportActionBar?.setHomeButtonEnabled(false)

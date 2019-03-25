@@ -197,7 +197,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
         }
 
         button_start_lease.click {
-            analytics.log(AnalyticEvents.LeasingStartTapEvent)
+            analytics.trackEvent(AnalyticEvents.LeasingStartTapEvent)
             launchActivity<StartLeasingActivity> {
                 val bundle = Bundle()
                 bundle.putLong(StartLeasingActivity.BUNDLE_WAVES, wavesAsset.getAvailableBalance())

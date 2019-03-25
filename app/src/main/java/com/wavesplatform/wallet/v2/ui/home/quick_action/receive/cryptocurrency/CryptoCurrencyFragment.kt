@@ -69,7 +69,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         button_continue.click {
             if (presenter.tunnel != null && presenter.tunnel!!.tunnel != null) {
                 presenter.assetBalance?.getName()?.let { name ->
-                    analytics.log(AnalyticEvents.WalletAssetsReceiveTapEvent(name))
+                    analytics.trackEvent(AnalyticEvents.WalletAssetsReceiveTapEvent(name))
                 }
                 launchActivity<ReceiveAddressViewActivity> {
                     putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)

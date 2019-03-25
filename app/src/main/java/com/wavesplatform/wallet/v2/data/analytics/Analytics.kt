@@ -9,7 +9,7 @@ interface EventType {
 
 interface AnalyticsType {
     fun register(provider: ProviderType)
-    fun log(event: EventType)
+    fun trackEvent(event: EventType)
 }
 
 interface ProviderType {
@@ -23,7 +23,7 @@ class Analytics : AnalyticsType {
         this.providers.add(provider)
     }
 
-    override fun log(event: EventType) {
+    override fun trackEvent(event: EventType) {
         this.providers.forEach { provider ->
             event.provideName(provider)?.let { name ->
                 val parameters = event.provideParameters(provider)

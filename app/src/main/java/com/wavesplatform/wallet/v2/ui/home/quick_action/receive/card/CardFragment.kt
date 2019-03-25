@@ -46,7 +46,7 @@ class CardFragment : BaseFragment(), CardView {
 
         button_continue.click {
             if (presenter.isValid()) {
-                analytics.log(AnalyticEvents.WalletAssetsCardReceiveTapEvent)
+                analytics.trackEvent(AnalyticEvents.WalletAssetsCardReceiveTapEvent)
                 launchActivity<SuccessActivity> {
                     putExtra(SuccessActivity.KEY_INTENT_TITLE, getString(R.string.coinomat_success_title))
                     putExtra(SuccessActivity.KEY_INTENT_SUBTITLE, getString(R.string.coinomat_success_subtitle))

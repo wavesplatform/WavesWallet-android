@@ -215,7 +215,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     private fun setBurnButton(cardBurnContainer: View) {
         cardBurnContainer.click {
-            analytics.log(AnalyticEvents.BurnTokenTapEvent)
+            analytics.trackEvent(AnalyticEvents.BurnTokenTapEvent)
             launchActivity<TokenBurnActivity> {
                 putExtra(TokenBurnActivity.KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
             }

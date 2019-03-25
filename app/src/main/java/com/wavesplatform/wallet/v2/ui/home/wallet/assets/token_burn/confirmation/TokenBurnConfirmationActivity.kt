@@ -64,7 +64,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
                 "${Constants.CUSTOM_FEE_ASSET_NAME}"
 
         button_confirm.click {
-            analytics.log(AnalyticEvents.BurnTokenConfirmTapEvent)
+            analytics.trackEvent(AnalyticEvents.BurnTokenConfirmTapEvent)
             presenter.burn()
             toolbar_view.invisiable()
             card_content.gone()

@@ -15,7 +15,6 @@ import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
@@ -160,9 +159,9 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         safeLet(presenter.watchMarket?.market?.amountAssetLongName, presenter.watchMarket?.market?.priceAssetLongName)
         { amountAssetName, priceAssetName ->
             if (buy) {
-                analytics.log(AnalyticEvents.DEXBuyTapEvent(amountAssetName, priceAssetName))
+                analytics.trackEvent(AnalyticEvents.DEXBuyTapEvent(amountAssetName, priceAssetName))
             } else {
-                analytics.log(AnalyticEvents.DEXSellTapEvent(amountAssetName, priceAssetName))
+                analytics.trackEvent(AnalyticEvents.DEXSellTapEvent(amountAssetName, priceAssetName))
             }
         }
     }

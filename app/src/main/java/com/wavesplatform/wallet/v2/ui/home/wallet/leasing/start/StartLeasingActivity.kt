@@ -69,7 +69,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         }
 
         button_continue.click {
-            analytics.log(AnalyticEvents.LeasingSendTapEvent)
+            analytics.trackEvent(AnalyticEvents.LeasingSendTapEvent)
             launchActivity<ConfirmationStartLeasingActivity>(REQUEST_LEASING_CONFIRMATION) {
                 putExtra(ConfirmationStartLeasingActivity.BUNDLE_ADDRESS, edit_address.text.toString())
                 putExtra(ConfirmationStartLeasingActivity.BUNDLE_AMOUNT, edit_amount.text.toString())

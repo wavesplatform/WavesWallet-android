@@ -61,9 +61,9 @@ class TradeBuyAndSendSuccessActivity : BaseActivity(), TradeBuyAndSendSucessView
         safeLet(intent.getStringExtra(BUNDLE_AMOUNT_ASSET_NAME), intent.getStringExtra(BUNDLE_PRICE_ASSET_NAME))
         { amountAssetName, priceAssetName ->
             if (type == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
-                analytics.log(AnalyticEvents.DEXBuyTapEvent(amountAssetName, priceAssetName))
+                analytics.trackEvent(AnalyticEvents.DEXBuyTapEvent(amountAssetName, priceAssetName))
             } else {
-                analytics.log(AnalyticEvents.DEXSellTapEvent(amountAssetName, priceAssetName))
+                analytics.trackEvent(AnalyticEvents.DEXSellTapEvent(amountAssetName, priceAssetName))
             }
         }
 

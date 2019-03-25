@@ -69,7 +69,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
 
         button_continue.click {
             safeLet(App.getAccessManager().getWallet()?.address, presenter.assetBalance?.getName()) { address, name ->
-                analytics.log(AnalyticEvents.WalletAssetsReceiveTapEvent(name))
+                analytics.trackEvent(AnalyticEvents.WalletAssetsReceiveTapEvent(name))
                 launchActivity<ReceiveAddressViewActivity> {
                     putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
                     putExtra(YourAssetsActivity.BUNDLE_ADDRESS, address)

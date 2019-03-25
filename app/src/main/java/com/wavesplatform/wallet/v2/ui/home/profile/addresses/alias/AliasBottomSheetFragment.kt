@@ -110,9 +110,9 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
 
     private fun logEvent() {
         if (from == FROM_WALLET) {
-            analytics.log(AnalyticEvents.AliasCreateVcardEvent)
+            analytics.trackEvent(AnalyticEvents.AliasCreateVcardEvent)
         } else {
-            analytics.log(AnalyticEvents.AliasCreateProfileEvent)
+            analytics.trackEvent(AnalyticEvents.AliasCreateProfileEvent)
         }
     }
 
