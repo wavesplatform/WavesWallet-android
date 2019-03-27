@@ -38,8 +38,8 @@ android {
         applicationId "com.wavesplatform.wallet"
         targetSdkVersion 28
         minSdkVersion 21
-        versionCode 419
-        versionName "2.2.3"
+        versionCode 420
+        versionName "2.3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -244,7 +244,6 @@ dependencies {
     releaseImplementation 'com.github.markzhai:blockcanary-no-op:1.5.0'
 
     implementation 'io.sentry:sentry-android:1.7.16'
-    implementation 'org.slf4j:slf4j-nop:1.7.25'
 
     // OkHttp
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
