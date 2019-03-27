@@ -304,12 +304,13 @@
 }
 
 -keep class com.wavesplatform.sdk.net.service.GithubService { *; }
--keep class com.wavesplatform.wallet.v2.data.remote.NodeService { *; }
--keep class com.wavesplatform.wallet.v2.data.remote.ApiService { *; }
--keep class com.wavesplatform.wallet.v2.data.remote.MatcherService { *; }
--keep class com.wavesplatform.wallet.v2.data.remote.CoinomatService { *; }
--keep class com.wavesplatform.wallet.v2.data.remote.DataFeedService { *; }
+-keep class com.wavesplatform.sdk.net.service.NodeService { *; }
+-keep class com.wavesplatform.sdk.net.service.ApiService { *; }
+-keep class com.wavesplatform.sdk.net.service.MatcherService { *; }
+-keep class com.wavesplatform.sdk.net.service.CoinomatService { *; }
+-keep class com.wavesplatform.sdk.net.service.DataFeedService { *; }
 
+-keep class com.wavesplatform.sdk.net.model.** { *; }
 -keep class com.wavesplatform.wallet.v2.data.model.** { *; }
 -keepclassmembernames interface * {
     @retrofit.http.* <methods>;

@@ -62,7 +62,13 @@ android {
             signingConfig signingConfigs.config
         }
         debug {
-            multiDexEnabled false
+            // multiDexEnabled false
+            debuggable false
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            multiDexEnabled true
         }
     }
 
@@ -172,7 +178,7 @@ kapt {
 
 ext {
     supportVersion = '28.0.0'
-    rxJavaVersion = '2.2.4'
+    rxJavaVersion = '2.2.7'
     rxAndroidVersion = '2.1.0'
     daggerVersion = '2.17'
     retrofitVersion = '2.4.0'
@@ -194,7 +200,7 @@ dependencies {
     implementation "com.android.support:preference-v7:$supportVersion"
     implementation "com.android.support:preference-v14:$supportVersion"
     // Enable crash reporting only for release version
-    implementation "com.google.firebase:firebase-core:16.0.7"
+    implementation "com.google.firebase:firebase-core:16.0.8"
     implementation "com.google.firebase:firebase-database:16.1.0"
     implementation "com.google.firebase:firebase-messaging:17.4.0"
     implementation "com.google.firebase:firebase-inappmessaging-display:17.1.0"
