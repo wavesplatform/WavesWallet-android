@@ -14,7 +14,7 @@ import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.sdk.utils.getTicker
 import com.wavesplatform.sdk.utils.stripZeros
-import com.wavesplatform.wallet.R // todo check
+import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents

@@ -202,7 +202,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     it.printStackTrace()
                 }))
 
-        presenter.wavesAssetBalance.notNull { // todo check
+        presenter.wavesAssetBalance.notNull {
             text_asset_value.text = MoneyUtil.getScaledText(it, Constants.WAVES_ASSET_INFO)
 
             presenter.loadCommission(it)
