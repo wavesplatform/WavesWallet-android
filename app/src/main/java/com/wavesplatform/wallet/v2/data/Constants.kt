@@ -109,10 +109,10 @@ object Constants {
 
     val wavesAssetInfo = AssetInfo(id = WAVES_ASSET_ID_EMPTY, precision = 8, name = "WAVES", quantity = 10000000000000000L)
 
-    var MRTGeneralAsset = GlobalConfiguration.GeneralAssetId(assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
+    var MRTGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
             gatewayId = "MRT", displayName = "MinersReward")
 
-    var WCTGeneralAsset = GlobalConfiguration.GeneralAssetId(assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
+    var WCTGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
             gatewayId = "WCT", displayName = "WavesCommunity")
 
     fun find(assetId: String): AssetBalance? {
@@ -120,7 +120,7 @@ object Constants {
     }
 
     fun findByGatewayId(gatewayId: String): AssetBalance? { // ticker
-        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
+        for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
             if (asset.gatewayId == gatewayId) {
                 return find(asset.assetId)
             }
@@ -128,17 +128,15 @@ object Constants {
         return null
     }
 
-    fun defaultAssetsAvatar(): HashMap<String, String> {
-        val map = hashMapOf<String, String>()
-        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
-            map[asset.assetId] = asset.iconUrls.default
-        }
-        return map
+    fun defaultAssetsAvatar(): MutableMap<String, String> {
+        val allConfigAssets = EnvironmentManager.globalConfiguration.generalAssets
+                .plus(EnvironmentManager.globalConfiguration.assets)
+        return allConfigAssets.associateBy({ it.assetId }, { it.iconUrls.default }).toMutableMap()
     }
 
     fun coinomatCryptoCurrencies(): HashMap<String, String> {
         val map = hashMapOf<String, String>()
-        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
+        for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
             if (asset.isGateway) {
                 map[asset.assetId] = asset.gatewayId
             }

@@ -687,7 +687,7 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 }
 
 fun isShowTicker(assetId: String?): Boolean {
-    return EnvironmentManager.globalConfiguration.generalAssetIds.any {
+    return EnvironmentManager.globalConfiguration.generalAssets.any {
         it.assetId == assetId || assetId.isNullOrEmpty()
     }
 }

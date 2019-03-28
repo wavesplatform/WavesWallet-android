@@ -45,7 +45,7 @@ class EnvironmentManager {
 
         companion object {
 
-            internal var environments: MutableList<Environment> = ArrayList()
+            internal var environments: MutableList<Environment> = mutableListOf()
             var TEST_NET = Environment(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, FILENAME_TEST_NET)
             var MAIN_NET = Environment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, FILENAME_MAIN_NET)
 
@@ -57,19 +57,19 @@ class EnvironmentManager {
     }
 
     companion object {
-
+        // TODO: Put one field with version
         const val KEY_ENV_TEST_NET = "env_testnet"
         const val URL_CONFIG_MAIN_NET = "https://github-proxy.wvservices.com/" +
-                "wavesplatform/waves-client-config/mobile/v2.2/environment_mainnet.json"
+                "wavesplatform/waves-client-config/mobile/v2.3/environment_mainnet.json"
         const val FILENAME_TEST_NET = "environment_testnet.json"
 
         const val KEY_ENV_MAIN_NET = "env_prod"
         const val URL_CONFIG_TEST_NET = "https://github-proxy.wvservices.com/" +
-                "wavesplatform/waves-client-config/mobile/v2.2/environment_testnet.json"
+                "wavesplatform/waves-client-config/mobile/v2.3/environment_testnet.json"
         const val FILENAME_MAIN_NET = "environment_mainnet.json"
 
         const val URL_COMMISSION_MAIN_NET = "https://github-proxy.wvservices.com/" +
-                "wavesplatform/waves-client-config/mobile/v2.2/fee.json"
+                "wavesplatform/waves-client-config/mobile/v2.3/fee.json"
 
         private var instance: EnvironmentManager? = null
         private val handler = Handler()
@@ -124,7 +124,7 @@ class EnvironmentManager {
                         instance!!.current!!.setConfiguration(globalConfiguration)
 
                         val list = mutableListOf<String>()
-                        for (asset in globalConfiguration.generalAssetIds) {
+                        for (asset in globalConfiguration.generalAssets) {
                             list.add(asset.assetId)
                         }
                         list
@@ -219,8 +219,8 @@ class EnvironmentManager {
                         PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT, Environment.MAIN_NET.name)
             }
 
-        private fun findAssetIdByAssetId(assetId: String): GlobalConfiguration.GeneralAssetId? {
-            for (asset in instance!!.current!!.configuration!!.generalAssetIds) {
+        private fun findAssetIdByAssetId(assetId: String): GlobalConfiguration.ConfigAsset? {
+            for (asset in instance!!.current!!.configuration!!.generalAssets) {
                 if (asset.assetId == assetId) {
                     return asset
                 }
