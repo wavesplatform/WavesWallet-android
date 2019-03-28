@@ -1,5 +1,12 @@
 package com.wavesplatform.wallet.v2.data.analytics
 
+import android.content.Context
+import com.wavesplatform.wallet.BuildConfig
+import com.wavesplatform.wallet.v2.data.analytics.providers.AmplitudeProvider
+import com.wavesplatform.wallet.v2.data.analytics.providers.AppsFlyerProvider
+import com.wavesplatform.wallet.v2.data.analytics.providers.FirebaseProvider
+import com.wavesplatform.wallet.v2.data.analytics.providers.LoggerProvider
+
 var analytics = Analytics.instance
 
 interface EventType {
@@ -34,5 +41,13 @@ class Analytics : AnalyticsType {
 
     companion object {
         var instance = Analytics()
+
+        @JvmStatic
+        fun init(context: Context) {
+            instance.register(LoggerProvider())
+            instance.register(FirebaseProvider(context))
+            instance.register(AppsFlyerProvider(context, BuildConfig.APPS_FLYER_KEY))
+            instance.register(AmplitudeProvider(context, BuildConfig.AMPLITUDE_API_KEY))
+        }
     }
 }
