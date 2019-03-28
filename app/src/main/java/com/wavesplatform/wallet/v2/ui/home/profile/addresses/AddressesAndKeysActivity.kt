@@ -80,18 +80,14 @@ class AddressesAndKeysActivity : BaseActivity(), AddressesAndKeysView {
         }
         relative_alias.click {
             val bottomSheetFragment = AliasBottomSheetFragment()
-            if (ownAliases.isEmpty()) {
-                bottomSheetFragment.type = AliasBottomSheetFragment.TYPE_EMPTY
-            } else {
-                bottomSheetFragment.type = AliasBottomSheetFragment.TYPE_CONTENT
-            }
-            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+            bottomSheetFragment.configureDialog(ownAliases.isEmpty(), AliasBottomSheetFragment.FROM_PROFILE)
             bottomSheetFragment.onCreateAliasListener = object : AliasBottomSheetFragment.OnCreateAliasListener {
                 override fun onSuccess() {
                     bottomSheetFragment.dismiss()
                     showSuccess(getString(R.string.new_alias_success_create), R.id.root)
                 }
             }
+            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
     }
 

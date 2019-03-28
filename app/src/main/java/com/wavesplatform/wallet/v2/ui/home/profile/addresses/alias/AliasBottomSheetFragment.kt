@@ -12,6 +12,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
@@ -40,6 +42,7 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
     var onCreateAliasListener: OnCreateAliasListener? = null
 
     var type = TYPE_EMPTY
+    var from = FROM_WALLET
 
     lateinit var rootView: View
     lateinit var progressBarFee: ImageProgressBar
@@ -47,9 +50,9 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
     lateinit var buttonCreateAlias: View
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         when (type) {
@@ -89,6 +92,7 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
                 }
 
                 buttonCreateAlias.click {
+                    logEvent()
                     launchActivity<CreateAliasActivity>(REQUEST_CREATE_ALIAS) {
                         putExtra(CreateAliasActivity.BUNDLE_BLOCKCHAIN_COMMISSION, presenter.fee)
                     }
@@ -102,6 +106,14 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
         progressBarFee = rootView.findViewById<ImageProgressBar>(R.id.progress_bar_fee_transaction)
         feeTransaction = rootView.findViewById(R.id.text_fee_transaction)
         return rootView
+    }
+
+    private fun logEvent() {
+        if (from == FROM_WALLET) {
+            analytics.trackEvent(AnalyticEvents.AliasCreateVcardEvent)
+        } else {
+            analytics.trackEvent(AnalyticEvents.AliasCreateProfileEvent)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -128,6 +140,15 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
                 feeTransaction.visiable()
             }
         })
+    }
+
+    fun configureDialog(emptyType: Boolean, from: String) {
+        type = if (emptyType) {
+            AliasBottomSheetFragment.TYPE_EMPTY
+        } else {
+            AliasBottomSheetFragment.TYPE_CONTENT
+        }
+        this.from = from
     }
 
     override fun onDestroyView() {
@@ -159,8 +180,10 @@ class AliasBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), AliasView
     }
 
     companion object {
-        var TYPE_EMPTY = 1
-        var TYPE_CONTENT = 2
-        var REQUEST_CREATE_ALIAS = 43
+        const val TYPE_EMPTY = 1
+        const val TYPE_CONTENT = 2
+        const val REQUEST_CREATE_ALIAS = 43
+        const val FROM_WALLET = "wallet"
+        const val FROM_PROFILE = "profile"
     }
 }
