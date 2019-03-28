@@ -78,7 +78,8 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
             }
             HistoryTabFragment.send -> {
                 queryAsSingle {
-                    `in`("transactionTypeId", arrayOf(Constants.ID_SENT_TYPE, Constants.ID_MASS_SEND_TYPE))
+                    `in`("transactionTypeId", arrayOf(Constants.ID_SENT_TYPE, Constants.ID_MASS_SEND_TYPE,
+                            Constants.ID_SELF_TRANSFER_TYPE, Constants.ID_SPAM_SELF_TRANSFER))
                 }
             }
             HistoryTabFragment.received -> {

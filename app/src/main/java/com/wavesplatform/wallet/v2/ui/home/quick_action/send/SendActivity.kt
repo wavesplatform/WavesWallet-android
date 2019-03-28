@@ -40,12 +40,14 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee.SponsoredFeeBot
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send.*
 import kotlinx.android.synthetic.main.layout_asset_card.*
 import kotlinx.android.synthetic.main.view_commission.*
 import pers.victor.ext.*
 import java.math.BigDecimal
 import java.net.URI
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SendActivity : BaseActivity(), SendView {
@@ -101,8 +103,12 @@ class SendActivity : BaseActivity(), SendView {
         }
 
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
+                .skipInitialValue()
+                .map(CharSequence::toString)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    checkRecipient(it.toString())
+                    checkRecipient(it)
                 })
 
         edit_amount.applyFilterStartWithDot()
