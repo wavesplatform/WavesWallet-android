@@ -325,7 +325,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
 
                 textIdValue?.text = transaction.assetId
-                if (transaction.reissuable) {
+                if (transaction.asset?.reissuable == true) {
                     textTokenStatus?.text = getString(R.string.history_details_reissuable)
                 } else {
                     textTokenStatus?.text = getString(R.string.history_details_not_reissuable)
@@ -338,7 +338,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                             imageCopy.copyToClipboard(textIdValue?.text.toString())
                         })
 
-                historyContainer?.addView(tokenView)
+                historyContainer.addView(tokenView)
             }
             TransactionType.CREATE_ALIAS_TYPE,
             TransactionType.DATA_TYPE,

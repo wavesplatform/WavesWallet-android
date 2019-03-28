@@ -11,6 +11,8 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
+import android.os.Parcelable
 import android.provider.Settings
 import android.support.annotation.ColorRes
 import android.support.annotation.IdRes
@@ -257,6 +259,29 @@ fun Context.isAppOnForeground(): Boolean {
         }
     }
     return false
+}
+
+fun <V> Map<String, V>.toBundle(bundle: Bundle = Bundle()): Bundle = bundle.apply {
+    forEach {
+        val k = it.key
+        val v = it.value
+        when (v) {
+            is IBinder -> putBinder(k, v)
+            is Bundle -> putBundle(k, v)
+            is Byte -> putByte(k, v)
+            is ByteArray -> putByteArray(k, v)
+            is Char -> putChar(k, v)
+            is CharArray -> putCharArray(k, v)
+            is CharSequence -> putCharSequence(k, v)
+            is Float -> putFloat(k, v)
+            is FloatArray -> putFloatArray(k, v)
+            is Parcelable -> putParcelable(k, v)
+            is Short -> putShort(k, v)
+            is ShortArray -> putShortArray(k, v)
+
+            else -> throw IllegalArgumentException("$v is of a type that is not currently supported")
+        }
+    }
 }
 
 fun Context.getToolBarHeight(): Int {

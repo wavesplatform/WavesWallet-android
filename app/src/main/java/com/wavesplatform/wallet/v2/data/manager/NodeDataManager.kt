@@ -9,6 +9,7 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticAssetManager
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.remote.request.*
@@ -38,6 +39,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     lateinit var githubDataManager: GithubDataManager
     @Inject
     lateinit var matcherDataManager: MatcherDataManager
+    @Inject
+    lateinit var analyticAssetManager: AnalyticAssetManager
     var transactions: List<Transaction> = ArrayList()
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
@@ -172,12 +175,21 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 }
 
                                 tripple.third.balances.saveAll()
+
                                 AssetBalanceStore.saveAssetBalanceStore(tripple.third.balances)
 
-                                return@map queryAll<AssetBalance>()
+                                val allAssets = queryAll<AssetBalance>()
+                                trackZeroBalances(allAssets)
+
+                                return@map allAssets
                             }
                             .subscribeOn(Schedulers.io())
                 }
+    }
+
+    private fun trackZeroBalances(balances: List<AssetBalance>) {
+        val generalAssets = balances.filter { it.isGateway || it.isWaves() }.toMutableList()
+        analyticAssetManager.trackFromZeroBalances(generalAssets)
     }
 
     private fun findElementsInDbWithZeroBalancesAndDelete(assetsFromDb: List<AssetBalance>?, tripple: Triple<AssetBalance, Map<String, Long>, AssetBalances>) {
