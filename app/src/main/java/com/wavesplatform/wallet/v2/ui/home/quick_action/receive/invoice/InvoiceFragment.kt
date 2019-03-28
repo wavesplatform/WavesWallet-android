@@ -12,8 +12,11 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.sdk.utils.safeLet // todo check
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
@@ -65,7 +68,8 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         }
 
         button_continue.click {
-            App.getAccessManager().getWallet()?.address?.let { address ->
+            safeLet(App.getAccessManager().getWallet()?.address, presenter.assetBalance?.getName()) { address, name ->
+                analytics.trackEvent(AnalyticEvents.WalletAssetsReceiveTapEvent(name))
                 launchActivity<ReceiveAddressViewActivity> {
                     putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
                     putExtra(YourAssetsActivity.BUNDLE_ADDRESS, address)

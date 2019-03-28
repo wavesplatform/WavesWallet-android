@@ -42,6 +42,7 @@ android {
         multiDexEnabled true
         archivesBaseName = "waves-wallet-$versionName"
         buildConfigField "String", "APPS_FLYER_KEY", "\"" + appsFlyerKey + "\""
+        buildConfigField "String", "AMPLITUDE_API_KEY", "\"" + devAmplitudeApiKey + "\""
         manifestPlaceholders = [
                 appIcon: "@mipmap/ic_launcher",
                 appIconRound: "@mipmap/ic_launcher_round",
@@ -84,6 +85,7 @@ android {
     productFlavors {
         prod {
             signingConfig signingConfigs.config
+            buildConfigField "String", "AMPLITUDE_API_KEY", "\"" + prodAmplitudeApiKey + "\""
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher",
                     appIconRound: "@mipmap/ic_launcher_round",
@@ -91,6 +93,7 @@ android {
         }
         dev {
             applicationIdSuffix ".dev"
+            buildConfigField "String", "AMPLITUDE_API_KEY", "\"" + devAmplitudeApiKey + "\""
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher_dev",
                     appIconRound: "@mipmap/ic_launcher_dev_round",
@@ -98,6 +101,7 @@ android {
         }
         devTest {
             applicationIdSuffix ".test"
+            buildConfigField "String", "AMPLITUDE_API_KEY", "\"" + devAmplitudeApiKey + "\""
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher_test",
                     appIconRound: "@mipmap/ic_launcher_test_round",
@@ -211,6 +215,8 @@ dependencies {
 
     implementation 'com.github.andrefrsousa:SuperBottomSheet:1.3.0'
     implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.1'
+
+    implementation 'com.amplitude:android-sdk:2.16.0'
 
     // RxJava
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"

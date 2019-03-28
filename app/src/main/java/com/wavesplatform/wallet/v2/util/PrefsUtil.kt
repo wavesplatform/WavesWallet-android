@@ -40,6 +40,10 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         return getValueInternal(guid + name, value)
     }
 
+    fun getValue(name: String): MutableSet<String> {
+        return getValueInternal(guid + name)
+    }
+
     fun getGlobalValue(name: String, value: String): String {
         return getValueInternal(name, value)
     }
@@ -90,6 +94,10 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
 
     fun setValue(guid: String, name: String, value: Boolean?) {
         setValueInternal(guid + name, value!!)
+    }
+
+    fun setValue(name: String, value: MutableSet<String>) {
+        setValueInternal(guid + name, value.toHashSet())
     }
 
     private fun setValueInternal(name: String, value: HashSet<String>) {
@@ -243,5 +251,7 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         const val KEY_LAST_UPDATE_DEX_INFO = "last_update_dex_info"
         const val KEY_GLOBAL_NODE_COOKIES = "node_cookies"
         const val KEY_DEX_PAIR_SMART_INFO_NOT_SHOW_LIST = "dex_pair_smart_info_not_show_list"
+        const val KEY_ASSETS_ZERO = "assets_zero"
+        const val KEY_ASSETS_ALL = "assets_all"
     }
 }

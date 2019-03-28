@@ -21,8 +21,10 @@ import com.wavesplatform.sdk.net.model.response.coinomat.XRate
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb // todo check
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -254,6 +256,9 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun onShowPaymentDetails() {
+        presenter.selectedAsset?.getName()?.let { name ->
+            analytics.trackEvent(AnalyticEvents.WalletAssetsSendTapEvent(name))
+        }
         launchActivity<SendConfirmationActivity>(REQUEST_SEND) {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
             putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)

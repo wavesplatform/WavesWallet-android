@@ -13,6 +13,8 @@ import com.wavesplatform.sdk.net.model.response.Alias
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
@@ -68,6 +70,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
         }
 
         button_continue.click {
+            analytics.trackEvent(AnalyticEvents.LeasingSendTapEvent)
             launchActivity<ConfirmationStartLeasingActivity>(REQUEST_LEASING_CONFIRMATION) {
                 putExtra(ConfirmationStartLeasingActivity.BUNDLE_ADDRESS, edit_address.text.toString())
                 putExtra(ConfirmationStartLeasingActivity.BUNDLE_AMOUNT, edit_amount.text.toString())
@@ -199,7 +202,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                     it.printStackTrace()
                 }))
 
-        presenter.wavesAssetBalance.notNull {
+        presenter.wavesAssetBalance.notNull { // todo check
             text_asset_value.text = MoneyUtil.getScaledText(it, Constants.WAVES_ASSET_INFO)
 
             presenter.loadCommission(it)

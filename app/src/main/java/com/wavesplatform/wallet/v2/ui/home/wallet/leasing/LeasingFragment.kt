@@ -13,6 +13,8 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.net.model.response.Transaction
@@ -193,10 +195,10 @@ class LeasingFragment : BaseFragment(), LeasingView {
         }
 
         button_start_lease.click {
+            analytics.trackEvent(AnalyticEvents.LeasingStartTapEvent)
             launchActivity<StartLeasingActivity> {
                 val bundle = Bundle()
-                bundle.putLong(StartLeasingActivity.BUNDLE_WAVES, wavesAsset.getAvailableBalance()
-                        ?: 0)
+                bundle.putLong(StartLeasingActivity.BUNDLE_WAVES, wavesAsset.getAvailableBalance())
                 putExtras(bundle)
             }
         }

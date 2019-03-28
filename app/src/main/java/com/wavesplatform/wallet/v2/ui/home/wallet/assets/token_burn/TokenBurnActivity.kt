@@ -10,6 +10,8 @@ import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.sdk.utils.clearBalance
 import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.util.*
@@ -124,6 +126,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
                 }))
 
         button_continue.click {
+            analytics.trackEvent(AnalyticEvents.BurnTokenContinueTapEvent)
             launchActivity<TokenBurnConfirmationActivity>(REQUEST_BURN_CONFIRM) {
                 putExtra(KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
                 putExtra(KEY_INTENT_BLOCKCHAIN_FEE, presenter.fee)

@@ -18,7 +18,6 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
     lateinit var coinomatManager: CoinomatManager
     var assetBalance: AssetBalance? = null
     var tunnel: GetTunnel? = null
-    private var address: String? = App.getAccessManager().getWallet()!!.address
     private var lang: String = "ru_RU"
     var nextStepValidation = false
 
@@ -32,7 +31,7 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
 
         val currencyTo = "W$currencyFrom"
 
-        addSubscription(coinomatManager.createTunnel(currencyFrom, currencyTo, address, null)
+        addSubscription(coinomatManager.createTunnel(currencyFrom, currencyTo, getWavesAddress(), null)
                 .flatMap { createTunnel ->
                     coinomatManager.getTunnel(
                             createTunnel.tunnelId,

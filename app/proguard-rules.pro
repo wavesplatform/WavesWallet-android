@@ -27,6 +27,9 @@
 -keep public class com.google.android.gms.* { public *; }
 -dontwarn com.google.android.gms.**
 
+-keep class com.google.android.gms.ads.** { *; }
+-dontwarn okio.**
+
 # Don't mess with classes with native methods
 -keepclasseswithmembers class * {
     native <methods>;

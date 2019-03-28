@@ -14,6 +14,8 @@ import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnel
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
@@ -66,6 +68,9 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
 
         button_continue.click {
             if (presenter.tunnel != null && presenter.tunnel!!.tunnel != null) {
+                presenter.assetBalance?.getName()?.let { name ->
+                    analytics.trackEvent(AnalyticEvents.WalletAssetsReceiveTapEvent(name))
+                }
                 launchActivity<ReceiveAddressViewActivity> {
                     putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
                     putExtra(YourAssetsActivity.BUNDLE_ADDRESS,
