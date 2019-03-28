@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.net.model.OrderType
 import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.sdk.net.service.CoinomatService
 import com.wavesplatform.sdk.utils.*
@@ -23,7 +24,6 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
@@ -275,7 +275,6 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                         exchangeView.history_details_type?.text = getString(R.string.history_exchange_buy)
                     }
 
-                    // todo check
                     exchangeView.text_exchange_value.text = transaction.getScaledTotal(myOrder.assetPair?.priceAssetObject?.precision)
                     exchangeView.text_price_value.text = transaction.getScaledPrice(myOrder.assetPair?.amountAssetObject?.precision,
                             myOrder.assetPair?.priceAssetObject?.precision)
