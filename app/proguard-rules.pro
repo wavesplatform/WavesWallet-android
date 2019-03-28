@@ -342,3 +342,8 @@
 -keepattributes SourceFile, LineNumberTable
 -keep,allowshrinking,allowoptimization class * { <methods>; }
 # End Allow optimisation whilst preserving stack traces -------
+
+# Google Analytics -------------------------------------------#
+-keep class com.google.android.gms.ads.** { *; }
+-dontwarn okio.**
+# End Google Analytics ----------------------------------------
