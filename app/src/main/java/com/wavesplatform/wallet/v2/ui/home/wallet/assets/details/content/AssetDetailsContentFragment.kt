@@ -11,6 +11,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.sdk.net.model.response.AssetBalance
@@ -215,6 +217,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     private fun setBurnButton(cardBurnContainer: View) {
         cardBurnContainer.click {
+            analytics.trackEvent(AnalyticEvents.BurnTokenTapEvent)
             launchActivity<TokenBurnActivity> {
                 putExtra(TokenBurnActivity.KEY_INTENT_ASSET_BALANCE, presenter.assetBalance)
             }

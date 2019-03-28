@@ -131,7 +131,6 @@
             android:maxLines="1"
             android:textColor="@color/basic700"
             android:textSize="11sp"
-            android:visibility="gone"
             app:autoSizeMaxTextSize="11sp"
             app:autoSizeMinTextSize="9sp"
             app:autoSizeStepGranularity="1sp"
@@ -159,8 +158,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
             app:srcCompat="@drawable/icon_info_basic_300" />
 
     </LinearLayout>

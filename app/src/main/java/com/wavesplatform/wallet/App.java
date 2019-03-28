@@ -15,6 +15,8 @@ import com.google.firebase.FirebaseApp;
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs;
 import com.squareup.leakcanary.LeakCanary;
 import com.wavesplatform.sdk.Wavesplatform;
+import com.wavesplatform.wallet.v2.data.analytics.Analytics;
+import com.wavesplatform.wallet.v2.util.PrefsUtil;
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper;
 import com.wavesplatform.wallet.v2.data.manager.AccessManager;
 import com.wavesplatform.wallet.v2.data.receiver.ScreenReceiver;
@@ -54,7 +56,6 @@ public class App extends DaggerApplication {
         }
         LeakCanary.install(this);
 
-        Analytics.appsFlyerInit(this);
         FirebaseApp.initializeApp(this);
         Fabric.with(this, new Crashlytics());
         application = this;
@@ -62,6 +63,8 @@ public class App extends DaggerApplication {
 
         Realm.init(this);
         Ext.INSTANCE.setCtx(this);
+
+        Analytics.init(this);
 
         Sentry.init(new AndroidSentryClientFactory(this.getApplicationContext()));
 

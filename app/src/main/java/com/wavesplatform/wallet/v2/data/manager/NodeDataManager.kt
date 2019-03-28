@@ -14,6 +14,7 @@ import com.wavesplatform.sdk.utils.sumByLong
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticAssetManager
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
@@ -41,6 +42,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     lateinit var githubDataManager: GithubDataManager
     @Inject
     lateinit var matcherDataManager: MatcherDataManager
+    @Inject
+    lateinit var analyticAssetManager: AnalyticAssetManager
+    var transactions: List<Transaction> = ArrayList()
 
     fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
         return githubService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, EnvironmentManager.servers.spamUrl))
@@ -175,10 +179,19 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
                                 AssetBalanceDb.convertToDb(tripple.third.balances).saveAll()
                                 AssetBalanceStore.saveAssetBalanceStore(tripple.third.balances)
-                                return@map AssetBalanceDb.convertFromDb(queryAll())
+
+                                val allAssets = AssetBalanceDb.convertFromDb(queryAll<AssetBalanceDb>())
+                                trackZeroBalances(allAssets)
+
+                                return@map allAssets
                             }
                             .subscribeOn(Schedulers.io())
                 }
+    }
+
+    private fun trackZeroBalances(balances: List<AssetBalance>) {
+        val generalAssets = balances.filter { it.isGateway || it.isWaves() }.toMutableList()
+        analyticAssetManager.trackFromZeroBalances(generalAssets)
     }
 
     private fun findElementsInDbWithZeroBalancesAndDelete(assetsFromDb: List<AssetBalance>?, tripple: Triple<AssetBalance, Map<String, Long>, AssetBalances>) {
