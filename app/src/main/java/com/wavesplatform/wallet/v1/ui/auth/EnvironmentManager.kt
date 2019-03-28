@@ -57,19 +57,20 @@ class EnvironmentManager {
     }
 
     companion object {
-        // TODO: Put one field with version
-        const val KEY_ENV_TEST_NET = "env_testnet"
-        const val URL_CONFIG_MAIN_NET = "https://github-proxy.wvservices.com/" +
-                "wavesplatform/waves-client-config/mobile/v2.3/environment_mainnet.json"
-        const val FILENAME_TEST_NET = "environment_testnet.json"
+        private const val BRANCH = "mobile/v2.3"
 
+        const val KEY_ENV_TEST_NET = "env_testnet"
         const val KEY_ENV_MAIN_NET = "env_prod"
-        const val URL_CONFIG_TEST_NET = "https://github-proxy.wvservices.com/" +
-                "wavesplatform/waves-client-config/mobile/v2.3/environment_testnet.json"
+
+        const val FILENAME_TEST_NET = "environment_testnet.json"
         const val FILENAME_MAIN_NET = "environment_mainnet.json"
 
+        const val URL_CONFIG_MAIN_NET = "https://github-proxy.wvservices.com/" +
+                "wavesplatform/waves-client-config/$BRANCH/environment_mainnet.json"
+        const val URL_CONFIG_TEST_NET = "https://github-proxy.wvservices.com/" +
+                "wavesplatform/waves-client-config/$BRANCH/environment_testnet.json"
         const val URL_COMMISSION_MAIN_NET = "https://github-proxy.wvservices.com/" +
-                "wavesplatform/waves-client-config/mobile/v2.3/fee.json"
+                "wavesplatform/waves-client-config/$BRANCH/fee.json"
 
         private var instance: EnvironmentManager? = null
         private val handler = Handler()

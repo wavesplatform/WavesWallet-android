@@ -134,33 +134,23 @@ object Constants {
         return allConfigAssets.associateBy({ it.assetId }, { it.iconUrls.default }).toMutableMap()
     }
 
-    fun coinomatCryptoCurrencies(): HashMap<String, String> {
-        val map = hashMapOf<String, String>()
-        for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
-            if (asset.isGateway) {
-                map[asset.assetId] = asset.gatewayId
-            }
-        }
-        return map
+    fun coinomatCryptoCurrencies(): MutableMap<String, String> {
+        return EnvironmentManager.globalConfiguration.generalAssets
+                .associateBy({ it.assetId }, { it.gatewayId })
+                .toMutableMap()
     }
 
     fun defaultCrypto(): Array<String> {
-        val list = mutableListOf<String>()
-        for (asset in EnvironmentManager.defaultAssets) {
-            if (!asset.isFiatMoney) {
-                list.add(asset.assetId)
-            }
-        }
-        return list.toTypedArray()
+        return EnvironmentManager.defaultAssets
+                .filter { !it.isFiatMoney }
+                .map { it.assetId }
+                .toTypedArray()
     }
 
     fun defaultFiat(): Array<String> {
-        val list = mutableListOf<String>()
-        for (asset in EnvironmentManager.defaultAssets) {
-            if (asset.isFiatMoney) {
-                list.add(asset.assetId)
-            }
-        }
-        return list.toTypedArray()
+        return EnvironmentManager.defaultAssets
+                .filter { it.isFiatMoney }
+                .map { it.assetId }
+                .toTypedArray()
     }
 }
