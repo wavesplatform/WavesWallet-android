@@ -7,6 +7,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.sdk.net.model.Language
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
@@ -104,6 +106,7 @@ class TutorialActivity : BaseActivity(), TutorialView {
                     view_pager.currentItem == adapter.items.size - 1 -> {
                         text_next.text = getString(R.string.confirm_card_tutorial_submit)
                         text_next.click {
+                            analytics.trackEvent(AnalyticEvents.NewUserConfirmEvent)
                             preferencesHelper.setTutorialPassed(true)
                             exitAnimation()
                         }

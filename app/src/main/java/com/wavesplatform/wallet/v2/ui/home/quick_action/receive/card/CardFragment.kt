@@ -17,6 +17,8 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.success.SuccessActivity
 import com.wavesplatform.wallet.v2.util.*
@@ -45,6 +47,7 @@ class CardFragment : BaseFragment(), CardView {
 
         button_continue.click {
             if (presenter.isValid()) {
+                analytics.trackEvent(AnalyticEvents.WalletAssetsCardReceiveTapEvent)
                 launchActivity<SuccessActivity> {
                     putExtra(SuccessActivity.KEY_INTENT_TITLE, getString(R.string.coinomat_success_title))
                     putExtra(SuccessActivity.KEY_INTENT_SUBTITLE, getString(R.string.coinomat_success_subtitle))

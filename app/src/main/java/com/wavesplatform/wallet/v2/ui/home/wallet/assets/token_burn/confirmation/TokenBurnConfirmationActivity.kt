@@ -8,6 +8,8 @@ import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.request.BurnRequest
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnActivity.Companion.KEY_INTENT_AMOUNT
@@ -62,6 +64,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
                 "${Constants.CUSTOM_FEE_ASSET_NAME}"
 
         button_confirm.click {
+            analytics.trackEvent(AnalyticEvents.BurnTokenConfirmTapEvent)
             presenter.burn()
             toolbar_view.invisiable()
             card_content.gone()

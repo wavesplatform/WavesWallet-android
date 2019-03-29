@@ -13,10 +13,8 @@ import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.Base58
-import com.wavesplatform.sdk.net.model.response.AssetBalance
-import com.wavesplatform.sdk.net.model.response.Transaction
-import com.wavesplatform.sdk.net.model.response.TransactionType
-import com.wavesplatform.sdk.net.model.response.Transfer
+import com.wavesplatform.sdk.net.model.OrderType
+import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.sdk.net.service.CoinomatService
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
@@ -26,7 +24,6 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
@@ -39,6 +36,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation.Co
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.fragment_bottom_sheet_exchange_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
 import kotlinx.android.synthetic.main.history_details_layout.view.*
@@ -266,65 +264,26 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                         R.layout.fragment_bottom_sheet_exchange_layout,
                         historyContainer, false)
 
-                val historyDetailsType = exchangeView?.findViewById<AppCompatTextView>(
-                        R.id.history_details_type)
 
-                val textExchangeValue = exchangeView?.findViewById<AppCompatTextView>(
-                        R.id.text_exchange_value)
-                val textExchangeTag = exchangeView?.findViewById<AppCompatTextView>(
-                        R.id.text_exchange_tag)
+                exchangeView?.let {
+                    val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
+                            App.getAccessManager().getWallet()?.address!!)
 
-                val textPriceValue = exchangeView?.findViewById<AppCompatTextView>(
-                        R.id.text_price_value)
-                val textPriceTag = exchangeView?.findViewById<AppCompatTextView>(
-                        R.id.text_price_tag)
-
-                val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
-                        App.getAccessManager().getWallet()?.address!!)
-
-                if (myOrder.getType() == OrderType.BUY) {
-                    historyDetailsType?.text = getString(R.string.history_exchange_sell)
-                } else {
-                    historyDetailsType?.text = getString(R.string.history_exchange_buy)
-                }
-
-                // show value for price
-                if (isShowTicker(myOrder.assetPair?.priceAssetObject?.id)) {
-                    textPriceValue?.text = MoneyUtil.getScaledPrice(transaction.price,
-                            myOrder?.assetPair?.amountAssetObject?.precision ?: 0,
-                            myOrder?.assetPair?.priceAssetObject?.precision ?: 0)
-
-                    val ticker = myOrder.assetPair?.priceAssetObject?.getTicker()
-                    if (!ticker.isNullOrBlank()) {
-                        textPriceTag?.text = ticker
-                        textPriceTag?.visiable()
+                    if (myOrder.getType() == OrderType.BUY) {
+                        exchangeView.history_details_type?.text = getString(R.string.history_exchange_sell)
+                    } else {
+                        exchangeView.history_details_type?.text = getString(R.string.history_exchange_buy)
                     }
-                } else {
-                    textPriceValue?.text = "${MoneyUtil.getScaledPrice(transaction.price,
-                            myOrder.assetPair?.amountAssetObject?.precision ?: 0,
-                            myOrder.assetPair?.priceAssetObject?.precision ?: 0)} " +
-                            "${myOrder.assetPair?.priceAssetObject?.name}"
+
+                    exchangeView.text_exchange_value.text = transaction.getScaledTotal(myOrder.assetPair?.priceAssetObject?.precision)
+                    exchangeView.text_price_value.text = transaction.getScaledPrice(myOrder.assetPair?.amountAssetObject?.precision,
+                            myOrder.assetPair?.priceAssetObject?.precision)
+
+                    showTickerOrSimple(exchangeView.text_exchange_value, exchangeView.text_exchange_tag, myOrder.assetPair?.priceAssetObject)
+                    showTickerOrSimple(exchangeView.text_price_value, exchangeView.text_price_tag, myOrder.assetPair?.priceAssetObject)
                 }
 
-                // show value for amount
-                if (isShowTicker(myOrder.assetPair?.priceAssetObject?.id)) {
-                    textExchangeValue?.text = MoneyUtil.getScaledPrice(transaction.getOrderSum(),
-                            myOrder.assetPair?.amountAssetObject?.precision ?: 0,
-                            myOrder.assetPair?.priceAssetObject?.precision ?: 0)
-
-                    val ticker = myOrder.assetPair?.priceAssetObject?.getTicker()
-                    if (!ticker.isNullOrBlank()) {
-                        textExchangeTag?.text = ticker
-                        textExchangeTag?.visiable()
-                    }
-                } else {
-                    textExchangeValue?.text = "${MoneyUtil.getScaledPrice(transaction.getOrderSum(),
-                            myOrder.assetPair?.amountAssetObject?.precision ?: 0,
-                            myOrder.assetPair?.priceAssetObject?.precision ?: 0)} " +
-                            "${myOrder.assetPair?.priceAssetObject?.name}"
-                }
-
-                historyContainer?.addView(exchangeView)
+                historyContainer.addView(exchangeView)
             }
             TransactionType.SELF_TRANSFER_TYPE -> {
                 val selfTransferView = inflater?.inflate(R.layout.fragment_bottom_sheet_seft_transfer_layout, historyContainer, false)
@@ -366,7 +325,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
 
                 textIdValue?.text = transaction.assetId
-                if (transaction.reissuable) {
+                if (transaction.asset?.reissuable == true) {
                     textTokenStatus?.text = getString(R.string.history_details_reissuable)
                 } else {
                     textTokenStatus?.text = getString(R.string.history_details_not_reissuable)
@@ -379,7 +338,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                             imageCopy.copyToClipboard(textIdValue?.text.toString())
                         })
 
-                historyContainer?.addView(tokenView)
+                historyContainer.addView(tokenView)
             }
             TransactionType.CREATE_ALIAS_TYPE,
             TransactionType.DATA_TYPE,
@@ -574,6 +533,19 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         historyContainer.addView(commentBlock)
 
         return historyContainer
+    }
+
+
+    private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfo?) {
+        if (isShowTicker(assetInfo?.id)) {
+            val ticker = assetInfo?.getTicker()
+            if (!ticker.isNullOrBlank()) {
+                tickerView.text = ticker
+                tickerView.visiable()
+            }
+        } else {
+            valueView.text = valueView.text.toString().plus(" ${assetInfo?.name}}")
+        }
     }
 
     override fun setupInfo(transaction: Transaction): View? {

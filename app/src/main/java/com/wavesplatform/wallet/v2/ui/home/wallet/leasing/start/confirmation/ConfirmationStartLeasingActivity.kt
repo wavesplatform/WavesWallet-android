@@ -8,6 +8,8 @@ import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.showError
@@ -51,6 +53,8 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
         text_leasing_result_value.text = getString(R.string.confirm_leasing_result_value, presenter.amount, Constants.WAVES_ASSET_INFO.name)
 
         button_confirm.click {
+            analytics.trackEvent(AnalyticEvents.LeasingConfirmTapEvent)
+
             supportActionBar?.setDisplayShowTitleEnabled(false)
             supportActionBar?.setHomeButtonEnabled(false)
             supportActionBar?.setDisplayHomeAsUpEnabled(false)

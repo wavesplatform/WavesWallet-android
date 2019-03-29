@@ -17,6 +17,8 @@ import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -124,6 +126,9 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
     }
 
     private fun goNext() {
+        presenter.selectedAsset?.getName()?.let { name ->
+            analytics.trackEvent(AnalyticEvents.WalletAssetsSendConfirmEvent(name))
+        }
         showTransactionProcessing()
         presenter.confirmSend()
     }
@@ -165,7 +170,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
     }
 
     private fun setSaveAddress(signed: TransactionsBroadcastRequest) {
-        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", signed.recipient)}
+        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", signed.recipient) }
         if (addressBookUser == null) {
             sent_to_address.text = signed.recipient
             add_address.visiable()
