@@ -10,6 +10,8 @@ import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
@@ -123,6 +125,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     }
 
     private fun tryOpenOrderDialog(buy: Boolean, initPriceValue: Long?, initAmountValue: Long? = null) {
+        logEvent(buy)
         val amountAssetInfo = (activity as TradeActivity).presenter.amountAssetInfo
         val priceAssetInfo = (activity as TradeActivity).presenter.priceAssetInfo
         if ((amountAssetInfo?.hasScript == true || priceAssetInfo?.hasScript == true)) {
@@ -151,6 +154,18 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
             openOrderDialog(initAmountValue, initPriceValue, buy)
         }
     }
+
+    private fun logEvent(buy: Boolean) {
+        safeLet(presenter.watchMarket?.market?.amountAssetLongName, presenter.watchMarket?.market?.priceAssetLongName)
+        { amountAssetName, priceAssetName ->
+            if (buy) {
+                analytics.trackEvent(AnalyticEvents.DEXBuyTapEvent(amountAssetName, priceAssetName))
+            } else {
+                analytics.trackEvent(AnalyticEvents.DEXSellTapEvent(amountAssetName, priceAssetName))
+            }
+        }
+    }
+
 
     private fun openOrderDialog(initAmountValue: Long?, initPriceValue: Long?, buy: Boolean) {
         val data = BuySellData(watchMarket = presenter.watchMarket, initAmount = initAmountValue, initPrice = initPriceValue,

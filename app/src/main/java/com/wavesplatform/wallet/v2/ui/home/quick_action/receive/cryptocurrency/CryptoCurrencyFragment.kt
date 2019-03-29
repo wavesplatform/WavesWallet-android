@@ -12,6 +12,8 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -66,6 +68,9 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
 
         button_continue.click {
             if (presenter.tunnel != null && presenter.tunnel!!.tunnel != null) {
+                presenter.assetBalance?.getName()?.let { name ->
+                    analytics.trackEvent(AnalyticEvents.WalletAssetsReceiveTapEvent(name))
+                }
                 launchActivity<ReceiveAddressViewActivity> {
                     putExtra(YourAssetsActivity.BUNDLE_ASSET_ITEM, presenter.assetBalance)
                     putExtra(YourAssetsActivity.BUNDLE_ADDRESS,

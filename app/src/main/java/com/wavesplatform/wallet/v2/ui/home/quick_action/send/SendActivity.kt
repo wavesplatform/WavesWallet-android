@@ -21,6 +21,8 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil.getWavesStripZeros
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
@@ -41,12 +43,14 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee.SponsoredFeeBot
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send.*
 import kotlinx.android.synthetic.main.layout_asset_card.*
 import kotlinx.android.synthetic.main.view_commission.*
 import pers.victor.ext.*
 import java.math.BigDecimal
 import java.net.URI
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SendActivity : BaseActivity(), SendView {
@@ -102,8 +106,12 @@ class SendActivity : BaseActivity(), SendView {
         }
 
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
+                .skipInitialValue()
+                .map(CharSequence::toString)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    checkRecipient(it.toString())
+                    checkRecipient(it)
                 })
 
         edit_amount.applyFilterStartWithDot()
@@ -249,6 +257,9 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun onShowPaymentDetails() {
+        presenter.selectedAsset?.getName()?.let { name ->
+            analytics.trackEvent(AnalyticEvents.WalletAssetsSendTapEvent(name))
+        }
         launchActivity<SendConfirmationActivity>(REQUEST_SEND) {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
             putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)
