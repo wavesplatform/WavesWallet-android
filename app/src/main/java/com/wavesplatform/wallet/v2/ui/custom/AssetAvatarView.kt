@@ -14,7 +14,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.Constants.WCTGeneralAsset
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import pers.victor.ext.findColor

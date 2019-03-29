@@ -25,8 +25,6 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.REQUEST_SORTING
-import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment.Companion.RESULT_NEED_UPDATE
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity

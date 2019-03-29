@@ -1,15 +1,12 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders
 
-import android.databinding.adapters.TextViewBindingAdapter.setText
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.OrderStatus
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import com.wavesplatform.wallet.v2.data.model.remote.response.OrderResponse
-import com.wavesplatform.wallet.v2.util.stripZeros
 import kotlinx.android.synthetic.main.recycle_item_my_orders.view.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import java.util.*

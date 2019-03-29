@@ -20,7 +20,6 @@ import pers.victor.ext.currentTimeMillis
 import timber.log.Timber
 import java.io.IOException
 import java.nio.charset.Charset
-import java.util.*
 
 class EnvironmentManager {
 
@@ -221,12 +220,7 @@ class EnvironmentManager {
             }
 
         private fun findAssetIdByAssetId(assetId: String): GlobalConfiguration.ConfigAsset? {
-            for (asset in instance!!.current!!.configuration!!.generalAssets) {
-                if (asset.assetId == assetId) {
-                    return asset
-                }
-            }
-            return null
+            return instance?.current?.configuration?.generalAssets?.firstOrNull { it.assetId == assetId }
         }
 
         private fun loadJsonFromAsset(application: Application, fileName: String): String {
