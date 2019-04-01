@@ -603,6 +603,11 @@ fun AssetBalance.getItemType(): Int {
         isSpam -> AssetsAdapter.TYPE_SPAM_ASSET
         isHidden -> AssetsAdapter.TYPE_HIDDEN_ASSET
         else -> AssetsAdapter.TYPE_ASSET
+
+// todo check move to lib
+fun isShowTicker(assetId: String?): Boolean {
+    return EnvironmentManager.globalConfiguration.generalAssets.any {
+        it.assetId == assetId || assetId.isNullOrEmpty()
     }
 }
 

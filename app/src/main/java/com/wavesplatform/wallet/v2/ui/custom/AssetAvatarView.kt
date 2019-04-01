@@ -136,7 +136,6 @@ class AssetAvatarView : AppCompatImageView {
     * */
     private fun setValues(assetId: String, name: String, isSponsoredAsset: Boolean, isScriptAsset: Boolean) {
         val avatar = when (assetId) {
-            WCT_GENERAL_ASSET.assetId -> R.drawable.ic_logo_wct_48
             "" -> Constants.defaultAssetsAvatar()[Constants.WAVES_ASSET_ID_FILLED]
             else -> Constants.defaultAssetsAvatar()[assetId]
         }

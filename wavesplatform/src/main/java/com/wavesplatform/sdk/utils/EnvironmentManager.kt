@@ -18,7 +18,6 @@ import io.reactivex.disposables.Disposable
 import pers.victor.ext.currentTimeMillis
 import java.io.IOException
 import java.nio.charset.Charset
-import java.util.*
 
 class EnvironmentManager {
 
@@ -43,7 +42,7 @@ class EnvironmentManager {
 
         companion object {
 
-            internal var environments: MutableList<Environment> = ArrayList()
+            internal var environments: MutableList<Environment> = mutableListOf()
             var TEST_NET = Environment(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, FILENAME_TEST_NET)
             var MAIN_NET = Environment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, FILENAME_MAIN_NET)
 
@@ -55,19 +54,20 @@ class EnvironmentManager {
     }
 
     companion object {
+        private const val BRANCH = "mobile/v2.3"
 
         const val KEY_ENV_TEST_NET = "env_testnet"
-        const val URL_CONFIG_MAIN_NET = "https://github-proxy.wvservices.com/" +
-                "wavesplatform/waves-client-config/mobile/v2.2/environment_mainnet.json"
-        const val FILENAME_TEST_NET = "environment_testnet.json"
-
         const val KEY_ENV_MAIN_NET = "env_prod"
-        const val URL_CONFIG_TEST_NET = "https://github-proxy.wvservices.com/" +
-                "wavesplatform/waves-client-config/mobile/v2.2/environment_testnet.json"
+
+        const val FILENAME_TEST_NET = "environment_testnet.json"
         const val FILENAME_MAIN_NET = "environment_mainnet.json"
 
+        const val URL_CONFIG_MAIN_NET = "https://github-proxy.wvservices.com/" +
+                "wavesplatform/waves-client-config/$BRANCH/environment_mainnet.json"
+        const val URL_CONFIG_TEST_NET = "https://github-proxy.wvservices.com/" +
+                "wavesplatform/waves-client-config/$BRANCH/environment_testnet.json"
         const val URL_COMMISSION_MAIN_NET = "https://github-proxy.wvservices.com/" +
-                "wavesplatform/waves-client-config/mobile/v2.2/fee.json"
+                "wavesplatform/waves-client-config/$BRANCH/fee.json"
 
         private var instance: EnvironmentManager? = null
         private val handler = Handler()
@@ -127,7 +127,7 @@ class EnvironmentManager {
                         instance!!.current!!.setConfiguration(globalConfiguration)
 
                         val list = mutableListOf<String>()
-                        for (asset in globalConfiguration.generalAssetIds) {
+                        for (asset in globalConfiguration.generalAssets) {
                             list.add(asset.assetId)
                         }
                         list
@@ -222,13 +222,8 @@ class EnvironmentManager {
                         GLOBAL_CURRENT_ENVIRONMENT, Environment.MAIN_NET.name)
             }
 
-        private fun findAssetIdByAssetId(assetId: String): GlobalConfiguration.GeneralAssetId? {
-            for (asset in instance!!.current!!.configuration!!.generalAssetIds) {
-                if (asset.assetId == assetId) {
-                    return asset
-                }
-            }
-            return null
+        private fun findAssetIdByAssetId(assetId: String): GlobalConfiguration.ConfigAsset? {
+            return instance?.current?.configuration?.generalAssets?.firstOrNull { it.assetId == assetId }
         }
 
         private fun loadJsonFromAsset(application: Application, fileName: String): String {

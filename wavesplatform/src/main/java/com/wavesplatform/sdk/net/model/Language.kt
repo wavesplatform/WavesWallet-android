@@ -22,11 +22,12 @@ enum class Language(
     SPANISH(R.drawable.ic_flag_18_spain, R.string.choose_language_spain, "es", "ES"),
     PORTUGUESE(R.drawable.ic_flag_18_portugal, R.string.choose_language_portuguese, "pt", "PT"),
     BRAZILIAN(R.drawable.ic_flag_18_brazil, R.string.choose_language_brazilian, "pt_BR", "BR"),
-    // DANISH(R.drawable.ic_flag_18_danish, R.string.choose_language_danish, "dn", "dn"),
+    POLISH(R.drawable.ic_flag_18_polszczyzna, R.string.choose_language_polish, "pl", "PL"),
+    ITALIAN(R.drawable.ic_flag_18_italiano, R.string.choose_language_italian, "it", "IT"),
     GERMAN(R.drawable.ic_flag_18_germany, R.string.choose_language_german, "de", "DE"),
     INDONESIAN(R.drawable.ic_flag_18_indonesia, R.string.choose_language_indonesian, "in", "ID"),
     JAPAN(R.drawable.ic_flag_18_japan, R.string.choose_language_japan, "ja", "JA"),
-    // POLISH(R.drawable.ic_flag_18_polszczyzna, R.string.choose_language_polish, "pl"),
+    // DANISH(R.drawable.ic_flag_18_danish, R.string.choose_language_danish, "dn", "dn"),
     ;
 
     companion object {

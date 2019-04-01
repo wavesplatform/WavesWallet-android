@@ -1,10 +1,8 @@
 package com.wavesplatform.wallet.v2.data.rules
 
 import android.support.annotation.StringRes
-
-import java.util.Locale
-
 import io.github.anderscheow.validator.rules.BaseRule
+import java.util.*
 
 class MinTrimRule : BaseRule {
 

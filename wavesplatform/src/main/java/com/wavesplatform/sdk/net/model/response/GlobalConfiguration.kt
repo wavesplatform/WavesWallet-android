@@ -6,7 +6,8 @@ data class GlobalConfiguration(
     @SerializedName("name") var name: String = "",
     @SerializedName("servers") var servers: Servers = Servers(),
     @SerializedName("scheme") var scheme: String = "",
-    @SerializedName("generalAssetIds") var generalAssetIds: List<GeneralAssetId> = listOf()
+    @SerializedName("generalAssets") var generalAssets: List<ConfigAsset> = listOf(),
+    @SerializedName("assets") var assets: List<ConfigAsset> = listOf()
 ) {
 
     data class Servers(
@@ -16,7 +17,7 @@ data class GlobalConfiguration(
         @SerializedName("matcherUrl") var matcherUrl: String = ""
     )
 
-    data class GeneralAssetId(
+    data class ConfigAsset(
         @SerializedName("assetId") var assetId: String = "",
         @SerializedName("displayName") var displayName: String = "",
         @SerializedName("isFiat") var isFiat: Boolean = false,

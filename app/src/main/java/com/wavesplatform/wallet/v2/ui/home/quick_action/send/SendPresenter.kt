@@ -265,7 +265,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
         fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
-            for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
+            for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
                 if (recipient!!.matches("${asset.addressRegEx}$".toRegex())) {
                     return if (assetBalance != null) {
                         asset.assetId

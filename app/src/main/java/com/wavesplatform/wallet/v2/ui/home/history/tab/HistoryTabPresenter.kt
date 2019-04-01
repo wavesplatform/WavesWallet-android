@@ -14,7 +14,7 @@ import com.wavesplatform.sdk.utils.transactionType
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.database.TransactionSaver
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
-import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
+import com.wavesplatform.wallet.v2.data.model.local.HistoryItem // todo check
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentPresenter
