@@ -43,6 +43,7 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.MoneyUtil
@@ -705,10 +706,9 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
 }
 
 fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
-    return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true) &&
-            (null != queryFirst<SpamAsset> {
-                equalTo("assetId", assetId)
-            }))
+    return (App.getAccessManager().getWallet() != null
+            && prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+            && (null != queryFirst<SpamAsset> { equalTo("assetId", assetId) }))
 }
 
 fun isShowTicker(assetId: String?): Boolean {
