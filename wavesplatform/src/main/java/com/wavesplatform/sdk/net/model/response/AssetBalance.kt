@@ -15,7 +15,6 @@ open class AssetBalances(
 
 @Parcelize
 open class AssetBalance(
-        @PrimaryKey
         @SerializedName("assetId") var assetId: String = "",
         @SerializedName("balance") var balance: Long? = 0,
         @SerializedName("leasedBalance") var leasedBalance: Long? = 0,
@@ -27,8 +26,8 @@ open class AssetBalance(
         @SerializedName("issueTransaction") var issueTransaction: IssueTransaction? = IssueTransaction(id = assetId),
         var isHidden: Boolean = false,
         var position: Int = -1,
-        @Ignore var configureVisibleState: Boolean = false,
-        @Ignore var isChecked: Boolean = false,
+        var configureVisibleState: Boolean = false,
+        var isChecked: Boolean = false,
         var isFiatMoney: Boolean = false,
         var isFavorite: Boolean = false,
         var isGateway: Boolean = false,

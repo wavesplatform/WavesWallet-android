@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data.analytics
 
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import javax.inject.Inject
 import javax.inject.Singleton
 

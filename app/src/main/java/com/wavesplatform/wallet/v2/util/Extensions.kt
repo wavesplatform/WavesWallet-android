@@ -543,7 +543,7 @@ fun find(assetId: String): AssetBalance? {
 }
 
 fun findByGatewayId(gatewayId: String): AssetBalance? { // ticker
-    for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
+    for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
         if (asset.gatewayId == gatewayId) {
             return find(asset.assetId)
         }
@@ -603,11 +603,6 @@ fun AssetBalance.getItemType(): Int {
         isSpam -> AssetsAdapter.TYPE_SPAM_ASSET
         isHidden -> AssetsAdapter.TYPE_HIDDEN_ASSET
         else -> AssetsAdapter.TYPE_ASSET
-
-// todo check move to lib
-fun isShowTicker(assetId: String?): Boolean {
-    return EnvironmentManager.globalConfiguration.generalAssets.any {
-        it.assetId == assetId || assetId.isNullOrEmpty()
     }
 }
 

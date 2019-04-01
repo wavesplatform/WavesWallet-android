@@ -25,14 +25,22 @@ class Constants {
         const val WAVES_MIN_FEE = 100000L
         const val MIN_WAVES_SPONSORED_BALANCE = 1.005
 
-        val WAVES_ASSET_INFO = AssetInfo(id = WAVES_ASSET_ID_EMPTY, precision = 8, name = "WAVES",
+        val WAVES_ASSET_INFO = AssetInfo(
+                id = WAVES_ASSET_ID_EMPTY,
+                precision = 8,
+                name = "WAVES",
                 quantity = 10000000000000000L)
-        val MRT_GENERAL_ASSET = GlobalConfiguration.GeneralAssetId(
+
+        var MRTGeneralAsset = GlobalConfiguration.ConfigAsset(
                 assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
-                gatewayId = "MRT", displayName = "MinersReward")
-        val WCT_GENERAL_ASSET = GlobalConfiguration.GeneralAssetId(
+                gatewayId = "MRT",
+                displayName = "MinersReward")
+
+        var WCTGeneralAsset = GlobalConfiguration.ConfigAsset(
                 assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
-                gatewayId = "WCT", displayName = "WavesCommunity")
+                gatewayId = "WCT",
+                displayName = "WavesCommunity")
+
 
         // Transaction view types non Transaction block-chain type
         const val ID_RECEIVED_TYPE = 0
@@ -60,42 +68,30 @@ class Constants {
         const val ID_CANCEL_SPONSORSHIP_TYPE = 22
         const val ID_UPDATE_ASSET_SCRIPT_TYPE = 23
 
-        fun defaultAssetsAvatar(): HashMap<String, String> {
-            val map = hashMapOf<String, String>()
-            for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
-                map[asset.assetId] = asset.iconUrls.default
-            }
-            return map
+        fun defaultAssetsAvatar(): MutableMap<String, String> {
+            val allConfigAssets = EnvironmentManager.globalConfiguration.generalAssets
+                    .plus(EnvironmentManager.globalConfiguration.assets)
+            return allConfigAssets.associateBy({ it.assetId }, { it.iconUrls.default }).toMutableMap()
         }
 
-        fun coinomatCryptoCurrencies(): HashMap<String, String> {
-            val map = hashMapOf<String, String>()
-            for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
-                if (asset.isGateway) {
-                    map[asset.assetId] = asset.gatewayId
-                }
-            }
-            return map
+        fun coinomatCryptoCurrencies(): MutableMap<String, String> {
+            return EnvironmentManager.globalConfiguration.generalAssets
+                    .associateBy({ it.assetId }, { it.gatewayId })
+                    .toMutableMap()
         }
 
         fun defaultCrypto(): Array<String> {
-            val list = mutableListOf<String>()
-            for (asset in EnvironmentManager.defaultAssets) {
-                if (!asset.isFiatMoney) {
-                    list.add(asset.assetId)
-                }
-            }
-            return list.toTypedArray()
+            return EnvironmentManager.defaultAssets
+                    .filter { !it.isFiatMoney }
+                    .map { it.assetId }
+                    .toTypedArray()
         }
 
         fun defaultFiat(): Array<String> {
-            val list = mutableListOf<String>()
-            for (asset in EnvironmentManager.defaultAssets) {
-                if (asset.isFiatMoney) {
-                    list.add(asset.assetId)
-                }
-            }
-            return list.toTypedArray()
+            return EnvironmentManager.defaultAssets
+                    .filter { it.isFiatMoney }
+                    .map { it.assetId }
+                    .toTypedArray()
         }
     }
- }
+}
