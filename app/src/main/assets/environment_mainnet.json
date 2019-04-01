@@ -7,7 +7,7 @@
     "matcherUrl": "https://matcher.wavesplatform.com"
   },
   "scheme": "W",
-  "generalAssetIds": [
+  "generalAssets": [
     {
       "iconUrls": {
         "default": "https://d1jh0rcszsaxik.cloudfront.net/assset_icons/logo_waves_48.png"
@@ -151,6 +151,92 @@
       "wavesId": "WXMR",
       "gatewayId": "XMR",
       "addressRegEx": "^4[0-9AB][1-9A-HJ-NP-Za-km-z]{93}"
+    }
+  ],
+  "assets": [
+    {
+      "iconUrls": {
+        "default": "https://d1jh0rcszsaxik.cloudfront.net/assset_icons/v1/logo_mrt_48.png"
+      },
+      "assetId": "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
+      "displayName": "Miners Reward Token",
+      "isFiat": false,
+      "isGateway": false,
+      "wavesId": "MRT",
+      "gatewayId": "",
+      "addressRegEx": ""
+    },
+    {
+      "iconUrls": {
+        "default": "https://d1jh0rcszsaxik.cloudfront.net/assset_icons/v1/logo_wrt_48.png"
+      },
+      "assetId": "H1RmwqzeXsdQMt6jR6DPkGbZjA2PKUoofP4WjuCRz1st",
+      "displayName": "Waves Reward Token",
+      "isFiat": false,
+      "isGateway": false,
+      "wavesId": "WRT",
+      "gatewayId": "",
+      "addressRegEx": ""
+    },
+    {
+      "iconUrls": {
+        "default": "https://d1jh0rcszsaxik.cloudfront.net/assset_icons/v1/logo_wct_48.png"
+      },
+      "assetId": "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
+      "displayName": "WavesCommunity",
+      "isFiat": false,
+      "isGateway": false,
+      "wavesId": "WCT",
+      "gatewayId": "",
+      "addressRegEx": ""
+    },
+    {
+      "iconUrls": {
+        "default": "https://d1jh0rcszsaxik.cloudfront.net/assset_icons/v1/logo-pbt-48.png"
+      },
+      "assetId": "EdDvbhk4wJ1kL6pMCq1V36GbQE2nGE7Metb87zbaY2JL",
+      "displayName": "Primalbase",
+      "isFiat": false,
+      "isGateway": false,
+      "wavesId": "PBT",
+      "gatewayId": "",
+      "addressRegEx": ""
+    },
+    {
+      "iconUrls": {
+        "default": "https://d1jh0rcszsaxik.cloudfront.net/assset_icons/v1/logo-cof-48.png"
+      },
+      "assetId": "AcrRM9STdBu5PNiFveTCbRFTS8tADhKcsbC2KBp8A4tx",
+      "displayName": "CoffeeCoin",
+      "isFiat": false,
+      "isGateway": false,
+      "wavesId": "COF",
+      "gatewayId": "",
+      "addressRegEx": ""
+    },
+    {
+      "iconUrls": {
+        "default": "https://d1jh0rcszsaxik.cloudfront.net/assset_icons/v1/logo-blxs-48.png"
+      },
+      "assetId": "9FgLbjiwhn7wFEviVayHNpUV3WnDWJnox9HS5xpcHNDH",
+      "displayName": "Blockscart",
+      "isFiat": false,
+      "isGateway": false,
+      "wavesId": "BLXS",
+      "gatewayId": "",
+      "addressRegEx": ""
+    },
+    {
+      "iconUrls": {
+        "default": "https://d1jh0rcszsaxik.cloudfront.net/assset_icons/v1/logo-xbbt-48.png"
+      },
+      "assetId": "882VjGQB5mnaF8ydzNvFdHiqB7i2Bej1wG3B1fBweMAy",
+      "displayName": "BountyBustersv",
+      "isFiat": false,
+      "isGateway": false,
+      "wavesId": "XBBT",
+      "gatewayId": "",
+      "addressRegEx": ""
     }
   ]
 }

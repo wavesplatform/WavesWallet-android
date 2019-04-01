@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_la
 import kotlinx.android.synthetic.main.history_details_layout.view.*
 import kotlinx.android.synthetic.main.layout_bottom_sheet_my_orders_body.view.*
 import kotlinx.android.synthetic.main.layout_my_orders_bottom_sheet_bottom_btns.view.*
-import kotlinx.android.synthetic.main.spinner_item.view.*
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

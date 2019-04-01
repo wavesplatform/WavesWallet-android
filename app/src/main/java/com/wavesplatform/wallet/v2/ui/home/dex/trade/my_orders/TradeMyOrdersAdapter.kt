@@ -11,7 +11,6 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details.MyOrderDe
 import com.wavesplatform.wallet.v2.util.roundTo
 import kotlinx.android.synthetic.main.recycle_item_my_orders.view.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
-import java.util.*
 import javax.inject.Inject
 
 class TradeMyOrdersAdapter @Inject constructor() : BaseQuickAdapter<OrderResponse, BaseViewHolder>(R.layout.recycle_item_my_orders, null) {

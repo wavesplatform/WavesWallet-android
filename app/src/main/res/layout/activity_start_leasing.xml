@@ -57,7 +57,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_centerVertical="true"
-                    app:srcCompat="@drawable/logo_waves_48" />
+                    app:srcCompat="@drawable/shape_btn_basic_oval_default" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_asset_name"
