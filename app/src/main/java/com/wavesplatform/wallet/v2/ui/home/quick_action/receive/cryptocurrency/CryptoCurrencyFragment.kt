@@ -169,7 +169,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         needMakeButtonEnable()
 
         if (assetBalance != null) {
-            presenter.getTunnel(assetBalance.assetId!!)
+            presenter.getTunnel(assetBalance.assetId)
             skeletonView = Skeleton.bind(container_info)
                     .color(R.color.basic50)
                     .load(R.layout.item_skeleton_crypto_warning)
