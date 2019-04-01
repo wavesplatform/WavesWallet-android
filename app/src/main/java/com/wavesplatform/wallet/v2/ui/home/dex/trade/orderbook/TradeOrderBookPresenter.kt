@@ -17,7 +17,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -70,27 +70,19 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
     }
 
     private fun getCalculatedBids(list: List<OrderBook.Bid>): Collection<MultiItemEntity> {
-        var sum = 0.0
-        list.forEach {
-            val amountUIValue = MoneyUtil.getScaledText(it.amount, watchMarket?.market?.amountAssetDecimals
-                    ?: 0).stripZeros()
-            val priceUIValue = MoneyUtil.getScaledPrice(it.price, watchMarket?.market?.amountAssetDecimals
-                    ?: 0, watchMarket?.market?.priceAssetDecimals ?: 0).stripZeros()
-            sum += amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
-            it.sum = sum
+        var totalSum = 0L
+        list.forEach { bid ->
+            totalSum += bid.total
+            bid.sum = totalSum
         }
         return list
     }
 
     private fun getCalculatedAsks(list: List<OrderBook.Ask>): List<OrderBook.Ask> {
-        var sum = 0.0
-        list.forEach {
-            val amountUIValue = MoneyUtil.getScaledText(it.amount, watchMarket?.market?.amountAssetDecimals
-                    ?: 0).stripZeros()
-            val priceUIValue = MoneyUtil.getScaledPrice(it.price, watchMarket?.market?.amountAssetDecimals
-                    ?: 0, watchMarket?.market?.priceAssetDecimals ?: 0).stripZeros()
-            sum += amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
-            it.sum = sum
+        var totalSum = 0L
+        list.forEach { ask ->
+            totalSum += ask.total
+            ask.sum = totalSum
         }
         return list
     }
