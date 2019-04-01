@@ -9,10 +9,6 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import javax.inject.Inject
 
-/**
- * Created by anonymous on 07.03.18.
- */
-
 class TransactionUtil @Inject constructor() {
 
     fun getTransactionType(transaction: Transaction): Int =

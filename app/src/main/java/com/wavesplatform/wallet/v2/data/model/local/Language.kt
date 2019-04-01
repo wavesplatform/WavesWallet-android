@@ -5,10 +5,6 @@ import android.support.annotation.StringRes
 import com.wavesplatform.wallet.R
 import java.util.*
 
-/**
- * Created by anonymous on 16.12.17.
- */
-
 enum class Language(
         @DrawableRes var image: Int,
         @StringRes var title: Int,

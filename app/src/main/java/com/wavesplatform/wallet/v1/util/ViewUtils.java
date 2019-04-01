@@ -20,10 +20,6 @@ import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
-/**
- * Created by adambennett on 29/07/2016.
- */
-
 public class ViewUtils {
 
     /**

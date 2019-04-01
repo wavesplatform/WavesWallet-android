@@ -9,10 +9,6 @@ import com.wavesplatform.wallet.v2.util.RxEventBus
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-/**
- * Created by anonymous on 22.03.17.
- */
-
 class ErrorManager @Inject constructor(val mRxEventBus: RxEventBus, val mPreferencesHelper: PreferencesHelper) {
     private lateinit var mActivity: BaseActivity
     private lateinit var retrySubject: PublishSubject<Events.RetryEvent>

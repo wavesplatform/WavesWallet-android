@@ -11,9 +11,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.*
 
-/**
- * Created by anonymous on 07.03.18.
- */
 class BaseUtil {
     companion object {
         fun createMultipartFromFile(picture: File?, key: String = "photo"): MultipartBody.Part? {

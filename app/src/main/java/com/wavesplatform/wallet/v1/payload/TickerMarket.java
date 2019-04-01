@@ -5,10 +5,6 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by anonymous on 26.06.17.
- */
-
 public class TickerMarket implements Parcelable{
 
     @SerializedName("symbol")

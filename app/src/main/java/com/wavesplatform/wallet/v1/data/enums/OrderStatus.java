@@ -4,10 +4,6 @@ import android.support.annotation.ColorRes;
 
 import com.wavesplatform.wallet.R;
 
-/**
- * Created by anonymous on 11.07.17.
- */
-
 public enum OrderStatus {
     Accepted("Open", R.color.dex_orderbook_left_bg),
     PartiallyFilled("Partial", R.color.dex_orderbook_left_bg),

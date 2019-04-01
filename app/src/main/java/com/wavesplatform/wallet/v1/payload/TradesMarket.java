@@ -5,10 +5,6 @@ import android.os.Parcelable;
 
 import java.util.Date;
 
-/**
- * Created by anonymous on 26.06.17.
- */
-
 public class TradesMarket implements Parcelable{
     public String timestamp = String.valueOf(new Date().getTime());
     public String id = "0.0";

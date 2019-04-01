@@ -74,10 +74,6 @@ val filterEmptySpace = InputFilter { source, start, end, dest, dstart, dend ->
     null
 }
 
-/**
- * Created by anonymous on 13.09.17.
- */
-
 fun EditText.applyFilterStartWithDot() {
     this.filters = arrayOf(filterStartWithDot)
 }

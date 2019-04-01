@@ -2,10 +2,6 @@ package com.wavesplatform.wallet.v1.payload;
 
 import com.wavesplatform.wallet.v1.data.enums.OrderStatus;
 
-/**
- * Created by anonymous on 06.07.17.
- */
-
 public class MyOrder {
 
     public String id;

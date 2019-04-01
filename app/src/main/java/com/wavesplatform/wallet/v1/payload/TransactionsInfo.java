@@ -1,9 +1,5 @@
 package com.wavesplatform.wallet.v1.payload;
 
-/**
- * Created by anonymous on 11.07.17.
- */
-
 public class TransactionsInfo {
     public int type;
     public String id;
