@@ -104,7 +104,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
                     view.text_status?.text = FILLED_ORDER_PERCENT
                 }
                 OrderStatus.Cancelled -> {
-                    // with template "Canceled ({percent}%)"
+                    // with template "Cancelled ({percent}%)"
                     view.text_status?.text = getString(R.string.my_orders_details_canceled_status, percent
                             .roundTo(2)
                             .toString()
