@@ -16,11 +16,11 @@ class OrderBook(
 ) {
 
     class Pair(
-            @SerializedName("amountAsset") var amountAsset: String? = "",
-            @SerializedName("priceAsset") var priceAsset: String? = ""
+            @SerializedName("amountAsset") var amountAsset: String = "",
+            @SerializedName("priceAsset") var priceAsset: String = ""
     ) {
         fun toBytes(): ByteArray {
-            return try { // todo check
+            return try {
                 Bytes.concat(SignUtil.arrayOption(amountAsset),
                         SignUtil.arrayOption(priceAsset))
             } catch (e: Exception) {
