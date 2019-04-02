@@ -8,19 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.MvpAppCompatFragment
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
-import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
-import com.wavesplatform.sdk.utils.RxUtil
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 abstract class BaseFragment : MvpAppCompatFragment(), BaseView, BaseMvpView, HasSupportFragmentInjector {
 

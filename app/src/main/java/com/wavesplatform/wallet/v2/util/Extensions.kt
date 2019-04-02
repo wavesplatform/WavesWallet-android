@@ -543,7 +543,7 @@ fun find(assetId: String): AssetBalance? {
 }
 
 fun findByGatewayId(gatewayId: String): AssetBalance? { // ticker
-    for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
+    for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
         if (asset.gatewayId == gatewayId) {
             return find(asset.assetId)
         }

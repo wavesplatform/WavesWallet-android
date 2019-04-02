@@ -276,7 +276,11 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun setPercent(percent: Double) {
         presenter.selectedAsset.notNull { assetBalance ->
-            val amount = (assetBalance.getAvailableBalance() * percent).toLong()
+            val amount = if (percent == 1.0) {
+                assetBalance.getAvailableBalance()
+            } else {
+                (assetBalance.getAvailableBalance() * percent).toLong()
+            }
             checkAndSetAmount(amount, assetBalance)
         }
     }

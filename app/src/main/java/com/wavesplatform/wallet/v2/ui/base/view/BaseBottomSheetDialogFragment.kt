@@ -10,7 +10,6 @@ import android.widget.FrameLayout
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.wallet.v2.util.getToolBarHeight
 import com.wavesplatform.sdk.utils.notNull

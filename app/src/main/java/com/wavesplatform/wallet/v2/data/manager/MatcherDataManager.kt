@@ -91,14 +91,14 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         if (allMarketsList.isEmpty()) {
             return Observable.zip(Observable.just(EnvironmentManager.globalConfiguration)
                     .map {
-                        val globalAssets = it.generalAssetIds.toMutableList()
-                        globalAssets.add(Constants.MRT_GENERAL_ASSET)
-                        globalAssets.add(Constants.WCT_GENERAL_ASSET)
+                        val globalAssets = it.generalAssets.toMutableList()
+                        globalAssets.add(Constants.MRTGeneralAsset)
+                        globalAssets.add(Constants.WCTGeneralAsset) // todo check const
                         return@map globalAssets.associateBy { it.assetId }
                     },
                     matcherService.getAllMarkets()
                             .map { it.markets },
-                    BiFunction { configure: Map<String, GlobalConfiguration.GeneralAssetId>, apiMarkets: List<MarketResponse> ->
+                    BiFunction { configure: Map<String, GlobalConfiguration.ConfigAsset>, apiMarkets: List<MarketResponse> ->
                         return@BiFunction Pair(configure, apiMarkets)
                     })
                     .flatMap {
