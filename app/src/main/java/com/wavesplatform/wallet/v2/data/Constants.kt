@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.data
 
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -116,7 +117,11 @@ object Constants {
             gatewayId = "WCT", displayName = "WavesCommunity")
 
     fun find(assetId: String): AssetBalance? {
-        return queryFirst { equalTo("assetId", assetId) }
+        return if (App.getAccessManager().getWallet() == null) {
+            null
+        } else {
+            queryFirst { equalTo("assetId", assetId) }
+        }
     }
 
     fun findByGatewayId(gatewayId: String): AssetBalance? { // ticker
