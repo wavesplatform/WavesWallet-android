@@ -13,6 +13,7 @@ class BuySellData(
     var orderType: Int? = null,
     var initPrice: Long? = null,
     var initAmount: Long? = null,
+    var initSum: Long? = null,
     var lastPrice: Long? = null,
     var askPrice: Long? = null,
     var bidPrice: Long? = null

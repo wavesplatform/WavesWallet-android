@@ -351,17 +351,19 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         }
 
         presenter.data?.watchMarket.notNull { watchMarket ->
-            if (presenter.data?.initAmount != null) {
-                val amountUIValue = MoneyUtil.getScaledText(presenter.data?.initAmount!!, watchMarket.market.amountAssetDecimals).clearBalance()
-                edit_amount.setText(amountUIValue)
-            }
             if (presenter.data?.initPrice != null) {
                 val priceUIValue = MoneyUtil.getScaledPrice(presenter.data?.initPrice!!, watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
                 edit_limit_price.setText(priceUIValue)
             }
-            if (presenter.data?.initAmount != null && presenter.data?.initPrice != null) {
-                val sum = edit_limit_price.text.toString().toDouble() * edit_limit_price.text.toString().toDouble()
-                edit_total_price.setText(MoneyUtil.getFormattedTotal(sum, watchMarket.market.priceAssetDecimals))
+            if (presenter.data?.initSum != null) {
+                val totalUIValue = MoneyUtil.getScaledPrice(presenter.data?.initSum!!,
+                        watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
+                edit_total_price.setText(totalUIValue)
+            }
+            if (presenter.data?.initSum != null && presenter.data?.initPrice != null) {
+                val amount = presenter.data?.initSum!! / presenter.data?.initPrice!!
+                presenter.humanTotalTyping = true
+                edit_amount.setText(MoneyUtil.getScaledText(amount, watchMarket.market.amountAssetDecimals))
             }
         }
 
