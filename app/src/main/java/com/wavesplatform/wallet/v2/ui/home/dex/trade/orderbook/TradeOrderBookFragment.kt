@@ -83,11 +83,11 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
                 when (item.itemType) {
                     TradeOrderBookAdapter.ASK_TYPE -> {
                         item as OrderBook.Ask
-                        tryOpenOrderDialog(true, item.price, item.amount)
+                        tryOpenOrderDialog(true, item.price, item.amount, item.sum)
                     }
                     TradeOrderBookAdapter.BID_TYPE -> {
                         item as OrderBook.Bid
-                        tryOpenOrderDialog(false, item.price, item.amount)
+                        tryOpenOrderDialog(false, item.price, item.amount, item.sum)
                     }
                 }
             }
@@ -124,20 +124,20 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
         }
     }
 
-    private fun tryOpenOrderDialog(buy: Boolean, initPriceValue: Long?, initAmountValue: Long? = null) {
+    private fun tryOpenOrderDialog(buy: Boolean, initPriceValue: Long?, initAmountValue: Long? = null, initSumValue: Long? = null) {
         logEvent(buy)
         val amountAssetInfo = (activity as TradeActivity).presenter.amountAssetInfo
         val priceAssetInfo = (activity as TradeActivity).presenter.priceAssetInfo
         if ((amountAssetInfo?.hasScript == true || priceAssetInfo?.hasScript == true)) {
             safeLet(amountAssetInfo, priceAssetInfo) { amountAssetInfo, priceAssetInfo ->
                 if (presenter.prefsUtil.isNotShownSmartAlertForPair(amountAssetInfo.id, priceAssetInfo.id)) {
-                    openOrderDialog(initAmountValue, initPriceValue, buy)
+                    openOrderDialog(initAmountValue, initPriceValue, initSumValue, buy)
                 } else {
                     val smartPairInfoDialog = SmartPairInfoBottomSheetFragment()
                     val listener = object : SmartPairInfoBottomSheetFragment.SmartPairDialogListener {
                         override fun onContinueClicked(notShowAgain: Boolean) {
                             presenter.prefsUtil.setNotShownSmartAlertForPair(amountAssetInfo.id, priceAssetInfo.id, notShowAgain)
-                            openOrderDialog(initAmountValue, initPriceValue, buy)
+                            openOrderDialog(initAmountValue, initPriceValue, initSumValue, buy)
                         }
 
                         override fun onCancelClicked(notShowAgain: Boolean) {
@@ -151,7 +151,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
                 }
             }
         } else {
-            openOrderDialog(initAmountValue, initPriceValue, buy)
+            openOrderDialog(initAmountValue, initPriceValue, initSumValue, buy)
         }
     }
 
@@ -167,9 +167,9 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     }
 
 
-    private fun openOrderDialog(initAmountValue: Long?, initPriceValue: Long?, buy: Boolean) {
+    private fun openOrderDialog(initAmountValue: Long?, initPriceValue: Long?, initSumValue: Long?, buy: Boolean) {
         val data = BuySellData(watchMarket = presenter.watchMarket, initAmount = initAmountValue, initPrice = initPriceValue,
-                bidPrice = getBidPrice(), askPrice = getAskPrice(), lastPrice = getLastPrice())
+                initSum = initSumValue, bidPrice = getBidPrice(), askPrice = getAskPrice(), lastPrice = getLastPrice())
         data.orderType =
                 if (buy) TradeBuyAndSellBottomSheetFragment.BUY_TYPE
                 else TradeBuyAndSellBottomSheetFragment.SELL_TYPE

@@ -192,7 +192,7 @@ open class Transaction(
                 CREATE_ALIAS -> "Create Alias"
                 MASS_TRANSFER -> "Mass Transfer"
                 DATA -> "Data"
-                ADDRESS_SCRIPT -> "Script"
+                ADDRESS_SCRIPT -> "Address Script"
                 SPONSORSHIP -> "SponsorShip"
                 ASSET_SCRIPT -> "Asset Script"
                 else -> ""
