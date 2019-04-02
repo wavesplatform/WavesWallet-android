@@ -82,7 +82,7 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
         return orderBookBids
     }
 
-    private fun getCalculatedAsks(list: List<OrderBook.Ask>): List<OrderBook.Ask> {
+    private fun getCalculatedAsks(list: List<OrderBook.Ask>): List<OrderBookAskMultiItemEntity> {
         var totalSum = 0L
         val orderBookAsks = mutableListOf<OrderBookAskMultiItemEntity>()
         list.forEach { ask ->
