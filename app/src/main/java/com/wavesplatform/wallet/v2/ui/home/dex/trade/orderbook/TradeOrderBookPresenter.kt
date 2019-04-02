@@ -71,32 +71,24 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                         }))
     }
 
-    private fun getCalculatedBids(list: List<OrderBook.Bid>): List<MultiItemEntity> {
-        var sum = 0.0
+    private fun getCalculatedBids(list: List<OrderBook.Bid>): Collection<MultiItemEntity> {
+        var totalSum = 0L
         val orderBookBids = mutableListOf<OrderBookBidMultiItemEntity>()
-        list.forEach {
-            val amountUIValue = MoneyUtil.getScaledText(it.amount, watchMarket?.market?.amountAssetDecimals
-                    ?: 0).stripZeros()
-            val priceUIValue = MoneyUtil.getScaledPrice(it.price, watchMarket?.market?.amountAssetDecimals
-                    ?: 0, watchMarket?.market?.priceAssetDecimals ?: 0).stripZeros()
-            sum += amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
-            it.sum = sum
-            orderBookBids.add(OrderBookBidMultiItemEntity(it))
+        list.forEach { bid ->
+            totalSum += bid.total
+            bid.sum = totalSum
+            orderBookBids.add(OrderBookBidMultiItemEntity(bid))
         }
         return orderBookBids
     }
 
-    private fun getCalculatedAsks(list: List<OrderBook.Ask>): List<MultiItemEntity> {
-        var sum = 0.0
+    private fun getCalculatedAsks(list: List<OrderBook.Ask>): List<OrderBookAskMultiItemEntity> {
+        var totalSum = 0L
         val orderBookAsks = mutableListOf<OrderBookAskMultiItemEntity>()
-        list.forEach {
-            val amountUIValue = MoneyUtil.getScaledText(it.amount, watchMarket?.market?.amountAssetDecimals
-                    ?: 0).stripZeros()
-            val priceUIValue = MoneyUtil.getScaledPrice(it.price, watchMarket?.market?.amountAssetDecimals
-                    ?: 0, watchMarket?.market?.priceAssetDecimals ?: 0).stripZeros()
-            sum += amountUIValue.clearBalance().toDouble() * priceUIValue.clearBalance().toDouble()
-            it.sum = sum
-            orderBookAsks.add(OrderBookAskMultiItemEntity(it))
+        list.forEach { ask ->
+            totalSum += ask.total
+            ask.sum = totalSum
+            orderBookAsks.add(OrderBookAskMultiItemEntity(ask))
         }
         return orderBookAsks
     }

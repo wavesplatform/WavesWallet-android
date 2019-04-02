@@ -592,10 +592,9 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
 }
 
 fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
-    return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true) &&
-            (null != queryFirst<SpamAssetDb> {
-                equalTo("assetId", assetId)
-            }))
+    return (App.getAccessManager().getWallet() != null
+            && prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+            && (null != queryFirst<SpamAssetDb> { equalTo("assetId", assetId) }))
 }
 
 fun AssetBalance.getItemType(): Int {

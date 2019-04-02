@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.data.database
 
 import com.vicpin.krealmextensions.*
+import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.AssetInfo
 import com.wavesplatform.sdk.net.model.response.Transaction
@@ -43,7 +44,9 @@ class TransactionSaver @Inject constructor() {
             changeListener: OnTransactionLimitChangeListener? = null
     ) {
         currentLimit = limit
-        if (sortedList.isEmpty() || limit < 1) {
+        if (Wavesplatform.getWallet() == null
+                || sortedList.isEmpty()
+                || limit < 1) {
             rxEventBus.post(Events.NeedUpdateHistoryScreen())
             return
         }

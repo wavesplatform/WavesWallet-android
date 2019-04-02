@@ -32,6 +32,13 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     var needToScroll: Boolean = false
 
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
+        if (Wavesplatform.getWallet() == null) {
+            runOnUiThread {
+                viewState.afterFailedLoadAssets()
+            }
+            return
+        }
+
         viewState.startServiceToLoadData()
         runAsync {
             val savedAssetPrefs = queryAll<AssetBalanceStore>()
