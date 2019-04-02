@@ -44,7 +44,7 @@
 
             <com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
                 android:id="@+id/image_asset_icon"
-                tools:src="@drawable/logo_bitcoin_48"
+                tools:src="@drawable/shape_btn_basic_oval_default"
                 android:layout_marginStart="6dp"
                 android:layout_width="24dp"
                 android:layout_height="24dp"

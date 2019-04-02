@@ -5,7 +5,10 @@ import com.arellomobile.mvp.MvpView
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
-import com.wavesplatform.wallet.v2.data.manager.*
+import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
+import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
+import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager
+import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

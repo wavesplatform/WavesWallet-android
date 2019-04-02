@@ -6,6 +6,7 @@ import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
@@ -29,6 +30,13 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     var needToScroll: Boolean = false
 
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
+        if (App.getAccessManager().getWallet() == null) {
+            runOnUiThread {
+                viewState.afterFailedLoadAssets()
+            }
+            return
+        }
+
         viewState.startServiceToLoadData()
         runAsync {
             val savedAssetPrefs = queryAll<AssetBalanceStore>()

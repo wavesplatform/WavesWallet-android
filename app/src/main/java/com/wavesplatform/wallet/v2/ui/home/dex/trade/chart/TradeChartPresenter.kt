@@ -5,6 +5,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.vicpin.krealmextensions.save
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.model.local.ChartModel
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
@@ -30,6 +31,9 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     private var barEntries: ArrayList<BarEntry> = ArrayList()
     var currentTimeFrame: Int = 30
         set(value) {
+            if (App.getAccessManager().getWallet() == null) {
+                return
+            }
             field = value
             watchMarket?.market?.currentTimeFrame = value
             watchMarket?.market?.save()

@@ -5,7 +5,6 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import kotlinx.android.synthetic.main.activity_change_password.*
 import javax.inject.Inject
 
 @InjectViewState

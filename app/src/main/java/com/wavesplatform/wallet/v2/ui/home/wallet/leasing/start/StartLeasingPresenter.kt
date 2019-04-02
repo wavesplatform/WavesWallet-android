@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
 import com.wavesplatform.wallet.v2.data.model.remote.response.ScriptInfo
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction

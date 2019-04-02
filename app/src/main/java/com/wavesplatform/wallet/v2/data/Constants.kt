@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.data
 
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -109,18 +110,22 @@ object Constants {
 
     val wavesAssetInfo = AssetInfo(id = WAVES_ASSET_ID_EMPTY, precision = 8, name = "WAVES", quantity = 10000000000000000L)
 
-    var MRTGeneralAsset = GlobalConfiguration.GeneralAssetId(assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
+    var MRTGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
             gatewayId = "MRT", displayName = "MinersReward")
 
-    var WCTGeneralAsset = GlobalConfiguration.GeneralAssetId(assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
+    var WCTGeneralAsset = GlobalConfiguration.ConfigAsset(assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
             gatewayId = "WCT", displayName = "WavesCommunity")
 
     fun find(assetId: String): AssetBalance? {
-        return queryFirst { equalTo("assetId", assetId) }
+        return if (App.getAccessManager().getWallet() == null) {
+            null
+        } else {
+            queryFirst { equalTo("assetId", assetId) }
+        }
     }
 
     fun findByGatewayId(gatewayId: String): AssetBalance? { // ticker
-        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
+        for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
             if (asset.gatewayId == gatewayId) {
                 return find(asset.assetId)
             }
@@ -128,41 +133,29 @@ object Constants {
         return null
     }
 
-    fun defaultAssetsAvatar(): HashMap<String, String> {
-        val map = hashMapOf<String, String>()
-        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
-            map[asset.assetId] = asset.iconUrls.default
-        }
-        return map
+    fun defaultAssetsAvatar(): MutableMap<String, String> {
+        val allConfigAssets = EnvironmentManager.globalConfiguration.generalAssets
+                .plus(EnvironmentManager.globalConfiguration.assets)
+        return allConfigAssets.associateBy({ it.assetId }, { it.iconUrls.default }).toMutableMap()
     }
 
-    fun coinomatCryptoCurrencies(): HashMap<String, String> {
-        val map = hashMapOf<String, String>()
-        for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
-            if (asset.isGateway) {
-                map[asset.assetId] = asset.gatewayId
-            }
-        }
-        return map
+    fun coinomatCryptoCurrencies(): MutableMap<String, String> {
+        return EnvironmentManager.globalConfiguration.generalAssets
+                .associateBy({ it.assetId }, { it.gatewayId })
+                .toMutableMap()
     }
 
     fun defaultCrypto(): Array<String> {
-        val list = mutableListOf<String>()
-        for (asset in EnvironmentManager.defaultAssets) {
-            if (!asset.isFiatMoney) {
-                list.add(asset.assetId)
-            }
-        }
-        return list.toTypedArray()
+        return EnvironmentManager.defaultAssets
+                .filter { !it.isFiatMoney }
+                .map { it.assetId }
+                .toTypedArray()
     }
 
     fun defaultFiat(): Array<String> {
-        val list = mutableListOf<String>()
-        for (asset in EnvironmentManager.defaultAssets) {
-            if (asset.isFiatMoney) {
-                list.add(asset.assetId)
-            }
-        }
-        return list.toTypedArray()
+        return EnvironmentManager.defaultAssets
+                .filter { it.isFiatMoney }
+                .map { it.assetId }
+                .toTypedArray()
     }
 }

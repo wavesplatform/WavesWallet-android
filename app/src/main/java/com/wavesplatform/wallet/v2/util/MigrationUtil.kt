@@ -9,7 +9,6 @@ import io.realm.DynamicRealm
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import java.io.File
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class MigrationUtil @Inject constructor() {
