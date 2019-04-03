@@ -1,10 +1,9 @@
-package com.wavesplatform.sdk.utils
 /*
  * Created by Ershov Aleksandr on 1/4/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.custom
+package com.wavesplatform.sdk.utils
 
 import android.graphics.Bitmap
 import android.graphics.Color

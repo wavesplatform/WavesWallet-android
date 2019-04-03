@@ -1,12 +1,13 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.util;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
-
-/**
- * Created by adambennett on 29/07/2016.
- */
 
 public class ViewUtils {
 
