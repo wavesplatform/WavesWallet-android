@@ -339,7 +339,7 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
     }
 }
 
-fun String.isWebUrl() : Boolean{
+fun String.isWebUrl(): Boolean {
     return Patterns.WEB_URL.matcher(this.trim()).matches()
 }
 
@@ -706,8 +706,12 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
 }
 
 fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
+    return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+            && isSpam(assetId))
+}
+
+fun isSpam(assetId: String?): Boolean {
     return (App.getAccessManager().getWallet() != null
-            && prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
             && (null != queryFirst<SpamAsset> { equalTo("assetId", assetId) }))
 }
 

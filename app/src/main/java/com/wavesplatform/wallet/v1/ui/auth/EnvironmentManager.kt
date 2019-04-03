@@ -112,17 +112,9 @@ class EnvironmentManager {
                 throw NullPointerException("EnvironmentManager must be init first!")
             }
 
-            instance!!.configurationDisposable = githubDataManager.globalConfiguration(EnvironmentManager.environment.url)
+            instance!!.configurationDisposable = githubDataManager.globalConfiguration(environment.url)
                     .map { globalConfiguration ->
-                        instance!!.interceptor!!.setHosts(globalConfiguration.servers)
-                        PreferenceManager
-                                .getDefaultSharedPreferences(App.getAppContext())
-                                .edit()
-                                .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
-                                        Gson().toJson(globalConfiguration))
-                                .apply()
-                        instance!!.current!!.setConfiguration(globalConfiguration)
-
+                        setConfiguration(globalConfiguration)
                         val list = mutableListOf<String>()
                         for (asset in globalConfiguration.generalAssets) {
                             list.add(asset.assetId)
@@ -161,12 +153,7 @@ class EnvironmentManager {
                     }, { error ->
                         Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration!")
                         error.printStackTrace()
-                        PreferenceManager
-                                .getDefaultSharedPreferences(App.getAppContext())
-                                .edit()
-                                .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
-                                        Gson().toJson(EnvironmentManager.Environment.MAIN_NET.configuration))
-                                .apply()
+                        setConfiguration(environment.configuration!!)
                         instance!!.configurationDisposable!!.dispose()
                     })
 
@@ -188,6 +175,17 @@ class EnvironmentManager {
                         error.printStackTrace()
                         instance!!.timeDisposable!!.dispose()
                     })
+        }
+
+        private fun setConfiguration(globalConfiguration: GlobalConfiguration) {
+            instance!!.interceptor!!.setHosts(globalConfiguration.servers)
+            PreferenceManager
+                    .getDefaultSharedPreferences(App.getAppContext())
+                    .edit()
+                    .putString(PrefsUtil.GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                            Gson().toJson(globalConfiguration))
+                    .apply()
+            instance!!.current!!.setConfiguration(globalConfiguration)
         }
 
         @JvmStatic

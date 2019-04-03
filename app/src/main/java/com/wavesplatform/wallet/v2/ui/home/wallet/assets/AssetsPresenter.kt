@@ -85,18 +85,19 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     queryAllAsSingle<AssetBalance>().toObservable(),
                     queryAllAsSingle<SpamAsset>().toObservable()
                             .map { spamListFromDb ->
-                                if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
-                                    return@map spamListFromDb
-                                } else {
+                                val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+                                if (enableSpamFilter) {
                                     return@map listOf<SpamAsset>()
+                                } else {
+                                    return@map spamListFromDb
                                 }
                             },
                     BiFunction { t1: List<AssetBalance>, t2: List<SpamAsset> ->
                         return@BiFunction Pair(t1, t2)
                     })
                     .map { pairOfData ->
-                        val spamListFromDb = pairOfData.second
                         val assetsListFromDb = pairOfData.first
+                        val spamListFromDb = pairOfData.second
 
                         assetsListFromDb.forEach { asset ->
                             asset.isSpam = spamListFromDb.any { it.assetId == asset.assetId }
@@ -201,13 +202,17 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
 
         // check if spam assets exists and create section with them
-        if (it.third.isNotEmpty()) {
-            val spamSection = WalletSectionItem(app.getString(R.string.wallet_assets_spam_category,
-                    it.third.size.toString()))
-            it.third.forEach {
-                spamSection.addSubItem(it)
+
+        val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+        if (!enableSpamFilter) {
+            if (it.third.isNotEmpty()) {
+                val spamSection = WalletSectionItem(app.getString(R.string.wallet_assets_spam_category,
+                        it.third.size.toString()))
+                it.third.forEach {
+                    spamSection.addSubItem(it)
+                }
+                listToShow.add(spamSection)
             }
-            listToShow.add(spamSection)
         }
 
         // show all assets with sections
