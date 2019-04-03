@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.util
 
 import com.wavesplatform.wallet.App
@@ -8,10 +13,6 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionC
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import javax.inject.Inject
-
-/**
- * Created by anonymous on 07.03.18.
- */
 
 class TransactionUtil @Inject constructor() {
 

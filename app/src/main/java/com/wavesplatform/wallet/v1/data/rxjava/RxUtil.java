@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v1.data.rxjava;
 
 import io.reactivex.CompletableTransformer;
@@ -6,12 +11,6 @@ import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-
-/**
- * Created by adambennett on 12/08/2016.
- *
- * A class for basic RxJava utilities, ie Transformer classes
- */
 
 public final class RxUtil {
 

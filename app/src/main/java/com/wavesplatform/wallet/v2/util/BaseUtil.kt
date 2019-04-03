@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.util
 
 import android.graphics.Bitmap
@@ -11,9 +16,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.*
 
-/**
- * Created by anonymous on 07.03.18.
- */
 class BaseUtil {
     companion object {
         fun createMultipartFromFile(picture: File?, key: String = "photo"): MultipartBody.Part? {

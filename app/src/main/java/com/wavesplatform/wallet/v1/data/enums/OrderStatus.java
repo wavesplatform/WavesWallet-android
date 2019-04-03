@@ -1,12 +1,13 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v1.data.enums;
 
 import android.support.annotation.ColorRes;
 
 import com.wavesplatform.wallet.R;
-
-/**
- * Created by anonymous on 11.07.17.
- */
 
 public enum OrderStatus {
     Accepted("Open", R.color.dex_orderbook_left_bg),

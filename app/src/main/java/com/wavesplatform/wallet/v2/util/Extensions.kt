@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.util
 
 import android.app.Activity
@@ -74,10 +79,6 @@ val filterEmptySpace = InputFilter { source, start, end, dest, dstart, dend ->
     }
     null
 }
-
-/**
- * Created by anonymous on 13.09.17.
- */
 
 fun EditText.applyFilterStartWithDot() {
     this.filters = arrayOf(filterStartWithDot)
