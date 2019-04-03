@@ -1,10 +1,14 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.sdk.net.model
 
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import com.wavesplatform.sdk.R
 import java.util.*
-
 
 enum class Language(
         @DrawableRes var image: Int,

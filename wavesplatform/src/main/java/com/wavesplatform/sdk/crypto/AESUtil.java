@@ -1,4 +1,10 @@
 package com.wavesplatform.sdk.crypto;
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
+package com.wavesplatform.wallet.v1.crypto;
 
 import org.apache.commons.codec.binary.Base64;
 import org.spongycastle.crypto.BlockCipher;

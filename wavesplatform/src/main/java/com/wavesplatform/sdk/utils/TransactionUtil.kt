@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.sdk.utils
 
 
@@ -7,10 +12,6 @@ import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommission
 import com.wavesplatform.sdk.net.model.response.Transaction
 import com.wavesplatform.sdk.net.model.response.TransactionType
 import javax.inject.Inject
-
-/**
- * Created by anonymous on 07.03.18.
- */
 
 class TransactionUtil @Inject constructor() {
 
