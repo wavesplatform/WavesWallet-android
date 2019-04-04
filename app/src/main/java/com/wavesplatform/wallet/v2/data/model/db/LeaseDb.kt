@@ -19,7 +19,8 @@ open class LeaseDb(
         @SerializedName("signature") var signature: String = "",
         @SerializedName("version") var version: Int = 0,
         @SerializedName("amount") var amount: Long = 0,
-        @SerializedName("recipient") var recipient: String = ""
+        @SerializedName("recipient") var recipient: String = "",
+        @SerializedName("recipientAddress") var recipientAddress: String? = ""
 ) : RealmModel {
 
     constructor(lease: Lease?) : this() {
@@ -33,6 +34,7 @@ open class LeaseDb(
             this.version = it.version
             this.amount = it.amount
             this.recipient = it.recipient
+            this.recipientAddress = it.recipientAddress
         }
     }
 
@@ -46,6 +48,7 @@ open class LeaseDb(
                 signature = this.signature,
                 version = this.version,
                 amount = this.amount,
-                recipient = this.recipient)
+                recipient = this.recipient,
+                recipientAddress = this.recipientAddress)
     }
 }

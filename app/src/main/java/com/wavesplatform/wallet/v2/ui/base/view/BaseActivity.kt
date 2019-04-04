@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.base.view
 
 import android.app.Dialog
@@ -29,11 +34,9 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.RetrofitException
-import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
@@ -48,6 +51,9 @@ import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
@@ -133,12 +139,11 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                 }))
 
         Wavesplatform.setOnErrorListener(object : OnErrorListener {
-
             override fun onError(exception: RetrofitException) {
-                SentryHelper.logException(exception)
+                // todo Check Errors to show or log
                 val retrySubject = PublishSubject.create<Events.RetryEvent>()
-                // mErrorManager.handleError(exception, retrySubject)
-                mErrorManager.showError(this@BaseActivity, exception, retrySubject)
+                mErrorManager.handleError(exception, retrySubject)
+                SentryHelper.logException(exception)
             }
         })
     }

@@ -1,16 +1,22 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.history.tab
 
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
-import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.Language
 import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.net.model.response.Transaction
 import com.wavesplatform.sdk.net.model.response.TransactionType
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.sdk.utils.transactionType
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.database.TransactionSaver
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
@@ -18,6 +24,7 @@ import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentPresenter
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -59,7 +66,10 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         Log.d("historydev", "on presenter")
         val singleData: Single<List<TransactionDb>> = when (type) {
             HistoryTabFragment.all -> {
-                queryAllAsSingle()
+                queryAllAsSingle<TransactionDb>()
+                        .map {
+                            return@map filterNodeCancelLeasing(it)
+                        }
             }
             HistoryTabFragment.exchanged -> {
                 queryAsSingle { `in`("transactionTypeId", arrayOf(Constants.ID_EXCHANGE_TYPE)) }
@@ -71,9 +81,11 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }
             }
             HistoryTabFragment.leased -> {
-                queryAsSingle {
+                queryAsSingle<TransactionDb> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_INCOMING_LEASING_TYPE,
                             Constants.ID_CANCELED_LEASING_TYPE, Constants.ID_STARTED_LEASING_TYPE))
+                }.map {
+                    return@map filterNodeCancelLeasing(it)
                 }
             }
             HistoryTabFragment.send -> {
@@ -89,9 +101,11 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }
             }
             HistoryTabFragment.leasing_all -> {
-                queryAsSingle {
+                queryAsSingle<TransactionDb> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_STARTED_LEASING_TYPE,
                             Constants.ID_INCOMING_LEASING_TYPE, Constants.ID_CANCELED_LEASING_TYPE))
+                }.map {
+                    return@map filterNodeCancelLeasing(it)
                 }
             }
             HistoryTabFragment.leasing_active_now -> {
@@ -102,24 +116,48 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }
             }
             HistoryTabFragment.leasing_canceled -> {
-                queryAsSingle {
+                queryAsSingle<TransactionDb> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_CANCELED_LEASING_TYPE))
+                }.map {
+                    return@map filterNodeCancelLeasing(it)
                 }
             }
             else -> {
-                queryAllAsSingle()
+                queryAllAsSingle<TransactionDb>().map {
+                    return@map filterNodeCancelLeasing(it)
+                }
             }
         }
 
-        return singleData.map { transitions ->
+        return singleData.map { transitionsDb ->
+            val transitions = TransactionDb.convertFromDb(transitionsDb)
             allItemsFromDb = if (assetBalance == null) {
-                TransactionDb.convertFromDb(
-                        transitions.sortedByDescending { transaction -> transaction.timestamp })
+                filterSpam(transitions).sortedByDescending { transaction -> transaction.timestamp }
             } else {
-                filterDetailed(TransactionDb.convertFromDb(transitions), assetBalance!!.assetId)
+                filterDetailed(filterSpam(transitions), assetBalance!!.assetId)
                         .sortedByDescending { transaction -> transaction.timestamp }
             }
             return@map sortAndConfigToUi(allItemsFromDb)
+        }
+    }
+
+    private fun filterNodeCancelLeasing(transactions: List<TransactionDb>): List<TransactionDb> {
+        return transactions.filter { transaction ->
+            if (TransactionType.getTypeById(transaction.transactionTypeId)
+                    != TransactionType.CANCELED_LEASING_TYPE) {
+                true
+            } else {
+                transaction.lease?.recipientAddress != App.getAccessManager().getWallet().address
+            }
+        }
+    }
+
+    private fun filterSpam(transitions: List<Transaction>): List<Transaction> {
+        val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+        return if (enableSpamFilter) {
+            transitions.filter { !(it.asset?.isSpam ?: false) }
+        } else {
+            transitions
         }
     }
 

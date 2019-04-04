@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home
 
 import com.arellomobile.mvp.InjectViewState
@@ -41,7 +46,8 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
                             Constants.ID_MASS_RECEIVE_TYPE))
                 }
             } else {
-                if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
+                val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+                if (!enableSpamFilter) {
                     queryAsSingle {
                         `in`("transactionTypeId", arrayOf(
                                 Constants.ID_RECEIVED_TYPE,

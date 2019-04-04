@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import com.arellomobile.mvp.InjectViewState
@@ -87,18 +92,19 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     queryAllAsSingle<AssetBalanceDb>().toObservable(),
                     queryAllAsSingle<SpamAssetDb>().toObservable()
                             .map { spamListFromDb ->
-                                if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
-                                    return@map spamListFromDb
-                                } else {
+                                val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+                                if (enableSpamFilter) {
                                     return@map listOf<SpamAssetDb>()
+                                } else {
+                                    return@map spamListFromDb
                                 }
                             },
                     BiFunction { t1: List<AssetBalanceDb>, t2: List<SpamAssetDb> ->
                         return@BiFunction Pair(t1, t2)
                     })
                     .map { pairOfData ->
-                        val spamListFromDb = pairOfData.second
                         val assetsListFromDb = pairOfData.first
+                        val spamListFromDb = pairOfData.second
 
                         assetsListFromDb.forEach { asset ->
                             asset.isSpam = spamListFromDb.any { it.assetId == asset.assetId }
@@ -207,13 +213,16 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
 
         // check if spam assets exists and create section with them
-        if (it.third.isNotEmpty()) {
-            val spamSection = WalletSectionItem(app.getString(R.string.wallet_assets_spam_category,
-                    it.third.size.toString()))
-            it.third.forEach {
-                spamSection.addSubItem(it.convertFromDb())
+        val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+        if (!enableSpamFilter) {
+            if (it.third.isNotEmpty()) {
+                val spamSection = WalletSectionItem(app.getString(R.string.wallet_assets_spam_category,
+                        it.third.size.toString()))
+                it.third.forEach {
+                    spamSection.addSubItem(it.convertFromDb())
+                }
+                listToShow.add(spamSection)
             }
-            listToShow.add(spamSection)
         }
 
         // show all assets with sections

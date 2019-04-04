@@ -1,3 +1,8 @@
+/*
+ * Created by Eduard Zaydel on 1/4/2019
+ * Copyright © 2019 Waves Platform. All rights reserved.
+ */
+
 package com.wavesplatform.wallet.v2.data.helpers
 
 import com.wavesplatform.sdk.net.RetrofitException
@@ -15,8 +20,8 @@ import java.util.*
 class SentryHelper {
 
     companion object {
-        const val TAG_HTTP_CODE = "http.error"
-        const val TAG_NETWORK_TYPE = "network.type"
+        private const val TAG_HTTP_CODE = "http.error"
+        private const val TAG_NETWORK_TYPE = "network.type"
 
         fun logException(exception: Exception) {
             if (exception is RetrofitException) {
