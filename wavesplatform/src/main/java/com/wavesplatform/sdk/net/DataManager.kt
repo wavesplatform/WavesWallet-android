@@ -1,4 +1,4 @@
-package com.wavesplatform.sdk.net.service
+package com.wavesplatform.sdk.net
 
 import android.content.Context
 import android.util.Log
@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.sdk.BuildConfig
+import com.wavesplatform.sdk.net.service.*
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import okhttp3.Cache

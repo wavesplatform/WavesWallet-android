@@ -1,9 +1,30 @@
+/**
+ *
+ * ██╗    ██╗ █████╗ ██╗   ██╗███████╗███████╗
+ * ██║    ██║██╔══██╗██║   ██║██╔════╝██╔════╝
+ * ██║ █╗ ██║███████║██║   ██║█████╗  ███████╗
+ * ██║███╗██║██╔══██║╚██╗ ██╔╝██╔══╝  ╚════██║
+ * ╚███╔███╔╝██║  ██║ ╚████╔╝ ███████╗███████║
+ * ╚══╝╚══╝ ╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚══════╝
+ *
+ * ██████╗ ██╗      █████╗ ████████╗███████╗ ██████╗ ██████╗ ███╗   ███╗
+ * ██╔══██╗██║     ██╔══██╗╚══██╔══╝██╔════╝██╔═══██╗██╔══██╗████╗ ████║
+ * ██████╔╝██║     ███████║   ██║   █████╗  ██║   ██║██████╔╝██╔████╔██║
+ * ██╔═══╝ ██║     ██╔══██║   ██║   ██╔══╝  ██║   ██║██╔══██╗██║╚██╔╝██║
+ * ██║     ███████╗██║  ██║   ██║   ██║     ╚██████╔╝██║  ██║██║ ╚═╝ ██║
+ * ╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝
+ *
+ */
+
 package com.wavesplatform.sdk
 
 import android.app.Application
 import android.util.Log
 import com.wavesplatform.sdk.crypto.WalletManager
 import com.wavesplatform.sdk.crypto.WavesWallet
+import com.wavesplatform.sdk.net.CallAdapterFactory
+import com.wavesplatform.sdk.net.DataManager
+import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.service.*
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import retrofit2.CallAdapter
@@ -22,12 +43,13 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         /**
          * Initialisation Wavesplatform method must be call first.
          * @param application Application context ot the app
-         * @param mainNet Define net to use. Default true means use MainNet. False - TestNet
-         * @param factory Add a call adapter factory for supporting service method return types
-         * other than Call
+         * @param mainNet Optional parameter. Default true. Define net to use.
+         * Default true means use MainNet. False - TestNet
+         * @param factory Optional parameter. Add a call adapter factory
+         * for supporting service method return types other than Call
          */
         @JvmStatic
-        fun init(application: Application, mainNet: Boolean = true, factory: CallAdapter.Factory? = null) {
+        fun init(application: Application, mainNet: Boolean = true, factory: CallAdapterFactory? = null) {
             EnvironmentManager.init(application)
             if (!mainNet) {
                 EnvironmentManager.setCurrentEnvironment(EnvironmentManager.Environment.TEST_NET)
@@ -37,6 +59,15 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
                     getGithubService().globalConfiguration(EnvironmentManager.environment.url),
                     getApiService(),
                     getNodeService())
+        }
+
+        /**
+         * Initialisation Wavesplatform method must be call first.
+         * @param application Application context ot the app
+         */
+        @JvmStatic
+        fun init(application: Application) {
+            init(application, true, null)
         }
 
         @JvmStatic
@@ -78,7 +109,11 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         }
 
         /**
-         * Create wallet from secret seed-phrase.
+         * Create wallet.
+         * @param encrypted Encrypted seed by password
+         * @param password Password of seed
+         * @param guid Optional. Set your specific id for the wallet
+         * @return New generated guid or return from {@code guid} parameter
          */
         @JvmStatic
         fun createWallet(encrypted: String,
@@ -95,6 +130,10 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             }
         }
 
+        /**
+         * @see com.wavesplatform.sdk.crypto.WavesWallet
+         * @return Current Waveswallet
+         */
         @JvmStatic
         @Throws(NullPointerException::class)
         fun getWallet(): WavesWallet {
@@ -105,21 +144,33 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             }
         }
 
+        /**
+         * Resets current wallet and loosing any data of it
+         */
         @JvmStatic
         fun resetWallet() {
             get().wavesWallet = null
         }
 
+        /**
+         * @return Checks is platform set any active wallet
+         */
         @JvmStatic
         fun isAuthenticated(): Boolean {
             return get().wavesWallet != null
         }
 
+        /**
+         * @return Address of current wallet
+         */
         @JvmStatic
         fun getAddress(): String {
             return Wavesplatform.getWallet().address
         }
 
+        /**
+         * @return Public key of current wallet
+         */
         @JvmStatic
         fun getPublicKeyStr(): String {
             return Wavesplatform.getWallet().publicKeyStr
@@ -145,14 +196,18 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             return Wavesplatform.get().dataManager.matcherService
         }
 
+        /**
+         * Returns service for working with nodes
+         * @see com.wavesplatform.sdk.net.service.NodeService
+         */
         @JvmStatic
         fun getNodeService(): NodeService {
             return Wavesplatform.get().dataManager.nodeService
         }
 
         @JvmStatic
-        fun setCallAdapterFactory(factory: CallAdapter.Factory) {
-            Wavesplatform.get().dataManager.setCallAdapterFactory(factory)
+        fun setOnErrorListener(errorListener: OnErrorListener) {
+            Wavesplatform.get().dataManager.setCallAdapterFactory(CallAdapterFactory(errorListener))
         }
     }
 }

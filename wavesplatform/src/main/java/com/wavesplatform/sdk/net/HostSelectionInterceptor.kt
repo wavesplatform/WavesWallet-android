@@ -3,7 +3,7 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.sdk.net.service
+package com.wavesplatform.sdk.net
 
 import com.wavesplatform.sdk.net.model.response.GlobalConfiguration
 import com.wavesplatform.sdk.utils.notNull

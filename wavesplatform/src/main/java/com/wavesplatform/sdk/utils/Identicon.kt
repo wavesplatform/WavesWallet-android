@@ -10,6 +10,9 @@ import android.graphics.Color
 import android.graphics.Point
 import java.util.*
 
+/**
+ * Icon generator by hash-string to bitmap
+ */
 class Identicon {
 
     private val options: Options
