@@ -10,6 +10,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.database.TransactionSaver
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
@@ -117,12 +118,21 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
         return singleData.map { transitions ->
             allItemsFromDb = if (assetBalance == null) {
-                transitions.sortedByDescending { transaction -> transaction.timestamp }
+                filterSpam(transitions).sortedByDescending { transaction -> transaction.timestamp }
             } else {
-                filterDetailed(transitions, assetBalance!!.assetId)
+                filterDetailed(filterSpam(transitions), assetBalance!!.assetId)
                         .sortedByDescending { transaction -> transaction.timestamp }
             }
             return@map sortAndConfigToUi(allItemsFromDb)
+        }
+    }
+
+    private fun filterSpam(transitions: List<Transaction>): List<Transaction> {
+        val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+        return if (enableSpamFilter) {
+            transitions.filter { !(it.asset?.isSpam ?: false) }
+        } else {
+            transitions
         }
     }
 
