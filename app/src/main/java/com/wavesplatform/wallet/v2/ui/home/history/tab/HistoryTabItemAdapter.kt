@@ -155,7 +155,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                     }
 
                     if (!TransactionType.isZeroTransferOrExchange(item.data.transactionType())) {
-                        if (isSpamConsidered(item.data.assetId, prefsUtil)) {
+                        if (isSpam(item.data.assetId)) {
                             view.text_tag_spam.visiable()
                         } else {
                             if (isShowTicker(item.data.assetId)) {

@@ -123,15 +123,7 @@ class EnvironmentManager {
 
             instance!!.configurationDisposable = globalConfigurationObserver
                     .map { globalConfiguration ->
-                        instance!!.interceptor!!.setHosts(globalConfiguration.servers)
-                        PreferenceManager
-                                .getDefaultSharedPreferences(instance!!.application)
-                                .edit()
-                                .putString(GLOBAL_CURRENT_ENVIRONMENT_DATA,
-                                        Gson().toJson(globalConfiguration))
-                                .apply()
-                        instance!!.current!!.setConfiguration(globalConfiguration)
-
+                        setConfiguration(globalConfiguration)
                         val list = mutableListOf<String>()
                         for (asset in globalConfiguration.generalAssets) {
                             list.add(asset.assetId)
@@ -170,12 +162,7 @@ class EnvironmentManager {
                     }, { error ->
                         Log.e("EnvironmentManager", "Can't download GlobalConfiguration!")
                         error.printStackTrace()
-                        PreferenceManager
-                                .getDefaultSharedPreferences(instance!!.application)
-                                .edit()
-                                .putString(GLOBAL_CURRENT_ENVIRONMENT_DATA,
-                                        Gson().toJson(Environment.MAIN_NET.configuration))
-                                .apply()
+                        setConfiguration(environment.configuration!!)
                         instance!!.configurationDisposable!!.dispose()
                     })
 
@@ -197,6 +184,17 @@ class EnvironmentManager {
                         error.printStackTrace()
                         instance!!.timeDisposable!!.dispose()
                     })
+        }
+
+        private fun setConfiguration(globalConfiguration: GlobalConfiguration) {
+            instance!!.interceptor!!.setHosts(globalConfiguration.servers)
+            PreferenceManager
+                    .getDefaultSharedPreferences(instance!!.application)
+                    .edit()
+                    .putString(GLOBAL_CURRENT_ENVIRONMENT_DATA,
+                            Gson().toJson(globalConfiguration))
+                    .apply()
+            instance!!.current!!.setConfiguration(globalConfiguration)
         }
 
         @JvmStatic

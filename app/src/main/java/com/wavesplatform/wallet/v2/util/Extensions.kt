@@ -295,6 +295,16 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
     }
 }
 
+// todo check move
+fun String.isWebUrl(): Boolean {
+    return Patterns.WEB_URL.matcher(this.trim()).matches()
+}
+// todo check move
+fun String.stripZeros(): String {
+    if (this == "0.0") return this
+    return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
+}
+
 fun Fragment.showSuccess(@StringRes msgId: Int, @IdRes viewId: Int) {
     showSuccess(getString(msgId), viewId)
 }
@@ -597,8 +607,12 @@ fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { 
 }
 
 fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
+    return (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+            && isSpam(assetId))
+}
+
+fun isSpam(assetId: String?): Boolean {
     return (App.getAccessManager().getWallet() != null
-            && prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
             && (null != queryFirst<SpamAssetDb> { equalTo("assetId", assetId) }))
 }
 

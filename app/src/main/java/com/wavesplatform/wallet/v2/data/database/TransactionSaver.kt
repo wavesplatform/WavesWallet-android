@@ -142,19 +142,41 @@ class TransactionSaver @Inject constructor() {
                                 trans.feeAssetObject = allAssets.firstOrNull { it.id == trans.feeAssetId }
                             }
 
-                            if (trans.recipient.contains("alias")) {
-                                val aliasName = trans.recipient.substringAfterLast(":")
-                                aliasName.notNull {
-                                    subscriptions.add(apiDataManager.loadAlias(it)
-                                            .compose(RxUtil.applyObservableDefaultSchedulers())
-                                            .subscribe {
-                                                trans.recipientAddress = it.address
-                                                trans.transactionTypeId = TransactionUtil.getTransactionType(trans)
-                                                TransactionDb(trans).save()
-                                            })
+                            when {
+                                trans.recipient.contains("alias") -> {
+                                    val aliasName = trans.recipient.substringAfterLast(":")
+                                    loadAliasAddress(aliasName) { address ->
+                                        trans.recipientAddress = address
+                                        trans.transactionTypeId = transactionUtil.getTransactionType(trans)
+                                        trans.save()
+                                    }
+
                                 }
-                            } else {
-                                trans.recipientAddress = trans.recipient
+                                trans.lease?.recipient?.contains("alias") == true -> {
+                                    val aliasName = trans.lease?.recipient?.substringAfterLast(":")
+                                    loadAliasAddress(aliasName) { address ->
+                                        trans.lease?.recipientAddress = address
+                                        trans.transactionTypeId = transactionUtil.getTransactionType(trans)
+                                        trans.save()
+                                        // todo check
+                                    }
+                                }
+
+                                /*if (trans.recipient.contains("alias")) {
+                                    val aliasName = trans.recipient.substringAfterLast(":")
+                                    aliasName.notNull {
+                                        subscriptions.add(apiDataManager.loadAlias(it)
+                                                .compose(RxUtil.applyObservableDefaultSchedulers())
+                                                .subscribe {
+                                                    trans.recipientAddress = it.address
+                                                    trans.transactionTypeId = TransactionUtil.getTransactionType(trans)
+                                                    TransactionDb(trans).save()
+                                                })
+                                    }
+                                } else {
+                                    trans.recipientAddress = trans.recipient
+                                }*/
+                                else -> trans.recipientAddress = trans.recipient
                             }
 
                             trans.transfers.forEach { trans ->
@@ -228,6 +250,16 @@ class TransactionSaver @Inject constructor() {
                         }
                     }
                 })
+    }
+
+    private fun loadAliasAddress(alias: String?, listener: (String?) -> Unit) {
+        alias.notNull {
+            subscriptions.add(apiDataManager.loadAlias(it)
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe {
+                        listener.invoke(it.address)
+                    })
+        }
     }
 
     private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfo>, callback: (ArrayList<AssetInfo>) -> Unit) {
