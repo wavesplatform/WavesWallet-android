@@ -141,26 +141,19 @@ class TransactionSaver @Inject constructor() {
                             when {
                                 trans.recipient.contains("alias") -> {
                                     val aliasName = trans.recipient.substringAfterLast(":")
-                                    aliasName.notNull {
-                                        subscriptions.add(apiDataManager.loadAlias(it)
-                                                .compose(RxUtil.applyObservableDefaultSchedulers())
-                                                .subscribe {
-                                                    trans.recipientAddress = it.address
-                                                    trans.transactionTypeId = transactionUtil.getTransactionType(trans)
-                                                    trans.save()
-                                                })
+                                    loadAliasAddress(aliasName) { address ->
+                                        trans.recipientAddress = address
+                                        trans.transactionTypeId = transactionUtil.getTransactionType(trans)
+                                        trans.save()
                                     }
+
                                 }
                                 trans.lease?.recipient?.contains("alias") == true -> {
                                     val aliasName = trans.lease?.recipient?.substringAfterLast(":")
-                                    aliasName.notNull {
-                                        subscriptions.add(apiDataManager.loadAlias(it)
-                                                .compose(RxUtil.applyObservableDefaultSchedulers())
-                                                .subscribe {
-                                                    trans.lease?.recipientAddress = it.address
-                                                    trans.transactionTypeId = transactionUtil.getTransactionType(trans)
-                                                    trans.save()
-                                                })
+                                    loadAliasAddress(aliasName) { address ->
+                                        trans.lease?.recipientAddress = address
+                                        trans.transactionTypeId = transactionUtil.getTransactionType(trans)
+                                        trans.save()
                                     }
                                 }
                                 else -> trans.recipientAddress = trans.recipient
@@ -237,6 +230,16 @@ class TransactionSaver @Inject constructor() {
                         }
                     }
                 })
+    }
+
+    private fun loadAliasAddress(alias: String?, listener: (String?) -> Unit) {
+        alias.notNull {
+            subscriptions.add(apiDataManager.loadAlias(it)
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe {
+                        listener.invoke(it.address)
+                    })
+        }
     }
 
     private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfo>, callback: (ArrayList<AssetInfo>) -> Unit) {
