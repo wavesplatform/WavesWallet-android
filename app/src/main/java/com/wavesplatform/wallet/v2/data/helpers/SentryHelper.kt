@@ -5,8 +5,8 @@
 
 package com.wavesplatform.wallet.v2.data.helpers
 
+import com.wavesplatform.sdk.net.RetrofitException
 import com.wavesplatform.wallet.BuildConfig
-import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.model.local.NetworkType
 import com.wavesplatform.wallet.v2.util.clone
 import io.sentry.Sentry
