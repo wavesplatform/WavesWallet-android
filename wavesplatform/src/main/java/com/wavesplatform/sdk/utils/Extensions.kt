@@ -46,7 +46,7 @@ fun Number.roundTo(numFractionDigits: Int?) = String.format(
         "%.${numFractionDigits}f",
         toDouble()).clearBalance().toDouble()
 
-fun String.isWebUrl() : Boolean{
+fun String.isWebUrl(): Boolean {
     return Patterns.WEB_URL.matcher(this.trim()).matches()
 }
 

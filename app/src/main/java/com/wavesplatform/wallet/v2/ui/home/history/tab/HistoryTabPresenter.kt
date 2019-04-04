@@ -9,22 +9,22 @@ import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
-import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.Language
 import com.wavesplatform.sdk.net.model.response.AssetBalance
 import com.wavesplatform.sdk.net.model.response.Transaction
 import com.wavesplatform.sdk.net.model.response.TransactionType
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.sdk.utils.transactionType
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.database.TransactionSaver
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
-import com.wavesplatform.wallet.v2.data.manager.AccessManager
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentPresenter
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -66,7 +66,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         Log.d("historydev", "on presenter")
         val singleData: Single<List<TransactionDb>> = when (type) {
             HistoryTabFragment.all -> {
-                queryAllAsSingle<Transaction>()
+                queryAllAsSingle<TransactionDb>()
                         .map {
                             return@map filterNodeCancelLeasing(it)
                         }
@@ -81,7 +81,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }
             }
             HistoryTabFragment.leased -> {
-                queryAsSingle<Transaction> {
+                queryAsSingle<TransactionDb> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_INCOMING_LEASING_TYPE,
                             Constants.ID_CANCELED_LEASING_TYPE, Constants.ID_STARTED_LEASING_TYPE))
                 }.map {
@@ -101,7 +101,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }
             }
             HistoryTabFragment.leasing_all -> {
-                queryAsSingle<Transaction> {
+                queryAsSingle<TransactionDb> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_STARTED_LEASING_TYPE,
                             Constants.ID_INCOMING_LEASING_TYPE, Constants.ID_CANCELED_LEASING_TYPE))
                 }.map {
@@ -116,20 +116,21 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }
             }
             HistoryTabFragment.leasing_canceled -> {
-                queryAsSingle<Transaction> {
+                queryAsSingle<TransactionDb> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_CANCELED_LEASING_TYPE))
                 }.map {
                     return@map filterNodeCancelLeasing(it)
                 }
             }
             else -> {
-                queryAllAsSingle<Transaction>().map {
+                queryAllAsSingle<TransactionDb>().map {
                     return@map filterNodeCancelLeasing(it)
                 }
             }
         }
 
-        return singleData.map { transitions -> // todo check TransactionDb.convertFromDb(
+        return singleData.map { transitionsDb ->
+            val transitions = TransactionDb.convertFromDb(transitionsDb)
             allItemsFromDb = if (assetBalance == null) {
                 filterSpam(transitions).sortedByDescending { transaction -> transaction.timestamp }
             } else {
@@ -140,12 +141,13 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         }
     }
 
-    private fun filterNodeCancelLeasing(transactions: List<Transaction>): List<Transaction> {
+    private fun filterNodeCancelLeasing(transactions: List<TransactionDb>): List<TransactionDb> {
         return transactions.filter { transaction ->
-            if (transaction.transactionType() != TransactionType.CANCELED_LEASING_TYPE) {
+            if (TransactionType.getTypeById(transaction.transactionTypeId)
+                    != TransactionType.CANCELED_LEASING_TYPE) {
                 true
             } else {
-                transaction.lease?.recipientAddress != App.getAccessManager().getWallet()?.address
+                transaction.lease?.recipientAddress != App.getAccessManager().getWallet().address
             }
         }
     }

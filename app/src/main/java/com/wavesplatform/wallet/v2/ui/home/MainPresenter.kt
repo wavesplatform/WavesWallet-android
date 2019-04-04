@@ -37,7 +37,7 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
 
     fun reloadTransactionsAfterSpamSettingsChanged(afterUrlChanged: Boolean = false) {
         runAsync {
-            val singleData: Single<List<Transaction>> = if (afterUrlChanged) {
+            val singleData: Single<List<TransactionDb>> = if (afterUrlChanged) {
                 queryAsSingle {
                     `in`("transactionTypeId", arrayOf(
                             Constants.ID_MASS_SPAM_RECEIVE_TYPE,

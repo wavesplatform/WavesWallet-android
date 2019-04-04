@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.v2.data.model.db.TransferDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.TransactionUtil.Companion.getTransactionType
 import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
@@ -147,8 +148,8 @@ class TransactionSaver @Inject constructor() {
                                     val aliasName = trans.recipient.substringAfterLast(":")
                                     loadAliasAddress(aliasName) { address ->
                                         trans.recipientAddress = address
-                                        trans.transactionTypeId = transactionUtil.getTransactionType(trans)
-                                        trans.save()
+                                        trans.transactionTypeId = getTransactionType(trans)
+                                        TransactionDb(trans).save()
                                     }
 
                                 }
@@ -156,26 +157,10 @@ class TransactionSaver @Inject constructor() {
                                     val aliasName = trans.lease?.recipient?.substringAfterLast(":")
                                     loadAliasAddress(aliasName) { address ->
                                         trans.lease?.recipientAddress = address
-                                        trans.transactionTypeId = transactionUtil.getTransactionType(trans)
-                                        trans.save()
-                                        // todo check
+                                        trans.transactionTypeId = getTransactionType(trans)
+                                        TransactionDb(trans).save()
                                     }
                                 }
-
-                                /*if (trans.recipient.contains("alias")) {
-                                    val aliasName = trans.recipient.substringAfterLast(":")
-                                    aliasName.notNull {
-                                        subscriptions.add(apiDataManager.loadAlias(it)
-                                                .compose(RxUtil.applyObservableDefaultSchedulers())
-                                                .subscribe {
-                                                    trans.recipientAddress = it.address
-                                                    trans.transactionTypeId = TransactionUtil.getTransactionType(trans)
-                                                    TransactionDb(trans).save()
-                                                })
-                                    }
-                                } else {
-                                    trans.recipientAddress = trans.recipient
-                                }*/
                                 else -> trans.recipientAddress = trans.recipient
                             }
 

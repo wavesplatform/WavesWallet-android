@@ -295,16 +295,6 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
     }
 }
 
-// todo check move
-fun String.isWebUrl(): Boolean {
-    return Patterns.WEB_URL.matcher(this.trim()).matches()
-}
-// todo check move
-fun String.stripZeros(): String {
-    if (this == "0.0") return this
-    return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
-}
-
 fun Fragment.showSuccess(@StringRes msgId: Int, @IdRes viewId: Int) {
     showSuccess(getString(msgId), viewId)
 }
