@@ -15,7 +15,7 @@ class MigrationUtil @Inject constructor() {
 
     companion object {
 
-        const val VER_DB_WITHOUT_USER_DATA = 3L
+        const val VER_DB_WITHOUT_USER_DATA = 4L
         private const val VER_DB_NEW = -1L
         private const val KEY_AB_NAMES = "address_book_names"
         private const val KEY_AB_ADDRESSES = "address_book_addresses"

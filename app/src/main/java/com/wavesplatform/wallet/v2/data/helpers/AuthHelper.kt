@@ -11,6 +11,9 @@ import com.wavesplatform.wallet.v2.data.database.realm.module.DataModule
 import com.wavesplatform.wallet.v2.data.database.realm.module.UserDataModule
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
+import com.wavesplatform.wallet.v2.data.database.realm.module.DataModule
+import com.wavesplatform.wallet.v2.data.database.realm.module.UserDataModule
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.util.MigrationUtil
 import io.realm.Realm
 import io.realm.RealmConfiguration
