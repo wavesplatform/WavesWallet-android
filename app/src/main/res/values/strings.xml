@@ -268,7 +268,7 @@
     <string name="history_details_exchange_price">Price</string>
     <string name="history_details_fee">Fee</string>
     <string name="history_details_id">Asset ID</string>
-    <string name="history_details_leasing_from">Leasing to</string>
+    <string name="history_details_leasing_from">Leasing from</string>
     <string name="history_details_leasing_to">Leasing to</string>
     <string name="history_details_node_address">Node address</string>
     <string name="history_details_not_reissuable">Not Reissuable</string>
