@@ -125,9 +125,6 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
                 WelcomeItem(R.drawable.userimg_dex_80,
                         getString(R.string.welcome_dex_title),
                         getString(R.string.welcome_dex_description))
-                /*, WelcomeItem(R.drawable.userimg_token_80,
-                        getString(R.string.welcome_token_title),
-                        getString(R.string.welcome_token_description))*/
         )
     }
 

@@ -305,6 +305,11 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                     textCancelLeasingFromAddress?.text = nodeLeasingRecipient
                 }
 
+                if (transaction.transactionType() == TransactionType.INCOMING_LEASING_TYPE) {
+                    receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_hint)?.text = getString(R.string.history_details_leasing_from)
+                    textCancelLeasingFromAddress?.text = transaction.sender
+                }
+
                 eventSubscriptions.add(RxView.clicks(imageCopy!!)
                         .throttleFirst(1500, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
