@@ -12,6 +12,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
+import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CounterHandler
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.OrderListener
@@ -351,22 +352,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             button_confirm.text = getString(R.string.buy_btn_txt, presenter.data?.watchMarket?.market?.amountAssetShortName)
         }
 
-        presenter.data?.watchMarket.notNull { watchMarket ->
-            if (presenter.data?.initPrice != null) {
-                val priceUIValue = MoneyUtil.getScaledPrice(presenter.data?.initPrice!!, watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
-                edit_limit_price.setText(priceUIValue)
-            }
-            if (presenter.data?.initSum != null) {
-                val totalUIValue = MoneyUtil.getScaledPrice(presenter.data?.initSum!!,
-                        watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
-                edit_total_price.setText(totalUIValue)
-            }
-            if (presenter.data?.initSum != null && presenter.data?.initPrice != null) {
-                val amount = presenter.data?.initSum!! / presenter.data?.initPrice!!
-                presenter.humanTotalTyping = true
-                edit_amount.setText(MoneyUtil.getScaledText(amount, watchMarket.market.amountAssetDecimals))
-            }
-        }
+        fillInputsWithValues()
 
         text_expiration_value.click {
             val alt_bld = AlertDialog.Builder(baseActivity)
@@ -401,6 +387,56 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         button_confirm.click {
             presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
         }
+    }
+
+    private fun fillInputsWithValues() {
+        presenter.data?.watchMarket.notNull { watchMarket ->
+            if (presenter.data?.initPrice != null) {
+                val priceUIValue = MoneyUtil.getScaledPrice(presenter.data?.initPrice!!, watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
+                edit_limit_price.setText(priceUIValue)
+            }
+            if (presenter.data?.initSum != null) {
+                if (presenter.data?.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
+                    withAvailableSum { sum ->
+                        val totalUIValue = MoneyUtil.getScaledPrice(sum,
+                                watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
+                        presenter.humanTotalTyping = true
+                        edit_total_price.setText(totalUIValue)
+                    }
+                } else {
+                    withAvailableAmount { amount ->
+                        val amountUIValue = MoneyUtil.getScaledText(amount, watchMarket.market.amountAssetDecimals).clearBalance()
+                        presenter.humanTotalTyping = true
+                        edit_amount.setText(amountUIValue)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun withAvailableSum(listener: (Long) -> Unit) {
+        var total = 0L
+        safeLet(presenter.data?.initSum, presenter.data?.initPrice) { sum, price ->
+            total = sum
+            if (sum > presenter.currentPriceBalance) {
+                total = presenter.currentPriceBalance
+            }
+        }
+        listener.invoke(total)
+    }
+
+    private fun withAvailableAmount(listener: (Long) -> Unit) {
+        var amountValue = 0L
+        safeLet(presenter.data?.watchMarket?.market, presenter.data?.initSum, presenter.data?.initPrice) { market, sum, price ->
+            val amountTemp = sum.toDouble() / price.toDouble()
+            val unscaledAmount = MoneyUtil.getUnscaledValue(amountTemp.toString(), market.amountAssetDecimals)
+            amountValue = if (unscaledAmount > presenter.currentAmountBalance) {
+                presenter.currentAmountBalance - getFeeIfNeed()
+            } else {
+                unscaledAmount
+            }
+        }
+        listener.invoke(amountValue)
     }
 
     private fun getFeeIfNeed(): Long {
@@ -532,6 +568,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
+        fillInputsWithValues()
         text_fee_value.text = "${getScaledAmount(unscaledAmount, 8)} " +
                 "${Constants.wavesAssetInfo.name}"
         progress_bar_fee_transaction.hide()
