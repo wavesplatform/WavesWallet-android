@@ -58,6 +58,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         arguments.notNull {
             presenter.data = it.getParcelable<BuySellData>(TradeBuyAndSellBottomSheetFragment.BUNDLE_DATA)
             presenter.orderType = it.getInt(TradeBuyAndSellBottomSheetFragment.BUNDLE_ORDER_TYPE)
+            presenter.initBalances()
         }
 
         if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
