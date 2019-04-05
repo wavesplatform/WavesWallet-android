@@ -139,11 +139,14 @@ class EnvironmentManager {
                                     isFavorite = assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED,
                                     issueTransaction = IssueTransaction(
                                             id = assetInfo.assetInfo.id,
+                                            assetId = assetInfo.assetInfo.id,
                                             name = findAssetIdByAssetId(
                                                     assetInfo.assetInfo.id)?.displayName
                                                     ?: assetInfo.assetInfo.name,
                                             decimals = assetInfo.assetInfo.precision,
                                             quantity = assetInfo.assetInfo.quantity,
+                                            description = assetInfo.assetInfo.description,
+                                            sender = assetInfo.assetInfo.sender,
                                             timestamp = assetInfo.assetInfo.timestamp.time),
                                     isGateway = findAssetIdByAssetId(
                                             assetInfo.assetInfo.id)?.isGateway ?: false,
