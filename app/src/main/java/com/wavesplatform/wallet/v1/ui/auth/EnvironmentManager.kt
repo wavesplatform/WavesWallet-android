@@ -123,11 +123,7 @@ class EnvironmentManager {
                                 .apply()
                         instance!!.current!!.setConfiguration(globalConfiguration)
 
-                        val list = mutableListOf<String>()
-                        for (asset in globalConfiguration.generalAssets) {
-                            list.add(asset.assetId)
-                        }
-                        list
+                        globalConfiguration.generalAssets.map { it.assetId }
                     }
                     .flatMap { githubDataManager.apiService.assetsInfoByIds(it) }
                     .map { info ->
@@ -150,8 +146,9 @@ class EnvironmentManager {
                                             quantity = assetInfo.assetInfo.quantity,
                                             timestamp = assetInfo.assetInfo.timestamp.time),
                                     isGateway = findAssetIdByAssetId(
-                                            assetInfo.assetInfo.id)?.isGateway
-                                            ?: false)
+                                            assetInfo.assetInfo.id)?.isGateway ?: false,
+                                    isFiatMoney = findAssetIdByAssetId(
+                                            assetInfo.assetInfo.id)?.isFiat ?: false)
                             defaultAssets.add(assetBalance)
                         }
                     }
