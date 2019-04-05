@@ -27,7 +27,10 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
         runAsync {
             addSubscription(Observable.just(allTransactions)
                     .map {
-                        return@map it.filter { transaction ->
+                        return@map filterNodeCancelLeasing(it)
+                    }
+                    .map {
+                        return@map it.asSequence().filter { transaction ->
                             isNotSpam(transaction) &&
                                     (asset.assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && !transaction.isSponsorshipTransaction()) ||
                                     AssetDetailsContentPresenter.isAssetIdInExchange(transaction, asset.assetId) ||
@@ -51,6 +54,16 @@ class AssetDetailsContentPresenter @Inject constructor() : BasePresenter<AssetDe
                                     emptyList<HistoryItem>().toMutableList())
                         }
                     }))
+        }
+    }
+
+    private fun filterNodeCancelLeasing(transactions: List<Transaction>): List<Transaction> {
+        return transactions.filter { transaction ->
+            if (transaction.transactionType() != TransactionType.CANCELED_LEASING_TYPE) {
+                true
+            } else {
+                transaction.lease?.recipientAddress != App.getAccessManager().getWallet()?.address
+            }
         }
     }
 
