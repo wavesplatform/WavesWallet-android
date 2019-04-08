@@ -264,10 +264,6 @@
             android:name="com.wavesplatform.wallet.v2.ui.success.SuccessActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
-
-        <service
-            android:name=".v2.data.service.UpdateApiDataService"
-            android:stopWithTask="true" />
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"

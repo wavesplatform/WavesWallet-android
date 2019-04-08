@@ -23,16 +23,10 @@ import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 @Deprecated("Temp class for saving transactions, should refactor")
-class TransactionSaver @Inject constructor() {
+class TransactionSaver(private var nodeDataManager: NodeDataManager,
+                       private var rxEventBus: RxEventBus) {
 
-    @Inject
-    lateinit var rxEventBus: RxEventBus
-    @Inject
-    lateinit var nodeDataManager: NodeDataManager
-    @Inject
-    lateinit var apiDataManager: ApiDataManager
-    @Inject
-    lateinit var transactionUtil: TransactionUtil
+    private var transactionUtil = TransactionUtil()
     private var allAssets = arrayListOf<AssetInfo>()
     private var subscriptions: CompositeDisposable = CompositeDisposable()
     private var currentLimit = DEFAULT_LIMIT
@@ -121,7 +115,7 @@ class TransactionSaver @Inject constructor() {
                 .distinct()
                 .toMutableList()
 
-        subscriptions.add(apiDataManager.assetsInfoByIds(allTransactionsAssets)
+        subscriptions.add(nodeDataManager.apiDataManager.assetsInfoByIds(allTransactionsAssets)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe {
                     mergeAndSaveAllAssets(ArrayList(it)) { assetsInfo ->
@@ -163,7 +157,7 @@ class TransactionSaver @Inject constructor() {
                                 if (trans.recipient.contains("alias")) {
                                     val aliasName = trans.recipient.substringAfterLast(":")
                                     aliasName.notNull {
-                                        subscriptions.add(apiDataManager.loadAlias(it)
+                                        subscriptions.add(nodeDataManager.apiDataManager.loadAlias(it)
                                                 .compose(RxUtil.applyObservableDefaultSchedulers())
                                                 .subscribe {
                                                     trans.recipientAddress = it.address
@@ -234,7 +228,7 @@ class TransactionSaver @Inject constructor() {
 
     private fun loadAliasAddress(alias: String?, listener: (String?) -> Unit) {
         alias.notNull {
-            subscriptions.add(apiDataManager.loadAlias(it)
+            subscriptions.add(nodeDataManager.apiDataManager.loadAlias(it)
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe {
                         listener.invoke(it.address)

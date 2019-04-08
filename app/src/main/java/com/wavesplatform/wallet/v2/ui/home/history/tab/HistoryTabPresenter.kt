@@ -14,7 +14,6 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.database.TransactionSaver
-import com.wavesplatform.wallet.v2.data.manager.AccessManager
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
@@ -40,9 +39,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
     var type: String? = "all"
     var hashOfTimestamp = hashMapOf<Long, Long>()
     var assetBalance: AssetBalance? = null
-
-    @Inject
-    lateinit var transactionSaver: TransactionSaver
+    private var transactionSaver: TransactionSaver? = null
 
     fun loadTransactions() {
         runAsync {
@@ -176,7 +173,10 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                     if (list.isEmpty()) {
                         viewState.afterSuccessLoadTransaction(arrayListOf(), type)
                     } else {
-                        transactionSaver.saveTransactions(list)
+                        if (transactionSaver == null) {
+                            transactionSaver = TransactionSaver(nodeDataManager, rxEventBus)
+                        }
+                        transactionSaver!!.saveTransactions(list)
                     }
                 }, {
                     viewState.onShowError(R.string.history_error_receive_data)

@@ -20,7 +20,7 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
-import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
+import com.wavesplatform.wallet.v2.data.service.HistoryUpdateRxWorker
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.util.AddressUtil
@@ -31,7 +31,6 @@ import io.reactivex.Observable
 import io.reactivex.exceptions.Exceptions
 import org.apache.commons.io.Charsets
 import org.spongycastle.util.encoders.Hex
-import pers.victor.ext.app
 import java.io.File
 import java.security.SecureRandom
 import java.util.*
@@ -231,7 +230,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
     }
 
     private fun clearRealmConfiguration() {
-        app.stopService(Intent(app, UpdateApiDataService::class.java))
+        HistoryUpdateRxWorker.cancel()
         val f = RealmConfigStore::class.java.getDeclaredField("configMap") // NoSuchFieldException
         f.isAccessible = true
         val configMap = f.get(RealmConfigStore::class.java) as MutableMap<*, *>

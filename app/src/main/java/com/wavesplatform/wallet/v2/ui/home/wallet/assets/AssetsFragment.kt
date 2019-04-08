@@ -7,7 +7,6 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -27,7 +26,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
+import com.wavesplatform.wallet.v2.data.service.HistoryUpdateRxWorker
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
@@ -35,7 +34,6 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.isMyServiceRunning
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
@@ -44,7 +42,6 @@ import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.isVisible
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
-import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
 import javax.inject.Inject
 
 class AssetsFragment : BaseFragment(), AssetsView {
@@ -210,14 +207,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
     }
 
     override fun startServiceToLoadData() {
-        runOnUiThread {
-            if (!isMyServiceRunning(UpdateApiDataService::class.java)) {
-                val intent = Intent(activity, UpdateApiDataService::class.java)
-                activity?.let {
-                    ContextCompat.startForegroundService(it, intent)
-                }
-            }
-        }
+        HistoryUpdateRxWorker.start(presenter.nodeDataManager, rxEventBus)
     }
 
     override fun afterSuccessLoadAssets(assets: ArrayList<MultiItemEntity>, fromDB: Boolean, withApiUpdate: Boolean) {
