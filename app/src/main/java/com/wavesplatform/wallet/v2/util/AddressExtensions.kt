@@ -28,10 +28,14 @@ fun String?.isValidWavesAddress(): Boolean {
     }
 }
 
+fun String.isAlias(): Boolean {
+    return this.contains("alias")
+}
+
 fun String.makeAsAlias(): String {
     return "alias:${EnvironmentManager.netCode.toChar()}:$this"
 }
 
-fun String.clearAlias(): String {
+fun String.parseAlias(): String {
     return this.substringAfterLast(":")
 }

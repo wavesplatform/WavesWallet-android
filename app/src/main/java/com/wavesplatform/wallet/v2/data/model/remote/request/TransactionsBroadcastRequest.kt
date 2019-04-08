@@ -10,7 +10,7 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.SignUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.arrayWithSize
-import com.wavesplatform.wallet.v2.util.clearAlias
+import com.wavesplatform.wallet.v2.util.parseAlias
 import java.nio.charset.Charset
 
 class TransactionsBroadcastRequest(
@@ -38,7 +38,7 @@ class TransactionsBroadcastRequest(
     var id: String? = ""
 
     private fun toSignBytes(): ByteArray {
-        recipient = recipient.clearAlias()
+        recipient = recipient.parseAlias()
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(version.toByte()),
@@ -60,7 +60,7 @@ class TransactionsBroadcastRequest(
         return if (recipient.length <= 30) {
             Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
                     byteArrayOf(EnvironmentManager.netCode),
-                    recipient.clearAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
+                    recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
         } else {
             Base58.decode(recipient)
         }
