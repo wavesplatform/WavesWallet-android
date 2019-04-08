@@ -13,8 +13,10 @@ import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.helpers.ClearAssetsHelper
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.SpamAsset
@@ -60,7 +62,12 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                             }
                         }
                         dbAssets = assetBalanceList
-                        return@map createTripleSortedLists(assetBalanceList)
+                        return@map Observable.just(assetBalanceList)
+                    }
+                    .map {
+                        // clear wallet from unimportant assets
+                        dbAssets = ClearAssetsHelper.clearUnimportantAssets(prefsUtil, dbAssets)
+                        return@map createTripleSortedLists(dbAssets)
                     }
                     .doOnNext { postSuccess(it, withApiUpdate, true) }
                     .flatMap { tryUpdateWithApi(withApiUpdate, dbAssets) }
