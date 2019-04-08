@@ -9,9 +9,12 @@ import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.database.TransactionSaver
+import com.wavesplatform.wallet.v2.data.manager.AccessManager
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
@@ -63,7 +66,10 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         Log.d("historydev", "on presenter")
         val singleData: Single<List<Transaction>> = when (type) {
             HistoryTabFragment.all -> {
-                queryAllAsSingle()
+                queryAllAsSingle<Transaction>()
+                        .map {
+                            return@map filterNodeCancelLeasing(it)
+                        }
             }
             HistoryTabFragment.exchanged -> {
                 queryAsSingle { `in`("transactionTypeId", arrayOf(Constants.ID_EXCHANGE_TYPE)) }
@@ -75,9 +81,11 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }
             }
             HistoryTabFragment.leased -> {
-                queryAsSingle {
+                queryAsSingle<Transaction> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_INCOMING_LEASING_TYPE,
                             Constants.ID_CANCELED_LEASING_TYPE, Constants.ID_STARTED_LEASING_TYPE))
+                }.map {
+                    return@map filterNodeCancelLeasing(it)
                 }
             }
             HistoryTabFragment.send -> {
@@ -93,9 +101,11 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }
             }
             HistoryTabFragment.leasing_all -> {
-                queryAsSingle {
+                queryAsSingle<Transaction> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_STARTED_LEASING_TYPE,
                             Constants.ID_INCOMING_LEASING_TYPE, Constants.ID_CANCELED_LEASING_TYPE))
+                }.map {
+                    return@map filterNodeCancelLeasing(it)
                 }
             }
             HistoryTabFragment.leasing_active_now -> {
@@ -106,23 +116,46 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }
             }
             HistoryTabFragment.leasing_canceled -> {
-                queryAsSingle {
+                queryAsSingle<Transaction> {
                     `in`("transactionTypeId", arrayOf(Constants.ID_CANCELED_LEASING_TYPE))
+                }.map {
+                    return@map filterNodeCancelLeasing(it)
                 }
             }
             else -> {
-                queryAllAsSingle()
+                queryAllAsSingle<Transaction>().map {
+                    return@map filterNodeCancelLeasing(it)
+                }
             }
         }
 
         return singleData.map { transitions ->
             allItemsFromDb = if (assetBalance == null) {
-                transitions.sortedByDescending { transaction -> transaction.timestamp }
+                filterSpam(transitions).sortedByDescending { transaction -> transaction.timestamp }
             } else {
-                filterDetailed(transitions, assetBalance!!.assetId)
+                filterDetailed(filterSpam(transitions), assetBalance!!.assetId)
                         .sortedByDescending { transaction -> transaction.timestamp }
             }
             return@map sortAndConfigToUi(allItemsFromDb)
+        }
+    }
+
+    private fun filterNodeCancelLeasing(transactions: List<Transaction>): List<Transaction> {
+        return transactions.filter { transaction ->
+            if (transaction.transactionType() != TransactionType.CANCELED_LEASING_TYPE) {
+                true
+            } else {
+                transaction.lease?.recipientAddress != App.getAccessManager().getWallet()?.address
+            }
+        }
+    }
+
+    private fun filterSpam(transitions: List<Transaction>): List<Transaction> {
+        val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
+        return if (enableSpamFilter) {
+            transitions.filter { !(it.asset?.isSpam ?: false) }
+        } else {
+            transitions
         }
     }
 
