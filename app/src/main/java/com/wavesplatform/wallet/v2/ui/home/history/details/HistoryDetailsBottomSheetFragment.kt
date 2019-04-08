@@ -217,7 +217,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val imageCopy = sendView?.findViewById<AppCompatImageView>(R.id.image_address_copy)
                 val imageAddressAction = sendView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
-                var recipient = transaction.recipient.clearAlias()
+                var recipient = transaction.recipient.parseAlias()
                 if (TextUtils.isEmpty(recipient)) {
                     recipient = transaction.recipientAddress ?: ""
                 }
@@ -241,9 +241,9 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val textLeasingToAddress = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_leasing_to_address)
                 val imageAddressAction = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
-                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
+                val nodeLeasingRecipient = transaction.lease?.recipient?.parseAlias()
                 if (nodeLeasingRecipient.isNullOrEmpty()) {
-                    textLeasingToAddress?.text = transaction.recipient.clearAlias()
+                    textLeasingToAddress?.text = transaction.recipient.parseAlias()
                 } else {
                     textLeasingToAddress?.text = nodeLeasingRecipient
                 }
@@ -298,9 +298,9 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val imageCopy = receiveView?.findViewById<AppCompatImageView>(R.id.image_address_copy)
                 val imageAddressAction = receiveView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
-                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
+                val nodeLeasingRecipient = transaction.lease?.recipient?.parseAlias()
                 if (nodeLeasingRecipient.isNullOrEmpty()) {
-                    textCancelLeasingFromAddress?.text = transaction.recipient.clearAlias()
+                    textCancelLeasingFromAddress?.text = transaction.recipient.parseAlias()
                 } else {
                     textCancelLeasingFromAddress?.text = nodeLeasingRecipient
                 }
@@ -388,7 +388,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
 
                     textRecipientNumber?.text = getString(R.string.history_mass_send_recipient, index.inc().toString())
 
-                    var recipient = transfer.recipient.clearAlias()
+                    var recipient = transfer.recipient.parseAlias()
                     if (TextUtils.isEmpty(recipient)) {
                         recipient = transfer.recipientAddress ?: ""
                     }
@@ -425,7 +425,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
 
                                 val transfer = transfers[i]
 
-                                var recipient = transfer.recipient.clearAlias()
+                                var recipient = transfer.recipient.parseAlias()
                                 if (TextUtils.isEmpty(recipient)) {
                                     recipient = transfer.recipientAddress ?: ""
                                 }

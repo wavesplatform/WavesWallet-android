@@ -6,7 +6,7 @@ import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.util.clearAlias
+import com.wavesplatform.wallet.v2.util.parseAlias
 import com.wavesplatform.wallet.v2.util.findMyOrder
 import com.wavesplatform.wallet.v2.util.stripZeros
 import com.wavesplatform.wallet.v2.util.transactionType
@@ -247,7 +247,7 @@ open class Transaction(
             return if (transaction.recipient.isNullOrEmpty()) {
                 ""
             } else {
-                "Recipient: ${transaction.recipient.clearAlias()}\n"
+                "Recipient: ${transaction.recipient.parseAlias()}\n"
             }
         }
 

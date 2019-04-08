@@ -134,8 +134,8 @@ class TransactionSaver @Inject constructor() {
                             }
 
                             when {
-                                trans.recipient.contains("alias") -> {
-                                    val aliasName = trans.recipient.substringAfterLast(":")
+                                trans.recipient.isAlias() -> {
+                                    val aliasName = trans.recipient.parseAlias()
                                     loadAliasAddress(aliasName) { address ->
                                         trans.recipientAddress = address
                                         trans.transactionTypeId = transactionUtil.getTransactionType(trans)
@@ -143,30 +143,30 @@ class TransactionSaver @Inject constructor() {
                                     }
 
                                 }
-                                trans.lease?.recipient?.contains("alias") == true -> {
-                                    val aliasName = trans.lease?.recipient?.substringAfterLast(":")
+                                trans.lease?.recipient?.isAlias() == true -> {
+                                    val aliasName = trans.lease?.recipient?.parseAlias()
                                     loadAliasAddress(aliasName) { address ->
                                         trans.lease?.recipientAddress = address
                                         trans.transactionTypeId = transactionUtil.getTransactionType(trans)
                                         trans.save()
                                     }
                                 }
-                                else -> trans.recipientAddress = trans.recipient
+                                else -> {
+                                    trans.recipientAddress = trans.recipient
+                                    trans.lease?.recipientAddress = trans.lease?.recipient
+                                }
                             }
 
-                            trans.transfers.forEach { trans ->
-                                if (trans.recipient.contains("alias")) {
-                                    val aliasName = trans.recipient.substringAfterLast(":")
-                                    aliasName.notNull {
-                                        subscriptions.add(apiDataManager.loadAlias(it)
-                                                .compose(RxUtil.applyObservableDefaultSchedulers())
-                                                .subscribe {
-                                                    trans.recipientAddress = it.address
-                                                    trans.save()
-                                                })
+                            trans.transfers.forEach { transfer ->
+                                when {
+                                    transfer.recipient.isAlias() -> {
+                                        val aliasName = transfer.recipient.parseAlias()
+                                        loadAliasAddress(aliasName) { address ->
+                                            transfer.recipientAddress = address
+                                            transfer.save()
+                                        }
                                     }
-                                } else {
-                                    trans.recipientAddress = trans.recipient
+                                    else -> transfer.recipientAddress = transfer.recipient
                                 }
                             }
 
