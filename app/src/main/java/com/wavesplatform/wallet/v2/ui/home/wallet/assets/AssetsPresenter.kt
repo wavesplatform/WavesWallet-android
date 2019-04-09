@@ -193,6 +193,11 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
             MutableList<AssetBalance>>, withApiUpdate: Boolean, fromDb: Boolean) {
         val listToShow = arrayListOf<MultiItemEntity>()
 
+        val searchItem = MultiItemEntity {
+             AssetsAdapter.TYPE_SEARCH
+        }
+        listToShow.add(searchItem)
+
         // add all main assets
         listToShow.addAll(it.first)
 

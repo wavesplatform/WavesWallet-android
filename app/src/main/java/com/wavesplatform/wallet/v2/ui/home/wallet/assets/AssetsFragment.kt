@@ -34,6 +34,7 @@ import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
+import com.wavesplatform.wallet.v2.ui.search_asset.SearchAssetActivity
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.isMyServiceRunning
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -99,6 +100,12 @@ class AssetsFragment : BaseFragment(), AssetsView {
                         presenter.reloadAssetsAfterSpamUrlChanged()
                     }
                 })
+
+        adapter.onSearchClickListener = object : AssetsAdapter.OnSearchClickListener{
+            override fun onClick() {
+                launchActivity<SearchAssetActivity>()
+            }
+        }
     }
 
     private fun setupUI() {

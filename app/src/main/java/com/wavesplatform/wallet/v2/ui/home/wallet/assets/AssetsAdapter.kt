@@ -28,12 +28,14 @@ class AssetsAdapter @Inject constructor() :
         BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder>(null) {
 
     var scrollToHeaderListener: ScrollToHeaderListener? = null
+    var onSearchClickListener: OnSearchClickListener? = null
 
     companion object {
-        val TYPE_HEADER = 0
-        val TYPE_ASSET = 1
-        val TYPE_HIDDEN_ASSET = 2
-        val TYPE_SPAM_ASSET = 3
+        const val TYPE_HEADER = 0
+        const val TYPE_ASSET = 1
+        const val TYPE_HIDDEN_ASSET = 2
+        const val TYPE_SPAM_ASSET = 3
+        const val TYPE_SEARCH = 4
     }
 
     init {
@@ -41,6 +43,7 @@ class AssetsAdapter @Inject constructor() :
         addItemType(TYPE_ASSET, R.layout.wallet_asset_item)
         addItemType(TYPE_HIDDEN_ASSET, R.layout.wallet_asset_item)
         addItemType(TYPE_SPAM_ASSET, R.layout.wallet_asset_item)
+        addItemType(TYPE_SEARCH, R.layout.wallet_asset_search_item)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -55,6 +58,11 @@ class AssetsAdapter @Inject constructor() :
 
     override fun convert(helper: BaseViewHolder, item: MultiItemEntity) {
         when (helper.itemViewType) {
+            TYPE_SEARCH -> {
+                helper.itemView.click {
+                    onSearchClickListener?.onClick()
+                }
+            }
             TYPE_HEADER -> {
                 val item = item as WalletSectionItem
                 helper.setText(R.id.text_header, item.header)
@@ -105,5 +113,9 @@ class AssetsAdapter @Inject constructor() :
 
     interface ScrollToHeaderListener {
         fun scrollToHeader(position: Int, itemView: View)
+    }
+
+    interface OnSearchClickListener {
+        fun onClick()
     }
 }
