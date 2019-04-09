@@ -214,9 +214,9 @@
   <string name="dex_trade_tab_last_trades">Ultimi movimenti</string>
   <string name="dex_trade_tab_my_orders">I miei ordini</string>
   <string name="dex_trade_tab_orderbook">Libro degli ordini</string>
-  <string name="confirm_card_tutorial_about_backup">Ho compreso che spostando questa app su un altro dispositivo o cancellandola, i miei Waves potranno essere recuperati esclusivamente utilizzando la frase di backup.</string>
-  <string name="confirm_card_tutorial_about_fund_on_device">Ho compreso che i miei fondi sono mantenuti in sicurezza su questo dispositivo, non da una società</string>
-  <string name="confirm_card_tutorial_about_terms">Ho letto, compreso e accettato l\'informativa sulla privacy, i termini e le condizioni</string>
+  <string name="confirm_card_tutorial_about_backup">I have read and agree with the Privacy Policy</string>
+  <string name="confirm_card_tutorial_about_fund_on_device">I understand that my funds are held securely on this device, not by a company. If this app is moved to another device or deleted, my Waves can only be recovered with the backup phrase.</string>
+  <string name="confirm_card_tutorial_about_terms">I have read and agree with the Terms and Conditions</string>
   <string name="confirm_card_tutorial_privacy_policy">Informativa sulla privacy</string>
   <string name="dialog_processing">Attendi…</string>
   <string name="edit_account_name">Modifica nome</string>
@@ -272,7 +272,7 @@
   <string name="history_details_exchange_price">Prezzo</string>
   <string name="history_details_fee">Spese</string>
   <string name="history_details_id">ID Asset</string>
-  <string name="history_details_leasing_from">Prestito a</string>
+  <string name="history_details_leasing_from">Leasing from</string>
   <string name="history_details_leasing_to">Prestito a</string>
   <string name="history_details_node_address">Indirizzo Nodo</string>
   <string name="history_details_not_reissuable">Non riemettibile</string>
@@ -316,14 +316,14 @@
   <string name="history_type_incoming_leasing">Prestito in entrata</string>
   <string name="history_type_mass_receive">Ricezione massiva</string>
   <string name="history_type_mass_send">Trasferimento massivo</string>
-  <string name="history_type_mass_spam_receive">Ricevuti</string>
+  <string name="history_type_mass_spam_receive">Spam Ricevuti</string>
   <string name="history_type_receive">Ricevuti</string>
   <string name="history_type_receive_sponsorship">Sponsorizzazione ricevuta</string>
   <string name="history_type_self_transfer">Auto-trasferimento</string>
   <string name="history_type_sent">Inviati</string>
-  <string name="history_type_set_address_script">Imposta Script di transazione</string>
+  <string name="history_type_set_address_script">Imposta Script</string>
   <string name="history_type_set_sponsorship">Imposta sponsorizzazione</string>
-  <string name="history_type_spam_receive">Ricevuti</string>
+  <string name="history_type_spam_receive">Spam Ricevuti</string>
   <string name="history_type_started_leasing">Prestito avviato</string>
   <string name="history_type_token_burn">Distruzione token</string>
   <string name="history_type_token_generation">Generazione token</string>
@@ -647,4 +647,11 @@
   <string name="dex_smart_pair_dialog_do_not_show_again">Non mostrare più</string>
   <string name="enter_seed_manually_validation_seed_is_simple_title">La frase SEED deve essere composta da 15 parole con spazi tra ogni parola</string>
   <string name="enter_seed_manually_validation_seed_is_simple_description">La frase SEED inserita è troppo corta. Assicurati di non confondere la frase con l\'indirizzo di un wallet. L\'utilizzo di un indirizzo come frase SEED può comportare la perdita di fondi.</string>
+  <string name="my_orders_details_type_buy">Buy: %1$s/%2$s</string>
+  <string name="my_orders_details_type_sell">Sell: %1$s/%2$s</string>
+  <string name="my_orders_details_cancel">Cancel order</string>
+  <string name="my_orders_details_canceled_status">Canceled (%1$s)</string>
+  <string name="my_orders_details_amount_hint">Amount</string>
+  <string name="my_orders_details_price_hint">Price</string>
+  <string name="my_orders_details_total_hint">Total</string>
 </resources>
