@@ -61,6 +61,8 @@ enum class TransactionType(
             R.string.history_type_cancel_address_script),
     UPDATE_ASSET_SCRIPT_TYPE(Constants.ID_UPDATE_ASSET_SCRIPT_TYPE, R.drawable.ic_t_setassetscript_48,
             R.string.history_type_update_asset_script),
+    SCRIPT_INVOCATION_TYPE(Constants.ID_SCRIPT_INVOCATION_TYPE, R.drawable.ic_t_invocationscript_48,
+            R.string.history_type_script_invocation),
     UNRECOGNISED_TYPE(Constants.ID_UNRECOGNISED_TYPE, R.drawable.ic_t_undefined_48,
             R.string.history_type_unrecognised);
 

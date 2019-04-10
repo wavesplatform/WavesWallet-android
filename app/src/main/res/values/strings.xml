@@ -326,6 +326,7 @@
     <string name="history_type_token_reissue">Token Reissue </string>
     <string name="history_type_unrecognised">Unrecognised Transaction</string>
     <string name="history_type_update_asset_script">Set Asset Script</string>
+    <string name="history_type_script_invocation">Script Invocation</string>
     <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
     <string name="import_account_login_at_site">Log in to your Waves Client via web or Mac, PC</string>
     <string name="import_account_scan_pairing_code">Scan pairing code</string>

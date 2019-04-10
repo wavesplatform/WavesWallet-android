@@ -75,9 +75,9 @@ open class AssetPair(
 @RealmClass
 open class Payment(
         @SerializedName("amount")
-        var amount: Int,
+        var amount: Int = 0,
         @SerializedName("assetId")
-        var assetId: String?
+        var assetId: String? = null
 ) : RealmModel
 
 @RealmClass
@@ -204,6 +204,7 @@ open class Transaction(
         const val ADDRESS_SCRIPT = 13
         const val SPONSORSHIP = 14
         const val ASSET_SCRIPT = 15
+        const val SCRIPT_INVOCATION = 16
 
         private fun getNameBy(type: Int): String {
             return when (type) {
@@ -222,6 +223,7 @@ open class Transaction(
                 ADDRESS_SCRIPT -> "Address Script"
                 SPONSORSHIP -> "SponsorShip"
                 ASSET_SCRIPT -> "Asset Script"
+                SCRIPT_INVOCATION -> "Script Invocation"
                 else -> ""
             }
         }
