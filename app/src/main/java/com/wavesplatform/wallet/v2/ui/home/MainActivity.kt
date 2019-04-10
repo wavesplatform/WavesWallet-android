@@ -39,7 +39,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFr
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
-import kotlinx.android.synthetic.main.activity_main_v2.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_news.view.*
 import pers.victor.ext.click
@@ -61,7 +61,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     @ProvidePresenter
     fun providePresenter(): MainPresenter = presenter
 
-    override fun configLayoutRes() = R.layout.activity_main_v2
+    override fun configLayoutRes() = R.layout.activity_main
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)

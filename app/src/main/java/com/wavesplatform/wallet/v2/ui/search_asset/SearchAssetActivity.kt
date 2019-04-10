@@ -6,20 +6,22 @@
 package com.wavesplatform.wallet.v2.ui.search_asset
 
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
+import android.view.LayoutInflater
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_search_asset.*
+import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.click
 import javax.inject.Inject
 
@@ -38,10 +40,23 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
     override fun configLayoutRes() = R.layout.activity_search_asset
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        setStatusBarColor(R.color.white)
+        setNavigationBarColor(R.color.white)
+        ViewCompat.setElevation(appbar_layout, 8F)
+        clear_button.click {
+            search_view.setText("")
+            presenter.search("")
+        }
         cancel_button.click { finish() }
         recycle_assets.layoutManager = LinearLayoutManager(this)
         adapter.bindToRecyclerView(recycle_assets)
-        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+
+        val emptyView = LayoutInflater.from(this)
+                .inflate(R.layout.address_book_empty_state, null)
+        emptyView.text_empty.text = getString(R.string.search_asset_empty)
+        adapter.emptyView = emptyView
+
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
             val item = this.adapter.getItem(position) as AssetBalance
             launchActivity<AssetDetailsActivity>(AssetsFragment.REQUEST_ASSET_DETAILS) {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType)
@@ -51,28 +66,18 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
 
         eventSubscriptions.add(RxTextView.textChanges(search_view)
                 .subscribe { search ->
-                    val searchEmpty = !TextUtils.isEmpty(search)
-                    if (searchEmpty) {
-                        search(search.toString())
+                    if (!TextUtils.isEmpty(search)) {
+                        presenter.search(search.toString())
                     }
                 })
 
-        search("")
+        presenter.search("")
+
+        search_view.requestFocus()
+
     }
 
-    private fun search(query: String) {
-        val list = if (TextUtils.isEmpty(query)) {
-            presenter.queryAllAssetBalance()
-        } else {
-            val queryLower = query.toLowerCase()
-            presenter.queryAllAssetBalance().filter {
-                it.assetId.toLowerCase().contains(queryLower)
-                        || it.getName().toLowerCase().contains(queryLower)
-                        || it.issueTransaction?.name?.toLowerCase()?.contains(queryLower) ?: false
-                        || it.issueTransaction?.assetId?.toLowerCase()?.contains(queryLower) ?: false
-                        || it.assetId == Constants.findByGatewayId(query.toUpperCase())?.assetId
-            }
-        }
+    override fun setSearchResult(list: List<AssetBalance>) {
         adapter.setNewData(list)
     }
 }

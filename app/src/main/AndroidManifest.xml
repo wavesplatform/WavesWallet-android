@@ -268,7 +268,7 @@
             android:name="com.wavesplatform.wallet.v2.ui.search_asset.SearchAssetActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="stateVisible"/>
 
         <service
             android:name=".v2.data.service.UpdateApiDataService"

@@ -583,7 +583,7 @@ fun View.setMargins(
             left ?: lp.leftMargin,
             top ?: lp.topMargin,
             right ?: lp.rightMargin,
-            bottom ?: lp.rightMargin
+            bottom ?: lp.bottomMargin
     )
 
     layoutParams = lp
