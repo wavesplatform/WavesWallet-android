@@ -100,7 +100,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
         adapter.onSearchClickListener = object : AssetsAdapter.OnSearchClickListener {
             override fun onClick(view: View) {
-                launchActivity<SearchAssetActivity>()
+                launchActivity<SearchAssetActivity>(withoutAnimation = true)
+                activity!!.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             }
         }
     }

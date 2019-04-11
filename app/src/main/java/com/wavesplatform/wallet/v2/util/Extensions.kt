@@ -530,7 +530,6 @@ inline fun <reified T : Any> Fragment.launchActivity(
     }
     if (withoutAnimation) {
         activity?.overridePendingTransition(0, 0)
-        // todo activity?.overridePendingTransition(R.anim.start_new_show,  R.anim.start_current_hide)
     }
 }
 

@@ -41,6 +41,11 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
 
     override fun configLayoutRes() = R.layout.activity_search_asset
 
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+    }
+
     override fun onViewReady(savedInstanceState: Bundle?) {
         setStatusBarColor(R.color.basic50)
         setNavigationBarColor(R.color.basic50)
@@ -49,7 +54,7 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
             search_view.setText("")
             presenter.search("")
         }
-        cancel_button.click { finish() }
+        cancel_button.click { onBackPressed() }
         recycle_assets.layoutManager = LinearLayoutManager(this)
         adapter.bindToRecyclerView(recycle_assets)
 
