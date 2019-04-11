@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
@@ -87,7 +88,7 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
 
     }
 
-    override fun setSearchResult(list: List<AssetBalance>) {
+    override fun setSearchResult(list: List<MultiItemEntity>) {
         adapter.setNewData(list)
     }
 }

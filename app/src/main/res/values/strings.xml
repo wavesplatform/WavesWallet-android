@@ -660,4 +660,6 @@
     <string name="search_asset_hint">Search</string>
     <string name="search_asset_cancel">Cancel</string>
     <string name="search_asset_empty">Nothing found here…</string>
+    <string name="search_asset_hidden_title">Hidden assets</string>
+
 </resources>
