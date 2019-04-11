@@ -548,11 +548,7 @@ inline fun <reified T : Any> Context.launchActivity(
     }
 
     intent.init()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        startActivity(intent, options)
-    } else {
-        startActivity(intent)
-    }
+    startActivity(intent, options)
 }
 
 fun Snackbar.withColor(@ColorRes colorInt: Int?): Snackbar {

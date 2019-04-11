@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:background="@color/white">
+        android:background="@color/basic50">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -31,7 +31,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/basic100_rounded"
-                android:drawableStart="@drawable/ic_search_24_basic_500"
+                android:drawableStart="@drawable/ic_search_24_black"
                 android:drawablePadding="8dp"
                 android:hint="@string/search_asset_hint"
                 android:paddingTop="8dp"

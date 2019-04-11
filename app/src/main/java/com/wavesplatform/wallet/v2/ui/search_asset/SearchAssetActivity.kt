@@ -23,6 +23,8 @@ import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_search_asset.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
 import pers.victor.ext.click
+import pers.victor.ext.gone
+import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class SearchAssetActivity : BaseActivity(), SearchAssetView {
@@ -40,8 +42,8 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
     override fun configLayoutRes() = R.layout.activity_search_asset
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        setStatusBarColor(R.color.white)
-        setNavigationBarColor(R.color.white)
+        setStatusBarColor(R.color.basic50)
+        setNavigationBarColor(R.color.basic50)
         ViewCompat.setElevation(appbar_layout, 8F)
         clear_button.click {
             search_view.setText("")
@@ -66,9 +68,12 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
 
         eventSubscriptions.add(RxTextView.textChanges(search_view)
                 .subscribe { search ->
-                    if (!TextUtils.isEmpty(search)) {
-                        presenter.search(search.toString())
+                    if (TextUtils.isEmpty(search)) {
+                        clear_button.gone()
+                    } else {
+                        clear_button.visiable()
                     }
+                    presenter.search(search.toString())
                 })
 
         presenter.search("")

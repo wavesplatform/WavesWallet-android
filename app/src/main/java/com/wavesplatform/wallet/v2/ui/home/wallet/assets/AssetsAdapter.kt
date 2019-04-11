@@ -60,7 +60,7 @@ class AssetsAdapter @Inject constructor() :
         when (helper.itemViewType) {
             TYPE_SEARCH -> {
                 helper.itemView.click {
-                    onSearchClickListener?.onClick()
+                    onSearchClickListener?.onClick(helper.itemView)
                 }
             }
             TYPE_HEADER -> {
@@ -116,6 +116,6 @@ class AssetsAdapter @Inject constructor() :
     }
 
     interface OnSearchClickListener {
-        fun onClick()
+        fun onClick(view: View)
     }
 }

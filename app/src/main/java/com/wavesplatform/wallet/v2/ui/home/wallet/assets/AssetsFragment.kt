@@ -10,10 +10,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -101,8 +98,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
                     }
                 })
 
-        adapter.onSearchClickListener = object : AssetsAdapter.OnSearchClickListener{
-            override fun onClick() {
+        adapter.onSearchClickListener = object : AssetsAdapter.OnSearchClickListener {
+            override fun onClick(view: View) {
                 launchActivity<SearchAssetActivity>()
             }
         }
