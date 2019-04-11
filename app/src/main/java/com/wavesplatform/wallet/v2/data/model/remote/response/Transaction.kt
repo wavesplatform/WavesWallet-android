@@ -75,9 +75,10 @@ open class AssetPair(
 @RealmClass
 open class Payment(
         @SerializedName("amount")
-        var amount: Int = 0,
+        var amount: Long = 0,
         @SerializedName("assetId")
-        var assetId: String? = null
+        var assetId: String? = null,
+        var asset: AssetInfo? = AssetInfo()
 ) : RealmModel
 
 @RealmClass
@@ -149,6 +150,8 @@ open class Transaction(
         var minSponsoredAssetFee: String? = "",
         @SerializedName("payment")
         var payment: RealmList<Payment> = RealmList(),
+        @SerializedName("dappAddress")
+        var dappAddress: String? = "",
         var transactionTypeId: Int = 0,
         var asset: AssetInfo? = AssetInfo()
 ) : RealmModel {

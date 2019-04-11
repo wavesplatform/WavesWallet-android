@@ -84,6 +84,7 @@ enum class TransactionType(
                     type == TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
                     type == TransactionType.CANCEL_SPONSORSHIP_TYPE ||
                     type == TransactionType.UPDATE_ASSET_SCRIPT_TYPE ||
+                    type == TransactionType.SCRIPT_INVOCATION_TYPE ||
                     type == TransactionType.EXCHANGE_TYPE)
         }
     }
