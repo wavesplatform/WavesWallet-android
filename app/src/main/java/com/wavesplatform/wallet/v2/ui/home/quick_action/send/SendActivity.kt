@@ -80,6 +80,15 @@ class SendActivity : BaseActivity(), SendView {
         checkRecipient(edit_address.text.toString())
 
         setupCommissionBlock()
+        
+        eventSubscriptions.add(RxTextView.textChanges(edit_address)
+                .skipInitialValue()
+                .map(CharSequence::toString)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    checkRecipient(it)
+                })
 
         when {
             intent.hasExtra(KEY_INTENT_ASSET_DETAILS) -> {
@@ -104,15 +113,6 @@ class SendActivity : BaseActivity(), SendView {
             }
             else -> assetEnable(true)
         }
-
-        eventSubscriptions.add(RxTextView.textChanges(edit_address)
-                .skipInitialValue()
-                .map(CharSequence::toString)
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    checkRecipient(it)
-                })
 
         edit_amount.applyFilterStartWithDot()
 
