@@ -7,10 +7,11 @@ package com.wavesplatform.wallet.v2.data.helpers
 
 import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 
 class ClearAssetsHelper {
     companion object {
@@ -57,10 +58,10 @@ class ClearAssetsHelper {
                 savedAssetPrefsMap[it.assetId]?.isHidden = true
             }
 
-            allAssetsToClear.saveAll()
+            AssetBalanceDb.convertToDb(allAssetsToClear).saveAll()
             savedAssetPrefs.saveAll()
 
-            return queryAll<AssetBalance>().toMutableList()
+            return AssetBalanceDb.convertFromDb(queryAll()).toMutableList()
         }
     }
 }

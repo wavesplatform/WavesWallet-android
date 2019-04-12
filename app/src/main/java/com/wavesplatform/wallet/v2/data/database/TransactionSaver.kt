@@ -151,7 +151,7 @@ class TransactionSaver @Inject constructor() {
                             if (!trans.payment.isNullOrEmpty()) {
                                 trans.payment.first()?.let { payment ->
                                     if (payment.assetId.isNullOrEmpty()) {
-                                        payment.asset = Constants.wavesAssetInfo
+                                        payment.asset = Constants.WAVES_ASSET_INFO
                                     } else {
                                         payment.asset = allAssets.firstOrNull { it.id == payment.assetId }
                                     }

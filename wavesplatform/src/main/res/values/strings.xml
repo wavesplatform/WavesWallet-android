@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Wavesplatform</string>
     <string name="history_type_cancel_address_script">Cancel Script Transaction</string>
-    <string name="history_type_cancel_sponsorship">Cancel Sponsorship transaction</string>
+    <string name="history_type_cancel_sponsorship">Disable Sponsorship</string>
     <string name="history_type_canceled_leasing">Canceled Leasing</string>
     <string name="history_type_create_alias">Create Alias</string>
     <string name="history_type_data">Data transaction</string>
@@ -15,7 +15,7 @@
     <string name="history_type_self_transfer">Self-transfer</string>
     <string name="history_type_sent">Sent</string>
     <string name="history_type_set_address_script">Set Script Transaction</string>
-    <string name="history_type_set_sponsorship">Set sponsorship transaction</string>
+    <string name="history_type_set_sponsorship">Set Sponsorship</string>
     <string name="history_type_spam_receive">Received</string>
     <string name="history_type_started_leasing">Started Leasing</string>
     <string name="history_type_token_burn">Token Burn</string>
@@ -23,6 +23,7 @@
     <string name="history_type_token_reissue">Token Reissue </string>
     <string name="history_type_unrecognised">Unrecognised Transaction</string>
     <string name="history_type_update_asset_script">Set Asset Script</string>
+    <string name="history_type_script_invocation">Script Invocation</string>
     <string name="my_orders_type_buy">Buy</string>
     <string name="my_orders_type_sell">Sell</string>
     <string name="my_orders_status_open">Open</string>

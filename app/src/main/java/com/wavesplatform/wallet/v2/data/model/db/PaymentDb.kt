@@ -17,14 +17,15 @@ open class PaymentDb(
         var amount: Long = 0,
         @SerializedName("assetId")
         var assetId: String? = null,
-        var asset: AssetInfo? = AssetInfo()
+        @SerializedName("asset")
+        var asset: AssetInfoDb? = AssetInfoDb()
 ) : RealmModel, Parcelable {
 
-    constructor(order: Payment?) : this() {
-        order.notNull {
+    constructor(payment: Payment?) : this() {
+        payment.notNull {
             this.amount = it.amount
             this.assetId = it.assetId
-            this.asset = it.asset
+            this.asset = AssetInfoDb(it.asset)
         }
     }
 
@@ -32,6 +33,6 @@ open class PaymentDb(
         return Payment(
                 amount = amount,
                 assetId = assetId,
-                asset = asset)
+                asset = asset?.convertFromDb())
     }
 }

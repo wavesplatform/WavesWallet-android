@@ -67,6 +67,7 @@ open class Payment(
         var amount: Long = 0,
         @SerializedName("assetId")
         var assetId: String? = null,
+        @SerializedName("assetId")
         var asset: AssetInfo? = AssetInfo()
 )
 

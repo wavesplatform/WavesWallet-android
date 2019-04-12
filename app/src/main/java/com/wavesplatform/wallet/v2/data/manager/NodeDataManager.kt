@@ -186,7 +186,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 AssetBalanceDb.convertToDb(tripple.third.balances).saveAll()
                                 AssetBalanceStore.saveAssetBalanceStore(tripple.third.balances)
 
-                                val allAssets = AssetBalanceDb.convertFromDb(queryAll<AssetBalanceDb>())
+                                val allAssets = AssetBalanceDb.convertFromDb(queryAll())
                                 trackZeroBalances(allAssets)
 
                                 // clear wallet from unimportant assets for new imported wallets

@@ -67,7 +67,9 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                     }
                     .map {
                         // clear wallet from unimportant assets
-                        dbAssets = ClearAssetsHelper.clearUnimportantAssets(prefsUtil, dbAssets)
+                        dbAssets = AssetBalanceDb.convertToDb(
+                                ClearAssetsHelper.clearUnimportantAssets(
+                                        prefsUtil, AssetBalanceDb.convertFromDb(dbAssets)))
                         return@map createTripleSortedLists(dbAssets)
                     }
                     .doOnNext { postSuccess(it, withApiUpdate, true) }
