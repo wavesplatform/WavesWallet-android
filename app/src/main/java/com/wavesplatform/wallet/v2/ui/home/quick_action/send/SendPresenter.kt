@@ -105,7 +105,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
             } else if (!isFundSufficient(tx)) {
                 return R.string.insufficient_funds
             } else if (isGatewayAmountError()) {
-                return R.string.insufficient_gateway_funds_error // todo check
+                return R.string.insufficient_gateway_funds_error
             } else if (findByGatewayId("XMR")!!.assetId == recipientAssetId &&
                     moneroPaymentId != null &&
                     (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH ||

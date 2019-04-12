@@ -88,7 +88,7 @@ class MigrationUtil @Inject constructor() {
                     return
                 }
                 if (tempRealm!!.version != VER_DB_NEW && tempRealm.version < VER_DB_WITHOUT_USER_DATA) {
-                    if (sharedRealm.hasTable(Table.getTableNameForClass("AddressBookUser"))) {
+                    if (sharedRealm.hasTable(Table.getTableNameForClass("AddressBookUser"))) {  // todo check table name
                         val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
                         val addressBookUsers = mutableListOf<AddressBookUser>()
                         for (item in addressBookUsersDb) {
@@ -101,7 +101,7 @@ class MigrationUtil @Inject constructor() {
                     }
 
                     val assetBalancesStore = mutableListOf<AssetBalanceStore>()
-                    val assetBalancesDb = tempRealm.where("AssetBalance").findAll()
+                    val assetBalancesDb = tempRealm.where("AssetBalance").findAll()  // todo check table name
                     for (item in assetBalancesDb) {
                         val assetId = item.getString("assetId")
                         assetBalancesStore.add(AssetBalanceStore(

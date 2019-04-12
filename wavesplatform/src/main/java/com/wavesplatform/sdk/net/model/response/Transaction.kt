@@ -62,20 +62,17 @@ open class AssetPair(
         @SerializedName("priceAssetObject") var priceAssetObject: AssetInfo? = AssetInfo()
 )
 
-// todo check move to DB
-@RealmClass
 open class Payment(
         @SerializedName("amount")
         var amount: Long = 0,
         @SerializedName("assetId")
         var assetId: String? = null,
         var asset: AssetInfo? = AssetInfo()
-) : RealmModel
+)
 
 open class Transaction(
         @SerializedName("type")
         var type: Int = 0,
-        @PrimaryKey
         @SerializedName("id")
         var id: String = "",
         @SerializedName("sender")
@@ -129,9 +126,9 @@ open class Transaction(
         @SerializedName("totalAmount")
         var totalAmount: Long = 0,
         @SerializedName("transfers")
-        var transfers: RealmList<Transfer> = RealmList(),
+        var transfers: List<Transfer> = mutableListOf(),
         @SerializedName("data")
-        var data: RealmList<Data> = RealmList(),
+        var data: List<Data> = mutableListOf(),
         @SerializedName("isPending")
         var isPending: Boolean = false,
         @SerializedName("script")
@@ -139,7 +136,7 @@ open class Transaction(
         @SerializedName("minSponsoredAssetFee")
         var minSponsoredAssetFee: String? = "",
         @SerializedName("payment")
-        var payment: RealmList<Payment> = RealmList(),
+        var payment: List<Payment> = mutableListOf(),
         @SerializedName("dappAddress")
         var dappAddress: String? = "",
         var transactionTypeId: Int = 0,

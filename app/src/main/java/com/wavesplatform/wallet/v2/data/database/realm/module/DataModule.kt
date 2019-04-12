@@ -10,5 +10,5 @@ import io.realm.annotations.RealmModule
 
 @RealmModule(classes = [AssetBalanceDb::class, IssueTransactionDb::class, TransactionDb::class, DataDb::class,
     TransferDb::class, AssetPairDb::class, OrderDb::class, LeaseDb::class, AliasDb::class, SpamAssetDb::class,
-    AssetInfoDb::class, Payment::class]) // todo check imports
+    AssetInfoDb::class, PaymentDb::class])
 class DataModule
