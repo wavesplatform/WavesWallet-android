@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticAssetManager
+import com.wavesplatform.wallet.v2.data.helpers.ClearAssetsHelper
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
@@ -188,7 +189,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 val allAssets = AssetBalanceDb.convertFromDb(queryAll<AssetBalanceDb>())
                                 trackZeroBalances(allAssets)
 
-                                return@map allAssets
+                                // clear wallet from unimportant assets for new imported wallets
+                                return@map ClearAssetsHelper.clearUnimportantAssets(prefsUtil, allAssets.toMutableList(), fromAPI = true)
                             }
                             .subscribeOn(Schedulers.io())
                 }

@@ -131,6 +131,7 @@ class HistoryTabItemAdapter @Inject constructor() :
                             TransactionType.DATA_TYPE,
                             TransactionType.SET_ADDRESS_SCRIPT_TYPE,
                             TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
+                            TransactionType.SCRIPT_INVOCATION_TYPE,
                             TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                                 view.text_transaction_name.text =
                                         mContext.getString(R.string.history_data_type_title)

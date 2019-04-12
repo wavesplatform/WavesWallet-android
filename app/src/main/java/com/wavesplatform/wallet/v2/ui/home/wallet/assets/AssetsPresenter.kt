@@ -18,6 +18,7 @@ import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.helpers.ClearAssetsHelper
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
@@ -62,7 +63,12 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                             }
                         }
                         dbAssets = assetBalanceList
-                        return@map createTripleSortedLists(assetBalanceList)
+                        return@map Observable.just(assetBalanceList)
+                    }
+                    .map {
+                        // clear wallet from unimportant assets
+                        dbAssets = ClearAssetsHelper.clearUnimportantAssets(prefsUtil, dbAssets)
+                        return@map createTripleSortedLists(dbAssets)
                     }
                     .doOnNext { postSuccess(it, withApiUpdate, true) }
                     .flatMap { tryUpdateWithApi(withApiUpdate, AssetBalanceDb.convertFromDb(dbAssets)) }

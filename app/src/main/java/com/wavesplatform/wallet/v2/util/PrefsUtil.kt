@@ -258,5 +258,6 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         const val KEY_DEX_PAIR_SMART_INFO_NOT_SHOW_LIST = "dex_pair_smart_info_not_show_list"
         const val KEY_ASSETS_ZERO = "assets_zero"
         const val KEY_ASSETS_ALL = "assets_all"
+        const val KEY_IS_CLEARED_ASSETS = "is_cleared_assets"
     }
 }
