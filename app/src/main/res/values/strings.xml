@@ -326,6 +326,7 @@
     <string name="history_type_token_reissue">Token Reissue </string>
     <string name="history_type_unrecognised">Unrecognised Transaction</string>
     <string name="history_type_update_asset_script">Set Asset Script</string>
+    <string name="history_type_script_invocation">Script Invocation</string>
     <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
     <string name="import_account_login_at_site">Log in to your Waves Client via web or Mac, PC</string>
     <string name="import_account_scan_pairing_code">Scan pairing code</string>
@@ -657,6 +658,9 @@
 
     <string name="enter_seed_manually_validation_seed_is_simple_title">Your Seed phrase is too simple</string>
     <string name="enter_seed_manually_validation_seed_is_simple_description">This is not secure. You should avoid using a Seed phrase that might be easy for someone else to guess. Are you sure you want to continue?</string>
+
+    <string name="history_details_script_invocation_payment">Payment</string>
+    <string name="history_details_script_invocation_script_address">Script address</string>
     <string name="search_asset_hint">Search</string>
     <string name="search_asset_cancel">Cancel</string>
     <string name="search_asset_empty">Nothing found here…</string>

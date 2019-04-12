@@ -258,5 +258,6 @@ class PrefsUtil @Inject constructor(@ApplicationContext context: Context) {
         const val KEY_GLOBAL_CURRENT_TIME_CORRECTION = "global_current_time_correction"
         const val KEY_ASSETS_ZERO = "assets_zero"
         const val KEY_ASSETS_ALL = "assets_all"
+        const val KEY_IS_CLEARED_ASSETS = "is_cleared_assets"
     }
 }

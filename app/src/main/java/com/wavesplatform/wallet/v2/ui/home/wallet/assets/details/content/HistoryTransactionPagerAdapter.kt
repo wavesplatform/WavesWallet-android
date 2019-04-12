@@ -104,6 +104,7 @@ class HistoryTransactionPagerAdapter constructor(
                 TransactionType.DATA_TYPE,
                 TransactionType.SET_ADDRESS_SCRIPT_TYPE,
                 TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
+                TransactionType.SCRIPT_INVOCATION_TYPE,
                 TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                     layout.text_transaction_value.setTypeface(null, Typeface.BOLD)
                     layout.text_transaction_value.text = layout.text_transaction_name.context
