@@ -89,7 +89,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         adapter.bindToRecyclerView(recycle_assets)
 
         if (intent.hasExtra(CRYPTO_CURRENCY)) {
-            presenter.loadCryptoAssets(presenter.greaterZeroBalance)
+            presenter.loadCryptoAssets(presenter.greaterZeroBalance, useWaves = false)
         } else {
             presenter.loadAssets(presenter.greaterZeroBalance)
         }
