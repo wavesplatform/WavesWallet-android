@@ -15,8 +15,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
-import com.wavesplatform.sdk.net.model.response.AssetBalance
-import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnel
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnelResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
@@ -49,7 +49,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
 
         var REQUEST_SELECT_ASSET = 10001
 
-        fun newInstance(assetBalance: AssetBalance?): CryptoCurrencyFragment {
+        fun newInstance(assetBalance: AssetBalanceResponse?): CryptoCurrencyFragment {
             val fragment = CryptoCurrencyFragment()
             if (assetBalance == null) {
                 return fragment
@@ -65,7 +65,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         if (arguments == null) {
             assetChangeEnable(true)
         } else {
-            val assetBalance = arguments!!.getParcelable<AssetBalance>(
+            val assetBalance = arguments!!.getParcelable<AssetBalanceResponse>(
                     YourAssetsActivity.BUNDLE_ASSET_ITEM)
             setAssetBalance(assetBalance)
             assetChangeEnable(false)
@@ -104,12 +104,12 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SELECT_ASSET && resultCode == Activity.RESULT_OK) {
-            val assetBalance = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
+            val assetBalance = data?.getParcelableExtra<AssetBalanceResponse>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
             setAssetBalance(assetBalance)
         }
     }
 
-    override fun onShowTunnel(tunnel: GetTunnel?) {
+    override fun onShowTunnel(tunnel: GetTunnelResponse?) {
         skeletonView?.hide()
         if (tunnel?.tunnel == null ||
                 tunnel.tunnel?.inMin.isNullOrEmpty() ||
@@ -156,7 +156,7 @@ class CryptoCurrencyFragment : BaseFragment(), CryptoCurrencyView {
         button_continue?.isEnabled = false
     }
 
-    private fun setAssetBalance(assetBalance: AssetBalance?) {
+    private fun setAssetBalance(assetBalance: AssetBalanceResponse?) {
         presenter.assetBalance = assetBalance
 
         image_asset_icon.setAsset(assetBalance)

@@ -13,7 +13,7 @@ import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
-import com.wavesplatform.sdk.net.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 
 data class BurnRequest(
@@ -23,7 +23,7 @@ data class BurnRequest(
         @SerializedName("quantity") var quantity: Long = 1,
         @SerializedName("senderPublicKey") var senderPublicKey: String? = "",
         @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
-        @SerializedName("type") val type: Int = Transaction.BURN,
+        @SerializedName("type") val type: Int = TransactionResponse.BURN,
         @SerializedName("version") val version: Int = Constants.VERSION,
         @SerializedName("proofs") var proofs: MutableList<String?>? = null,
         @SerializedName("id") var id: String? = null
@@ -32,7 +32,7 @@ data class BurnRequest(
     fun toSignBytes(): ByteArray {
         return try {
             Bytes.concat(
-                    byteArrayOf(Transaction.BURN.toByte()),
+                    byteArrayOf(TransactionResponse.BURN.toByte()),
                     byteArrayOf(EnvironmentManager.netCode),
                     byteArrayOf(chainId),
                     Base58.decode(Wavesplatform.getWallet().publicKeyStr ?: ""),

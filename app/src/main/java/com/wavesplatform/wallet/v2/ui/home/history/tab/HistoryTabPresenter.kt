@@ -10,9 +10,9 @@ import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.sdk.net.model.Language
-import com.wavesplatform.sdk.net.model.response.AssetBalance
-import com.wavesplatform.sdk.net.model.response.Transaction
-import com.wavesplatform.sdk.net.model.response.TransactionType
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
+import com.wavesplatform.sdk.net.model.TransactionType
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.utils.isWavesId
 import com.wavesplatform.sdk.utils.transactionType
@@ -35,11 +35,11 @@ import javax.inject.Inject
 
 @InjectViewState
 class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>() {
-    var allItemsFromDb = listOf<Transaction>()
+    var allItemsFromDb = listOf<TransactionResponse>()
     var totalHeaders = 0
     var type: String? = "all"
     var hashOfTimestamp = hashMapOf<Long, Long>()
-    var assetBalance: AssetBalance? = null
+    var assetBalance: AssetBalanceResponse? = null
 
     @Inject
     lateinit var transactionSaver: TransactionSaver
@@ -152,7 +152,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         }
     }
 
-    private fun filterSpam(transitions: List<Transaction>): List<Transaction> {
+    private fun filterSpam(transitions: List<TransactionResponse>): List<TransactionResponse> {
         val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
         return if (enableSpamFilter) {
             transitions.filter { !(it.asset?.isSpam ?: false) }
@@ -161,7 +161,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
         }
     }
 
-    private fun filterDetailed(transactions: List<Transaction>, assetId: String): List<Transaction> {
+    private fun filterDetailed(transactions: List<TransactionResponse>, assetId: String): List<TransactionResponse> {
         return transactions.filter { transaction ->
             (assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && !transaction.isSponsorshipTransaction()) ||
                     AssetDetailsContentPresenter.isAssetIdInExchange(transaction, assetId) ||
@@ -186,7 +186,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                 }))
     }
 
-    private fun sortAndConfigToUi(it: List<Transaction>): ArrayList<HistoryItem> {
+    private fun sortAndConfigToUi(it: List<TransactionResponse>): ArrayList<HistoryItem> {
         init()
 
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy",

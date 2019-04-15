@@ -41,7 +41,8 @@
         android:layout_below="@+id/appbar_layout"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingBottom="24dp" />
+        android:paddingBottom="24dp"
+        tools:listitem="@layout/your_assets_item"/>
 
     <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
         android:id="@+id/progress_bar"

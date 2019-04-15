@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.Ignore
@@ -34,7 +34,7 @@ open class AssetBalanceDb(
         var isSpam: Boolean = false
 ) : RealmModel, Parcelable {
 
-    constructor(assetBalance: AssetBalance?) : this() {
+    constructor(assetBalance: AssetBalanceResponse?) : this() {
         assetBalance.notNull {
             this.assetId = it.assetId
             this.balance = it.balance
@@ -56,8 +56,8 @@ open class AssetBalanceDb(
         }
     }
 
-    fun convertFromDb(): AssetBalance {
-        return AssetBalance(
+    fun convertFromDb(): AssetBalanceResponse {
+        return AssetBalanceResponse(
                 assetId = this.assetId,
                 balance = this.balance,
                 leasedBalance = this.leasedBalance,
@@ -79,7 +79,7 @@ open class AssetBalanceDb(
 
     companion object {
 
-        fun convertToDb(assetBalances: List<AssetBalance>): MutableList<AssetBalanceDb> {
+        fun convertToDb(assetBalances: List<AssetBalanceResponse>): MutableList<AssetBalanceDb> {
             val list = mutableListOf<AssetBalanceDb>()
             assetBalances.forEach {
                 list.add(AssetBalanceDb(it))
@@ -87,8 +87,8 @@ open class AssetBalanceDb(
             return list
         }
 
-        fun convertFromDb(assetBalances: List<AssetBalanceDb>): MutableList<AssetBalance> {
-            val list = mutableListOf<AssetBalance>()
+        fun convertFromDb(assetBalances: List<AssetBalanceDb>): MutableList<AssetBalanceResponse> {
+            val list = mutableListOf<AssetBalanceResponse>()
             assetBalances.forEach {
                 list.add(it.convertFromDb())
             }

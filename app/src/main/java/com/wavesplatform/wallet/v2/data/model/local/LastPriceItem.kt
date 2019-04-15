@@ -10,10 +10,10 @@ import com.wavesplatform.sdk.net.model.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook.TradeOrderBookAdapter
 
 class LastPriceItem : MultiItemEntity {
-    var lastTrade: LastTradesResponse.Data.ExchangeTransaction? = null
+    var lastTrade: LastTradesResponse.DataResponse.ExchangeTransactionResponse? = null
     var spreadPercent: Double? = 0.0
 
-    constructor(spreadPercent: Double?, item: LastTradesResponse.Data.ExchangeTransaction) {
+    constructor(spreadPercent: Double?, item: LastTradesResponse.DataResponse.ExchangeTransactionResponse) {
         this.lastTrade = item
         this.spreadPercent = spreadPercent
     }

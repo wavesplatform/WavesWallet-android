@@ -12,11 +12,11 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
-import com.wavesplatform.sdk.net.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 
 data class CancelLeasingRequest(
-        @SerializedName("type") val type: Int = Transaction.LEASE_CANCEL,
+        @SerializedName("type") val type: Int = TransactionResponse.LEASE_CANCEL,
         @SerializedName("chainId") var scheme: Int? = EnvironmentManager.netCode.toInt(),
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("leaseId") var leaseId: String = "",

@@ -5,9 +5,9 @@
 
 package com.wavesplatform.sdk.net.service
 
-import com.wavesplatform.sdk.net.model.response.GlobalConfiguration
-import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommission
-import com.wavesplatform.sdk.net.model.response.News
+import com.wavesplatform.sdk.net.model.response.GlobalConfigurationResponse
+import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommissionResponse
+import com.wavesplatform.sdk.net.model.response.NewsResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -19,11 +19,11 @@ interface GithubService {
     fun spamAssets(@Url url: String = EnvironmentManager.servers.spamUrl): Observable<String>
 
     @GET
-    fun news(@Url url: String = News.URL): Observable<News>
+    fun news(@Url url: String = NewsResponse.URL): Observable<NewsResponse>
 
     @GET
-    fun globalConfiguration(@Url url: String = EnvironmentManager.environment.url): Observable<GlobalConfiguration>
+    fun globalConfiguration(@Url url: String = EnvironmentManager.environment.url): Observable<GlobalConfigurationResponse>
 
     @GET
-    fun globalCommission(@Url url: String = EnvironmentManager.URL_COMMISSION_MAIN_NET): Observable<GlobalTransactionCommission>
+    fun globalCommission(@Url url: String = EnvironmentManager.URL_COMMISSION_MAIN_NET): Observable<GlobalTransactionCommissionResponse>
 }

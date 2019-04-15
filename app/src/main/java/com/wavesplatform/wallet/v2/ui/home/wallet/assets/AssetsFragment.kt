@@ -26,7 +26,7 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
@@ -164,7 +164,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = this.adapter.getItem(position) as AssetBalance
+            val item = this.adapter.getItem(position) as AssetBalanceResponse
             val positionWithoutSection = when {
                 // minus hidden section header and all clear assets
                 item.isHidden -> position - 1 - adapter.data.count {

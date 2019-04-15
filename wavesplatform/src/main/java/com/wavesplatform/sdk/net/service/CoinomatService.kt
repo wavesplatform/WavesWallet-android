@@ -1,9 +1,9 @@
 package com.wavesplatform.sdk.net.service
 
-import com.wavesplatform.sdk.net.model.response.coinomat.XRate
-import com.wavesplatform.sdk.net.model.response.coinomat.CreateTunnel
-import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnel
-import com.wavesplatform.sdk.net.model.response.coinomat.Limit
+import com.wavesplatform.sdk.net.model.response.coinomat.XRateResponse
+import com.wavesplatform.sdk.net.model.response.coinomat.CreateTunnelResponse
+import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnelResponse
+import com.wavesplatform.sdk.net.model.response.coinomat.LimitResponse
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -15,7 +15,7 @@ interface CoinomatService {
             @Query("crypto") crypto: String?,
             @Query("address") address: String?,
             @Query("fiat") fiat: String?
-    ): Observable<Limit>
+    ): Observable<LimitResponse>
 
     @GET("v2/indacoin/rate.php")
     fun rate(
@@ -31,7 +31,7 @@ interface CoinomatService {
             @Query("currency_to") currencyTo: String?,
             @Query("wallet_to") address: String?,
             @Query("monero_payment_id") moneroPaymentId: String?
-    ): Observable<CreateTunnel>
+    ): Observable<CreateTunnelResponse>
 
     @GET("v1/get_tunnel.php")
     fun getTunnel(
@@ -39,7 +39,7 @@ interface CoinomatService {
             @Query("k1") k1: String?,
             @Query("k2") k2: String?,
             @Query("lang") lang: String?
-    ): Observable<GetTunnel>
+    ): Observable<GetTunnelResponse>
 
     // https://coinomat.com/api/v1/get_xrate.php?f=WETH&t=ETH&lang=ru_RU
     @GET("v1/get_xrate.php")
@@ -47,7 +47,7 @@ interface CoinomatService {
             @Query("f") from: String?,
             @Query("t") to: String?,
             @Query("lang") lang: String?
-    ): Observable<XRate>
+    ): Observable<XRateResponse>
 
     companion object Factory {
 

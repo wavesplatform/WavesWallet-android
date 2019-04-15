@@ -13,13 +13,13 @@ import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.net.model.OrderType
-import com.wavesplatform.sdk.net.model.response.OrderBook
+import com.wavesplatform.sdk.net.model.response.OrderBookResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 
 data class OrderRequest(
         @SerializedName("matcherPublicKey") var matcherPublicKey: String = "",
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
-        @SerializedName("assetPair") var assetPair: OrderBook.Pair = OrderBook.Pair(),
+        @SerializedName("assetPair") var assetPair: OrderBookResponse.PairResponse = OrderBookResponse.PairResponse(),
         @SerializedName("orderType") var orderType: OrderType = OrderType.BUY,
         @SerializedName("price") var price: Long = 0L,
         @SerializedName("amount") var amount: Long = 0L,

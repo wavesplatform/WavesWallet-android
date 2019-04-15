@@ -13,11 +13,11 @@ import java.math.BigDecimal
 @Parcelize
 data class PairResponse(
     @SerializedName("__type") var type: String = "",
-    @SerializedName("data") var data: Data = Data()
+    @SerializedName("data") var data: DataResponse = DataResponse()
 ) : Parcelable {
 
     @Parcelize
-    data class Data(
+    data class DataResponse(
         @SerializedName("firstPrice") var firstPrice: BigDecimal = BigDecimal(0),
         @SerializedName("lastPrice") var lastPrice: BigDecimal = BigDecimal(0),
         @SerializedName("volume") var volume: BigDecimal = BigDecimal(0),

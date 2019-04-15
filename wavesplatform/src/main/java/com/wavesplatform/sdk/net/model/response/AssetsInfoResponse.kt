@@ -12,16 +12,16 @@ import java.util.*
 
 data class AssetsInfoResponse(
         @SerializedName("__type") var type: String = "list",
-        @SerializedName("data") var data: List<AssetsInfoData> = listOf()
+        @SerializedName("data") var data: List<AssetsInfoDataResponse> = listOf()
 )
 
-data class AssetsInfoData(
+data class AssetsInfoDataResponse(
         @SerializedName("__type") var type: String = "asset",
-        @SerializedName("data") var assetInfo: AssetInfo = AssetInfo()
+        @SerializedName("data") var assetInfo: AssetInfoResponse = AssetInfoResponse()
 )
 
 @Parcelize
-open class AssetInfo(
+open class AssetInfoResponse(
         @SerializedName("ticker") var ticker: String? = "",
         @SerializedName("id") var id: String = "",
         @SerializedName("name") var name: String = "",

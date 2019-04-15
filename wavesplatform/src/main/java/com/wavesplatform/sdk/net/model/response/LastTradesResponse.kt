@@ -10,77 +10,77 @@ import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.OrderType
 
 data class LastTradesResponse(
-    @SerializedName("__type")
+        @SerializedName("__type")
     var type: String = "",
-    @SerializedName("data")
-    var `data`: List<Data> = listOf(),
-    @SerializedName("lastCursor")
+        @SerializedName("data")
+    var `data`: List<DataResponse> = listOf(),
+        @SerializedName("lastCursor")
     var lastCursor: String = ""
 ) {
-    data class Data(
+    data class DataResponse(
         @SerializedName("__type")
         var type: String = "",
         @SerializedName("data")
-        var transaction: ExchangeTransaction = ExchangeTransaction()
+        var transaction: ExchangeTransactionResponse = ExchangeTransactionResponse()
     ) {
-        data class ExchangeTransaction(
-            @SerializedName("amount")
+        data class ExchangeTransactionResponse(
+                @SerializedName("amount")
             var amount: Double = 0.0,
-            @SerializedName("buyMatcherFee")
+                @SerializedName("buyMatcherFee")
             var buyMatcherFee: Double = 0.0,
-            @SerializedName("fee")
+                @SerializedName("fee")
             var fee: Double = 0.0,
-            @SerializedName("height")
+                @SerializedName("height")
             var height: Int = 0,
-            @SerializedName("id")
+                @SerializedName("id")
             var id: String = "",
-            @SerializedName("order1")
-            var order1: ExchangeOrder = ExchangeOrder(),
-            @SerializedName("order2")
-            var order2: ExchangeOrder = ExchangeOrder(),
-            @SerializedName("price")
+                @SerializedName("order1")
+            var order1: ExchangeOrderResponse = ExchangeOrderResponse(),
+                @SerializedName("order2")
+            var order2: ExchangeOrderResponse = ExchangeOrderResponse(),
+                @SerializedName("price")
             var price: Double = 0.0,
-            @SerializedName("sellMatcherFee")
+                @SerializedName("sellMatcherFee")
             var sellMatcherFee: Double = 0.0,
-            @SerializedName("sender")
+                @SerializedName("sender")
             var sender: String = "",
-            @SerializedName("senderPublicKey")
+                @SerializedName("senderPublicKey")
             var senderPublicKey: String = "",
-            @SerializedName("signature")
+                @SerializedName("signature")
             var signature: String = "",
-            @SerializedName("timestamp")
+                @SerializedName("timestamp")
             var timestamp: String = "",
-            @SerializedName("type")
+                @SerializedName("type")
             var type: Int = 0
         ) {
-            data class ExchangeOrder(
-                @SerializedName("amount")
+            data class ExchangeOrderResponse(
+                    @SerializedName("amount")
                 var amount: Double = 0.0,
-                @SerializedName("assetPair")
-                var assetPair: AssetPair = AssetPair(),
-                @SerializedName("expiration")
+                    @SerializedName("assetPair")
+                var assetPair: AssetPairResponse = AssetPairResponse(),
+                    @SerializedName("expiration")
                 var expiration: String = "",
-                @SerializedName("id")
+                    @SerializedName("id")
                 var id: String = "",
-                @SerializedName("matcherFee")
+                    @SerializedName("matcherFee")
                 var matcherFee: Double = 0.0,
-                @SerializedName("matcherPublicKey")
+                    @SerializedName("matcherPublicKey")
                 var matcherPublicKey: String = "",
-                @SerializedName("orderType")
+                    @SerializedName("orderType")
                 var orderType: String = "",
-                @SerializedName("price")
+                    @SerializedName("price")
                 var price: Double = 0.0,
-                @SerializedName("sender")
+                    @SerializedName("sender")
                 var sender: String = "",
-                @SerializedName("senderPublicKey")
+                    @SerializedName("senderPublicKey")
                 var senderPublicKey: String = "",
-                @SerializedName("signature")
+                    @SerializedName("signature")
                 var signature: String = "",
-                @SerializedName("timestamp")
+                    @SerializedName("timestamp")
                 var timestamp: String = ""
             ) {
 
-                data class AssetPair(
+                data class AssetPairResponse(
                     @SerializedName("amountAsset")
                     var amountAsset: String = "",
                     @SerializedName("priceAsset")
@@ -96,7 +96,7 @@ data class LastTradesResponse(
                 }
             }
 
-            fun getMyOrder(): ExchangeOrder {
+            fun getMyOrder(): ExchangeOrderResponse {
                 return if (order1.timestamp > order2.timestamp) order1
                 else order2
             }

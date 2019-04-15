@@ -14,7 +14,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.Alias
+import com.wavesplatform.sdk.net.model.response.AliasResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -151,7 +151,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
                         presenter.nodeAddressValidation = false
                         text_address_error.text = getString(R.string.start_leasing_validation_address_is_invalid_error)
                         text_address_error.visiable()
-                        return@flatMap Observable.empty<Alias>()
+                        return@flatMap Observable.empty<AliasResponse>()
                     }
                 }
                 .compose(RxUtil.applyObservableDefaultSchedulers())

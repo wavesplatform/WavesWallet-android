@@ -7,10 +7,10 @@ package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.sdk.net.model.response.Alias
-import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommission
-import com.wavesplatform.sdk.net.model.response.ScriptInfo
-import com.wavesplatform.sdk.net.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.AliasResponse
+import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommissionResponse
+import com.wavesplatform.sdk.net.model.response.ScriptInfoResponse
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.TransactionUtil
@@ -26,7 +26,7 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
 
     var fee = 0L
 
-    fun loadAliases(callback: (List<Alias>) -> Unit) {
+    fun loadAliases(callback: (List<AliasResponse>) -> Unit) {
         runAsync {
             addSubscription(
                     queryAllAsSingle<AliasDb>().toObservable()
@@ -44,16 +44,16 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
         addSubscription(Observable.zip(
                 githubDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(),
-                BiFunction { t1: GlobalTransactionCommission,
-                             t2: ScriptInfo ->
+                BiFunction { t1: GlobalTransactionCommissionResponse,
+                             t2: ScriptInfoResponse ->
                     return@BiFunction Pair(t1, t2)
                 })
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ pair ->
                     val commission = pair.first
                     val scriptInfo = pair.second
-                    val params = GlobalTransactionCommission.Params()
-                    params.transactionType = Transaction.CREATE_ALIAS
+                    val params = GlobalTransactionCommissionResponse.ParamsResponse()
+                    params.transactionType = TransactionResponse.CREATE_ALIAS
                     params.smartAccount = scriptInfo.extraFee != 0L
                     fee = TransactionUtil.countCommission(commission, params)
                     callback.showCommissionSuccess(fee)

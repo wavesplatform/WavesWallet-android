@@ -8,9 +8,9 @@ package com.wavesplatform.wallet.v2.data.database
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.AssetInfo
-import com.wavesplatform.sdk.net.model.response.Transaction
-import com.wavesplatform.sdk.net.model.response.TransactionType
+import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
+import com.wavesplatform.sdk.net.model.TransactionType
 import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.transactionType
@@ -38,14 +38,14 @@ class TransactionSaver @Inject constructor() {
     lateinit var nodeDataManager: NodeDataManager
     @Inject
     lateinit var apiDataManager: ApiDataManager
-    private var allAssets = arrayListOf<AssetInfo>()
+    private var allAssets = arrayListOf<AssetInfoResponse>()
     private var subscriptions: CompositeDisposable = CompositeDisposable()
     private var currentLimit = DEFAULT_LIMIT
     private var prevLimit = DEFAULT_LIMIT
     private var needCheckToUpdateBalance = false
 
     fun saveTransactions(
-            sortedList: List<Transaction>,
+            sortedList: List<TransactionResponse>,
             limit: Int = DEFAULT_LIMIT,
             changeListener: OnTransactionLimitChangeListener? = null
     ) {
@@ -107,7 +107,7 @@ class TransactionSaver @Inject constructor() {
         }
     }
 
-    private fun saveToDb(transactions: List<Transaction>) {
+    private fun saveToDb(transactions: List<TransactionResponse>) {
 
         // grab all assetsIds
         val tempGrabbedAssets = mutableListOf<String?>()
@@ -262,7 +262,7 @@ class TransactionSaver @Inject constructor() {
         }
     }
 
-    private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfo>, callback: (ArrayList<AssetInfo>) -> Unit) {
+    private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfoResponse>, callback: (ArrayList<AssetInfoResponse>) -> Unit) {
         runAsync {
             queryAllAsync<SpamAssetDb> { spams ->
                 val spamMap = spams.associateBy { it.assetId }

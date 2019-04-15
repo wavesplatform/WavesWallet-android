@@ -21,7 +21,7 @@ import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
-import com.wavesplatform.sdk.net.model.response.News
+import com.wavesplatform.sdk.net.model.response.NewsResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
@@ -354,7 +354,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         }
     }
 
-    override fun showNews(news: News) {
+    override fun showNews(news: NewsResponse) {
         val ids = prefsUtil.getGlobalValueList(PrefsUtil.SHOWED_NEWS_IDS).toHashSet()
         var anyNewsShowed = false
         for (notification in news.notifications) {
@@ -373,8 +373,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                             .into(view.image)
 
                     val langCode = preferencesHelper.getLanguage()
-                    view.text_title.text = News.getTitle(langCode, notification)
-                    view.text_subtitle.text = News.getSubtitle(langCode, notification)
+                    view.text_title.text = NewsResponse.getTitle(langCode, notification)
+                    view.text_subtitle.text = NewsResponse.getSubtitle(langCode, notification)
                     view.button_ok.click {
                         prefsUtil.addGlobalListValue(PrefsUtil.SHOWED_NEWS_IDS, notification.id)
                         accountFirstOpenDialog?.dismiss()

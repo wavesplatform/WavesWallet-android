@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data.model.db
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.net.model.response.Transfer
+import com.wavesplatform.sdk.net.model.response.TransferResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmList
 import io.realm.RealmModel
@@ -17,7 +17,7 @@ open class TransferDb(
         var amount: Long = 0
 ) : RealmModel {
 
-    constructor(transfer: Transfer) : this() {
+    constructor(transfer: TransferResponse) : this() {
         transfer.notNull {
             this.recipient = it.recipient
             this.recipientAddress = it.recipientAddress
@@ -25,8 +25,8 @@ open class TransferDb(
         }
     }
 
-    fun convertFromDb(): Transfer {
-        return Transfer(
+    fun convertFromDb(): TransferResponse {
+        return TransferResponse(
                 recipient = this.recipient,
                 recipientAddress = this.recipientAddress,
                 amount = this.amount)
@@ -34,7 +34,7 @@ open class TransferDb(
 
     companion object {
 
-        fun convertToDb(transfers: List<Transfer>): RealmList<TransferDb> {
+        fun convertToDb(transfers: List<TransferResponse>): RealmList<TransferDb> {
             val list = RealmList<TransferDb>()
             transfers.forEach {
                 list.add(TransferDb(it))
@@ -42,8 +42,8 @@ open class TransferDb(
             return list
         }
 
-        fun convertFromDb(transfers: RealmList<TransferDb>): MutableList<Transfer> {
-            val list = mutableListOf<Transfer>()
+        fun convertFromDb(transfers: RealmList<TransferDb>): MutableList<TransferResponse> {
+            val list = mutableListOf<TransferResponse>()
             transfers.forEach {
                 list.add(it.convertFromDb())
             }

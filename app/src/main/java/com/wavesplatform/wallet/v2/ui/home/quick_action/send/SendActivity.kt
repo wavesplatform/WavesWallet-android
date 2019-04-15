@@ -21,8 +21,8 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.AssetBalance
-import com.wavesplatform.sdk.net.model.response.coinomat.XRate
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.coinomat.XRateResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
@@ -91,7 +91,7 @@ class SendActivity : BaseActivity(), SendView {
                 assetEnable(false)
             }
             intent.hasExtra(KEY_INTENT_REPEAT_TRANSACTION) -> {
-                val assetBalance = intent.getParcelableExtra<AssetBalance>(
+                val assetBalance = intent.getParcelableExtra<AssetBalanceResponse>(
                         SendActivity.KEY_INTENT_TRANSACTION_ASSET_BALANCE)
                 val amount = intent
                         .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT).clearBalance()
@@ -183,7 +183,7 @@ class SendActivity : BaseActivity(), SendView {
             val dialog = SponsoredFeeBottomSheetFragment()
             dialog.configureData(presenter.feeAsset.assetId, presenter.feeWaves)
             dialog.onSelectedAssetListener = object : SponsoredFeeBottomSheetFragment.SponsoredAssetSelectedListener {
-                override fun onSelected(asset: AssetBalance, fee: Long) {
+                override fun onSelected(asset: AssetBalanceResponse, fee: Long) {
                     presenter.feeAsset = asset
                     presenter.fee = fee
 
@@ -290,7 +290,7 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
-    private fun checkAndSetAmount(amount: Long, assetBalance: AssetBalance) {
+    private fun checkAndSetAmount(amount: Long, assetBalance: AssetBalanceResponse) {
         if (presenter.type == SendPresenter.Type.GATEWAY) {
             val total = BigDecimal.valueOf(amount,
                     assetBalance.getDecimals())
@@ -339,7 +339,7 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
-    override fun showXRate(xRate: XRate, ticker: String) {
+    override fun showXRate(xRate: XRateResponse, ticker: String) {
         xRateSkeletonView?.hide()
 
         val fee = if (xRate.feeOut == null) {
@@ -481,7 +481,7 @@ class SendActivity : BaseActivity(), SendView {
         text_fee_transaction.visiable()
     }
 
-    override fun showLoadAssetSuccess(assetBalance: AssetBalance) {
+    override fun showLoadAssetSuccess(assetBalance: AssetBalanceResponse) {
         assetsSkeletonView!!.hide()
         setAsset(assetBalance)
         assetEnable(false)
@@ -601,7 +601,7 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
-    private fun setAsset(asset: AssetBalance?) {
+    private fun setAsset(asset: AssetBalanceResponse?) {
         if (asset == null) {
             text_asset_error.visiable()
             presenter.selectedAsset = null
@@ -637,7 +637,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun loadGatewayXRate(assetId: String) {
-        if (AssetBalance.isGateway(assetId)) {
+        if (AssetBalanceResponse.isGateway(assetId)) {
             relative_do_not_withdraw.visiable()
             relative_gateway_fee.visiable()
             if (xRateSkeletonView == null) {

@@ -9,7 +9,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class TransactionsInfo(var assetId: String, var name: String, var decimals: Int) : Parcelable {
+class TransactionsInfoResponse(var assetId: String, var name: String, var decimals: Int) : Parcelable {
     var type: Int = 0
     var id: String? = null
     var sender: String? = null

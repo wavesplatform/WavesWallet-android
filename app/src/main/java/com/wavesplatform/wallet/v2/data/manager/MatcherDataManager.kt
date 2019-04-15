@@ -12,7 +12,7 @@ import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
-import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
 import com.wavesplatform.sdk.net.model.request.CancelOrderRequest
 import com.wavesplatform.sdk.net.model.request.OrderRequest
 import com.wavesplatform.sdk.net.model.response.*
@@ -45,7 +45,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return matcherService.loadReservedBalances(getPublicKeyStr(), timestamp, signature)
     }
 
-    fun loadMyOrders(watchMarket: WatchMarket?): Observable<List<OrderResponse>> {
+    fun loadMyOrders(watchMarket: WatchMarketResponse?): Observable<List<AssetPairOrderResponse>> {
         val timestamp = EnvironmentManager.getTime()
         var signature = ""
         App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
@@ -56,7 +56,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return matcherService.getMyOrders(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getPublicKeyStr(), signature, timestamp)
     }
 
-    fun loadOrderBook(watchMarket: WatchMarket?): Observable<OrderBook> {
+    fun loadOrderBook(watchMarket: WatchMarketResponse?): Observable<OrderBookResponse> {
         return matcherService.getOrderBook(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset)
     }
 
@@ -73,7 +73,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun getBalanceFromAssetPair(watchMarket: WatchMarket?): Observable<LinkedTreeMap<String, Long>> {
+    fun getBalanceFromAssetPair(watchMarket: WatchMarketResponse?): Observable<LinkedTreeMap<String, Long>> {
         return matcherService.getBalanceFromAssetPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getAddress())
     }
 
@@ -103,7 +103,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                     },
                     matcherService.getAllMarkets()
                             .map { it.markets },
-                    BiFunction { configure: Map<String, GlobalConfiguration.ConfigAsset>, apiMarkets: List<MarketResponse> ->
+                    BiFunction { configure: Map<String, GlobalConfigurationResponse.ConfigAsset>, apiMarkets: List<MarketResponse> ->
                         return@BiFunction Pair(configure, apiMarkets)
                     })
                     .flatMap {
@@ -170,7 +170,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                         .map {
                             return@map MarketResponseDb.convertFromDb(it).associateBy { it.id }
                         }
-                , Function3 { apiMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAsset>, dbMarkets: Map<String?, MarketResponse> ->
+                , Function3 { apiMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAssetResponse>, dbMarkets: Map<String?, MarketResponse> ->
             val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
                 apiMarkets.filter { market -> spamAssets[market.amountAsset] == null && spamAssets[market.priceAsset] == null }
             } else {

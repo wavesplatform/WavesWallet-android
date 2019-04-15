@@ -11,8 +11,8 @@ import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.Transaction
-import com.wavesplatform.sdk.net.model.response.TransactionType
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
+import com.wavesplatform.sdk.net.model.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -165,7 +165,7 @@ class HistoryTransactionPagerAdapter constructor(
         return view === `object`
     }
 
-    private fun setExchangeItem(transaction: Transaction, view: View) {
+    private fun setExchangeItem(transaction: TransactionResponse, view: View) {
         val myOrder = findMyOrder(
                 transaction.order1!!,
                 transaction.order2!!,

@@ -12,7 +12,7 @@ import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
@@ -191,7 +191,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
     }
 
-    private fun tryUpdateWithApi(withApiUpdate: Boolean, it: List<AssetBalance>): Observable<List<AssetBalance>> {
+    private fun tryUpdateWithApi(withApiUpdate: Boolean, it: List<AssetBalanceResponse>): Observable<List<AssetBalanceResponse>> {
         return if (withApiUpdate) {
             nodeDataManager.loadAssets(it)
         } else {

@@ -9,7 +9,7 @@ import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAsSingle
 import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
@@ -33,7 +33,7 @@ class CardPresenter @Inject constructor() : BasePresenter<CardView>() {
     var fiat: String = "USD"
     private var min: Float = 0F
     private var max: Float = 0F
-    var asset: AssetBalance? = null
+    var asset: AssetBalanceResponse? = null
     private var rate = ""
 
     fun invalidate() {

@@ -10,12 +10,13 @@ import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.net.model.OrderType
+import com.wavesplatform.sdk.net.model.TransactionType
 import com.wavesplatform.sdk.utils.*
 import pers.victor.ext.date
 import java.math.BigInteger
 
 
-open class Lease(
+open class LeaseResponse(
         @SerializedName("type") var type: Int = 0,
         @SerializedName("id") var id: String = "",
         @SerializedName("sender") var sender: String = "",
@@ -30,12 +31,12 @@ open class Lease(
 )
 
 
-open class Order(
+open class OrderResponse(
         @SerializedName("id") var id: String = "",
         @SerializedName("sender") var sender: String = "",
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("matcherPublicKey") var matcherPublicKey: String = "",
-        @SerializedName("assetPair") var assetPair: AssetPair? = AssetPair(),
+        @SerializedName("assetPair") var assetPair: AssetPairResponse? = AssetPairResponse(),
         @SerializedName("orderType") var orderType: String = "",
         @SerializedName("price") var price: Long = 0,
         @SerializedName("amount") var amount: Long = 0,
@@ -55,23 +56,23 @@ open class Order(
 }
 
 
-open class AssetPair(
+open class AssetPairResponse(
         @SerializedName("amountAsset") var amountAsset: String? = "",
-        @SerializedName("amountAssetObject") var amountAssetObject: AssetInfo? = AssetInfo(),
+        @SerializedName("amountAssetObject") var amountAssetObject: AssetInfoResponse? = AssetInfoResponse(),
         @SerializedName("priceAsset") var priceAsset: String? = "",
-        @SerializedName("priceAssetObject") var priceAssetObject: AssetInfo? = AssetInfo()
+        @SerializedName("priceAssetObject") var priceAssetObject: AssetInfoResponse? = AssetInfoResponse()
 )
 
-open class Payment(
+open class PaymentResponse(
         @SerializedName("amount")
         var amount: Long = 0,
         @SerializedName("assetId")
         var assetId: String? = null,
         @SerializedName("assetId")
-        var asset: AssetInfo? = AssetInfo()
+        var asset: AssetInfoResponse? = AssetInfoResponse()
 )
 
-open class Transaction(
+open class TransactionResponse(
         @SerializedName("type")
         var type: Int = 0,
         @SerializedName("id")
@@ -101,13 +102,13 @@ open class Transaction(
         @SerializedName("status")
         var status: String? = "",
         @SerializedName("lease")
-        var lease: Lease? = Lease(),
+        var lease: LeaseResponse? = LeaseResponse(),
         @SerializedName("fee")
         var fee: Long = 0,
         @SerializedName("feeAssetId")
         var feeAssetId: String? = null,
         @SerializedName("feeAssetObject")
-        var feeAssetObject: AssetInfo? = AssetInfo(),
+        var feeAssetObject: AssetInfoResponse? = AssetInfoResponse(),
         @SerializedName("quantity")
         var quantity: Long = 0,
         @SerializedName("price")
@@ -121,15 +122,15 @@ open class Transaction(
         @SerializedName("sellMatcherFee")
         var sellMatcherFee: Long = 0,
         @SerializedName("order1")
-        var order1: Order? = Order(),
+        var order1: OrderResponse? = OrderResponse(),
         @SerializedName("order2")
-        var order2: Order? = Order(),
+        var order2: OrderResponse? = OrderResponse(),
         @SerializedName("totalAmount")
         var totalAmount: Long = 0,
         @SerializedName("transfers")
-        var transfers: List<Transfer> = mutableListOf(),
+        var transfers: List<TransferResponse> = mutableListOf(),
         @SerializedName("data")
-        var data: List<Data> = mutableListOf(),
+        var data: List<DataResponse> = mutableListOf(),
         @SerializedName("isPending")
         var isPending: Boolean = false,
         @SerializedName("script")
@@ -137,11 +138,11 @@ open class Transaction(
         @SerializedName("minSponsoredAssetFee")
         var minSponsoredAssetFee: String? = "",
         @SerializedName("payment")
-        var payment: List<Payment> = mutableListOf(),
+        var payment: List<PaymentResponse> = mutableListOf(),
         @SerializedName("dappAddress")
         var dappAddress: String? = "",
         var transactionTypeId: Int = 0,
-        var asset: AssetInfo? = AssetInfo()
+        var asset: AssetInfoResponse? = AssetInfoResponse()
 ) {
 
     val decimals: Int
@@ -200,17 +201,17 @@ open class Transaction(
         private fun getNameBy(type: Int): String {
             return when (type) {
                 GENESIS -> "Genesis"
-                PAYMENT -> "Payment"
+                PAYMENT -> "PaymentResponse"
                 ISSUE -> "Issue"
-                TRANSFER -> "Transfer"
+                TRANSFER -> "TransferResponse"
                 REISSUE -> "Reissue"
                 BURN -> "Burn"
                 EXCHANGE -> "Exchange"
-                LEASE -> "Lease"
-                LEASE_CANCEL -> "Lease Cancel"
-                CREATE_ALIAS -> "Create Alias"
-                MASS_TRANSFER -> "Mass Transfer"
-                DATA -> "Data"
+                LEASE -> "LeaseResponse"
+                LEASE_CANCEL -> "LeaseResponse Cancel"
+                CREATE_ALIAS -> "Create AliasResponse"
+                MASS_TRANSFER -> "Mass TransferResponse"
+                DATA -> "DataResponse"
                 ADDRESS_SCRIPT -> "Address Script"
                 SPONSORSHIP -> "SponsorShip"
                 ASSET_SCRIPT -> "Asset Script"
@@ -219,13 +220,13 @@ open class Transaction(
             }
         }
 
-        fun getInfo(transaction: Transaction): String {
+        fun getInfo(transaction: TransactionResponse): String {
             val feeAssetId = if (transaction.feeAssetId == null) {
                 ""
             } else {
                 " (${transaction.feeAssetId})"
             }
-            return "Transaction ID: ${transaction.id}\n" +
+            return "TransactionResponse ID: ${transaction.id}\n" +
                     type(transaction) +
                     "Date: ${transaction.timestamp.date("MM/dd/yyyy HH:mm")}\n" +
                     "Sender: ${transaction.sender}\n" +
@@ -236,7 +237,7 @@ open class Transaction(
                     attachment(transaction)
         }
 
-        private fun type(transaction: Transaction) =
+        private fun type(transaction: TransactionResponse) =
                 "Type: ${transaction.type} (${getNameBy(transaction.type).toLowerCase()}" +
                         if (transaction.type == EXCHANGE) {
                             if (findMyOrder(transaction.order1!!,
@@ -251,7 +252,7 @@ open class Transaction(
                             ")\n"
                         }
 
-        private fun recipient(transaction: Transaction): String {
+        private fun recipient(transaction: TransactionResponse): String {
             return if (transaction.recipient.isNullOrEmpty()) {
                 ""
             } else {
@@ -259,12 +260,12 @@ open class Transaction(
             }
         }
 
-        private fun fee(transaction: Transaction, feeAssetId: String): String {
+        private fun fee(transaction: TransactionResponse, feeAssetId: String): String {
             return "Fee: ${MoneyUtil.getScaledText(transaction.fee, transaction.feeAssetObject)
                     .stripZeros()} ${transaction.feeAssetObject?.name}" + feeAssetId
         }
 
-        private fun attachment(transaction: Transaction): String {
+        private fun attachment(transaction: TransactionResponse): String {
             return if (transaction.attachment.isNullOrEmpty()) {
                 ""
             } else {
@@ -272,7 +273,7 @@ open class Transaction(
             }
         }
 
-        private fun amount(transaction: Transaction): String {
+        private fun amount(transaction: TransactionResponse): String {
             val amountAsset = if (transaction.type == EXCHANGE) {
                 transaction.order1?.assetPair?.amountAssetObject
             } else {
@@ -287,7 +288,7 @@ open class Transaction(
                     }
         }
 
-        private fun exchangePrice(transaction: Transaction): String {
+        private fun exchangePrice(transaction: TransactionResponse): String {
             return if (transaction.type == EXCHANGE) {
                 val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
                         Wavesplatform.getWallet().address)
@@ -313,14 +314,14 @@ open class Transaction(
     }
 }
 
-open class Data(
+open class DataResponse(
         @SerializedName("key") var key: String = "",
         @SerializedName("type") var type: String = "",
         @SerializedName("value") var value: String = ""
 )
 
 
-open class Transfer(
+open class TransferResponse(
         @SerializedName("recipient")
         var recipient: String = "",
         @SerializedName("recipientAddress")

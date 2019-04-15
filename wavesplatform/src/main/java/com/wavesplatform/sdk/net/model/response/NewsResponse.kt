@@ -7,12 +7,12 @@ package com.wavesplatform.sdk.net.model.response
 
 import com.google.gson.annotations.SerializedName
 
-class News {
+class NewsResponse {
 
     @SerializedName("notifications")
-    var notifications: List<Notification> = listOf()
+    var notifications: List<NotificationResponse> = listOf()
 
-    class Notification {
+    class NotificationResponse {
 
         @SerializedName("startDate")
         var startDate: Long? = null
@@ -32,13 +32,13 @@ class News {
         const val URL = "https://github-proxy.wvservices.com/wavesplatform/waves-client-config/mobile/v2.2/notifications_android.json"
         private const val DEFAULT_LANG_CODE = "en"
 
-        fun getTitle(langCode: String, notification: Notification): String {
+        fun getTitle(langCode: String, notification: NotificationResponse): String {
             return notification.title?.get(langCode)
                     ?: notification.title?.get(DEFAULT_LANG_CODE)
                     ?: ""
         }
 
-        fun getSubtitle(langCode: String, notification: Notification): String {
+        fun getSubtitle(langCode: String, notification: NotificationResponse): String {
             return notification.subtitle?.get(langCode)
                     ?: notification.subtitle?.get(DEFAULT_LANG_CODE)
                     ?: ""

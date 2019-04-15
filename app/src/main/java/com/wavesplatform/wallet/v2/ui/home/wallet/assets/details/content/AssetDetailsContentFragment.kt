@@ -20,7 +20,7 @@ import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -112,7 +112,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
                 })
     }
 
-    override fun onAssetAddressBalanceLoadSuccess(assetBalance: AssetBalance) {
+    override fun onAssetAddressBalanceLoadSuccess(assetBalance: AssetBalanceResponse) {
         presenter.assetBalance = assetBalance
         fillInformation(assetBalance)
     }
@@ -156,7 +156,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         }
     }
 
-    private fun fillInformation(assetBalance: AssetBalance?) {
+    private fun fillInformation(assetBalance: AssetBalanceResponse?) {
         formatter.timeZone = TimeZone.getTimeZone("UTC")
 
         text_available_balance.text = assetBalance?.getDisplayAvailableBalance()

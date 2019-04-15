@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.clearBalance
 import com.wavesplatform.sdk.utils.stripZeros
@@ -43,7 +43,7 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
                         }))
     }
 
-    private fun isValidBalanceForSponsoring(item: AssetBalance, fee: String): Boolean {
+    private fun isValidBalanceForSponsoring(item: AssetBalanceResponse, fee: String): Boolean {
         val sponsorBalance = MoneyUtil.getScaledText(item.getSponsorBalance(), Constants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal()
         val feeDecimalValue = fee.clearBalance().toBigDecimal()
         val availableBalance = MoneyUtil.getScaledText(item.getAvailableBalance()
@@ -58,7 +58,7 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
                 item.isWaves())
     }
 
-    private fun getFee(item: AssetBalance): String {
+    private fun getFee(item: AssetBalanceResponse): String {
         return if (item.isWaves()) {
             MoneyUtil.getScaledText(wavesFee, Constants.WAVES_ASSET_INFO.precision).stripZeros()
         } else {
@@ -66,7 +66,7 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
         }
     }
 
-    private fun calculateFeeForSponsoredAsset(item: AssetBalance): String {
+    private fun calculateFeeForSponsoredAsset(item: AssetBalanceResponse): String {
         val sponsorFee = MoneyUtil.getScaledText(item.minSponsoredAssetFee, item).clearBalance().toBigDecimal()
         val value = ((MoneyUtil.getScaledText(wavesFee, Constants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal() /
                 MoneyUtil.getScaledText(Constants.WAVES_MIN_FEE, Constants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal()) * sponsorFee)

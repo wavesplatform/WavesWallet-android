@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.wavesplatform.sdk.net.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_smart_pair_info_layout.view.*
@@ -18,8 +18,8 @@ import pers.victor.ext.visiableIf
 
 class SmartPairInfoBottomSheetFragment : BaseBottomSheetDialogFragment() {
 
-    private lateinit var amountInfo: AssetInfo
-    private lateinit var priceInfo: AssetInfo
+    private lateinit var amountInfo: AssetInfoResponse
+    private lateinit var priceInfo: AssetInfoResponse
     private lateinit var listener: SmartPairDialogListener
 
     override fun onCreateView(
@@ -49,7 +49,7 @@ class SmartPairInfoBottomSheetFragment : BaseBottomSheetDialogFragment() {
         return rootView
     }
 
-    fun configureDialog(amountInfo: AssetInfo, priceInfo: AssetInfo, listener: SmartPairDialogListener) {
+    fun configureDialog(amountInfo: AssetInfoResponse, priceInfo: AssetInfoResponse, listener: SmartPairDialogListener) {
         this.amountInfo = amountInfo
         this.priceInfo = priceInfo
         this.listener = listener

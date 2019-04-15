@@ -5,7 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.analytics
 
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -32,7 +32,7 @@ class AnalyticAssetManager @Inject constructor(private var prefUtil: PrefsUtil) 
             prefUtil.setValue(PrefsUtil.KEY_ASSETS_ZERO, value)
         }
 
-    fun trackFromZeroBalances(assets: MutableList<AssetBalance>) {
+    fun trackFromZeroBalances(assets: MutableList<AssetBalanceResponse>) {
         val zeroAssets = assets.filter { it.balance == 0L }
 
         saveZeroBalance(zeroAssets)
@@ -52,7 +52,7 @@ class AnalyticAssetManager @Inject constructor(private var prefUtil: PrefsUtil) 
         assetsIds = allBalances
     }
 
-    private fun saveZeroBalance(assetId: List<AssetBalance>) {
+    private fun saveZeroBalance(assetId: List<AssetBalanceResponse>) {
         val zeroBalances = zeroAssetsIds
         assetId.forEach { asset ->
             if (!zeroBalances.contains(asset.assetId)) {

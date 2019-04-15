@@ -24,14 +24,14 @@ interface NodeService {
      * @param address Address
      */
     @GET("assets/balance/{address}")
-    fun assetsBalance(@Path("address") address: String?): Observable<AssetBalances>
+    fun assetsBalance(@Path("address") address: String?): Observable<AssetBalancesResponse>
 
     /**
      * Account's Waves balance
      * @param address Address
      */
     @GET("addresses/balance/{address}")
-    fun wavesBalance(@Path("address") address: String?): Observable<WavesBalance>
+    fun wavesBalance(@Path("address") address: String?): Observable<WavesBalanceResponse>
 
     /**
      * Get list of transactions where specified address has been involved
@@ -40,20 +40,20 @@ interface NodeService {
      */
     @GET("transactions/address/{address}/limit/{limit}")
     fun transactionList(@Path("address") address: String?,
-                        @Path("limit") limit: Int): Observable<List<List<Transaction>>>
+                        @Path("limit") limit: Int): Observable<List<List<TransactionResponse>>>
 
     @GET("assets/balance/{address}/{assetId}")
     fun addressAssetBalance(
         @Path("address") address: String?,
         @Path("assetId") assetId: String?
-    ): Observable<AddressAssetBalance>
+    ): Observable<AddressAssetBalanceResponse>
 
     /**
      * Get a transaction info by it's id
      * @param id id of transaction
      */
     @GET("transactions/info/{id}")
-    fun getTransactionsInfo(@Path("id") id: String): Observable<TransactionsInfo>
+    fun getTransactionsInfo(@Path("id") id: String): Observable<TransactionsInfoResponse>
 
     /**
      *
@@ -78,13 +78,13 @@ interface NodeService {
      * @param createAliasRequest AliasRequest with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun createAlias(@Body createAliasRequest: AliasRequest): Observable<Alias>
+    fun createAlias(@Body createAliasRequest: AliasRequest): Observable<AliasResponse>
 
     /**
      * Get list of unconfirmed transactions
      */
     @GET("transactions/unconfirmed")
-    fun unconfirmedTransactions(): Observable<List<Transaction>>
+    fun unconfirmedTransactions(): Observable<List<TransactionResponse>>
 
     /**
      * Broadcast a signed transfer transaction
@@ -97,28 +97,28 @@ interface NodeService {
      * Get current Waves block-chain height
      */
     @GET("blocks/height")
-    fun currentBlocksHeight(): Observable<Height>
+    fun currentBlocksHeight(): Observable<HeightResponse>
 
     /**
      * Active leasing transactions of account
      * @param address Address
      */
     @GET("leasing/active/{address}")
-    fun activeLeasing(@Path("address") address: String?): Observable<List<Transaction>>
+    fun activeLeasing(@Path("address") address: String?): Observable<List<TransactionResponse>>
 
     /**
      * Broadcast a signed create leasing transaction
      * @param createLeasingRequest CreateLeasingRequest with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun createLeasing(@Body createLeasingRequest: CreateLeasingRequest): Observable<Transaction>
+    fun createLeasing(@Body createLeasingRequest: CreateLeasingRequest): Observable<TransactionResponse>
 
     /**
      * Broadcast a signed cancel leasing transaction
      * @param cancelLeasingRequest CancelLeasingRequest with signature by privateKey
      */
     @POST("transactions/broadcast")
-    fun cancelLeasing(@Body cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction>
+    fun cancelLeasing(@Body cancelLeasingRequest: CancelLeasingRequest): Observable<TransactionResponse>
 
     /**
      * Broadcast a signed burn transaction
@@ -132,18 +132,18 @@ interface NodeService {
      * @param address Address
      */
     @GET("addresses/scriptInfo/{address}")
-    fun scriptAddressInfo(@Path("address") address: String): Observable<ScriptInfo>
+    fun scriptAddressInfo(@Path("address") address: String): Observable<ScriptInfoResponse>
 
     /**
      * Provides detailed information about given asset
      * @param assetId Asset Id
      */
     @GET("/assets/details/{assetId}")
-    fun assetDetails(@Path("assetId") assetId: String): Observable<AssetsDetails>
+    fun assetDetails(@Path("assetId") assetId: String): Observable<AssetsDetailsResponse>
 
     /**
      * Current Node time (UTC)
      */
     @GET("/utils/time")
-    fun utilsTime(): Observable<UtilsTime>
+    fun utilsTime(): Observable<UtilsTimeResponse>
 }

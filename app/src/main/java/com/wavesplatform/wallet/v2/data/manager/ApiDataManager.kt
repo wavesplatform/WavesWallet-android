@@ -8,9 +8,9 @@ package com.wavesplatform.wallet.v2.data.manager
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.sdk.net.model.WatchMarket
-import com.wavesplatform.sdk.net.model.response.Alias
-import com.wavesplatform.sdk.net.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
+import com.wavesplatform.sdk.net.model.response.AliasResponse
+import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.sdk.net.model.response.CandlesResponse
 import com.wavesplatform.sdk.net.model.response.LastTradesResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
@@ -32,7 +32,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
         var DEFAULT_LAST_TRADES_LIMIT = 50
     }
 
-    fun loadAliases(): Observable<List<Alias>> {
+    fun loadAliases(): Observable<List<AliasResponse>> {
         return apiService.aliases(getAddress())
                 .map {
                     val aliases = it.data.mapTo(ArrayList()) {
@@ -44,7 +44,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun loadDexPairInfo(watchMarket: WatchMarket): Observable<WatchMarket> {
+    fun loadDexPairInfo(watchMarket: WatchMarketResponse): Observable<WatchMarketResponse> {
         return Observable.interval(0, 30, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap {
@@ -58,7 +58,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
                 .onErrorResumeNext(Observable.empty())
     }
 
-    fun loadAlias(alias: String): Observable<Alias> {
+    fun loadAlias(alias: String): Observable<AliasResponse> {
         val localAlias = queryFirst<AliasDb> { equalTo("alias", alias) }
 
         if (localAlias != null) {
@@ -73,7 +73,7 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
         }
     }
 
-    fun assetsInfoByIds(ids: List<String?>): Observable<List<AssetInfo>> {
+    fun assetsInfoByIds(ids: List<String?>): Observable<List<AssetInfoResponse>> {
         if (ids.isEmpty()) {
             return Observable.just(listOf())
         } else {
@@ -98,14 +98,14 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
         }
     }
 
-    fun loadLastTradesByPair(watchMarket: WatchMarket?): Observable<ArrayList<LastTradesResponse.Data.ExchangeTransaction>> {
+    fun loadLastTradesByPair(watchMarket: WatchMarketResponse?): Observable<ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse>> {
         return apiService.loadLastTradesByPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, DEFAULT_LAST_TRADES_LIMIT)
                 .map {
                     return@map it.data.mapTo(ArrayList()) { it.transaction }
                 }
     }
 
-    fun getLastTradeByPair(watchMarket: WatchMarket?): Observable<ArrayList<LastTradesResponse.Data.ExchangeTransaction>> {
+    fun getLastTradeByPair(watchMarket: WatchMarketResponse?): Observable<ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse>> {
         return apiService.loadLastTradesByPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, 1)
                 .map {
                     return@map it.data.mapTo(ArrayList()) { it.transaction }
@@ -114,11 +114,11 @@ class ApiDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadCandles(
-        watchMarket: WatchMarket?,
-        timeFrame: Int,
-        from: Long,
-        to: Long
-    ): Observable<List<CandlesResponse.Candle>> {
+            watchMarket: WatchMarketResponse?,
+            timeFrame: Int,
+            from: Long,
+            to: Long
+    ): Observable<List<CandlesResponse.CandleResponse>> {
         return apiService.loadCandles(watchMarket?.market?.amountAsset,
                 watchMarket?.market?.priceAsset, "${timeFrame}m", from, to)
                 .map {

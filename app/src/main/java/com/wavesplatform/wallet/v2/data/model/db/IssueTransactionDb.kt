@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.net.model.response.IssueTransaction
+import com.wavesplatform.sdk.net.model.response.IssueTransactionResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
@@ -30,7 +30,7 @@ open class IssueTransactionDb(
         @SerializedName("script") var script: String? = ""
 ) : RealmModel, Parcelable {
 
-    constructor(transaction: IssueTransaction?) : this() {
+    constructor(transaction: IssueTransactionResponse?) : this() {
         transaction.notNull {
             this.type = it.type
             this.id = it.id
@@ -50,8 +50,8 @@ open class IssueTransactionDb(
         }
     }
 
-    fun convertFromDb(): IssueTransaction {
-        return IssueTransaction(
+    fun convertFromDb(): IssueTransactionResponse {
+        return IssueTransactionResponse(
                 type = this.type,
                 id = this.id,
                 sender = this.sender,

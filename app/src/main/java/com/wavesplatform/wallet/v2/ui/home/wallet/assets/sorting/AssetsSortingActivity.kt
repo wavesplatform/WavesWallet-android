@@ -17,7 +17,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
@@ -121,7 +121,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         }
 
         adapter.onHiddenChangeListener = object : AssetsSortingAdapter.OnHiddenChangeListener {
-            override fun onHiddenStateChanged(item: AssetBalance, checked: Boolean) {
+            override fun onHiddenStateChanged(item: AssetBalanceResponse, checked: Boolean) {
                 presenter.needToUpdate = true
                 item.isHidden = !checked
                 AssetBalanceDb(item).save()

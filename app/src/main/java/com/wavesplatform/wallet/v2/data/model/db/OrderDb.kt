@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.net.model.response.Order
+import com.wavesplatform.sdk.net.model.response.OrderResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
@@ -27,7 +27,7 @@ open class OrderDb(
         @SerializedName("signature") var signature: String = ""
 ) : RealmModel, Parcelable {
 
-    constructor(order: Order?) : this() {
+    constructor(order: OrderResponse?) : this() {
         order.notNull {
             this.id = it.id
             this.sender = it.sender
@@ -44,8 +44,8 @@ open class OrderDb(
         }
     }
 
-    fun convertFromDb(): Order {
-        return Order(
+    fun convertFromDb(): OrderResponse {
+        return OrderResponse(
                 id = id,
                 sender = sender,
                 senderPublicKey = senderPublicKey,

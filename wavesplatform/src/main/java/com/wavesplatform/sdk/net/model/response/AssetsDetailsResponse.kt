@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class AssetsDetails(
+data class AssetsDetailsResponse(
     @SerializedName("assetId") var assetId: String = "",
     @SerializedName("issueHeight") var issueHeight: Long = 0L,
     @SerializedName("issueTimestamp") var issueTimestamp: Long = 0L,

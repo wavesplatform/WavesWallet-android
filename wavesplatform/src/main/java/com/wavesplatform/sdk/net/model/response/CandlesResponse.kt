@@ -8,14 +8,14 @@ package com.wavesplatform.sdk.net.model.response
 import com.google.gson.annotations.SerializedName
 
 data class CandlesResponse(
-    @SerializedName("candles")
-    var candles: List<Candle> = listOf(),
-    @SerializedName("timeEnd")
+        @SerializedName("candles")
+    var candles: List<CandleResponse> = listOf(),
+        @SerializedName("timeEnd")
     var timeEnd: Long = 0,
-    @SerializedName("timeStart")
+        @SerializedName("timeStart")
     var timeStart: Long = 0
 ) {
-    data class Candle(
+    data class CandleResponse(
         @SerializedName("close")
         var close: Double? = 0.0,
         @SerializedName("high")

@@ -7,14 +7,11 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 
 import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
-import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
 import com.wavesplatform.sdk.net.model.response.LastTradesResponse
-import com.wavesplatform.sdk.net.model.response.OrderBook
-import com.wavesplatform.sdk.utils.clearBalance
+import com.wavesplatform.sdk.net.model.response.OrderBookResponse
 import com.wavesplatform.sdk.utils.notNull
-import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.data.model.local.OrderBookAskMultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.OrderBookBidMultiItemEntity
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -30,7 +27,7 @@ import javax.inject.Inject
 
 @InjectViewState
 class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBookView>() {
-    var watchMarket: WatchMarket? = null
+    var watchMarket: WatchMarketResponse? = null
     var needFirstScrollToLastPrice = true
     val subscriptions = CompositeDisposable()
 
@@ -41,7 +38,7 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                         .flatMap {
                             return@flatMap Observable.zip(matcherDataManager.loadOrderBook(watchMarket),
                                     apiDataManager.getLastTradeByPair(watchMarket),
-                                    BiFunction { orderBook: OrderBook, lastPrice: ArrayList<LastTradesResponse.Data.ExchangeTransaction> ->
+                                    BiFunction { orderBook: OrderBookResponse, lastPrice: ArrayList<LastTradesResponse.DataResponse.ExchangeTransactionResponse> ->
                                         return@BiFunction Pair(orderBook, lastPrice)
                                     })
                         }
@@ -76,7 +73,7 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
                         }))
     }
 
-    private fun getCalculatedBids(list: List<OrderBook.Bid>): Collection<MultiItemEntity> {
+    private fun getCalculatedBids(list: List<OrderBookResponse.BidResponse>): Collection<MultiItemEntity> {
         var totalSum = 0L
         val orderBookBids = mutableListOf<OrderBookBidMultiItemEntity>()
         list.forEach { bid ->
@@ -87,7 +84,7 @@ class TradeOrderBookPresenter @Inject constructor() : BasePresenter<TradeOrderBo
         return orderBookBids
     }
 
-    private fun getCalculatedAsks(list: List<OrderBook.Ask>): List<OrderBookAskMultiItemEntity> {
+    private fun getCalculatedAsks(list: List<OrderBookResponse.AskResponse>): List<OrderBookAskMultiItemEntity> {
         var totalSum = 0L
         val orderBookAsks = mutableListOf<OrderBookAskMultiItemEntity>()
         list.forEach { ask ->

@@ -3,6 +3,7 @@ package com.wavesplatform.sdk.utils
 import android.util.Patterns
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
+import com.wavesplatform.sdk.net.model.TransactionType
 import com.wavesplatform.sdk.net.model.response.*
 import org.spongycastle.util.encoders.Hex
 import java.math.BigDecimal
@@ -33,7 +34,7 @@ fun String.clearBalance(): String {
             .replace(MoneyUtil.DEFAULT_SEPARATOR_THIN_SPACE.toString(), "")
 }
 
-fun Transaction.transactionType(): TransactionType {
+fun TransactionResponse.transactionType(): TransactionType {
     return TransactionType.getTypeById(this.transactionTypeId)
 }
 
@@ -62,7 +63,7 @@ fun <T : Any> T?.notNull(f: (it: T) -> Unit) {
     if (this != null) f(this)
 }
 
-fun findMyOrder(first: Order, second: Order, address: String?): Order {
+fun findMyOrder(first: OrderResponse, second: OrderResponse, address: String?): OrderResponse {
     return if (first.sender == second.sender) {
         if (first.timestamp > second.timestamp) {
             first
@@ -86,7 +87,7 @@ fun ErrorResponse.isSmartError(): Boolean {
     return this.error in 305..308
 }
 
-fun AssetInfo.getTicker(): String {
+fun AssetInfoResponse.getTicker(): String {
 
     if (this.id.isWavesId()) {
         return Constants.WAVES_ASSET_INFO.name

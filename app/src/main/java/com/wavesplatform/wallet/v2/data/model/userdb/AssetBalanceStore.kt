@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.data.model.userdb
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
@@ -26,7 +26,7 @@ open class AssetBalanceStore(
 
     companion object {
 
-        fun saveAssetBalanceStore(balances: List<AssetBalance>) {
+        fun saveAssetBalanceStore(balances: List<AssetBalanceResponse>) {
             val list = mutableListOf<AssetBalanceStore>()
             for (assetBalance in balances) {
                 list.add(AssetBalanceStore(

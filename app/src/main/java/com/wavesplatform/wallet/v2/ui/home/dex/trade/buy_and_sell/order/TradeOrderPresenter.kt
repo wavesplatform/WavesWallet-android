@@ -10,7 +10,6 @@ import com.wavesplatform.sdk.net.model.OrderType
 import com.wavesplatform.sdk.net.model.request.OrderRequest
 import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.sdk.utils.EnvironmentManager
-import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.sdk.utils.clearBalance
 import com.wavesplatform.sdk.utils.isWaves
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
@@ -19,9 +18,6 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.util.errorBody
-import io.reactivex.Observable
-import io.reactivex.functions.Function3
-import pers.victor.ext.second
 import java.math.RoundingMode
 import javax.inject.Inject
 
@@ -29,7 +25,7 @@ import javax.inject.Inject
 class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>() {
     var data: BuySellData? = BuySellData()
     var orderRequest: OrderRequest = OrderRequest()
-    var wavesBalance: AssetBalance = AssetBalance()
+    var wavesBalance: AssetBalanceResponse = AssetBalanceResponse()
 
     var humanTotalTyping = false
 
@@ -121,7 +117,7 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                 }))
     }
 
-    private fun createPair(): OrderBook.Pair {
+    private fun createPair(): OrderBookResponse.PairResponse {
         val amountAsset =
                 if (data?.watchMarket?.market?.amountAsset?.isWaves() == true) ""
                 else data?.watchMarket?.market?.amountAsset ?: ""
@@ -129,6 +125,6 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
                 if (data?.watchMarket?.market?.priceAsset?.isWaves() == true) ""
                 else data?.watchMarket?.market?.priceAsset ?: ""
 
-        return OrderBook.Pair(amountAsset, priceAsset)
+        return OrderBookResponse.PairResponse(amountAsset, priceAsset)
     }
 }

@@ -10,4 +10,4 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-open class SpamAsset(@SerializedName("assetId") var assetId: String? = "") : Parcelable
+open class SpamAssetResponse(@SerializedName("assetId") var assetId: String? = "") : Parcelable

@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.net.model.response.AssetPair
+import com.wavesplatform.sdk.net.model.response.AssetPairResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.RealmClass
@@ -18,7 +18,7 @@ open class AssetPairDb(
         @SerializedName("priceAssetObject") var priceAssetObject: AssetInfoDb? = AssetInfoDb()
 ) : RealmModel, Parcelable {
 
-    constructor(alias: AssetPair?) : this() {
+    constructor(alias: AssetPairResponse?) : this() {
         alias.notNull {
             this.amountAsset = it.amountAsset
             this.amountAssetObject = AssetInfoDb(it.amountAssetObject)
@@ -27,8 +27,8 @@ open class AssetPairDb(
         }
     }
 
-    fun convertFromDb(): AssetPair {
-        return AssetPair(
+    fun convertFromDb(): AssetPairResponse {
+        return AssetPairResponse(
                 amountAsset = this.amountAsset,
                 amountAssetObject = this.amountAssetObject?.convertFromDb(),
                 priceAsset = this.priceAsset,

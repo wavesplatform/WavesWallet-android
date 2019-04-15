@@ -13,7 +13,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
 import com.wavesplatform.sdk.net.model.response.MarketResponse
-import com.wavesplatform.sdk.net.model.response.OrderBook
+import com.wavesplatform.sdk.net.model.response.OrderBookResponse
 import com.wavesplatform.sdk.utils.stripZeros
 import pers.victor.ext.findColor
 import javax.inject.Inject
@@ -42,7 +42,7 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
                         .setText(R.id.text_percent_value, mContext.getString(R.string.orderbook_spread_percent, percent))
             }
             ASK_TYPE -> {
-                val item = item as OrderBook.Ask
+                val item = item as OrderBookResponse.AskResponse
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
                 val priceUIValue = MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals)
                 helper.setTextColor(R.id.text_price_value, findColor(R.color.error400))
@@ -52,7 +52,7 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
                         .setText(R.id.text_sum_value, item.getScaledSum(market.priceAssetDecimals))
             }
             BID_TYPE -> {
-                val item = item as OrderBook.Bid
+                val item = item as OrderBookResponse.BidResponse
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
                 val priceUIValue = MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals)
                 helper.setTextColor(R.id.text_price_value, findColor(R.color.submit400))

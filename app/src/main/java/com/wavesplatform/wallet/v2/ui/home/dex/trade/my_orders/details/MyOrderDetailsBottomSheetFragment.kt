@@ -9,9 +9,9 @@ import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.sdk.net.model.OrderStatus
-import com.wavesplatform.sdk.net.model.response.AssetInfo
-import com.wavesplatform.sdk.net.model.response.OrderResponse
-import com.wavesplatform.sdk.net.model.response.TransactionType
+import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
+import com.wavesplatform.sdk.net.model.response.AssetPairOrderResponse
+import com.wavesplatform.sdk.net.model.TransactionType
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.MatcherDataManager
@@ -69,7 +69,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
         return view
     }
 
-    private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfo?) {
+    private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfoResponse?) {
         if (isShowTicker(assetInfo?.id)) {
             val ticker = assetInfo?.getTicker()
             if (!ticker.isNullOrBlank()) {
@@ -160,7 +160,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
                     showProgressBar(false)
                     cancelOrderListener?.successCancelOrder()
 
-                    selectedItem?.orderResponse?.status = OrderResponse.API_STATUS_CANCELLED
+                    selectedItem?.orderResponse?.status = AssetPairOrderResponse.API_STATUS_CANCELLED
                     configureView()
                 }, {
                     showProgressBar(false)

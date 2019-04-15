@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.net.model.response.SpamAsset
+import com.wavesplatform.sdk.net.model.response.SpamAssetResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
@@ -15,19 +15,19 @@ open class SpamAssetDb(
         @PrimaryKey
         @SerializedName("assetId") var assetId: String? = "") : RealmModel, Parcelable {
 
-    constructor(spamAsset: SpamAsset?) : this() {
+    constructor(spamAsset: SpamAssetResponse?) : this() {
         spamAsset.notNull {
             this.assetId = it.assetId
         }
     }
 
-    fun convertFromDb(): SpamAsset {
-        return SpamAsset(assetId = this.assetId)
+    fun convertFromDb(): SpamAssetResponse {
+        return SpamAssetResponse(assetId = this.assetId)
     }
 
     companion object {
 
-        fun convertToDb(spamAssets: List<SpamAsset>): List<SpamAssetDb> {
+        fun convertToDb(spamAssets: List<SpamAssetResponse>): List<SpamAssetDb> {
             val list = mutableListOf<SpamAssetDb>()
             spamAssets.forEach {
                 list.add(SpamAssetDb(it))
@@ -35,8 +35,8 @@ open class SpamAssetDb(
             return list
         }
 
-        fun convertFromDb(spamAssets: List<SpamAssetDb>): List<SpamAsset> {
-            val list = mutableListOf<SpamAsset>()
+        fun convertFromDb(spamAssets: List<SpamAssetDb>): List<SpamAssetResponse> {
+            val list = mutableListOf<SpamAssetResponse>()
             spamAssets.forEach {
                 list.add(it.convertFromDb())
             }

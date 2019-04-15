@@ -7,8 +7,8 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.utils.Constants.Companion.coinomatCryptoCurrencies
-import com.wavesplatform.sdk.net.model.response.AssetBalance
-import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnel
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnelResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -21,8 +21,8 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
 
     @Inject
     lateinit var coinomatManager: CoinomatManager
-    var assetBalance: AssetBalance? = null
-    var tunnel: GetTunnel? = null
+    var assetBalance: AssetBalanceResponse? = null
+    var tunnel: GetTunnelResponse? = null
     private var lang: String = "ru_RU"
     var nextStepValidation = false
 

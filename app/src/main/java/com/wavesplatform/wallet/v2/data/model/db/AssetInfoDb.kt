@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.net.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
@@ -27,7 +27,7 @@ open class AssetInfoDb(
         var isSpam: Boolean = false
 ) : Parcelable, RealmModel {
 
-    constructor(assetInfo: AssetInfo?) : this() {
+    constructor(assetInfo: AssetInfoResponse?) : this() {
         assetInfo.notNull {
             this.ticker = it.ticker
             this.id = it.id
@@ -43,8 +43,8 @@ open class AssetInfoDb(
         }
     }
 
-    fun convertFromDb(): AssetInfo {
-        return AssetInfo(
+    fun convertFromDb(): AssetInfoResponse {
+        return AssetInfoResponse(
                 ticker = ticker,
                 id = id,
                 name = name,
@@ -61,7 +61,7 @@ open class AssetInfoDb(
 
     companion object {
         
-        fun convertToDb(assetInfo: List<AssetInfo>): MutableList<AssetInfoDb> {
+        fun convertToDb(assetInfo: List<AssetInfoResponse>): MutableList<AssetInfoDb> {
             val list = mutableListOf<AssetInfoDb>()
             assetInfo.forEach {
                 list.add(AssetInfoDb(it))
@@ -69,8 +69,8 @@ open class AssetInfoDb(
             return list
         }
 
-        fun convertFromDb(assetInfo: List<AssetInfoDb>): MutableList<AssetInfo> {
-            val list = mutableListOf<AssetInfo>()
+        fun convertFromDb(assetInfo: List<AssetInfoDb>): MutableList<AssetInfoResponse> {
+            val list = mutableListOf<AssetInfoResponse>()
             assetInfo.forEach {
                 list.add(it.convertFromDb())
             }

@@ -16,8 +16,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.ViewSkeletonScreen
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.sdk.net.model.response.AssetBalance
-import com.wavesplatform.sdk.net.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
@@ -141,7 +141,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         }
     }
 
-    override fun afterSuccessLoadAssets(sortedToFirstFavoriteList: MutableList<AssetBalance>) {
+    override fun afterSuccessLoadAssets(sortedToFirstFavoriteList: MutableList<AssetBalanceResponse>) {
         // configure top avatars pager
         adapterAvatar.items = sortedToFirstFavoriteList
         adapterAvatar.notifyDataSetChanged()
@@ -192,7 +192,7 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
         }
     }
 
-    fun getAllTransactions(): List<Transaction> {
+    fun getAllTransactions(): List<TransactionResponse> {
         return presenter.allTransaction
     }
 

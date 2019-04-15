@@ -5,12 +5,12 @@
 
 package com.wavesplatform.wallet.v2.ui.home.dex
 
-import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface DexView : BaseMvpView {
-    fun afterSuccessLoadMarkets(list: ArrayList<WatchMarket>)
+    fun afterSuccessLoadMarkets(list: ArrayList<WatchMarketResponse>)
     fun afterFailedLoadMarkets()
-    fun afterSuccessLoadPairInfo(watchMarket: WatchMarket, index: Int)
+    fun afterSuccessLoadPairInfo(watchMarket: WatchMarketResponse, index: Int)
     fun afterFailedLoadPairInfo()
 }

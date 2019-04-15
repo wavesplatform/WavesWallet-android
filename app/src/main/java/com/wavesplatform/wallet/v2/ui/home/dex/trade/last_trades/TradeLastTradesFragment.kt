@@ -13,7 +13,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
 import com.wavesplatform.sdk.net.model.response.LastTradesResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.stripZeros
@@ -38,9 +38,9 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
     lateinit var adapter: TradeLastTradesAdapter
 
     companion object {
-        fun newInstance(watchMarket: WatchMarket?): TradeLastTradesFragment {
+        fun newInstance(watchMarket: WatchMarketResponse?): TradeLastTradesFragment {
             val args = Bundle()
-            args.classLoader = WatchMarket::class.java.classLoader
+            args.classLoader = WatchMarketResponse::class.java.classLoader
             args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
             val fragment = TradeLastTradesFragment()
             fragment.arguments = args
@@ -54,7 +54,7 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
     override fun configLayoutRes() = R.layout.fragment_trade_last_trades
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
+        presenter.watchMarket = arguments?.getParcelable<WatchMarketResponse>(TradeActivity.BUNDLE_MARKET)
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.UpdateButtonsPrice::class.java)
                 .subscribe {
@@ -112,7 +112,7 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
         return view
     }
 
-    override fun afterSuccessLoadLastTrades(data: List<LastTradesResponse.Data.ExchangeTransaction>) {
+    override fun afterSuccessLoadLastTrades(data: List<LastTradesResponse.DataResponse.ExchangeTransactionResponse>) {
         progress_bar.hide()
         swipe_container.isRefreshing = false
         error_layout.gone()

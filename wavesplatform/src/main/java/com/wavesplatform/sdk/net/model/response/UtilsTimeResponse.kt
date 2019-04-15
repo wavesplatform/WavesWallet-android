@@ -7,7 +7,8 @@ package com.wavesplatform.sdk.net.model.response
 
 import com.google.gson.annotations.SerializedName
 
-data class Markets(
-    @SerializedName("matcherPublicKey") var matcherPublicKey: String = "",
-    @SerializedName("markets") var markets: List<MarketResponse> = listOf()
-)
+data class UtilsTimeResponse(
+        @SerializedName("system")
+        var system: Long = 0,
+        @SerializedName("NTP")
+        var ntp: Long = 0)

@@ -15,7 +15,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
@@ -94,6 +94,6 @@ class SponsoredFeeBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), Sp
     }
 
     interface SponsoredAssetSelectedListener {
-        fun onSelected(asset: AssetBalance, fee: Long)
+        fun onSelected(asset: AssetBalanceResponse, fee: Long)
     }
 }

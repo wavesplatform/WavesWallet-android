@@ -12,8 +12,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.sdk.net.model.WatchMarket
-import com.wavesplatform.sdk.net.model.response.OrderBook
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
+import com.wavesplatform.sdk.net.model.response.OrderBookResponse
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.stripZeros
@@ -52,7 +52,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     override fun configLayoutRes() = R.layout.fragment_trade_orderbook
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
+        presenter.watchMarket = arguments?.getParcelable<WatchMarketResponse>(TradeActivity.BUNDLE_MARKET)
 
         eventSubscriptions.add(rxEventBus.filteredObservable(Events.DexOrderButtonClickEvent::class.java)
                 .subscribe {
@@ -87,11 +87,11 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
                 val item = adapter.getItem(position) as MultiItemEntity
                 when (item.itemType) {
                     TradeOrderBookAdapter.ASK_TYPE -> {
-                        item as OrderBook.Ask
+                        item as OrderBookResponse.AskResponse
                         tryOpenOrderDialog(true, item.price, item.amount, item.sum)
                     }
                     TradeOrderBookAdapter.BID_TYPE -> {
-                        item as OrderBook.Bid
+                        item as OrderBookResponse.BidResponse
                         tryOpenOrderDialog(false, item.price, item.amount, item.sum)
                     }
                 }
@@ -186,7 +186,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     private fun getBidPrice(): Long? {
         val itemEntity = adapter.data.firstOrNull { it.itemType == TradeOrderBookAdapter.BID_TYPE }
         return if (itemEntity != null) {
-            (itemEntity as OrderBook.Bid).price
+            (itemEntity as OrderBookResponse.BidResponse).price
         } else {
             null
         }
@@ -195,7 +195,7 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     private fun getAskPrice(): Long? {
         val itemEntity = adapter.data.lastOrNull { it.itemType == TradeOrderBookAdapter.ASK_TYPE }
         return if (itemEntity != null) {
-            (itemEntity as OrderBook.Ask).price
+            (itemEntity as OrderBookResponse.AskResponse).price
         } else {
             null
         }
@@ -277,9 +277,9 @@ class TradeOrderBookFragment : BaseFragment(), TradeOrderBookView {
     }
 
     companion object {
-        fun newInstance(watchMarket: WatchMarket?): TradeOrderBookFragment {
+        fun newInstance(watchMarket: WatchMarketResponse?): TradeOrderBookFragment {
             val args = Bundle()
-            args.classLoader = WatchMarket::class.java.classLoader
+            args.classLoader = WatchMarketResponse::class.java.classLoader
             args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
             val fragment = TradeOrderBookFragment()
             fragment.arguments = args

@@ -9,6 +9,6 @@ import com.wavesplatform.sdk.net.model.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface TradeLastTradesView : BaseMvpView {
-    fun afterSuccessLoadLastTrades(data: List<LastTradesResponse.Data.ExchangeTransaction>)
+    fun afterSuccessLoadLastTrades(data: List<LastTradesResponse.DataResponse.ExchangeTransactionResponse>)
     fun afterFailedLoadLastTrades()
 }

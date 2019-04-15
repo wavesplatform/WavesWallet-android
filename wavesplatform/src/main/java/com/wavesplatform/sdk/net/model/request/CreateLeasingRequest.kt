@@ -12,14 +12,14 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
-import com.wavesplatform.sdk.net.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.arrayWithSize
 import com.wavesplatform.sdk.utils.clearAlias
 import java.nio.charset.Charset
 
 data class CreateLeasingRequest(
-        @SerializedName("type") val type: Int = Transaction.LEASE,
+        @SerializedName("type") val type: Int = TransactionResponse.LEASE,
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("scheme") var scheme: String? = EnvironmentManager.globalConfiguration.scheme,
         @SerializedName("amount") var amount: Long = 0,

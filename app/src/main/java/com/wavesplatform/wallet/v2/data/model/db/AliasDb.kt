@@ -2,7 +2,7 @@ package com.wavesplatform.wallet.v2.data.model.db
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.net.model.response.Alias
+import com.wavesplatform.sdk.net.model.response.AliasResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
@@ -18,7 +18,7 @@ open class AliasDb(
         var own: Boolean = false
 ) : RealmModel, Parcelable {
 
-    constructor(alias: Alias?) : this() {
+    constructor(alias: AliasResponse?) : this() {
         alias.notNull {
             this.alias = it.alias
             this.address = it.address
@@ -26,8 +26,8 @@ open class AliasDb(
         }
     }
 
-    fun convertFromDb(): Alias {
-        return Alias(
+    fun convertFromDb(): AliasResponse {
+        return AliasResponse(
                 alias = this.alias,
                 address = this.address,
                 own = this.own)
@@ -35,7 +35,7 @@ open class AliasDb(
 
     companion object {
 
-        fun convertToDb(aliases: List<Alias>): MutableList<AliasDb> {
+        fun convertToDb(aliases: List<AliasResponse>): MutableList<AliasDb> {
             val list = mutableListOf<AliasDb>()
             aliases.forEach {
                 list.add(AliasDb(it))
@@ -43,8 +43,8 @@ open class AliasDb(
             return list
         }
 
-        fun convertFromDb(aliases: List<AliasDb>): MutableList<Alias> {
-            val list = mutableListOf<Alias>()
+        fun convertFromDb(aliases: List<AliasDb>): MutableList<AliasResponse> {
+            val list = mutableListOf<AliasResponse>()
             aliases.forEach {
                 list.add(it.convertFromDb())
             }

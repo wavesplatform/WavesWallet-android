@@ -9,7 +9,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.jakewharton.rxbinding2.view.RxView
 import com.wavesplatform.wallet.R
-import com.wavesplatform.sdk.net.model.response.Alias
+import com.wavesplatform.sdk.net.model.response.AliasResponse
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -18,11 +18,11 @@ import pers.victor.ext.gone
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class AliasesAdapter @Inject constructor() : BaseQuickAdapter<Alias, BaseViewHolder>(R.layout.aliases_layout) {
+class AliasesAdapter @Inject constructor() : BaseQuickAdapter<AliasResponse, BaseViewHolder>(R.layout.aliases_layout) {
 
     var subscriptions: CompositeDisposable? = null
 
-    override fun convert(helper: BaseViewHolder, item: Alias) {
+    override fun convert(helper: BaseViewHolder, item: AliasResponse) {
         helper.itemView.text_alias_name.text = item.alias
 
         subscriptions?.add(RxView.clicks(helper.itemView.image_copy)

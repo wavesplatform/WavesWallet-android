@@ -12,13 +12,13 @@ import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
-import com.wavesplatform.sdk.net.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.arrayWithSize
 import java.nio.charset.Charset
 
 data class AliasRequest(
-        @SerializedName("type") val type: Int = Transaction.CREATE_ALIAS,
+        @SerializedName("type") val type: Int = TransactionResponse.CREATE_ALIAS,
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("fee") var fee: Long = 0,
         @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),

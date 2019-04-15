@@ -12,7 +12,7 @@ import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.stripZeros
 import java.math.BigInteger
 
-class OrderResponse {
+class AssetPairOrderResponse {
 
     @SerializedName("id")
     var id: String = ""
@@ -29,11 +29,11 @@ class OrderResponse {
     @SerializedName("status")
     var status: String = ""
     @SerializedName("assetPair")
-    var assetPair: AssetPair? = null
+    var assetPair: AssetPairResponse? = null
     @SerializedName("sectionTimestamp")
     var sectionTimestamp: Long = 0
 
-    class AssetPair {
+    class AssetPairResponse {
         @SerializedName("amountAsset")
         var amountAsset: String = ""
         @SerializedName("priceAsset")

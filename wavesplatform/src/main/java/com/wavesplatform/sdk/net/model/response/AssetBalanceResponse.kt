@@ -13,13 +13,13 @@ import com.wavesplatform.sdk.utils.MoneyUtil
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
-open class AssetBalances(
+open class AssetBalancesResponse(
         @SerializedName("address") var address: String? = null,
-        @SerializedName("balances") var balances: List<AssetBalance> = ArrayList()
+        @SerializedName("balances") var balances: List<AssetBalanceResponse> = ArrayList()
 )
 
 @Parcelize
-open class AssetBalance(
+open class AssetBalanceResponse(
         @SerializedName("assetId") var assetId: String = "",
         @SerializedName("balance") var balance: Long? = 0,
         @SerializedName("leasedBalance") var leasedBalance: Long? = 0,
@@ -28,7 +28,7 @@ open class AssetBalance(
         @SerializedName("minSponsoredAssetFee") var minSponsoredAssetFee: Long? = 0,
         @SerializedName("sponsorBalance") var sponsorBalance: Long? = 0,
         @SerializedName("quantity") var quantity: Long? = 0,
-        @SerializedName("issueTransaction") var issueTransaction: IssueTransaction? = IssueTransaction(id = assetId),
+        @SerializedName("issueTransaction") var issueTransaction: IssueTransactionResponse? = IssueTransactionResponse(id = assetId),
         var isHidden: Boolean = false,
         var position: Int = -1,
         var configureVisibleState: Boolean = false,
@@ -141,7 +141,7 @@ open class AssetBalance(
 }
 
 @Parcelize
-open class IssueTransaction(
+open class IssueTransactionResponse(
         @SerializedName("type") var type: Int? = 0,
         @SerializedName("id") var id: String? = "",
         @SerializedName("sender") var sender: String? = "",

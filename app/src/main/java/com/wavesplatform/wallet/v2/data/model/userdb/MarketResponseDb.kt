@@ -2,9 +2,9 @@ package com.wavesplatform.wallet.v2.data.model.userdb
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.net.model.response.AmountAssetInfo
+import com.wavesplatform.sdk.net.model.response.AmountAssetInfoResponse
 import com.wavesplatform.sdk.net.model.response.MarketResponse
-import com.wavesplatform.sdk.net.model.response.PriceAssetInfo
+import com.wavesplatform.sdk.net.model.response.PriceAssetInfoResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.Ignore
@@ -23,13 +23,13 @@ open class MarketResponseDb(
         @SerializedName("amountAssetLongName") var amountAssetLongName: String? = "",
         @SerializedName("amountAssetDecimals") var amountAssetDecimals: Int = 0,
         @Ignore @SerializedName("amountAssetInfo")
-        var amountAssetInfo: AmountAssetInfo = AmountAssetInfo(),
+        var amountAssetInfo: AmountAssetInfoResponse = AmountAssetInfoResponse(),
         @SerializedName("priceAsset") var priceAsset: String = "",
         @SerializedName("priceAssetName") var priceAssetName: String = "",
         @SerializedName("priceAssetShortName") var priceAssetShortName: String? = "",
         @SerializedName("priceAssetLongName") var priceAssetLongName: String? = "",
         @Ignore @SerializedName("priceAssetInfo")
-        var priceAssetInfo: PriceAssetInfo = PriceAssetInfo(),
+        var priceAssetInfo: PriceAssetInfoResponse = PriceAssetInfoResponse(),
         @SerializedName("priceAssetDecimals") var priceAssetDecimals: Int = 0,
         @SerializedName("created") var created: Long = 0,
         @SerializedName("checked") var checked: Boolean = false,

@@ -16,7 +16,7 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
@@ -82,7 +82,7 @@ class DexFragment : BaseFragment(), DexView {
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             if (isNetworkConnected()) {
                 val args = Bundle()
-                args.classLoader = WatchMarket::class.java.classLoader
+                args.classLoader = WatchMarketResponse::class.java.classLoader
                 args.putParcelable(TradeActivity.BUNDLE_MARKET, this@DexFragment.adapter.getItem(position))
 
                 launchActivity<TradeActivity>(options = args)
@@ -132,7 +132,7 @@ class DexFragment : BaseFragment(), DexView {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun afterSuccessLoadMarkets(list: ArrayList<WatchMarket>) {
+    override fun afterSuccessLoadMarkets(list: ArrayList<WatchMarketResponse>) {
         swipe_container.isRefreshing = false
         presenter.clearOldPairsSubscriptions()
 
@@ -156,7 +156,7 @@ class DexFragment : BaseFragment(), DexView {
         }
     }
 
-    override fun afterSuccessLoadPairInfo(watchMarket: WatchMarket, index: Int) {
+    override fun afterSuccessLoadPairInfo(watchMarket: WatchMarketResponse, index: Int) {
         adapter.headerLayout?.text_last_update?.text = presenter.prefsUtil
                 .getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L)
                 .currentDateAsTimeSpanString(activity!!)

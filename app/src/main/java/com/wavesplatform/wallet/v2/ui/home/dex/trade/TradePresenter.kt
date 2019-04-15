@@ -6,17 +6,17 @@
 package com.wavesplatform.wallet.v2.ui.home.dex.trade
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.net.model.WatchMarket
-import com.wavesplatform.sdk.net.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
+import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import javax.inject.Inject
 
 @InjectViewState
 class TradePresenter @Inject constructor() : BasePresenter<TradeView>() {
-    var watchMarket: WatchMarket? = null
-    var amountAssetInfo: AssetInfo? = null
-    var priceAssetInfo: AssetInfo? = null
+    var watchMarket: WatchMarketResponse? = null
+    var amountAssetInfo: AssetInfoResponse? = null
+    var priceAssetInfo: AssetInfoResponse? = null
 
     fun loadAssetsInfoOfPair() {
         addSubscription(apiDataManager.assetsInfoByIds(arrayListOf(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset))

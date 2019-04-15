@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.data.helpers
 
 import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
@@ -15,7 +15,7 @@ import com.wavesplatform.wallet.v2.util.PrefsUtil
 
 class ClearAssetsHelper {
     companion object {
-        fun clearUnimportantAssets(prefsUtil: PrefsUtil, assets: MutableList<AssetBalance>, fromAPI: Boolean = false): MutableList<AssetBalance> {
+        fun clearUnimportantAssets(prefsUtil: PrefsUtil, assets: MutableList<AssetBalanceResponse>, fromAPI: Boolean = false): MutableList<AssetBalanceResponse> {
             return if (!prefsUtil.getValue(PrefsUtil.KEY_IS_CLEARED_ASSETS, false)) {
                 if (assets.size == EnvironmentManager.defaultAssets.size) {
                     // new account or empty account - let's go next
@@ -34,7 +34,7 @@ class ClearAssetsHelper {
             }
         }
 
-        private fun checkAndClear(assets: MutableList<AssetBalance>): MutableList<AssetBalance> {
+        private fun checkAndClear(assets: MutableList<AssetBalanceResponse>): MutableList<AssetBalanceResponse> {
             // load config for assets
             val savedAssetPrefs = queryAll<AssetBalanceStore>()
             val savedAssetPrefsMap = savedAssetPrefs.associateBy { it.assetId }

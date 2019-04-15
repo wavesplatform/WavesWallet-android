@@ -28,7 +28,7 @@ interface ApiService {
      * Get address for alias
      */
     @GET("v0/aliases/{alias}")
-    fun alias(@Path("alias") alias: String?): Observable<AliasData>
+    fun alias(@Path("alias") alias: String?): Observable<AliasDataResponse>
 
     /**
      * Get asset info by asset ID

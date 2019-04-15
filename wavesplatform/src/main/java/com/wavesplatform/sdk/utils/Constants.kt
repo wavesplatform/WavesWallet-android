@@ -1,7 +1,7 @@
 package com.wavesplatform.sdk.utils
 
-import com.wavesplatform.sdk.net.model.response.AssetInfo
-import com.wavesplatform.sdk.net.model.response.GlobalConfiguration
+import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
+import com.wavesplatform.sdk.net.model.response.GlobalConfigurationResponse
 
 
 class Constants {
@@ -25,24 +25,24 @@ class Constants {
         const val WAVES_MIN_FEE = 100000L
         const val MIN_WAVES_SPONSORED_BALANCE = 1.005
 
-        val WAVES_ASSET_INFO = AssetInfo(
+        val WAVES_ASSET_INFO = AssetInfoResponse(
                 id = WAVES_ASSET_ID_EMPTY,
                 precision = 8,
                 name = "WAVES",
                 quantity = 10000000000000000L)
 
-        var MRTGeneralAsset = GlobalConfiguration.ConfigAsset(
+        var MRTGeneralAsset = GlobalConfigurationResponse.ConfigAsset(
                 assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
                 gatewayId = "MRT",
                 displayName = "MinersReward")
 
-        var WCTGeneralAsset = GlobalConfiguration.ConfigAsset(
+        var WCTGeneralAsset = GlobalConfigurationResponse.ConfigAsset(
                 assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
                 gatewayId = "WCT",
                 displayName = "WavesCommunity")
 
 
-        // Transaction view types non Transaction block-chain type
+        // TransactionResponse view types non TransactionResponse block-chain type
         const val ID_RECEIVED_TYPE = 0
         const val ID_SENT_TYPE = 1
         const val ID_STARTED_LEASING_TYPE = 2

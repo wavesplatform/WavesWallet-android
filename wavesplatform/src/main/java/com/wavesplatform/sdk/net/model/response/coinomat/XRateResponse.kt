@@ -7,7 +7,7 @@ package com.wavesplatform.sdk.net.model.response.coinomat
 
 import com.google.gson.annotations.SerializedName
 
-data class XRate(
+data class XRateResponse(
     @SerializedName("xrate") var xrate: String? = null,
     @SerializedName("in_min") var inMin: String? = null,
     @SerializedName("in_def") var inDef: String? = null,

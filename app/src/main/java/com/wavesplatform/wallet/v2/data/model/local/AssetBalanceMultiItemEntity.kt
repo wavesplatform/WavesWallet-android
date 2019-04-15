@@ -2,14 +2,14 @@ package com.wavesplatform.wallet.v2.data.model.local
 
 import android.os.Parcelable
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class AssetBalanceMultiItemEntity() : AssetBalance(), MultiItemEntity, Parcelable {
+class AssetBalanceMultiItemEntity() : AssetBalanceResponse(), MultiItemEntity, Parcelable {
 
     constructor(assetBalance: AssetBalanceDb?) : this() {
         assetBalance.notNull {

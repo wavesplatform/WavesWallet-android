@@ -13,14 +13,14 @@ import com.wavesplatform.sdk.utils.SignUtil
 import com.wavesplatform.sdk.utils.stripZeros
 import java.math.BigInteger
 
-class OrderBook(
+class OrderBookResponse(
         @SerializedName("timestamp") var timestamp: Long = 0,
-        @SerializedName("pair") var pair: Pair = Pair(),
-        @SerializedName("bids") var bids: List<Bid> = listOf(),
-        @SerializedName("asks") var asks: List<Ask> = listOf()
+        @SerializedName("pair") var pair: PairResponse = PairResponse(),
+        @SerializedName("bids") var bids: List<BidResponse> = listOf(),
+        @SerializedName("asks") var asks: List<AskResponse> = listOf()
 ) {
 
-    class Pair(
+    class PairResponse(
             @SerializedName("amountAsset") var amountAsset: String = "",
             @SerializedName("priceAsset") var priceAsset: String = ""
     ) {
@@ -29,13 +29,13 @@ class OrderBook(
                 Bytes.concat(SignUtil.arrayOption(amountAsset),
                         SignUtil.arrayOption(priceAsset))
             } catch (e: Exception) {
-                Log.e("Wallet", "Couldn't create bytes for AssetPair: ", e)
+                Log.e("Wallet", "Couldn't create bytes for AssetPairResponse: ", e)
                 ByteArray(0)
             }
         }
     }
 
-    open class Ask(
+    open class AskResponse(
             @SerializedName("amount") var amount: Long = 0,
             @SerializedName("price") var price: Long = 0,
             @SerializedName("sum") var sum: Long = 0
@@ -53,7 +53,7 @@ class OrderBook(
         }
     }
 
-    open class Bid(
+    open class BidResponse(
             @SerializedName("amount") var amount: Long = 0,
             @SerializedName("price") var price: Long = 0,
             @SerializedName("sum") var sum: Long = 0

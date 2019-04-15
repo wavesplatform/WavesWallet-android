@@ -16,7 +16,7 @@ import com.oushangfeng.pinnedsectionitemdecoration.PinnedHeaderItemDecoration
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.SpeedyLinearLayoutManager
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -160,7 +160,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
         const val TYPE = "type"
 
-        fun newInstance(type: String, asset: AssetBalance?): HistoryTabFragment {
+        fun newInstance(type: String, asset: AssetBalanceResponse?): HistoryTabFragment {
             val historyDateItemFragment = HistoryTabFragment()
             val bundle = Bundle()
             bundle.putString(TYPE, type)

@@ -35,7 +35,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     @Inject
     lateinit var coinomatManager: CoinomatManager
 
-    var selectedAsset: AssetBalance? = null
+    var selectedAsset: AssetBalanceResponse? = null
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
     var attachment: String? = ""
@@ -47,7 +47,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     var gatewayMax: BigDecimal = BigDecimal.ZERO
     var fee = 0L
     var feeWaves = 0L
-    var feeAsset: AssetBalance = find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    var feeAsset: AssetBalanceResponse = find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
     fun sendClicked() {
         val res = validateTransfer()
@@ -214,9 +214,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 githubDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(),
                 nodeDataManager.assetDetails(assetId),
-                Function3 { t1: GlobalTransactionCommission,
-                            t2: ScriptInfo,
-                            t3: AssetsDetails ->
+                Function3 { t1: GlobalTransactionCommissionResponse,
+                            t2: ScriptInfoResponse,
+                            t3: AssetsDetailsResponse ->
                     return@Function3 Triple(t1, t2, t3)
                 })
                 .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -224,8 +224,8 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     val commission = triple.first
                     val scriptInfo = triple.second
                     val assetsDetails = triple.third
-                    val params = GlobalTransactionCommission.Params()
-                    params.transactionType = Transaction.TRANSFER
+                    val params = GlobalTransactionCommissionResponse.ParamsResponse()
+                    params.transactionType = TransactionResponse.TRANSFER
                     params.smartAccount = scriptInfo.extraFee != 0L
                     params.smartAsset = assetsDetails.scripted
                     fee = countCommission(commission, params)
@@ -243,10 +243,10 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 nodeDataManager.assetDetails(assetId)
                         .compose(RxUtil.applyObservableDefaultSchedulers())
                         .subscribe({ assetsDetails ->
-                            val assetBalance = AssetBalance(
+                            val assetBalance = AssetBalanceResponse(
                                     assetsDetails.assetId,
                                     quantity = assetsDetails.quantity,
-                                    issueTransaction = IssueTransaction(
+                                    issueTransaction = IssueTransactionResponse(
                                             assetId = assetsDetails.assetId,
                                             id = assetsDetails.assetId,
                                             name = assetsDetails.name,
@@ -269,7 +269,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         const val LANG: String = "ru_RU"
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
-        fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
+        fun getAssetId(recipient: String?, assetBalance: AssetBalanceResponse?): String? {
             val configAsset = EnvironmentManager.globalConfiguration.generalAssets
                     .firstOrNull { it.assetId == assetBalance?.assetId }
 

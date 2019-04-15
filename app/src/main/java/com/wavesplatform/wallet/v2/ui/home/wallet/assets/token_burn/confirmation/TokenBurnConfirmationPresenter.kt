@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmatio
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.net.model.request.BurnRequest
 import com.wavesplatform.wallet.App
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.isSmartError
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @InjectViewState
 class TokenBurnConfirmationPresenter @Inject constructor() : BasePresenter<TokenBurnConfirmationView>() {
 
-    var assetBalance: AssetBalance? = null
+    var assetBalance: AssetBalanceResponse? = null
     var amount: Double = 0.0
     var fee = 0L
 

@@ -13,7 +13,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.sdk.net.model.response.Alias
+import com.wavesplatform.sdk.net.model.response.AliasResponse
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import com.wavesplatform.wallet.v2.data.rules.AliasRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
@@ -140,7 +140,7 @@ class CreateAliasActivity : BaseActivity(), CreateAliasView {
         exitFromActivity()
     }
 
-    override fun successCreateAlias(alias: Alias) {
+    override fun successCreateAlias(alias: AliasResponse) {
         AliasDb(alias).save()
         setResult(Constants.RESULT_OK, Intent().apply {
             putExtra(RESULT_ALIAS, alias)

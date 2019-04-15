@@ -1,7 +1,7 @@
 package com.wavesplatform.wallet.v2.data.model.db
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.net.model.response.Lease
+import com.wavesplatform.sdk.net.model.response.LeaseResponse
 import com.wavesplatform.sdk.utils.notNull
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
@@ -23,7 +23,7 @@ open class LeaseDb(
         @SerializedName("recipientAddress") var recipientAddress: String? = ""
 ) : RealmModel {
 
-    constructor(lease: Lease?) : this() {
+    constructor(lease: LeaseResponse?) : this() {
         lease.notNull {
             this.id = it.id
             this.sender = it.sender
@@ -38,8 +38,8 @@ open class LeaseDb(
         }
     }
 
-    fun convertFromDb(): Lease {
-        return Lease(
+    fun convertFromDb(): LeaseResponse {
+        return LeaseResponse(
                 id = this.id,
                 sender = this.sender,
                 senderPublicKey = this.senderPublicKey,

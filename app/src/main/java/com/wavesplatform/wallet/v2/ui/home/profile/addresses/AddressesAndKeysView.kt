@@ -5,9 +5,9 @@
 
 package com.wavesplatform.wallet.v2.ui.home.profile.addresses
 
-import com.wavesplatform.sdk.net.model.response.Alias
+import com.wavesplatform.sdk.net.model.response.AliasResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
 
 interface AddressesAndKeysView : BaseMvpView {
-    fun afterSuccessLoadAliases(ownAliases: List<Alias>)
+    fun afterSuccessLoadAliases(ownAliases: List<AliasResponse>)
 }

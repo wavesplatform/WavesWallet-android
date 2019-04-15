@@ -8,9 +8,9 @@ package com.wavesplatform.sdk.net.service
 import com.google.gson.internal.LinkedTreeMap
 import com.wavesplatform.sdk.net.model.request.CancelOrderRequest
 import com.wavesplatform.sdk.net.model.request.OrderRequest
-import com.wavesplatform.sdk.net.model.response.Markets
-import com.wavesplatform.sdk.net.model.response.OrderBook
-import com.wavesplatform.sdk.net.model.response.OrderResponse
+import com.wavesplatform.sdk.net.model.response.MarketsResponse
+import com.wavesplatform.sdk.net.model.response.OrderBookResponse
+import com.wavesplatform.sdk.net.model.response.AssetPairOrderResponse
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -34,7 +34,7 @@ interface MatcherService {
      * Get the open trading markets along with trading pairs meta data
      */
     @GET("matcher/orderbook")
-    fun getAllMarkets(): Observable<Markets>
+    fun getAllMarkets(): Observable<MarketsResponse>
 
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}/tradableBalance/{address}")
     fun getBalanceFromAssetPair(
@@ -44,16 +44,16 @@ interface MatcherService {
     ): Observable<LinkedTreeMap<String, Long>>
 
     /**
-     * Get Order Book for a given Asset Pair
+     * Get OrderResponse Book for a given Asset Pair
      */
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}")
     fun getOrderBook(
         @Path("amountAsset") amountAsset: String?,
         @Path("priceAsset") priceAsset: String?
-    ): Observable<OrderBook>
+    ): Observable<OrderBookResponse>
 
     /**
-     * Get Order History for a given Asset Pair and Public Key
+     * Get OrderResponse History for a given Asset Pair and Public Key
      */
     @GET("matcher/orderbook/{amountAsset}/{priceAsset}/publicKey/{publicKey}")
     fun getMyOrders(
@@ -62,7 +62,7 @@ interface MatcherService {
         @Path("publicKey") publicKey: String?,
         @Header("signature") signature: String?,
         @Header("timestamp") timestamp: Long
-    ): Observable<List<OrderResponse>>
+    ): Observable<List<AssetPairOrderResponse>>
 
     /**
      * Cancel previously submitted order if it's not already filled completely

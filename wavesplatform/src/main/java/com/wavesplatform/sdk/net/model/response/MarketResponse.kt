@@ -17,12 +17,12 @@ open class MarketResponse(
         @SerializedName("amountAssetShortName") var amountAssetShortName: String? = "",
         @SerializedName("amountAssetLongName") var amountAssetLongName: String? = "",
         @SerializedName("amountAssetDecimals") var amountAssetDecimals: Int = 0,
-        @SerializedName("amountAssetInfo") var amountAssetInfo: AmountAssetInfo = AmountAssetInfo(),
+        @SerializedName("amountAssetInfo") var amountAssetInfo: AmountAssetInfoResponse = AmountAssetInfoResponse(),
         @SerializedName("priceAsset") var priceAsset: String = "",
         @SerializedName("priceAssetName") var priceAssetName: String = "",
         @SerializedName("priceAssetShortName") var priceAssetShortName: String? = "",
         @SerializedName("priceAssetLongName") var priceAssetLongName: String? = "",
-        @SerializedName("priceAssetInfo") var priceAssetInfo: PriceAssetInfo = PriceAssetInfo(),
+        @SerializedName("priceAssetInfo") var priceAssetInfo: PriceAssetInfoResponse = PriceAssetInfoResponse(),
         @SerializedName("priceAssetDecimals") var priceAssetDecimals: Int = 0,
         @SerializedName("created") var created: Long = 0,
         @SerializedName("checked") var checked: Boolean = false,
@@ -32,11 +32,11 @@ open class MarketResponse(
 ) : Parcelable
 
 @Parcelize
-data class AmountAssetInfo(
+data class AmountAssetInfoResponse(
         @SerializedName("decimals") var decimals: Int = 0
 ) : Parcelable
 
 @Parcelize
-data class PriceAssetInfo(
+data class PriceAssetInfoResponse(
         @SerializedName("decimals") var decimals: Int = 0
 ) : Parcelable

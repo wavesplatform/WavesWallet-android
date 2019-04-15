@@ -10,8 +10,8 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.net.model.request.TransactionsBroadcastRequest
-import com.wavesplatform.sdk.net.model.response.AssetBalance
-import com.wavesplatform.sdk.net.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -34,13 +34,13 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
     var attachment: String = ""
-    var selectedAsset: AssetBalance? = null
-    var assetInfo: AssetInfo? = null
+    var selectedAsset: AssetBalanceResponse? = null
+    var assetInfo: AssetInfoResponse? = null
     var moneroPaymentId: String? = null
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
     var blockchainCommission = 0L
-    var feeAsset: AssetBalance = find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    var feeAsset: AssetBalanceResponse = find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
     fun confirmSend() {
         val singed = signTransaction()

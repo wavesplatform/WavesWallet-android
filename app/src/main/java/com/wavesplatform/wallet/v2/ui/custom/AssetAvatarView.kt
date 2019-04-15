@@ -18,8 +18,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
 import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.AssetBalance
-import com.wavesplatform.sdk.net.model.response.AssetInfo
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.wallet.R
 import pers.victor.ext.findColor
 import pers.victor.ext.resize
@@ -90,7 +90,7 @@ class AssetAvatarView : AppCompatImageView {
     /*
     * Set asset object to get initials for drawable
     * */
-    fun setAsset(asset: AssetBalance?) {
+    fun setAsset(asset: AssetBalanceResponse?) {
         setValues(asset?.assetId ?: " ", asset?.getName() ?: " ",
                 asset?.isSponsored() == true,
                 asset?.isScripted() == true)
@@ -99,7 +99,7 @@ class AssetAvatarView : AppCompatImageView {
     /*
    * Set asset info object to get initials for drawable
    * */
-    fun setAsset(asset: AssetInfo) {
+    fun setAsset(asset: AssetInfoResponse) {
         setValues(asset.id, asset.name, asset.isSponsored(), asset.hasScript)
     }
 

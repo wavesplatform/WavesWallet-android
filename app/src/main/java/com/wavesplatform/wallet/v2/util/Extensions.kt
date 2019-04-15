@@ -34,7 +34,6 @@ import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
-import android.util.Patterns
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -47,9 +46,9 @@ import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.net.RetrofitException
 import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.net.model.response.ErrorResponse
-import com.wavesplatform.sdk.net.model.response.TransactionType
+import com.wavesplatform.sdk.net.model.TransactionType
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
@@ -539,15 +538,15 @@ fun TextView.makeTextHalfBold() {
     this.text = str.append(" $textAfter")
 }
 
-fun loadDbWavesBalance(): AssetBalance {
+fun loadDbWavesBalance(): AssetBalanceResponse {
     return find(Constants.WAVES_ASSET_ID_EMPTY)!!
 }
 
-fun find(assetId: String): AssetBalance? {
+fun find(assetId: String): AssetBalanceResponse? {
     return (queryFirst<AssetBalanceDb> { equalTo("assetId", assetId) })?.convertFromDb()
 }
 
-fun findByGatewayId(gatewayId: String): AssetBalance? { // ticker
+fun findByGatewayId(gatewayId: String): AssetBalanceResponse? { // ticker
     for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
         if (asset.gatewayId == gatewayId) {
             return find(asset.assetId)
@@ -606,7 +605,7 @@ fun isSpam(assetId: String?): Boolean {
             && (null != queryFirst<SpamAssetDb> { equalTo("assetId", assetId) }))
 }
 
-fun AssetBalance.getItemType(): Int {
+fun AssetBalanceResponse.getItemType(): Int {
     return when {
         isSpam -> AssetsAdapter.TYPE_SPAM_ASSET
         isHidden -> AssetsAdapter.TYPE_HIDDEN_ASSET

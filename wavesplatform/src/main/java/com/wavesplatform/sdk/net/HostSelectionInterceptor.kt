@@ -5,13 +5,13 @@
 
 package com.wavesplatform.sdk.net
 
-import com.wavesplatform.sdk.net.model.response.GlobalConfiguration
+import com.wavesplatform.sdk.net.model.response.GlobalConfigurationResponse
 import com.wavesplatform.sdk.utils.notNull
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import java.io.IOException
 
-class HostSelectionInterceptor(initServers: GlobalConfiguration.Servers) : Interceptor {
+class HostSelectionInterceptor(initServers: GlobalConfigurationResponse.Servers) : Interceptor {
 
     @Volatile
     private var nodeHost: String? = null
@@ -24,7 +24,7 @@ class HostSelectionInterceptor(initServers: GlobalConfiguration.Servers) : Inter
     private val initDataHost = HttpUrl.parse(initServers.dataUrl)?.host()
     private val initMatcherHost = HttpUrl.parse(initServers.matcherUrl)?.host()
 
-    fun setHosts(servers: GlobalConfiguration.Servers) {
+    fun setHosts(servers: GlobalConfigurationResponse.Servers) {
         nodeHost = HttpUrl.parse(servers.nodeUrl)?.host()
         dataHost = HttpUrl.parse(servers.dataUrl)?.host()
         matcherHost = HttpUrl.parse(servers.matcherUrl)?.host()

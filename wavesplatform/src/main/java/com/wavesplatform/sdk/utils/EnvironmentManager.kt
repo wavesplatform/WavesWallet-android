@@ -12,9 +12,9 @@ import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Log
 import com.google.gson.Gson
-import com.wavesplatform.sdk.net.model.response.AssetBalance
-import com.wavesplatform.sdk.net.model.response.GlobalConfiguration
-import com.wavesplatform.sdk.net.model.response.IssueTransaction
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.GlobalConfigurationResponse
+import com.wavesplatform.sdk.net.model.response.IssueTransactionResponse
 import com.wavesplatform.sdk.net.service.ApiService
 import com.wavesplatform.sdk.net.HostSelectionInterceptor
 import com.wavesplatform.sdk.net.service.NodeService
@@ -23,7 +23,6 @@ import io.reactivex.disposables.Disposable
 import pers.victor.ext.currentTimeMillis
 import java.io.IOException
 import java.nio.charset.Charset
-import java.util.*
 
 class EnvironmentManager {
 
@@ -34,15 +33,15 @@ class EnvironmentManager {
     private var interceptor: HostSelectionInterceptor? = null
 
     class Environment internal constructor(val name: String, val url: String, jsonFileName: String) {
-        var configuration: GlobalConfiguration? = null
+        var configuration: GlobalConfigurationResponse? = null
 
         init {
             this.configuration = Gson().fromJson(
                     loadJsonFromAsset(instance!!.application!!, jsonFileName),
-                    GlobalConfiguration::class.java)
+                    GlobalConfigurationResponse::class.java)
         }
 
-        internal fun setConfiguration(configuration: GlobalConfiguration) {
+        internal fun setConfiguration(configuration: GlobalConfigurationResponse) {
             this.configuration = configuration
         }
 
@@ -97,7 +96,7 @@ class EnvironmentManager {
                                     GLOBAL_CURRENT_ENVIRONMENT_DATA,
                                     Gson().toJson(environment.configuration))
                             environment.setConfiguration(Gson()
-                                    .fromJson(json, GlobalConfiguration::class.java))
+                                    .fromJson(json, GlobalConfigurationResponse::class.java))
                         } else {
                             environment.setConfiguration(environment.configuration!!)
                         }
@@ -114,7 +113,7 @@ class EnvironmentManager {
         }
 
         @JvmStatic
-        fun updateConfiguration(globalConfigurationObserver: Observable<GlobalConfiguration>,
+        fun updateConfiguration(globalConfigurationObserver: Observable<GlobalConfigurationResponse>,
                                 apiService: ApiService,
                                 nodeService: NodeService) {
             if (instance == null) {
@@ -134,7 +133,7 @@ class EnvironmentManager {
                     .map { info ->
                         defaultAssets.clear()
                         for (assetInfo in info.data) {
-                            val assetBalance = AssetBalance(
+                            val assetBalance = AssetBalanceResponse(
                                     assetId = if (assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED) {
                                         Constants.WAVES_ASSET_ID_EMPTY
                                     } else {
@@ -142,7 +141,7 @@ class EnvironmentManager {
                                     },
                                     quantity = assetInfo.assetInfo.quantity,
                                     isFavorite = assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED,
-                                    issueTransaction = IssueTransaction(
+                                    issueTransaction = IssueTransactionResponse(
                                             id = assetInfo.assetInfo.id,
                                             name = findAssetIdByAssetId(
                                                     assetInfo.assetInfo.id)?.displayName
@@ -160,7 +159,7 @@ class EnvironmentManager {
                     .subscribe({
                         instance!!.configurationDisposable!!.dispose()
                     }, { error ->
-                        Log.e("EnvironmentManager", "Can't download GlobalConfiguration!")
+                        Log.e("EnvironmentManager", "Can't download GlobalConfigurationResponse!")
                         error.printStackTrace()
                         setConfiguration(environment.configuration!!)
                         instance!!.configurationDisposable!!.dispose()
@@ -186,7 +185,7 @@ class EnvironmentManager {
                     })
         }
 
-        private fun setConfiguration(globalConfiguration: GlobalConfiguration) {
+        private fun setConfiguration(globalConfiguration: GlobalConfigurationResponse) {
             instance!!.interceptor!!.setHosts(globalConfiguration.servers)
             PreferenceManager
                     .getDefaultSharedPreferences(instance!!.application)
@@ -226,7 +225,7 @@ class EnvironmentManager {
                         GLOBAL_CURRENT_ENVIRONMENT, Environment.MAIN_NET.name)
             }
 
-        private fun findAssetIdByAssetId(assetId: String): GlobalConfiguration.ConfigAsset? {
+        private fun findAssetIdByAssetId(assetId: String): GlobalConfigurationResponse.ConfigAsset? {
             return instance?.current?.configuration?.generalAssets?.firstOrNull { it.assetId == assetId }
         }
 
@@ -247,17 +246,17 @@ class EnvironmentManager {
         val netCode: Byte
             get() = environment.configuration!!.scheme[0].toByte()
 
-        val globalConfiguration: GlobalConfiguration
+        val globalConfiguration: GlobalConfigurationResponse
             get() = environment.configuration!!
 
         val name: String
             get() = environment.name
 
         @JvmStatic
-        val servers: GlobalConfiguration.Servers
+        val servers: GlobalConfigurationResponse.Servers
             get() = environment.configuration!!.servers
 
-        val defaultAssets = mutableListOf<AssetBalance>()
+        val defaultAssets = mutableListOf<AssetBalanceResponse>()
 
         val environment: Environment
             get() = instance!!.current!!

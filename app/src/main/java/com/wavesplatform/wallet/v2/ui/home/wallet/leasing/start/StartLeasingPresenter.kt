@@ -6,9 +6,9 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommission
-import com.wavesplatform.sdk.net.model.response.ScriptInfo
-import com.wavesplatform.sdk.net.model.response.Transaction
+import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommissionResponse
+import com.wavesplatform.sdk.net.model.response.ScriptInfoResponse
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.TransactionUtil
@@ -35,16 +35,16 @@ class StartLeasingPresenter @Inject constructor() : BasePresenter<StartLeasingVi
         addSubscription(Observable.zip(
                 githubDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(),
-                BiFunction { t1: GlobalTransactionCommission,
-                             t2: ScriptInfo ->
+                BiFunction { t1: GlobalTransactionCommissionResponse,
+                             t2: ScriptInfoResponse ->
                     return@BiFunction Pair(t1, t2)
                 })
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ triple ->
                     val commission = triple.first
                     val scriptInfo = triple.second
-                    val params = GlobalTransactionCommission.Params()
-                    params.transactionType = Transaction.LEASE
+                    val params = GlobalTransactionCommissionResponse.ParamsResponse()
+                    params.transactionType = TransactionResponse.LEASE
                     params.smartAccount = scriptInfo.extraFee != 0L
                     fee = TransactionUtil.countCommission(commission, params)
                     viewState.showCommissionSuccess(fee)

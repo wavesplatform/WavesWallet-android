@@ -19,6 +19,7 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.net.model.OrderType
+import com.wavesplatform.sdk.net.model.TransactionType
 import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.sdk.net.service.CoinomatService
 import com.wavesplatform.sdk.utils.*
@@ -49,13 +50,13 @@ import kotlinx.android.synthetic.main.history_details_layout.view.*
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 
-class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Transaction>() {
+class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<TransactionResponse>() {
 
     override fun configLayoutRes(): Int {
         return R.layout.history_details_bottom_sheet_dialog
     }
 
-    override fun setupHeader(transaction: Transaction): View? {
+    override fun setupHeader(transaction: TransactionResponse): View? {
         val view = inflate(R.layout.history_details_layout)
 
         view.text_tag.gone()
@@ -163,7 +164,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         return view
     }
 
-    override fun setupBody(transaction: Transaction): View? {
+    override fun setupBody(transaction: TransactionResponse): View? {
         val historyContainer = LinearLayout(activity)
         historyContainer.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         historyContainer.orientation = LinearLayout.VERTICAL
@@ -360,7 +361,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val addressContainer = massSendLayout?.findViewById<LinearLayout>(R.id.container_address)
                 val showMoreAddress = massSendLayout?.findViewById<TextView>(R.id.text_show_more_address)
 
-                val transfers: MutableList<Transfer> = transaction.transfers.toMutableList()
+                val transfers: MutableList<TransferResponse> = transaction.transfers.toMutableList()
 
                 transfers.forEachIndexed { index, transfer ->
                     val addressView = inflater?.inflate(R.layout.address_layout, null, false)
@@ -577,7 +578,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
     }
 
 
-    private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfo?) {
+    private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfoResponse?) {
         if (isShowTicker(assetInfo?.id)) {
             val ticker = assetInfo?.getTicker()
             if (!ticker.isNullOrBlank()) {
@@ -589,7 +590,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         }
     }
 
-    override fun setupInfo(transaction: Transaction): View? {
+    override fun setupInfo(transaction: TransactionResponse): View? {
         val layout = inflate(R.layout.fragment_history_bottom_sheet_base_info_layout)
 
         fun showTransactionFee() {
@@ -626,7 +627,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         return layout
     }
 
-    override fun setupFooter(transaction: Transaction): View? {
+    override fun setupFooter(transaction: TransactionResponse): View? {
         val view = inflater?.inflate(R.layout.fragment_history_bottom_sheet_bottom_btns, null, false)
 
         fun changeViewMargin(view: View) {
@@ -653,7 +654,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    copyToClipboard(Transaction.getInfo(transaction), view.text_copy_all_data,
+                    copyToClipboard(TransactionResponse.getInfo(transaction), view.text_copy_all_data,
                             R.string.history_details_copy_all_data)
                 })
 
@@ -739,7 +740,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         return view
     }
 
-    private fun setExchangeItem(transaction: Transaction, view: View) {
+    private fun setExchangeItem(transaction: TransactionResponse, view: View) {
         val myOrder = findMyOrder(
                 transaction.order1!!,
                 transaction.order2!!,
@@ -786,7 +787,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         view.text_transaction_value.text = directionSign + amountValue + assetName
     }
 
-    private fun nonGateway(assetBalance: AssetBalance, transaction: Transaction) =
+    private fun nonGateway(assetBalance: AssetBalanceResponse, transaction: TransactionResponse) =
             !assetBalance.isGateway || (assetBalance.isGateway &&
                     !transaction.recipientAddress.equals(CoinomatService.GATEWAY_ADDRESS))
 

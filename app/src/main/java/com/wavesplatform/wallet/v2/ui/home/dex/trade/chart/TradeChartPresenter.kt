@@ -11,7 +11,7 @@ import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.userdb.MarketResponseDb
@@ -27,7 +27,7 @@ import kotlin.collections.ArrayList
 
 @InjectViewState
 class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>() {
-    var watchMarket: WatchMarket? = null
+    var watchMarket: WatchMarketResponse? = null
     var selectedTimeFrame = 0
     var newSelectedTimeFrame = 0
     val timeFrameList = arrayOf(ChartTimeFrame.FIVE_MINUTES, ChartTimeFrame.FIFTEEN_MINUTES, ChartTimeFrame.THIRTY_MINUTES,

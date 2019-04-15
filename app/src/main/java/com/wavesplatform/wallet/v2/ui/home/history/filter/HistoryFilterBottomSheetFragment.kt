@@ -14,7 +14,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import com.vicpin.krealmextensions.queryAllAsync
-import com.wavesplatform.sdk.net.model.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
@@ -27,7 +27,7 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
     var rooView: View? = null
     var inflater: LayoutInflater? = null
     var periodListSelected = arrayListOf<String>()
-    var assetListSelected = arrayListOf<AssetBalance>()
+    var assetListSelected = arrayListOf<AssetBalanceResponse>()
     var transferistSelected = arrayListOf<TransferModel>()
     var closeBtn: Button? = null
     var filterBtn: Button? = null
@@ -91,7 +91,7 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
         }
 
         assetsAdapter.setOnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as AssetBalance
+            val item = adapter.getItem(position) as AssetBalanceResponse
             if (item.isChecked) {
                 assetListSelected.remove(item)
             } else {

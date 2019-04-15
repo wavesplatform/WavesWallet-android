@@ -28,7 +28,7 @@ import com.wavesplatform.wallet.R
 import com.github.mikephil.charting.utils.ObjectPool
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
-import com.wavesplatform.sdk.net.model.WatchMarket
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
 import com.wavesplatform.sdk.net.model.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CandleTouchListener
@@ -60,10 +60,10 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     @ProvidePresenter
     fun providePresenter(): TradeChartPresenter = presenter
 
-    override fun configLayoutRes() = com.wavesplatform.wallet.R.layout.fragment_trade_chart
+    override fun configLayoutRes() = R.layout.fragment_trade_chart
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
+        presenter.watchMarket = arguments?.getParcelable(TradeActivity.BUNDLE_MARKET)
 
         val timeFrame = ChartTimeFrame.findByServerTime(presenter.watchMarket?.market?.currentTimeFrame)
         val position = ChartTimeFrame.findPositionByServerTime(presenter.watchMarket?.market?.currentTimeFrame)
@@ -327,7 +327,7 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         bar_chart.moveViewToX(candle_chart.lowestVisibleX)
     }
 
-    override fun successGetTrades(tradesMarket: LastTradesResponse.Data.ExchangeTransaction?) {
+    override fun successGetTrades(tradesMarket: LastTradesResponse.DataResponse.ExchangeTransactionResponse?) {
         tradesMarket.notNull {
             val limitLine = LimitLine(it.price.toFloat(), "")
             limitLine.lineColor = if (it.getMyOrder().getType() == OrderType.BUY) {
@@ -364,8 +364,8 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
 
                 val candleData = CandleData()
                 val set = CandleDataSet(candles, "Candle DataSet")
-                set.decreasingColor = findColor(com.wavesplatform.wallet.R.color.error400)
-                set.increasingColor = findColor(com.wavesplatform.wallet.R.color.submit300)
+                set.decreasingColor = findColor(R.color.error400)
+                set.increasingColor = findColor(R.color.submit300)
                 set.neutralColor = Color.parseColor("#4b7190")
                 set.shadowColorSameAsCandle = true
                 set.increasingPaintStyle = Paint.Style.FILL
@@ -525,9 +525,9 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     }
 
     companion object {
-        fun newInstance(watchMarket: WatchMarket?): TradeChartFragment {
+        fun newInstance(watchMarket: WatchMarketResponse?): TradeChartFragment {
             val args = Bundle()
-            args.classLoader = WatchMarket::class.java.classLoader
+            args.classLoader = WatchMarketResponse::class.java.classLoader
             args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
             val fragment = TradeChartFragment()
             fragment.arguments = args

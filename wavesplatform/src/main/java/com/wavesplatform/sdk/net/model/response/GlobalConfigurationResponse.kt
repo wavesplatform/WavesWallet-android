@@ -7,7 +7,7 @@ package com.wavesplatform.sdk.net.model.response
 
 import com.google.gson.annotations.SerializedName
 
-data class GlobalConfiguration(
+data class GlobalConfigurationResponse(
     @SerializedName("name") var name: String = "",
     @SerializedName("servers") var servers: Servers = Servers(),
     @SerializedName("scheme") var scheme: String = "",

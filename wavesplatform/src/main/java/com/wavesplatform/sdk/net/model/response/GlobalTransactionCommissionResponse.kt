@@ -10,25 +10,25 @@ import com.google.gson.annotations.SerializedName
 /**
  * https://wavesplatform.atlassian.net/wiki/spaces/WAVES/pages/1305280576
  */
-data class GlobalTransactionCommission(
+data class GlobalTransactionCommissionResponse(
 
     @SerializedName("smart_asset_extra_fee") var smartAssetExtraFee: Long = 400000,
     @SerializedName("smart_account_extra_fee") var smartAccountExtraFee: Long = 400000,
-    @SerializedName("calculate_fee_rules") var calculateFeeRules: CalculateFeeRules = CalculateFeeRules()) {
+    @SerializedName("calculate_fee_rules") var calculateFeeRules: CalculateFeeRulesResponse = CalculateFeeRulesResponse()) {
 
-    data class CalculateFeeRules(
-        @SerializedName("default") var default: FeeRules = FeeRules(),
-        @SerializedName("3") var issue: FeeRules = FeeRules(fee = 100000000),
-        @SerializedName("5") var reissue: FeeRules = FeeRules(fee = 100000000),
-        @SerializedName("7") var exchange: FeeRules = FeeRules(addSmartAccountFee = false, fee = 300000),
-        @SerializedName("11") var massTransfer: FeeRules = FeeRules(pricePerTransfer = 50000),
-        @SerializedName("12") var data: FeeRules = FeeRules(pricePerKb = 100000),
-        @SerializedName("13") var script: FeeRules = FeeRules(fee = 1000000),
-        @SerializedName("14") var sponsor: FeeRules = FeeRules(fee = 100000000),
-        @SerializedName("15") var assetScript: FeeRules = FeeRules(fee = 100000000)
+    data class CalculateFeeRulesResponse(
+            @SerializedName("default") var default: FeeRulesResponse = FeeRulesResponse(),
+            @SerializedName("3") var issue: FeeRulesResponse = FeeRulesResponse(fee = 100000000),
+            @SerializedName("5") var reissue: FeeRulesResponse = FeeRulesResponse(fee = 100000000),
+            @SerializedName("7") var exchange: FeeRulesResponse = FeeRulesResponse(addSmartAccountFee = false, fee = 300000),
+            @SerializedName("11") var massTransfer: FeeRulesResponse = FeeRulesResponse(pricePerTransfer = 50000),
+            @SerializedName("12") var data: FeeRulesResponse = FeeRulesResponse(pricePerKb = 100000),
+            @SerializedName("13") var script: FeeRulesResponse = FeeRulesResponse(fee = 1000000),
+            @SerializedName("14") var sponsor: FeeRulesResponse = FeeRulesResponse(fee = 100000000),
+            @SerializedName("15") var assetScript: FeeRulesResponse = FeeRulesResponse(fee = 100000000)
     )
 
-    data class FeeRules(
+    data class FeeRulesResponse(
         @SerializedName("smart_asset_extra_fee") var smartAssetExtraFee: Long? = null,
         @SerializedName("smart_account_extra_fee") var smartAccountExtraFee: Long? = null,
         @SerializedName("add_smart_asset_fee") var addSmartAssetFee: Boolean = true,
@@ -39,7 +39,7 @@ data class GlobalTransactionCommission(
         @SerializedName("price_per_kb") var pricePerKb: Long? = null
     )
 
-    class Params(
+    class ParamsResponse(
         var transactionType: Int? = null,
         var smartAccount: Boolean? = null,
         var smartAsset: Boolean? = null,
