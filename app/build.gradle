@@ -319,7 +319,7 @@ dependencies {
     implementation 'com.arello-mobile:moxy-app-compat:1.5.5'
     kapt 'com.arello-mobile:moxy-compiler:1.5.5'
 
-    implementation "com.github.vicpinm:krealmextensions:2.3.0"
+    implementation "com.github.vicpinm:krealmextensions:2.5.0"
     implementation 'com.yarolegovich:sliding-root-nav:1.1.0'
     implementation 'io.github.anderscheow:validator:1.1.5'
 

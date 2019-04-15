@@ -92,8 +92,8 @@ open class CreatePassCodeActivity : BaseActivity(), CreatePasscodeView {
                 || intent.hasExtra(NewAccountActivity.KEY_INTENT_PROCESS_ACCOUNT_IMPORT))
         if (createOrImport && FingerprintAuthDialogFragment.isAvailable(this)) {
             launchActivity<UseFingerprintActivity>(intent.extras) {
-                putExtra(CreatePassCodeActivity.KEY_INTENT_GUID, guid)
-                putExtra(CreatePassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
+                putExtra(KEY_INTENT_GUID, guid)
+                putExtra(KEY_INTENT_PASS_CODE, passCode)
             }
         } else if (App.getAccessManager().isUseFingerPrint(guid)
                 && FingerprintAuthDialogFragment.isAvailable(this)) {

@@ -68,7 +68,7 @@ open class PaymentResponse(
         var amount: Long = 0,
         @SerializedName("assetId")
         var assetId: String? = null,
-        @SerializedName("assetId")
+        @SerializedName("asset")
         var asset: AssetInfoResponse? = AssetInfoResponse()
 )
 

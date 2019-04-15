@@ -88,7 +88,7 @@ class MigrationUtil @Inject constructor() {
                     return
                 }
                 if (tempRealm!!.version != VER_DB_NEW && tempRealm.version < VER_DB_WITHOUT_USER_DATA) {
-                    if (sharedRealm.hasTable(Table.getTableNameForClass("AddressBookUser"))) {  // todo check table name
+                    if (sharedRealm.hasTable(Table.getTableNameForClass("AddressBookUser"))) {
                         val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
                         val addressBookUsers = mutableListOf<AddressBookUser>()
                         for (item in addressBookUsersDb) {
