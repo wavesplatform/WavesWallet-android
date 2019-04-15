@@ -1,10 +1,10 @@
--verbose
--dontobfuscate
--ignorewarnings
+#-verbose
+#-dontobfuscate
+#-ignorewarnings
 
 # These lines allow optimisation whilst preserving stack traces
--optimizations !code/allocation/variable
--optimizations !class/unboxing/enum
+-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*, !class/unboxing/enum
+-optimizationpasses 2
 -keepattributes SourceFile, LineNumberTable
 -keep,allowshrinking,allowoptimization class * { <methods>; }
 
@@ -384,8 +384,8 @@
 -dontwarn java.lang.ClassValue
 -dontwarn com.google.j2objc.annotations.Weak
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
--dontoptimize
--dontobfuscate
+#-dontoptimize
+#-dontobfuscate
 -dontwarn sun.misc.Unsafe
 -dontwarn com.google.common.collect.MinMaxPriorityQueue
 

@@ -1,3 +1,5 @@
+import com.android.build.OutputFile
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
@@ -20,9 +22,9 @@ android {
     signingConfigs {
         config {
             storeFile file("android.jks")
-            storePassword="$System.env.KEYSTORE_PASSWORD"
-            keyPassword="$System.env.KEY_PASSWORD"
-            keyAlias="$System.env.KEY_ALIAS"
+            storePassword = "$System.env.KEYSTORE_PASSWORD"
+            keyPassword = "$System.env.KEY_PASSWORD"
+            keyAlias = "$System.env.KEY_ALIAS"
         }
     }
     compileSdkVersion 28
@@ -44,9 +46,45 @@ android {
         buildConfigField "String", "APPS_FLYER_KEY", "\"" + appsFlyerKey + "\""
         buildConfigField "String", "AMPLITUDE_API_KEY", "\"" + devAmplitudeApiKey + "\""
         manifestPlaceholders = [
-                appIcon: "@mipmap/ic_launcher",
+                appIcon     : "@mipmap/ic_launcher",
                 appIconRound: "@mipmap/ic_launcher_round",
                 fabricApiKey: fabricApiKey]
+
+//        ndk {
+//            abiFilters "armeabi-v7a", "arm64-v8a", "x86"
+//        }
+    }
+
+    splits {
+        // Configures multiple APKs based on ABI.
+        abi {
+            def isReleaseBuild = false
+
+            gradle.startParameter.taskNames.find {
+                // Enable split for release builds in different build flavors
+                // (assembleProdRelease, assembleDevRelease, etc.).
+                if (it ==~ /:app:assemble.*Release/) {
+                    isReleaseBuild = true
+                    return true // break
+                }
+
+                return false // continue
+            }
+
+            // Enables building multiple APKs per ABI.
+            enable isReleaseBuild
+//            enable true
+
+            // By default all ABIs are included, so use reset() and include to specify that we only
+            // want APKs for x86, armeabi-v7a, and mips.
+            reset()
+
+            // Specifies a list of ABIs that Gradle should create APKs for.
+            include "x86", "x86_64", "armeabi-v7a", "arm64-v8a"
+
+            // Specifies that we want to also generate a universal APK that includes all ABIs.
+            universalApk true
+        }
     }
 
     buildTypes {
@@ -64,15 +102,23 @@ android {
         }
     }
 
+
+    def abiCodes = ['x86': 1, 'x86_64': 2, 'armeabi-v7a': 3, 'arm64-v8a': 4]
+
     applicationVariants.all { variant ->
         def version = variant.versionName
-        def versionCode = variant.versionCode
         def gitHash = getGitHash()
         def buildType = variant.variantData.variantConfiguration.buildType.name
         def date = new Date()
         def formattedDate = date.format('dd.MM.yy')
-        def newApkName = "[" + buildType + "|" + version + "|" + versionCode + "|" + gitHash + "] " + appName + " (" +formattedDate + ")" +  ".apk"
         variant.outputs.all { output ->
+            def abiName = output.getFilter(OutputFile.ABI)
+            if (abiName == null) {
+                abiName = "universal"
+            }
+            def versionCode = abiCodes.get(abiName, 0) * 100000 + variant.versionCode
+            versionCodeOverride = versionCode
+            def newApkName = "[" + buildType + "|" + version + "|" + versionCode + "|" + gitHash + "|" + abiName + "] " + appName + " (" + formattedDate + ")" + ".apk"
             outputFileName = newApkName
         }
     }
@@ -87,7 +133,7 @@ android {
             signingConfig signingConfigs.config
             buildConfigField "String", "AMPLITUDE_API_KEY", "\"" + prodAmplitudeApiKey + "\""
             manifestPlaceholders = [
-                    appIcon: "@mipmap/ic_launcher",
+                    appIcon     : "@mipmap/ic_launcher",
                     appIconRound: "@mipmap/ic_launcher_round",
                     fabricApiKey: fabricApiKey]
         }
@@ -95,7 +141,7 @@ android {
             applicationIdSuffix ".dev"
             buildConfigField "String", "AMPLITUDE_API_KEY", "\"" + devAmplitudeApiKey + "\""
             manifestPlaceholders = [
-                    appIcon: "@mipmap/ic_launcher_dev",
+                    appIcon     : "@mipmap/ic_launcher_dev",
                     appIconRound: "@mipmap/ic_launcher_dev_round",
                     fabricApiKey: fabricApiKey]
         }
@@ -103,7 +149,7 @@ android {
             applicationIdSuffix ".test"
             buildConfigField "String", "AMPLITUDE_API_KEY", "\"" + devAmplitudeApiKey + "\""
             manifestPlaceholders = [
-                    appIcon: "@mipmap/ic_launcher_test",
+                    appIcon     : "@mipmap/ic_launcher_test",
                     appIconRound: "@mipmap/ic_launcher_test_round",
                     fabricApiKey: fabricApiKey]
         }
