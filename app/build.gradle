@@ -98,11 +98,7 @@ android {
             signingConfig signingConfigs.config
         }
         debug {
-            minifyEnabled true
-            zipAlignEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            multiDexEnabled true
+            multiDexEnabled false
         }
     }
 
