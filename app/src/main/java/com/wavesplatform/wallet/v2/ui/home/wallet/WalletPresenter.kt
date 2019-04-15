@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet
 
 import com.arellomobile.mvp.InjectViewState
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
@@ -14,7 +15,7 @@ class WalletPresenter @Inject constructor() : BasePresenter<WalletView>() {
     var hideShadow: Boolean = true
 
     fun checkNewAppUpdates() {
-        // TODO: change logic of loading app last version
-        viewState.afterCheckNewAppUpdates(true)
+        val needUpdate = preferenceHelper.lastAppVersion != BuildConfig.VERSION_NAME
+        viewState.afterCheckNewAppUpdates(needUpdate)
     }
 }

@@ -5,6 +5,8 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.view.View
@@ -19,13 +21,9 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import pers.victor.ext.gone
-import pers.victor.ext.toast
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
-import android.content.Intent
-import android.R
-import android.net.Uri
 
 
 class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabBarVisibilityListener {
@@ -117,15 +115,17 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
     }
 
     override fun afterCheckNewAppUpdates(needUpdate: Boolean) {
-        info_alert.apply {
-            setIcon(com.wavesplatform.wallet.R.drawable.userimg_rocket_48)
-            setTitle(com.wavesplatform.wallet.R.string.need_update_alert_title)
-            setDescription(com.wavesplatform.wallet.R.string.need_update_alert_description)
-            setActionIcon(com.wavesplatform.wallet.R.drawable.ic_arrowright_14_basic_200)
-            onAlertClick {
-                openAppInPlayMarket()
-            }
-        }.show()
+        if (needUpdate){
+            info_alert.apply {
+                setIcon(R.drawable.userimg_rocket_48)
+                setTitle(R.string.need_update_alert_title)
+                setDescription(R.string.need_update_alert_description)
+                setActionIcon(R.drawable.ic_arrowright_14_basic_200)
+                onAlertClick {
+                    openAppInPlayMarket()
+                }
+            }.show()
+        }
     }
 
     private fun openAppInPlayMarket() {

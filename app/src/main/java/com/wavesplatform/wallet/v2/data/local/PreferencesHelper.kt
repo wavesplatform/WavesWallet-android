@@ -7,6 +7,7 @@ package com.wavesplatform.wallet.v2.data.local
 
 import android.content.Context
 import com.pddstudio.preferences.encrypted.EncryptedPreferences
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
 import javax.inject.Inject
@@ -22,6 +23,10 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     fun clear() {
         mPref.edit().clear().apply()
     }
+
+    var lastAppVersion: String
+        get() = mPref.getString(KEY_LAST_APP_VERSION, BuildConfig.VERSION_NAME)
+        set(value) = mPref.edit().putString(KEY_LAST_APP_VERSION, value).apply()
 
     var currentBlocksHeight: Int
         get() = mPref.getInt(KEY_CURRENT_BLOCKS_HEIGHT, 0)
@@ -55,6 +60,7 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         const val PREF_FILE_NAME = "android_waves_pref_file"
         const val KEY_TUTORIAL = "keyTutorial"
         const val KEY_CURRENT_BLOCKS_HEIGHT = "currentBlocksHeight"
+        const val KEY_LAST_APP_VERSION = "lastAppVersion"
         const val KEY_LANGUAGE = "keyLanguage"
         const val KEY_SHOW_SAVE_SEED_WARNING = "key_show_save_seed_warning"
     }
