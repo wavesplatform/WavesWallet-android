@@ -12,4 +12,9 @@ import javax.inject.Inject
 @InjectViewState
 class WalletPresenter @Inject constructor() : BasePresenter<WalletView>() {
     var hideShadow: Boolean = true
+
+    fun checkNewAppUpdates() {
+        // TODO: change logic of loading app last version
+        viewState.afterCheckNewAppUpdates(true)
+    }
 }

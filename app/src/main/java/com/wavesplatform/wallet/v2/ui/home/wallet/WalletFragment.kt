@@ -19,12 +19,16 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import pers.victor.ext.gone
+import pers.victor.ext.toast
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
+import android.content.Intent
+import android.R
+import android.net.Uri
+
 
 class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabBarVisibilityListener {
-
     @Inject
     @InjectPresenter
     lateinit var presenter: WalletPresenter
@@ -34,7 +38,7 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
     @ProvidePresenter
     fun providePresenter(): WalletPresenter = presenter
 
-    override fun configLayoutRes(): Int = R.layout.fragment_wallet
+    override fun configLayoutRes(): Int = com.wavesplatform.wallet.R.layout.fragment_wallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +52,7 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
         adapter = WalletFragmentPageAdapter(
                 childFragmentManager,
                 arrayListOf(assetsFragment, leasingFragment),
-                arrayOf(getString(R.string.wallet_assets), getString(R.string.wallet_leasing)))
+                arrayOf(getString(com.wavesplatform.wallet.R.string.wallet_assets), getString(com.wavesplatform.wallet.R.string.wallet_leasing)))
     }
 
     companion object {
@@ -59,6 +63,8 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupUI()
+
+        presenter.checkNewAppUpdates()
     }
 
     fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
@@ -108,5 +114,28 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
         onElevationAppBarChangeListener?.let {
             onElevationAppBarChangeListener?.onChange(presenter.hideShadow)
         }
+    }
+
+    override fun afterCheckNewAppUpdates(needUpdate: Boolean) {
+        info_alert.apply {
+            setIcon(com.wavesplatform.wallet.R.drawable.userimg_rocket_48)
+            setTitle(com.wavesplatform.wallet.R.string.need_update_alert_title)
+            setDescription(com.wavesplatform.wallet.R.string.need_update_alert_description)
+            setActionIcon(com.wavesplatform.wallet.R.drawable.ic_arrowright_14_basic_200)
+            onAlertClick {
+                openAppInPlayMarket()
+            }
+        }.show()
+    }
+
+    private fun openAppInPlayMarket() {
+        val appPackageName = activity?.packageName
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+        } catch (anfe: android.content.ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+        }
+
+
     }
 }
