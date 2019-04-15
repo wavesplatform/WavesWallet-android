@@ -10,7 +10,7 @@ import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 
 class ClearAssetsHelper {
@@ -36,7 +36,7 @@ class ClearAssetsHelper {
 
         private fun checkAndClear(assets: MutableList<AssetBalanceResponse>): MutableList<AssetBalanceResponse> {
             // load config for assets
-            val savedAssetPrefs = queryAll<AssetBalanceStore>()
+            val savedAssetPrefs = queryAll<AssetBalanceStoreDb>()
             val savedAssetPrefsMap = savedAssetPrefs.associateBy { it.assetId }
 
             // filter unimportant assets

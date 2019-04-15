@@ -23,7 +23,7 @@ import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -47,7 +47,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
 
         viewState.startServiceToLoadData()
         runAsync {
-            val savedAssetPrefs = queryAll<AssetBalanceStore>()
+            val savedAssetPrefs = queryAll<AssetBalanceStoreDb>()
             var dbAssets = mutableListOf<AssetBalanceDb>()
             addSubscription(queryAllAsSingle<AssetBalanceDb>().toObservable()
                     .subscribeOn(Schedulers.io())
@@ -127,7 +127,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         }
 
                         assetsListFromDb.saveAll()
-                        AssetBalanceStore.saveAssetBalanceStore(AssetBalanceDb.convertFromDb(assetsListFromDb))
+                        AssetBalanceStoreDb.saveAssetBalanceStore(AssetBalanceDb.convertFromDb(assetsListFromDb))
                         return@map assetsListFromDb
                     }
                     .map { createTripleSortedLists(it.toMutableList()) }
@@ -177,7 +177,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         }
 
                         assetsListFromDb.saveAll()
-                        AssetBalanceStore.saveAssetBalanceStore(AssetBalanceDb.convertFromDb(assetsListFromDb))
+                        AssetBalanceStoreDb.saveAssetBalanceStore(AssetBalanceDb.convertFromDb(assetsListFromDb))
                         return@map assetsListFromDb
                     }
                     .map { createTripleSortedLists(it.toMutableList()) }

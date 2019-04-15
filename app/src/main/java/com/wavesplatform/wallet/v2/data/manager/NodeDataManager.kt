@@ -27,7 +27,7 @@ import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.util.loadDbWavesBalance
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -112,7 +112,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                             }
                             .map { tripple ->
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
-                                val savedAssetPrefs = queryAll<AssetBalanceStore>()
+                                val savedAssetPrefs = queryAll<AssetBalanceStoreDb>()
 
                                 if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
                                     // merge db data and API data
@@ -184,7 +184,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 }
 
                                 AssetBalanceDb.convertToDb(tripple.third.balances).saveAll()
-                                AssetBalanceStore.saveAssetBalanceStore(tripple.third.balances)
+                                AssetBalanceStoreDb.saveAssetBalanceStore(tripple.third.balances)
 
                                 val allAssets = AssetBalanceDb.convertFromDb(queryAll())
                                 trackZeroBalances(allAssets)

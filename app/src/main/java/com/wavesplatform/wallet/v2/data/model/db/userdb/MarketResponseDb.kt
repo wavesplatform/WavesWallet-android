@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v2.data.model.userdb
+package com.wavesplatform.wallet.v2.data.model.db.userdb
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

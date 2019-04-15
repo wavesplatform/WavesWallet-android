@@ -6,10 +6,10 @@
 package com.wavesplatform.wallet.v2.data.database.realm.module
 
 
-import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
-import com.wavesplatform.wallet.v2.data.model.userdb.MarketResponseDb
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
+import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import io.realm.annotations.RealmModule
 
-@RealmModule(classes = [AddressBookUser::class, AssetBalanceStore::class, MarketResponseDb::class])
+@RealmModule(classes = [AddressBookUserDb::class, AssetBalanceStoreDb::class, MarketResponseDb::class])
 class UserDataModule

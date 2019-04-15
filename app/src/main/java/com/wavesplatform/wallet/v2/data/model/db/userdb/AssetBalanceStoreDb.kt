@@ -3,7 +3,7 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.data.model.userdb
+package com.wavesplatform.wallet.v2.data.model.db.userdb
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -16,7 +16,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @RealmClass
-open class AssetBalanceStore(
+open class AssetBalanceStoreDb(
         @PrimaryKey
         @SerializedName("assetId") var assetId: String = "",
         @SerializedName("isHidden") var isHidden: Boolean = false,
@@ -27,9 +27,9 @@ open class AssetBalanceStore(
     companion object {
 
         fun saveAssetBalanceStore(balances: List<AssetBalanceResponse>) {
-            val list = mutableListOf<AssetBalanceStore>()
+            val list = mutableListOf<AssetBalanceStoreDb>()
             for (assetBalance in balances) {
-                list.add(AssetBalanceStore(
+                list.add(AssetBalanceStoreDb(
                         assetBalance.assetId,
                         assetBalance.isHidden,
                         assetBalance.position,

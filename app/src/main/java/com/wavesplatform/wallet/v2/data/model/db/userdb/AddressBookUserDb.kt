@@ -3,7 +3,7 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.data.model.userdb
+package com.wavesplatform.wallet.v2.data.model.db.userdb
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -14,7 +14,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @RealmClass
-open class AddressBookUser(
+open class AddressBookUserDb(
         @PrimaryKey
         @SerializedName("address") var address: String = "",
         @SerializedName("name") var name: String = ""
