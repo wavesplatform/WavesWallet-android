@@ -101,7 +101,7 @@ class MigrationUtil @Inject constructor() {
                     }
 
                     val assetBalancesStore = mutableListOf<AssetBalanceStoreDb>()
-                    val assetBalancesDb = tempRealm.where("AssetBalance").findAll()  // todo check table name
+                    val assetBalancesDb = tempRealm.where("AssetBalanceDb").findAll()
                     for (item in assetBalancesDb) {
                         val assetId = item.getString("assetId")
                         assetBalancesStore.add(AssetBalanceStoreDb(
@@ -112,9 +112,9 @@ class MigrationUtil @Inject constructor() {
                     }
                     assetBalancesStore.saveAll()
 
-                    if (sharedRealm.hasTable(Table.getTableNameForClass("MarketResponse"))) {
+                    if (sharedRealm.hasTable(Table.getTableNameForClass("MarketResponseDb"))) {
                         val newMarketResponses = mutableListOf<MarketResponseDb>()
-                        val marketResponses = tempRealm.where("MarketResponse").findAll() // todo check table name
+                        val marketResponses = tempRealm.where("MarketResponseDb").findAll()
                         for (item in marketResponses) {
                             newMarketResponses.add(MarketResponseDb(
                                     id = item.getString("id"),

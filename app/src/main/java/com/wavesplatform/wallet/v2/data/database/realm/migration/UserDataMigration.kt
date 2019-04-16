@@ -5,19 +5,19 @@
 
 package com.wavesplatform.wallet.v2.data.database.realm.migration
 
+import android.util.Log
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
 
 class UserDataMigration : RealmMigration {
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
-        var oldVersion = oldVersion
-        val schema = realm.schema
-
-        if (oldVersion <= 1L) {
-            // first migration here
-
-            oldVersion++
+        Log.d("", "")
+        if (oldVersion < 2) {
+            val schema = realm.schema
+            schema.rename("AddressBookUser", "AddressBookUserDb")
+            schema.rename("AssetBalanceStore", "AssetBalanceStoreDb")
+            schema.rename("MarketResponse", "MarketResponseDb")
         }
     }
 }
