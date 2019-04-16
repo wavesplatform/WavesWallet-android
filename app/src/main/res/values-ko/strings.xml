@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 16/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <resources>
   <string name="about_fill_payment_details">지불 정보 입력란에 다음 정보를 필히 기입해야합니다:</string>
   <string name="about_fill_payment_info">CNM — 귀하의 WAVES 주소. \nIf그렇지 않으면 귀하의 계좌에 크레딧을 줄 수 없습니다</string>
@@ -214,9 +219,9 @@
   <string name="dex_trade_tab_last_trades">최근 거래</string>
   <string name="dex_trade_tab_my_orders">나의 주문</string>
   <string name="dex_trade_tab_orderbook">호가창</string>
-  <string name="confirm_card_tutorial_about_backup">I have read and agree with the Privacy Policy</string>
-  <string name="confirm_card_tutorial_about_fund_on_device">I understand that my funds are held securely on this device, not by a company. If this app is moved to another device or deleted, my Waves can only be recovered with the backup phrase.</string>
-  <string name="confirm_card_tutorial_about_terms">I have read and agree with the Terms and Conditions</string>
+  <string name="confirm_card_tutorial_about_backup">나는 본 개인정보 보호정책을 읽었으며 동의합니다</string>
+  <string name="confirm_card_tutorial_about_fund_on_device">나는 나의 자산이 회사가 아닌 본 장치에서 안전하게 보관되고 있다는 것을 이해합니다. 만약 이 앱이 지워지거나 다른 장치로 이동된다면 나의 Waves는 백업 구절로만 복원될 수 있습니다.</string>
+  <string name="confirm_card_tutorial_about_terms">나는 본 이용 약관을 읽었으며 동의합니다</string>
   <string name="confirm_card_tutorial_privacy_policy">개인 정보 보호 정책</string>
   <string name="dialog_processing">기다려주세요…</string>
   <string name="edit_account_name">이름 변경ㅎ</string>
@@ -256,7 +261,7 @@
   <string name="history_active_now">지금 활성화</string>
   <string name="history_all">모두</string>
   <string name="history_canceled">취소 내역</string>
-  <string name="history_data_type_title">블록체인에 들어가기</string>
+  <string name="history_data_type_title">블록 체인에 글쓰기</string>
   <string name="history_details_active_now">지금 활성화</string>
   <string name="history_details_add_address">주소 저장</string>
   <string name="history_details_amount_per_transaction">트랜잭셩 당 수량</string>
@@ -272,7 +277,7 @@
   <string name="history_details_exchange_price">가격</string>
   <string name="history_details_fee">수수료</string>
   <string name="history_details_id">자산 ID</string>
-  <string name="history_details_leasing_from">Leasing from</string>
+  <string name="history_details_leasing_from">Leasing하는 주소</string>
   <string name="history_details_leasing_to">Lease 받는 주소</string>
   <string name="history_details_node_address">노드 주소</string>
   <string name="history_details_not_reissuable">재발행 불가</string>
@@ -300,7 +305,7 @@
   <string name="history_received">수신 내역</string>
   <string name="history_sent">발신 내역</string>
   <string name="history_sorting_close">닫기</string>
-  <string name="history_sorting_display_spam">스팸 트랜잭션 보기</string>
+  <string name="history_sorting_display_spam">검증되지 않은 자산 트랜잭션 보기</string>
   <string name="history_sorting_filter">필터</string>
   <string name="history_sorting_half_year">6 개월</string>
   <string name="history_sorting_month">월</string>
@@ -316,20 +321,20 @@
   <string name="history_type_incoming_leasing">들어오는 Leasing</string>
   <string name="history_type_mass_receive">대량 수신</string>
   <string name="history_type_mass_send">대량 전송</string>
-  <string name="history_type_mass_spam_receive">Spam 수신 내역</string>
+  <string name="history_type_mass_spam_receive">검증되지 않은 자산 수신 내역</string>
   <string name="history_type_receive">받은</string>
   <string name="history_type_receive_sponsorship">스폰서십 수신 완료</string>
   <string name="history_type_self_transfer">자체-전송</string>
   <string name="history_type_sent">보낸</string>
   <string name="history_type_set_address_script">스크립트 트랜잭션 설정</string>
   <string name="history_type_set_sponsorship">스폰서십 설정</string>
-  <string name="history_type_spam_receive">Spam 수신 내역</string>
+  <string name="history_type_spam_receive">검증되지 않은 자산 수신 내역</string>
   <string name="history_type_started_leasing">시작된 Leasing</string>
   <string name="history_type_token_burn">토큰 소각</string>
   <string name="history_type_token_generation">토큰 생성</string>
   <string name="history_type_token_reissue">토큰 재발행</string>
   <string name="history_type_unrecognised">알수없는 트랜잭션</string>
-  <string name="history_type_update_asset_script">자산 Script 설정</string>
+  <string name="history_type_update_asset_script">스크립트 업데이트</string>
   <string name="import_account_click_show_pairing">QR 코드를 확인하기 위해 «페어링 코드 보기»를 클릭하세요</string>
   <string name="import_account_login_at_site">Mac 또는 PC를 통해 Waves 클라이언트에 로그인하세요</string>
   <string name="import_account_scan_pairing_code">페어링 코드 스캔</string>
@@ -374,10 +379,10 @@
   <string name="network_node_address">노드 주소</string>
   <string name="network_save">저장</string>
   <string name="network_set_default">기본 설정</string>
-  <string name="network_spam_filter">스팸 필터</string>
+  <string name="network_spam_filter">검증되지 않은 자산 필터</string>
   <string name="network_spam_url_validation_bad_url">URL이 존재하지 않습니다</string>
   <string name="network_spam_url_validation_url_empty">URL이 필요합니다</string>
-  <string name="network_switch_off_spam_filtering">스팸 필터링</string>
+  <string name="network_switch_off_spam_filtering">검증되지 않은 자산 필터링</string>
   <string name="network_toolbar_title">네트워크</string>
   <string name="new_account_account_name_hint">계정 이름</string>
   <string name="new_account_account_name_validation_already_exist_error">이미 존재하는 계정 이름입니다</string>
@@ -543,7 +548,7 @@
   <string name="send_recipient_asset_is_not_valid">이 자산은 유효하지 않습니다</string>
   <string name="send_recipient_the_address_is_not_valid">이 주소는 유효하지 않습니다</string>
   <string name="send_select_your_asset">자산을 선택하세요</string>
-  <string name="send_spam_error">스팸 자산으로 자금을 전송하는것은 불가합니다</string>
+  <string name="send_spam_error">검증되지 않은 자산으로 자금을 전송하는것은 불가합니다</string>
   <string name="send_success_do_you_want_to_save_this_address">이 주소를 저장하시겠습니까?</string>
   <string name="send_success_okay">확인</string>
   <string name="send_success_you_have_sent_sum">%1$s %2$s 을 보냈습니다</string>
@@ -598,8 +603,8 @@
   <string name="wallet_assets">자산</string>
   <string name="wallet_assets_hidden_category">숨긴 자산 (%1$s)</string>
   <string name="wallet_assets_my_asset">/ 나의 자산</string>
-  <string name="wallet_assets_spam_category">스팸 자산 (%1$s)</string>
-  <string name="wallet_assets_spam_tag">스팸</string>
+  <string name="wallet_assets_spam_category">검증되지 않은 자산 (%1$s)</string>
+  <string name="wallet_assets_spam_tag">검증되지 않은 자산</string>
   <string name="wallet_leasing">Leasing</string>
   <string name="wallet_leasing_active_now">지금 활성화 (%1$s)</string>
   <string name="wallet_leasing_available_balance">사용가능 수량</string>
@@ -647,11 +652,22 @@
   <string name="dex_smart_pair_dialog_do_not_show_again">다시 표시하지 않습니다</string>
   <string name="enter_seed_manually_validation_seed_is_simple_title">SEED 구절은 각 단어 사이에 공간이 있는 15개의 단어로 구성되어야 합니다</string>
   <string name="enter_seed_manually_validation_seed_is_simple_description">입력한 SEED 구절이 너무 짧습니다. 지갑 주소와 혼동되지 않도록 주의하세요. 주소를 SEED 구절로 사용한다며 귀하의 자산을 모두 잃어버릴 수 있습니다.</string>
-  <string name="my_orders_details_type_buy">Buy: %1$s/%2$s</string>
-  <string name="my_orders_details_type_sell">Sell: %1$s/%2$s</string>
-  <string name="my_orders_details_cancel">Cancel order</string>
-  <string name="my_orders_details_canceled_status">Canceled (%1$s)</string>
-  <string name="my_orders_details_amount_hint">Amount</string>
-  <string name="my_orders_details_price_hint">Price</string>
-  <string name="my_orders_details_total_hint">Total</string>
+  <string name="my_orders_details_type_buy">매수: %1$s/%2$s</string>
+  <string name="my_orders_details_type_sell">매도: %1$s/%2$s</string>
+  <string name="my_orders_details_cancel">주문 취소</string>
+  <string name="my_orders_details_canceled_status">취소 완료 (%1$s)</string>
+  <string name="my_orders_details_amount_hint">수량</string>
+  <string name="my_orders_details_price_hint">가격</string>
+  <string name="my_orders_details_total_hint">총</string>
+  <string name="RENAME.clean.title">깨끗하게 유지하세요!</string>
+  <string name="RENAME.clean.text">우리는 귀하의 지갑을 깨끗하고 깔끔하게 유지할 수 있도록 자산의 디스플레이를 재설계하였습니다. 자산 목록은 사용자가 원하는 데로 직접 편집할 수 있습니다.</string>
+  <string name="search_asset_hint">검색</string>
+  <string name="search_asset_cancel">취소</string>
+  <string name="search_asset_empty">귀하는 그런 자산을 보유하고 있지 않습니다</string>
+  <string name="history_type_script_invocation">Script 발동</string>
+  <string name="history_details_script_invocation_payment">지불</string>
+  <string name="history_details_script_invocation_script_address">Script 주소</string>
+  <string name="need_update_alert_title">It\'s time to update your app!</string>
+  <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
+  <string name="search_asset_hidden_title">숨긴 자산</string>
 </resources>
