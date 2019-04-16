@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 16/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <resources>
   <string name="about_fill_payment_details">È necessario compilare il campo dei dettagli di pagamento con le seguenti informazioni:</string>
   <string name="about_fill_payment_info">CNM — il tuo indirizzo WAVES. \nSe non procedi, non possiamo accreditare il tuo account.</string>
@@ -256,7 +261,7 @@
   <string name="history_active_now">Attivo ora</string>
   <string name="history_all">Tutto</string>
   <string name="history_canceled">Cancellato</string>
-  <string name="history_data_type_title">Entra nel mondo Blockchain</string>
+  <string name="history_data_type_title">Scrivere sulla blockchain</string>
   <string name="history_details_active_now">ATTIVO ORA</string>
   <string name="history_details_add_address">Salva indirizzo</string>
   <string name="history_details_amount_per_transaction">Totale per transazione</string>
@@ -307,7 +312,7 @@
   <string name="history_sorting_period">Periodo</string>
   <string name="history_sorting_week">Settimana</string>
   <string name="history_toolbar_title">Storico</string>
-  <string name="history_type_cancel_address_script">Cancella Script di transazione</string>
+  <string name="history_type_cancel_address_script">Cancella Script</string>
   <string name="history_type_cancel_sponsorship">Disattiva sponsorizzazione</string>
   <string name="history_type_canceled_leasing">Prestito revocato</string>
   <string name="history_type_create_alias">Crea Alias</string>
@@ -329,7 +334,7 @@
   <string name="history_type_token_generation">Generazione token</string>
   <string name="history_type_token_reissue">Riemissione token</string>
   <string name="history_type_unrecognised">Transazione sconosciuta</string>
-  <string name="history_type_update_asset_script">Imposta lo Script dell\'Asset</string>
+  <string name="history_type_update_asset_script">Aggiorna Script</string>
   <string name="import_account_click_show_pairing">Fai clic su \"Mostra codice di accoppiamento\" per mostrare un codice QR.</string>
   <string name="import_account_login_at_site">Accedi al tuo client Waves via web o Mac, PC</string>
   <string name="import_account_scan_pairing_code">Scansione del codice di accoppiamento</string>
@@ -377,7 +382,7 @@
   <string name="network_spam_filter">Filtro antispam</string>
   <string name="network_spam_url_validation_bad_url">Url non valida</string>
   <string name="network_spam_url_validation_url_empty">L\'Url è obbligatorio</string>
-  <string name="network_switch_off_spam_filtering">Filtro antispam</string>
+  <string name="network_switch_off_spam_filtering">Filtro anti-spam</string>
   <string name="network_toolbar_title">Rete</string>
   <string name="new_account_account_name_hint">Nome utente</string>
   <string name="new_account_account_name_validation_already_exist_error">Nome account già utilizzato</string>
@@ -654,4 +659,15 @@
   <string name="my_orders_details_amount_hint">Amount</string>
   <string name="my_orders_details_price_hint">Price</string>
   <string name="my_orders_details_total_hint">Total</string>
+  <string name="RENAME.clean.title">No more mess!</string>
+  <string name="RENAME.clean.text">We have redesigned the display of assets to allow you to keep your wallet clean and tidy. You can customise your asset list however you want!</string>
+  <string name="search_asset_hint">Search</string>
+  <string name="search_asset_cancel">Cancel</string>
+  <string name="search_asset_empty">You do not have such assets</string>
+  <string name="history_type_script_invocation">Script Invocation</string>
+  <string name="history_details_script_invocation_payment">Payment</string>
+  <string name="history_details_script_invocation_script_address">Script address</string>
+  <string name="need_update_alert_title">It\'s time to update your app!</string>
+  <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
+  <string name="search_asset_hidden_title">Asset nascosti</string>
 </resources>

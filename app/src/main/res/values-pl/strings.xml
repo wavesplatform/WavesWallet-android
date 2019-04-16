@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 16/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <resources>
   <string name="about_fill_payment_details">MUSISZ wypełnić pole szczegółów płatności następującymi informacjami:</string>
   <string name="about_fill_payment_info">CNM - Twój adres WAVES.\nJeśli tego nie zrobisz, nie możemy zasilić Twojego konta.</string>
@@ -256,7 +261,7 @@
   <string name="history_active_now">Teraz aktywne</string>
   <string name="history_all">Wszystko</string>
   <string name="history_canceled">Anulowane</string>
-  <string name="history_data_type_title">Wpis w blockchain</string>
+  <string name="history_data_type_title">Pisanie na blockchain</string>
   <string name="history_details_active_now">TERAZ AKTYWNE</string>
   <string name="history_details_add_address">Zapisz adres</string>
   <string name="history_details_amount_per_transaction">Kwota na transakcję</string>
@@ -307,7 +312,7 @@
   <string name="history_sorting_period">Okres</string>
   <string name="history_sorting_week">Tydzień</string>
   <string name="history_toolbar_title">Historia</string>
-  <string name="history_type_cancel_address_script">Anuluj transakcję skryptową</string>
+  <string name="history_type_cancel_address_script">Anuluj skryptową</string>
   <string name="history_type_cancel_sponsorship">Wyłącz sponsorowanie</string>
   <string name="history_type_canceled_leasing">Anulowany leasing</string>
   <string name="history_type_create_alias">Utwórz alias</string>
@@ -329,7 +334,7 @@
   <string name="history_type_token_generation">Generowanie tokena</string>
   <string name="history_type_token_reissue">Doemitowanie tokena</string>
   <string name="history_type_unrecognised">Nierozpoznana transakcja</string>
-  <string name="history_type_update_asset_script">Ustaw skrypt zasobów</string>
+  <string name="history_type_update_asset_script">Zaktualizuj skrypt</string>
   <string name="import_account_click_show_pairing">Kliknij «Pokaż kod parowania», aby wyświetlić kod QR</string>
   <string name="import_account_login_at_site">Zaloguj się do swojego klienta Waves przez Internet lub Mac, PC</string>
   <string name="import_account_scan_pairing_code">Zeskanuj kod parowania</string>
@@ -654,4 +659,15 @@
   <string name="my_orders_details_amount_hint">Amount</string>
   <string name="my_orders_details_price_hint">Price</string>
   <string name="my_orders_details_total_hint">Ogółem</string>
+  <string name="RENAME.clean.title">No more mess!</string>
+  <string name="RENAME.clean.text">We have redesigned the display of assets to allow you to keep your wallet clean and tidy. You can customise your asset list however you want!</string>
+  <string name="search_asset_hint">Search</string>
+  <string name="search_asset_cancel">Cancel</string>
+  <string name="search_asset_empty">You do not have such assets</string>
+  <string name="history_type_script_invocation">Script Invocation</string>
+  <string name="history_details_script_invocation_payment">Payment</string>
+  <string name="history_details_script_invocation_script_address">Script address</string>
+  <string name="need_update_alert_title">It\'s time to update your app!</string>
+  <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
+  <string name="search_asset_hidden_title">Ukryte aktywa</string>
 </resources>

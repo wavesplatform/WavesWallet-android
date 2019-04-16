@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 16/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <resources>
   <string name="about_fill_payment_details">Por favor, preenche o campo de detalhes da transferência com a seguinte informação:</string>
   <string name="about_fill_payment_info">CNM — o teu endereço WAVES. \nSe não o fizeres não teremos como creditar os fundos na tua conta.</string>
@@ -214,9 +219,9 @@
   <string name="dex_trade_tab_last_trades">Últimas trocas</string>
   <string name="dex_trade_tab_my_orders">As minhas Ordens</string>
   <string name="dex_trade_tab_orderbook">Livro de Ordens</string>
-  <string name="confirm_card_tutorial_about_backup">I have read and agree with the Privacy Policy</string>
-  <string name="confirm_card_tutorial_about_fund_on_device">I understand that my funds are held securely on this device, not by a company. If this app is moved to another device or deleted, my Waves can only be recovered with the backup phrase.</string>
-  <string name="confirm_card_tutorial_about_terms">I have read and agree with the Terms and Conditions</string>
+  <string name="confirm_card_tutorial_about_backup">Li, entendi e aceitei a Política de Privacidade</string>
+  <string name="confirm_card_tutorial_about_fund_on_device">Entendo que os meus fundos estão guardados apenas neste dispositivo. Se esta aplicação foi movida para outro dispositivo ou apagada os meus fundos apenas podem ser recuperados com as palavras de recuperação desta carteira.</string>
+  <string name="confirm_card_tutorial_about_terms">Li, entendi e aceitei os Termos de Utilização</string>
   <string name="confirm_card_tutorial_privacy_policy">Política de Privacidade</string>
   <string name="dialog_processing">Espera um pouco…</string>
   <string name="edit_account_name">Editar o nome da conta</string>
@@ -256,7 +261,7 @@
   <string name="history_active_now">Ativas</string>
   <string name="history_all">Tudo</string>
   <string name="history_canceled">Canceladas</string>
-  <string name="history_data_type_title">Dados em blockchain</string>
+  <string name="history_data_type_title">Escrevendo no blockchain</string>
   <string name="history_details_active_now">ATIVAS</string>
   <string name="history_details_add_address">Gravar endereço</string>
   <string name="history_details_amount_per_transaction">Quantidade por transação</string>
@@ -272,7 +277,7 @@
   <string name="history_details_exchange_price">Cotação</string>
   <string name="history_details_fee">Taxa</string>
   <string name="history_details_id">Ativo ID</string>
-  <string name="history_details_leasing_from">Leasing from</string>
+  <string name="history_details_leasing_from">Concessão de</string>
   <string name="history_details_leasing_to">Concessionado a</string>
   <string name="history_details_node_address">Endereço do Nó</string>
   <string name="history_details_not_reissuable">Não reutilizável</string>
@@ -300,7 +305,7 @@
   <string name="history_received">Recebido</string>
   <string name="history_sent">Enviado</string>
   <string name="history_sorting_close">Fechar</string>
-  <string name="history_sorting_display_spam">Mostrar transações marcadas como Spam</string>
+  <string name="history_sorting_display_spam">Mostrar transações suspeitas</string>
   <string name="history_sorting_filter">Filtrar</string>
   <string name="history_sorting_half_year">Meio ano</string>
   <string name="history_sorting_month">Mês</string>
@@ -316,20 +321,20 @@
   <string name="history_type_incoming_leasing">Concessão Recebida</string>
   <string name="history_type_mass_receive">Recebido</string>
   <string name="history_type_mass_send">Enviado</string>
-  <string name="history_type_mass_spam_receive">Spam Recebido</string>
+  <string name="history_type_mass_spam_receive">Suspeitas recebido</string>
   <string name="history_type_receive">Recebido</string>
   <string name="history_type_receive_sponsorship">Sponsorship Recebido</string>
   <string name="history_type_self_transfer">Auto-Transferência</string>
   <string name="history_type_sent">Enviado</string>
   <string name="history_type_set_address_script">Registo de Script</string>
   <string name="history_type_set_sponsorship">Criar de Sponsorship</string>
-  <string name="history_type_spam_receive">Spam Recebido</string>
+  <string name="history_type_spam_receive">Suspeitas recebido</string>
   <string name="history_type_started_leasing">Concessão Iniciada</string>
   <string name="history_type_token_burn">Destruição de Token</string>
   <string name="history_type_token_generation">Geração de Token</string>
   <string name="history_type_token_reissue">Reutilização de Token</string>
   <string name="history_type_unrecognised">Transação desconhecida</string>
-  <string name="history_type_update_asset_script">Registo de Script</string>
+  <string name="history_type_update_asset_script">Atualizar Script</string>
   <string name="import_account_click_show_pairing">Clica em «Mostrar código de emparelhamento» para ver o Código QR</string>
   <string name="import_account_login_at_site">Inicia a sessão na aplicação através do teu PC ou MAC</string>
   <string name="import_account_scan_pairing_code">Ler o código de emparelhamento</string>
@@ -376,7 +381,7 @@
   <string name="network_set_default">Definir como predefinição</string>
   <string name="network_spam_filter">Filtro de Spam</string>
   <string name="network_spam_url_validation_bad_url">URL inválido</string>
-  <string name="network_spam_url_validation_url_empty">É necessário o URL</string>
+  <string name="network_spam_url_validation_url_empty">É necessário indicar o URL</string>
   <string name="network_switch_off_spam_filtering">Filtro de Spam</string>
   <string name="network_toolbar_title">Rede</string>
   <string name="new_account_account_name_hint">Nome da conta</string>
@@ -543,7 +548,7 @@
   <string name="send_recipient_asset_is_not_valid">Este Ativo não pode ser enviado</string>
   <string name="send_recipient_the_address_is_not_valid">O endereço não é válido</string>
   <string name="send_select_your_asset">Seleciona o Ativo</string>
-  <string name="send_spam_error">Não é possível enviar Ativos marcados como SPAM</string>
+  <string name="send_spam_error">Não é possível enviar Ativos marcados como suspeitos</string>
   <string name="send_success_do_you_want_to_save_this_address">Queres guardar este endereço?</string>
   <string name="send_success_okay">Ok</string>
   <string name="send_success_you_have_sent_sum">Enviaste %1$s %2$s</string>
@@ -598,8 +603,8 @@
   <string name="wallet_assets">Ativos</string>
   <string name="wallet_assets_hidden_category">Ativos ocultos (%1$s)</string>
   <string name="wallet_assets_my_asset">/ Meu Ativo</string>
-  <string name="wallet_assets_spam_category">Ativos classificados como Spam (%1$s)</string>
-  <string name="wallet_assets_spam_tag">Spam</string>
+  <string name="wallet_assets_spam_category">Ativos classificados suspeitos (%1$s)</string>
+  <string name="wallet_assets_spam_tag">Suspeito</string>
   <string name="wallet_leasing">Concessões</string>
   <string name="wallet_leasing_active_now">Ativo agora (%1$s)</string>
   <string name="wallet_leasing_available_balance">Saldo disponível</string>
@@ -647,11 +652,22 @@
   <string name="dex_smart_pair_dialog_do_not_show_again">Não mostrar novamente</string>
   <string name="enter_seed_manually_validation_seed_is_simple_title">O conjunto das palavras de recuperação deve conter 15 palavras, separadas por espaços</string>
   <string name="enter_seed_manually_validation_seed_is_simple_description">O conjunto das palavras de recuperação é demasiado curto. Não confundas estas palavras com o endereço da Carteira. Usar um endereço como uma chave de recuperação pode resultar na perda dos fundos.</string>
-  <string name="my_orders_details_type_buy">Buy: %1$s/%2$s</string>
-  <string name="my_orders_details_type_sell">Sell: %1$s/%2$s</string>
-  <string name="my_orders_details_cancel">Cancel order</string>
-  <string name="my_orders_details_canceled_status">Canceled (%1$s)</string>
-  <string name="my_orders_details_amount_hint">Amount</string>
-  <string name="my_orders_details_price_hint">Price</string>
+  <string name="my_orders_details_type_buy">Compra: %1$s/%2$s</string>
+  <string name="my_orders_details_type_sell">Venda: %1$s/%2$s</string>
+  <string name="my_orders_details_cancel">Cancelar ordem</string>
+  <string name="my_orders_details_canceled_status">Cancelada (%1$s)</string>
+  <string name="my_orders_details_amount_hint">Quantidade</string>
+  <string name="my_orders_details_price_hint">Cotação</string>
   <string name="my_orders_details_total_hint">Total</string>
+  <string name="RENAME.clean.title">Acabámos com a confusão que eram as listas infindáveis de ativos no ecrã.</string>
+  <string name="RENAME.clean.text">Mudámos a forma de apresentação da lista Ativos para tornar a aplicação simples e fácil de usar. Se preferires podes sempre customizar a lista de ativos que pretendes ver carregados no ecrã.</string>
+  <string name="search_asset_hint">Pesquisar</string>
+  <string name="search_asset_cancel">Cancelar</string>
+  <string name="search_asset_empty">Não foram encontrados ativos</string>
+  <string name="history_type_script_invocation">Invocar Script</string>
+  <string name="history_details_script_invocation_payment">Pagamento</string>
+  <string name="history_details_script_invocation_script_address">Endereço</string>
+  <string name="need_update_alert_title">It\'s time to update your app!</string>
+  <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
+  <string name="search_asset_hidden_title">Ativos ocultos</string>
 </resources>

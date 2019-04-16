@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 16/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <resources>
   <string name="about_fill_payment_details">You MUST fill in the payment details field with the following information:</string>
   <string name="about_fill_payment_info">CNM — your WAVES address. \nIf you don’t do it, we can’t credit your account.</string>
@@ -300,14 +305,14 @@
   <string name="history_received">Received</string>
   <string name="history_sent">Sent</string>
   <string name="history_sorting_close">Close</string>
-  <string name="history_sorting_display_spam">Display spam transactions</string>
+  <string name="history_sorting_display_spam">Display suspicious transactions</string>
   <string name="history_sorting_filter">Filter</string>
   <string name="history_sorting_half_year">Half-year</string>
   <string name="history_sorting_month">Month</string>
   <string name="history_sorting_period">Period</string>
   <string name="history_sorting_week">Week</string>
   <string name="history_toolbar_title">History</string>
-  <string name="history_type_cancel_address_script">Cancel Script Transaction</string>
+  <string name="history_type_cancel_address_script">Cancel Script</string>
   <string name="history_type_cancel_sponsorship">Disable Sponsorship</string>
   <string name="history_type_canceled_leasing">Canceled Leasing</string>
   <string name="history_type_create_alias">Create Alias</string>
@@ -316,20 +321,20 @@
   <string name="history_type_incoming_leasing">Incoming Leasing</string>
   <string name="history_type_mass_receive">Mass received</string>
   <string name="history_type_mass_send">Mass send</string>
-  <string name="history_type_mass_spam_receive">Spam Received</string>
+  <string name="history_type_mass_spam_receive">Suspicious received</string>
   <string name="history_type_receive">Received</string>
   <string name="history_type_receive_sponsorship">Received Sponsorship</string>
   <string name="history_type_self_transfer">Self-transfer</string>
   <string name="history_type_sent">Sent</string>
   <string name="history_type_set_address_script">Set Script</string>
   <string name="history_type_set_sponsorship">Set Sponsorship</string>
-  <string name="history_type_spam_receive">Spam Received</string>
+  <string name="history_type_spam_receive">Suspicious received</string>
   <string name="history_type_started_leasing">Started Leasing</string>
   <string name="history_type_token_burn">Token Burn</string>
   <string name="history_type_token_generation">Token Generation</string>
   <string name="history_type_token_reissue">Token Reissue </string>
   <string name="history_type_unrecognised">Unrecognised Transaction</string>
-  <string name="history_type_update_asset_script">Set Asset Script</string>
+  <string name="history_type_update_asset_script">Update Script</string>
   <string name="import_account_click_show_pairing">Click «Show Pairing Code» to reveal a QR Code</string>
   <string name="import_account_login_at_site">Log in to your Waves Client via web or Mac, PC</string>
   <string name="import_account_scan_pairing_code">Scan pairing code</string>
@@ -543,7 +548,7 @@
   <string name="send_recipient_asset_is_not_valid">The asset is not valid</string>
   <string name="send_recipient_the_address_is_not_valid">The address is not valid</string>
   <string name="send_select_your_asset">Select your asset</string>
-  <string name="send_spam_error">Sending funds to spam asset is not possible</string>
+  <string name="send_spam_error">Sending funds to suspicious asset is not possible</string>
   <string name="send_success_do_you_want_to_save_this_address">Do you want to save this address?</string>
   <string name="send_success_okay">Okay</string>
   <string name="send_success_you_have_sent_sum">You have sent %1$s %2$s</string>
@@ -598,8 +603,8 @@
   <string name="wallet_assets">Assets</string>
   <string name="wallet_assets_hidden_category">Hidden assets (%1$s)</string>
   <string name="wallet_assets_my_asset">/ My Asset</string>
-  <string name="wallet_assets_spam_category">Spam assets (%1$s)</string>
-  <string name="wallet_assets_spam_tag">Spam</string>
+  <string name="wallet_assets_spam_category">Suspicious assets (%1$s)</string>
+  <string name="wallet_assets_spam_tag">Suspicious</string>
   <string name="wallet_leasing">Leasing</string>
   <string name="wallet_leasing_active_now">Active now (%1$s)</string>
   <string name="wallet_leasing_available_balance">Available balance</string>
@@ -654,4 +659,15 @@
   <string name="my_orders_details_amount_hint">Amount</string>
   <string name="my_orders_details_price_hint">Price</string>
   <string name="my_orders_details_total_hint">Total</string>
+  <string name="RENAME.clean.title">No more mess!</string>
+  <string name="RENAME.clean.text">We have redesigned the display of assets to allow you to keep your wallet clean and tidy. You can customise your asset list however you want!</string>
+  <string name="search_asset_hint">Search</string>
+  <string name="search_asset_cancel">Cancel</string>
+  <string name="search_asset_empty">You do not have such assets</string>
+  <string name="history_type_script_invocation">Script Invocation</string>
+  <string name="history_details_script_invocation_payment">Payment</string>
+  <string name="history_details_script_invocation_script_address">Script address</string>
+  <string name="need_update_alert_title">It\'s time to update your app!</string>
+  <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
+  <string name="search_asset_hidden_title">Hidden assets</string>
 </resources>
