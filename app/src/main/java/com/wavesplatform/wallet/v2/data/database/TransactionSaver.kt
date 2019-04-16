@@ -111,6 +111,11 @@ class TransactionSaver @Inject constructor() {
                 tempGrabbedAssets.add(assetPair.amountAsset)
                 tempGrabbedAssets.add(assetPair.priceAsset)
             }
+            if (!transition.payment.isNullOrEmpty()){
+                transition.payment.first()?.notNull { payment ->
+                    tempGrabbedAssets.add(payment.assetId)
+                }
+            }
             tempGrabbedAssets.add(transition.assetId)
             tempGrabbedAssets.add(transition.feeAssetId)
         }
@@ -136,6 +141,16 @@ class TransactionSaver @Inject constructor() {
                                 trans.feeAssetObject = Constants.wavesAssetInfo
                             } else {
                                 trans.feeAssetObject = allAssets.firstOrNull { it.id == trans.feeAssetId }
+                            }
+
+                            if (!trans.payment.isNullOrEmpty()) {
+                                trans.payment.first()?.let { payment ->
+                                    if (payment.assetId.isNullOrEmpty()) {
+                                        payment.asset = Constants.wavesAssetInfo
+                                    } else {
+                                        payment.asset = allAssets.firstOrNull { it.id == payment.assetId }
+                                    }
+                                }
                             }
 
                             when {
