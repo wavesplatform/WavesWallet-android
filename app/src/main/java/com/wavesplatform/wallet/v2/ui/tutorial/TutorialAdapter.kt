@@ -19,6 +19,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.item_tutorial_6_card_confirm.view.*
 import java.util.concurrent.TimeUnit
+import com.wavesplatform.sdk.utils.notNull
 import javax.inject.Inject
 
 

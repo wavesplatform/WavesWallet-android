@@ -88,8 +88,6 @@
 # Retrolambda
 -dontwarn java.lang.invoke.*
 
--dontnote com.subgraph.orchid.crypto.PRNGFixes
-
 # zxing
 -dontwarn com.google.zxing.common.BitMatrix
 
@@ -308,7 +306,7 @@
     !static !private <fields>;
 }
 
--keep class com.wavesplatform.wallet.v2.data.remote.GithubService { *; }
+-keep class com.wavesplatform.sdk.net.service.GithubService { *; }
 -keep class com.wavesplatform.wallet.v2.data.remote.NodeService { *; }
 -keep class com.wavesplatform.wallet.v2.data.remote.ApiService { *; }
 -keep class com.wavesplatform.wallet.v2.data.remote.MatcherService { *; }

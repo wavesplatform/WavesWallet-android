@@ -21,8 +21,8 @@ import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryActivity
@@ -33,7 +33,6 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_leasing.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -146,7 +145,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
         recycle_active_leasing.isNestedScrollingEnabled = false
 
         adapterActiveAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val historyItem = adapter.getItem(position) as Transaction
+            val historyItem = adapter.getItem(position) as TransactionResponse
 
             val bottomSheetFragment = HistoryDetailsBottomSheetFragment()
 
@@ -179,9 +178,9 @@ class LeasingFragment : BaseFragment(), LeasingView {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun showBalances(wavesAsset: AssetBalance) {
+    override fun showBalances(wavesAsset: AssetBalanceResponse) {
         skeletonScreen?.hide()
-        if (wavesAsset.balance ?: 0 > 0) {
+        if (wavesAsset.getAvailableBalance() > 0) {
             linear_details_balances.visiable()
         } else {
             linear_details_balances.gone()
@@ -192,13 +191,12 @@ class LeasingFragment : BaseFragment(), LeasingView {
         text_available_balance.makeTextHalfBold()
         text_leased.text = wavesAsset.getDisplayLeasedBalance()
         text_total.text = wavesAsset.getDisplayTotalBalance()
-        wavesAsset.balance.notNull { wavesBalance ->
-            if (wavesBalance != 0L) {
-                progress_of_leasing.progress = ((wavesAsset.leasedBalance ?: 0 *
-                100) / wavesBalance).toInt()
-            } else {
-                progress_of_leasing.progress = 0
-            }
+        val wavesBalance = wavesAsset.getAvailableBalance()
+        if (wavesBalance != 0L) {
+            progress_of_leasing.progress =
+                    ((wavesAsset.leasedBalance ?: 0 * 100) / wavesBalance).toInt()
+        } else {
+            progress_of_leasing.progress = 0
         }
 
         button_start_lease.click {
@@ -211,7 +209,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
         }
     }
 
-    override fun showActiveLeasingTransaction(transactions: List<Transaction>) {
+    override fun showActiveLeasingTransaction(transactions: List<TransactionResponse>) {
         skeletonScreen?.hide()
         swipe_container.isRefreshing = false
         if (transactions.isEmpty()) {

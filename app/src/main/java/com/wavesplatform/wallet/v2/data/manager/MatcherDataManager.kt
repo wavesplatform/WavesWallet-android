@@ -9,19 +9,21 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.internal.LinkedTreeMap
 import com.vicpin.krealmextensions.queryAllAsSingle
+import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.crypto.CryptoProvider
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
+import com.wavesplatform.sdk.net.model.request.CancelOrderRequest
+import com.wavesplatform.sdk.net.model.request.OrderRequest
+import com.wavesplatform.sdk.net.model.response.*
+import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.crypto.Base58
-import com.wavesplatform.wallet.v1.crypto.CryptoProvider
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.request.CancelOrderRequest
-import com.wavesplatform.wallet.v2.data.model.remote.request.OrderRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
+import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
@@ -43,7 +45,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return matcherService.loadReservedBalances(getPublicKeyStr(), timestamp, signature)
     }
 
-    fun loadMyOrders(watchMarket: WatchMarket?): Observable<List<OrderResponse>> {
+    fun loadMyOrders(watchMarket: WatchMarketResponse?): Observable<List<AssetPairOrderResponse>> {
         val timestamp = EnvironmentManager.getTime()
         var signature = ""
         App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
@@ -54,15 +56,15 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return matcherService.getMyOrders(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getPublicKeyStr(), signature, timestamp)
     }
 
-    fun loadOrderBook(watchMarket: WatchMarket?): Observable<OrderBook> {
+    fun loadOrderBook(watchMarket: WatchMarketResponse?): Observable<OrderBookResponse> {
         return matcherService.getOrderBook(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset)
     }
 
     fun cancelOrder(orderId: String?, amountAsset: String?, priceAsset: String?): Observable<Any> {
         val request = CancelOrderRequest()
         request.sender = getPublicKeyStr()
-        request.orderId = orderId
-        App.getAccessManager().getWallet()?.privateKey.notNull {
+        request.orderId = orderId ?: ""
+        App.getAccessManager().getWallet().privateKey.notNull {
             request.sign(it)
         }
         return matcherService.cancelOrder(amountAsset, priceAsset, request)
@@ -71,7 +73,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun getBalanceFromAssetPair(watchMarket: WatchMarket?): Observable<LinkedTreeMap<String, Long>> {
+    fun getBalanceFromAssetPair(watchMarket: WatchMarketResponse?): Observable<LinkedTreeMap<String, Long>> {
         return matcherService.getBalanceFromAssetPair(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, getAddress())
     }
 
@@ -101,7 +103,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
                     },
                     matcherService.getAllMarkets()
                             .map { it.markets },
-                    BiFunction { configure: Map<String, GlobalConfiguration.ConfigAsset>, apiMarkets: List<MarketResponse> ->
+                    BiFunction { configure: Map<String, GlobalConfigurationResponse.ConfigAsset>, apiMarkets: List<MarketResponse> ->
                         return@BiFunction Pair(configure, apiMarkets)
                     })
                     .flatMap {
@@ -160,16 +162,15 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     }
 
     private fun filterMarketsBySpamAndSelect(markets: List<MarketResponse>): Observable<MutableList<MarketResponse>> {
-        return Observable.zip(Observable.just(markets), queryAllAsSingle<SpamAsset>().toObservable()
+        return Observable.zip(Observable.just(markets), queryAllAsSingle<SpamAssetDb>().toObservable()
                 .map {
-                    val map = it.associateBy { it.assetId }
-                    return@map map
+                    return@map SpamAssetDb.convertFromDb(it).associateBy { it.assetId }
                 },
-                queryAllAsSingle<MarketResponse>().toObservable()
+                queryAllAsSingle<MarketResponseDb>().toObservable()
                         .map {
-                            val map = it.associateBy { it.id }
-                            return@map map
-                        }, Function3 { apiMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAsset>, dbMarkets: Map<String?, MarketResponse> ->
+                            return@map MarketResponseDb.convertFromDb(it).associateBy { it.id }
+                        }
+                , Function3 { apiMarkets: List<MarketResponse>, spamAssets: Map<String?, SpamAssetResponse>, dbMarkets: Map<String?, MarketResponse> ->
             val filteredSpamList = if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
                 apiMarkets.filter { market -> spamAssets[market.amountAsset] == null && spamAssets[market.priceAsset] == null }
             } else {

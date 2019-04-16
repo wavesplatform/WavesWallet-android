@@ -7,13 +7,14 @@ package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
-import com.wavesplatform.wallet.v2.data.model.remote.response.ScriptInfo
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.sdk.net.model.response.AliasResponse
+import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommissionResponse
+import com.wavesplatform.sdk.net.model.response.ScriptInfoResponse
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.TransactionUtil
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.TransactionUtil
+import com.wavesplatform.wallet.v2.data.model.db.AliasDb
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -25,14 +26,14 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
 
     var fee = 0L
 
-    fun loadAliases(callback: (List<Alias>) -> Unit) {
+    fun loadAliases(callback: (List<AliasResponse>) -> Unit) {
         runAsync {
             addSubscription(
-                    queryAllAsSingle<Alias>().toObservable()
+                    queryAllAsSingle<AliasDb>().toObservable()
                             .compose(RxUtil.applyObservableDefaultSchedulers())
                             .subscribe { aliases ->
                                 val ownAliases = aliases.filter { it.own }.toMutableList()
-                                runOnUiThread { callback.invoke(ownAliases) }
+                                runOnUiThread { callback.invoke(AliasDb.convertFromDb(ownAliases)) }
                             })
         }
     }
@@ -43,16 +44,16 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
         addSubscription(Observable.zip(
                 githubDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(),
-                BiFunction { t1: GlobalTransactionCommission,
-                             t2: ScriptInfo ->
+                BiFunction { t1: GlobalTransactionCommissionResponse,
+                             t2: ScriptInfoResponse ->
                     return@BiFunction Pair(t1, t2)
                 })
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ pair ->
                     val commission = pair.first
                     val scriptInfo = pair.second
-                    val params = GlobalTransactionCommission.Params()
-                    params.transactionType = Transaction.CREATE_ALIAS
+                    val params = GlobalTransactionCommissionResponse.ParamsResponse()
+                    params.transactionType = TransactionResponse.CREATE_ALIAS
                     params.smartAccount = scriptInfo.extraFee != 0L
                     fee = TransactionUtil.countCommission(commission, params)
                     callback.showCommissionSuccess(fee)

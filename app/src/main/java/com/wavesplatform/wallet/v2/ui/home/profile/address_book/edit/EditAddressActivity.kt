@@ -15,10 +15,12 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.mindorks.editdrawabletext.DrawablePosition
-import com.mindorks.editdrawabletext.onDrawableClickListener
+import com.mindorks.editdrawabletext.OnDrawableClickListener
+import com.wavesplatform.sdk.utils.WAVES_PREFIX
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.rules.AddressBookAddressRule
 import com.wavesplatform.wallet.v2.data.rules.AddressBookNameRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
@@ -28,9 +30,7 @@ import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity.Companion.BUNDLE_POSITION
-import com.wavesplatform.wallet.v2.util.AddressUtil
 import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.onAction
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -64,7 +64,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         setupToolbar(toolbar_view, true, getString(R.string.edit_address_toolbar_title), R.drawable.ic_toolbar_back_black)
         validator = Validator.with(applicationContext).setMode(Mode.CONTINUOUS)
 
-        presenter.addressBookUser = intent.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
+        presenter.addressBookUser = intent.getParcelableExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM)
 
         val nameValidation = Validation(til_name)
                 .and(NotEmptyTrimRule(R.string.address_book_name_validation_required_error))
@@ -72,7 +72,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
                 .and(MaxRule(24, R.string.address_book_name_validation_max_length_error))
                 .and(AddressBookNameRule(prefsUtil, R.string.address_book_name_validation_already_use_error))
 
-        edit_address.setDrawableClickListener(object : onDrawableClickListener {
+        edit_address.setDrawableClickListener(object : OnDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
                     DrawablePosition.RIGHT -> {
@@ -147,7 +147,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
             edit_address.isFocusableInTouchMode = false
             edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 
-            edit_address.setText(intent.getParcelableExtra<AddressBookUser>(
+            edit_address.setText(intent.getParcelableExtra<AddressBookUserDb>(
                     AddressBookActivity.BUNDLE_ADDRESS_ITEM).address)
             presenter.addressFieldValid = edit_address.text.isNotEmpty()
         } else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE) {
@@ -190,7 +190,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         button_save.isEnabled = presenter.isAllFieldsValid()
     }
 
-    override fun successEditAddress(addressBookUser: AddressBookUser?) {
+    override fun successEditAddress(addressBookUser: AddressBookUserDb?) {
         val newIntent = Intent()
         newIntent.putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, addressBookUser)
         newIntent.putExtra(AddressBookActivity.BUNDLE_POSITION, intent.getIntExtra(BUNDLE_POSITION, -1))
@@ -211,7 +211,7 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
             ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                    result.contents.replace(AddressUtil.WAVES_PREFIX, "").notNull {
+                    result.contents.replace(WAVES_PREFIX, "").notNull {
                         edit_address.setText(it.trim())
                     }
                 }

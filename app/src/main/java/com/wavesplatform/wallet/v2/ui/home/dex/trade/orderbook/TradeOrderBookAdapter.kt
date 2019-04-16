@@ -8,13 +8,13 @@ package com.wavesplatform.wallet.v2.ui.home.dex.trade.orderbook
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.wavesplatform.sdk.net.model.OrderType
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.model.local.LastPriceItem
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.OrderBook
-import com.wavesplatform.wallet.v2.util.stripZeros
+import com.wavesplatform.sdk.net.model.response.MarketResponse
+import com.wavesplatform.sdk.net.model.response.OrderBookResponse
+import com.wavesplatform.sdk.utils.stripZeros
 import pers.victor.ext.findColor
 import javax.inject.Inject
 
@@ -33,13 +33,16 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
                 val item = item as LastPriceItem
                 val percent = "%.2f".format(item.spreadPercent)
                 helper.setImageResource(R.id.image_graph,
-                        if (item.lastTrade?.getMyOrder()?.getType() == OrderType.BUY) R.drawable.ic_chartarrow_success_400
-                        else R.drawable.ic_chartarrow_error_500)
+                        if (item.lastTrade?.getMyOrder()?.getType() == OrderType.BUY) {
+                            R.drawable.ic_chartarrow_success_400
+                        } else {
+                            R.drawable.ic_chartarrow_error_500
+                        })
                         .setText(R.id.text_price_value, item.lastTrade?.price?.toBigDecimal()?.toPlainString())
                         .setText(R.id.text_percent_value, mContext.getString(R.string.orderbook_spread_percent, percent))
             }
             ASK_TYPE -> {
-                val item = item as OrderBook.Ask
+                val item = item as OrderBookResponse.AskResponse
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
                 val priceUIValue = MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals)
                 helper.setTextColor(R.id.text_price_value, findColor(R.color.error400))
@@ -49,7 +52,7 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
                         .setText(R.id.text_sum_value, item.getScaledSum(market.priceAssetDecimals))
             }
             BID_TYPE -> {
-                val item = item as OrderBook.Bid
+                val item = item as OrderBookResponse.BidResponse
                 val amountUIValue = MoneyUtil.getScaledText(item.amount, market.amountAssetDecimals).stripZeros()
                 val priceUIValue = MoneyUtil.getScaledPrice(item.price, market.amountAssetDecimals, market.priceAssetDecimals)
                 helper.setTextColor(R.id.text_price_value, findColor(R.color.submit400))

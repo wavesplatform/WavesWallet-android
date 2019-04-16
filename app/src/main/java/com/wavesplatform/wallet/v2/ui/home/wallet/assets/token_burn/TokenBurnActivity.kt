@@ -11,13 +11,16 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.sdk.utils.clearBalance
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.confirmation.TokenBurnConfirmationActivity
 import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.sdk.utils.RxUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_token_burn.*
 import kotlinx.android.synthetic.main.view_commission.*
@@ -184,7 +187,7 @@ class TokenBurnActivity : BaseActivity(), TokenBurnView {
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
-        text_fee_transaction.text = MoneyUtil.getWavesStripZeros(unscaledAmount)
+        text_fee_transaction.text = MoneyUtil.getScaledText(unscaledAmount, 8)
         progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
         makeButtonEnableIfValid()

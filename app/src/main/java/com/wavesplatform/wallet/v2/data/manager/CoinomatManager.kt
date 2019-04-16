@@ -6,10 +6,10 @@
 package com.wavesplatform.wallet.v2.data.manager
 
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.CreateTunnel
-import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
-import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.Limit
-import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
+import com.wavesplatform.sdk.net.model.response.coinomat.CreateTunnelResponse
+import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnelResponse
+import com.wavesplatform.sdk.net.model.response.coinomat.LimitResponse
+import com.wavesplatform.sdk.net.model.response.coinomat.XRateResponse
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,7 +21,7 @@ class CoinomatManager @Inject constructor() : BaseDataManager() {
         return coinomatService.rate(crypto, address, fiat, amount)
     }
 
-    fun loadLimits(crypto: String?, address: String?, fiat: String?): Observable<Limit> {
+    fun loadLimits(crypto: String?, address: String?, fiat: String?): Observable<LimitResponse> {
         return coinomatService.limits(crypto, address, fiat)
     }
 
@@ -30,15 +30,15 @@ class CoinomatManager @Inject constructor() : BaseDataManager() {
         currencyTo: String?,
         address: String?,
         moneroPaymentId: String?
-    ): Observable<CreateTunnel> {
+    ): Observable<CreateTunnelResponse> {
         return coinomatService.createTunnel(currencyFrom, currencyTo, address, moneroPaymentId)
     }
 
-    fun getTunnel(xtId: String?, k1: String?, k2: String?, lang: String): Observable<GetTunnel> {
+    fun getTunnel(xtId: String?, k1: String?, k2: String?, lang: String): Observable<GetTunnelResponse> {
         return coinomatService.getTunnel(xtId, k1, k2, lang)
     }
 
-    fun getXRate(from: String?, to: String?, lang: String): Observable<XRate> {
+    fun getXRate(from: String?, to: String?, lang: String): Observable<XRateResponse> {
         return coinomatService.getXRate(from, to, lang)
     }
 }

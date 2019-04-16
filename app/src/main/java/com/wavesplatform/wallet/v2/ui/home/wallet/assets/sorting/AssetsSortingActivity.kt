@@ -17,11 +17,12 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.vicpin.krealmextensions.save
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
@@ -91,8 +92,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             this.adapter.addData(linePosition, globalItem)
 
                             // Save to DB
-                            asset.save()
-                            AssetBalanceStore(asset.assetId, asset.isHidden, asset.position, asset.isFavorite).save()
+                            AssetBalanceDb(asset).save()
+                            AssetBalanceStoreDb(asset.assetId, asset.isHidden, asset.position, asset.isFavorite).save()
                         }
                         AssetSortingItem.TYPE_NOT_FAVORITE -> {
                             // remove from current list
@@ -110,8 +111,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             this.adapter.addData(linePosition, globalItem)
 
                             // Save to DB
-                            asset.save()
-                            AssetBalanceStore(asset.assetId, asset.isHidden, asset.position,
+                            AssetBalanceDb(asset).save()
+                            AssetBalanceStoreDb(asset.assetId, asset.isHidden, asset.position,
                                     asset.isFavorite).save()
                         }
                     }
@@ -120,11 +121,11 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         }
 
         adapter.onHiddenChangeListener = object : AssetsSortingAdapter.OnHiddenChangeListener {
-            override fun onHiddenStateChanged(item: AssetBalance, checked: Boolean) {
+            override fun onHiddenStateChanged(item: AssetBalanceResponse, checked: Boolean) {
                 presenter.needToUpdate = true
                 item.isHidden = !checked
-                item.save()
-                AssetBalanceStore(item.assetId, item.isHidden, item.position,
+                AssetBalanceDb(item).save()
+                AssetBalanceStoreDb(item.assetId, item.isHidden, item.position,
                         item.isFavorite).save()
             }
         }

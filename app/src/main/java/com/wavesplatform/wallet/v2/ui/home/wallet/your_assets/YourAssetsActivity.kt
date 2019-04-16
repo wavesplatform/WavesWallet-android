@@ -17,9 +17,9 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mindorks.editdrawabletext.DrawablePosition
-import com.mindorks.editdrawabletext.onDrawableClickListener
+import com.mindorks.editdrawabletext.OnDrawableClickListener
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_your_assets.*
@@ -79,7 +79,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
                     adapter.filter(it)
                 })
 
-        edit_search.setDrawableClickListener(object : onDrawableClickListener {
+        edit_search.setDrawableClickListener(object : OnDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
                     DrawablePosition.RIGHT -> {
@@ -100,7 +100,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as AssetBalance
+            val item = adapter.getItem(position) as AssetBalanceResponse
 
             adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, _ ->
                 // disable click for next items, which user click before activity will finish
@@ -113,7 +113,7 @@ class YourAssetsActivity : BaseActivity(), YourAssetsView {
         }
     }
 
-    override fun showAssets(assets: MutableList<AssetBalance>) {
+    override fun showAssets(assets: MutableList<AssetBalanceResponse>) {
         progress_bar.hide()
 
         if (assets.isEmpty()) {

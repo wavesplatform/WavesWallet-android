@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.language
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.local.LanguageItem
+import com.wavesplatform.sdk.net.model.LanguageItem
 import kotlinx.android.synthetic.main.choose_language_item.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.setPaddingEnd

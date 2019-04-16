@@ -14,19 +14,19 @@ import android.text.TextUtils
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v2.util.safeLet
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.applyFilterStartWithDot
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.safeLet
 import kotlinx.android.synthetic.main.fragment_invoice.*
 import kotlinx.android.synthetic.main.layout_asset_card.*
 import pers.victor.ext.click
@@ -50,7 +50,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         const val REQUEST_SELECT_ASSET = 10001
         const val INVOICE_SCREEN = "invoice"
 
-        fun newInstance(assetBalance: AssetBalance?): InvoiceFragment {
+        fun newInstance(assetBalance: AssetBalanceResponse?): InvoiceFragment {
             val fragment = InvoiceFragment()
             if (assetBalance == null) {
                 return fragment
@@ -66,7 +66,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         if (arguments == null) {
             assetChangeEnable(true)
         } else {
-            val assetBalance = arguments!!.getParcelable<AssetBalance>(
+            val assetBalance = arguments!!.getParcelable<AssetBalanceResponse>(
                     YourAssetsActivity.BUNDLE_ASSET_ITEM)
             setAssetBalance(assetBalance)
             assetChangeEnable(false)
@@ -95,12 +95,12 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SELECT_ASSET && resultCode == Activity.RESULT_OK) {
-            val assetBalance = data?.getParcelableExtra<AssetBalance>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
+            val assetBalance = data?.getParcelableExtra<AssetBalanceResponse>(YourAssetsActivity.BUNDLE_ASSET_ITEM)
             setAssetBalance(assetBalance)
         }
     }
 
-    private fun setAssetBalance(assetBalance: AssetBalance?) {
+    private fun setAssetBalance(assetBalance: AssetBalanceResponse?) {
         if (assetBalance == null) {
             return
         }

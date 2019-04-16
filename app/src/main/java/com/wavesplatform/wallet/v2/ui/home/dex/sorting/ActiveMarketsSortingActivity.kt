@@ -20,11 +20,12 @@ import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.vicpin.krealmextensions.delete
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
+import com.wavesplatform.sdk.net.model.response.MarketResponse
+import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companion.RESULT_NEED_UPDATE
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.activity_active_markets_sorting.*
 import kotlinx.android.synthetic.main.dex_active_markets_sorting_item.view.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
@@ -72,7 +73,7 @@ class ActiveMarketsSortingActivity : BaseActivity(), ActiveMarketsSortingView {
 
                     val item = this.adapter.getItem(position)
                     item.notNull { item ->
-                        item.delete { equalTo("id", item.id) }
+                        MarketResponseDb(item).delete { equalTo("id", item.id) }
 
                         // remove from current list
                         this.adapter.data.removeAt(position)

@@ -14,8 +14,8 @@ import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.util.getScaledAmount
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.wallet_asset_item.view.*
@@ -86,17 +86,17 @@ class AssetsAdapter @Inject constructor() :
                     e.printStackTrace()
                 }
 
-                val item = item as AssetBalance
-                helper.setText(R.id.text_asset_name, item.getName())
+                val assetBalance = item as AssetBalanceResponse
+                helper.setText(R.id.text_asset_name, assetBalance.getName())
                         .setText(R.id.text_asset_value, getScaledAmount(
-                                item.getAvailableBalance() ?: 0L, item.getDecimals()))
-                        .setGone(R.id.image_favourite, item.isFavorite)
-                        .setGone(R.id.text_my_asset, item.issueTransaction?.sender
+                                assetBalance.getAvailableBalance(), assetBalance.getDecimals()))
+                        .setGone(R.id.image_favourite, assetBalance.isFavorite)
+                        .setGone(R.id.text_my_asset, assetBalance.issueTransaction?.sender
                                 == App.getAccessManager().getWallet()?.address)
-                        .setGone(R.id.text_tag_spam, item.isSpam)
+                        .setGone(R.id.text_tag_spam, assetBalance.isSpam)
 
 //                helper.itemView.image_asset_icon.isOval = true
-                helper.itemView.image_asset_icon.setAsset(item)
+                helper.itemView.image_asset_icon.setAsset(assetBalance)
 
                 helper.itemView.text_asset_value.makeTextHalfBold()
             }

@@ -6,7 +6,6 @@
 package com.wavesplatform.wallet.v2.util
 
 import android.app.Activity
-import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
@@ -35,7 +34,6 @@ import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
-import android.util.Patterns
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -44,27 +42,26 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import com.google.common.primitives.Bytes
-import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.sdk.net.RetrofitException
+import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.ErrorResponse
+import com.wavesplatform.sdk.net.model.TransactionType
+import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.exception.RetrofitException
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import okhttp3.ResponseBody
 import pers.victor.ext.*
 import pers.victor.ext.Ext.ctx
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.io.File
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.util.*
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     if (dest.isNullOrEmpty() && source.startsWith(".")) {
@@ -121,14 +118,6 @@ fun Long.currentDateAsTimeSpanString(context: Context): String {
     return context.getString(R.string.dex_last_update_value, "$timeDayRelative, $timeHour")
 }
 
-fun String.isWaves(): Boolean {
-    return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
-}
-
-fun getWavesDexFee(fee: Long): BigDecimal {
-    return MoneyUtil.getScaledText(fee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
-}
-
 /**
  * @param action constant from EditorInfo
  * @see android.view.inputmethod.EditorInfo
@@ -156,20 +145,6 @@ fun <T1: Any, T2: Any, T3: Any, T4: Any, R: Any> safeLet(p1: T1?, p2: T2?, p3: T
 }
 fun <T1: Any, T2: Any, T3: Any, T4: Any, T5: Any, R: Any> safeLet(p1: T1?, p2: T2?, p3: T3?, p4: T4?, p5: T5?, block: (T1, T2, T3, T4, T5)->R?): R? {
     return if (p1 != null && p2 != null && p3 != null && p4 != null && p5 != null) block(p1, p2, p3, p4, p5) else null
-}
-
-fun String.isWavesId(): Boolean {
-    return this.toLowerCase() == Constants.wavesAssetInfo.id
-}
-
-fun ByteArray.arrayWithSize(): ByteArray {
-    return Bytes.concat(Shorts.toByteArray(size.toShort()), this)
-}
-
-fun String.clearBalance(): String {
-    return this.stripZeros()
-            .replace(MoneyUtil.DEFAULT_SEPARATOR_COMMA.toString(), "")
-            .replace(MoneyUtil.DEFAULT_SEPARATOR_THIN_SPACE.toString(), "")
 }
 
 fun View.makeBackgroundWithRippleEffect() {
@@ -223,10 +198,6 @@ fun Activity.openUrlWithIntent(url: String) {
     startActivity(browserIntent)
 }
 
-fun Transaction.transactionType(): TransactionType {
-    return TransactionType.getTypeById(this.transactionTypeId)
-}
-
 fun TransactionType.icon(): Drawable? {
     return ContextCompat.getDrawable(app, this.image)
 }
@@ -250,18 +221,6 @@ fun AlertDialog.makeStyled() {
     buttonNegative?.setTextColor(findColor(R.color.submit300))
 }
 
-fun Context.isAppOnForeground(): Boolean {
-    val appProcesses: MutableList<ActivityManager.RunningAppProcessInfo>? = activityManager.runningAppProcesses
-            ?: return false
-    val packageName = packageName
-    appProcesses?.forEach {
-        if (it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND &&
-                it.processName.equals(packageName)) {
-            return true
-        }
-    }
-    return false
-}
 
 fun <V> Map<String, V>.toBundle(bundle: Bundle = Bundle()): Bundle = bundle.apply {
     forEach {
@@ -294,8 +253,6 @@ fun Context.getToolBarHeight(): Int {
     return mActionBarSize
 }
 
-fun Number.roundTo(numFractionDigits: Int?) = String.format("%.${numFractionDigits}f", toDouble()).clearBalance().toDouble()
-
 fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
     return if (numDecimalPlaces != null) {
         val factor = Math.pow(10.0, numDecimalPlaces.toDouble())
@@ -304,9 +261,6 @@ fun Double.roundToDecimals(numDecimalPlaces: Int?): Double {
         this
     }
 }
-
-fun ClosedRange<Int>.random() =
-        Random().nextInt((endInclusive + 1) - start) + start
 
 fun TextView.makeLinks(links: Array<String>, clickableSpans: Array<ClickableSpan>) {
     val spannableString = SpannableString(this.text)
@@ -338,15 +292,6 @@ fun Activity.setSystemBarTheme(pIsDark: Boolean) {
             lFlags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
     }
-}
-
-fun String.isWebUrl(): Boolean {
-    return Patterns.WEB_URL.matcher(this.trim()).matches()
-}
-
-fun String.stripZeros(): String {
-    if (this == "0.0") return this
-    return if (!this.contains(".")) this else this.replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
 }
 
 fun Fragment.showSuccess(@StringRes msgId: Int, @IdRes viewId: Int) {
@@ -463,22 +408,10 @@ fun View.copyToClipboard(
     }
 }
 
-inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
-    var sum = 0L
-    for (element in this) {
-        sum += selector(element)
-    }
-    return sum
-}
-
-fun <T : Any> T?.notNull(f: (it: T) -> Unit) {
-    if (this != null) f(this)
-}
 
 /**
  * Extensions for simpler launching of Activities
  */
-
 inline fun <reified T : Any> Activity.launchActivity(
         requestCode: Int = -1,
         clear: Boolean = false,
@@ -548,11 +481,7 @@ inline fun <reified T : Any> Context.launchActivity(
     }
 
     intent.init()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        startActivity(intent, options)
-    } else {
-        startActivity(intent)
-    }
+    startActivity(intent, options)
 }
 
 fun Snackbar.withColor(@ColorRes colorInt: Int?): Snackbar {
@@ -597,39 +526,33 @@ fun TextView.makeTextHalfBold() {
         ""
     }
     val str = SpannableStringBuilder(textBefore)
-    if (textBefore.indexOf(".") != -1) {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    } else if (textBefore.indexOf(" ") != -1) {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    } else {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    when {
+        textBefore.indexOf(".") != -1 ->
+            str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf("."),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        textBefore.indexOf(" ") != -1 ->
+            str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf(" "),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        else -> str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
     this.text = str.append(" $textAfter")
 }
 
-fun findMyOrder(first: Order, second: Order, address: String?): Order {
-    return if (first.sender == second.sender) {
-        if (first.timestamp > second.timestamp) {
-            first
-        } else {
-            second
-        }
-    } else if (first.sender == address) {
-        first
-    } else if (second.sender == address) {
-        second
-    } else {
-        if (first.timestamp > second.timestamp) {
-            first
-        } else {
-            second
-        }
-    }
+fun loadDbWavesBalance(): AssetBalanceResponse {
+    return find(Constants.WAVES_ASSET_ID_EMPTY)!!
 }
 
-fun loadDbWavesBalance(): AssetBalance {
-    return queryFirst<AssetBalance> { equalTo("assetId", Constants.WAVES_ASSET_ID_EMPTY) }
-            ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+fun find(assetId: String): AssetBalanceResponse? {
+    return (queryFirst<AssetBalanceDb> { equalTo("assetId", assetId) })?.convertFromDb()
+}
+
+fun findByGatewayId(gatewayId: String): AssetBalanceResponse? { // ticker
+    for (asset in EnvironmentManager.globalConfiguration.generalAssets) {
+        if (asset.gatewayId == gatewayId) {
+            return find(asset.assetId)
+        }
+    }
+    return null
 }
 
 fun getDeviceId(): String {
@@ -645,42 +568,8 @@ fun Throwable.errorBody(): ErrorResponse? {
 }
 
 fun ResponseBody.clone(): ResponseBody {
-    var bufferClone = this.source().buffer()?.clone()
+    val bufferClone = this.source().buffer()?.clone()
     return ResponseBody.create(this.contentType(), this.contentLength(), bufferClone)
-}
-
-fun ErrorResponse.isSmartError(): Boolean {
-    return this.error in 305..308
-}
-
-fun AssetInfo.getTicker(): String {
-
-    if (this.id.isWavesId()) {
-        return Constants.wavesAssetInfo.name
-    }
-
-    return this.ticker ?: this.name
-}
-
-fun getScaledAmount(amount: Long, decimals: Int): String {
-    val absAmount = Math.abs(amount)
-    val value = BigDecimal.valueOf(absAmount, decimals)
-    if (amount == 0L) {
-        return "0"
-    }
-
-    val sign = if (amount < 0) "-" else ""
-
-    return sign + when {
-        value >= MoneyUtil.ONE_B -> value.divide(MoneyUtil.ONE_B, 1, RoundingMode.FLOOR)
-                .toPlainString().stripZeros() + "B"
-        value >= MoneyUtil.ONE_M -> value.divide(MoneyUtil.ONE_M, 1, RoundingMode.FLOOR)
-                .toPlainString().stripZeros() + "M"
-        value >= MoneyUtil.ONE_K -> value.divide(MoneyUtil.ONE_K, 1, RoundingMode.FLOOR)
-                .toPlainString().stripZeros() + "k"
-        else -> MoneyUtil.createFormatter(decimals).format(BigDecimal.valueOf(absAmount, decimals))
-                .stripZeros() + ""
-    }
 }
 
 fun Context.showAlertAboutScriptedAccount(buttonOnClickListener: () -> Unit = { }) {
@@ -713,11 +602,19 @@ fun isSpamConsidered(assetId: String?, prefsUtil: PrefsUtil): Boolean {
 
 fun isSpam(assetId: String?): Boolean {
     return (App.getAccessManager().getWallet() != null
-            && (null != queryFirst<SpamAsset> { equalTo("assetId", assetId) }))
+            && (null != queryFirst<SpamAssetDb> { equalTo("assetId", assetId) }))
 }
 
-fun isShowTicker(assetId: String?): Boolean {
-    return EnvironmentManager.globalConfiguration.generalAssets.any {
-        it.assetId == assetId || assetId.isNullOrEmpty()
+fun AssetBalanceResponse.getItemType(): Int {
+    return when {
+        isSpam -> AssetsAdapter.TYPE_SPAM_ASSET
+        isHidden -> AssetsAdapter.TYPE_HIDDEN_ASSET
+        else -> AssetsAdapter.TYPE_ASSET
     }
+}
+
+fun restartApp() {
+    val intent = Intent(App.getAppContext(), com.wavesplatform.wallet.v2.ui.splash.SplashActivity::class.java)
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+    App.getAppContext().startActivity(intent)
 }

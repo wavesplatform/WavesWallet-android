@@ -12,10 +12,11 @@ import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.asksira.loopingviewpager.LoopingViewPager
+import com.wavesplatform.sdk.net.model.Language
+import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.data.model.local.WelcomeItem
 import com.wavesplatform.wallet.v2.ui.auth.choose_account.ChooseAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
@@ -23,7 +24,6 @@ import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageBottomSheetFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_welcome.*
 import pers.victor.ext.click
 import pers.victor.ext.visiable

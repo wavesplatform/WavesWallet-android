@@ -21,14 +21,15 @@ import android.widget.LinearLayout
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.bumptech.glide.Glide
+import com.wavesplatform.sdk.net.model.response.NewsResponse
+import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
-import com.wavesplatform.wallet.v2.data.model.remote.response.News
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
@@ -38,7 +39,6 @@ import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
 import kotlinx.android.synthetic.main.backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_news.view.*
@@ -98,7 +98,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     override fun onResume() {
         super.onResume()
         showBackUpSeedWarning()
-        if (App.getAccessManager().getWallet() != null) {
+        if (App.getAccessManager().isAuthenticated()) {
             presenter.loadNews()
         }
     }
@@ -354,7 +354,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         }
     }
 
-    override fun showNews(news: News) {
+    override fun showNews(news: NewsResponse) {
         val ids = prefsUtil.getGlobalValueList(PrefsUtil.SHOWED_NEWS_IDS).toHashSet()
         var anyNewsShowed = false
         for (notification in news.notifications) {
@@ -373,8 +373,8 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
                             .into(view.image)
 
                     val langCode = preferencesHelper.getLanguage()
-                    view.text_title.text = News.getTitle(langCode, notification)
-                    view.text_subtitle.text = News.getSubtitle(langCode, notification)
+                    view.text_title.text = NewsResponse.getTitle(langCode, notification)
+                    view.text_subtitle.text = NewsResponse.getSubtitle(langCode, notification)
                     view.button_ok.click {
                         prefsUtil.addGlobalListValue(PrefsUtil.SHOWED_NEWS_IDS, notification.id)
                         accountFirstOpenDialog?.dismiss()

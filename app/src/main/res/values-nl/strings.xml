@@ -219,8 +219,6 @@
     <string name="confirm_card_tutorial_about_terms">Ik heb de Gebruiksvoorwaarden gelezen, \nbegrepen en ga ermee akkoord</string>
     <string name="confirm_card_tutorial_privacy_policy">Gebruiksvoorwaarden</string>
     <string name="confirm_card_tutorial_title">Bevestig en begin</string>
-    <string name="dialog_account_first_open_subtitle">Waves is anders — het kan niet veilig worden bewaard door een bank of webservice</string>
-    <string name="dialog_account_first_open_title">Klaar!</string>
     <string name="dialog_processing">Wachten…</string>
     <string name="edit_account_name">Bewerk naam</string>
     <string name="edit_account_new_name">Nieuwe accountnaam</string>

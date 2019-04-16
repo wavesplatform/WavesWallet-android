@@ -13,9 +13,9 @@ import android.widget.EditText
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CounterHandler
@@ -24,6 +24,7 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSel
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.success.TradeBuyAndSendSuccessActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity.Companion.TOTAL_BALANCE
 import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.sdk.utils.RxUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_trade_order.*
 import pers.victor.ext.*
@@ -416,7 +417,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     }
 
     private fun isValidWavesFee(): Boolean {
-        return if (presenter.wavesBalance.getAvailableBalance() ?: 0 > presenter.fee) {
+        return if (presenter.wavesBalance.getAvailableBalance() > presenter.fee) {
             true
         } else {
             if (presenter.data?.watchMarket?.market?.amountAsset?.isWaves() == true &&
@@ -537,7 +538,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
         text_fee_value.text = "${getScaledAmount(unscaledAmount, 8)} " +
-                "${Constants.wavesAssetInfo.name}"
+                "${Constants.WAVES_ASSET_INFO.name}"
         progress_bar_fee_transaction.hide()
         text_fee_value.visiable()
     }

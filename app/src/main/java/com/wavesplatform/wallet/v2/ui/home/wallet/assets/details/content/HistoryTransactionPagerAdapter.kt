@@ -10,16 +10,18 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
+import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
+import com.wavesplatform.sdk.net.model.TransactionType
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
 import com.wavesplatform.wallet.v2.ui.home.history.details.HistoryDetailsBottomSheetFragment
-import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
+import com.wavesplatform.wallet.v2.util.icon
+import com.wavesplatform.wallet.v2.util.isSpamConsidered
+import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import kotlinx.android.synthetic.main.assets_detailed_history_item.view.*
 import pers.victor.ext.*
 
@@ -75,7 +77,7 @@ class HistoryTransactionPagerAdapter constructor(
                 TransactionType.MASS_SPAM_RECEIVE_TYPE,
                 TransactionType.MASS_RECEIVE_TYPE,
                 TransactionType.MASS_SEND_TYPE -> {
-                    layout.text_transaction_value.text = getTransactionAmount(
+                    layout.text_transaction_value.text = TransactionUtil.getTransactionAmount(
                             transaction = item.data, round = false)
                 }
                 TransactionType.CREATE_ALIAS_TYPE -> {
@@ -163,7 +165,7 @@ class HistoryTransactionPagerAdapter constructor(
         return view === `object`
     }
 
-    private fun setExchangeItem(transaction: Transaction, view: View) {
+    private fun setExchangeItem(transaction: TransactionResponse, view: View) {
         val myOrder = findMyOrder(
                 transaction.order1!!,
                 transaction.order2!!,

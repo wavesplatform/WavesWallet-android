@@ -219,8 +219,6 @@
     <string name="confirm_card_tutorial_about_terms">Okudum, anladım ve onaylıyorum \nKullanım şartları</string>
     <string name="confirm_card_tutorial_privacy_policy">Kullanım şartları</string>
     <string name="confirm_card_tutorial_title">Onayla ve Başla</string>
-    <string name="dialog_account_first_open_subtitle">Waves Başkadır</string>
-    <string name="dialog_account_first_open_title">Bitti!</string>
     <string name="dialog_processing">Bekle…</string>
     <string name="edit_account_name">Adı düzenle</string>
     <string name="edit_account_new_name">Yeni hesap adı</string>

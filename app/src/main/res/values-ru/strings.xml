@@ -219,8 +219,6 @@
     <string name="confirm_card_tutorial_about_terms">Я прочитал, понял и согласился с \nУсловиями использования</string>
     <string name="confirm_card_tutorial_privacy_policy">Условиями использования</string>
     <string name="confirm_card_tutorial_title">Подтвердить и начать</string>
-    <string name="dialog_account_first_open_subtitle">Кошелёк Waves хранится только на вашем устройстве</string>
-    <string name="dialog_account_first_open_title">Готово!</string>
     <string name="dialog_processing">Подождите…</string>
     <string name="edit_account_name">Изменить имя</string>
     <string name="edit_account_new_name">Новое имя аккаунта</string>

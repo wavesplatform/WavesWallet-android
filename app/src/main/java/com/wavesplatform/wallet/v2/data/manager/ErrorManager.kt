@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.data.manager
 
 import android.content.Context
+import com.wavesplatform.sdk.net.RetrofitException
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.exception.RetrofitException
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.util.RxEventBus

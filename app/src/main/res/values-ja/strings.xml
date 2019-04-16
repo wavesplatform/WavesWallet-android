@@ -219,8 +219,6 @@
     <string name="confirm_card_tutorial_about_terms">規約を読み、内容を理解し、同意いたします \n利用規約</string>
     <string name="confirm_card_tutorial_privacy_policy">利用規約</string>
     <string name="confirm_card_tutorial_title">同意して利用する</string>
-    <string name="dialog_account_first_open_subtitle">銀行やWebサービスとは異なり、Wavesはあなたの資産を保管しません</string>
-    <string name="dialog_account_first_open_title">アカウントの作成が完了しました！ご利用の前に以下の内容を確認してください。</string>
     <string name="dialog_processing">お待ちください…</string>
     <string name="edit_account_name">名前を編集する</string>
     <string name="edit_account_new_name">新しいアカウント名</string>

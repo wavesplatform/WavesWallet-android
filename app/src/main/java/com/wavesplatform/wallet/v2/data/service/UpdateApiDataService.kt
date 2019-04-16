@@ -20,9 +20,9 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.database.TransactionSaver
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.util.RxEventBus
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -58,7 +58,7 @@ class UpdateApiDataService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (App.getAccessManager().getWallet() == null ||
+        if (App.getAccessManager().isAuthenticated() ||
                 ProcessLifecycleOwner.get().lifecycle.currentState != Lifecycle.State.RESUMED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 stopForeground(true)
@@ -68,7 +68,7 @@ class UpdateApiDataService : Service() {
             return Service.START_NOT_STICKY
         }
 
-        val transaction = queryFirst<Transaction>()
+        val transaction = queryFirst<TransactionDb>()
         if (transaction == null) {
             transactionLimit = TransactionSaver.MAX_LIMIT
         }

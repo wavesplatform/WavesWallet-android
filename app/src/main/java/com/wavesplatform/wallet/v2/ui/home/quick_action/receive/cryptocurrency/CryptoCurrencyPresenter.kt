@@ -6,13 +6,13 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency
 
 import com.arellomobile.mvp.InjectViewState
+import com.wavesplatform.sdk.utils.Constants.Companion.coinomatCryptoCurrencies
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnelResponse
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
-import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.GetTunnel
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
@@ -21,13 +21,13 @@ class CryptoCurrencyPresenter @Inject constructor() : BasePresenter<CryptoCurren
 
     @Inject
     lateinit var coinomatManager: CoinomatManager
-    var assetBalance: AssetBalance? = null
-    var tunnel: GetTunnel? = null
+    var assetBalance: AssetBalanceResponse? = null
+    var tunnel: GetTunnelResponse? = null
     private var lang: String = "ru_RU"
     var nextStepValidation = false
 
     fun getTunnel(assetId: String) {
-        val currencyFrom = Constants.coinomatCryptoCurrencies()[assetId]
+        val currencyFrom = coinomatCryptoCurrencies()[assetId]
         if (currencyFrom.isNullOrEmpty()) {
             viewState.onShowError(App.getAppContext()
                     .getString(R.string.receive_error_network))

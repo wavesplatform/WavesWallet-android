@@ -90,9 +90,9 @@ android {
     buildTypes {
         release {
             debuggable false
-            minifyEnabled false
+            minifyEnabled true
             zipAlignEnabled true
-            shrinkResources false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled true
             signingConfig signingConfigs.config
@@ -123,6 +123,10 @@ android {
         }
     }
 
+    androidExtensions {
+        experimental = true
+    }
+
 
     productFlavors {
         prod {
@@ -150,6 +154,7 @@ android {
                     fabricApiKey: fabricApiKey]
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -224,6 +229,7 @@ ext {
 }
 
 dependencies {
+    implementation project(':wavesplatform')
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$supportVersion"
@@ -291,7 +297,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
 
     implementation 'com.github.rubensousa:bottomsheetbuilder:1.6.1'
-    implementation 'com.github.MindorksOpenSource:EditDrawableText:1.1.0'
+    implementation 'com.github.MindorksOpenSource:EditDrawableText:1.2.0'
 
     implementation 'com.madgag.spongycastle:core:1.58.0.0'
 
@@ -313,7 +319,7 @@ dependencies {
     implementation 'com.arello-mobile:moxy-app-compat:1.5.5'
     kapt 'com.arello-mobile:moxy-compiler:1.5.5'
 
-    implementation "com.github.vicpinm:krealmextensions:2.3.0"
+    implementation "com.github.vicpinm:krealmextensions:2.5.0"
     implementation 'com.yarolegovich:sliding-root-nav:1.1.0'
     implementation 'io.github.anderscheow:validator:1.1.5'
 

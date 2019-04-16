@@ -6,8 +6,8 @@
 package com.wavesplatform.wallet.v2.data.rules
 
 import android.support.annotation.StringRes
+import com.wavesplatform.sdk.crypto.WavesWallet
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.data.auth.WavesWallet
 
 import io.github.anderscheow.validator.rules.BaseRule
 

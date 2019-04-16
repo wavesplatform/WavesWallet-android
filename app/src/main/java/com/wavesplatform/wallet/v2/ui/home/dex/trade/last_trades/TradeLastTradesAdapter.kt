@@ -9,19 +9,19 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.internal.bind.util.ISO8601Utils
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
-import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
-import com.wavesplatform.wallet.v2.util.clearBalance
+import com.wavesplatform.sdk.utils.MoneyUtil
+import com.wavesplatform.sdk.net.model.response.LastTradesResponse
+import com.wavesplatform.sdk.net.model.response.MarketResponse
+import com.wavesplatform.sdk.utils.clearBalance
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import java.math.BigDecimal
 import java.text.ParsePosition
 import javax.inject.Inject
 
-class TradeLastTradesAdapter @Inject constructor() : BaseQuickAdapter<LastTradesResponse.Data.ExchangeTransaction, BaseViewHolder>(R.layout.recycle_item_last_trades, null) {
+class TradeLastTradesAdapter @Inject constructor() : BaseQuickAdapter<LastTradesResponse.DataResponse.ExchangeTransactionResponse, BaseViewHolder>(R.layout.recycle_item_last_trades, null) {
     var market: MarketResponse = MarketResponse()
 
-    override fun convert(helper: BaseViewHolder, item: LastTradesResponse.Data.ExchangeTransaction) {
+    override fun convert(helper: BaseViewHolder, item: LastTradesResponse.DataResponse.ExchangeTransactionResponse) {
         val sum = item.price * item.amount
 
         helper

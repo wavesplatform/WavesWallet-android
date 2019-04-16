@@ -219,8 +219,6 @@
     <string name="confirm_card_tutorial_about_terms">Ich habe die Nutzungsbedingungen gelesen, \nverstanden und bin damit einverstanden</string>
     <string name="confirm_card_tutorial_privacy_policy">Nutzungsbedingungen</string>
     <string name="confirm_card_tutorial_title">Bestätigen Sie und beginnen Sie</string>
-    <string name="dialog_account_first_open_subtitle">Waves ist anders — es kann nicht von einer Bank oder einem Webdienst sicher gehalten werden</string>
-    <string name="dialog_account_first_open_title">Erledigt!</string>
     <string name="dialog_processing">Warten…</string>
     <string name="edit_account_name">Namen bearbeiten</string>
     <string name="edit_account_new_name">Neuer Accountname</string>

@@ -13,8 +13,8 @@ import jp.wasabeef.recyclerview.animators.BaseItemAnimator;
 
 public class FadeInWithoutDelayAnimator extends BaseItemAnimator {
 
-  public FadeInWithoutDelayAnimator() {
-  }
+    public FadeInWithoutDelayAnimator() {
+    }
 
   public FadeInWithoutDelayAnimator(Interpolator interpolator) {
     mInterpolator = interpolator;

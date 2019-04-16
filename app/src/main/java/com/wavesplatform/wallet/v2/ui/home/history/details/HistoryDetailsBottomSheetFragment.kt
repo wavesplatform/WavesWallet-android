@@ -17,18 +17,20 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.net.model.OrderType
+import com.wavesplatform.sdk.net.model.TransactionType
+import com.wavesplatform.sdk.net.model.response.*
+import com.wavesplatform.sdk.net.service.CoinomatService
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.crypto.Base58
-import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
-import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
-import com.wavesplatform.wallet.v2.data.remote.CoinomatService
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
 import com.wavesplatform.wallet.v2.ui.custom.SpamTag
@@ -39,7 +41,6 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation.ConfirmationCancelLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.util.*
-import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_exchange_layout.view.*
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_script_invocation_layout.view.*
@@ -49,13 +50,13 @@ import kotlinx.android.synthetic.main.history_details_layout.view.*
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 
-class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Transaction>() {
+class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<TransactionResponse>() {
 
     override fun configLayoutRes(): Int {
         return R.layout.history_details_bottom_sheet_dialog
     }
 
-    override fun setupHeader(transaction: Transaction): View? {
+    override fun setupHeader(transaction: TransactionResponse): View? {
         val view = inflate(R.layout.history_details_layout)
 
         view.text_tag.gone()
@@ -88,7 +89,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 TransactionType.MASS_SPAM_RECEIVE_TYPE,
                 TransactionType.MASS_RECEIVE_TYPE,
                 TransactionType.MASS_SEND_TYPE -> {
-                    view.text_transaction_value.text = getTransactionAmount(
+                    view.text_transaction_value.text = TransactionUtil.getTransactionAmount(
                             transaction = transaction, decimals = decimals, round = false)
                 }
                 TransactionType.CREATE_ALIAS_TYPE -> {
@@ -163,7 +164,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         return view
     }
 
-    override fun setupBody(transaction: Transaction): View? {
+    override fun setupBody(transaction: TransactionResponse): View? {
         val historyContainer = LinearLayout(activity)
         historyContainer.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         historyContainer.orientation = LinearLayout.VERTICAL
@@ -176,7 +177,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         val showCommentBlock = !transaction.attachment.isNullOrEmpty()
         if (showCommentBlock) {
             commentBlock.visiable()
-            textComment?.text = String(Base58.decode(transaction.attachment))
+            textComment?.text = String(Base58.decode(transaction.attachment!!))
         } else {
             commentBlock.gone()
         }
@@ -360,7 +361,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val addressContainer = massSendLayout?.findViewById<LinearLayout>(R.id.container_address)
                 val showMoreAddress = massSendLayout?.findViewById<TextView>(R.id.text_show_more_address)
 
-                val transfers: MutableList<Transfer> = transaction.transfers.toMutableList()
+                val transfers: MutableList<TransferResponse> = transaction.transfers.toMutableList()
 
                 transfers.forEachIndexed { index, transfer ->
                     val addressView = inflater?.inflate(R.layout.address_layout, null, false)
@@ -577,7 +578,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
     }
 
 
-    private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfo?) {
+    private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfoResponse?) {
         if (isShowTicker(assetInfo?.id)) {
             val ticker = assetInfo?.getTicker()
             if (!ticker.isNullOrBlank()) {
@@ -589,7 +590,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         }
     }
 
-    override fun setupInfo(transaction: Transaction): View? {
+    override fun setupInfo(transaction: TransactionResponse): View? {
         val layout = inflate(R.layout.fragment_history_bottom_sheet_base_info_layout)
 
         fun showTransactionFee() {
@@ -626,7 +627,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         return layout
     }
 
-    override fun setupFooter(transaction: Transaction): View? {
+    override fun setupFooter(transaction: TransactionResponse): View? {
         val view = inflater?.inflate(R.layout.fragment_history_bottom_sheet_bottom_btns, null, false)
 
         fun changeViewMargin(view: View) {
@@ -653,7 +654,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    copyToClipboard(Transaction.getInfo(transaction), view.text_copy_all_data,
+                    copyToClipboard(TransactionResponse.getInfo(transaction), view.text_copy_all_data,
                             R.string.history_details_copy_all_data)
                 })
 
@@ -666,9 +667,13 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (view.check_box_staging_on_explorer.isChecked) {
-                        openUrlWithChromeTab(String.format(Constants.URL_WAVES_STAGE_EXPLORER, transaction.id))
+                        openUrlWithChromeTab(String.format(
+                                com.wavesplatform.sdk.utils.Constants.URL_WAVES_STAGE_EXPLORER,
+                                transaction.id))
                     } else {
-                        openUrlWithChromeTab(String.format(Constants.URL_WAVES_EXPLORER, transaction.id))
+                        openUrlWithChromeTab(String.format(
+                                com.wavesplatform.sdk.utils.Constants.URL_WAVES_EXPLORER,
+                                transaction.id))
                     }
                 })
 
@@ -678,11 +683,11 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
 
                 changeViewMargin(view.text_view_on_explorer)
 
-                val assetBalance = queryFirst<AssetBalance> {
+                val assetBalance = queryFirst<AssetBalanceDb> {
                     equalTo("assetId", transaction.assetId ?: "")
-                }
-                if (assetBalance != null && (nonGateway(assetBalance, transaction) ||
-                                assetBalance.isWaves() || assetBalance.isFiatMoney)) {
+                }?.convertFromDb()
+                if (assetBalance != null && (nonGateway(assetBalance, transaction)
+                                || assetBalance.isWaves() || assetBalance.isFiatMoney)) {
                     eventSubscriptions.add(RxView.clicks(view.text_send_again)
                             .throttleFirst(1500, TimeUnit.MILLISECONDS)
                             .observeOn(AndroidSchedulers.mainThread())
@@ -697,7 +702,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                                             transaction.recipientAddress)
                                     if (!transaction.attachment.isNullOrEmpty()) {
                                         putExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT,
-                                                String(Base58.decode(transaction.attachment)))
+                                                String(Base58.decode(transaction.attachment!!)))
                                     } else {
                                         putExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT, "")
                                     }
@@ -735,7 +740,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         return view
     }
 
-    private fun setExchangeItem(transaction: Transaction, view: View) {
+    private fun setExchangeItem(transaction: TransactionResponse, view: View) {
         val myOrder = findMyOrder(
                 transaction.order1!!,
                 transaction.order2!!,
@@ -752,7 +757,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         val amountValue = getScaledAmount(transaction.amount,
                 amountAsset.precision)
 
-        if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
+        if (myOrder.orderType == com.wavesplatform.sdk.utils.Constants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell
             directionSign = "-"
         } else {
@@ -765,8 +770,8 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)
 
-        val amountAssetTicker = if (amountAsset.name == Constants.WAVES_ASSET_ID_FILLED) {
-            Constants.WAVES_ASSET_ID_FILLED
+        val amountAssetTicker = if (amountAsset.name == com.wavesplatform.sdk.utils.Constants.WAVES_ASSET_ID_FILLED) {
+            com.wavesplatform.sdk.utils.Constants.WAVES_ASSET_ID_FILLED
         } else {
             amountAsset.ticker
         }
@@ -782,12 +787,12 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         view.text_transaction_value.text = directionSign + amountValue + assetName
     }
 
-    private fun nonGateway(assetBalance: AssetBalance, transaction: Transaction) =
+    private fun nonGateway(assetBalance: AssetBalanceResponse, transaction: TransactionResponse) =
             !assetBalance.isGateway || (assetBalance.isGateway &&
                     !transaction.recipientAddress.equals(CoinomatService.GATEWAY_ADDRESS))
 
     private fun resolveExistOrNoAddress(textViewName: TextView?, textViewAddress: TextView?, textAddressAction: AppCompatTextView?) {
-        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
+        val addressBookUser = queryFirst<AddressBookUserDb> { equalTo("address", textViewAddress?.text.toString()) }
         makeAddressActionViewClickableStyled(textAddressAction)
 
         if (addressBookUser == null) {
@@ -801,7 +806,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             textAddressAction?.click {
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), ""))
                 }
             }
         } else {
@@ -816,7 +821,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             textAddressAction?.click {
                 launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), addressBookUser.name))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), addressBookUser.name))
                 }
             }
         }
@@ -838,7 +843,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
     }
 
     private fun resolveExistOrNoAddressForMassSend(textViewName: TextView?, textViewAddress: TextView?, imageAddressAction: AppCompatImageView?) {
-        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", textViewAddress?.text.toString()) }
+        val addressBookUser = queryFirst<AddressBookUserDb> { equalTo("address", textViewAddress?.text.toString()) }
 
         makeAddressActionViewClickableStyled(imageAddressAction)
 
@@ -852,7 +857,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             imageAddressAction?.click {
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), ""))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), ""))
                 }
             }
         } else {
@@ -866,7 +871,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             imageAddressAction?.click {
                 launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
-                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUser(textViewAddress?.text.toString(), addressBookUser.name))
+                    putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), addressBookUser.name))
                 }
             }
         }

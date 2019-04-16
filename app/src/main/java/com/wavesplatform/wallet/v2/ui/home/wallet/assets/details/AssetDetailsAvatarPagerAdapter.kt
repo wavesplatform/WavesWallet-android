@@ -9,13 +9,13 @@ import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import kotlinx.android.synthetic.main.item_asset_details_avatar.view.*
 import pers.victor.ext.inflate
 import javax.inject.Inject
 
 class AssetDetailsAvatarPagerAdapter @Inject constructor() : PagerAdapter() {
-    var items: List<AssetBalance> = arrayListOf()
+    var items: List<AssetBalanceResponse> = arrayListOf()
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
         val layout = inflate(R.layout.item_asset_details_avatar, collection, false) as ViewGroup

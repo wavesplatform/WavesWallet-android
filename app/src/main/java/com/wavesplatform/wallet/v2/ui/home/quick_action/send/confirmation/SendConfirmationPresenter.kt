@@ -7,25 +7,21 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.crypto.Base58
+import com.wavesplatform.sdk.net.model.request.TransactionsBroadcastRequest
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.crypto.Base58
-import com.wavesplatform.wallet.v1.data.rxjava.RxUtil
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.MoneyUtil
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
-import com.wavesplatform.wallet.v2.data.model.remote.request.TransactionsBroadcastRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
-import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
-import com.wavesplatform.wallet.v2.util.clearAlias
 import com.wavesplatform.wallet.v2.util.errorBody
-import com.wavesplatform.wallet.v2.util.isSmartError
-import com.wavesplatform.wallet.v2.util.makeAsAlias
+import com.wavesplatform.wallet.v2.util.find
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -38,13 +34,13 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var recipient: String? = ""
     var amount: BigDecimal = BigDecimal.ZERO
     var attachment: String = ""
-    var selectedAsset: AssetBalance? = null
-    var assetInfo: AssetInfo? = null
+    var selectedAsset: AssetBalanceResponse? = null
+    var assetInfo: AssetInfoResponse? = null
     var moneroPaymentId: String? = null
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
     var blockchainCommission = 0L
-    var feeAsset: AssetBalance = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    var feeAsset: AssetBalanceResponse = find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
     fun confirmSend() {
         val singed = signTransaction()
@@ -129,7 +125,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     }
 
     fun getAddressName(address: String) {
-        val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", address)}
+        val addressBookUser = queryFirst<AddressBookUserDb> { equalTo("address", address)}
         if (addressBookUser == null) {
             viewState.hideAddressBookUser()
         } else {

@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.enter
 
 import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.data.auth.IncorrectPinException
+import com.wavesplatform.wallet.v2.data.manager.PinStoreService
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import timber.log.Timber
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class EnterPassCodePresenter @Inject constructor() : BasePresenter<EnterPasscode
                     App.getAccessManager().resetPassCodeInputFails(guid)
                     viewState.onSuccessValidatePassCode(password, passCode)
                 }, { error ->
-                    if (error !is IncorrectPinException) {
+                    if (error !is PinStoreService.IncorrectPinException) {
                         Timber.e(error, "Failed to validate pin")
                     } else {
                         App.getAccessManager().incrementPassCodeInputFails(guid)

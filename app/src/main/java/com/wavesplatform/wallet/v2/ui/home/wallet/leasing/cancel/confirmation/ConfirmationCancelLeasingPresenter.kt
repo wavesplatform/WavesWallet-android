@@ -6,15 +6,15 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
-import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
-import com.wavesplatform.wallet.v2.data.model.remote.response.ScriptInfo
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.sdk.net.model.request.CancelLeasingRequest
+import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommissionResponse
+import com.wavesplatform.sdk.net.model.response.ScriptInfoResponse
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.TransactionUtil
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.TransactionUtil
+import com.wavesplatform.sdk.utils.isSmartError
 import com.wavesplatform.wallet.v2.util.errorBody
-import com.wavesplatform.wallet.v2.util.isSmartError
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import javax.inject.Inject
@@ -57,16 +57,16 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
         addSubscription(Observable.zip(
                 githubDataManager.getGlobalCommission(),
                 nodeDataManager.scriptAddressInfo(),
-                BiFunction { t1: GlobalTransactionCommission,
-                             t2: ScriptInfo ->
+                BiFunction { t1: GlobalTransactionCommissionResponse,
+                             t2: ScriptInfoResponse ->
                     return@BiFunction Pair(t1, t2)
                 })
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ triple ->
                     val commission = triple.first
                     val scriptInfo = triple.second
-                    val params = GlobalTransactionCommission.Params()
-                    params.transactionType = Transaction.LEASE_CANCEL
+                    val params = GlobalTransactionCommissionResponse.ParamsResponse()
+                    params.transactionType = TransactionResponse.LEASE_CANCEL
                     params.smartAccount = scriptInfo.extraFee != 0L
                     fee = TransactionUtil.countCommission(commission, params)
                     viewState.showCommissionSuccess(fee)

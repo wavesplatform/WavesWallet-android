@@ -6,10 +6,9 @@
 package com.wavesplatform.wallet.v2.util
 
 import com.vicpin.krealmextensions.saveAll
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
-import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
+import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import io.realm.DynamicRealm
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -37,9 +36,9 @@ class MigrationUtil @Inject constructor() {
                         guid + KEY_AB_ADDRESSES)
                 if (names.isNotEmpty() && addresses.isNotEmpty()
                         && names.size == addresses.size) {
-                    val addressBookUsers = mutableListOf<AddressBookUser>()
+                    val addressBookUsers = mutableListOf<AddressBookUserDb>()
                     for (i in 0 until names.size) {
-                        val addressBookUser = AddressBookUser(addresses[i], names[i])
+                        val addressBookUser = AddressBookUserDb(addresses[i], names[i])
                         addressBookUsers.add(addressBookUser)
                     }
                     addressBookUsers.saveAll()
@@ -89,11 +88,11 @@ class MigrationUtil @Inject constructor() {
                     return
                 }
                 if (tempRealm!!.version != VER_DB_NEW && tempRealm.version < VER_DB_WITHOUT_USER_DATA) {
-                    if (sharedRealm.hasTable(Table.getTableNameForClass("AddressBookUser"))) {
-                        val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
-                        val addressBookUsers = mutableListOf<AddressBookUser>()
+                    if (sharedRealm.hasTable(Table.getTableNameForClass("AddressBookUserDb"))) {
+                        val addressBookUsersDb = tempRealm.where("AddressBookUserDb").findAll()
+                        val addressBookUsers = mutableListOf<AddressBookUserDb>()
                         for (item in addressBookUsersDb) {
-                            val addressBookUser = AddressBookUser(
+                            val addressBookUser = AddressBookUserDb(
                                     item.getString("address"),
                                     item.getString("name"))
                             addressBookUsers.add(addressBookUser)
@@ -101,11 +100,11 @@ class MigrationUtil @Inject constructor() {
                         addressBookUsers.saveAll()
                     }
 
-                    val assetBalancesStore = mutableListOf<AssetBalanceStore>()
-                    val assetBalancesDb = tempRealm.where("AssetBalance").findAll()
+                    val assetBalancesStore = mutableListOf<AssetBalanceStoreDb>()
+                    val assetBalancesDb = tempRealm.where("AssetBalance").findAll()  // todo check table name
                     for (item in assetBalancesDb) {
                         val assetId = item.getString("assetId")
-                        assetBalancesStore.add(AssetBalanceStore(
+                        assetBalancesStore.add(AssetBalanceStoreDb(
                                 assetId = assetId,
                                 isHidden = item.getBoolean("isHidden"),
                                 position = item.getInt("position"),
@@ -114,10 +113,10 @@ class MigrationUtil @Inject constructor() {
                     assetBalancesStore.saveAll()
 
                     if (sharedRealm.hasTable(Table.getTableNameForClass("MarketResponse"))) {
-                        val newMarketResponses = mutableListOf<MarketResponse>()
-                        val marketResponses = tempRealm.where("MarketResponse").findAll()
+                        val newMarketResponses = mutableListOf<MarketResponseDb>()
+                        val marketResponses = tempRealm.where("MarketResponse").findAll() // todo check table name
                         for (item in marketResponses) {
-                            newMarketResponses.add(MarketResponse(
+                            newMarketResponses.add(MarketResponseDb(
                                     id = item.getString("id"),
                                     amountAsset = item.getString("amountAsset"),
                                     amountAssetName = item.getString("amountAssetName"),

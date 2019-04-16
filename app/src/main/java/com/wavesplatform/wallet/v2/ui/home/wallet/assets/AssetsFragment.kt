@@ -26,7 +26,9 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -34,10 +36,8 @@ import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
-import com.wavesplatform.wallet.v2.util.RxUtil
-import com.wavesplatform.wallet.v2.util.isMyServiceRunning
-import com.wavesplatform.wallet.v2.util.launchActivity
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.util.*
 import kotlinx.android.synthetic.main.fragment_assets.*
 import kotlinx.android.synthetic.main.wallet_header_item.view.*
 import pers.victor.ext.dp2px
@@ -164,7 +164,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = this.adapter.getItem(position) as AssetBalance
+            val item = this.adapter.getItem(position) as AssetBalanceResponse
             val positionWithoutSection = when {
                 // minus hidden section header and all clear assets
                 item.isHidden -> position - 1 - adapter.data.count {
@@ -180,7 +180,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 else -> position // no changes
             }
             launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType)
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.getItemType())
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, positionWithoutSection)
             }
         }
@@ -195,7 +195,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
     }
 
     private fun getCorrectionIndex(): Int {
-        val someFirstHidden = queryFirst<AssetBalance> {
+        val someFirstHidden = queryFirst<AssetBalanceDb> {
             equalTo("isHidden", true)
         }
         return if (someFirstHidden == null) {

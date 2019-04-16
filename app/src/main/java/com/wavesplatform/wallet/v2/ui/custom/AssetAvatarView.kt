@@ -17,10 +17,10 @@ import android.util.AttributeSet
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
+import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
+import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import pers.victor.ext.findColor
 import pers.victor.ext.resize
 import pers.victor.ext.sp
@@ -90,7 +90,7 @@ class AssetAvatarView : AppCompatImageView {
     /*
     * Set asset object to get initials for drawable
     * */
-    fun setAsset(asset: AssetBalance?) {
+    fun setAsset(asset: AssetBalanceResponse?) {
         setValues(asset?.assetId ?: " ", asset?.getName() ?: " ",
                 asset?.isSponsored() == true,
                 asset?.isScripted() == true)
@@ -99,7 +99,7 @@ class AssetAvatarView : AppCompatImageView {
     /*
    * Set asset info object to get initials for drawable
    * */
-    fun setAsset(asset: AssetInfo) {
+    fun setAsset(asset: AssetInfoResponse) {
         setValues(asset.id, asset.name, asset.isSponsored(), asset.hasScript)
     }
 
@@ -112,7 +112,7 @@ class AssetAvatarView : AppCompatImageView {
         }
 
         val letter = text.trim().substring(0, 1)
-        val letterColor = Constants.alphabetColor[letter.toLowerCase()]
+        val letterColor = com.wavesplatform.wallet.v2.data.Constants.alphabetColor[letter.toLowerCase()]
 
         return if (letterColor != null) {
             letter.toUpperCase()
@@ -126,7 +126,7 @@ class AssetAvatarView : AppCompatImageView {
             return findColor(R.color.persist)
         }
 
-        val letterColor = Constants.alphabetColor[text!!.trim().substring(0, 1).toLowerCase()]
+        val letterColor = com.wavesplatform.wallet.v2.data.Constants.alphabetColor[text!!.trim().substring(0, 1).toLowerCase()]
 
         return if (letterColor != null) {
             findColor(letterColor)

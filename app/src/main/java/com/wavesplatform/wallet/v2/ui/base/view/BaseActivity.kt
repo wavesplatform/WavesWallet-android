@@ -31,9 +31,12 @@ import com.akexorcist.localizationactivity.core.OnLocaleChangedListener
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.net.OnErrorListener
+import com.wavesplatform.sdk.net.RetrofitException
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
@@ -51,6 +54,9 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
 import pers.victor.ext.click
@@ -127,13 +133,21 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                 .observeInternetConnectivity()
                 .distinctUntilChanged()
                 .onErrorResumeNext(Observable.empty())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({ connected ->
                     onNetworkConnectionChanged(connected)
                 }, {
                     it.printStackTrace()
                 }))
+
+        Wavesplatform.setOnErrorListener(object : OnErrorListener {
+            override fun onError(exception: RetrofitException) {
+                // todo Check Errors to show or log
+                val retrySubject = PublishSubject.create<Events.RetryEvent>()
+                mErrorManager.handleError(exception, retrySubject)
+                SentryHelper.logException(exception)
+            }
+        })
     }
 
     protected fun checkInternet() {
@@ -198,7 +212,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     private fun askPassCodeIfNeed() {
         val guid = App.getAccessManager().getLastLoggedInGuid()
 
-        val notAuthenticated = App.getAccessManager().getWallet() == null
+        val notAuthenticated = !App.getAccessManager().isAuthenticated()
         val hasGuidToLogin = !TextUtils.isEmpty(guid)
 
         if (hasGuidToLogin && notAuthenticated && askPassCode()) {
@@ -314,10 +328,6 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
         } else {
             window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
         }
-    }
-
-    protected fun restartApp() {
-        App.getAccessManager().restartApp(this)
     }
 
     protected fun clearAndLogout() {

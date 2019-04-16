@@ -10,13 +10,15 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
+import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
+import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.data.model.local.ChartModel
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
 import io.reactivex.Observable
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,7 +27,7 @@ import kotlin.collections.ArrayList
 
 @InjectViewState
 class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>() {
-    var watchMarket: WatchMarket? = null
+    var watchMarket: WatchMarketResponse? = null
     var selectedTimeFrame = 0
     var newSelectedTimeFrame = 0
     val timeFrameList = arrayOf(ChartTimeFrame.FIVE_MINUTES, ChartTimeFrame.FIFTEEN_MINUTES, ChartTimeFrame.THIRTY_MINUTES,
@@ -36,12 +38,14 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     private var barEntries: ArrayList<BarEntry> = ArrayList()
     var currentTimeFrame: Int = 30
         set(value) {
-            if (App.getAccessManager().getWallet() == null) {
+            if (Wavesplatform.getWallet() == null) {
                 return
             }
             field = value
             watchMarket?.market?.currentTimeFrame = value
-            watchMarket?.market?.save()
+            watchMarket?.market.notNull {
+                MarketResponseDb(it).save()
+            }
         }
     var prevToDate: Long = 0
     private var timer: Timer? = null

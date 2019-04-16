@@ -23,18 +23,19 @@ import com.github.mikephil.charting.listener.BarLineChartTouchListener
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.utils.EntryXComparator
+import com.wavesplatform.sdk.net.model.OrderType
+import com.wavesplatform.wallet.R
 import com.github.mikephil.charting.utils.ObjectPool
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.data.model.remote.response.LastTradesResponse
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
+import com.wavesplatform.sdk.net.model.response.LastTradesResponse
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CandleTouchListener
 import com.wavesplatform.wallet.v2.ui.custom.OnCandleGestureListener
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.makeStyled
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.activity_trade.*
 import kotlinx.android.synthetic.main.fragment_trade_chart.*
 import kotlinx.android.synthetic.main.global_server_error_layout.*
@@ -59,10 +60,10 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     @ProvidePresenter
     fun providePresenter(): TradeChartPresenter = presenter
 
-    override fun configLayoutRes() = com.wavesplatform.wallet.R.layout.fragment_trade_chart
+    override fun configLayoutRes() = R.layout.fragment_trade_chart
 
     override fun onViewReady(savedInstanceState: Bundle?) {
-        presenter.watchMarket = arguments?.getParcelable<WatchMarket>(TradeActivity.BUNDLE_MARKET)
+        presenter.watchMarket = arguments?.getParcelable(TradeActivity.BUNDLE_MARKET)
 
         val timeFrame = ChartTimeFrame.findByServerTime(presenter.watchMarket?.market?.currentTimeFrame)
         val position = ChartTimeFrame.findPositionByServerTime(presenter.watchMarket?.market?.currentTimeFrame)
@@ -326,10 +327,14 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
         bar_chart.moveViewToX(candle_chart.lowestVisibleX)
     }
 
-    override fun successGetTrades(tradesMarket: LastTradesResponse.Data.ExchangeTransaction?) {
+    override fun successGetTrades(tradesMarket: LastTradesResponse.DataResponse.ExchangeTransactionResponse?) {
         tradesMarket.notNull {
             val limitLine = LimitLine(it.price.toFloat(), "")
-            limitLine.lineColor = if (it.getMyOrder().getType() == OrderType.BUY) findColor(com.wavesplatform.wallet.R.color.submit300) else findColor(com.wavesplatform.wallet.R.color.error400)
+            limitLine.lineColor = if (it.getMyOrder().getType() == OrderType.BUY) {
+                findColor(R.color.submit300)
+            } else {
+                findColor(R.color.error400)
+            }
             limitLine.lineWidth = 1f
             limitLine.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
             candle_chart.axisRight.removeAllLimitLines()
@@ -359,8 +364,8 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
 
                 val candleData = CandleData()
                 val set = CandleDataSet(candles, "Candle DataSet")
-                set.decreasingColor = findColor(com.wavesplatform.wallet.R.color.error400)
-                set.increasingColor = findColor(com.wavesplatform.wallet.R.color.submit300)
+                set.decreasingColor = findColor(R.color.error400)
+                set.increasingColor = findColor(R.color.submit300)
                 set.neutralColor = Color.parseColor("#4b7190")
                 set.shadowColorSameAsCandle = true
                 set.increasingPaintStyle = Paint.Style.FILL
@@ -520,9 +525,9 @@ class TradeChartFragment : BaseFragment(), TradeChartView, OnCandleGestureListen
     }
 
     companion object {
-        fun newInstance(watchMarket: WatchMarket?): TradeChartFragment {
+        fun newInstance(watchMarket: WatchMarketResponse?): TradeChartFragment {
             val args = Bundle()
-            args.classLoader = WatchMarket::class.java.classLoader
+            args.classLoader = WatchMarketResponse::class.java.classLoader
             args.putParcelable(TradeActivity.BUNDLE_MARKET, watchMarket)
             val fragment = TradeChartFragment()
             fragment.arguments = args

@@ -7,11 +7,12 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
+import com.wavesplatform.sdk.net.model.response.TransactionResponse
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
-import com.wavesplatform.wallet.v2.util.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -23,13 +24,13 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
     var needToUpdate: Boolean = false
     var isShow = true
     var scrollRange: Float = -1f
-    var allTransaction: List<Transaction> = emptyList()
+    var allTransaction: List<TransactionResponse> = emptyList()
 
     fun loadAssets(itemType: Int) {
         runAsync {
-            addSubscription(Single.zip(queryAllAsSingle<AssetBalance>(), queryAllAsSingle<Transaction>(),
-                    BiFunction { assets: List<AssetBalance>, transactions: List<Transaction> ->
-                        allTransaction = transactions
+            addSubscription(Single.zip(queryAllAsSingle(), queryAllAsSingle(),
+                    BiFunction { assets: List<AssetBalanceDb>, transactions: List<TransactionDb> ->
+                        allTransaction = TransactionDb.convertFromDb(transactions)
                         return@BiFunction assets
                     })
                     .map {
@@ -51,7 +52,7 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
                     .compose(RxUtil.applySingleDefaultSchedulers())
                     .subscribe({ it ->
                         runOnUiThread {
-                            viewState.afterSuccessLoadAssets(it)
+                            viewState.afterSuccessLoadAssets(AssetBalanceDb.convertFromDb(it))
                         }
                     }, {
                         it.printStackTrace()

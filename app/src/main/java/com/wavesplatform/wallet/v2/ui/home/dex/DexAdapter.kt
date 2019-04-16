@@ -8,15 +8,15 @@ package com.wavesplatform.wallet.v2.ui.home.dex
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.local.WatchMarket
-import com.wavesplatform.wallet.v2.util.notNull
+import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
+import com.wavesplatform.sdk.utils.notNull
 import pers.victor.ext.findDrawable
 import java.math.BigDecimal
 import javax.inject.Inject
 
-class DexAdapter @Inject constructor() : BaseQuickAdapter<WatchMarket, BaseViewHolder>(R.layout.dex_layout_item, null) {
+class DexAdapter @Inject constructor() : BaseQuickAdapter<WatchMarketResponse, BaseViewHolder>(R.layout.dex_layout_item, null) {
 
-    override fun convert(helper: BaseViewHolder, item: WatchMarket) {
+    override fun convert(helper: BaseViewHolder, item: WatchMarketResponse) {
         if (item.pairResponse?.data != null) {
             item.pairResponse?.data.notNull { data ->
                 val deltaPercent = (data.lastPrice.minus(data.firstPrice)).times(BigDecimal(100))

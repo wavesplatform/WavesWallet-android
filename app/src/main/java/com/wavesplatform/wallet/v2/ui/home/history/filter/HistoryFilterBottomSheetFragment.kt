@@ -14,8 +14,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import com.vicpin.krealmextensions.queryAllAsync
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.history.filter.adapter.AssetsAdapter
 import com.wavesplatform.wallet.v2.ui.home.history.filter.adapter.TransferAdapter
@@ -26,7 +27,7 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
     var rooView: View? = null
     var inflater: LayoutInflater? = null
     var periodListSelected = arrayListOf<String>()
-    var assetListSelected = arrayListOf<AssetBalance>()
+    var assetListSelected = arrayListOf<AssetBalanceResponse>()
     var transferistSelected = arrayListOf<TransferModel>()
     var closeBtn: Button? = null
     var filterBtn: Button? = null
@@ -39,7 +40,7 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
         closeBtn = rooView?.findViewById(R.id.button_close)
         filterBtn = rooView?.findViewById(R.id.button_filter)
 
-        rooView?.findViewById<CheckBox>(R.id.checkbox_week)?.setOnCheckedChangeListener({ buttonView, isChecked ->
+        rooView?.findViewById<CheckBox>(R.id.checkbox_week)?.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 periodListSelected.add(buttonView.text.toString())
                 buttonView.setBackgroundResource(R.drawable.period_checked)
@@ -49,8 +50,8 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
             }
 
             checkIsItemSelected()
-        })
-        rooView?.findViewById<CheckBox>(R.id.checkbox_month)?.setOnCheckedChangeListener({ buttonView, isChecked ->
+        }
+        rooView?.findViewById<CheckBox>(R.id.checkbox_month)?.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 periodListSelected.add(buttonView.text.toString())
                 buttonView.setBackgroundResource(R.drawable.period_checked)
@@ -60,8 +61,8 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
             }
 
             checkIsItemSelected()
-        })
-        rooView?.findViewById<CheckBox>(R.id.checkbox_half_year)?.setOnCheckedChangeListener({ buttonView, isChecked ->
+        }
+        rooView?.findViewById<CheckBox>(R.id.checkbox_half_year)?.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 periodListSelected.add(buttonView.text.toString())
                 buttonView.setBackgroundResource(R.drawable.period_checked)
@@ -71,7 +72,7 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
             }
 
             checkIsItemSelected()
-        })
+        }
         setupAssetsList()
         setupTransferList()
 
@@ -85,12 +86,12 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
         recycleAssets?.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         recycleAssets?.adapter = assetsAdapter
 
-        queryAllAsync<AssetBalance> {
-            assetsAdapter.setNewData(it)
+        queryAllAsync<AssetBalanceDb> {
+            assetsAdapter.setNewData(AssetBalanceDb.convertFromDb(it))
         }
 
         assetsAdapter.setOnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as AssetBalance
+            val item = adapter.getItem(position) as AssetBalanceResponse
             if (item.isChecked) {
                 assetListSelected.remove(item)
             } else {
@@ -111,7 +112,7 @@ class HistoryFilterBottomSheetFragment : BaseBottomSheetDialogFragment() {
         recycleTransfer?.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         recycleTransfer?.adapter = transferAdapter
 
-        var transfeeList = arrayListOf<TransferModel>()
+        val transfeeList = arrayListOf<TransferModel>()
         transfeeList.add(TransferModel("MaksTorch", "3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW", false))
         transfeeList.add(TransferModel("MaksTorch1", "3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW", false))
         transfeeList.add(TransferModel("MaksTorch2", "3PCjZftzzhtY4ZLLBfsyvNxw8RwAgXZVZJW", false))

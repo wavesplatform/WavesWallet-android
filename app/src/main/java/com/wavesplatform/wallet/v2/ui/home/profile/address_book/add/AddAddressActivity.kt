@@ -14,10 +14,12 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.zxing.integration.android.IntentIntegrator
 import com.mindorks.editdrawabletext.DrawablePosition
-import com.mindorks.editdrawabletext.onDrawableClickListener
+import com.mindorks.editdrawabletext.OnDrawableClickListener
+import com.wavesplatform.sdk.utils.WAVES_PREFIX
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.data.rules.AddressBookAddressRule
 import com.wavesplatform.wallet.v2.data.rules.AddressBookNameRule
 import com.wavesplatform.wallet.v2.data.rules.MinTrimRule
@@ -26,8 +28,6 @@ import com.wavesplatform.wallet.v2.ui.auth.import_account.scan.ScanSeedFragment
 import com.wavesplatform.wallet.v2.ui.auth.qr_scanner.QrCodeScannerActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
-import com.wavesplatform.wallet.v2.util.AddressUtil
-import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.onAction
 import io.github.anderscheow.validator.Validation
 import io.github.anderscheow.validator.Validator
@@ -90,7 +90,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
         if (edit_address.text.isEmpty()) edit_address.tag = R.drawable.ic_qrcode_24_basic_500
         else edit_address.tag = R.drawable.ic_deladdress_24_error_400
 
-        edit_address.setDrawableClickListener(object : onDrawableClickListener {
+        edit_address.setDrawableClickListener(object : OnDrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
                     DrawablePosition.RIGHT -> {
@@ -125,7 +125,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
             edit_address.isFocusableInTouchMode = false
             edit_address.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 
-            edit_address.setText(intent.getParcelableExtra<AddressBookUser>(AddressBookActivity.BUNDLE_ADDRESS_ITEM).address)
+            edit_address.setText(intent.getParcelableExtra<AddressBookUserDb>(AddressBookActivity.BUNDLE_ADDRESS_ITEM).address)
             presenter.addressFieldValid = edit_address.text.isNotEmpty()
         } else if (type == AddressBookActivity.SCREEN_TYPE_EDITABLE) {
             val addressValidation = Validation(til_address)
@@ -167,7 +167,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
             ScanSeedFragment.REQUEST_SCAN_QR_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                    result.contents.replace(AddressUtil.WAVES_PREFIX, "").notNull {
+                    result.contents.replace(WAVES_PREFIX, "").notNull {
                         edit_address.setText(it.trim())
                     }
                 }
@@ -175,7 +175,7 @@ class AddAddressActivity : BaseActivity(), AddAddressView {
         }
     }
 
-    override fun successSaveAddress(addressBookUser: AddressBookUser) {
+    override fun successSaveAddress(addressBookUser: AddressBookUserDb) {
         val intent = Intent()
         intent.putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, addressBookUser)
         setResult(Constants.RESULT_OK, intent)

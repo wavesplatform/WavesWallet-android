@@ -6,13 +6,13 @@
 package com.wavesplatform.wallet.v2.data.model.local
 
 import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 
 class AssetSortingItem : MultiItemEntity {
     var type: Int = 0
-    var asset: AssetBalance = AssetBalance()
+    var asset: AssetBalanceResponse = AssetBalanceResponse()
 
-    constructor(itemType: Int, asset: AssetBalance) {
+    constructor(itemType: Int, asset: AssetBalanceResponse) {
         this.type = itemType
         this.asset = asset
     }

@@ -9,22 +9,26 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ProcessLifecycleOwner
 import android.text.TextUtils
 import com.vicpin.krealmextensions.*
+import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.net.model.request.*
+import com.wavesplatform.sdk.net.model.response.*
+import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.utils.TransactionUtil
+import com.wavesplatform.sdk.utils.notNull
+import com.wavesplatform.sdk.utils.sumByLong
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticAssetManager
 import com.wavesplatform.wallet.v2.data.helpers.ClearAssetsHelper
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.model.db.AliasDb
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
-import com.wavesplatform.wallet.v2.data.model.remote.request.*
-import com.wavesplatform.wallet.v2.data.model.remote.response.*
-import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
-import com.wavesplatform.wallet.v2.util.TransactionUtil
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.util.loadDbWavesBalance
-import com.wavesplatform.wallet.v2.util.notNull
-import com.wavesplatform.wallet.v2.util.sumByLong
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
@@ -37,8 +41,7 @@ import kotlin.collections.ArrayList
 
 @Singleton
 class NodeDataManager @Inject constructor() : BaseDataManager() {
-    @Inject
-    lateinit var transactionUtil: TransactionUtil
+
     @Inject
     lateinit var apiDataManager: ApiDataManager
     @Inject
@@ -47,28 +50,28 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     lateinit var matcherDataManager: MatcherDataManager
     @Inject
     lateinit var analyticAssetManager: AnalyticAssetManager
-    var transactions: List<Transaction> = ArrayList()
+    var transactions: List<TransactionResponse> = ArrayList()
 
-    fun loadSpamAssets(): Observable<ArrayList<SpamAsset>> {
+    fun loadSpamAssets(): Observable<ArrayList<SpamAssetResponse>> {
         return githubService.spamAssets(prefsUtil.getValue(PrefsUtil.KEY_SPAM_URL, EnvironmentManager.servers.spamUrl))
                 .map {
                     val scanner = Scanner(it)
-                    val spam = arrayListOf<SpamAsset>()
+                    val spam = arrayListOf<SpamAssetResponse>()
                     while (scanner.hasNextLine()) {
-                        spam.add(SpamAsset(scanner.nextLine().split(",")[0]))
+                        spam.add(SpamAssetResponse(scanner.nextLine().split(",")[0]))
                     }
                     scanner.close()
 
                     // clear old spam list and save new
-                    deleteAll<SpamAsset>()
-                    spam.saveAll()
+                    deleteAll<SpamAssetDb>()
+                    SpamAssetDb.convertToDb(spam).saveAll()
 
                     return@map spam
                 }.map { spamListFromDb ->
                     if (prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)) {
                         return@map spamListFromDb
                     } else {
-                        return@map arrayListOf<SpamAsset>()
+                        return@map arrayListOf<SpamAssetResponse>()
                     }
                 }
     }
@@ -80,13 +83,13 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun assetsBalances(withWaves: Boolean = true): Observable<MutableList<AssetBalance>> {
+    fun assetsBalances(withWaves: Boolean = true): Observable<MutableList<AssetBalanceResponse>> {
         return if (withWaves) {
             Observable.zip(
                     nodeService.assetsBalance(getAddress())
                             .map { it.balances.toMutableList() },
                     loadWavesBalance(),
-                    BiFunction { assetsBalance: MutableList<AssetBalance>, wavesBalance: AssetBalance ->
+                    BiFunction { assetsBalance: MutableList<AssetBalanceResponse>, wavesBalance: AssetBalanceResponse ->
                         assetsBalance.add(0, wavesBalance)
                         return@BiFunction assetsBalance
                     })
@@ -98,18 +101,18 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         }
     }
 
-    fun loadAssets(assetsFromDb: List<AssetBalance>? = null): Observable<List<AssetBalance>> {
+    fun loadAssets(assetsFromDb: List<AssetBalanceResponse>? = null): Observable<List<AssetBalanceResponse>> {
         return loadSpamAssets()
                 .flatMap { spamAssets ->
                     return@flatMap nodeService.assetsBalance(getAddress())
                             .flatMap { assets ->
-                                return@flatMap Observable.zip(loadWavesBalance(), matcherDataManager.loadReservedBalances(), Observable.just(assets), Function3 { t1: AssetBalance, t2: Map<String, Long>, t3: AssetBalances ->
+                                return@flatMap Observable.zip(loadWavesBalance(), matcherDataManager.loadReservedBalances(), Observable.just(assets), Function3 { t1: AssetBalanceResponse, t2: Map<String, Long>, t3: AssetBalancesResponse ->
                                     return@Function3 Triple(t1, t2, t3)
                                 })
                             }
                             .map { tripple ->
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
-                                val savedAssetPrefs = queryAll<AssetBalanceStore>()
+                                val savedAssetPrefs = queryAll<AssetBalanceStoreDb>()
 
                                 if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
                                     // merge db data and API data
@@ -180,11 +183,10 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                     }
                                 }
 
-                                tripple.third.balances.saveAll()
+                                AssetBalanceDb.convertToDb(tripple.third.balances).saveAll()
+                                AssetBalanceStoreDb.saveAssetBalanceStore(tripple.third.balances)
 
-                                AssetBalanceStore.saveAssetBalanceStore(tripple.third.balances)
-
-                                val allAssets = queryAll<AssetBalance>()
+                                val allAssets = AssetBalanceDb.convertFromDb(queryAll())
                                 trackZeroBalances(allAssets)
 
                                 // clear wallet from unimportant assets for new imported wallets
@@ -194,12 +196,12 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    private fun trackZeroBalances(balances: List<AssetBalance>) {
+    private fun trackZeroBalances(balances: List<AssetBalanceResponse>) {
         val generalAssets = balances.filter { it.isGateway || it.isWaves() }.toMutableList()
         analyticAssetManager.trackFromZeroBalances(generalAssets)
     }
 
-    private fun findElementsInDbWithZeroBalancesAndDelete(assetsFromDb: List<AssetBalance>?, tripple: Triple<AssetBalance, Map<String, Long>, AssetBalances>) {
+    private fun findElementsInDbWithZeroBalancesAndDelete(assetsFromDb: List<AssetBalanceResponse>?, tripple: Triple<AssetBalanceResponse, Map<String, Long>, AssetBalancesResponse>) {
         if (assetsFromDb?.size != tripple.third.balances.size) {
             val dbIds = assetsFromDb?.mapTo(ArrayList()) { it.assetId }
             val apiIds = tripple.third.balances.mapTo(ArrayList()) { it.assetId }
@@ -207,7 +209,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
             offsetAsset?.forEach { id ->
                 if (id.isNotEmpty()) {
-                    val assetBalance = queryFirst<AssetBalance> { equalTo("assetId", id) }
+                    val assetBalance = queryFirst<AssetBalanceDb> { equalTo("assetId", id) }
                     if (assetBalance?.isGateway == false) {
                         assetBalance.delete { equalTo("assetId", id) }
                     } else {
@@ -219,7 +221,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         }
     }
 
-    fun loadWavesBalance(): Observable<AssetBalance> {
+    fun loadWavesBalance(): Observable<AssetBalanceResponse> {
         return Observable.zip(
                 // load total balance
                 nodeService.wavesBalance(getAddress()).map {
@@ -232,19 +234,19 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 // load in order balance
                 matcherDataManager.loadReservedBalances()
                         .map {
-                            return@map it[Constants.wavesAssetInfo.name] ?: 0L
+                            return@map it[Constants.WAVES_ASSET_INFO.name] ?: 0L
                         },
                 Function3 { totalBalance: Long, leasedBalance: Long, inOrderBalance: Long ->
                     val currentWaves = loadDbWavesBalance()
                     currentWaves.balance = totalBalance
                     currentWaves.leasedBalance = leasedBalance
                     currentWaves.inOrderBalance = inOrderBalance
-                    currentWaves.save()
+                    AssetBalanceDb(currentWaves).save()
                     return@Function3 currentWaves
                 })
     }
 
-    fun createAlias(createAliasRequest: AliasRequest): Observable<Alias> {
+    fun createAlias(createAliasRequest: AliasRequest): Observable<AliasResponse> {
         createAliasRequest.senderPublicKey = getPublicKeyStr()
         createAliasRequest.timestamp = EnvironmentManager.getTime()
         App.getAccessManager().getWallet()?.privateKey.notNull {
@@ -253,7 +255,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         return nodeService.createAlias(createAliasRequest)
                 .map {
                     it.address = getAddress()
-                    it.save()
+                    AliasDb(it).save()
                     return@map it
                 }
                 .doOnNext {
@@ -261,16 +263,17 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun cancelLeasing(cancelLeasingRequest: CancelLeasingRequest): Observable<Transaction> {
+    fun cancelLeasing(cancelLeasingRequest: CancelLeasingRequest): Observable<TransactionResponse> {
         cancelLeasingRequest.senderPublicKey = getPublicKeyStr()
         cancelLeasingRequest.timestamp = EnvironmentManager.getTime()
-
         App.getAccessManager().getWallet()?.privateKey.notNull {
             cancelLeasingRequest.sign(it)
         }
         return nodeService.cancelLeasing(cancelLeasingRequest)
                 .map {
-                    val first = queryFirst<Transaction> { equalTo("id", cancelLeasingRequest.leaseId) }
+                    val first = queryFirst<TransactionDb> {
+                        equalTo("id", cancelLeasingRequest.leaseId)
+                    }
                     first?.status = LeasingStatus.CANCELED.status
                     first?.save()
                     return@map it
@@ -284,7 +287,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
             createLeasingRequest: CreateLeasingRequest,
             recipientIsAlias: Boolean,
             fee: Long
-    ): Observable<Transaction> {
+    ): Observable<TransactionResponse> {
         createLeasingRequest.senderPublicKey = getPublicKeyStr()
         createLeasingRequest.fee = fee
         createLeasingRequest.timestamp = EnvironmentManager.getTime()
@@ -298,7 +301,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun loadTransactions(currentLoadTransactionLimitPerRequest: Int): Observable<List<Transaction>> {
+    fun loadTransactions(currentLoadTransactionLimitPerRequest: Int): Observable<List<TransactionResponse>> {
         return Observable.interval(0, 15, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap {
@@ -306,18 +309,18 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                         return@flatMap nodeService.transactionList(getAddress(), currentLoadTransactionLimitPerRequest)
                                 .map { r -> r[0] }
                     } else {
-                        return@flatMap Observable.just(listOf<Transaction>())
+                        return@flatMap Observable.just(listOf<TransactionResponse>())
                     }
                 }
                 .onErrorResumeNext(Observable.empty())
     }
 
-    fun loadLightTransactions(): Observable<List<Transaction>> {
+    fun loadLightTransactions(): Observable<List<TransactionResponse>> {
         return nodeService.transactionList(getAddress(), 100)
                 .map { r -> r[0] }
     }
 
-    fun currentBlocksHeight(): Observable<Height> {
+    fun currentBlocksHeight(): Observable<HeightResponse> {
         return Observable.interval(0, 60, TimeUnit.SECONDS)
                 .retry(3)
                 .flatMap {
@@ -330,13 +333,14 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 .onErrorResumeNext(Observable.empty())
     }
 
-    fun activeLeasing(): Observable<List<Transaction>> {
+    private fun activeLeasing(): Observable<List<TransactionResponse>> {
         return nodeService.activeLeasing(getAddress())
                 .map {
                     return@map it.filter {
-                        it.asset = Constants.wavesAssetInfo
-                        it.transactionTypeId = transactionUtil.getTransactionType(it)
-                        it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE && it.sender == App.getAccessManager().getWallet()?.address
+                        it.asset = Constants.WAVES_ASSET_INFO
+                        it.transactionTypeId = TransactionUtil.getTransactionType(it)
+                        it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
+                                && it.sender == App.getAccessManager().getWallet()?.address
                     }
                 }
                 .flatMap {
@@ -364,16 +368,16 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun scriptAddressInfo(address: String = getAddress() ?: ""): Observable<ScriptInfo> {
+    fun scriptAddressInfo(address: String = getAddress() ?: ""): Observable<ScriptInfoResponse> {
         return nodeService.scriptAddressInfo(address)
                 .doOnNext {
                     prefsUtil.setValue(PrefsUtil.KEY_SCRIPTED_ACCOUNT, it.extraFee != 0L)
                 }
     }
 
-    fun assetDetails(assetId: String?): Observable<AssetsDetails> {
+    fun assetDetails(assetId: String?): Observable<AssetsDetailsResponse> {
         return if (TextUtils.isEmpty(assetId) || assetId == Constants.WAVES_ASSET_ID_FILLED) {
-            Observable.just(AssetsDetails(assetId = Constants.WAVES_ASSET_ID_FILLED, scripted = false))
+            Observable.just(AssetsDetailsResponse(assetId = Constants.WAVES_ASSET_ID_FILLED, scripted = false))
         } else {
             nodeService.assetDetails(assetId!!)
         }
@@ -384,17 +388,17 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 githubDataManager.getGlobalCommission(),
                 assetDetails(amountAsset),
                 assetDetails(priceAsset),
-                Function3 { t1: GlobalTransactionCommission,
-                            t2: AssetsDetails,
-                            t3: AssetsDetails ->
+                Function3 { t1: GlobalTransactionCommissionResponse,
+                            t2: AssetsDetailsResponse,
+                            t3: AssetsDetailsResponse ->
                     return@Function3 Triple(t1, t2, t3)
                 })
                 .flatMap {
                     val commission = it.first
                     val amountAssetsDetails = it.second
                     val priceAssetsDetails = it.third
-                    val params = GlobalTransactionCommission.Params()
-                    params.transactionType = Transaction.EXCHANGE
+                    val params = GlobalTransactionCommissionResponse.ParamsResponse()
+                    params.transactionType = TransactionResponse.EXCHANGE
                     params.smartPriceAsset = priceAssetsDetails.scripted
                     params.smartAmountAsset = amountAssetsDetails.scripted
                     return@flatMap Observable.just(TransactionUtil.countCommission(commission, params))
@@ -402,11 +406,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
     }
 
-    fun addressAssetBalance(address: String, assetId: String): Observable<AddressAssetBalance> {
+    fun addressAssetBalance(address: String, assetId: String): Observable<AddressAssetBalanceResponse> {
         return nodeService.addressAssetBalance(address, assetId)
-    }
-
-    fun utilsTime(): Observable<UtilsTime> {
-        return nodeService.utilsTime()
     }
 }

@@ -8,13 +8,13 @@ package com.wavesplatform.wallet.v2.data.helpers
 import com.vicpin.krealmextensions.RealmConfigStore
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
-import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.database.realm.module.DataModule
 import com.wavesplatform.wallet.v2.data.database.realm.module.UserDataModule
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.util.MigrationUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import javax.inject.Inject
@@ -57,9 +57,9 @@ class AuthHelper @Inject constructor(private var prefsUtil: PrefsUtil) {
 
     private fun saveDefaultAssets() {
         EnvironmentManager.defaultAssets.forEach {
-            val asset = queryFirst<AssetBalance> { equalTo("assetId", it.assetId) }
+            val asset = queryFirst<AssetBalanceDb> { equalTo("assetId", it.assetId) }
             if (asset == null) {
-                it.save()
+                AssetBalanceDb(it).save()
             }
         }
         prefsUtil.setValue(PrefsUtil.KEY_DEFAULT_ASSETS, true)
