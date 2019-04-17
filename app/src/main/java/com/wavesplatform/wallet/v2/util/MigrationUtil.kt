@@ -88,8 +88,8 @@ class MigrationUtil @Inject constructor() {
                     return
                 }
                 if (tempRealm!!.version != VER_DB_NEW && tempRealm.version < VER_DB_WITHOUT_USER_DATA) {
-                    if (sharedRealm.hasTable(Table.getTableNameForClass("AddressBookUserDb"))) {
-                        val addressBookUsersDb = tempRealm.where("AddressBookUserDb").findAll()
+                    if (sharedRealm.hasTable(Table.getTableNameForClass("AddressBookUser"))) {
+                        val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
                         val addressBookUsers = mutableListOf<AddressBookUserDb>()
                         for (item in addressBookUsersDb) {
                             val addressBookUser = AddressBookUserDb(
@@ -101,7 +101,7 @@ class MigrationUtil @Inject constructor() {
                     }
 
                     val assetBalancesStore = mutableListOf<AssetBalanceStoreDb>()
-                    val assetBalancesDb = tempRealm.where("AssetBalanceDb").findAll()
+                    val assetBalancesDb = tempRealm.where("AssetBalance").findAll()
                     for (item in assetBalancesDb) {
                         val assetId = item.getString("assetId")
                         assetBalancesStore.add(AssetBalanceStoreDb(
@@ -112,9 +112,9 @@ class MigrationUtil @Inject constructor() {
                     }
                     assetBalancesStore.saveAll()
 
-                    if (sharedRealm.hasTable(Table.getTableNameForClass("MarketResponseDb"))) {
+                    if (sharedRealm.hasTable(Table.getTableNameForClass("MarketResponse"))) {
                         val newMarketResponses = mutableListOf<MarketResponseDb>()
-                        val marketResponses = tempRealm.where("MarketResponseDb").findAll()
+                        val marketResponses = tempRealm.where("MarketResponse").findAll()
                         for (item in marketResponses) {
                             newMarketResponses.add(MarketResponseDb(
                                     id = item.getString("id"),
