@@ -1,6 +1,6 @@
--verbose
--dontobfuscate
--ignorewarnings
+#-verbose
+#-dontobfuscate
+#-ignorewarnings
 
 # Glide ------------------------------------------------------#
 -keep public class * implements com.bumptech.glide.module.GlideModule
@@ -337,8 +337,8 @@
 # End Support -------------------------------------------------
 
 # Allow optimisation whilst preserving stack traces ----------#
--optimizations !code/allocation/variable
--optimizations !class/unboxing/enum
+-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*, !class/unboxing/enum
+-optimizationpasses 2
 -keepattributes SourceFile, LineNumberTable
 -keep,allowshrinking,allowoptimization class * { <methods>; }
 # End Allow optimisation whilst preserving stack traces -------
@@ -347,3 +347,10 @@
 -keep class com.google.android.gms.ads.** { *; }
 -dontwarn okio.**
 # End Google Analytics ----------------------------------------
+
+# Sentry -----------------------------------------------------#
+-keepattributes LineNumberTable,SourceFile
+-dontwarn org.slf4j.**
+-dontwarn javax.**
+-keep class io.sentry.event.Event { *; }
+# End Sentry --------------------------------------------------
