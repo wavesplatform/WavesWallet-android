@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Created by Eduard Zaydel on 16/4/2019
-  ~ Copyright © 2019 Waves Platform. All rights reserved.
-  -->
-
 <resources>
   <string name="about_fill_payment_details">Por favor, preenche o campo de detalhes da transferência com a seguinte informação:</string>
   <string name="about_fill_payment_info">CNM — o teu endereço WAVES. \nSe não o fizeres não teremos como creditar os fundos na tua conta.</string>
@@ -659,7 +654,7 @@
   <string name="my_orders_details_amount_hint">Quantidade</string>
   <string name="my_orders_details_price_hint">Cotação</string>
   <string name="my_orders_details_total_hint">Total</string>
-  <string name="RENAME.clean.title">Acabámos com a confusão que eram as listas infindáveis de ativos no ecrã.</string>
+  <string name="RENAME.clean.title">Acabámos com a confusão!</string>
   <string name="RENAME.clean.text">Mudámos a forma de apresentação da lista Ativos para tornar a aplicação simples e fácil de usar. Se preferires podes sempre customizar a lista de ativos que pretendes ver carregados no ecrã.</string>
   <string name="search_asset_hint">Pesquisar</string>
   <string name="search_asset_cancel">Cancelar</string>
@@ -667,7 +662,7 @@
   <string name="history_type_script_invocation">Invocar Script</string>
   <string name="history_details_script_invocation_payment">Pagamento</string>
   <string name="history_details_script_invocation_script_address">Endereço</string>
-  <string name="need_update_alert_title">It\'s time to update your app!</string>
-  <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
+  <string name="need_update_alert_title">Chegou a hora de atualizares a app!</string>
+  <string name="need_update_alert_description">Estamos a trabalhar para melhorar a Carteira Waves. Por favor, atualiza a tua aplicação para aceder às novas funcionalidades.</string>
   <string name="search_asset_hidden_title">Ativos ocultos</string>
 </resources>

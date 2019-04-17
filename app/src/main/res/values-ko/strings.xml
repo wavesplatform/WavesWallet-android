@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Created by Eduard Zaydel on 16/4/2019
-  ~ Copyright © 2019 Waves Platform. All rights reserved.
-  -->
-
 <resources>
   <string name="about_fill_payment_details">지불 정보 입력란에 다음 정보를 필히 기입해야합니다:</string>
   <string name="about_fill_payment_info">CNM — 귀하의 WAVES 주소. \nIf그렇지 않으면 귀하의 계좌에 크레딧을 줄 수 없습니다</string>
@@ -667,7 +662,7 @@
   <string name="history_type_script_invocation">Script 발동</string>
   <string name="history_details_script_invocation_payment">지불</string>
   <string name="history_details_script_invocation_script_address">Script 주소</string>
-  <string name="need_update_alert_title">It\'s time to update your app!</string>
-  <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
+  <string name="need_update_alert_title">앱을 업데이트 할 시간입니다!</string>
+  <string name="need_update_alert_description">Waves 지갑을 보다 유용하게 만들기 위해 끊임없이 노력하고 있습니다. 새로운 기능에 액세스하려면 앱을 업데이트하십시오.</string>
   <string name="search_asset_hidden_title">숨긴 자산</string>
 </resources>

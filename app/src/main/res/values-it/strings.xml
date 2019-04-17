@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Created by Eduard Zaydel on 16/4/2019
-  ~ Copyright © 2019 Waves Platform. All rights reserved.
-  -->
-
 <resources>
   <string name="about_fill_payment_details">È necessario compilare il campo dei dettagli di pagamento con le seguenti informazioni:</string>
   <string name="about_fill_payment_info">CNM — il tuo indirizzo WAVES. \nSe non procedi, non possiamo accreditare il tuo account.</string>

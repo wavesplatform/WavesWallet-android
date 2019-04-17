@@ -316,14 +316,14 @@
   <string name="history_type_incoming_leasing">租赁收益</string>
   <string name="history_type_mass_receive">大额收入</string>
   <string name="history_type_mass_send">大额发送</string>
-  <string name="history_type_mass_spam_receive">Spam 收到</string>
+  <string name="history_type_mass_spam_receive">收到可疑信息</string>
   <string name="history_type_receive">已收到</string>
   <string name="history_type_receive_sponsorship">获得赞助</string>
   <string name="history_type_self_transfer">自动转账</string>
   <string name="history_type_sent">已发送</string>
   <string name="history_type_set_address_script">设置脚本交易</string>
   <string name="history_type_set_sponsorship">设置赞助交易</string>
-  <string name="history_type_spam_receive">Spam 收到</string>
+  <string name="history_type_spam_receive">收到可疑信息</string>
   <string name="history_type_started_leasing">开始租赁</string>
   <string name="history_type_token_burn">代币焚毁</string>
   <string name="history_type_token_generation">代币产生</string>

@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Created by Eduard Zaydel on 16/4/2019
-  ~ Copyright © 2019 Waves Platform. All rights reserved.
-  -->
-
 <resources>
   <string name="about_fill_payment_details">U moet de volgende informatie bij de betalingsdetails invoeren:</string>
   <string name="about_fill_payment_info">CNM — Uw WAVES adres. \nAls u dit niet invoert kunnen we uw account niet crediteren.</string>
@@ -667,7 +662,7 @@
   <string name="history_type_script_invocation">Script Aanroep</string>
   <string name="history_details_script_invocation_payment">Betaling</string>
   <string name="history_details_script_invocation_script_address">Script adres</string>
-  <string name="need_update_alert_title">It\'s time to update your app!</string>
-  <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
+  <string name="need_update_alert_title">Het is tijd om uw app te updaten!</string>
+  <string name="need_update_alert_description">We werken er voortdurend aan om Waves Wallet beter en nuttiger te maken. Update uw app om toegang te krijgen tot nieuwe functies.</string>
   <string name="search_asset_hidden_title">Verborgen assets</string>
 </resources>
