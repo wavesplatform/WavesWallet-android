@@ -650,7 +650,7 @@
   <string name="my_orders_details_type_buy">매수: %1$s/%2$s</string>
   <string name="my_orders_details_type_sell">매도: %1$s/%2$s</string>
   <string name="my_orders_details_cancel">주문 취소</string>
-  <string name="my_orders_details_canceled_status">취소 완료 (%1$s)</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (취소 완료)</string>
   <string name="my_orders_details_amount_hint">수량</string>
   <string name="my_orders_details_price_hint">가격</string>
   <string name="my_orders_details_total_hint">총</string>

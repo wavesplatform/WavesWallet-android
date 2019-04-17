@@ -650,7 +650,7 @@
   <string name="my_orders_details_type_buy">Comprar: %1$s/%2$s</string>
   <string name="my_orders_details_type_sell">Vender: %1$s/%2$s</string>
   <string name="my_orders_details_cancel">Cancelar ordem</string>
-  <string name="my_orders_details_canceled_status">Cancelado (%1$s)</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (Canceladas)</string>
   <string name="my_orders_details_amount_hint">Quantidade</string>
   <string name="my_orders_details_price_hint">Preço</string>
   <string name="my_orders_details_total_hint">Total</string>

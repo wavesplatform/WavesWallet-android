@@ -650,7 +650,7 @@
   <string name="my_orders_details_type_buy">Beli: %1$s/%2$s</string>
   <string name="my_orders_details_type_sell">Jual: %1$s/%2$s</string>
   <string name="my_orders_details_cancel">Batalkan pesanan</string>
-  <string name="my_orders_details_canceled_status">Dibatalkan (%1$s)</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (Dibatalkan)</string>
   <string name="my_orders_details_amount_hint">Jumlah</string>
   <string name="my_orders_details_price_hint">Harga</string>
   <string name="my_orders_details_total_hint">Total</string>

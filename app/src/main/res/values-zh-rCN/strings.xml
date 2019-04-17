@@ -650,7 +650,7 @@
   <string name="my_orders_details_type_buy">购买：%1$s/%2$s</string>
   <string name="my_orders_details_type_sell">卖：%1$s/%2$s</string>
   <string name="my_orders_details_cancel">取消订单</string>
-  <string name="my_orders_details_canceled_status">已取消 (%1$s)</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (已取消)</string>
   <string name="my_orders_details_amount_hint">总量</string>
   <string name="my_orders_details_price_hint">价格</string>
   <string name="my_orders_details_total_hint">总额</string>

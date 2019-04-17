@@ -650,7 +650,7 @@
   <string name="my_orders_details_type_buy">Kaufen: %1$s/%2$s</string>
   <string name="my_orders_details_type_sell">Verkaufen: %1$s/%2$s</string>
   <string name="my_orders_details_cancel">Bestellung abbrechen</string>
-  <string name="my_orders_details_canceled_status">Abgebrochen (%1$s)</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (Abgebrochen)</string>
   <string name="my_orders_details_amount_hint">Menge</string>
   <string name="my_orders_details_price_hint">Preis</string>
   <string name="my_orders_details_total_hint">Gesamtmenge</string>
