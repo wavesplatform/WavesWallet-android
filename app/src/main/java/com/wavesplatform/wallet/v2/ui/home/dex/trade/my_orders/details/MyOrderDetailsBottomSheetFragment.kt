@@ -77,7 +77,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
                 tickerView.visiable()
             }
         } else {
-            valueView.text = valueView.text.toString().plus(" ${assetInfo?.name}}")
+            valueView.text = valueView.text.toString().plus(" ${assetInfo?.name}")
         }
     }
 

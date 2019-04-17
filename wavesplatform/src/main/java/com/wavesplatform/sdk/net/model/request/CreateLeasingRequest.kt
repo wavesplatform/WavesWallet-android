@@ -46,11 +46,12 @@ data class CreateLeasingRequest(
         }
     }
 
+    // todo check parseAlias
     private fun resolveRecipientBytes(recipientIsAlias: Boolean): ByteArray? {
         return if (recipientIsAlias) {
             Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
                     byteArrayOf(EnvironmentManager.netCode),
-                    recipient.clearAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
+                    recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
         } else {
             Base58.decode(recipient)
         }

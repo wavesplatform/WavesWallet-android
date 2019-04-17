@@ -12,6 +12,7 @@ import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.clearBalance
 import com.wavesplatform.sdk.utils.isWaves
+import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
@@ -29,8 +30,8 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
 
     var humanTotalTyping = false
 
-    var currentAmountBalance: Long? = 0L
-    var currentPriceBalance: Long? = 0L
+    var currentAmountBalance: Long = 0L
+    var currentPriceBalance: Long = 0L
 
     var selectedExpiration = 5
     var newSelectedExpiration = 5
@@ -44,6 +45,13 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
     var amountValidation = false
 
     var fee = 0L
+
+    fun initBalances(){
+        currentAmountBalance = queryFirst<AssetBalance> { equalTo("assetId",
+                data?.watchMarket?.market?.amountAsset?.withWavesIdConvert()) }?.getAvailableBalance() ?: 0L
+        currentPriceBalance = queryFirst<AssetBalance> { equalTo("assetId",
+                data?.watchMarket?.market?.priceAsset?.withWavesIdConvert()) }?.getAvailableBalance() ?: 0L
+    }
 
     fun isAllFieldsValid(): Boolean {
         return priceValidation && amountValidation && totalPriceValidation
@@ -71,8 +79,8 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
         addSubscription(matcherDataManager.getBalanceFromAssetPair(data?.watchMarket)
                 .flatMap {
                     // save balance
-                    currentAmountBalance = it[data?.watchMarket?.market?.amountAsset]
-                    currentPriceBalance = it[data?.watchMarket?.market?.priceAsset]
+                    currentAmountBalance = it[data?.watchMarket?.market?.amountAsset] ?: 0
+                    currentPriceBalance = it[data?.watchMarket?.market?.priceAsset] ?: 0
 
                     return@flatMap nodeDataManager.getCommissionForPair(data?.watchMarket?.market?.amountAsset,
                             data?.watchMarket?.market?.priceAsset)

@@ -14,17 +14,18 @@ enum class Language(
         @DrawableRes var image: Int,
         @StringRes var title: Int,
         var code: String,
-        var iso: String
+        var iso: String,
+        var oldCode: String = code
 ) {
     ENGLISH(R.drawable.ic_flag_18_britain, R.string.choose_language_english, "en", "EN"),
     RUSSIAN(R.drawable.ic_flag_18_rus, R.string.choose_language_russia, "ru", "RU"),
     KOREAN(R.drawable.ic_flag_18_korea, R.string.choose_language_korea, "ko", "KO"),
     CHINESE_SIMPLIFIED(R.drawable.ic_flag_18_china, R.string.choose_language_china, "zh_CN", "ZH"),
     TURKISH(R.drawable.ic_flag_18_turkey, R.string.choose_language_turkey, "tr", "TR"),
-    DUTCH(R.drawable.ic_flag_18_nederland, R.string.choose_language_nederlands, "nl", "NL"),
-    HINDI(R.drawable.ic_flag_18_hindi, R.string.choose_language_hindi, "hi", "HI"),
+    DUTCH(R.drawable.ic_flag_18_nederland, R.string.choose_language_nederlands, "nl_NL", "NL", "nl"),
+    HINDI(R.drawable.ic_flag_18_hindi, R.string.choose_language_hindi, "hi_IN", "HI", "hi"),
     SPANISH(R.drawable.ic_flag_18_spain, R.string.choose_language_spain, "es", "ES"),
-    PORTUGUESE(R.drawable.ic_flag_18_portugal, R.string.choose_language_portuguese, "pt", "PT"),
+    PORTUGUESE(R.drawable.ic_flag_18_portugal, R.string.choose_language_portuguese, "pt_PT", "PT", "pt"),
     BRAZILIAN(R.drawable.ic_flag_18_brazil, R.string.choose_language_brazilian, "pt_BR", "BR"),
     POLISH(R.drawable.ic_flag_18_polszczyzna, R.string.choose_language_polish, "pl", "PL"),
     ITALIAN(R.drawable.ic_flag_18_italiano, R.string.choose_language_italian, "it", "IT"),
@@ -42,7 +43,7 @@ enum class Language(
 
         fun getLanguageItemByCode(code: String): LanguageItem {
             Language.values().forEach {
-                if (it.code == code) {
+                if (it.code == code || it.oldCode == code) {
                     return LanguageItem(it, false)
                 }
             }
@@ -50,7 +51,7 @@ enum class Language(
         }
 
         fun getLanguageByCode(code: String): Language {
-            return Language.values().firstOrNull { it.code == code } ?: Language.ENGLISH
+            return Language.values().firstOrNull { it.code == code || it.oldCode == code } ?: Language.ENGLISH
         }
 
         fun getLocale(code: String): Locale {

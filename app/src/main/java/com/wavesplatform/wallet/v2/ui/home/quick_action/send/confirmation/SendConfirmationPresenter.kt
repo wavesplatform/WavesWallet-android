@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendPresenter
+import com.wavesplatform.wallet.v2.util.parseAlias
 import com.wavesplatform.wallet.v2.util.errorBody
 import com.wavesplatform.wallet.v2.util.find
 import java.math.BigDecimal
@@ -79,7 +80,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             addSubscription(nodeDataManager.transactionsBroadcast(signedTransaction)
                     .compose(RxUtil.applySchedulersToObservable())
                     .subscribe({ tx ->
-                        tx.recipient = tx.recipient.clearAlias()
+                        tx.recipient = tx.recipient.parseAlias()
                         saveLastSentAddress(tx.recipient)
                         viewState.onShowTransactionSuccess(tx)
                     }, {
@@ -176,7 +177,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 }
                 .compose(RxUtil.applySchedulersToObservable())
                 .subscribe({ tx ->
-                    tx.recipient = tx.recipient.clearAlias()
+                    tx.recipient = tx.recipient.parseAlias()
                     saveLastSentAddress(tx.recipient)
                     viewState.onShowTransactionSuccess(tx)
                 }, {
