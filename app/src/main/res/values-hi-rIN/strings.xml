@@ -650,7 +650,7 @@
   <string name="my_orders_details_type_buy">खरीदें: %1$s/%2$s</string>
   <string name="my_orders_details_type_sell">बेचें: %1$s/%2$s</string>
   <string name="my_orders_details_cancel">ओर्डेर रद्द करना</string>
-  <string name="my_orders_details_canceled_status">रद्द (%1$s)</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (रद्द)</string>
   <string name="my_orders_details_amount_hint">रकम</string>
   <string name="my_orders_details_price_hint">मूल्य</string>
   <string name="my_orders_details_total_hint">संपूर्ण</string>

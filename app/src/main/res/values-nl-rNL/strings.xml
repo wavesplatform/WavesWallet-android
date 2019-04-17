@@ -650,7 +650,7 @@
   <string name="my_orders_details_type_buy">Koop: %1$s/%2$s</string>
   <string name="my_orders_details_type_sell">Verkoop: %1$s/%2$s</string>
   <string name="my_orders_details_cancel">Annuleer order</string>
-  <string name="my_orders_details_canceled_status">Geannuleerd (%1$s)</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (Geannuleerd)</string>
   <string name="my_orders_details_amount_hint">Hoeveelheid</string>
   <string name="my_orders_details_price_hint">Prijs</string>
   <string name="my_orders_details_total_hint">Totaal</string>

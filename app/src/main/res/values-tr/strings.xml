@@ -650,7 +650,7 @@
   <string name="my_orders_details_type_buy">Al: %1$s/%2$s</string>
   <string name="my_orders_details_type_sell">Sat: %1$s/%2$s</string>
   <string name="my_orders_details_cancel">Emri iptal et</string>
-  <string name="my_orders_details_canceled_status">İptal edildi (%1$s)</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (İptal edildi)</string>
   <string name="my_orders_details_amount_hint">Miktar</string>
   <string name="my_orders_details_price_hint">Fiyat</string>
   <string name="my_orders_details_total_hint">Toplam</string>
