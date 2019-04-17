@@ -300,7 +300,7 @@
   <string name="history_received">受信</string>
   <string name="history_sent">送信済</string>
   <string name="history_sorting_close">閉じる</string>
-  <string name="history_sorting_display_spam">スパムトランザクションを表示</string>
+  <string name="history_sorting_display_spam">注意が必要なトランザクションを表示</string>
   <string name="history_sorting_filter">フィルター</string>
   <string name="history_sorting_half_year">半年</string>
   <string name="history_sorting_month">月</string>
@@ -316,14 +316,14 @@
   <string name="history_type_incoming_leasing">受信したリース</string>
   <string name="history_type_mass_receive">マストランスファー受信済</string>
   <string name="history_type_mass_send">マストランスファー</string>
-  <string name="history_type_mass_spam_receive">Spam 受信</string>
+  <string name="history_type_mass_spam_receive">不審なアセットを受信</string>
   <string name="history_type_receive">受信済</string>
   <string name="history_type_receive_sponsorship">スポンサーシップの受信</string>
   <string name="history_type_self_transfer">セルフ転送</string>
   <string name="history_type_sent">送信済</string>
   <string name="history_type_set_address_script">スクリプトトランザクションをセット</string>
   <string name="history_type_set_sponsorship">スポンサーシップをセット</string>
-  <string name="history_type_spam_receive">Spam 受信</string>
+  <string name="history_type_spam_receive">不審なアセットを受信</string>
   <string name="history_type_started_leasing">開始されたリース</string>
   <string name="history_type_token_burn">トークンをバーン</string>
   <string name="history_type_token_generation">トークンを発行</string>
@@ -543,7 +543,7 @@
   <string name="send_recipient_asset_is_not_valid">アセットが有効ではありません</string>
   <string name="send_recipient_the_address_is_not_valid">アドレスが不正です</string>
   <string name="send_select_your_asset">アセットを選択</string>
-  <string name="send_spam_error">スパムアセットに送金することは出来ません</string>
+  <string name="send_spam_error">不審なアセットに資金を送金することは出来ません</string>
   <string name="send_success_do_you_want_to_save_this_address">このアドレスを保存しますか？</string>
   <string name="send_success_okay">OK</string>
   <string name="send_success_you_have_sent_sum">%1$s %2$s を送信しました</string>
@@ -598,7 +598,7 @@
   <string name="wallet_assets">アセット</string>
   <string name="wallet_assets_hidden_category">非表示のアセット (%1$s)</string>
   <string name="wallet_assets_my_asset">/ 私のアセット</string>
-  <string name="wallet_assets_spam_category">スパムアセット (%1$s)</string>
+  <string name="wallet_assets_spam_category">不審なアセット (%1$s)</string>
   <string name="wallet_assets_spam_tag">注意</string>
   <string name="wallet_leasing">リース</string>
   <string name="wallet_leasing_active_now">有効なリース (%1$s)</string>
