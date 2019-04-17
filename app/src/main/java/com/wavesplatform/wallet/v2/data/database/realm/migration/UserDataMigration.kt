@@ -1,5 +1,5 @@
 /*
- * Created by Eduard Zaydel on 3/4/2019
+ * Created by Eduard Zaydel on 5/4/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
@@ -11,13 +11,11 @@ import io.realm.RealmMigration
 class UserDataMigration : RealmMigration {
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
-        var oldVersion = oldVersion
-        val schema = realm.schema
-
-        if (oldVersion <= 1L) {
-            // first migration here
-
-            oldVersion++
+        if (oldVersion < 2) {
+            val schema = realm.schema
+            schema.rename("AddressBookUser", "AddressBookUserDb")
+            schema.rename("AssetBalanceStore", "AssetBalanceStoreDb")
+            schema.rename("MarketResponse", "MarketResponseDb")
         }
     }
 }

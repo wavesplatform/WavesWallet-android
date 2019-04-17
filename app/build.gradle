@@ -5,9 +5,12 @@ apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: "io.gitlab.arturbosch.detekt"
 apply plugin: 'realm-android'
 apply plugin: 'io.sentry.android.gradle'
 apply from: 'api-keys.properties'
+apply from: "$rootDir/ktlint.gradle"
+apply from: "$rootDir/detekt.gradle"
 
 def getGitHash = { ->
     def stdout = new ByteArrayOutputStream()
@@ -38,7 +41,7 @@ android {
         targetSdkVersion 28
         minSdkVersion 21
         versionCode 420
-        versionName "2.2.4"
+        versionName "2.3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -219,7 +222,7 @@ kapt {
 
 ext {
     supportVersion = '28.0.0'
-    rxJavaVersion = '2.2.4'
+    rxJavaVersion = '2.2.7'
     rxAndroidVersion = '2.1.0'
     daggerVersion = '2.17'
     retrofitVersion = '2.4.0'
@@ -241,10 +244,10 @@ dependencies {
     implementation "com.android.support:preference-v7:$supportVersion"
     implementation "com.android.support:preference-v14:$supportVersion"
     // Enable crash reporting only for release version
-    implementation "com.google.firebase:firebase-core:16.0.7"
+    implementation "com.google.firebase:firebase-core:16.0.8"
     implementation "com.google.firebase:firebase-database:16.1.0"
-    implementation "com.google.firebase:firebase-messaging:17.4.0"
-    implementation "com.google.firebase:firebase-inappmessaging-display:17.1.0"
+    implementation "com.google.firebase:firebase-messaging:17.6.0"
+    implementation "com.google.firebase:firebase-inappmessaging-display:17.1.1"
     releaseImplementation "com.google.firebase:firebase-crash:16.2.1"
     implementation 'commons-io:commons-io:2.4'
 

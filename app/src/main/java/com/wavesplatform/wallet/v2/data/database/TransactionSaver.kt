@@ -7,13 +7,10 @@ package com.wavesplatform.wallet.v2.data.database
 
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.sdk.net.model.TransactionType
-import com.wavesplatform.sdk.utils.TransactionUtil
-import com.wavesplatform.sdk.utils.notNull
-import com.wavesplatform.sdk.utils.transactionType
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
@@ -22,7 +19,6 @@ import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.db.TransferDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.util.RxEventBus
-import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.TransactionUtil.Companion.getTransactionType
 import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -148,19 +144,9 @@ class TransactionSaver @Inject constructor() {
                                 trans.feeAssetObject = allAssets.firstOrNull { it.id == trans.feeAssetId }
                             }
 
-                            if (!trans.payment.isNullOrEmpty()) {
-                                trans.payment.first()?.let { payment ->
-                                    if (payment.assetId.isNullOrEmpty()) {
-                                        payment.asset = Constants.WAVES_ASSET_INFO
-                                    } else {
-                                        payment.asset = allAssets.firstOrNull { it.id == payment.assetId }
-                                    }
-                                }
-                            }
-
                             when {
-                                trans.recipient.contains("alias") -> {
-                                    val aliasName = trans.recipient.substringAfterLast(":")
+                                trans.recipient.isAlias() -> {
+                                    val aliasName = trans.recipient.parseAlias()
                                     loadAliasAddress(aliasName) { address ->
                                         trans.recipientAddress = address
                                         trans.transactionTypeId = getTransactionType(trans)
@@ -168,30 +154,30 @@ class TransactionSaver @Inject constructor() {
                                     }
 
                                 }
-                                trans.lease?.recipient?.contains("alias") == true -> {
-                                    val aliasName = trans.lease?.recipient?.substringAfterLast(":")
+                                trans.lease?.recipient?.isAlias() == true -> {
+                                    val aliasName = trans.lease?.recipient?.parseAlias()
                                     loadAliasAddress(aliasName) { address ->
                                         trans.lease?.recipientAddress = address
                                         trans.transactionTypeId = getTransactionType(trans)
                                         TransactionDb(trans).save()
                                     }
                                 }
-                                else -> trans.recipientAddress = trans.recipient
+                                else -> {
+                                    trans.recipientAddress = trans.recipient
+                                    trans.lease?.recipientAddress = trans.lease?.recipient
+                                }
                             }
 
-                            trans.transfers.forEach { trans ->
-                                if (trans.recipient.contains("alias")) {
-                                    val aliasName = trans.recipient.substringAfterLast(":")
-                                    aliasName.notNull {
-                                        subscriptions.add(apiDataManager.loadAlias(it)
-                                                .compose(RxUtil.applyObservableDefaultSchedulers())
-                                                .subscribe {
-                                                    trans.recipientAddress = it.address
-                                                    TransferDb(trans).save()
-                                                })
+                            trans.transfers.forEach { transfer ->
+                                when {
+                                    transfer.recipient.isAlias() -> {
+                                        val aliasName = transfer.recipient.parseAlias()
+                                        loadAliasAddress(aliasName) { address ->
+                                            transfer.recipientAddress = address
+                                            TransferDb(transfer).save()
+                                        }
                                     }
-                                } else {
-                                    trans.recipientAddress = trans.recipient
+                                    else -> transfer.recipientAddress = transfer.recipient
                                 }
                             }
 

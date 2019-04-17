@@ -143,11 +143,10 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
     private fun filterNodeCancelLeasing(transactions: List<TransactionDb>): List<TransactionDb> {
         return transactions.filter { transaction ->
-            if (TransactionType.getTypeById(transaction.transactionTypeId)
-                    != TransactionType.CANCELED_LEASING_TYPE) {
+            if (transaction.convertFromDb().transactionType() != TransactionType.CANCELED_LEASING_TYPE) {
                 true
             } else {
-                transaction.lease?.recipientAddress != App.getAccessManager().getWallet().address
+                transaction.lease?.recipientAddress != App.getAccessManager().getWallet()?.address
             }
         }
     }

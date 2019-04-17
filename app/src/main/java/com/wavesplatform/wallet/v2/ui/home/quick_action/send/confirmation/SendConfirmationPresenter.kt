@@ -79,7 +79,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
             addSubscription(nodeDataManager.transactionsBroadcast(signedTransaction)
                     .compose(RxUtil.applySchedulersToObservable())
                     .subscribe({ tx ->
-                        tx.recipient = tx.recipient.clearAlias()
+                        tx.recipient = tx.recipient.parseAlias()
                         saveLastSentAddress(tx.recipient)
                         viewState.onShowTransactionSuccess(tx)
                     }, {
@@ -176,7 +176,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                 }
                 .compose(RxUtil.applySchedulersToObservable())
                 .subscribe({ tx ->
-                    tx.recipient = tx.recipient.clearAlias()
+                    tx.recipient = tx.recipient.parseAlias()
                     saveLastSentAddress(tx.recipient)
                     viewState.onShowTransactionSuccess(tx)
                 }, {

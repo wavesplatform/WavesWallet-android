@@ -226,7 +226,7 @@ open class TransactionResponse(
             } else {
                 " (${transaction.feeAssetId})"
             }
-            return "TransactionResponse ID: ${transaction.id}\n" +
+            return "Transaction ID: ${transaction.id}\n" +
                     type(transaction) +
                     "Date: ${transaction.timestamp.date("MM/dd/yyyy HH:mm")}\n" +
                     "Sender: ${transaction.sender}\n" +
@@ -242,7 +242,7 @@ open class TransactionResponse(
                         if (transaction.type == EXCHANGE) {
                             if (findMyOrder(transaction.order1!!,
                                             transaction.order2!!,
-                                            Wavesplatform.getWallet().address!!)
+                                            Wavesplatform.getWallet().address)
                                             .orderType == Constants.SELL_ORDER_TYPE) {
                                 "-${Constants.SELL_ORDER_TYPE})\n"
                             } else {
@@ -269,7 +269,7 @@ open class TransactionResponse(
             return if (transaction.attachment.isNullOrEmpty()) {
                 ""
             } else {
-                "\nAttachment: ${String(Base58.decode(transaction.attachment!!))}"
+                "\nAttachment: ${String(Base58.decode(transaction.attachment ?: ""))}"
             }
         }
 

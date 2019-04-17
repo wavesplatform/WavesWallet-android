@@ -20,17 +20,17 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# Whispersystems ----------------------------------------------
+# Whispersystems ---------------------------------------------#
 -keep class org.whispersystems.curve25519.** { *; }
-# End Whispersystems
+# End Whispersystems ------------------------------------------
 
-# Spongycastle ------------------------------------------------
+# Spongycastle -----------------------------------------------#
 -keep class org.spongycastle.**
 -dontwarn org.spongycastle.jce.provider.X509LDAPCertStoreSpi
 -dontwarn org.spongycastle.x509.util.LDAPStoreHelper
-# End Spongycastle
+# End Spongycastle --------------------------------------------
 
-# Guava -------------------------------------------------------
+# Guava ------------------------------------------------------#
 -dontwarn javax.lang.model.element.Modifier
 
 # Note: We intentionally don't add the flags we'd need to make Enums work.
@@ -125,13 +125,13 @@
 -keep class com.google.apphosting.api.ApiProxy {
   static *** getCurrentEnvironment (...);
 }
-# End Guava
+# End Guava ---------------------------------------------------
 
-# RxJava 2 & RxAndroid ----------------------------------------
+# RxJava 2 & RxAndroid ---------------------------------------#
 # Nothing requires ProGuard
-# End RxJava 2 & RxAndroid
+# End RxJava 2 & RxAndroid ------------------------------------
 
-# Retrofit ----------------------------------------------------
+# Retrofit ---------------------------------------------------#
 -dontwarn retrofit2.**
 -dontwarn org.codehaus.mojo.**
 -keep class retrofit2.** { *; }
@@ -153,18 +153,21 @@
 
 -dontwarn org.robovm.**
 -keep class org.robovm.** { *; }
+# End Retrofit ------------------------------------------------
 
-# LeakCanary --------------------------------------------------
+# LeakCanary -------------------------------------------------#
 -keep class org.eclipse.mat.** { *; }
 -keep class com.squareup.leakcanary.** { *; }
+# End LeakCanary ----------------------------------------------
 
-# Reactive Network --------------------------------------------
+# Reactive Network -------------------------------------------#
 -dontwarn com.github.pwittchen.reactivenetwork.library.ReactiveNetwork
 -dontwarn io.reactivex.functions.Function
 -dontwarn rx.internal.util.**
 -dontwarn sun.misc.Unsafe
+# End Reactive Network ----------------------------------------
 
-# Gson --------------------------------------------------------
+# Gson -------------------------------------------------------#
 # Gson uses generic type information stored in a class file when working with fields. Proguard
 # removes such information by default, so configure it to keep all of it.
 -keepattributes Signature
@@ -184,29 +187,33 @@
 -keep class * implements com.google.gson.TypeAdapterFactory
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
+# End Gson ----------------------------------------------------
 
-# OkHttp3 -----------------------------------------------------
+# OkHttp3 ----------------------------------------------------#
 -dontwarn okhttp3.**
 -dontwarn okio.**
 -dontwarn javax.annotation.**
 # A resource is loaded with a relative path so the package of this class must be preserved.
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+# End OkHttp3 -------------------------------------------------
 
-# Dagger 2 ----------------------------------------------------
+# Dagger 2 ---------------------------------------------------#
 -dontwarn com.google.errorprone.annotations.**
+# End Dagger 2 ------------------------------------------------
 
-# Retrofitcachelibrx2 (retrofit2 + okhttp3 + rxjava2) ---------
+# Retrofitcachelibrx2 (retrofit2 + okhttp3 + rxjava2) --------#
 -dontwarn ren.yale.android.retrofitcachelibrx2.**
 -keep class ren.yale.android.retrofitcachelibrx2.** { *; }
--keepclasseswithmembernames class  retrofit2.adapter.rxjava2.BodyObservable { *; }
--keepclasseswithmembernames class  retrofit2.adapter.rxjava2.ResultObservable { *; }
--keepclasseswithmembernames class  retrofit2.adapter.rxjava2.CallEnqueueObservable { *; }
--keepclasseswithmembernames class  retrofit2.adapter.rxjava2.CallExecuteObservable { *; }
+-keepclasseswithmembernames class retrofit2.adapter.rxjava2.BodyObservable { *; }
+-keepclasseswithmembernames class retrofit2.adapter.rxjava2.ResultObservable { *; }
+-keepclasseswithmembernames class retrofit2.adapter.rxjava2.CallEnqueueObservable { *; }
+-keepclasseswithmembernames class retrofit2.adapter.rxjava2.CallExecuteObservable { *; }
 -keepclasseswithmembernames class retrofit2.Retrofit { *; }
 -keepclasseswithmembernames class retrofit2.ServiceMethod { *; }
 -keepclasseswithmembernames class retrofit2.OkHttpCall { *; }
+# End Retrofitcachelibrx2 (retrofit2 + okhttp3 + rxjava2) -----
 
-# Apache commons.io -------------------------------------------
+# Apache commons.io ------------------------------------------#
 -dontwarn java.beans.*
 -dontnote org.apache.commons.compress.**
 -dontwarn org.apache.commons.compress.**
@@ -219,3 +226,31 @@
 -dontwarn java.nio.channels.SeekableByteChannel
 -dontwarn java.nio.file.attribute.FileAttribute
 -dontwarn java.io.File
+# End Apache commons.io ---------------------------------------
+
+# Common recommendations -------------------------------------#
+# Enums
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+# Keep all serializable objects
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+
+# To prevent cases of reflection causing issues
+-keepattributes *Annotation*, InnerClasses
+# End Common recommendations -----------------------------------
+
+# Waves Net Models & Interfeces ------------------------------#
+-keep class com.wavesplatform.sdk.** { *; }
+# End Waves Net Models & Interfeces ---------------------------
+
+-ignorewarnings
