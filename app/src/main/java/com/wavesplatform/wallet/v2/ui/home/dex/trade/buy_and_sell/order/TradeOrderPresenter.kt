@@ -9,15 +9,13 @@ import com.arellomobile.mvp.InjectViewState
 import com.wavesplatform.sdk.net.model.OrderType
 import com.wavesplatform.sdk.net.model.request.OrderRequest
 import com.wavesplatform.sdk.net.model.response.*
-import com.wavesplatform.sdk.utils.EnvironmentManager
-import com.wavesplatform.sdk.utils.clearBalance
-import com.wavesplatform.sdk.utils.isWaves
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
 import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
-import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.util.errorBody
 import java.math.RoundingMode
 import javax.inject.Inject
@@ -46,11 +44,14 @@ class TradeOrderPresenter @Inject constructor() : BasePresenter<TradeOrderView>(
 
     var fee = 0L
 
-    fun initBalances(){
-        currentAmountBalance = queryFirst<AssetBalance> { equalTo("assetId",
-                data?.watchMarket?.market?.amountAsset?.withWavesIdConvert()) }?.getAvailableBalance() ?: 0L
-        currentPriceBalance = queryFirst<AssetBalance> { equalTo("assetId",
-                data?.watchMarket?.market?.priceAsset?.withWavesIdConvert()) }?.getAvailableBalance() ?: 0L
+    fun initBalances() {
+        val amountAssetDb = queryFirst<AssetBalanceDb> { equalTo("assetId",
+                data?.watchMarket?.market?.amountAsset?.withWavesIdConvert()) }
+        currentAmountBalance = amountAssetDb?.convertFromDb()?.getAvailableBalance() ?: 0L
+
+        val priceAssetDb = queryFirst<AssetBalanceDb> { equalTo("assetId",
+                data?.watchMarket?.market?.priceAsset?.withWavesIdConvert()) }
+        currentPriceBalance = priceAssetDb?.convertFromDb()?.getAvailableBalance() ?: 0L
     }
 
     fun isAllFieldsValid(): Boolean {

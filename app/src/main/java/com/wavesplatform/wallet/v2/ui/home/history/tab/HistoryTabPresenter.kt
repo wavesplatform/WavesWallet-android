@@ -15,6 +15,7 @@ import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.sdk.net.model.TransactionType
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.utils.isWavesId
+import com.wavesplatform.sdk.utils.transactionType
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.database.TransactionSaver
@@ -142,7 +143,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
 
     private fun filterNodeCancelLeasing(transactions: List<TransactionDb>): List<TransactionDb> {
         return transactions.filter { transaction ->
-            if (TransactionResponse.transactionType() != TransactionType.CANCELED_LEASING_TYPE) {
+            if (transaction.convertFromDb().transactionType() != TransactionType.CANCELED_LEASING_TYPE) {
                 true
             } else {
                 transaction.lease?.recipientAddress != App.getAccessManager().getWallet()?.address
@@ -158,12 +159,12 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
             transitions
         }
     }
-    // todo check transactionType
+
     private fun filterDetailed(transactions: List<TransactionResponse>, assetId: String): List<TransactionResponse> {
         return transactions.filter { transaction ->
             (assetId.isWavesId() && transaction.assetId.isNullOrEmpty() && !transaction.isSponsorshipTransaction()) ||
                     AssetDetailsContentPresenter.isAssetIdInExchange(transaction, assetId) ||
-                    transaction.assetId == assetId && TransactionResponse.transactionType() != TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
+                    transaction.assetId == assetId && transaction.transactionType() != TransactionType.RECEIVE_SPONSORSHIP_TYPE ||
                     (transaction.feeAssetId == assetId && transaction.isSponsorshipTransaction())
         }
     }

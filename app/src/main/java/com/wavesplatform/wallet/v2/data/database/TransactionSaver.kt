@@ -7,13 +7,10 @@ package com.wavesplatform.wallet.v2.data.database
 
 import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.sdk.net.model.TransactionType
-import com.wavesplatform.sdk.utils.TransactionUtil
-import com.wavesplatform.sdk.utils.notNull
-import com.wavesplatform.sdk.utils.transactionType
+import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
@@ -22,10 +19,7 @@ import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.db.TransferDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.util.RxEventBus
-import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.TransactionUtil.Companion.getTransactionType
-import com.wavesplatform.wallet.v2.util.isAlias
-import com.wavesplatform.wallet.v2.util.parseAlias
 import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
 import pyxis.uzuki.live.richutilskt.utils.runOnUiThread
@@ -254,7 +248,7 @@ class TransactionSaver @Inject constructor() {
         }
     }
 
-    private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfo>, callback: (ArrayList<AssetInfo>) -> Unit) {
+    private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfoResponse>, callback: (ArrayList<AssetInfoResponse>) -> Unit) {
         runAsync {
             queryAllAsync<SpamAssetDb> { spams ->
                 val spamMap = spams.associateBy { it.assetId }

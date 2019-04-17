@@ -616,14 +616,6 @@ fun AssetBalanceResponse.getItemType(): Int {
     }
 }
 
-fun isShowTicker(assetId: String?): Boolean {
-    return assetId.isNullOrEmpty() || EnvironmentManager.globalConfiguration.generalAssets
-            .plus(EnvironmentManager.globalConfiguration.assets)
-            .any {
-                it.assetId == assetId
-            }
-}
-
 fun restartApp() {
     val intent = Intent(App.getAppContext(), com.wavesplatform.wallet.v2.ui.splash.SplashActivity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)

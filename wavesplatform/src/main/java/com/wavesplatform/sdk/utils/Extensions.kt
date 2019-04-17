@@ -15,9 +15,17 @@ fun String.isWaves(): Boolean {
     return this.toLowerCase() == Constants.WAVES_ASSET_INFO.name.toLowerCase()
 }
 
-fun getWavesDexFee(fee: Long): BigDecimal {
-    return MoneyUtil.getScaledText(fee, Constants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal()
+fun String.withWavesIdConvert(): String {
+    if (this.isWaves()) {
+        return ""
+    }
+    return this
+}
 
+fun getWavesDexFee(fee: Long): BigDecimal {
+    return MoneyUtil.getScaledText(fee, Constants.WAVES_ASSET_INFO.precision)
+            .clearBalance()
+            .toBigDecimal()
 }
 
 fun String.isWavesId(): Boolean {
@@ -125,7 +133,9 @@ fun randomString(): String {
 }
 
 fun isShowTicker(assetId: String?): Boolean {
-    return EnvironmentManager.globalConfiguration.generalAssets.any {
-        it.assetId == assetId || assetId.isNullOrEmpty()
-    }
+    return assetId.isNullOrEmpty() || EnvironmentManager.globalConfiguration.generalAssets
+            .plus(EnvironmentManager.globalConfiguration.assets)
+            .any {
+                it.assetId == assetId
+            }
 }

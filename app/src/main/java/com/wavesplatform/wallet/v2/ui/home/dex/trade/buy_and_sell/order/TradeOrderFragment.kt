@@ -17,7 +17,6 @@ import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CounterHandler
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.OrderListener

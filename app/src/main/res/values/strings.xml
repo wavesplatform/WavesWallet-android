@@ -654,4 +654,7 @@
   <string name="my_orders_details_amount_hint">Amount</string>
   <string name="my_orders_details_price_hint">Price</string>
   <string name="my_orders_details_total_hint">Total</string>
+
+  <string name="history_details_script_invocation_payment">Payment</string>
+  <string name="history_details_script_invocation_script_address">Script address</string>
 </resources>
