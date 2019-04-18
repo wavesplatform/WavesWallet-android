@@ -3,7 +3,7 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.search_asset
+package com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset
 
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
@@ -21,12 +21,13 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_search_asset.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
-import org.w3c.dom.Text
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SearchAssetActivity : BaseActivity(), SearchAssetView {
@@ -66,19 +67,23 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
         adapter.emptyView = emptyView
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
-            val item = this.adapter.getItem(position) as AssetBalance
-            launchActivity<AssetDetailsActivity>(AssetsFragment.REQUEST_ASSET_DETAILS) {
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType)
-                if (item.isHidden) {
-                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position - 1)
-                } else {
-                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position)
+            if (this.adapter.getItem(position) is AssetBalance) {
+                val item = this.adapter.getItem(position) as AssetBalance
+                launchActivity<AssetDetailsActivity>(AssetsFragment.REQUEST_ASSET_DETAILS) {
+                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType)
+                    if (item.isHidden) {
+                        putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION,
+                                position - HIDDEN_HEADER_SIZE)
+                    } else {
+                        putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position)
+                    }
+                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_SEARCH, search_view.text.toString())
                 }
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_SEARCH, search_view.text.toString())
             }
         }
 
         eventSubscriptions.add(RxTextView.textChanges(search_view)
+                .debounce(300, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .subscribe { search ->
                     if (TextUtils.isEmpty(search)) {
                         clear_button.gone()
@@ -96,5 +101,9 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
 
     override fun setSearchResult(list: List<MultiItemEntity>) {
         adapter.setNewData(list)
+    }
+
+    companion object {
+        private const val HIDDEN_HEADER_SIZE = 1
     }
 }

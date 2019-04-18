@@ -3,7 +3,7 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.ui.search_asset
+package com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset
 
 import android.support.v7.widget.CardView
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
@@ -33,12 +33,6 @@ class SearchAssetAdapter  @Inject constructor() :
 
         when (helper.itemViewType) {
             AssetsAdapter.TYPE_ASSET, AssetsAdapter.TYPE_HIDDEN_ASSET -> {
-                if (helper.adapterPosition == 0) {
-                    helper.getView<CardView>(R.id.card_asset).setMargins(top = dp2px(16))
-                } else {
-                    helper.getView<CardView>(R.id.card_asset).setMargins(top = dp2px(2))
-                }
-
                 val assetBalance = multiItemEntity as AssetBalance
                 helper.setText(R.id.text_asset_name, assetBalance.getName())
                         .setText(R.id.text_asset_value, getScaledAmount(

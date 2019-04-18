@@ -27,16 +27,30 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
     var isShow = true
     var scrollRange: Float = -1f
     var allTransaction: List<Transaction> = emptyList()
+    private var findAssetList = listOf<AssetBalance>()
+
 
     fun loadSearchAssets(query: String) {
-        val find = findAssetBalanceInDb(query)
+        if (findAssetList.isEmpty()) {
+            findAssetList = queryAll()
+        }
+        val find = findAssetBalanceInDb(query, findAssetList)
         val result = mutableListOf<AssetBalance>()
         val hiddenAssets = mutableListOf<AssetBalance>()
+
         find.forEach {
-            if (it.isHidden) {
-                hiddenAssets.add(it)
-            } else {
+            if (it.isFavorite) {
                 result.add(it)
+            }
+        }
+
+        find.forEach {
+            if (!it.isFavorite) {
+                if (it.isHidden) {
+                    hiddenAssets.add(it)
+                } else {
+                    result.add(it)
+                }
             }
         }
         result.addAll(hiddenAssets)

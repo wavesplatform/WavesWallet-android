@@ -48,7 +48,6 @@ import android.widget.TextView
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Shorts
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
-import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -729,13 +728,12 @@ fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): Strin
     return localizedContext.resources.getString(id)
 }
 
-fun findAssetBalanceInDb(query: String?): List<AssetBalance> {
+fun findAssetBalanceInDb(query: String?, list: List<AssetBalance>): List<AssetBalance> {
     return if (TextUtils.isEmpty(query)) {
-        queryAll<AssetBalance>().filter { !it.isSpam }
+        list.filter { !it.isSpam }
     } else {
         val queryLower = query!!.toLowerCase()
-        queryAll<AssetBalance>()
-                .filter { !it.isSpam }
+        list.filter { !it.isSpam }
                 .filter {
                     it.assetId.toLowerCase().contains(queryLower)
                             || it.getName().toLowerCase().contains(queryLower)
