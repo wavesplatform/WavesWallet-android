@@ -10,6 +10,7 @@ import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -21,6 +22,7 @@ import android.os.Parcelable
 import android.provider.Settings
 import android.support.annotation.ColorRes
 import android.support.annotation.IdRes
+import android.support.annotation.NonNull
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -145,16 +147,19 @@ fun EditText.onAction(action: Int, runAction: () -> Unit) {
     }
 }
 
-fun <T1: Any, T2: Any, R: Any> safeLet(p1: T1?, p2: T2?, block: (T1, T2)->R?): R? {
+fun <T1 : Any, T2 : Any, R : Any> safeLet(p1: T1?, p2: T2?, block: (T1, T2) -> R?): R? {
     return if (p1 != null && p2 != null) block(p1, p2) else null
 }
-fun <T1: Any, T2: Any, T3: Any, R: Any> safeLet(p1: T1?, p2: T2?, p3: T3?, block: (T1, T2, T3)->R?): R? {
+
+fun <T1 : Any, T2 : Any, T3 : Any, R : Any> safeLet(p1: T1?, p2: T2?, p3: T3?, block: (T1, T2, T3) -> R?): R? {
     return if (p1 != null && p2 != null && p3 != null) block(p1, p2, p3) else null
 }
-fun <T1: Any, T2: Any, T3: Any, T4: Any, R: Any> safeLet(p1: T1?, p2: T2?, p3: T3?, p4: T4?, block: (T1, T2, T3, T4)->R?): R? {
+
+fun <T1 : Any, T2 : Any, T3 : Any, T4 : Any, R : Any> safeLet(p1: T1?, p2: T2?, p3: T3?, p4: T4?, block: (T1, T2, T3, T4) -> R?): R? {
     return if (p1 != null && p2 != null && p3 != null && p4 != null) block(p1, p2, p3, p4) else null
 }
-fun <T1: Any, T2: Any, T3: Any, T4: Any, T5: Any, R: Any> safeLet(p1: T1?, p2: T2?, p3: T3?, p4: T4?, p5: T5?, block: (T1, T2, T3, T4, T5)->R?): R? {
+
+fun <T1 : Any, T2 : Any, T3 : Any, T4 : Any, T5 : Any, R : Any> safeLet(p1: T1?, p2: T2?, p3: T3?, p4: T4?, p5: T5?, block: (T1, T2, T3, T4, T5) -> R?): R? {
     return if (p1 != null && p2 != null && p3 != null && p4 != null && p5 != null) block(p1, p2, p3, p4, p5) else null
 }
 
@@ -720,4 +725,11 @@ fun isShowTicker(assetId: String?): Boolean {
     return EnvironmentManager.globalConfiguration.generalAssets.any {
         it.assetId == assetId || assetId.isNullOrEmpty()
     }
+}
+
+fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): String {
+    val configuration = Configuration(resources.configuration)
+    configuration.setLocale(desiredLocale)
+    val localizedContext = createConfigurationContext(configuration)
+    return localizedContext.resources.getString(id)
 }

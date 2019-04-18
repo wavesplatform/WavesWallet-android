@@ -18,7 +18,7 @@
         android:clipToPadding="false"
         android:overScrollMode="never"
         android:alpha="0"
-        android:paddingBottom="64dp" />
+        android:paddingBottom="88dp" />
 
     <FrameLayout
         android:id="@+id/frame_button_continue"
