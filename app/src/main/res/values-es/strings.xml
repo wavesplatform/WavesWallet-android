@@ -375,8 +375,8 @@
   <string name="network_save">Guardar</string>
   <string name="network_set_default">Establecer como predeterminado</string>
   <string name="network_spam_filter">Filtro sospechoso</string>
-  <string name="network_spam_url_validation_bad_url">Url incorrecto</string>
-  <string name="network_spam_url_validation_url_empty">Se requiere url</string>
+  <string name="network_spam_url_validation_bad_url">URL incorrecto</string>
+  <string name="network_spam_url_validation_url_empty">Se requiere URL</string>
   <string name="network_switch_off_spam_filtering">Filtrado sospechoso</string>
   <string name="network_toolbar_title">Red</string>
   <string name="new_account_account_name_hint">Nombre de la cuenta</string>
@@ -654,8 +654,6 @@
   <string name="my_orders_details_amount_hint">Cantidad</string>
   <string name="my_orders_details_price_hint">Precio</string>
   <string name="my_orders_details_total_hint">Total</string>
-  <string name="RENAME.clean.title">¡No más lío!</string>
-  <string name="RENAME.clean.text">Hemos rediseñado la pantalla de activos para permitirle mantener su billetera limpia y ordenada. ¡Puedes personalizar su lista de activos como quiera!</string>
   <string name="search_asset_hint">Buscar</string>
   <string name="search_asset_cancel">Anular</string>
   <string name="search_asset_empty">No tiene activos</string>
