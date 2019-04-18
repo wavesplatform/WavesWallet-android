@@ -636,6 +636,12 @@ fun findMyOrder(first: Order, second: Order, address: String?): Order {
     }
 }
 
+fun AssetBalance.getMaxDigitsBeforeZero(): Int {
+    return MoneyUtil.getScaledText(this.quantity ?: 0, this.getDecimals())
+            .replace(",", "")
+            .split(".")[0].length
+}
+
 fun loadDbWavesBalance(): AssetBalance {
     return queryFirst<AssetBalance> { equalTo("assetId", Constants.WAVES_ASSET_ID_EMPTY) }
             ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
