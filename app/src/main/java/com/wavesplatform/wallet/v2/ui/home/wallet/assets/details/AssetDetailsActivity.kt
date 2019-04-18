@@ -110,7 +110,13 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
 
         assetDetailsContentPageAdapter = AssetDetailsContentPageAdapter(
                 supportFragmentManager, emptyList())
-        presenter.loadAssets(intent.getIntExtra(BUNDLE_ASSET_TYPE, 0))
+
+        if (intent.hasExtra(BUNDLE_ASSET_SEARCH)) {
+            val search = intent.getStringExtra(BUNDLE_ASSET_SEARCH)
+            presenter.loadSearchAssets(search)
+        } else {
+            presenter.loadAssets(intent.getIntExtra(BUNDLE_ASSET_TYPE, 0))
+        }
     }
 
     private fun configureTitleForAssets(position: Int) {
@@ -233,5 +239,6 @@ class AssetDetailsActivity : BaseActivity(), AssetDetailsView {
     companion object {
         var BUNDLE_ASSET_POSITION = "position"
         var BUNDLE_ASSET_TYPE = "type"
+        var BUNDLE_ASSET_SEARCH = "search"
     }
 }

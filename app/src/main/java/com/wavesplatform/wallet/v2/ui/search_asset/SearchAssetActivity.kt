@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsAct
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_search_asset.*
 import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import org.w3c.dom.Text
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -68,7 +69,12 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
             val item = this.adapter.getItem(position) as AssetBalance
             launchActivity<AssetDetailsActivity>(AssetsFragment.REQUEST_ASSET_DETAILS) {
                 putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType)
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position)
+                if (item.isHidden) {
+                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position - 1)
+                } else {
+                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, position)
+                }
+                putExtra(AssetDetailsActivity.BUNDLE_ASSET_SEARCH, search_view.text.toString())
             }
         }
 
