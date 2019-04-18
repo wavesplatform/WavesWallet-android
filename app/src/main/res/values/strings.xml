@@ -659,6 +659,10 @@
     <string name="enter_seed_manually_validation_seed_is_simple_title">Your Seed phrase is too simple</string>
     <string name="enter_seed_manually_validation_seed_is_simple_description">This is not secure. You should avoid using a Seed phrase that might be easy for someone else to guess. Are you sure you want to continue?</string>
 
+    <string name="need_update_alert_title">It\'s time to update your app!</string>
+    <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
+
+
     <string name="history_details_script_invocation_payment">Payment</string>
     <string name="history_details_script_invocation_script_address">Script address</string>
 </resources>
