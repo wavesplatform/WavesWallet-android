@@ -12,7 +12,6 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
-import com.wavesplatform.wallet.v2.data.model.local.OrderType
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.custom.CounterHandler
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.OrderListener
@@ -74,9 +73,18 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         presenter.loadPairBalancesAndCommission()
         presenter.loadWavesBalance()
 
-        edit_amount.applyFilterStartWithDot()
-        edit_limit_price.applyFilterStartWithDot()
-        edit_total_price.applyFilterStartWithDot()
+        val amountAssetDecimalInputFilter =DecimalDigitsInputFilter(
+                Integer.MAX_VALUE,
+                presenter.data?.watchMarket?.market?.amountAssetDecimals ?: 8,
+                Double.MAX_VALUE)
+        val priceAssetDecimalInputFilter = DecimalDigitsInputFilter(
+                Integer.MAX_VALUE,
+                presenter.data?.watchMarket?.market?.priceAssetDecimals ?: 8,
+                Double.MAX_VALUE)
+
+        edit_amount.filters = arrayOf(filterStartWithDot, amountAssetDecimalInputFilter)
+        edit_limit_price.filters = arrayOf(filterStartWithDot, priceAssetDecimalInputFilter)
+        edit_total_price.filters = arrayOf(filterStartWithDot, priceAssetDecimalInputFilter)
 
         CounterHandler.Builder()
                 .valueView(edit_amount)

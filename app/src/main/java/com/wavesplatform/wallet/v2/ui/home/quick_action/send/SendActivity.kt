@@ -114,8 +114,6 @@ class SendActivity : BaseActivity(), SendView {
             else -> assetEnable(true)
         }
 
-        edit_amount.applyFilterStartWithDot()
-
         edit_amount.addTextChangedListener {
             on { s, _, _, _ ->
                 if (s.isNotEmpty()) {
@@ -629,6 +627,12 @@ class SendActivity : BaseActivity(), SendView {
             presenter.loadCommission(presenter.selectedAsset?.assetId)
 
             text_asset.gone()
+
+            edit_amount.setText("")
+            edit_amount.filters = arrayOf(filterStartWithDot, DecimalDigitsInputFilter(
+                    asset.getMaxDigitsBeforeZero(),
+                    asset.getDecimals(),
+                    Double.MAX_VALUE))
         }
     }
 
