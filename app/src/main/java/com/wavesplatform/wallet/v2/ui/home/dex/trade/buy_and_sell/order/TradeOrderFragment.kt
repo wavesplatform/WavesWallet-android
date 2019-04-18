@@ -73,20 +73,18 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         presenter.loadPairBalancesAndCommission()
         presenter.loadWavesBalance()
 
-        edit_amount.filters = arrayOf(filterStartWithDot, DecimalDigitsInputFilter(
+        val amountAssetDecimalInputFilter =DecimalDigitsInputFilter(
                 Integer.MAX_VALUE,
                 presenter.data?.watchMarket?.market?.amountAssetDecimals ?: 8,
-                Double.MAX_VALUE))
-
-        edit_limit_price.filters = arrayOf(filterStartWithDot, DecimalDigitsInputFilter(
+                Double.MAX_VALUE)
+        val priceAssetDecimalInputFilter = DecimalDigitsInputFilter(
                 Integer.MAX_VALUE,
                 presenter.data?.watchMarket?.market?.priceAssetDecimals ?: 8,
-                Double.MAX_VALUE))
+                Double.MAX_VALUE)
 
-        edit_total_price.filters = arrayOf(filterStartWithDot, DecimalDigitsInputFilter(
-                Integer.MAX_VALUE,
-                presenter.data?.watchMarket?.market?.priceAssetDecimals ?: 8,
-                Double.MAX_VALUE))
+        edit_amount.filters = arrayOf(filterStartWithDot, amountAssetDecimalInputFilter)
+        edit_limit_price.filters = arrayOf(filterStartWithDot, priceAssetDecimalInputFilter)
+        edit_total_price.filters = arrayOf(filterStartWithDot, priceAssetDecimalInputFilter)
 
         CounterHandler.Builder()
                 .valueView(edit_amount)
