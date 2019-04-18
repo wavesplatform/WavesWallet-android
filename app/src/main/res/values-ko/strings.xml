@@ -187,10 +187,10 @@
   <string name="confirmaton_cancel_leasing_button_txt">Leasing 취소</string>
   <string name="confirmaton_cancel_leasing_fee_hint">수수료</string>
   <string name="confirmaton_cancel_leasing_tx_hint">Leasing TX</string>
-  <string name="create_passcode_create_new_title">신규 passcode 생성</string>
-  <string name="create_passcode_create_title">Passcode 생성</string>
-  <string name="create_passcode_validation_already_use_error">이미 사용하고 있는 Passcode 입니다</string>
-  <string name="create_passcode_verify_title">Passcode를 인증하세요</string>
+  <string name="create_passcode_create_new_title">신규 패스코드 생성</string>
+  <string name="create_passcode_create_title">패스코드 생성</string>
+  <string name="create_passcode_validation_already_use_error">이미 사용하고 있는 패스코드 입니다</string>
+  <string name="create_passcode_verify_title">패스코드를 인증하세요</string>
   <string name="create_pin_failed">PIN 생성 실패. 다시 시도하세요</string>
   <string name="dex_empty_button_text">마켓 추가</string>
   <string name="dex_empty_subtitle">빠르고 안전하게 거래하세요. 탈중앙화 거래소에서 거래하면 귀하의 자금을 완전히 통제할 수 있습니다.</string>
@@ -232,8 +232,8 @@
   <string name="edit_address_name">이름</string>
   <string name="edit_address_toolbar_title">편집</string>
   <string name="enter_passcode_error_wrong_password">잘못된 비밀번호</string>
-  <string name="enter_passcode_forgot_passcode">Passcode를 잊어버렸나요?</string>
-  <string name="enter_passcode_title">Passcode 입력</string>
+  <string name="enter_passcode_forgot_passcode">패스코드를 잊어버렸나요?</string>
+  <string name="enter_passcode_title">패스코드 입력</string>
   <string name="enter_passcode_too_many_attempts_dialog_description">잠금을 해제하려면 계정 비밀번호로 로그인하세요</string>
   <string name="enter_passcode_too_many_attempts_dialog_negative_btn_txt">취소</string>
   <string name="enter_passcode_too_many_attempts_dialog_positive_btn_txt">비밀번호 입력</string>
@@ -415,7 +415,7 @@
   <string name="profile_general_addresses_and_keys">주소, 키</string>
   <string name="profile_general_addresses_book">주소록</string>
   <string name="profile_general_backup_phrase">백업 구절</string>
-  <string name="profile_general_change_passcode">Passcode 변경</string>
+  <string name="profile_general_change_passcode">패스코드 변경</string>
   <string name="profile_general_change_password">비밀번호 변경</string>
   <string name="profile_general_current_height">현재 height</string>
   <string name="profile_general_current_version">Version</string>
@@ -654,8 +654,6 @@
   <string name="my_orders_details_amount_hint">수량</string>
   <string name="my_orders_details_price_hint">가격</string>
   <string name="my_orders_details_total_hint">총</string>
-  <string name="RENAME.clean.title">깨끗하게 유지하세요!</string>
-  <string name="RENAME.clean.text">우리는 귀하의 지갑을 깨끗하고 깔끔하게 유지할 수 있도록 자산의 디스플레이를 재설계하였습니다. 자산 목록은 사용자가 원하는 데로 직접 편집할 수 있습니다.</string>
   <string name="search_asset_hint">검색</string>
   <string name="search_asset_cancel">취소</string>
   <string name="search_asset_empty">귀하는 그런 자산을 보유하고 있지 않습니다</string>

@@ -375,8 +375,8 @@
   <string name="network_save">Simpan</string>
   <string name="network_set_default">Set standar</string>
   <string name="network_spam_filter">Filter Aset Mencurigakan</string>
-  <string name="network_spam_url_validation_bad_url">Url buruk</string>
-  <string name="network_spam_url_validation_url_empty">Url wajib diisi</string>
+  <string name="network_spam_url_validation_bad_url">URL buruk</string>
+  <string name="network_spam_url_validation_url_empty">URL wajib diisi</string>
   <string name="network_switch_off_spam_filtering">Pemfilteran Aset Mencurigakan</string>
   <string name="network_toolbar_title">Jaringan</string>
   <string name="new_account_account_name_hint">Nama akun</string>
@@ -654,8 +654,6 @@
   <string name="my_orders_details_amount_hint">Jumlah</string>
   <string name="my_orders_details_price_hint">Harga</string>
   <string name="my_orders_details_total_hint">Total</string>
-  <string name="RENAME.clean.title">Tidak ada lagi kekacauan!</string>
-  <string name="RENAME.clean.text">Kami telah mendesain ulang tampilan aset untuk memungkinkan Anda menjaga dompet Anda bersih dan rapi. Anda dapat menyesuaikan daftar aset Anda sesuka Anda!</string>
   <string name="search_asset_hint">Pencarian</string>
   <string name="search_asset_cancel">Batalkan</string>
   <string name="search_asset_empty">Anda tidak memiliki aset seperti itu</string>

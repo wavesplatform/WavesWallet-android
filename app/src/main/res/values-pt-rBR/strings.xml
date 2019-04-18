@@ -375,8 +375,8 @@
   <string name="network_save">Salvar</string>
   <string name="network_set_default">Configuração padrão</string>
   <string name="network_spam_filter">Filtro de spam</string>
-  <string name="network_spam_url_validation_bad_url">Url inválido</string>
-  <string name="network_spam_url_validation_url_empty">O url é obrigatório</string>
+  <string name="network_spam_url_validation_bad_url">URL inválido</string>
+  <string name="network_spam_url_validation_url_empty">O URL é obrigatório</string>
   <string name="network_switch_off_spam_filtering">Filtragem de spam</string>
   <string name="network_toolbar_title">Rede</string>
   <string name="new_account_account_name_hint">Nome da conta</string>
@@ -654,8 +654,6 @@
   <string name="my_orders_details_amount_hint">Quantidade</string>
   <string name="my_orders_details_price_hint">Preço</string>
   <string name="my_orders_details_total_hint">Total</string>
-  <string name="RENAME.clean.title">Acabou a bagunça!</string>
-  <string name="RENAME.clean.text">Nós redesenhamos a exibição dos ativos para permitir que você mantenha a sua carteira limpa e organizada. Você pode personalizar sua lista de ativos da forma que quiser!</string>
   <string name="search_asset_hint">Procurar</string>
   <string name="search_asset_cancel">Cancelar</string>
   <string name="search_asset_empty">Você não tem esses ativos</string>

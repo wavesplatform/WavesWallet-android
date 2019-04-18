@@ -375,8 +375,8 @@
   <string name="network_save">Save</string>
   <string name="network_set_default">Set default</string>
   <string name="network_spam_filter">Spam filter</string>
-  <string name="network_spam_url_validation_bad_url">Bad url</string>
-  <string name="network_spam_url_validation_url_empty">Url is required</string>
+  <string name="network_spam_url_validation_bad_url">Bad URL</string>
+  <string name="network_spam_url_validation_url_empty">URL is required</string>
   <string name="network_switch_off_spam_filtering">Spam filtering</string>
   <string name="network_toolbar_title">Network</string>
   <string name="new_account_account_name_hint">Account name</string>
@@ -479,7 +479,7 @@
   <string name="receive_fiat_choose_dialog_ok">Ok</string>
   <string name="receive_fiat_choose_dialog_title">Choose Currency</string>
   <string name="receive_fiat_choose_dialog_usd">USD</string>
-  <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can\’t refund them. You will lose that money.</string>
+  <string name="receive_gateway_info_gateway_warning_eth_subtitle">Check if you wallet or exchange users smart-contracts to withdraw ETH. We do not accept such transactions and can’t refund them. You will lose that money.</string>
   <string name="receive_gateway_info_gateway_warning_eth_title">Please do not deposit ETH form smart contracts! Do not deposit ERC20 tokens! Only Ethereum is allowed.</string>
   <string name="receive_get_verified">Get verified</string>
   <string name="receive_invoice">Invoice</string>
@@ -654,8 +654,6 @@
   <string name="my_orders_details_amount_hint">Amount</string>
   <string name="my_orders_details_price_hint">Price</string>
   <string name="my_orders_details_total_hint">Total</string>
-  <string name="RENAME.clean.title">No more mess!</string>
-  <string name="RENAME.clean.text">We have redesigned the display of assets to allow you to keep your wallet clean and tidy. You can customise your asset list however you want!</string>
   <string name="search_asset_hint">Search</string>
   <string name="search_asset_cancel">Cancel</string>
   <string name="search_asset_empty">You do not have such assets</string>
