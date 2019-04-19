@@ -85,6 +85,15 @@ class SendActivity : BaseActivity(), SendView {
         checkRecipient(edit_address.text.toString())
 
         setupCommissionBlock()
+        
+        eventSubscriptions.add(RxTextView.textChanges(edit_address)
+                .skipInitialValue()
+                .map(CharSequence::toString)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    checkRecipient(it)
+                })
 
         when {
             intent.hasExtra(KEY_INTENT_ASSET_DETAILS) -> {
@@ -109,17 +118,6 @@ class SendActivity : BaseActivity(), SendView {
             }
             else -> assetEnable(true)
         }
-
-        eventSubscriptions.add(RxTextView.textChanges(edit_address)
-                .skipInitialValue()
-                .map(CharSequence::toString)
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    checkRecipient(it)
-                })
-
-        edit_amount.applyFilterStartWithDot()
 
         edit_amount.addTextChangedListener {
             on { s, _, _, _ ->
@@ -634,6 +632,12 @@ class SendActivity : BaseActivity(), SendView {
             presenter.loadCommission(presenter.selectedAsset?.assetId)
 
             text_asset.gone()
+
+            edit_amount.setText("")
+            edit_amount.filters = arrayOf(filterStartWithDot, DecimalDigitsInputFilter(
+                    asset.getMaxDigitsBeforeZero(),
+                    asset.getDecimals(),
+                    Double.MAX_VALUE))
         }
     }
 

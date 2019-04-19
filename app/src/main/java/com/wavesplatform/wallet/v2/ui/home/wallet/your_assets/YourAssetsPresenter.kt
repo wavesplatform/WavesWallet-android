@@ -68,7 +68,7 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
         }
     }
 
-    fun loadCryptoAssets(greaterZeroBalance: Boolean) {
+    fun loadCryptoAssets(greaterZeroBalance: Boolean, useWaves: Boolean = true) {
         this.greaterZeroBalance = greaterZeroBalance
         runAsync {
             val singleData: Single<List<AssetBalance>> = if (this.greaterZeroBalance) {
@@ -88,13 +88,22 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
                     }
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
+                    .subscribe({ cryptoAssets ->
                         val assets = mutableListOf<AssetBalance>()
-                        assets.addAll(it)
+                        if (useWaves) {
+                            assets.addAll(cryptoAssets)
+                        } else {
+                            assets.addAll(cryptoAssets.filter {
+                                it.assetId != Constants.WAVES_ASSET_ID_EMPTY
+                            })
+                        }
                         runOnUiThread {
                             viewState.showAssets(assets)
                         }
                     }, {
+                        runOnUiThread {
+                            viewState.showAssets(mutableListOf())
+                        }
                     }))
         }
     }
