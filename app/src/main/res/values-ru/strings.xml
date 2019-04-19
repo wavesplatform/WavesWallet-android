@@ -654,8 +654,6 @@
   <string name="my_orders_details_amount_hint">Количество</string>
   <string name="my_orders_details_price_hint">Цена</string>
   <string name="my_orders_details_total_hint">Всего</string>
-  <string name="RENAME.clean.title">Теперь ничего лишнего!</string>
-  <string name="RENAME.clean.text">Мы переработали экран сортировки ассетов и привели в порядок ваш кошелек. Вы можете настроить список ассетов так, как захотите!</string>
   <string name="search_asset_hint">Поиск</string>
   <string name="search_asset_cancel">Отмена</string>
   <string name="search_asset_empty">У вас нет таких ассетов</string>

@@ -654,8 +654,6 @@
   <string name="my_orders_details_amount_hint">Miktar</string>
   <string name="my_orders_details_price_hint">Fiyat</string>
   <string name="my_orders_details_total_hint">Toplam</string>
-  <string name="RENAME.clean.title">Daha fazla karışıklık yok!</string>
-  <string name="RENAME.clean.text">Cüzdanınızı temiz ve düzenli tutmanız için kripto paralarınızın gösterimini yeniden tasarladık! Kripto paralarınızı istediğiniz gibi özelleştirebilirsiniz.</string>
   <string name="search_asset_hint">Ara</string>
   <string name="search_asset_cancel">İptal</string>
   <string name="search_asset_empty">Böyle bir varlığınız bulunmamaktadır</string>
