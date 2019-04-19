@@ -120,11 +120,7 @@ class EnvironmentManager {
             instance!!.configurationDisposable = githubDataManager.globalConfiguration(environment.url)
                     .map { globalConfiguration ->
                         setConfiguration(globalConfiguration)
-                        val list = mutableListOf<String>()
-                        for (asset in globalConfiguration.generalAssets) {
-                            list.add(asset.assetId)
-                        }
-                        list
+                        globalConfiguration.generalAssets.map { it.assetId }
                     }
                     .flatMap { githubDataManager.apiService.assetsInfoByIds(it) }
                     .map { info ->
@@ -140,15 +136,19 @@ class EnvironmentManager {
                                     isFavorite = assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED,
                                     issueTransaction = IssueTransaction(
                                             id = assetInfo.assetInfo.id,
+                                            assetId = assetInfo.assetInfo.id,
                                             name = findAssetIdByAssetId(
                                                     assetInfo.assetInfo.id)?.displayName
                                                     ?: assetInfo.assetInfo.name,
                                             decimals = assetInfo.assetInfo.precision,
                                             quantity = assetInfo.assetInfo.quantity,
+                                            description = assetInfo.assetInfo.description,
+                                            sender = assetInfo.assetInfo.sender,
                                             timestamp = assetInfo.assetInfo.timestamp.time),
                                     isGateway = findAssetIdByAssetId(
-                                            assetInfo.assetInfo.id)?.isGateway
-                                            ?: false)
+                                            assetInfo.assetInfo.id)?.isGateway ?: false,
+                                    isFiatMoney = findAssetIdByAssetId(
+                                            assetInfo.assetInfo.id)?.isFiat ?: false)
                             defaultAssets.add(assetBalance)
                         }
                     }

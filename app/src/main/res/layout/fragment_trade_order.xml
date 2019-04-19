@@ -61,6 +61,7 @@
                 android:layout_marginLeft="-5dp"
                 android:hint="0"
                 android:inputType="numberDecimal"
+                android:paddingEnd="80dp"
                 android:paddingBottom="20dp"
                 android:singleLine="true"
                 android:textColorHint="@color/basic500"
@@ -128,10 +129,10 @@
         <HorizontalScrollView
             android:id="@+id/horizontal_amount_suggestion"
             android:layout_width="match_parent"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:layout_height="wrap_content"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/linear_percent_values"
@@ -139,73 +140,73 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_use_total_balance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="4dp"
-                android:background="@drawable/basic100_rounded"
-                android:lineSpacingExtra="4sp"
-                android:paddingBottom="8dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="8dp"
-                android:tag="100"
-                android:text="@string/common_100_percent"
-                android:textColor="@color/basic500"
-                android:textSize="12sp" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_use_total_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/basic100_rounded"
+                    android:lineSpacingExtra="4sp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="8dp"
+                    android:tag="100"
+                    android:text="@string/common_100_percent"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_leasing_0_100"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:background="@drawable/basic100_rounded"
-                android:lineSpacingExtra="4sp"
-                android:paddingBottom="8dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="8dp"
-                android:tag="50"
-                android:text="@string/common_50_percent"
-                android:textColor="@color/basic500"
-                android:textSize="12sp" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_leasing_0_100"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/basic100_rounded"
+                    android:lineSpacingExtra="4sp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="8dp"
+                    android:tag="50"
+                    android:text="@string/common_50_percent"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_50_percent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:background="@drawable/basic100_rounded"
-                android:lineSpacingExtra="4sp"
-                android:paddingBottom="8dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="8dp"
-                android:tag="10"
-                android:text="@string/common_10_percent"
-                android:textColor="@color/basic500"
-                android:textSize="12sp" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_50_percent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/basic100_rounded"
+                    android:lineSpacingExtra="4sp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="8dp"
+                    android:tag="10"
+                    android:text="@string/common_10_percent"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_leasing_0_500000"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:background="@drawable/basic100_rounded"
-                android:lineSpacingExtra="4sp"
-                android:paddingBottom="8dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="8dp"
-                android:tag="5"
-                android:text="@string/common_5_percent"
-                android:textColor="@color/basic500"
-                android:textSize="12sp" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_leasing_0_500000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/basic100_rounded"
+                    android:lineSpacingExtra="4sp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="8dp"
+                    android:tag="5"
+                    android:text="@string/common_5_percent"
+                    android:textColor="@color/basic500"
+                    android:textSize="12sp" />
 
             </LinearLayout>
         </HorizontalScrollView>
@@ -254,6 +255,7 @@
                 android:layout_marginLeft="-5dp"
                 android:hint="0"
                 android:inputType="numberDecimal"
+                android:paddingEnd="80dp"
                 android:paddingBottom="20dp"
                 android:singleLine="true"
                 android:textColorHint="@color/basic500"
@@ -399,6 +401,7 @@
                 android:layout_marginLeft="-5dp"
                 android:hint="0"
                 android:inputType="numberDecimal"
+                android:paddingEnd="80dp"
                 android:paddingBottom="20dp"
                 android:singleLine="true"
                 android:textColorHint="@color/basic500"
@@ -439,10 +442,10 @@
         <HorizontalScrollView
             android:id="@+id/horizontal_total_suggestion"
             android:layout_width="match_parent"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:layout_height="wrap_content"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/linear_total_percent_values"
@@ -457,10 +460,10 @@
                     android:layout_marginRight="4dp"
                     android:background="@drawable/basic100_rounded"
                     android:lineSpacingExtra="4sp"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:paddingTop="8dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="8dp"
                     android:tag="100"
                     android:text="@string/common_100_percent"
                     android:textColor="@color/basic500"
@@ -473,10 +476,10 @@
                     android:layout_marginRight="4dp"
                     android:background="@drawable/basic100_rounded"
                     android:lineSpacingExtra="4sp"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:paddingTop="8dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="8dp"
                     android:tag="50"
                     android:text="@string/common_50_percent"
                     android:textColor="@color/basic500"
@@ -489,10 +492,10 @@
                     android:layout_marginRight="4dp"
                     android:background="@drawable/basic100_rounded"
                     android:lineSpacingExtra="4sp"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:paddingTop="8dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="8dp"
                     android:tag="10"
                     android:text="@string/common_10_percent"
                     android:textColor="@color/basic500"
@@ -505,10 +508,10 @@
                     android:layout_marginRight="4dp"
                     android:background="@drawable/basic100_rounded"
                     android:lineSpacingExtra="4sp"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:paddingTop="8dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="8dp"
                     android:tag="5"
                     android:text="@string/common_5_percent"
                     android:textColor="@color/basic500"
@@ -547,10 +550,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
+                        android:textColor="@color/disabled900"
                         android:visibility="invisible"
                         tools:text="0.003 Waves"
-                        android:textColor="@color/disabled900"
-                        tools:visibility="visible"/>
+                        tools:visibility="visible" />
 
                     <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
                         android:id="@+id/progress_bar_fee_transaction"
@@ -559,11 +562,9 @@
                         android:layout_gravity="center_horizontal"
                         android:visibility="gone"
                         app:progress_image="@drawable/ic_loader_24_submit_400"
-                        app:progress_text_visibility="false"/>
+                        app:progress_text_visibility="false" />
 
                 </FrameLayout>
-
-
 
 
             </LinearLayout>
