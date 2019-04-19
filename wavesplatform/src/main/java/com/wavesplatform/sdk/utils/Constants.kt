@@ -15,6 +15,8 @@ class Constants {
         const val URL_COINOMAT = "https://coinomat.com/api/"
         const val URL_WAVES_EXPLORER = "http://wavesexplorer.com/tx/%s"
         const val URL_WAVES_STAGE_EXPLORER = "http://stage.wavesexplorer.com/tx/%s"
+        const val URL_VERSION = "https://github-proxy.wvservices.com/" +
+                "wavesplatform/waves-client-config/master/version_android.json"
 
         const val VERSION: Int = 2
         const val WAVES_ASSET_ID_EMPTY = ""

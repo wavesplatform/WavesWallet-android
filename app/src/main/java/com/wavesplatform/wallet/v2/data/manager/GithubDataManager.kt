@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.data.manager
 
+import com.wavesplatform.sdk.net.model.LastAppVersionResponse
 import com.wavesplatform.sdk.net.model.response.GlobalConfigurationResponse
 import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommissionResponse
 import com.wavesplatform.sdk.net.model.response.NewsResponse
@@ -49,7 +50,7 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
         return githubService.globalCommission()
     }
 
-    fun loadLastAppVersion(): Observable<LastAppVersion> {
+    fun loadLastAppVersion(): Observable<LastAppVersionResponse> {
         return githubService.loadLastAppVersion()
     }
 }

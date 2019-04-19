@@ -51,7 +51,9 @@ import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.net.model.response.ErrorResponse
 import com.wavesplatform.sdk.net.model.TransactionType
+import com.wavesplatform.sdk.net.model.response.OrderResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -64,6 +66,7 @@ import pers.victor.ext.Ext.ctx
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.io.File
+import java.util.*
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     if (dest.isNullOrEmpty() && source.startsWith(".")) {
@@ -560,35 +563,10 @@ fun findByGatewayId(gatewayId: String): AssetBalanceResponse? { // ticker
     return null
 }
 
-fun findMyOrder(first: Order, second: Order, address: String?): Order {
-    return if (first.sender == second.sender) {
-        if (first.timestamp > second.timestamp) {
-            first
-        } else {
-            second
-        }
-    } else if (first.sender == address) {
-        first
-    } else if (second.sender == address) {
-        second
-    } else {
-        if (first.timestamp > second.timestamp) {
-            first
-        } else {
-            second
-        }
-    }
-}
-
-fun AssetBalance.getMaxDigitsBeforeZero(): Int {
+fun AssetBalanceResponse.getMaxDigitsBeforeZero(): Int {
     return MoneyUtil.getScaledText(this.quantity ?: 0, this.getDecimals())
             .replace(",", "")
             .split(".")[0].length
-}
-
-fun loadDbWavesBalance(): AssetBalance {
-    return queryFirst<AssetBalance> { equalTo("assetId", Constants.WAVES_ASSET_ID_EMPTY) }
-            ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
 }
 
 fun getDeviceId(): String {

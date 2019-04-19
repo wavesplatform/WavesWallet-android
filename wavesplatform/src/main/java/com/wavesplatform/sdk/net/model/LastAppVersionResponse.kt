@@ -3,11 +3,11 @@
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
-package com.wavesplatform.wallet.v2.data.model.remote.response
+package com.wavesplatform.sdk.net.model
 
 import com.google.gson.annotations.SerializedName
 
-data class LastAppVersion(
+data class LastAppVersionResponse(
         @SerializedName("last_version")
         var lastVersion: String
 )
