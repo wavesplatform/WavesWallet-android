@@ -30,6 +30,7 @@ class EnvironmentManager {
     private var application: Application? = null
     private var configurationDisposable: Disposable? = null
     private var timeDisposable: Disposable? = null
+    private var versionDisposable: Disposable? = null
     private var interceptor: HostSelectionInterceptor? = null
 
     class Environment internal constructor(val name: String, val url: String, jsonFileName: String) {
@@ -180,6 +181,16 @@ class EnvironmentManager {
                         instance!!.timeDisposable!!.dispose()
                     }, { error ->
                         Log.e("EnvironmentManager", "Can't download time correction!")
+                        error.printStackTrace()
+                        instance!!.timeDisposable!!.dispose()
+                    })
+
+            instance!!.versionDisposable = githubDataManager.loadLastAppVersion()
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe({ version ->
+                        githubDataManager.preferencesHelper.lastAppVersion = version.lastVersion
+                        instance!!.versionDisposable!!.dispose()
+                    }, { error ->
                         error.printStackTrace()
                         instance!!.timeDisposable!!.dispose()
                     })

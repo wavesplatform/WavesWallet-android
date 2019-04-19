@@ -48,4 +48,8 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
     fun getGlobalCommission(): Observable<GlobalTransactionCommissionResponse> {
         return githubService.globalCommission()
     }
+
+    fun loadLastAppVersion(): Observable<LastAppVersion> {
+        return githubService.loadLastAppVersion()
+    }
 }

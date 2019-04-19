@@ -363,7 +363,7 @@
   <string name="my_orders_price">Цена</string>
   <string name="my_orders_side_price">Тип/Цена</string>
   <string name="my_orders_status">Статус</string>
-  <string name="my_orders_status_canceled">Отменен</string>
+  <string name="my_orders_status_canceled">Отменён</string>
   <string name="my_orders_status_filled">Заполнено</string>
   <string name="my_orders_status_open">Открыт</string>
   <string name="my_orders_status_partial_filled">Частично</string>
@@ -650,7 +650,7 @@
   <string name="my_orders_details_type_buy">Покупка: %1$s/%2$s</string>
   <string name="my_orders_details_type_sell">Продажа: %1$s/%2$s</string>
   <string name="my_orders_details_cancel">Отменить ордер</string>
-  <string name="my_orders_details_canceled_status">Отменен (%1$s)</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (Отменён)</string>
   <string name="my_orders_details_amount_hint">Количество</string>
   <string name="my_orders_details_price_hint">Цена</string>
   <string name="my_orders_details_total_hint">Всего</string>

@@ -12,12 +12,13 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.ViewUtils
-import com.wavesplatform.sdk.net.model.LanguageItem
+import com.wavesplatform.sdk.net.model.LanguageItem // todo check Language
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.language.LanguageAdapter
 import com.wavesplatform.wallet.v2.ui.language.LanguagePresenter
 import com.wavesplatform.wallet.v2.ui.language.LanguageView
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
+import com.wavesplatform.wallet.v2.util.getLocalizedString
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.sdk.utils.notNull
 import kotlinx.android.synthetic.main.activity_choose_language.*
@@ -73,6 +74,8 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
                 item.checked = true
                 adapter.setData(position, item)
             }
+
+            setLocalizedTextToButton(item)
         }
 
         button_continue.click {
@@ -83,6 +86,10 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
             exitAnimation()
         }
         enterAnimation()
+    }
+
+    private fun setLocalizedTextToButton(item: LanguageItem) {
+        button_continue.text = getLocalizedString(R.string.choose_language_confirm, Language.getLocale(item.language.code))
     }
 
     private fun enterAnimation() {

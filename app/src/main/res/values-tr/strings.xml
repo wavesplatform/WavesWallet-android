@@ -647,11 +647,11 @@
   <string name="dex_smart_pair_dialog_do_not_show_again">Tekrar gösterme</string>
   <string name="enter_seed_manually_validation_seed_is_simple_title">Anahtar kelimeler 15 kelimeden oluşmaktadır ve her kelimenin arasında bir boşluk vardır</string>
   <string name="enter_seed_manually_validation_seed_is_simple_description">Girdiğiniz Anahtar Kelimeler çok kısa. Anahtar kelimeleri cüzdan adresi ile karıştırmadığınızdan emin olun. Anahtar kelimeler yerine cüzdan adresini kullanmak kayıplara neden olabilir.</string>
-  <string name="my_orders_details_type_buy">Buy: %1$s/%2$s</string>
-  <string name="my_orders_details_type_sell">Sell: %1$s/%2$s</string>
-  <string name="my_orders_details_cancel">Cancel order</string>
-  <string name="my_orders_details_canceled_status">Canceled (%1$s)</string>
-  <string name="my_orders_details_amount_hint">Amount</string>
+  <string name="my_orders_details_type_buy">Al: %1$s/%2$s</string>
+  <string name="my_orders_details_type_sell">Sat: %1$s/%2$s</string>
+  <string name="my_orders_details_cancel">Emri iptal et</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (İptal edildi)</string>
+  <string name="my_orders_details_amount_hint">Miktar</string>
   <string name="my_orders_details_price_hint">Fiyat</string>
   <string name="my_orders_details_total_hint">Toplam</string>
 </resources>

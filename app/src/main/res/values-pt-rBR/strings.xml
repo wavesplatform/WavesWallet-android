@@ -375,8 +375,8 @@
   <string name="network_save">Salvar</string>
   <string name="network_set_default">Configuração padrão</string>
   <string name="network_spam_filter">Filtro de spam</string>
-  <string name="network_spam_url_validation_bad_url">Url inválido</string>
-  <string name="network_spam_url_validation_url_empty">O url é obrigatório</string>
+  <string name="network_spam_url_validation_bad_url">URL inválido</string>
+  <string name="network_spam_url_validation_url_empty">O URL é obrigatório</string>
   <string name="network_switch_off_spam_filtering">Filtragem de spam</string>
   <string name="network_toolbar_title">Rede</string>
   <string name="new_account_account_name_hint">Nome da conta</string>
@@ -647,11 +647,20 @@
   <string name="dex_smart_pair_dialog_do_not_show_again">Não mostrar novamente</string>
   <string name="enter_seed_manually_validation_seed_is_simple_title">A SEED deve consistir de 15 palavras com espaços entre elas</string>
   <string name="enter_seed_manually_validation_seed_is_simple_description">A SEED que você digitou é muito curta. Certifique-se de não confundir a SEED com um endereço de carteira. Usar uma SEED como um endereço pode resultar na perda de fundos.</string>
-  <string name="my_orders_details_type_buy">Buy: %1$s/%2$s</string>
-  <string name="my_orders_details_type_sell">Sell: %1$s/%2$s</string>
-  <string name="my_orders_details_cancel">Cancel order</string>
-  <string name="my_orders_details_canceled_status">Canceled (%1$s)</string>
-  <string name="my_orders_details_amount_hint">Amount</string>
-  <string name="my_orders_details_price_hint">Price</string>
+  <string name="my_orders_details_type_buy">Comprar: %1$s/%2$s</string>
+  <string name="my_orders_details_type_sell">Vender: %1$s/%2$s</string>
+  <string name="my_orders_details_cancel">Cancelar ordem</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (Canceladas)</string>
+  <string name="my_orders_details_amount_hint">Quantidade</string>
+  <string name="my_orders_details_price_hint">Preço</string>
   <string name="my_orders_details_total_hint">Total</string>
+  <string name="search_asset_hint">Procurar</string>
+  <string name="search_asset_cancel">Cancelar</string>
+  <string name="search_asset_empty">Você não tem esses ativos</string>
+  <string name="history_type_script_invocation">Script utilizado</string>
+  <string name="history_details_script_invocation_payment">Pagamento</string>
+  <string name="history_details_script_invocation_script_address">Endereço do Script</string>
+  <string name="need_update_alert_title">Está na hora de atualizar seu aplicativo!</string>
+  <string name="need_update_alert_description">Estamos aperfeiçoando constantemente a Waves Wallet. Por favor, atualize o seu aplicativo para obter acesso a novos recursos.</string>
+  <string name="search_asset_hidden_title">Ativos ocultos</string>
 </resources>

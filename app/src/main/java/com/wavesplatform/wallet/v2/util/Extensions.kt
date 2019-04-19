@@ -9,6 +9,7 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -20,6 +21,7 @@ import android.os.Parcelable
 import android.provider.Settings
 import android.support.annotation.ColorRes
 import android.support.annotation.IdRes
+import android.support.annotation.NonNull
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -558,6 +560,37 @@ fun findByGatewayId(gatewayId: String): AssetBalanceResponse? { // ticker
     return null
 }
 
+fun findMyOrder(first: Order, second: Order, address: String?): Order {
+    return if (first.sender == second.sender) {
+        if (first.timestamp > second.timestamp) {
+            first
+        } else {
+            second
+        }
+    } else if (first.sender == address) {
+        first
+    } else if (second.sender == address) {
+        second
+    } else {
+        if (first.timestamp > second.timestamp) {
+            first
+        } else {
+            second
+        }
+    }
+}
+
+fun AssetBalance.getMaxDigitsBeforeZero(): Int {
+    return MoneyUtil.getScaledText(this.quantity ?: 0, this.getDecimals())
+            .replace(",", "")
+            .split(".")[0].length
+}
+
+fun loadDbWavesBalance(): AssetBalance {
+    return queryFirst<AssetBalance> { equalTo("assetId", Constants.WAVES_ASSET_ID_EMPTY) }
+            ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
+}
+
 fun getDeviceId(): String {
     return "android:${Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID)}"
 }
@@ -620,4 +653,11 @@ fun restartApp() {
     val intent = Intent(App.getAppContext(), com.wavesplatform.wallet.v2.ui.splash.SplashActivity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
     App.getAppContext().startActivity(intent)
+}
+
+fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): String {
+    val configuration = Configuration(resources.configuration)
+    configuration.setLocale(desiredLocale)
+    val localizedContext = createConfigurationContext(configuration)
+    return localizedContext.resources.getString(id)
 }

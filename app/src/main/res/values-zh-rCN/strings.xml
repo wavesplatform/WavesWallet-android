@@ -375,8 +375,8 @@
   <string name="network_save">保存</string>
   <string name="network_set_default">默认设置</string>
   <string name="network_spam_filter">垃圾邮件过滤器</string>
-  <string name="network_spam_url_validation_bad_url">无效网址</string>
-  <string name="network_spam_url_validation_url_empty">需要网址</string>
+  <string name="network_spam_url_validation_bad_url">错误的网址</string>
+  <string name="network_spam_url_validation_url_empty">网址是必需的</string>
   <string name="network_switch_off_spam_filtering">垃圾邮件过滤</string>
   <string name="network_toolbar_title">网络</string>
   <string name="new_account_account_name_hint">用户名</string>
@@ -479,7 +479,7 @@
   <string name="receive_fiat_choose_dialog_ok">OK</string>
   <string name="receive_fiat_choose_dialog_title">选择货币</string>
   <string name="receive_fiat_choose_dialog_usd">美元</string>
-  <string name="receive_gateway_info_gateway_warning_eth_subtitle">检查您的钱包或交易所是否为收回ETH使用智能合约。我们不接受这种交易，也不能退款。您将会失去这笔钱。</string>
+  <string name="receive_gateway_info_gateway_warning_eth_subtitle">检查您是否通过钱包或交换用户智能合约来撤销ETH。我们不接受此类交易，也不能退款。你会失去那笔钱。</string>
   <string name="receive_gateway_info_gateway_warning_eth_title">请不要从智能合约中交存ETH！别交存ERC20代币！您只能交存以太坊Ethereum。</string>
   <string name="receive_get_verified">获得证实</string>
   <string name="receive_invoice">发票</string>
@@ -647,11 +647,20 @@
   <string name="dex_smart_pair_dialog_do_not_show_again">不再显示</string>
   <string name="enter_seed_manually_validation_seed_is_simple_title">备份语必须由15个单词组成，每个单词之间有空格</string>
   <string name="enter_seed_manually_validation_seed_is_simple_description">您输入的备份语太短。确保您不要将短语与钱包地址混淆。使用地址作为备份语可能导致资金损失。</string>
-  <string name="my_orders_details_type_buy">Buy: %1$s/%2$s</string>
-  <string name="my_orders_details_type_sell">Sell: %1$s/%2$s</string>
-  <string name="my_orders_details_cancel">Cancel order</string>
-  <string name="my_orders_details_canceled_status">Canceled (%1$s)</string>
-  <string name="my_orders_details_amount_hint">Amount</string>
-  <string name="my_orders_details_price_hint">Price</string>
-  <string name="my_orders_details_total_hint">Total</string>
+  <string name="my_orders_details_type_buy">购买：%1$s/%2$s</string>
+  <string name="my_orders_details_type_sell">卖：%1$s/%2$s</string>
+  <string name="my_orders_details_cancel">取消订单</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (已取消)</string>
+  <string name="my_orders_details_amount_hint">总量</string>
+  <string name="my_orders_details_price_hint">价格</string>
+  <string name="my_orders_details_total_hint">总额</string>
+  <string name="search_asset_hint">搜索</string>
+  <string name="search_asset_cancel">取消</string>
+  <string name="search_asset_empty">你没有这样的资产</string>
+  <string name="history_type_script_invocation">脚本调用</string>
+  <string name="history_details_script_invocation_payment">付款</string>
+  <string name="history_details_script_invocation_script_address">脚本地址</string>
+  <string name="need_update_alert_title">是时候更新你的应用程式了！</string>
+  <string name="need_update_alert_description">我们一直致力于使Waves Wallet变得更好，更实用。请更新您的应用以获取对新功能的访问权限。</string>
+  <string name="search_asset_hidden_title">隐藏资产</string>
 </resources>

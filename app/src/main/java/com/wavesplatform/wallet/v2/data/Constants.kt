@@ -10,6 +10,8 @@ import com.wavesplatform.wallet.R
 object Constants {
 
     // Production
+    const val URL_VERSION = "https://github-proxy.wvservices.com/" +
+            "wavesplatform/waves-client-config/master/version_android.json"
     const val URL_COINOMAT = "https://coinomat.com/api/"
     const val URL_WAVES_FORUM = "https://forum.wavesplatform.com/"
     const val URL_TERMS = "https://wavesplatform.com/files/docs/Privacy%20Policy_SW.pdf"
