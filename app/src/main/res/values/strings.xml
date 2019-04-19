@@ -664,6 +664,10 @@
     <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
     <string name="search_asset_hidden_title">Hidden assets</string>
 
+    <string name="need_update_alert_title">It\'s time to update your app!</string>
+    <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
+
+
     <string name="history_details_script_invocation_payment">Payment</string>
     <string name="history_details_script_invocation_script_address">Script address</string>
 </resources>

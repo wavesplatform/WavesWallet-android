@@ -10,6 +10,7 @@ import android.app.ActivityManager
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -21,6 +22,7 @@ import android.os.Parcelable
 import android.provider.Settings
 import android.support.annotation.ColorRes
 import android.support.annotation.IdRes
+import android.support.annotation.NonNull
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -738,4 +740,11 @@ fun isShowTicker(assetId: String?): Boolean {
             .any {
                 it.assetId == assetId
             }
+}
+
+fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): String {
+    val configuration = Configuration(resources.configuration)
+    configuration.setLocale(desiredLocale)
+    val localizedContext = createConfigurationContext(configuration)
+    return localizedContext.resources.getString(id)
 }
