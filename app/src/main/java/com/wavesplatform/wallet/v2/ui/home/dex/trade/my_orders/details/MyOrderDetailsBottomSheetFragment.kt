@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.layout_my_orders_bottom_sheet_bottom_btns.
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyOrderTransaction>() {
 
@@ -43,10 +44,32 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
         val view = inflater?.inflate(R.layout.history_details_layout, null, false)
 
         view?.let {
-            view.image_transaction_type.setImageDrawable(TransactionType.EXCHANGE_TYPE.icon())
-            view.text_transaction_name.text = getString(TransactionType.EXCHANGE_TYPE.title)
+            view.text_transaction_name?.text = getString(R.string.history_details_status)
 
-            setExchangeItem(data, view)
+            // fill status field
+            val percent = (data.orderResponse.filled.toFloat() / data.orderResponse.amount.toFloat()) * 100
+            view.text_transaction_value?.setBackgroundResource(0)
+            when (data.orderResponse.getStatus()) {
+                OrderStatus.Filled -> {
+                    // force string, bcz percent with commission
+                    view.text_transaction_value?.text = FILLED_ORDER_PERCENT
+                }
+                OrderStatus.Cancelled -> {
+                    // with template "{percent}% (Cancelled)"
+                    view.text_transaction_value?.text = getString(R.string.my_orders_details_canceled_status, percent
+                            .roundToInt()
+                            .toString())
+                }
+                else -> {
+                    // with template "{percent}%"
+                    view.text_transaction_value?.text = percent
+                            .roundToInt()
+                            .toString()
+                            .plus("%")
+                }
+            }
+
+            view.image_transaction_type.setImageDrawable(TransactionType.EXCHANGE_TYPE.icon())
 
             view.text_transaction_value.makeTextHalfBold()
         }
@@ -78,7 +101,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
                 tickerView.visiable()
             }
         } else {
-            valueView.text = valueView.text.toString().plus(" ${assetInfo?.name}}")
+            valueView.text = valueView.text.toString().plus(" ${assetInfo?.name}")
         }
     }
 
@@ -89,6 +112,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
             view.setPaddingTop(15.dp)
             // hide unused fields
             view.relative_block.gone()
+            view.relative_status.gone()
             view.relative_confirmations.gone()
 
             // fill fee field
@@ -97,31 +121,6 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
 
             // fill time field
             view.text_timestamp?.text = data.orderResponse.timestamp.date("dd.MM.yyyy HH:mm")
-
-            // fill status field
-            val percent = (data.orderResponse.filled.toFloat() / data.orderResponse.amount.toFloat()) * 100
-            view.text_status?.setBackgroundResource(0)
-            view.text_status?.setTextColor(data.orderResponse.getType().color)
-            when (data.orderResponse.getStatus()) {
-                OrderStatus.Filled -> {
-                    // force string, bcz percent with commission
-                    view.text_status?.text = FILLED_ORDER_PERCENT
-                }
-                OrderStatus.Cancelled -> {
-                    // with template "Cancelled ({percent}%)"
-                    view.text_status?.text = getString(R.string.my_orders_details_canceled_status, percent
-                            .roundTo(2)
-                            .toString()
-                            .plus("%"))
-                }
-                else -> {
-                    // with template "{percent}%"
-                    view.text_status?.text = percent
-                            .roundTo(2)
-                            .toString()
-                            .plus("%")
-                }
-            }
         }
 
         return view
@@ -167,47 +166,6 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
                     showProgressBar(false)
                     it.printStackTrace()
                 }))
-    }
-
-    private fun setExchangeItem(data: MyOrderTransaction, view: View) {
-        val directionStringResId: Int
-        val directionSign: String
-        val notScaledValue = if (data.orderResponse.getStatus() == OrderStatus.Filled) {
-            data.orderResponse.amount
-        } else {
-            data.orderResponse.filled
-        }
-        val amountValue = getScaledAmount(notScaledValue,
-                data.amountAssetInfo?.precision ?: 8)
-
-        if (data.orderResponse.type == Constants.SELL_ORDER_TYPE) {
-            directionStringResId = R.string.my_orders_details_type_sell
-            directionSign = "-"
-        } else {
-            directionStringResId = R.string.my_orders_details_type_buy
-            directionSign = "+"
-        }
-
-        view.text_transaction_name.text = getString(
-                directionStringResId,
-                data.amountAssetInfo?.name,
-                data.priceAssetInfo?.name)
-
-        val amountAssetTicker = if (data.amountAssetInfo?.name == Constants.WAVES_ASSET_ID_FILLED) {
-            Constants.WAVES_ASSET_ID_FILLED
-        } else {
-            data.amountAssetInfo?.ticker
-        }
-
-        val assetName = if (amountAssetTicker.isNullOrEmpty()) {
-            " ${data.amountAssetInfo?.name}"
-        } else {
-            view.text_tag.visiable()
-            view.text_tag.text = amountAssetTicker
-            ""
-        }
-
-        view.text_transaction_value.text = directionSign + amountValue + assetName
     }
 
     interface CancelOrderListener {

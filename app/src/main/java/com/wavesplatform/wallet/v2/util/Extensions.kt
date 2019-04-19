@@ -127,6 +127,13 @@ fun String.isWaves(): Boolean {
     return this.toLowerCase() == Constants.wavesAssetInfo.name.toLowerCase()
 }
 
+fun String.withWavesIdConvert(): String {
+    if (this.isWaves()) {
+        return ""
+    }
+    return this
+}
+
 fun getWavesDexFee(fee: Long): BigDecimal {
     return MoneyUtil.getScaledText(fee, Constants.wavesAssetInfo.precision).clearBalance().toBigDecimal()
 }
@@ -632,6 +639,12 @@ fun findMyOrder(first: Order, second: Order, address: String?): Order {
     }
 }
 
+fun AssetBalance.getMaxDigitsBeforeZero(): Int {
+    return MoneyUtil.getScaledText(this.quantity ?: 0, this.getDecimals())
+            .replace(",", "")
+            .split(".")[0].length
+}
+
 fun loadDbWavesBalance(): AssetBalance {
     return queryFirst<AssetBalance> { equalTo("assetId", Constants.WAVES_ASSET_ID_EMPTY) }
             ?: Constants.find(Constants.WAVES_ASSET_ID_EMPTY)!!
@@ -722,9 +735,11 @@ fun isSpam(assetId: String?): Boolean {
 }
 
 fun isShowTicker(assetId: String?): Boolean {
-    return EnvironmentManager.globalConfiguration.generalAssets.any {
-        it.assetId == assetId || assetId.isNullOrEmpty()
-    }
+    return assetId.isNullOrEmpty() || EnvironmentManager.globalConfiguration.generalAssets
+            .plus(EnvironmentManager.globalConfiguration.assets)
+            .any {
+                it.assetId == assetId
+            }
 }
 
 fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): String {
