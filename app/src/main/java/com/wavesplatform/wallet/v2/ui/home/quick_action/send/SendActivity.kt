@@ -14,7 +14,6 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.vicpin.krealmextensions.delete
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
@@ -81,7 +80,7 @@ class SendActivity : BaseActivity(), SendView {
         checkRecipient(edit_address.text.toString())
 
         setupCommissionBlock()
-        
+
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
                 .skipInitialValue()
                 .map(CharSequence::toString)
@@ -577,9 +576,11 @@ class SendActivity : BaseActivity(), SendView {
                     }
                     if (parameter.contains("amount=")) {
                         val amount = parameter.replace("amount=", "").stripZeros()
-                        if (amount.toDouble() > 0) {
-                            edit_amount.setText(amount )
-                            amountEnable(false)
+                        edit_amount.setText(amount)
+                        amountEnable(false)
+                        if (amount.toDouble() <
+                                MoneyUtil.getScaledText(1, assetBalance).toDouble()) {
+                            showError(R.string.invalid_amount, R.id.root)
                         }
                     }
                 }
