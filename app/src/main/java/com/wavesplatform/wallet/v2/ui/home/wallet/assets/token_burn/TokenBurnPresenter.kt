@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil

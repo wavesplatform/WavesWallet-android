@@ -21,7 +21,6 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActi
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_trade_order.*
-import kotlinx.android.synthetic.main.transient_notification.*
 import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import java.math.BigDecimal
@@ -59,6 +58,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         arguments.notNull {
             presenter.data = it.getParcelable<BuySellData>(TradeBuyAndSellBottomSheetFragment.BUNDLE_DATA)
             presenter.orderType = it.getInt(TradeBuyAndSellBottomSheetFragment.BUNDLE_ORDER_TYPE)
+            presenter.initBalances()
         }
 
         if (presenter.orderType == TradeBuyAndSellBottomSheetFragment.SELL_TYPE) {
@@ -73,9 +73,18 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         presenter.loadPairBalancesAndCommission()
         presenter.loadWavesBalance()
 
-        edit_amount.applyFilterStartWithDot()
-        edit_limit_price.applyFilterStartWithDot()
-        edit_total_price.applyFilterStartWithDot()
+        val amountAssetDecimalInputFilter =DecimalDigitsInputFilter(
+                Integer.MAX_VALUE,
+                presenter.data?.watchMarket?.market?.amountAssetDecimals ?: 8,
+                Double.MAX_VALUE)
+        val priceAssetDecimalInputFilter = DecimalDigitsInputFilter(
+                Integer.MAX_VALUE,
+                presenter.data?.watchMarket?.market?.priceAssetDecimals ?: 8,
+                Double.MAX_VALUE)
+
+        edit_amount.filters = arrayOf(filterStartWithDot, amountAssetDecimalInputFilter)
+        edit_limit_price.filters = arrayOf(filterStartWithDot, priceAssetDecimalInputFilter)
+        edit_total_price.filters = arrayOf(filterStartWithDot, priceAssetDecimalInputFilter)
 
         CounterHandler.Builder()
                 .valueView(edit_amount)
@@ -351,20 +360,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
             button_confirm.text = getString(R.string.buy_btn_txt, presenter.data?.watchMarket?.market?.amountAssetShortName)
         }
 
-        presenter.data?.watchMarket.notNull { watchMarket ->
-            if (presenter.data?.initAmount != null) {
-                val amountUIValue = MoneyUtil.getScaledText(presenter.data?.initAmount!!, watchMarket.market.amountAssetDecimals).clearBalance()
-                edit_amount.setText(amountUIValue)
-            }
-            if (presenter.data?.initPrice != null) {
-                val priceUIValue = MoneyUtil.getScaledPrice(presenter.data?.initPrice!!, watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
-                edit_limit_price.setText(priceUIValue)
-            }
-            if (presenter.data?.initAmount != null && presenter.data?.initPrice != null) {
-                val sum = edit_limit_price.text.toString().toDouble() * edit_limit_price.text.toString().toDouble()
-                edit_total_price.setText(MoneyUtil.getFormattedTotal(sum, watchMarket.market.priceAssetDecimals))
-            }
-        }
+        fillInputsWithValues()
 
         text_expiration_value.click {
             val alt_bld = AlertDialog.Builder(baseActivity)
@@ -399,6 +395,56 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
         button_confirm.click {
             presenter.createOrder(edit_amount.text.toString(), edit_limit_price.text.toString())
         }
+    }
+
+    private fun fillInputsWithValues() {
+        presenter.data?.watchMarket.notNull { watchMarket ->
+            if (presenter.data?.initPrice != null) {
+                val priceUIValue = MoneyUtil.getScaledPrice(presenter.data?.initPrice!!, watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
+                edit_limit_price.setText(priceUIValue)
+            }
+            if (presenter.data?.initSum != null) {
+                if (presenter.data?.orderType == TradeBuyAndSellBottomSheetFragment.BUY_TYPE) {
+                    withAvailableSum { sum ->
+                        val totalUIValue = MoneyUtil.getScaledPrice(sum,
+                                watchMarket.market.amountAssetDecimals, watchMarket.market.priceAssetDecimals).clearBalance()
+                        presenter.humanTotalTyping = true
+                        edit_total_price.setText(totalUIValue)
+                    }
+                } else {
+                    withAvailableAmount { amount ->
+                        val amountUIValue = MoneyUtil.getScaledText(amount, watchMarket.market.amountAssetDecimals).clearBalance()
+                        presenter.humanTotalTyping = true
+                        edit_amount.setText(amountUIValue)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun withAvailableSum(listener: (Long) -> Unit) {
+        var total = 0L
+        safeLet(presenter.data?.initSum, presenter.data?.initPrice) { sum, price ->
+            total = sum
+            if (sum > presenter.currentPriceBalance) {
+                total = presenter.currentPriceBalance
+            }
+        }
+        listener.invoke(total)
+    }
+
+    private fun withAvailableAmount(listener: (Long) -> Unit) {
+        var amountValue = 0L
+        safeLet(presenter.data?.watchMarket?.market, presenter.data?.initSum, presenter.data?.initPrice) { market, sum, price ->
+            val amountTemp = sum.toDouble() / price.toDouble()
+            val unscaledAmount = MoneyUtil.getUnscaledValue(amountTemp.toString(), market.amountAssetDecimals)
+            amountValue = if (unscaledAmount > presenter.currentAmountBalance) {
+                presenter.currentAmountBalance - getFeeIfNeed()
+            } else {
+                unscaledAmount
+            }
+        }
+        listener.invoke(amountValue)
     }
 
     private fun getFeeIfNeed(): Long {
@@ -504,6 +550,8 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     override fun successPlaceOrder() {
         launchActivity<TradeBuyAndSendSuccessActivity> {
             putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_OPERATION_TYPE, presenter.orderType)
+            putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_AMOUNT_ASSET_NAME, presenter.data?.watchMarket?.market?.amountAssetLongName)
+            putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_PRICE_ASSET_NAME, presenter.data?.watchMarket?.market?.priceAssetLongName)
             putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_AMOUNT, edit_amount.text.toString())
             putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_PRICE, edit_limit_price.text.toString())
             putExtra(TradeBuyAndSendSuccessActivity.BUNDLE_TIME, presenter.orderRequest.timestamp.asDateString("HH:mm:ss"))
@@ -528,6 +576,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     }
 
     override fun showCommissionSuccess(unscaledAmount: Long) {
+        fillInputsWithValues()
         text_fee_value.text = "${getScaledAmount(unscaledAmount, 8)} " +
                 "${Constants.wavesAssetInfo.name}"
         progress_bar_fee_transaction.hide()

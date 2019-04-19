@@ -125,9 +125,6 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
                 WelcomeItem(R.drawable.userimg_dex_80,
                         getString(R.string.welcome_dex_title),
                         getString(R.string.welcome_dex_description))
-                /*, WelcomeItem(R.drawable.userimg_token_80,
-                        getString(R.string.welcome_token_title),
-                        getString(R.string.welcome_token_description))*/
         )
     }
 
@@ -158,13 +155,7 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
     }
 
     private fun updateMenuTitle() {
-        val bedMenuItem = menu?.findItem(R.id.action_change_language)
-        val langCode = preferencesHelper.getLanguage()
-        if (langCode == Language.BRAZILIAN.code) {
-            bedMenuItem?.title = "br"
-        } else {
-            bedMenuItem?.title = preferencesHelper.getLanguage()
-        }
+        menu?.findItem(R.id.action_change_language)?.title = Language.getLanguageByCode(preferencesHelper.getLanguage()).iso
     }
 
     override fun onBackPressed() {

@@ -4,7 +4,6 @@ import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.base.view.BaseMvpView
-import java.util.*
 
 @StateStrategyType(SkipStrategy::class)
 interface AssetDetailsView : BaseMvpView {

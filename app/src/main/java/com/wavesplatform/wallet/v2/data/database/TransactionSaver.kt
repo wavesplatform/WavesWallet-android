@@ -1,6 +1,7 @@
 package com.wavesplatform.wallet.v2.data.database
 
 import com.vicpin.krealmextensions.*
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.ApiDataManager
@@ -39,7 +40,9 @@ class TransactionSaver @Inject constructor() {
             changeListener: OnTransactionLimitChangeListener? = null
     ) {
         currentLimit = limit
-        if (sortedList.isEmpty() || limit < 1) {
+        if (App.getAccessManager().getWallet() == null
+                || sortedList.isEmpty()
+                || limit < 1) {
             rxEventBus.post(Events.NeedUpdateHistoryScreen())
             return
         }
@@ -130,34 +133,40 @@ class TransactionSaver @Inject constructor() {
                                 trans.feeAssetObject = allAssets.firstOrNull { it.id == trans.feeAssetId }
                             }
 
-                            if (trans.recipient.contains("alias")) {
-                                val aliasName = trans.recipient.substringAfterLast(":")
-                                aliasName.notNull {
-                                    subscriptions.add(apiDataManager.loadAlias(it)
-                                            .compose(RxUtil.applyObservableDefaultSchedulers())
-                                            .subscribe {
-                                                trans.recipientAddress = it.address
-                                                trans.transactionTypeId = transactionUtil.getTransactionType(trans)
-                                                trans.save()
-                                            })
+                            when {
+                                trans.recipient.isAlias() -> {
+                                    val aliasName = trans.recipient.parseAlias()
+                                    loadAliasAddress(aliasName) { address ->
+                                        trans.recipientAddress = address
+                                        trans.transactionTypeId = transactionUtil.getTransactionType(trans)
+                                        trans.save()
+                                    }
+
                                 }
-                            } else {
-                                trans.recipientAddress = trans.recipient
+                                trans.lease?.recipient?.isAlias() == true -> {
+                                    val aliasName = trans.lease?.recipient?.parseAlias()
+                                    loadAliasAddress(aliasName) { address ->
+                                        trans.lease?.recipientAddress = address
+                                        trans.transactionTypeId = transactionUtil.getTransactionType(trans)
+                                        trans.save()
+                                    }
+                                }
+                                else -> {
+                                    trans.recipientAddress = trans.recipient
+                                    trans.lease?.recipientAddress = trans.lease?.recipient
+                                }
                             }
 
-                            trans.transfers.forEach { trans ->
-                                if (trans.recipient.contains("alias")) {
-                                    val aliasName = trans.recipient.substringAfterLast(":")
-                                    aliasName.notNull {
-                                        subscriptions.add(apiDataManager.loadAlias(it)
-                                                .compose(RxUtil.applyObservableDefaultSchedulers())
-                                                .subscribe {
-                                                    trans.recipientAddress = it.address
-                                                    trans.save()
-                                                })
+                            trans.transfers.forEach { transfer ->
+                                when {
+                                    transfer.recipient.isAlias() -> {
+                                        val aliasName = transfer.recipient.parseAlias()
+                                        loadAliasAddress(aliasName) { address ->
+                                            transfer.recipientAddress = address
+                                            transfer.save()
+                                        }
                                     }
-                                } else {
-                                    trans.recipientAddress = trans.recipient
+                                    else -> transfer.recipientAddress = transfer.recipient
                                 }
                             }
 
@@ -216,6 +225,16 @@ class TransactionSaver @Inject constructor() {
                         }
                     }
                 })
+    }
+
+    private fun loadAliasAddress(alias: String?, listener: (String?) -> Unit) {
+        alias.notNull {
+            subscriptions.add(apiDataManager.loadAlias(it)
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe {
+                        listener.invoke(it.address)
+                    })
+        }
     }
 
     private fun mergeAndSaveAllAssets(arrayList: ArrayList<AssetInfo>, callback: (ArrayList<AssetInfo>) -> Unit) {

@@ -50,9 +50,9 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fingerprint_dialog, container, false)
         view.text_cancel.click { cancelDialog() }
@@ -61,7 +61,9 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     private fun cancelDialog() {
-        fingerPrintDialogListener?.onCancelButtonClicked(this.dialog)
+        context.notNull {
+            fingerPrintDialogListener?.onCancelButtonClicked(this.dialog)
+        }
         fingerprintIdentify.cancelIdentify()
     }
 
@@ -126,7 +128,9 @@ class FingerprintAuthDialogFragment : DialogFragment() {
             fingerprintIdentify.cancelIdentify()
             onSuccessRecognizedFingerprint()
             handler.postDelayed({
-                fingerPrintDialogListener?.onSuccessRecognizedFingerprint()
+                context.notNull {
+                    fingerPrintDialogListener?.onSuccessRecognizedFingerprint()
+                }
                 dismissAllowingStateLoss()
             }, DELAY_TO_CHANGE_STATE)
         } catch (throwable: SecureStorageException) {
@@ -142,7 +146,9 @@ class FingerprintAuthDialogFragment : DialogFragment() {
             fingerprintIdentify.cancelIdentify()
             onSuccessRecognizedFingerprint()
             handler.postDelayed({
-                fingerPrintDialogListener?.onSuccessRecognizedFingerprint(decryptedMessage)
+                context.notNull {
+                    fingerPrintDialogListener?.onSuccessRecognizedFingerprint(decryptedMessage)
+                }
                 dismissAllowingStateLoss()
             }, DELAY_TO_CHANGE_STATE)
         } catch (throwable: SecureStorageException) {
@@ -156,15 +162,16 @@ class FingerprintAuthDialogFragment : DialogFragment() {
     }
 
     private fun showHelpMessage(message: String?) {
-        fingerPrintDialogListener.notNull {
-            it.onShowErrorMessage(message ?: getString(R.string.common_server_error))
+        context.notNull {
+            fingerPrintDialogListener?.onShowErrorMessage(message ?: getString(R.string.common_server_error))
         }
     }
 
     private fun showErrorMessage(message: String?, errMessage: String?, tr: Throwable) {
         Timber.e(tr, errMessage)
-        fingerPrintDialogListener.notNull {
-            it.onShowErrorMessage(message ?: getString(R.string.common_server_error))
+        context.notNull {
+            fingerPrintDialogListener?.onShowErrorMessage(message
+                    ?: getString(R.string.common_server_error))
         }
     }
 
@@ -196,8 +203,9 @@ class FingerprintAuthDialogFragment : DialogFragment() {
         image_fingerprint_state?.setImageResource(R.drawable.ic_fingerprint_lock_48_submit_300)
         text_fingerprint_state?.setTextColor(findColor(R.color.error500))
         text_fingerprint_state?.setText(R.string.fingerprint_dialog_too_many_attempts)
-        fingerPrintDialogListener.notNull {
-            it.onFingerprintLocked(getString(R.string.fingerprint_dialog_too_many_attempts))
+        context.notNull {
+            fingerPrintDialogListener?.onFingerprintLocked(
+                    getString(R.string.fingerprint_dialog_too_many_attempts))
         }
     }
 

@@ -20,7 +20,6 @@ import com.wavesplatform.wallet.v2.util.notNull
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
-import pers.victor.ext.currentTimeMillis
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,7 +28,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     var allMarketsList = mutableListOf<MarketResponse>()
 
     fun loadReservedBalances(): Observable<Map<String, Long>> {
-        val timestamp = currentTimeMillis
+        val timestamp = EnvironmentManager.getTime()
         var signature = ""
         App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
             val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()),
@@ -40,7 +39,7 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadMyOrders(watchMarket: WatchMarket?): Observable<List<OrderResponse>> {
-        val timestamp = currentTimeMillis
+        val timestamp = EnvironmentManager.getTime()
         var signature = ""
         App.getAccessManager().getWallet()?.privateKey.notNull { privateKey ->
             val bytes = Bytes.concat(Base58.decode(getPublicKeyStr()),
@@ -54,13 +53,14 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         return matcherService.getOrderBook(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset)
     }
 
-    fun cancelOrder(orderId: String?, watchMarket: WatchMarket?, cancelOrderRequest: CancelOrderRequest): Observable<Any> {
-        cancelOrderRequest.sender = getPublicKeyStr()
-        cancelOrderRequest.orderId = orderId
+    fun cancelOrder(orderId: String?, amountAsset: String?, priceAsset: String?): Observable<Any> {
+        val request = CancelOrderRequest()
+        request.sender = getPublicKeyStr()
+        request.orderId = orderId
         App.getAccessManager().getWallet()?.privateKey.notNull {
-            cancelOrderRequest.sign(it)
+            request.sign(it)
         }
-        return matcherService.cancelOrder(watchMarket?.market?.amountAsset, watchMarket?.market?.priceAsset, cancelOrderRequest)
+        return matcherService.cancelOrder(amountAsset, priceAsset, request)
                 .doOnNext {
                     rxEventBus.post(Events.UpdateAssetsBalance())
                 }
@@ -89,14 +89,14 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
         if (allMarketsList.isEmpty()) {
             return Observable.zip(Observable.just(EnvironmentManager.globalConfiguration)
                     .map {
-                        val globalAssets = it.generalAssetIds.toMutableList()
+                        val globalAssets = it.generalAssets.toMutableList()
                         globalAssets.add(Constants.MRTGeneralAsset)
                         globalAssets.add(Constants.WCTGeneralAsset)
                         return@map globalAssets.associateBy { it.assetId }
                     },
                     matcherService.getAllMarkets()
                             .map { it.markets },
-                    BiFunction { configure: Map<String, GlobalConfiguration.GeneralAssetId>, apiMarkets: List<MarketResponse> ->
+                    BiFunction { configure: Map<String, GlobalConfiguration.ConfigAsset>, apiMarkets: List<MarketResponse> ->
                         return@BiFunction Pair(configure, apiMarkets)
                     })
                     .flatMap {

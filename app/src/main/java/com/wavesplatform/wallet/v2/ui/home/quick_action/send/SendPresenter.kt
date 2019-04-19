@@ -17,7 +17,7 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.countCommission
 import com.wavesplatform.wallet.v2.util.isSpamConsidered
-import com.wavesplatform.wallet.v2.util.isValidAddress
+import com.wavesplatform.wallet.v2.util.isValidWavesAddress
 import com.wavesplatform.wallet.v2.util.isWaves
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
@@ -79,7 +79,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 App.getAccessManager().getWallet()!!.publicKeyStr,
                 recipient ?: "",
                 MoneyUtil.getUnscaledValue(amount.toPlainString(), selectedAsset),
-                System.currentTimeMillis(),
+                EnvironmentManager.getTime(),
                 fee,
                 "",
                 feeAsset.assetId)
@@ -96,19 +96,19 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     > TransferTransactionRequest.MaxAttachmentSize) {
                 return R.string.attachment_too_long
             } else if (tx.amount <= 0 || tx.amount > java.lang.Long.MAX_VALUE - tx.fee) {
-                    return R.string.invalid_amount
-                } else if (tx.fee <= 0 || (feeAsset.isWaves() && tx.fee < Constants.WAVES_MIN_FEE)) {
-                    return R.string.insufficient_fee
-                } else if (!isFundSufficient(tx)) {
-                    return R.string.insufficient_funds
-                } else if (isGatewayAmountError()) {
-                    return R.string.insufficient_gateway_funds_error
-                } else if (Constants.findByGatewayId("XMR")!!.assetId == recipientAssetId &&
-                        moneroPaymentId != null &&
-                        (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH ||
-                                moneroPaymentId!!.contains(" ".toRegex()))) {
-                    return R.string.invalid_monero_payment_id
-                }
+                return R.string.invalid_amount
+            } else if (tx.fee <= 0 || (feeAsset.isWaves() && tx.fee < Constants.WAVES_MIN_FEE)) {
+                return R.string.insufficient_fee
+            } else if (!isFundSufficient(tx)) {
+                return R.string.insufficient_funds
+            } else if (isGatewayAmountError()) {
+                return R.string.insufficient_gateway_funds_error
+            } else if (Constants.findByGatewayId("XMR")!!.assetId == recipientAssetId &&
+                    moneroPaymentId != null &&
+                    (moneroPaymentId!!.length != MONERO_PAYMENT_ID_LENGTH ||
+                            moneroPaymentId!!.contains(" ".toRegex()))) {
+                return R.string.invalid_monero_payment_id
+            }
         }
         return 0
     }
@@ -267,20 +267,18 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
         const val MONERO_PAYMENT_ID_LENGTH = 64
 
         fun getAssetId(recipient: String?, assetBalance: AssetBalance?): String? {
-            for (asset in EnvironmentManager.globalConfiguration.generalAssetIds) {
-                if (recipient!!.matches("${asset.addressRegEx}$".toRegex())) {
-                    return if (assetBalance != null) {
-                        asset.assetId
-                    } else {
-                        null
-                    }
-                }
+            val configAsset = EnvironmentManager.globalConfiguration.generalAssets
+                    .firstOrNull { it.assetId == assetBalance?.assetId }
+
+            return if (recipient?.matches("${configAsset?.addressRegEx}$".toRegex()) == true) {
+                configAsset?.assetId
+            } else {
+                null
             }
-            return null
         }
 
         fun isWavesAddress(address: String?): Boolean {
-            if (address == null || !address.isValidAddress()) {
+            if (address == null || !address.isValidWavesAddress()) {
                 return false
             }
 

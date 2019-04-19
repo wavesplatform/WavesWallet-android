@@ -6,7 +6,7 @@ import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.util.clearAlias
+import com.wavesplatform.wallet.v2.util.parseAlias
 import com.wavesplatform.wallet.v2.util.findMyOrder
 import com.wavesplatform.wallet.v2.util.stripZeros
 import com.wavesplatform.wallet.v2.util.transactionType
@@ -29,7 +29,8 @@ open class Lease(
     @SerializedName("signature") var signature: String = "",
     @SerializedName("version") var version: Int = 0,
     @SerializedName("amount") var amount: Long = 0,
-    @SerializedName("recipient") var recipient: String = ""
+    @SerializedName("recipient") var recipient: String = "",
+    @SerializedName("recipientAddress") var recipientAddress: String? = ""
 ) : RealmModel
 
 @RealmClass
@@ -152,6 +153,25 @@ open class Transaction(
                 transactionType() == TransactionType.CANCEL_SPONSORSHIP_TYPE
     }
 
+    fun getScaledPrice(amountAssetDecimals: Int?, priceAssetDecimals: Int?): String {
+        return MoneyUtil.getScaledPrice(price,
+                amountAssetDecimals ?: 8,
+                priceAssetDecimals ?: 8).stripZeros()
+    }
+
+    fun getScaledTotal(priceAssetDecimals: Int?): String {
+        return MoneyUtil.getTextStripZeros(
+                BigInteger.valueOf(amount)
+                        .multiply(BigInteger.valueOf(price))
+                        .divide(BigInteger.valueOf(100000000)).toLong(),
+                priceAssetDecimals ?: 8).stripZeros()
+    }
+
+    fun getScaledAmount(amountAssetDecimals: Int?): String {
+        return MoneyUtil.getScaledText(amount, amountAssetDecimals ?: 8).stripZeros()
+    }
+
+
     companion object {
 
         const val GENESIS = 1
@@ -184,7 +204,7 @@ open class Transaction(
                 CREATE_ALIAS -> "Create Alias"
                 MASS_TRANSFER -> "Mass Transfer"
                 DATA -> "Data"
-                ADDRESS_SCRIPT -> "Script"
+                ADDRESS_SCRIPT -> "Address Script"
                 SPONSORSHIP -> "SponsorShip"
                 ASSET_SCRIPT -> "Asset Script"
                 else -> ""
@@ -227,7 +247,7 @@ open class Transaction(
             return if (transaction.recipient.isNullOrEmpty()) {
                 ""
             } else {
-                "Recipient: ${transaction.recipient.clearAlias()}\n"
+                "Recipient: ${transaction.recipient.parseAlias()}\n"
             }
         }
 

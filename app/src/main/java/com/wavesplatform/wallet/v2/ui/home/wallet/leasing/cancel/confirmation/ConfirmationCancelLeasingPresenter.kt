@@ -1,7 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.leasing.cancel.confirmation
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.model.remote.request.CancelLeasingRequest
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
 import com.wavesplatform.wallet.v2.data.model.remote.response.ScriptInfo
@@ -36,11 +35,14 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
                     viewState.showProgressBar(false)
                     it.printStackTrace()
 
-                    if (it.errorBody()?.isSmartError() == true) {
-                        viewState.failedCancelLeasingCauseSmart()
-                    } else {
-                        viewState.failedCancelLeasing(it.errorBody()?.message)
+                    it.errorBody()?.let { error ->
+                        if (error.isSmartError()) {
+                            viewState.failedCancelLeasingCauseSmart()
+                        } else {
+                            viewState.failedCancelLeasing(error.message)
+                        }
                     }
+
                 }))
     }
 

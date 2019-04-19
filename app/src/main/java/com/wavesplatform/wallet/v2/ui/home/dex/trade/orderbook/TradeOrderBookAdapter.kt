@@ -41,7 +41,7 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
                         .setBackgroundColor(R.id.view_bg, findColor(R.color.error100))
                         .setText(R.id.text_amount_value, amountUIValue)
                         .setText(R.id.text_price_value, priceUIValue)
-                        .setText(R.id.text_sum_value, MoneyUtil.getFormattedTotal(item.sum, market.priceAssetDecimals))
+                        .setText(R.id.text_sum_value, item.getScaledSum(market.priceAssetDecimals))
             }
             BID_TYPE -> {
                 val item = item as OrderBook.Bid
@@ -51,7 +51,7 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
                         .setBackgroundColor(R.id.view_bg, findColor(R.color.submit50))
                         .setText(R.id.text_amount_value, amountUIValue)
                         .setText(R.id.text_price_value, priceUIValue)
-                        .setText(R.id.text_sum_value, MoneyUtil.getFormattedTotal(item.sum, market.priceAssetDecimals))
+                        .setText(R.id.text_sum_value, item.getScaledSum(market.priceAssetDecimals))
             }
         }
     }

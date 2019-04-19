@@ -2,7 +2,6 @@ package com.wavesplatform.wallet.v2.ui.home.profile.addresses.alias
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.data.model.remote.response.GlobalTransactionCommission
 import com.wavesplatform.wallet.v2.data.model.remote.response.ScriptInfo

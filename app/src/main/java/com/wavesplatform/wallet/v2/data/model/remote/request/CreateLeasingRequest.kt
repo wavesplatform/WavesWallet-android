@@ -10,7 +10,7 @@ import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
 import com.wavesplatform.wallet.v2.util.arrayWithSize
-import com.wavesplatform.wallet.v2.util.clearAlias
+import com.wavesplatform.wallet.v2.util.parseAlias
 import java.nio.charset.Charset
 
 data class CreateLeasingRequest(
@@ -20,7 +20,7 @@ data class CreateLeasingRequest(
     @SerializedName("amount") var amount: Long = 0,
     @SerializedName("fee") var fee: Long = 0,
     @SerializedName("recipient") var recipient: String = "",
-    @SerializedName("timestamp") var timestamp: Long = 0,
+    @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
     @SerializedName("version") var version: Int = Constants.VERSION,
     @SerializedName("proofs") var proofs: MutableList<String?>? = null
 ) {
@@ -45,7 +45,7 @@ data class CreateLeasingRequest(
         return if (recipientIsAlias) {
             Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
                     byteArrayOf(EnvironmentManager.netCode),
-                    recipient.clearAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
+                    recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
         } else {
             Base58.decode(recipient)
         }

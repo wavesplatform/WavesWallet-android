@@ -10,7 +10,7 @@ var ChecksumLength = 4
 var HashLength = 20
 var AddressLength = 1 + 1 + ChecksumLength + HashLength
 
-fun String?.isValidAddress(): Boolean {
+fun String?.isValidWavesAddress(): Boolean {
     if (this.isNullOrEmpty()) return false
     return try {
         val bytes = Base58.decode(this)
@@ -28,10 +28,14 @@ fun String?.isValidAddress(): Boolean {
     }
 }
 
+fun String.isAlias(): Boolean {
+    return this.contains("alias")
+}
+
 fun String.makeAsAlias(): String {
     return "alias:${EnvironmentManager.netCode.toChar()}:$this"
 }
 
-fun String.clearAlias(): String {
+fun String.parseAlias(): String {
     return this.substringAfterLast(":")
 }

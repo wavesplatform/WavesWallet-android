@@ -1,27 +1,19 @@
 package com.wavesplatform.wallet.v2.ui.home.history.details
 
 import android.app.Activity
-import android.content.ClipData
 import android.content.Intent
 import android.graphics.Typeface
-import android.os.Bundle
-import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.view.RxView
-import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.crypto.Base58
 import com.wavesplatform.wallet.v1.util.MoneyUtil
@@ -29,13 +21,10 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.local.OrderType
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transaction
-import com.wavesplatform.wallet.v2.data.model.remote.response.TransactionType
-import com.wavesplatform.wallet.v2.data.model.remote.response.Transfer
+import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
 import com.wavesplatform.wallet.v2.data.remote.CoinomatService
-import com.wavesplatform.wallet.v2.ui.base.view.BaseSuperBottomSheetDialogFragment
+import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
 import com.wavesplatform.wallet.v2.ui.custom.AssetAvatarView
 import com.wavesplatform.wallet.v2.ui.custom.SpamTag
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.AddressBookActivity
@@ -47,71 +36,20 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActi
 import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.fragment_bottom_sheet_exchange_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
 import kotlinx.android.synthetic.main.history_details_layout.view.*
 import pers.victor.ext.*
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), HistoryDetailsView {
-    var selectedItem: Transaction? = null
-    var selectedItemPosition: Int = 0
-    var rootView: View? = null
-    var inflater: LayoutInflater? = null
+class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Transaction>() {
 
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: HistoryDetailsPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): HistoryDetailsPresenter = presenter
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        this.inflater = inflater
-        rootView = inflater.inflate(R.layout.history_details_bottom_sheet_dialog, container, false)
-
-        configureView()
-
-        return rootView
+    override fun configLayoutRes(): Int {
+        return R.layout.history_details_bottom_sheet_dialog
     }
 
-    private fun configureView() {
-        val container = rootView?.findViewById<LinearLayout>(R.id.main_container)
-        container?.removeAllViews()
-
-        selectedItem?.let {
-            container?.apply {
-                addView(setupHeader(it))
-                addView(setupBody(it))
-                addView(setupTransactionInfo(it))
-                addView(setupFooter(it))
-            }
-            configCloseButton()
-        }
-    }
-
-    private fun configCloseButton() {
-        val close = rootView?.findViewById<AppCompatImageView>(R.id.image_close)
-        close?.post {
-            val closeOriginalPos = IntArray(2)
-            close.getLocationOnScreen(closeOriginalPos)
-
-            val dialogHeight = dialog.findViewById<CoordinatorLayout>(R.id.coordinator).height
-            val imageCloseBottomY = (closeOriginalPos[1] + close.height)
-            val difference = dialogHeight - imageCloseBottomY
-
-            if (imageCloseBottomY < dialogHeight && difference > 0) {
-                val lp = close.layoutParams as RelativeLayout.LayoutParams
-                lp.setMargins(0, dp2px(34) + difference, dp2px(24), 0)
-                close.layoutParams = lp
-            }
-        }
-    }
-
-    private fun setupHeader(transaction: Transaction): View? {
+    override fun setupHeader(transaction: Transaction): View? {
         val view = inflate(R.layout.history_details_layout)
 
         view.text_tag.gone()
@@ -218,7 +156,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         return view
     }
 
-    private fun setupBody(transaction: Transaction): View? {
+    override fun setupBody(transaction: Transaction): View? {
         val historyContainer = LinearLayout(activity)
         historyContainer.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         historyContainer.orientation = LinearLayout.VERTICAL
@@ -279,7 +217,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 val imageCopy = sendView?.findViewById<AppCompatImageView>(R.id.image_address_copy)
                 val imageAddressAction = sendView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
-                var recipient = transaction.recipient.clearAlias()
+                var recipient = transaction.recipient.parseAlias()
                 if (TextUtils.isEmpty(recipient)) {
                     recipient = transaction.recipientAddress ?: ""
                 }
@@ -303,9 +241,9 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 val textLeasingToAddress = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_leasing_to_address)
                 val imageAddressAction = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
-                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
+                val nodeLeasingRecipient = transaction.lease?.recipient?.parseAlias()
                 if (nodeLeasingRecipient.isNullOrEmpty()) {
-                    textLeasingToAddress?.text = transaction.recipient.clearAlias()
+                    textLeasingToAddress?.text = transaction.recipient.parseAlias()
                 } else {
                     textLeasingToAddress?.text = nodeLeasingRecipient
                 }
@@ -326,65 +264,26 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                         R.layout.fragment_bottom_sheet_exchange_layout,
                         historyContainer, false)
 
-                val historyDetailsType = exchangeView?.findViewById<AppCompatTextView>(
-                        R.id.history_details_type)
 
-                val textExchangeValue = exchangeView?.findViewById<AppCompatTextView>(
-                        R.id.text_exchange_value)
-                val textExchangeTag = exchangeView?.findViewById<AppCompatTextView>(
-                        R.id.text_exchange_tag)
+                exchangeView?.let {
+                    val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
+                            App.getAccessManager().getWallet()?.address!!)
 
-                val textPriceValue = exchangeView?.findViewById<AppCompatTextView>(
-                        R.id.text_price_value)
-                val textPriceTag = exchangeView?.findViewById<AppCompatTextView>(
-                        R.id.text_price_tag)
-
-                val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
-                        App.getAccessManager().getWallet()?.address!!)
-
-                if (myOrder.getType() == OrderType.BUY) {
-                    historyDetailsType?.text = getString(R.string.history_exchange_sell)
-                } else {
-                    historyDetailsType?.text = getString(R.string.history_exchange_buy)
-                }
-
-                // show value for price
-                if (isShowTicker(myOrder.assetPair?.priceAssetObject?.id)) {
-                    textPriceValue?.text = MoneyUtil.getScaledPrice(transaction.price,
-                            myOrder?.assetPair?.amountAssetObject?.precision ?: 0,
-                            myOrder?.assetPair?.priceAssetObject?.precision ?: 0)
-
-                    val ticker = myOrder.assetPair?.priceAssetObject?.getTicker()
-                    if (!ticker.isNullOrBlank()) {
-                        textPriceTag?.text = ticker
-                        textPriceTag?.visiable()
+                    if (myOrder.getType() == OrderType.BUY) {
+                        exchangeView.history_details_type?.text = getString(R.string.history_exchange_sell)
+                    } else {
+                        exchangeView.history_details_type?.text = getString(R.string.history_exchange_buy)
                     }
-                } else {
-                    textPriceValue?.text = "${MoneyUtil.getScaledPrice(transaction.price,
-                            myOrder.assetPair?.amountAssetObject?.precision ?: 0,
-                            myOrder.assetPair?.priceAssetObject?.precision ?: 0)} " +
-                            "${myOrder.assetPair?.priceAssetObject?.name}"
+
+                    exchangeView.text_exchange_value.text = transaction.getScaledTotal(myOrder.assetPair?.priceAssetObject?.precision)
+                    exchangeView.text_price_value.text = transaction.getScaledPrice(myOrder.assetPair?.amountAssetObject?.precision,
+                            myOrder.assetPair?.priceAssetObject?.precision)
+
+                    showTickerOrSimple(exchangeView.text_exchange_value, exchangeView.text_exchange_tag, myOrder.assetPair?.priceAssetObject)
+                    showTickerOrSimple(exchangeView.text_price_value, exchangeView.text_price_tag, myOrder.assetPair?.priceAssetObject)
                 }
 
-                // show value for amount
-                if (isShowTicker(myOrder.assetPair?.priceAssetObject?.id)) {
-                    textExchangeValue?.text = MoneyUtil.getScaledPrice(transaction.getOrderSum(),
-                            myOrder.assetPair?.amountAssetObject?.precision ?: 0,
-                            myOrder.assetPair?.priceAssetObject?.precision ?: 0)
-
-                    val ticker = myOrder.assetPair?.priceAssetObject?.getTicker()
-                    if (!ticker.isNullOrBlank()) {
-                        textExchangeTag?.text = ticker
-                        textExchangeTag?.visiable()
-                    }
-                } else {
-                    textExchangeValue?.text = "${MoneyUtil.getScaledPrice(transaction.getOrderSum(),
-                            myOrder.assetPair?.amountAssetObject?.precision ?: 0,
-                            myOrder.assetPair?.priceAssetObject?.precision ?: 0)} " +
-                            "${myOrder.assetPair?.priceAssetObject?.name}"
-                }
-
-                historyContainer?.addView(exchangeView)
+                historyContainer.addView(exchangeView)
             }
             TransactionType.SELF_TRANSFER_TYPE -> {
                 val selfTransferView = inflater?.inflate(R.layout.fragment_bottom_sheet_seft_transfer_layout, historyContainer, false)
@@ -399,11 +298,16 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 val imageCopy = receiveView?.findViewById<AppCompatImageView>(R.id.image_address_copy)
                 val imageAddressAction = receiveView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
-                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
+                val nodeLeasingRecipient = transaction.lease?.recipient?.parseAlias()
                 if (nodeLeasingRecipient.isNullOrEmpty()) {
-                    textCancelLeasingFromAddress?.text = transaction.recipient.clearAlias()
+                    textCancelLeasingFromAddress?.text = transaction.recipient.parseAlias()
                 } else {
                     textCancelLeasingFromAddress?.text = nodeLeasingRecipient
+                }
+
+                if (transaction.transactionType() == TransactionType.INCOMING_LEASING_TYPE) {
+                    receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_hint)?.text = getString(R.string.history_details_leasing_from)
+                    textCancelLeasingFromAddress?.text = transaction.sender
                 }
 
                 eventSubscriptions.add(RxView.clicks(imageCopy!!)
@@ -426,7 +330,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 val textTokenStatus = tokenView?.findViewById<TextView>(R.id.text_token_status)
 
                 textIdValue?.text = transaction.assetId
-                if (transaction.reissuable) {
+                if (transaction.asset?.reissuable == true) {
                     textTokenStatus?.text = getString(R.string.history_details_reissuable)
                 } else {
                     textTokenStatus?.text = getString(R.string.history_details_not_reissuable)
@@ -439,7 +343,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                             imageCopy.copyToClipboard(textIdValue?.text.toString())
                         })
 
-                historyContainer?.addView(tokenView)
+                historyContainer.addView(tokenView)
             }
             TransactionType.CREATE_ALIAS_TYPE,
             TransactionType.DATA_TYPE,
@@ -484,7 +388,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
 
                     textRecipientNumber?.text = getString(R.string.history_mass_send_recipient, index.inc().toString())
 
-                    var recipient = transfer.recipient.clearAlias()
+                    var recipient = transfer.recipient.parseAlias()
                     if (TextUtils.isEmpty(recipient)) {
                         recipient = transfer.recipientAddress ?: ""
                     }
@@ -521,7 +425,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
 
                                 val transfer = transfers[i]
 
-                                var recipient = transfer.recipient.clearAlias()
+                                var recipient = transfer.recipient.parseAlias()
                                 if (TextUtils.isEmpty(recipient)) {
                                     recipient = transfer.recipientAddress ?: ""
                                 }
@@ -592,7 +496,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                 val imageAssetIcon = tokenView?.findViewById<AssetAvatarView>(R.id.image_asset_icon)
 
                 transaction.asset?.let {
-                    imageAssetIcon?.setAssetInfo(it)
+                    imageAssetIcon?.setAsset(it)
                 }
 
                 textAssetValue?.text = transaction.asset?.name
@@ -636,7 +540,20 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         return historyContainer
     }
 
-    private fun setupTransactionInfo(transaction: Transaction): View? {
+
+    private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfo?) {
+        if (isShowTicker(assetInfo?.id)) {
+            val ticker = assetInfo?.getTicker()
+            if (!ticker.isNullOrBlank()) {
+                tickerView.text = ticker
+                tickerView.visiable()
+            }
+        } else {
+            valueView.text = valueView.text.toString().plus(" ${assetInfo?.name}")
+        }
+    }
+
+    override fun setupInfo(transaction: Transaction): View? {
         val layout = inflate(R.layout.fragment_history_bottom_sheet_base_info_layout)
 
         fun showTransactionFee() {
@@ -673,7 +590,7 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         return layout
     }
 
-    private fun setupFooter(transaction: Transaction): View? {
+    override fun setupFooter(transaction: Transaction): View? {
         val view = inflater?.inflate(R.layout.fragment_history_bottom_sheet_bottom_btns, null, false)
 
         fun changeViewMargin(view: View) {
@@ -704,11 +621,19 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
                             R.string.history_details_copy_all_data)
                 })
 
+        if (BuildConfig.DEBUG) {
+            view.check_box_staging_on_explorer.visibility = View.VISIBLE
+        }
+
         eventSubscriptions.add(RxView.clicks(view.text_view_on_explorer)
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    openUrlWithChromeTab(String.format(Constants.WAVES_EXPLORER, transaction.id))
+                    if (view.check_box_staging_on_explorer.isChecked) {
+                        openUrlWithChromeTab(String.format(Constants.URL_WAVES_STAGE_EXPLORER, transaction.id))
+                    } else {
+                        openUrlWithChromeTab(String.format(Constants.URL_WAVES_EXPLORER, transaction.id))
+                    }
                 })
 
         when (transaction.transactionType()) {
@@ -819,20 +744,6 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
         }
 
         view.text_transaction_value.text = directionSign + amountValue + assetName
-    }
-
-    private fun copyToClipboard(textToCopy: String, view: TextView, btnText: Int) {
-        clipboardManager.primaryClip = ClipData.newPlainText(getString(R.string.app_name), textToCopy)
-        view.text = getString(R.string.common_copied)
-        view.setTextColor(findColor(R.color.success400))
-        view.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_18_success_400, 0, 0, 0)
-        runDelayed(1500) {
-            this.context.notNull {
-                view.text = getString(btnText)
-                view.setTextColor(findColor(R.color.black))
-                view.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_copy_18_black, 0, 0, 0)
-            }
-        }
     }
 
     private fun nonGateway(assetBalance: AssetBalance, transaction: Transaction) =
@@ -948,20 +859,5 @@ class HistoryDetailsBottomSheetFragment : BaseSuperBottomSheetDialogFragment(), 
             if (resultCode == Activity.RESULT_OK) {
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        SimpleChromeCustomTabs.getInstance().connectTo(requireActivity())
-    }
-
-    override fun onPause() {
-        SimpleChromeCustomTabs.getInstance().disconnectFrom(requireActivity())
-        super.onPause()
-    }
-
-    fun configureData(selectedItem: Transaction, selectedPosition: Int) {
-        this.selectedItem = selectedItem
-        this.selectedItemPosition = selectedPosition
     }
 }

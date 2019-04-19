@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="18dp"
+        android:layout_marginRight="16dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/asset_item_radius"
         app:cardElevation="2dp">
@@ -20,15 +20,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
             android:descendantFocusability="beforeDescendants"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="vertical"
-            android:paddingBottom="24dp"
-            android:paddingEnd="14dp"
             android:paddingStart="14dp"
-            android:paddingTop="24dp">
+            android:paddingTop="24dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="24dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -47,10 +46,10 @@
                     android:id="@+id/skeleton_address_asset"
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_toEndOf="@+id/image_asset"
                     android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginStart="14dp"
+                    android:layout_toEndOf="@+id/image_asset"
                     android:background="@drawable/skeleton_basic_100_round_4"
                     android:visibility="gone" />
 
@@ -58,9 +57,9 @@
                     android:id="@+id/address_asset"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="14dp"
                     android:layout_toEndOf="@+id/image_asset"
-                    android:layout_centerVertical="true"
                     android:gravity="center_vertical"
                     android:textColor="@color/basic500"
                     android:textSize="14sp"
@@ -74,6 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
                 android:textColorHint="@color/basic500"
                 app:errorEnabled="true"
                 app:hintTextAppearance="@style/TextLabel"
@@ -87,21 +87,61 @@
                     android:backgroundTint="@color/accent50"
                     android:hint="@string/enter_seed_manually_hint_your_seed"
                     android:imeOptions="actionDone"
-                    android:privateImeOptions="nm"
                     android:inputType="textNoSuggestions|textFilter|textMultiLine"
                     android:lines="3"
                     android:maxLines="3"
                     android:paddingBottom="20dp"
+                    android:privateImeOptions="nm"
                     android:textColorHint="@color/basic500" />
             </com.wavesplatform.wallet.v2.ui.custom.TopRightErrorTextInputLayout>
 
+
+            <RelativeLayout
+                android:id="@+id/relative_validation_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_validation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_info_18_warning_600" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_validation_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_toEndOf="@+id/image_validation"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/roboto_bold"
+                    tools:text="@string/enter_seed_manually_validation_seed_is_simple_title" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_validation_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_validation_title"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_toEndOf="@+id/image_validation"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    tools:text="@string/enter_seed_manually_validation_seed_is_simple_description" />
+
+            </RelativeLayout>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/button_continue"
                 style="@style/WavesButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="34dp"
+                android:layout_marginTop="16dp"
                 android:enabled="false"
                 android:text="@string/enter_seed_manually_continue" />
 

@@ -8,15 +8,16 @@ import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import io.realm.DynamicRealm
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.internal.OsSharedRealm
+import io.realm.internal.Table
 import java.io.File
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class MigrationUtil @Inject constructor() {
 
     companion object {
 
-        const val VER_DB_WITHOUT_USER_DATA = 3L
+        const val VER_DB_WITHOUT_USER_DATA = 4L
         private const val VER_DB_NEW = -1L
         private const val KEY_AB_NAMES = "address_book_names"
         private const val KEY_AB_ADDRESSES = "address_book_addresses"
@@ -74,21 +75,26 @@ class MigrationUtil @Inject constructor() {
                     .name(String.format("%s.realm", guid))
                     .build()
             if (Realm.getGlobalInstanceCount(initConfig) < 2) {
-                val tempRealm = try {
-                    DynamicRealm.getInstance(initConfig)
-                } catch (exception: IllegalArgumentException) {
+                val tempRealm: DynamicRealm?
+                val sharedRealm: OsSharedRealm?
+                try {
+                    tempRealm = DynamicRealm.getInstance(initConfig)
+                    sharedRealm = OsSharedRealm.getInstance(initConfig)
+                } catch (exception: Exception) {
                     return
                 }
                 if (tempRealm!!.version != VER_DB_NEW && tempRealm.version < VER_DB_WITHOUT_USER_DATA) {
-                    val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
-                    val addressBookUsers = mutableListOf<AddressBookUser>()
-                    for (item in addressBookUsersDb) {
-                        val addressBookUser = AddressBookUser(
-                                item.getString("address"),
-                                item.getString("name"))
-                        addressBookUsers.add(addressBookUser)
+                    if (sharedRealm.hasTable(Table.getTableNameForClass("AddressBookUser"))) {
+                        val addressBookUsersDb = tempRealm.where("AddressBookUser").findAll()
+                        val addressBookUsers = mutableListOf<AddressBookUser>()
+                        for (item in addressBookUsersDb) {
+                            val addressBookUser = AddressBookUser(
+                                    item.getString("address"),
+                                    item.getString("name"))
+                            addressBookUsers.add(addressBookUser)
+                        }
+                        addressBookUsers.saveAll()
                     }
-                    addressBookUsers.saveAll()
 
                     val assetBalancesStore = mutableListOf<AssetBalanceStore>()
                     val assetBalancesDb = tempRealm.where("AssetBalance").findAll()
@@ -102,32 +108,35 @@ class MigrationUtil @Inject constructor() {
                     }
                     assetBalancesStore.saveAll()
 
-                    val newMarketResponses = mutableListOf<MarketResponse>()
-                    val marketResponses = tempRealm.where("MarketResponse").findAll()
-                    for (item in marketResponses) {
-                        newMarketResponses.add(MarketResponse(
-                                id = item.getString("id"),
-                                amountAsset = item.getString("amountAsset"),
-                                amountAssetName = item.getString("amountAssetName"),
-                                amountAssetShortName = item.getString("amountAssetShortName"),
-                                amountAssetLongName = item.getString("amountAssetLongName"),
-                                amountAssetDecimals = item.getInt("amountAssetDecimals"),
-                                // amountAssetInfo = item.getObject("amountAssetInfo"),
-                                priceAsset = item.getString("priceAsset"),
-                                priceAssetName = item.getString("priceAssetName"),
-                                priceAssetShortName = item.getString("priceAssetShortName"),
-                                priceAssetLongName = item.getString("priceAssetLongName"),
-                                // priceAssetInfo = item.getObject("priceAssetInfo"),
-                                priceAssetDecimals = item.getInt("priceAssetDecimals"),
-                                created = item.getLong("created"),
-                                checked = item.getBoolean("checked"),
-                                popular = item.getBoolean("popular"),
-                                position = item.getInt("position"),
-                                currentTimeFrame = item.getInt("currentTimeFrame")))
+                    if (sharedRealm.hasTable(Table.getTableNameForClass("MarketResponse"))) {
+                        val newMarketResponses = mutableListOf<MarketResponse>()
+                        val marketResponses = tempRealm.where("MarketResponse").findAll()
+                        for (item in marketResponses) {
+                            newMarketResponses.add(MarketResponse(
+                                    id = item.getString("id"),
+                                    amountAsset = item.getString("amountAsset"),
+                                    amountAssetName = item.getString("amountAssetName"),
+                                    amountAssetShortName = item.getString("amountAssetShortName"),
+                                    amountAssetLongName = item.getString("amountAssetLongName"),
+                                    amountAssetDecimals = item.getInt("amountAssetDecimals"),
+                                    // amountAssetInfo = item.getObject("amountAssetInfo"),
+                                    priceAsset = item.getString("priceAsset"),
+                                    priceAssetName = item.getString("priceAssetName"),
+                                    priceAssetShortName = item.getString("priceAssetShortName"),
+                                    priceAssetLongName = item.getString("priceAssetLongName"),
+                                    // priceAssetInfo = item.getObject("priceAssetInfo"),
+                                    priceAssetDecimals = item.getInt("priceAssetDecimals"),
+                                    created = item.getLong("created"),
+                                    checked = item.getBoolean("checked"),
+                                    popular = item.getBoolean("popular"),
+                                    position = item.getInt("position"),
+                                    currentTimeFrame = item.getInt("currentTimeFrame")))
+                        }
+                        newMarketResponses.saveAll()
                     }
-                    newMarketResponses.saveAll()
                 }
                 tempRealm.close()
+                sharedRealm.close()
             }
         }
     }

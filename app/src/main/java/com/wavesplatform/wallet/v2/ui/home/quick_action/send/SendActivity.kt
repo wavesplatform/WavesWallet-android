@@ -21,6 +21,8 @@ import com.wavesplatform.wallet.v1.util.MoneyUtil.getWavesStripZeros
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.coinomat.XRate
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
@@ -41,12 +43,14 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee.SponsoredFeeBot
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.StartLeasingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send.*
 import kotlinx.android.synthetic.main.layout_asset_card.*
 import kotlinx.android.synthetic.main.view_commission.*
 import pers.victor.ext.*
 import java.math.BigDecimal
 import java.net.URI
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SendActivity : BaseActivity(), SendView {
@@ -76,6 +80,15 @@ class SendActivity : BaseActivity(), SendView {
         checkRecipient(edit_address.text.toString())
 
         setupCommissionBlock()
+        
+        eventSubscriptions.add(RxTextView.textChanges(edit_address)
+                .skipInitialValue()
+                .map(CharSequence::toString)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    checkRecipient(it)
+                })
 
         when {
             intent.hasExtra(KEY_INTENT_ASSET_DETAILS) -> {
@@ -100,13 +113,6 @@ class SendActivity : BaseActivity(), SendView {
             }
             else -> assetEnable(true)
         }
-
-        eventSubscriptions.add(RxTextView.textChanges(edit_address)
-                .subscribe {
-                    checkRecipient(it.toString())
-                })
-
-        edit_amount.applyFilterStartWithDot()
 
         edit_amount.addTextChangedListener {
             on { s, _, _, _ ->
@@ -249,6 +255,9 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun onShowPaymentDetails() {
+        presenter.selectedAsset?.getName()?.let { name ->
+            analytics.trackEvent(AnalyticEvents.WalletAssetsSendTapEvent(name))
+        }
         launchActivity<SendConfirmationActivity>(REQUEST_SEND) {
             putExtra(KEY_INTENT_SELECTED_ASSET, presenter.selectedAsset)
             putExtra(KEY_INTENT_SELECTED_RECIPIENT, presenter.recipient)
@@ -266,7 +275,11 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun setPercent(percent: Double) {
         presenter.selectedAsset.notNull { assetBalance ->
-            val amount = (assetBalance.getAvailableBalance() * percent).toLong()
+            val amount = if (percent == 1.0) {
+                assetBalance.getAvailableBalance()
+            } else {
+                (assetBalance.getAvailableBalance() * percent).toLong()
+            }
             checkAndSetAmount(amount, assetBalance)
         }
     }
@@ -614,6 +627,12 @@ class SendActivity : BaseActivity(), SendView {
             presenter.loadCommission(presenter.selectedAsset?.assetId)
 
             text_asset.gone()
+
+            edit_amount.setText("")
+            edit_amount.filters = arrayOf(filterStartWithDot, DecimalDigitsInputFilter(
+                    asset.getMaxDigitsBeforeZero(),
+                    asset.getDecimals(),
+                    Double.MAX_VALUE))
         }
     }
 

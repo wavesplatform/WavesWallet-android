@@ -50,7 +50,6 @@ import kotlinx.android.synthetic.main.no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
 import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.hideKeyboard
-import pyxis.uzuki.live.richutilskt.utils.inflate
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_cancel_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/selector_btn_red"
+        android:drawableStart="@drawable/ic_t_closeorder_18_white"
+        android:drawablePadding="8dp"
+        android:paddingStart="14dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="10dp"
+        android:text="@string/my_orders_details_cancel"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_close"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/text_cancel_order"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/selector_btn_basic_oval"
+        android:clickable="true"
+        android:scaleType="center"
+        app:srcCompat="@drawable/ic_arrowdown_24_black" />
+
+</RelativeLayout>

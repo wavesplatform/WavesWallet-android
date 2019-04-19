@@ -1,8 +1,6 @@
 package com.wavesplatform.wallet.v2.ui.auth.new_account.secret_phrase
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
@@ -47,22 +45,6 @@ class SecretPhraseActivity : BaseActivity(), SecretPhraseView {
                 putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, true)
             }
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_close -> {
-                launchActivity<CreatePassCodeActivity>(options = intent.extras) {
-                    putExtra(NewAccountActivity.KEY_INTENT_SKIP_BACKUP, true)
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_close, menu)
-        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onBackPressed() {

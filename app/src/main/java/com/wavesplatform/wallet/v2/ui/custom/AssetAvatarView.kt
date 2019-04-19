@@ -14,7 +14,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
-import com.wavesplatform.wallet.v2.data.Constants.WCTGeneralAsset
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetInfo
 import pers.victor.ext.findColor
@@ -95,8 +94,8 @@ class AssetAvatarView : AppCompatImageView {
     /*
    * Set asset info object to get initials for drawable
    * */
-    fun setAssetInfo(asset: AssetInfo) {
-        setValues(asset.id, asset.name, isSponsoredAsset = false, isScriptAsset = false) // TODO: check if need to show sponsor asset icon here
+    fun setAsset(asset: AssetInfo) {
+        setValues(asset.id, asset.name, asset.isSponsored(), asset.hasScript)
     }
 
     /*
@@ -136,7 +135,6 @@ class AssetAvatarView : AppCompatImageView {
     * */
     private fun setValues(assetId: String, name: String, isSponsoredAsset: Boolean, isScriptAsset: Boolean) {
         val avatar = when (assetId) {
-            WCTGeneralAsset.assetId -> R.drawable.ic_logo_wct_48
             "" -> Constants.defaultAssetsAvatar()[Constants.WAVES_ASSET_ID_FILLED]
             else -> Constants.defaultAssetsAvatar()[assetId]
         }

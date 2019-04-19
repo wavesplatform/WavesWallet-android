@@ -7,6 +7,7 @@ import com.wavesplatform.wallet.v1.crypto.PrivateKeyAccount;
 import com.wavesplatform.wallet.v1.data.auth.WavesWallet;
 import com.wavesplatform.wallet.v1.payload.Transaction;
 import com.wavesplatform.wallet.v1.request.IssueTransactionRequest;
+import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -92,7 +93,7 @@ public class NodeManagerTest {
                 6000000L,
                 (byte)6,
                 true,
-                System.currentTimeMillis());
+                EnvironmentManager.getTime());
 
         tx.sign(wavesWallet.getPrivateKey());
         System.out.println(new GsonBuilder()
