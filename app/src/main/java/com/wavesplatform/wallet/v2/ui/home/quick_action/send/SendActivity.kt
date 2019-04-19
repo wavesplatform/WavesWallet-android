@@ -14,6 +14,7 @@ import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.vicpin.krealmextensions.delete
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.MoneyUtil
@@ -97,13 +98,13 @@ class SendActivity : BaseActivity(), SendView {
             }
             intent.hasExtra(KEY_INTENT_REPEAT_TRANSACTION) -> {
                 val assetBalance = intent.getParcelableExtra<AssetBalance>(
-                        SendActivity.KEY_INTENT_TRANSACTION_ASSET_BALANCE)
+                        KEY_INTENT_TRANSACTION_ASSET_BALANCE)
                 val amount = intent
-                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT).clearBalance()
+                        .getStringExtra(KEY_INTENT_TRANSACTION_AMOUNT).clearBalance()
                 val recipientAddress = intent
-                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_RECIPIENT)
+                        .getStringExtra(KEY_INTENT_TRANSACTION_RECIPIENT)
                 val attachment = intent
-                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT)
+                        .getStringExtra(KEY_INTENT_TRANSACTION_ATTACHMENT)
                 setAsset(assetBalance)
                 assetEnable(false)
                 edit_address.setText(recipientAddress)
@@ -200,7 +201,7 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
-    private fun loadAsset(assetId: String) {
+    private fun loadAssetForLink(assetId: String, url: String) {
         if (assetsSkeletonView == null) {
             assetsSkeletonView = Skeleton.bind(edit_asset_layout)
                     .color(R.color.basic50)
@@ -211,7 +212,7 @@ class SendActivity : BaseActivity(), SendView {
         }
         assetEnable(false)
         button_continue.isEnabled = false
-        presenter.loadAsset(assetId)
+        presenter.loadAssetForLink(assetId, url)
     }
 
     private fun setRecipientSuggestions() {
@@ -476,10 +477,9 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun showLoadAssetSuccess(assetBalance: AssetBalance) {
-        assetsSkeletonView!!.hide()
+        assetsSkeletonView?.hide()
         setAsset(assetBalance)
         assetEnable(false)
-        showError(R.string.insufficient_funds, R.id.root)
     }
 
     override fun showLoadAssetError(errorMsgRes: Int) {
@@ -497,7 +497,7 @@ class SendActivity : BaseActivity(), SendView {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
                             .contents
                             .replace(AddressUtil.WAVES_PREFIX, "")
-                    parseDataFromQr(result)
+                    setDataFromUrl(result)
                 }
             }
 
@@ -533,8 +533,8 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
-    private fun parseDataFromQr(result: String) {
-        if (result.isNullOrEmpty()) {
+    override fun setDataFromUrl(url: String?) {
+        if (url.isNullOrEmpty()) {
             showError(R.string.send_error_get_data_from_qr, R.id.root)
             assetEnable(false)
             recipientEnable(false)
@@ -542,28 +542,12 @@ class SendActivity : BaseActivity(), SendView {
             return
         }
 
-        if (result.contains("https://client.wavesplatform.com/#send/".toRegex()) ||
-                result.contains("https://client.wavesplatform.com/%23send/".toRegex())) {
-            val uri = URI.create(result.replace(" ", "")
+        if (url.contains("https://client.wavesplatform.com/#send/".toRegex()) ||
+                url.contains("https://client.wavesplatform.com/%23send/".toRegex())) {
+            val uri = URI.create(url.replace(" ", "")
                     .replace("/#send/", "/send/")
                     .replace("/%23send/", "/send/"))
             try {
-                val params = uri.query.split("&")
-                for (parameter in params) {
-                    if (parameter.contains("recipient=")) {
-                        val recipient = parameter.replace("recipient=", "")
-                        edit_address.setText(recipient)
-                        recipientEnable(false)
-                    }
-                    if (parameter.contains("amount=")) {
-                        val amount = parameter.replace("amount=", "")
-                        if (amount.toDouble() > 0) {
-                            edit_amount.setText(amount)
-                            amountEnable(false)
-                        }
-                    }
-                }
-
                 var assetId = uri.path.split("/")[2]
                 if (Constants.WAVES_ASSET_ID_FILLED.equalsIgnoreCase(assetId)) {
                     assetId = ""
@@ -573,10 +557,31 @@ class SendActivity : BaseActivity(), SendView {
                 }
 
                 if (assetBalance == null) {
-                    loadAsset(assetId)
+                    loadAssetForLink(assetId, url)
+                    assetEnable(false)
+                    recipientEnable(false)
+                    amountEnable(false)
+                    return
                 } else {
+                    showLoadAssetSuccess(assetBalance)
                     setAsset(assetBalance)
                     assetEnable(false)
+                }
+
+                val params = uri.query.split("&")
+                for (parameter in params) {
+                    if (parameter.contains("recipient=")) {
+                        val recipient = parameter.replace("recipient=", "")
+                        edit_address.setText(recipient)
+                        recipientEnable(false)
+                    }
+                    if (parameter.contains("amount=")) {
+                        val amount = parameter.replace("amount=", "").stripZeros()
+                        if (amount.toDouble() > 0) {
+                            edit_amount.setText(amount )
+                            amountEnable(false)
+                        }
+                    }
                 }
             } catch (error: Exception) {
                 showError(R.string.send_error_get_data_from_qr, R.id.root)
@@ -586,11 +591,11 @@ class SendActivity : BaseActivity(), SendView {
                 error.printStackTrace()
             }
         } else {
-            if (result.contains(":")) {
-                val split = result.split(":")
+            if (url.contains(":")) {
+                val split = url.split(":")
                 edit_address.setText(split[1].trim())
             } else {
-                edit_address.setText(result)
+                edit_address.setText(url)
             }
         }
     }

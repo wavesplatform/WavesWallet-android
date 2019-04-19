@@ -16,4 +16,5 @@ interface SendView : BaseMvpView {
     fun showCommissionError()
     fun showLoadAssetSuccess(assetBalance: AssetBalance)
     fun showLoadAssetError(errorMsgRes: Int)
+    fun setDataFromUrl(url: String?)
 }
