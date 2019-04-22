@@ -47,7 +47,7 @@ class ChooseLanguageActivity : BaseActivity(), LanguageView {
     override fun onViewReady(savedInstanceState: Bundle?) {
         recycle_language.layoutManager = LinearLayoutManager(this)
         val logo = layoutInflater
-                .inflate(R.layout.view_splash_text_logo, null)
+                .inflate(R.layout.content_splash_text_logo, null)
         adapter.setHeaderView(logo)
         recycle_language.adapter = adapter
 

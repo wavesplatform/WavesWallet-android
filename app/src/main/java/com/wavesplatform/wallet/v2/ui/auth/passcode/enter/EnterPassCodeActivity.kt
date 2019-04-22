@@ -244,7 +244,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     }
 
     private fun getDescriptionView(): View? {
-        return inflate(R.layout.layout_many_attepmts)
+        return inflate(R.layout.content_many_attepmts)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -13,7 +13,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.wavesplatform.wallet.R
-import kotlinx.android.synthetic.main.layout_top_info_alert.view.*
+import kotlinx.android.synthetic.main.content_top_info_alert.view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -34,7 +34,7 @@ class InfoAlert : FrameLayout {
 
     private fun inflate() {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        inflater.inflate(R.layout.layout_top_info_alert, this, true)
+        inflater.inflate(R.layout.content_top_info_alert, this, true)
     }
 
     fun setTitle(title: String) {

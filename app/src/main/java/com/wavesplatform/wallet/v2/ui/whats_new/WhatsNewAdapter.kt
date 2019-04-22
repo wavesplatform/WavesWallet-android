@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.WhatsNewItem
 import com.wavesplatform.wallet.v2.injection.qualifier.ApplicationContext
-import kotlinx.android.synthetic.main.pager_whats_new_item.view.*
+import kotlinx.android.synthetic.main.item_pager_whats_new.view.*
 import javax.inject.Inject
 
 class WhatsNewAdapter @Inject constructor(@ApplicationContext var mContext: Context) : PagerAdapter() {
@@ -21,7 +21,7 @@ class WhatsNewAdapter @Inject constructor(@ApplicationContext var mContext: Cont
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
         val inflater = LayoutInflater.from(mContext)
-        val view = inflater.inflate(R.layout.pager_whats_new_item, null, false)
+        val view = inflater.inflate(R.layout.item_pager_whats_new, null, false)
 
         // TODO: Load photo
         view.image_new_icon.setImageResource(items[position].image)

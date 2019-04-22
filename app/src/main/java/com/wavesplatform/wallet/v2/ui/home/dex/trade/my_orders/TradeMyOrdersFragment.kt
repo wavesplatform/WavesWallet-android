@@ -20,7 +20,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details.MyOrderDetailsBottomSheetFragment
 import kotlinx.android.synthetic.main.fragment_trade_my_orders.*
-import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
 import pers.victor.ext.visiable
@@ -95,7 +95,7 @@ class TradeMyOrdersFragment : BaseFragment(), TradeMyOrdersView {
     }
 
     private fun getEmptyView(): View {
-        val view = inflate(R.layout.layout_empty_data)
+        val view = inflate(R.layout.content_empty_data)
         view.text_empty.text = getString(R.string.my_orders_empty)
         return view
     }
