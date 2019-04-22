@@ -575,13 +575,22 @@ class SendActivity : BaseActivity(), SendView {
                         recipientEnable(false)
                     }
                     if (parameter.contains("amount=")) {
-                        val amount = parameter.replace("amount=", "").stripZeros()
-                        edit_amount.setText(amount)
-                        amountEnable(false)
-                        if (amount.toDouble() <
-                                MoneyUtil.getScaledText(1, assetBalance).toDouble()) {
-                            showError(R.string.invalid_amount, R.id.root)
+                        val amount = BigDecimal(parameter.replace("amount=", "")
+                                .stripZeros())
+                        if (amount == BigDecimal.ZERO) {
+                            edit_amount.setText("")
+                            amountEnable(true)
+                        } else {
+                            edit_amount.setText(amount.toPlainString().stripZeros())
+                            amountEnable(false)
+                            if (amount.toDouble() <
+                                    MoneyUtil.getScaledText(1, assetBalance).toDouble()) {
+                                showError(R.string.invalid_amount, R.id.root)
+                            }
                         }
+                    } else {
+                        edit_amount.setText("")
+                        amountEnable(true)
                     }
                 }
             } catch (error: Exception) {
