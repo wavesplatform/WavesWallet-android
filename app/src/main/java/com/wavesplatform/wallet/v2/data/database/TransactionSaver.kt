@@ -105,6 +105,11 @@ class TransactionSaver(private var nodeDataManager: NodeDataManager,
                 tempGrabbedAssets.add(assetPair.amountAsset)
                 tempGrabbedAssets.add(assetPair.priceAsset)
             }
+            if (!transition.payment.isNullOrEmpty()){
+                transition.payment.first()?.notNull { payment ->
+                    tempGrabbedAssets.add(payment.assetId)
+                }
+            }
             tempGrabbedAssets.add(transition.assetId)
             tempGrabbedAssets.add(transition.feeAssetId)
         }
@@ -132,9 +137,19 @@ class TransactionSaver(private var nodeDataManager: NodeDataManager,
                                 trans.feeAssetObject = allAssets.firstOrNull { it.id == trans.feeAssetId }
                             }
 
+                            if (!trans.payment.isNullOrEmpty()) {
+                                trans.payment.first()?.let { payment ->
+                                    if (payment.assetId.isNullOrEmpty()) {
+                                        payment.asset = Constants.wavesAssetInfo
+                                    } else {
+                                        payment.asset = allAssets.firstOrNull { it.id == payment.assetId }
+                                    }
+                                }
+                            }
+
                             when {
-                                trans.recipient.contains("alias") -> {
-                                    val aliasName = trans.recipient.substringAfterLast(":")
+                                trans.recipient.isAlias() -> {
+                                    val aliasName = trans.recipient.parseAlias()
                                     loadAliasAddress(aliasName) { address ->
                                         trans.recipientAddress = address
                                         trans.transactionTypeId = transactionUtil.getTransactionType(trans)
@@ -142,15 +157,18 @@ class TransactionSaver(private var nodeDataManager: NodeDataManager,
                                     }
 
                                 }
-                                trans.lease?.recipient?.contains("alias") == true -> {
-                                    val aliasName = trans.lease?.recipient?.substringAfterLast(":")
+                                trans.lease?.recipient?.isAlias() == true -> {
+                                    val aliasName = trans.lease?.recipient?.parseAlias()
                                     loadAliasAddress(aliasName) { address ->
                                         trans.lease?.recipientAddress = address
                                         trans.transactionTypeId = transactionUtil.getTransactionType(trans)
                                         trans.save()
                                     }
                                 }
-                                else -> trans.recipientAddress = trans.recipient
+                                else -> {
+                                    trans.recipientAddress = trans.recipient
+                                    trans.lease?.recipientAddress = trans.lease?.recipient
+                                }
                             }
 
                             trans.transfers.forEach { trans ->
@@ -166,6 +184,20 @@ class TransactionSaver(private var nodeDataManager: NodeDataManager,
                                     }
                                 } else {
                                     trans.recipientAddress = trans.recipient
+                                    trans.lease?.recipientAddress = trans.lease?.recipient
+                                }
+                            }
+
+                            trans.transfers.forEach { transfer ->
+                                when {
+                                    transfer.recipient.isAlias() -> {
+                                        val aliasName = transfer.recipient.parseAlias()
+                                        loadAliasAddress(aliasName) { address ->
+                                            transfer.recipientAddress = address
+                                            transfer.save()
+                                        }
+                                    }
+                                    else -> transfer.recipientAddress = transfer.recipient
                                 }
                             }
 

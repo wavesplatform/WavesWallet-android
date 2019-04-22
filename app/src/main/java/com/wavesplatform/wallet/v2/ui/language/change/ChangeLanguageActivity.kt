@@ -19,6 +19,7 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.language.LanguageAdapter
 import com.wavesplatform.wallet.v2.ui.language.LanguagePresenter
 import com.wavesplatform.wallet.v2.ui.language.LanguageView
+import com.wavesplatform.wallet.v2.util.getLocalizedString
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_change_language.*
@@ -91,6 +92,8 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
                 item.checked = true
                 adapter.setData(position, item)
             }
+
+            setLocalizedTextToButton(item)
         }
 
         button_save.click {
@@ -101,6 +104,10 @@ class ChangeLanguageActivity : BaseActivity(), LanguageView {
                 launchActivity<MainActivity>(clear = true)
             }
         }
+    }
+
+    private fun setLocalizedTextToButton(item: LanguageItem) {
+        button_save.text = getLocalizedString(R.string.choose_language_confirm, Language.getLocale(item.language.code))
     }
 
     private fun markCurrentSelectedLanguage() {

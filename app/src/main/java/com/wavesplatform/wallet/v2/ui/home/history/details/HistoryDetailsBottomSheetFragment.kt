@@ -42,6 +42,7 @@ import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.wallet.v2.util.TransactionUtil.Companion.getTransactionAmount
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_exchange_layout.view.*
+import kotlinx.android.synthetic.main.fragment_bottom_sheet_script_invocation_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
 import kotlinx.android.synthetic.main.history_details_layout.view.*
@@ -122,6 +123,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 TransactionType.DATA_TYPE,
                 TransactionType.SET_ADDRESS_SCRIPT_TYPE,
                 TransactionType.CANCEL_ADDRESS_SCRIPT_TYPE,
+                TransactionType.SCRIPT_INVOCATION_TYPE,
                 TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                     view.text_transaction_name.text = getString(R.string.history_data_type_title)
                     view.text_transaction_value.text = getString(transaction.transactionType().title)
@@ -222,7 +224,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val imageCopy = sendView?.findViewById<AppCompatImageView>(R.id.image_address_copy)
                 val imageAddressAction = sendView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
-                var recipient = transaction.recipient.clearAlias()
+                var recipient = transaction.recipient.parseAlias()
                 if (TextUtils.isEmpty(recipient)) {
                     recipient = transaction.recipientAddress ?: ""
                 }
@@ -246,9 +248,9 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val textLeasingToAddress = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_leasing_to_address)
                 val imageAddressAction = startLeaseView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
-                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
+                val nodeLeasingRecipient = transaction.lease?.recipient?.parseAlias()
                 if (nodeLeasingRecipient.isNullOrEmpty()) {
-                    textLeasingToAddress?.text = transaction.recipient.clearAlias()
+                    textLeasingToAddress?.text = transaction.recipient.parseAlias()
                 } else {
                     textLeasingToAddress?.text = nodeLeasingRecipient
                 }
@@ -303,11 +305,16 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val imageCopy = receiveView?.findViewById<AppCompatImageView>(R.id.image_address_copy)
                 val imageAddressAction = receiveView?.findViewById<AppCompatTextView>(R.id.text_address_action)
 
-                val nodeLeasingRecipient = transaction.lease?.recipient?.clearAlias()
+                val nodeLeasingRecipient = transaction.lease?.recipient?.parseAlias()
                 if (nodeLeasingRecipient.isNullOrEmpty()) {
-                    textCancelLeasingFromAddress?.text = transaction.recipient.clearAlias()
+                    textCancelLeasingFromAddress?.text = transaction.recipient.parseAlias()
                 } else {
                     textCancelLeasingFromAddress?.text = nodeLeasingRecipient
+                }
+
+                if (transaction.transactionType() == TransactionType.INCOMING_LEASING_TYPE) {
+                    receiveView?.findViewById<AppCompatTextView>(R.id.text_received_from_hint)?.text = getString(R.string.history_details_leasing_from)
+                    textCancelLeasingFromAddress?.text = transaction.sender
                 }
 
                 eventSubscriptions.add(RxView.clicks(imageCopy!!)
@@ -388,7 +395,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
 
                     textRecipientNumber?.text = getString(R.string.history_mass_send_recipient, index.inc().toString())
 
-                    var recipient = transfer.recipient.clearAlias()
+                    var recipient = transfer.recipient.parseAlias()
                     if (TextUtils.isEmpty(recipient)) {
                         recipient = transfer.recipientAddress ?: ""
                     }
@@ -425,7 +432,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
 
                                 val transfer = transfers[i]
 
-                                var recipient = transfer.recipient.clearAlias()
+                                var recipient = transfer.recipient.parseAlias()
                                 if (TextUtils.isEmpty(recipient)) {
                                     recipient = transfer.recipientAddress ?: ""
                                 }
@@ -489,6 +496,40 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                         })
 
                 historyContainer?.addView(sponsorView)
+            }
+            TransactionType.SCRIPT_INVOCATION_TYPE -> {
+                val view = inflater?.inflate(R.layout.fragment_bottom_sheet_script_invocation_layout, historyContainer, false)
+
+                view?.let {
+                    view.text_script_address_value?.text = transaction.dappAddress
+
+                    val payment = transaction.payment.firstOrNull()
+
+                    if (payment != null){
+                        view.relative_payment.visiable()
+                        if (isShowTicker(payment.assetId)) {
+                            view.text_payment_value?.text = MoneyUtil.getScaledText(payment.amount, payment.asset).stripZeros()
+                            val ticker = transaction.asset?.getTicker()
+                            if (!ticker.isNullOrBlank()) {
+                                view.text_payment_tag?.text = ticker
+                                view.text_payment_tag?.visiable()
+                            }
+                        } else {
+                            view.text_payment_value?.text = "${MoneyUtil.getScaledText(payment.amount, payment.asset).stripZeros()} ${payment.asset?.name}"
+                        }
+                    }else{
+                        view.relative_payment.gone()
+                    }
+
+                    eventSubscriptions.add(RxView.clicks(view.image_copy)
+                            .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe {
+                                view.image_copy.copyToClipboard(view.text_script_address_value.text.toString())
+                            })
+                }
+
+                historyContainer.addView(view)
             }
             TransactionType.UPDATE_ASSET_SCRIPT_TYPE -> {
                 val tokenView = inflater?.inflate(R.layout.fragment_bottom_sheet_set_asset_script_layout, historyContainer, false)
