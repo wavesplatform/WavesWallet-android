@@ -28,7 +28,6 @@ class AssetsAdapter @Inject constructor() :
         BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder>(null) {
 
     var scrollToHeaderListener: ScrollToHeaderListener? = null
-    var onSearchClickListener: OnSearchClickListener? = null
 
     companion object {
         const val TYPE_HEADER = 0
@@ -58,11 +57,6 @@ class AssetsAdapter @Inject constructor() :
 
     override fun convert(helper: BaseViewHolder, item: MultiItemEntity) {
         when (helper.itemViewType) {
-            TYPE_SEARCH -> {
-                helper.itemView.click {
-                    onSearchClickListener?.onClick(helper.itemView)
-                }
-            }
             TYPE_HEADER -> {
                 val item = item as WalletSectionItem
                 helper.setText(R.id.text_header, item.header)
@@ -113,9 +107,5 @@ class AssetsAdapter @Inject constructor() :
 
     interface ScrollToHeaderListener {
         fun scrollToHeader(position: Int, itemView: View)
-    }
-
-    interface OnSearchClickListener {
-        fun onClick(view: View)
     }
 }

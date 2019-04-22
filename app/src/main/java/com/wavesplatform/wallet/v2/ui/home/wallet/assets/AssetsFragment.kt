@@ -10,7 +10,10 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -30,8 +33,8 @@ import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
-import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset.SearchAssetActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
 import com.wavesplatform.wallet.v2.util.RxUtil
 import com.wavesplatform.wallet.v2.util.isMyServiceRunning
 import com.wavesplatform.wallet.v2.util.launchActivity
@@ -97,13 +100,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
                         presenter.reloadAssetsAfterSpamUrlChanged()
                     }
                 })
-
-        adapter.onSearchClickListener = object : AssetsAdapter.OnSearchClickListener {
-            override fun onClick(view: View) {
-                launchActivity<SearchAssetActivity>(withoutAnimation = true)
-                activity!!.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-            }
-        }
     }
 
     private fun setupUI() {
@@ -169,24 +165,29 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
-            val item = this.adapter.getItem(position) as AssetBalance
-            val positionWithoutSection = when {
-                // minus hidden section header and all clear assets
-                item.isHidden -> position - 1 - adapter.data.count {
-                    (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
+            if (position == 0) {
+                launchActivity<SearchAssetActivity>(withoutAnimation = true)
+                activity!!.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            } else {
+                val item = this.adapter.getItem(position) as AssetBalance
+                val positionWithoutSection = when {
+                    // minus hidden section header and all clear assets
+                    item.isHidden -> position - 1 - adapter.data.count {
+                        (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
+                    }
+                    // minus hidden and spam sections header and all clear and hidden assets
+                    item.isSpam -> position - getCorrectionIndex() - adapter.data.count {
+                        (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
+                    } -
+                            adapter.data.count {
+                                (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HIDDEN_ASSET
+                            }
+                    else -> position // no changes
                 }
-                // minus hidden and spam sections header and all clear and hidden assets
-                item.isSpam -> position - getCorrectionIndex() - adapter.data.count {
-                    (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
-                } -
-                        adapter.data.count {
-                            (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HIDDEN_ASSET
-                        }
-                else -> position // no changes
-            }
-            launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType)
-                putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, positionWithoutSection)
+                launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
+                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType)
+                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, positionWithoutSection - 1)
+                }
             }
         }
 

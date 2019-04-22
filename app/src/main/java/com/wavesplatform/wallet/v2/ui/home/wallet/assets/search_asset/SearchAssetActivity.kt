@@ -93,10 +93,13 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
                     presenter.search(search.toString())
                 })
 
-        presenter.search("")
-
         search_view.requestFocus()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.queryAllAssets()
+        presenter.search(presenter.lastQuery)
     }
 
     override fun setSearchResult(list: List<MultiItemEntity>) {

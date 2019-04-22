@@ -89,6 +89,7 @@
         android:clipToPadding="false"
         android:paddingBottom="18dp"
         android:paddingTop="18dp"
+        android:overScrollMode="never"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/wallet_asset_item"/>
 

@@ -18,10 +18,15 @@ import javax.inject.Inject
 class SearchAssetPresenter @Inject constructor() : BasePresenter<SearchAssetView>() {
 
     private var findAssetList = listOf<AssetBalance>()
+    var lastQuery = ""
+
+    fun queryAllAssets() {
+        findAssetList = queryAll()
+    }
 
     fun search(query: String) {
         if (findAssetList.isEmpty()) {
-            findAssetList = queryAll()
+            queryAllAssets()
         }
         val find = findAssetBalanceInDb(query, findAssetList)
         val result = mutableListOf<MultiItemEntity>()
@@ -52,5 +57,7 @@ class SearchAssetPresenter @Inject constructor() : BasePresenter<SearchAssetView
         }
 
         viewState.setSearchResult(result)
+
+        lastQuery = query
     }
 }
