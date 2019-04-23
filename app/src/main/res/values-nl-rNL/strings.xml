@@ -654,8 +654,6 @@
   <string name="my_orders_details_amount_hint">Hoeveelheid</string>
   <string name="my_orders_details_price_hint">Prijs</string>
   <string name="my_orders_details_total_hint">Totaal</string>
-  <string name="RENAME.clean.title">Geen rommel meer!</string>
-  <string name="RENAME.clean.text">We hebben de weergave van items opnieuw vormgeven om uw wallet schoon en opgeruimd te houden. U kunt uw lijst met assets aanpassen zoals u dat wilt!</string>
   <string name="search_asset_hint">Zoeken</string>
   <string name="search_asset_cancel">Annuleer</string>
   <string name="search_asset_empty">U heeft niet zulke assets</string>

@@ -654,8 +654,6 @@
   <string name="my_orders_details_amount_hint">Menge</string>
   <string name="my_orders_details_price_hint">Preis</string>
   <string name="my_orders_details_total_hint">Gesamtmenge</string>
-  <string name="RENAME.clean.title">Keine Unordnung mehr!</string>
-  <string name="RENAME.clean.text">Wir haben die Anzeige der Assets neu gestaltet, damit Sie Ihre Wallet sauber und aufgeräumt halten können. Sie können Ihre Bestandsliste beliebig anpassen!</string>
   <string name="search_asset_hint">Suche</string>
   <string name="search_asset_cancel">Abbrechen</string>
   <string name="search_asset_empty">Sie verfügen nicht über solche Assets</string>

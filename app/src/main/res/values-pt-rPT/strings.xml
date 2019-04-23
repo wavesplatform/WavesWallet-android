@@ -654,8 +654,6 @@
   <string name="my_orders_details_amount_hint">Quantidade</string>
   <string name="my_orders_details_price_hint">Cotação</string>
   <string name="my_orders_details_total_hint">Total</string>
-  <string name="RENAME.clean.title">Acabámos com a confusão!</string>
-  <string name="RENAME.clean.text">Mudámos a forma de apresentação da lista Ativos para tornar a aplicação simples e fácil de usar. Se preferires podes sempre customizar a lista de ativos que pretendes ver carregados no ecrã.</string>
   <string name="search_asset_hint">Pesquisar</string>
   <string name="search_asset_cancel">Cancelar</string>
   <string name="search_asset_empty">Não foram encontrados ativos</string>

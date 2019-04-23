@@ -654,8 +654,6 @@
   <string name="my_orders_details_amount_hint">रकम</string>
   <string name="my_orders_details_price_hint">मूल्य</string>
   <string name="my_orders_details_total_hint">संपूर्ण</string>
-  <string name="RENAME.clean.title">और कोई गड़बड़ नहीं!</string>
-  <string name="RENAME.clean.text">हमने आपको अपने बटुए को साफ सुथरा रखने के लिए परिसंपत्तियों के प्रदर्शन को फिर से डिज़ाइन किया है। आप चाहे तो अपनी संपत्ति सूची को अनुकूलित कर सकते हैं!</string>
   <string name="search_asset_hint">खोज</string>
   <string name="search_asset_cancel">रद्द करना</string>
   <string name="search_asset_empty">आपके पास ऐसी संपत्ति नहीं है</string>
