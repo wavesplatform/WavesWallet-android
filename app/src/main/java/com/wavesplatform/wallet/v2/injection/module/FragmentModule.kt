@@ -33,6 +33,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.send.fee.SponsoredFeeBot
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.content.AssetDetailsContentFragment
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.tab.AssetsSortingTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageBottomSheetFragment
 import dagger.Module
@@ -48,6 +49,10 @@ abstract class FragmentModule {
     @PerFragment
     @ContributesAndroidInjector
     internal abstract fun dexFragment(): DexFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    internal abstract fun assetsSortingTabFragment(): AssetsSortingTabFragment
 
     @PerFragment
     @ContributesAndroidInjector
