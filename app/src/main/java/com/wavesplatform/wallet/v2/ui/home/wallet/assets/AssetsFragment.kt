@@ -7,6 +7,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet.assets
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -26,7 +27,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
-import com.wavesplatform.wallet.v2.data.service.HistoryUpdateRxWorker
+import com.wavesplatform.wallet.v2.data.service.HistoryRepeatUpdater
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
@@ -204,10 +205,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
     override fun afterFailedUpdateAssets() {
         swipe_container?.isRefreshing = false
-    }
-
-    override fun startServiceToLoadData() {
-        HistoryUpdateRxWorker.start(presenter.nodeDataManager, rxEventBus)
     }
 
     override fun afterSuccessLoadAssets(assets: ArrayList<MultiItemEntity>, fromDB: Boolean, withApiUpdate: Boolean) {

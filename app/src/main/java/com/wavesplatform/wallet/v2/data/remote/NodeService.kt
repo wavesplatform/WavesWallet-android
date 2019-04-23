@@ -13,6 +13,7 @@ import com.wavesplatform.wallet.v1.request.TransferTransactionRequest
 import com.wavesplatform.wallet.v2.data.model.remote.request.*
 import com.wavesplatform.wallet.v2.data.model.remote.response.*
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

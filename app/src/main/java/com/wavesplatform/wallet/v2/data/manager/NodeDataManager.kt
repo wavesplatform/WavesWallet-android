@@ -26,6 +26,7 @@ import com.wavesplatform.wallet.v2.util.loadDbWavesBalance
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.sumByLong
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
@@ -298,36 +299,13 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 }
     }
 
-    fun loadTransactions(currentLoadTransactionLimitPerRequest: Int): Observable<List<Transaction>> {
-        return Observable.interval(0, 15, TimeUnit.SECONDS)
-                .retry(3)
-                .flatMap {
-                    if (ProcessLifecycleOwner.get().lifecycle.currentState == Lifecycle.State.RESUMED) {
-                        return@flatMap nodeService.transactionList(getAddress(), currentLoadTransactionLimitPerRequest)
-                                .map { r -> r[0] }
-                    } else {
-                        return@flatMap Observable.just(listOf<Transaction>())
-                    }
-                }
-                .onErrorResumeNext(Observable.empty())
-    }
-
     fun loadLightTransactions(): Observable<List<Transaction>> {
         return nodeService.transactionList(getAddress(), 100)
                 .map { r -> r[0] }
     }
 
     fun currentBlocksHeight(): Observable<Height> {
-        return Observable.interval(0, 60, TimeUnit.SECONDS)
-                .retry(3)
-                .flatMap {
-                    return@flatMap nodeService.currentBlocksHeight()
-                }
-                .map {
-                    preferencesHelper.currentBlocksHeight = it.height
-                    return@map it
-                }
-                .onErrorResumeNext(Observable.empty())
+        return nodeService.currentBlocksHeight()
     }
 
     fun activeLeasing(): Observable<List<Transaction>> {

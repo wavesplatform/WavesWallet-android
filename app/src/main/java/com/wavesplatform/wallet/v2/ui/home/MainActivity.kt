@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
@@ -29,6 +30,7 @@ import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.data.model.remote.response.News
+import com.wavesplatform.wallet.v2.data.service.HistoryRepeatUpdater
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
 import com.wavesplatform.wallet.v2.ui.home.history.HistoryFragment
@@ -100,6 +102,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         showBackUpSeedWarning()
         if (App.getAccessManager().getWallet() != null) {
             presenter.loadNews()
+            HistoryRepeatUpdater.start(Handler(), presenter.nodeDataManager, presenter.rxEventBus)
         }
     }
 

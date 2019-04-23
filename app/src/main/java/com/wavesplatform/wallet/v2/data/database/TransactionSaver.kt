@@ -171,23 +171,6 @@ class TransactionSaver(private var nodeDataManager: NodeDataManager,
                                 }
                             }
 
-                            trans.transfers.forEach { trans ->
-                                if (trans.recipient.contains("alias")) {
-                                    val aliasName = trans.recipient.substringAfterLast(":")
-                                    aliasName.notNull {
-                                        subscriptions.add(nodeDataManager.apiDataManager.loadAlias(it)
-                                                .compose(RxUtil.applyObservableDefaultSchedulers())
-                                                .subscribe {
-                                                    trans.recipientAddress = it.address
-                                                    trans.save()
-                                                })
-                                    }
-                                } else {
-                                    trans.recipientAddress = trans.recipient
-                                    trans.lease?.recipientAddress = trans.lease?.recipient
-                                }
-                            }
-
                             trans.transfers.forEach { transfer ->
                                 when {
                                     transfer.recipient.isAlias() -> {
@@ -197,7 +180,9 @@ class TransactionSaver(private var nodeDataManager: NodeDataManager,
                                             transfer.save()
                                         }
                                     }
-                                    else -> transfer.recipientAddress = transfer.recipient
+                                    else -> {
+                                        transfer.recipientAddress = transfer.recipient
+                                    }
                                 }
                             }
 

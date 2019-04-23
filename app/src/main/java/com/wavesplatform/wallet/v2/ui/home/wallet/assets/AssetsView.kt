@@ -15,5 +15,4 @@ interface AssetsView : BaseMvpView {
     fun afterSuccessLoadAssets(assets: ArrayList<MultiItemEntity>, fromDB: Boolean, withApiUpdate: Boolean)
     fun afterFailedLoadAssets()
     fun afterFailedUpdateAssets()
-    fun startServiceToLoadData()
 }

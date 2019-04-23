@@ -1,5 +1,5 @@
 /*
- * Created by Eduard Zaydel on 1/4/2019
+ * Created by Aleksandr Ershov on 1/4/2019
  * Copyright © 2019 Waves Platform. All rights reserved.
  */
 
@@ -20,7 +20,7 @@ import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.helpers.AuthHelper
 import com.wavesplatform.wallet.v2.data.model.userdb.AddressBookUser
-import com.wavesplatform.wallet.v2.data.service.HistoryUpdateRxWorker
+import com.wavesplatform.wallet.v2.data.service.HistoryRepeatUpdater
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.util.AddressUtil
@@ -230,7 +230,7 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
     }
 
     private fun clearRealmConfiguration() {
-        HistoryUpdateRxWorker.cancel()
+        HistoryRepeatUpdater.cancel()
         val f = RealmConfigStore::class.java.getDeclaredField("configMap") // NoSuchFieldException
         f.isAccessible = true
         val configMap = f.get(RealmConfigStore::class.java) as MutableMap<*, *>

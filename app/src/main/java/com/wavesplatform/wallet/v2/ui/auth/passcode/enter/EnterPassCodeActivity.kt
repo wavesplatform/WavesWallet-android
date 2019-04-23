@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.ui.auth.passcode.enter
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.View
@@ -17,6 +18,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
+import com.wavesplatform.wallet.v2.data.service.HistoryRepeatUpdater
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.use_account_password.UseAccountPasswordActivity
@@ -166,8 +168,8 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
     }
 
     override fun onSuccessValidatePassCode(password: String, passCode: String) {
-        if (useFingerprint && !SecurePreferences.contains(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE)) {
-            SecurePreferences.setValue(guid + EnterPassCodeActivity.KEY_INTENT_PASS_CODE, passCode)
+        if (useFingerprint && !SecurePreferences.contains(guid + KEY_INTENT_PASS_CODE)) {
+            SecurePreferences.setValue(guid + KEY_INTENT_PASS_CODE, passCode)
             prefsUtil.removeValue(guid, PrefsUtil.KEY_ENCRYPTED_PIN)
         }
 
@@ -179,6 +181,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         data.putExtra(KEY_INTENT_PASS_CODE, passCode)
         setResult(Constants.RESULT_OK, data)
         App.getAccessManager().setWallet(getGuid(), password)
+        HistoryRepeatUpdater.start(Handler(), presenter.nodeDataManager, presenter.rxEventBus)
         exitFromScreen()
     }
 

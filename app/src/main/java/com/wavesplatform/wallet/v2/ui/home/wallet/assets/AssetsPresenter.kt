@@ -44,7 +44,6 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
             return
         }
 
-        viewState.startServiceToLoadData()
         runAsync {
             val savedAssetPrefs = queryAll<AssetBalanceStore>()
             var dbAssets = mutableListOf<AssetBalance>()
