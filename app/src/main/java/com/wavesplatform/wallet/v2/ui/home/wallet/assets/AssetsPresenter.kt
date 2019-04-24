@@ -35,6 +35,7 @@ import javax.inject.Inject
 @InjectViewState
 class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     var needToScroll: Boolean = false
+    var enableElevation: Boolean = false
 
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
         if (App.getAccessManager().getWallet() == null) {

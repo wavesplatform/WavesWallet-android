@@ -12,8 +12,6 @@ import javax.inject.Inject
 
 @InjectViewState
 class WalletPresenter @Inject constructor() : BasePresenter<WalletView>() {
-    var hideShadow: Boolean = true
-
     fun checkNewAppUpdates() {
         val needUpdate = preferenceHelper.lastAppVersion != BuildConfig.VERSION_NAME
         viewState.afterCheckNewAppUpdates(needUpdate)

@@ -156,7 +156,6 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
             }
         }
 
-        walletFragment.setOnElevationChangeListener(elevationListener)
         dexFragment.setOnElevationChangeListener(elevationListener)
         historyFragment.setOnElevationChangeListener(elevationListener)
         profileFragment.setOnElevationChangeListener(elevationListener)

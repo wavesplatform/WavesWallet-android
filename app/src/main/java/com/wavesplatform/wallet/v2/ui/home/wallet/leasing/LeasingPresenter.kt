@@ -21,6 +21,8 @@ import javax.inject.Inject
 @InjectViewState
 class LeasingPresenter @Inject constructor() : BasePresenter<LeasingView>() {
 
+    var enableElevation: Boolean = false
+
     fun getActiveLeasing() {
         runAsync {
             addSubscription(Observable.zip(nodeDataManager.loadWavesBalance(),

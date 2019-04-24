@@ -30,7 +30,6 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset.SearchAssetActivity
@@ -60,9 +59,10 @@ class AssetsFragment : BaseFragment(), AssetsView {
     @Inject
     lateinit var adapter: AssetsAdapter
 
+    var elevationAppBarChangeListener : MainActivity.OnElevationAppBarChangeListener? = null
+
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
     private var headerItemDecoration: PinnedHeaderItemDecoration? = null
-    var changeTabBarVisibilityListener: HistoryTabFragment.ChangeTabBarVisibilityListener? = null
 
     override fun configLayoutRes(): Int = R.layout.fragment_assets
 
@@ -73,7 +73,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 .subscribe {
                     if (it.position == MainActivity.WALLET_SCREEN) {
                         recycle_assets.scrollToPosition(0)
-                        changeTabBarVisibilityListener?.changeTabBarVisibility(true)
                     }
                 })
 
@@ -100,6 +99,14 @@ class AssetsFragment : BaseFragment(), AssetsView {
                         presenter.reloadAssetsAfterSpamUrlChanged()
                     }
                 })
+
+        recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                presenter.enableElevation = recyclerView.computeVerticalScrollOffset() > 4
+                elevationAppBarChangeListener?.onChange(presenter.enableElevation)
+            }
+        })
     }
 
     private fun setupUI() {
