@@ -10,14 +10,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/basic100_rounded"
         android:drawableStart="@drawable/ic_search_24_basic_500"
         android:drawablePadding="8dp"
         android:padding="8dp"
         android:text="@string/search_asset_hint"
         android:gravity="center_vertical"
-        android:textColor="@color/accent100"
+        android:textColor="@color/basic500"
         android:textSize="16sp"/>
 
 </FrameLayout>
