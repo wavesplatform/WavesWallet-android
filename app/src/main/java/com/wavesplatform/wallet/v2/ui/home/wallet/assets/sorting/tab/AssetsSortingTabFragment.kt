@@ -50,6 +50,10 @@ class AssetsSortingTabFragment : BaseFragment(), AssetsSortingTabView {
 
 
     override fun onViewReady(savedInstanceState: Bundle?) {
+        arguments?.let { bundle ->
+            presenter.screenType = bundle.getInt(BUNDLE_TYPE, TYPE_POSITION)
+        }
+
         setupUI()
     }
 
@@ -220,6 +224,21 @@ class AssetsSortingTabFragment : BaseFragment(), AssetsSortingTabView {
 
     interface ToolbarShadowListener {
         fun showToolbarShadow(show: Boolean)
+    }
+
+    companion object {
+        const val BUNDLE_TYPE = "type"
+
+        const val TYPE_POSITION = 1
+        const val TYPE_VISIBILITY = 2
+
+        fun newInstance(type: Int): AssetsSortingTabFragment {
+            val fragment = AssetsSortingTabFragment()
+            fragment.arguments = Bundle().apply {
+                putInt(BUNDLE_TYPE, type)
+            }
+            return fragment
+        }
     }
 
 }

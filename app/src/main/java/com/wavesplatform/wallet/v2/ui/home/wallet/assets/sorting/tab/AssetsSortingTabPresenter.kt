@@ -20,6 +20,7 @@ import javax.inject.Inject
 
 @InjectViewState
 class AssetsSortingTabPresenter @Inject constructor() : BasePresenter<AssetsSortingTabView>() {
+    var screenType: Int = AssetsSortingTabFragment.TYPE_POSITION
     var needToUpdate: Boolean = false
     var visibilityConfigurationActive = false
 
