@@ -54,10 +54,12 @@ class InfoAlert : FrameLayout {
     }
 
     fun setIcon(icon: Bitmap) {
+        image_alert_icon.visiable()
         image_alert_icon.setImageBitmap(icon)
     }
 
     fun setIcon(@DrawableRes icon: Int) {
+        image_alert_icon.visiable()
         image_alert_icon.setImageResource(icon)
     }
 
@@ -82,10 +84,23 @@ class InfoAlert : FrameLayout {
     }
 
     fun show() {
+        this.alpha = 1f
         this.visiable()
     }
 
     fun hide() {
-        this.gone()
+        this.animate()
+                .alpha(0f)
+                .setDuration(350)
+                .withEndAction {
+                    this.gone()
+                }
+                .start()
+    }
+
+    override fun onDetachedFromWindow() {
+        this.animation?.cancel()
+        this.animation = null
+        super.onDetachedFromWindow()
     }
 }
