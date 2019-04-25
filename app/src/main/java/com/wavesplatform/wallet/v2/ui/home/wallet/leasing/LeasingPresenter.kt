@@ -22,6 +22,8 @@ import javax.inject.Inject
 @InjectViewState
 class LeasingPresenter @Inject constructor() : BasePresenter<LeasingView>() {
 
+    var enableElevation: Boolean = false
+
     fun getActiveLeasing() {
         if (Wavesplatform.isAuthenticated()) {
             runAsync {

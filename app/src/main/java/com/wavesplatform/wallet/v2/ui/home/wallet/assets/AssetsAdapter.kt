@@ -30,10 +30,11 @@ class AssetsAdapter @Inject constructor() :
     var scrollToHeaderListener: ScrollToHeaderListener? = null
 
     companion object {
-        val TYPE_HEADER = 0
-        val TYPE_ASSET = 1
-        val TYPE_HIDDEN_ASSET = 2
-        val TYPE_SPAM_ASSET = 3
+        const val TYPE_HEADER = 0
+        const val TYPE_ASSET = 1
+        const val TYPE_HIDDEN_ASSET = 2
+        const val TYPE_SPAM_ASSET = 3
+        const val TYPE_SEARCH = 4
     }
 
     init {
@@ -41,6 +42,7 @@ class AssetsAdapter @Inject constructor() :
         addItemType(TYPE_ASSET, R.layout.item_wallet_asset)
         addItemType(TYPE_HIDDEN_ASSET, R.layout.item_wallet_asset)
         addItemType(TYPE_SPAM_ASSET, R.layout.item_wallet_asset)
+        addItemType(TYPE_SEARCH, R.layout.item_wallet_asset_search)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

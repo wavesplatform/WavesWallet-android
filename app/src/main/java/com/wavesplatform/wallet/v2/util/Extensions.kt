@@ -21,7 +21,6 @@ import android.os.Parcelable
 import android.provider.Settings
 import android.support.annotation.ColorRes
 import android.support.annotation.IdRes
-import android.support.annotation.NonNull
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -471,7 +470,6 @@ inline fun <reified T : Any> Fragment.launchActivity(
     }
     if (withoutAnimation) {
         activity?.overridePendingTransition(0, 0)
-        // todo activity?.overridePendingTransition(R.anim.start_new_show,  R.anim.start_current_hide)
     }
 }
 
@@ -520,7 +518,7 @@ fun View.setMargins(
             left ?: lp.leftMargin,
             top ?: lp.topMargin,
             right ?: lp.rightMargin,
-            bottom ?: lp.rightMargin
+            bottom ?: lp.bottomMargin
     )
 
     layoutParams = lp
@@ -638,4 +636,20 @@ fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): Strin
     configuration.setLocale(desiredLocale)
     val localizedContext = createConfigurationContext(configuration)
     return localizedContext.resources.getString(id)
+}
+
+fun findAssetBalanceInDb(query: String?, list: List<AssetBalance>): List<AssetBalance> {
+    return if (TextUtils.isEmpty(query)) {
+        list.filter { !it.isSpam }
+    } else {
+        val queryLower = query!!.toLowerCase()
+        list.filter { !it.isSpam }
+                .filter {
+                    it.assetId.toLowerCase().contains(queryLower)
+                            || it.getName().toLowerCase().contains(queryLower)
+                            || it.issueTransaction?.name?.toLowerCase()?.contains(queryLower) ?: false
+                            || it.issueTransaction?.assetId?.toLowerCase()?.contains(queryLower) ?: false
+                            || it.assetId == Constants.findByGatewayId(query.toUpperCase())?.assetId
+                }
+    }
 }

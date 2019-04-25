@@ -654,17 +654,15 @@
     <string name="my_orders_details_amount_hint">Amount</string>
     <string name="my_orders_details_price_hint">Price</string>
     <string name="my_orders_details_total_hint">Total</string>
-    <string name="search_asset_hint">Search</string>
-    <string name="search_asset_cancel">Cancel</string>
-    <string name="search_asset_empty">You do not have such assets</string>
     <string name="history_type_script_invocation">Script Invocation</string>
     <string name="history_details_script_invocation_payment">Payment</string>
     <string name="history_details_script_invocation_script_address">Script address</string>
     <string name="need_update_alert_title">It\'s time to update your app!</string>
     <string name="need_update_alert_description">We are constantly working to make Waves Wallet better and more useful. Please update your app to gain access to new features.</string>
+    <string name="search_asset_hint">Search</string>
+    <string name="search_asset_cancel">Cancel</string>
     <string name="search_asset_hidden_title">Hidden assets</string>
-
+    <string name="search_asset_empty">You do not have such assets</string>
     <string name="clean_banner_title">No more mess!</string>
     <string name="clean_banner_description">We have redesigned the display of assets to allow you to keep your wallet clean and tidy. You can customise your asset list however you want!</string>
-
 </resources>

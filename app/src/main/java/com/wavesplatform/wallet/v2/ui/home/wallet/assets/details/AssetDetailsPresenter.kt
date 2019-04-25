@@ -6,13 +6,16 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.details
 
 import com.arellomobile.mvp.InjectViewState
+import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
-import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.RxUtil // todo check
+import com.wavesplatform.wallet.v2.util.findAssetBalanceInDb
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -25,6 +28,37 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
     var isShow = true
     var scrollRange: Float = -1f
     var allTransaction: List<TransactionResponse> = emptyList()
+    private var findAssetList = listOf<AssetBalance>()
+
+
+    fun loadSearchAssets(query: String) {
+        if (findAssetList.isEmpty()) {
+            findAssetList = queryAll()
+        }
+        val find = findAssetBalanceInDb(query, findAssetList)
+        val result = mutableListOf<AssetBalance>()
+        val hiddenAssets = mutableListOf<AssetBalance>()
+
+        find.forEach {
+            if (it.isFavorite) {
+                result.add(it)
+            }
+        }
+
+        find.forEach {
+            if (!it.isFavorite) {
+                if (it.isHidden) {
+                    hiddenAssets.add(it)
+                } else {
+                    result.add(it)
+                }
+            }
+        }
+        result.addAll(hiddenAssets)
+        runOnUiThread {
+            viewState.afterSuccessLoadAssets(result)
+        }
+    }
 
     fun loadAssets(itemType: Int) {
         runAsync {
@@ -50,7 +84,7 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
                         }
                     }
                     .compose(RxUtil.applySingleDefaultSchedulers())
-                    .subscribe({ it ->
+                    .subscribe({
                         runOnUiThread {
                             viewState.afterSuccessLoadAssets(AssetBalanceDb.convertFromDb(it))
                         }
