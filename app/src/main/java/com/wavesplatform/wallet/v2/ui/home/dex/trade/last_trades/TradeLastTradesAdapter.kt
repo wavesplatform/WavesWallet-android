@@ -18,7 +18,7 @@ import java.math.BigDecimal
 import java.text.ParsePosition
 import javax.inject.Inject
 
-class TradeLastTradesAdapter @Inject constructor() : BaseQuickAdapter<LastTradesResponse.DataResponse.ExchangeTransactionResponse, BaseViewHolder>(R.layout.recycle_item_last_trades, null) {
+class TradeLastTradesAdapter @Inject constructor() : BaseQuickAdapter<LastTradesResponse.DataResponse.ExchangeTransactionResponse, BaseViewHolder>(R.layout.item_last_trades, null) {
     var market: MarketResponse = MarketResponse()
 
     override fun convert(helper: BaseViewHolder, item: LastTradesResponse.DataResponse.ExchangeTransactionResponse) {

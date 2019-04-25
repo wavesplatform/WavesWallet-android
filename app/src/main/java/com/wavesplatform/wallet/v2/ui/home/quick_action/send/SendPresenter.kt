@@ -5,6 +5,7 @@
 
 package com.wavesplatform.wallet.v2.ui.home.quick_action.send
 
+import android.text.TextUtils
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.crypto.Base58
@@ -14,6 +15,7 @@ import com.wavesplatform.sdk.net.model.request.TransferTransactionRequest
 import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.sdk.utils.TransactionUtil.Companion.countCommission
+import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
@@ -238,7 +240,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                 }))
     }
 
-    fun loadAsset(assetId: String) {
+    fun loadAssetForLink(assetId: String, url: String) {
         addSubscription(
                 nodeDataManager.assetDetails(assetId)
                         .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -256,7 +258,12 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                                             reissuable = assetsDetails.reissuable,
                                             timestamp = assetsDetails.issueTimestamp,
                                             sender = assetsDetails.issuer))
-                            viewState.showLoadAssetSuccess(assetBalance)
+                            assetBalance.save()
+                            if (!TextUtils.isEmpty(url)) {
+                                viewState.setDataFromUrl(url)
+                            } else {
+                                viewState.showLoadAssetSuccess(assetBalance)
+                            }
                             if (isSpamConsidered(assetId, prefsUtil)) {
                                 viewState.onShowError(R.string.send_spam_error)
                             }

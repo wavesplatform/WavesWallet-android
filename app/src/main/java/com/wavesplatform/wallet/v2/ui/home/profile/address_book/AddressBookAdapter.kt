@@ -9,12 +9,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
-import kotlinx.android.synthetic.main.address_book_item.view.*
+import kotlinx.android.synthetic.main.item_address_book.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-class AddressBookAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUserDb, BaseViewHolder>(R.layout.address_book_item, null) {
+class AddressBookAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUserDb, BaseViewHolder>(R.layout.item_address_book, null) {
 
     var allData: MutableList<AddressBookUserDb> = arrayListOf()
     var screenType: Int = AddressBookActivity.AddressBookScreenType.EDIT.type

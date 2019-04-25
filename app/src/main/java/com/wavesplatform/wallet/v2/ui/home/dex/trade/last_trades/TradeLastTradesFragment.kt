@@ -20,8 +20,8 @@ import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import kotlinx.android.synthetic.main.fragment_trade_last_trades.*
-import kotlinx.android.synthetic.main.global_server_error_layout.*
-import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import kotlinx.android.synthetic.main.content_global_server_error_layout.*
+import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.inflate
@@ -107,7 +107,7 @@ class TradeLastTradesFragment : BaseFragment(), TradeLastTradesView {
     }
 
     private fun getEmptyView(): View {
-        val view = inflate(R.layout.layout_empty_data)
+        val view = inflate(R.layout.content_empty_data)
         view.text_empty.text = getString(R.string.last_trades_empty)
         return view
     }

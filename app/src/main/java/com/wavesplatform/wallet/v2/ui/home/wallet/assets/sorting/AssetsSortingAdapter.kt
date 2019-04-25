@@ -14,8 +14,8 @@ import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemTouchHelperAdapter
-import kotlinx.android.synthetic.main.wallet_asset_sorting_favorite_item.view.*
-import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
+import kotlinx.android.synthetic.main.item_wallet_asset_sorting_favorite.view.*
+import kotlinx.android.synthetic.main.item_wallet_asset_sorting.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.findColor
 import javax.inject.Inject
@@ -38,9 +38,9 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
     }
 
     init {
-        addItemType(AssetSortingItem.TYPE_FAVORITE, R.layout.wallet_asset_sorting_favorite_item)
-        addItemType(AssetSortingItem.TYPE_NOT_FAVORITE, R.layout.wallet_asset_sorting_item)
-        addItemType(AssetSortingItem.TYPE_LINE, R.layout.wallet_asset_sorting_line_item)
+        addItemType(AssetSortingItem.TYPE_FAVORITE, R.layout.item_wallet_asset_sorting_favorite)
+        addItemType(AssetSortingItem.TYPE_NOT_FAVORITE, R.layout.item_wallet_asset_sorting)
+        addItemType(AssetSortingItem.TYPE_LINE, R.layout.item_wallet_asset_sorting_line)
     }
 
     var onHiddenChangeListener: OnHiddenChangeListener? = null

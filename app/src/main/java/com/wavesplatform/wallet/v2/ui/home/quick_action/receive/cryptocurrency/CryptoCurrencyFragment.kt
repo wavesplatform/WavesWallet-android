@@ -28,7 +28,7 @@ import com.wavesplatform.wallet.v2.util.findByGatewayId
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.fragment_cryptocurrency.*
-import kotlinx.android.synthetic.main.layout_asset_card.*
+import kotlinx.android.synthetic.main.content_asset_card.*
 import pers.victor.ext.*
 import java.math.BigDecimal
 import javax.inject.Inject

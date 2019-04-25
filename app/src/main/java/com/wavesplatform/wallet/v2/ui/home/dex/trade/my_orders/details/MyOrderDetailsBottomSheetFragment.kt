@@ -20,9 +20,9 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragme
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_layout.view.*
-import kotlinx.android.synthetic.main.history_details_layout.view.*
-import kotlinx.android.synthetic.main.layout_bottom_sheet_my_orders_body.view.*
-import kotlinx.android.synthetic.main.layout_my_orders_bottom_sheet_bottom_btns.view.*
+import kotlinx.android.synthetic.main.content_history_details_layout.view.*
+import kotlinx.android.synthetic.main.content_bottom_sheet_my_orders_body.view.*
+import kotlinx.android.synthetic.main.content_my_orders_bottom_sheet_bottom_btns.view.*
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -36,11 +36,11 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
     var cancelOrderListener: CancelOrderListener? = null
 
     override fun configLayoutRes(): Int {
-        return R.layout.history_details_bottom_sheet_dialog
+        return R.layout.bottom_sheet_dialog_history_details
     }
 
     override fun setupHeader(data: MyOrderTransaction): View? {
-        val view = inflater?.inflate(R.layout.history_details_layout, null, false)
+        val view = inflater?.inflate(R.layout.content_history_details_layout, null, false)
 
         view?.let {
             view.text_transaction_name?.text = getString(R.string.history_details_status)
@@ -77,7 +77,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
     }
 
     override fun setupBody(data: MyOrderTransaction): View? {
-        val view = inflater?.inflate(R.layout.layout_bottom_sheet_my_orders_body, null, false)
+        val view = inflater?.inflate(R.layout.content_bottom_sheet_my_orders_body, null, false)
 
         view?.let {
             view.text_amount_value.text = data.orderResponse.getScaledAmount(data.amountAssetInfo?.precision)
@@ -126,7 +126,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
     }
 
     override fun setupFooter(data: MyOrderTransaction): View? {
-        val view = inflater?.inflate(R.layout.layout_my_orders_bottom_sheet_bottom_btns, null, false)
+        val view = inflater?.inflate(R.layout.content_my_orders_bottom_sheet_bottom_btns, null, false)
 
         view?.let {
             eventSubscriptions.add(RxView.clicks(view.image_close)

@@ -40,7 +40,7 @@ import com.wavesplatform.wallet.v2.ui.home.quick_action.QuickActionBottomSheetFr
 import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_main_v2.*
-import kotlinx.android.synthetic.main.backup_seed_warning_snackbar.*
+import kotlinx.android.synthetic.main.content_backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_news.view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -92,6 +92,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     private fun logFirstOpen() {
         if (prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true)) {
             prefsUtil.setValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, false)
+            prefsUtil.setValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, true)
+        } else {
+            if (!prefsUtil.getValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, false)) {
+                prefsUtil.setValue(PrefsUtil.KEY_IS_NEED_TO_SHOW_CLEARED_ALERT, true)
+            }
         }
     }
 
@@ -272,7 +277,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
      * **/
     private fun getCustomView(tabIcon: Int): View? {
         val customTab = LayoutInflater.from(this)
-                .inflate(R.layout.home_navigation_tab, null)
+                .inflate(R.layout.content_home_navigation_tab, null)
         val imageTabIcon = customTab.findViewById<ImageView>(R.id.image_tab_icon)
 
         imageTabIcon.setImageResource(tabIcon)
@@ -285,7 +290,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
      * **/
     private fun getCenterTabLayout(tabIcon: Int): View? {
         val customTab = LayoutInflater.from(this)
-                .inflate(R.layout.home_navigation_center_tab, null)
+                .inflate(R.layout.content_home_navigation_center_tab, null)
         val imageTabIcon = customTab.findViewById<ImageView>(R.id.image_tab_icon)
 
         imageTabIcon.setImageResource(tabIcon)

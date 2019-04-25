@@ -23,7 +23,7 @@ import com.wavesplatform.wallet.v2.util.*
 import com.wavesplatform.sdk.utils.RxUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_token_burn.*
-import kotlinx.android.synthetic.main.view_commission.*
+import kotlinx.android.synthetic.main.content_commission.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.isNetworkConnected

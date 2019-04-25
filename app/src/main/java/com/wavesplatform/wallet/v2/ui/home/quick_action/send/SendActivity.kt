@@ -49,8 +49,8 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send.*
-import kotlinx.android.synthetic.main.layout_asset_card.*
-import kotlinx.android.synthetic.main.view_commission.*
+import kotlinx.android.synthetic.main.content_asset_card.*
+import kotlinx.android.synthetic.main.content_commission.*
 import pers.victor.ext.*
 import java.math.BigDecimal
 import java.net.URI
@@ -84,7 +84,7 @@ class SendActivity : BaseActivity(), SendView {
         checkRecipient(edit_address.text.toString())
 
         setupCommissionBlock()
-        
+
         eventSubscriptions.add(RxTextView.textChanges(edit_address)
                 .skipInitialValue()
                 .map(CharSequence::toString)
@@ -101,13 +101,13 @@ class SendActivity : BaseActivity(), SendView {
             }
             intent.hasExtra(KEY_INTENT_REPEAT_TRANSACTION) -> {
                 val assetBalance = intent.getParcelableExtra<AssetBalanceResponse>(
-                        SendActivity.KEY_INTENT_TRANSACTION_ASSET_BALANCE)
+                        KEY_INTENT_TRANSACTION_ASSET_BALANCE)
                 val amount = intent
-                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_AMOUNT).clearBalance()
+                        .getStringExtra(KEY_INTENT_TRANSACTION_AMOUNT).clearBalance()
                 val recipientAddress = intent
-                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_RECIPIENT)
+                        .getStringExtra(KEY_INTENT_TRANSACTION_RECIPIENT)
                 val attachment = intent
-                        .getStringExtra(SendActivity.KEY_INTENT_TRANSACTION_ATTACHMENT)
+                        .getStringExtra(KEY_INTENT_TRANSACTION_ATTACHMENT)
                 setAsset(assetBalance)
                 assetEnable(false)
                 edit_address.setText(recipientAddress)
@@ -204,7 +204,7 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
-    private fun loadAsset(assetId: String) {
+    private fun loadAssetForLink(assetId: String, url: String) {
         if (assetsSkeletonView == null) {
             assetsSkeletonView = Skeleton.bind(edit_asset_layout)
                     .color(R.color.basic50)
@@ -215,12 +215,12 @@ class SendActivity : BaseActivity(), SendView {
         }
         assetEnable(false)
         button_continue.isEnabled = false
-        presenter.loadAsset(assetId)
+        presenter.loadAssetForLink(assetId, url)
     }
 
     private fun setRecipientSuggestions() {
         val addressBook = layoutInflater
-                .inflate(R.layout.view_text_tag, null) as AppCompatTextView
+                .inflate(R.layout.content_text_tag, null) as AppCompatTextView
         addressBook.text = getText(R.string.send_choose_from_address_book)
         addressBook.click {
             launchActivity<AddressBookActivity>(
@@ -243,7 +243,7 @@ class SendActivity : BaseActivity(), SendView {
         parametersForAddress.marginStart = ViewUtils.convertDpToPixel(4F, this).toInt()
         for (address in addresses) {
             val lastRecipient = layoutInflater
-                    .inflate(R.layout.view_text_tag, null) as AppCompatTextView
+                    .inflate(R.layout.content_text_tag, null) as AppCompatTextView
             val addressBookUser = queryFirst<AddressBookUserDb> { equalTo("address", address) }
             lastRecipient.text = addressBookUser?.name ?: address
             lastRecipient.click {
@@ -480,10 +480,9 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     override fun showLoadAssetSuccess(assetBalance: AssetBalanceResponse) {
-        assetsSkeletonView!!.hide()
+        assetsSkeletonView?.hide()
         setAsset(assetBalance)
         assetEnable(false)
-        showError(R.string.insufficient_funds, R.id.root)
     }
 
     override fun showLoadAssetError(errorMsgRes: Int) {
@@ -537,8 +536,8 @@ class SendActivity : BaseActivity(), SendView {
         }
     }
 
-    private fun parseDataFromQr(result: String) {
-        if (result.isNullOrEmpty()) {
+    override fun setDataFromUrl(url: String?) {
+        if (url.isNullOrEmpty()) {
             showError(R.string.send_error_get_data_from_qr, R.id.root)
             assetEnable(false)
             recipientEnable(false)
@@ -546,28 +545,12 @@ class SendActivity : BaseActivity(), SendView {
             return
         }
 
-        if (result.contains("https://client.wavesplatform.com/#send/".toRegex()) ||
-                result.contains("https://client.wavesplatform.com/%23send/".toRegex())) {
-            val uri = URI.create(result.replace(" ", "")
+        if (url.contains("https://client.wavesplatform.com/#send/".toRegex()) ||
+                url.contains("https://client.wavesplatform.com/%23send/".toRegex())) {
+            val uri = URI.create(url.replace(" ", "")
                     .replace("/#send/", "/send/")
                     .replace("/%23send/", "/send/"))
             try {
-                val params = uri.query.split("&")
-                for (parameter in params) {
-                    if (parameter.contains("recipient=")) {
-                        val recipient = parameter.replace("recipient=", "")
-                        edit_address.setText(recipient)
-                        recipientEnable(false)
-                    }
-                    if (parameter.contains("amount=")) {
-                        val amount = parameter.replace("amount=", "")
-                        if (amount.toDouble() > 0) {
-                            edit_amount.setText(amount)
-                            amountEnable(false)
-                        }
-                    }
-                }
-
                 var assetId = uri.path.split("/")[2]
                 if (Constants.WAVES_ASSET_ID_FILLED.equalsIgnoreCase(assetId)) {
                     assetId = ""
@@ -577,10 +560,42 @@ class SendActivity : BaseActivity(), SendView {
                 }?.convertFromDb()
 
                 if (assetBalance == null) {
-                    loadAsset(assetId)
+                    loadAssetForLink(assetId, url)
+                    assetEnable(false)
+                    recipientEnable(false)
+                    amountEnable(false)
+                    return
                 } else {
+                    showLoadAssetSuccess(assetBalance)
                     setAsset(assetBalance)
                     assetEnable(false)
+                }
+
+                val params = uri.query.split("&")
+                for (parameter in params) {
+                    if (parameter.contains("recipient=")) {
+                        val recipient = parameter.replace("recipient=", "")
+                        edit_address.setText(recipient)
+                        recipientEnable(false)
+                    }
+                    if (parameter.contains("amount=")) {
+                        val amount = BigDecimal(parameter.replace("amount=", "")
+                                .stripZeros())
+                        if (amount == BigDecimal.ZERO) {
+                            edit_amount.setText("")
+                            amountEnable(true)
+                        } else {
+                            edit_amount.setText(amount.toPlainString().stripZeros())
+                            amountEnable(false)
+                            if (amount.toDouble() <
+                                    MoneyUtil.getScaledText(1, assetBalance).toDouble()) {
+                                showError(R.string.invalid_amount, R.id.root)
+                            }
+                        }
+                    } else {
+                        edit_amount.setText("")
+                        amountEnable(true)
+                    }
                 }
             } catch (error: Exception) {
                 showError(R.string.send_error_get_data_from_qr, R.id.root)
@@ -590,11 +605,11 @@ class SendActivity : BaseActivity(), SendView {
                 error.printStackTrace()
             }
         } else {
-            if (result.contains(":")) {
-                val split = result.split(":")
+            if (url.contains(":")) {
+                val split = url.split(":")
                 edit_address.setText(split[1].trim())
             } else {
-                edit_address.setText(result)
+                edit_address.setText(url)
             }
         }
     }

@@ -14,12 +14,12 @@ import com.wavesplatform.sdk.net.model.response.MarketResponse
 import com.wavesplatform.sdk.net.model.response.AssetPairOrderResponse
 import com.wavesplatform.sdk.utils.roundTo
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.my_orders.details.MyOrderDetailsBottomSheetFragment.Companion.FILLED_ORDER_PERCENT
-import kotlinx.android.synthetic.main.recycle_item_my_orders.view.*
+import kotlinx.android.synthetic.main.item_my_orders.view.*
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-class TradeMyOrdersAdapter @Inject constructor() : BaseQuickAdapter<AssetPairOrderResponse, BaseViewHolder>(R.layout.recycle_item_my_orders, null) {
+class TradeMyOrdersAdapter @Inject constructor() : BaseQuickAdapter<AssetPairOrderResponse, BaseViewHolder>(R.layout.item_my_orders, null) {
     var market: MarketResponse = MarketResponse()
 
     override fun convert(helper: BaseViewHolder, item: AssetPairOrderResponse) {

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 22/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -69,7 +74,7 @@
             android:overScrollMode="never"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            tools:listitem="@layout/your_assets_item"
+            tools:listitem="@layout/item_your_assets"
             tools:orientation="vertical" />
 
         <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar

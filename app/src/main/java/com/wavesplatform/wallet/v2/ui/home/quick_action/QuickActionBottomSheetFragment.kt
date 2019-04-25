@@ -14,7 +14,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseBottomSheetDialogFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.ReceiveActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.send.SendActivity
 import com.wavesplatform.wallet.v2.util.launchActivity
-import kotlinx.android.synthetic.main.quick_action_bottom_sheet_dialog_layout.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_dialog_quick_action_layout.view.*
 import pers.victor.ext.click
 
 class QuickActionBottomSheetFragment : BaseBottomSheetDialogFragment() {
@@ -25,7 +25,7 @@ class QuickActionBottomSheetFragment : BaseBottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        val rootView = inflater.inflate(R.layout.quick_action_bottom_sheet_dialog_layout, container, false)
+        val rootView = inflater.inflate(R.layout.bottom_sheet_dialog_quick_action_layout, container, false)
 
         rootView.image_close.click {
             dismiss()
