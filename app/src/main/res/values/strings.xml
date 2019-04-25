@@ -614,6 +614,7 @@
     <string name="wallet_sorting_toolbar_position_action">Position</string>
     <string name="wallet_sorting_toolbar_title">Sorting</string>
     <string name="wallet_sorting_toolbar_visibility_action">Visibility</string>
+    <string name="wallet_sorting_hidden_section">Hidden assets</string>
     <string name="wallet_toolbar_title">Wallet</string>
     <string name="welcome_blockchain_description">Become part of a fast-growing area of the crypto world. You are the only person who can access your crypto assets.</string>
     <string name="welcome_blockchain_title">Get Started with Blockchain</string>
