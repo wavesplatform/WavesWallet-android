@@ -29,9 +29,9 @@ import com.wavesplatform.wallet.v2.ui.home.dex.trade.TradeActivity
 import com.wavesplatform.wallet.v2.util.currentDateAsTimeSpanString
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
-import kotlinx.android.synthetic.main.empty_dex_layout.view.*
+import kotlinx.android.synthetic.main.content_empty_dex_layout.view.*
 import kotlinx.android.synthetic.main.fragment_dex_new.*
-import kotlinx.android.synthetic.main.header_dex_layout.view.*
+import kotlinx.android.synthetic.main.content_header_dex_layout.view.*
 import pers.victor.ext.click
 import pers.victor.ext.inflate
 import pers.victor.ext.isNetworkConnected
@@ -167,14 +167,14 @@ class DexFragment : BaseFragment(), DexView {
     }
 
     private fun getHeaderView(): View? {
-        val view = inflate(R.layout.header_dex_layout)
+        val view = inflate(R.layout.content_header_dex_layout)
         view.text_last_update.text = presenter.prefsUtil.getValue(PrefsUtil.KEY_LAST_UPDATE_DEX_INFO, 0L)
                 .currentDateAsTimeSpanString(activity!!)
         return view
     }
 
     private fun getEmptyView(): View {
-        val view = inflate(R.layout.empty_dex_layout)
+        val view = inflate(R.layout.content_empty_dex_layout)
         view.button_add_markets.click {
             launchActivity<DexMarketsActivity>(REQUEST_SELECT_MARKETS)
         }

@@ -31,7 +31,7 @@ import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showSnackbar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_address_book.*
-import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
@@ -199,7 +199,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
     }
 
     private fun getEmptyView(): View {
-        val view = LayoutInflater.from(this).inflate(R.layout.address_book_empty_state, null)
+        val view = LayoutInflater.from(this).inflate(R.layout.content_address_book_empty_state, null)
         view.text_empty.text = getString(R.string.address_book_empty_state)
         return view
     }

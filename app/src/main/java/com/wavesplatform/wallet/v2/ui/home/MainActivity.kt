@@ -40,7 +40,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.WalletFragment
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.activity_main_v2.*
-import kotlinx.android.synthetic.main.backup_seed_warning_snackbar.*
+import kotlinx.android.synthetic.main.content_backup_seed_warning_snackbar.*
 import kotlinx.android.synthetic.main.dialog_news.view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
@@ -277,7 +277,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
      * **/
     private fun getCustomView(tabIcon: Int): View? {
         val customTab = LayoutInflater.from(this)
-                .inflate(R.layout.home_navigation_tab, null)
+                .inflate(R.layout.content_home_navigation_tab, null)
         val imageTabIcon = customTab.findViewById<ImageView>(R.id.image_tab_icon)
 
         imageTabIcon.setImageResource(tabIcon)
@@ -290,7 +290,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
      * **/
     private fun getCenterTabLayout(tabIcon: Int): View? {
         val customTab = LayoutInflater.from(this)
-                .inflate(R.layout.home_navigation_center_tab, null)
+                .inflate(R.layout.content_home_navigation_center_tab, null)
         val imageTabIcon = customTab.findViewById<ImageView>(R.id.image_tab_icon)
 
         imageTabIcon.setImageResource(tabIcon)

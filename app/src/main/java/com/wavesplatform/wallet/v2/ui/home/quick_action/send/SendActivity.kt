@@ -50,8 +50,8 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_send.*
-import kotlinx.android.synthetic.main.layout_asset_card.*
-import kotlinx.android.synthetic.main.view_commission.*
+import kotlinx.android.synthetic.main.content_asset_card.*
+import kotlinx.android.synthetic.main.content_commission.*
 import pers.victor.ext.*
 import java.math.BigDecimal
 import java.net.URI
@@ -221,7 +221,7 @@ class SendActivity : BaseActivity(), SendView {
 
     private fun setRecipientSuggestions() {
         val addressBook = layoutInflater
-                .inflate(R.layout.view_text_tag, null) as AppCompatTextView
+                .inflate(R.layout.content_text_tag, null) as AppCompatTextView
         addressBook.text = getText(R.string.send_choose_from_address_book)
         addressBook.click {
             launchActivity<AddressBookActivity>(
@@ -244,7 +244,7 @@ class SendActivity : BaseActivity(), SendView {
         parametersForAddress.marginStart = ViewUtils.convertDpToPixel(4F, this).toInt()
         for (address in addresses) {
             val lastRecipient = layoutInflater
-                    .inflate(R.layout.view_text_tag, null) as AppCompatTextView
+                    .inflate(R.layout.content_text_tag, null) as AppCompatTextView
             val addressBookUser = queryFirst<AddressBookUser> { equalTo("address", address) }
             lastRecipient.text = addressBookUser?.name ?: address
             lastRecipient.click {

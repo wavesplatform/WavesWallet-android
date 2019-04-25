@@ -32,7 +32,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.token_burn.TokenBurnAct
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_asset_details_content.*
+import kotlinx.android.synthetic.main.fragment_asset_details_layout.*
 import pers.victor.ext.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -52,7 +52,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
     private var formatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy 'at' HH:mm")
     private var skeletonScreen: ViewSkeletonScreen? = null
 
-    override fun configLayoutRes() = R.layout.fragment_asset_details_content
+    override fun configLayoutRes() = R.layout.fragment_asset_details_layout
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         presenter.assetBalance = arguments?.getParcelable(BUNDLE_ASSET)
