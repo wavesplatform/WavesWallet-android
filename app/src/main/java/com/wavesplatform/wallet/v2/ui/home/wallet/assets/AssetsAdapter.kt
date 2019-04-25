@@ -18,8 +18,8 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.util.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.setMargins
-import kotlinx.android.synthetic.main.wallet_asset_item.view.*
-import kotlinx.android.synthetic.main.wallet_header_item.view.*
+import kotlinx.android.synthetic.main.item_wallet_asset.view.*
+import kotlinx.android.synthetic.main.item_wallet_header.view.*
 import pers.victor.ext.click
 import pers.victor.ext.dp2px
 import javax.inject.Inject
@@ -38,10 +38,10 @@ class AssetsAdapter @Inject constructor() :
     }
 
     init {
-        addItemType(TYPE_HEADER, R.layout.wallet_header_item)
-        addItemType(TYPE_ASSET, R.layout.wallet_asset_item)
-        addItemType(TYPE_HIDDEN_ASSET, R.layout.wallet_asset_item)
-        addItemType(TYPE_SPAM_ASSET, R.layout.wallet_asset_item)
+        addItemType(TYPE_HEADER, R.layout.item_wallet_header)
+        addItemType(TYPE_ASSET, R.layout.item_wallet_asset)
+        addItemType(TYPE_HIDDEN_ASSET, R.layout.item_wallet_asset)
+        addItemType(TYPE_SPAM_ASSET, R.layout.item_wallet_asset)
         addItemType(TYPE_SEARCH, R.layout.wallet_asset_search_item)
     }
 

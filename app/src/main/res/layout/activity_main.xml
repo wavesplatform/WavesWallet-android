@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 22/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/frame_root"
@@ -58,7 +63,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
-                <include layout="@layout/backup_seed_warning_snackbar" />
+                <include layout="@layout/content_backup_seed_warning_snackbar" />
 
             </android.support.design.widget.CoordinatorLayout>
 

@@ -28,7 +28,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment.Companio
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
 import com.wavesplatform.wallet.v2.util.drag_helper.SimpleItemTouchHelperCallback
 import kotlinx.android.synthetic.main.activity_assets_sorting.*
-import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
+import kotlinx.android.synthetic.main.item_wallet_asset_sorting.view.*
 import pers.victor.ext.*
 import javax.inject.Inject
 

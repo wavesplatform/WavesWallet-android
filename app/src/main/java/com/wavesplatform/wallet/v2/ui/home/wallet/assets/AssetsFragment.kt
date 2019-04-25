@@ -39,7 +39,7 @@ import com.wavesplatform.wallet.v2.util.isMyServiceRunning
 import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_assets.*
-import kotlinx.android.synthetic.main.wallet_header_item.view.*
+import kotlinx.android.synthetic.main.item_wallet_header.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.isVisible

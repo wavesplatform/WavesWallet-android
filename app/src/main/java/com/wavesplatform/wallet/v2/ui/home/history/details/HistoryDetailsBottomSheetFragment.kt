@@ -45,18 +45,18 @@ import kotlinx.android.synthetic.main.fragment_bottom_sheet_exchange_layout.view
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_script_invocation_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_base_info_layout.view.*
 import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
-import kotlinx.android.synthetic.main.history_details_layout.view.*
+import kotlinx.android.synthetic.main.content_history_details_layout.view.*
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 
 class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Transaction>() {
 
     override fun configLayoutRes(): Int {
-        return R.layout.history_details_bottom_sheet_dialog
+        return R.layout.bottom_sheet_dialog_history_details
     }
 
     override fun setupHeader(transaction: Transaction): View? {
-        val view = inflate(R.layout.history_details_layout)
+        val view = inflate(R.layout.content_history_details_layout)
 
         view.text_tag.gone()
         view.text_transaction_value.setTypeface(null, Typeface.NORMAL)
@@ -169,7 +169,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         historyContainer.orientation = LinearLayout.VERTICAL
 
         /**Comment block views**/
-        val commentBlock = inflate(R.layout.history_detailed_transcation_comment_block_layout)
+        val commentBlock = inflate(R.layout.content_history_detailed_transcation_comment_block_layout)
 
         val textComment = commentBlock?.findViewById<TextView>(R.id.text_comment)
 
@@ -368,7 +368,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val transfers: MutableList<Transfer> = transaction.transfers.toMutableList()
 
                 transfers.forEachIndexed { index, transfer ->
-                    val addressView = inflater?.inflate(R.layout.address_layout, null, false)
+                    val addressView = inflater?.inflate(R.layout.content_address_layout, null, false)
                     val textRecipientNumber = addressView?.findViewById<AppCompatTextView>(R.id.text_recipient_number)
                     val textSentAddress = addressView?.findViewById<TextView>(R.id.text_sent_address)
                     val textSendAmountTag = addressView?.findViewById<AppCompatTextView>(R.id.text_send_amount_tag)
@@ -418,7 +418,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                             showMoreAddress.gone()
 
                             for (i in 3 until transfers.size) {
-                                val addressView = inflater?.inflate(R.layout.address_layout, null, false)
+                                val addressView = inflater?.inflate(R.layout.content_address_layout, null, false)
                                 val imageCopy = addressView?.findViewById<AppCompatImageView>(R.id.image_copy)
                                 val textSendAmountTag = addressView?.findViewById<AppCompatTextView>(R.id.text_send_amount_tag)
                                 val textRecipientNumber = addressView?.findViewById<AppCompatTextView>(R.id.text_recipient_number)

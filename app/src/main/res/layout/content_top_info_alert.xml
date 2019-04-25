@@ -16,20 +16,28 @@
     android:paddingEnd="10dp"
     android:paddingBottom="14dp">
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/image_alert_icon"
+    <FrameLayout
+        android:id="@+id/frame_icon_wrapper"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="14dp"
-        app:srcCompat="@drawable/userimg_rocket_48" />
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_alert_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/userimg_rocket_48"
+            tools:visibility="visible" />
+    </FrameLayout>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text_alert_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toStartOf="@+id/image_alert_action"
-        android:layout_toEndOf="@+id/image_alert_icon"
+        android:layout_toEndOf="@+id/frame_icon_wrapper"
         android:fontFamily="@font/roboto_bold"
         android:textColor="@color/black"
         android:textSize="12sp"
@@ -43,7 +51,7 @@
         android:layout_below="@+id/text_alert_title"
         android:layout_marginTop="6dp"
         android:layout_toStartOf="@+id/image_alert_action"
-        android:layout_toEndOf="@+id/image_alert_icon"
+        android:layout_toEndOf="@+id/frame_icon_wrapper"
         android:textColor="@color/black"
         android:textSize="12sp"
         tools:text="@string/need_update_alert_description" />

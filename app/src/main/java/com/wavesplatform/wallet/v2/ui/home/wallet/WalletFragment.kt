@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
@@ -22,6 +23,7 @@ import javax.inject.Inject
 
 
 class WalletFragment : BaseFragment(), WalletView {
+
     @Inject
     @InjectPresenter
     lateinit var presenter: WalletPresenter
@@ -61,7 +63,7 @@ class WalletFragment : BaseFragment(), WalletView {
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupUI()
-        presenter.checkNewAppUpdates()
+        presenter.showTopBannerIfNeed()
     }
 
     private fun setupUI() {
@@ -98,7 +100,7 @@ class WalletFragment : BaseFragment(), WalletView {
     }
 
     override fun afterCheckNewAppUpdates(needUpdate: Boolean) {
-        if (needUpdate){
+        if (needUpdate) {
             info_alert.apply {
                 setIcon(R.drawable.userimg_rocket_48)
                 setTitle(R.string.need_update_alert_title)
@@ -109,6 +111,19 @@ class WalletFragment : BaseFragment(), WalletView {
                 }
             }.show()
         }
+    }
+
+    override fun afterCheckClearedWallet() {
+        info_alert.apply {
+            setTitle(R.string.clean_banner_title)
+            setDescription(R.string.clean_banner_description)
+            setActionIcon(R.drawable.ic_clear_14_basic_300)
+            onAlertClick {
+                info_alert.hide()
+                presenter.prefsUtil.setValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, true)
+                presenter.showTopBannerIfNeed()
+            }
+        }.show()
     }
 
     private fun openAppInPlayMarket() {

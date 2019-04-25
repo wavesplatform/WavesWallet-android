@@ -1,3 +1,8 @@
+<!--
+  ~ Created by Eduard Zaydel on 22/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -103,12 +108,12 @@
 
         <include
             android:id="@+id/error_layout"
-            layout="@layout/global_server_error_layout"
+            layout="@layout/content_global_server_error_layout"
             android:visibility="gone" />
 
         <include
             android:id="@+id/layout_empty"
-            layout="@layout/layout_empty_data"
+            layout="@layout/content_empty_data"
             android:visibility="gone" />
 
     </android.support.v7.widget.CardView>

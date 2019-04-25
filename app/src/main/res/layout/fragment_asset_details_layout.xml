@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 22/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -363,7 +368,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone">
 
-            <include layout="@layout/layout_card_burn" />
+            <include layout="@layout/content_card_burn" />
 
         </FrameLayout>
 
@@ -713,7 +718,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone">
 
-            <include layout="@layout/layout_card_burn" />
+            <include layout="@layout/content_card_burn" />
 
         </FrameLayout>
 

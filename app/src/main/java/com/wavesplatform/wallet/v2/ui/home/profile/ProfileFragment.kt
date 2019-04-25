@@ -105,7 +105,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
             alertDialog.setMessage(getString(R.string.profile_general_delete_account_dialog_description))
             if (App.getAccessManager().isCurrentAccountBackupSkipped()) {
                 alertDialog.setView(LayoutInflater.from(baseActivity)
-                        .inflate(R.layout.delete_account_warning_layout, null))
+                        .inflate(R.layout.content_delete_account_warning_layout, null))
             }
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                     getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->

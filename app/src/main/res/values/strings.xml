@@ -663,4 +663,6 @@
     <string name="search_asset_cancel">Cancel</string>
     <string name="search_asset_hidden_title">Hidden assets</string>
     <string name="search_asset_empty">You do not have such assets</string>
+    <string name="clean_banner_title">No more mess!</string>
+    <string name="clean_banner_description">We have redesigned the display of assets to allow you to keep your wallet clean and tidy. You can customise your asset list however you want!</string>
 </resources>
