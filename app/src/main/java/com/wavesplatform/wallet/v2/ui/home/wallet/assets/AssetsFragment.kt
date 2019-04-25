@@ -99,14 +99,6 @@ class AssetsFragment : BaseFragment(), AssetsView {
                         presenter.reloadAssetsAfterSpamUrlChanged()
                     }
                 })
-
-        recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                presenter.enableElevation = recyclerView.computeVerticalScrollOffset() > 4
-                elevationAppBarChangeListener?.onChange(presenter.enableElevation)
-            }
-        })
     }
 
     private fun setupUI() {
@@ -205,6 +197,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 }
             }
         }
+
+        elevationAppBarChangeListener?.onChange(false)
     }
 
     private fun getCorrectionIndex(): Int {
@@ -237,7 +231,10 @@ class AssetsFragment : BaseFragment(), AssetsView {
         if (withApiUpdate) {
             if (fromDB) {
                 swipe_container?.isRefreshing = true
-                skeletonScreen.notNull { it.hide() }
+                skeletonScreen.notNull {
+                    it.hide()
+                    setElevationListener()
+                }
             } else {
                 swipe_container?.isRefreshing = false
             }
@@ -246,6 +243,16 @@ class AssetsFragment : BaseFragment(), AssetsView {
         }
 
         adapter.setNewData(assets)
+    }
+
+    private fun setElevationListener() {
+        recycle_assets.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                presenter.enableElevation = recyclerView.computeVerticalScrollOffset() > 4
+                elevationAppBarChangeListener?.onChange(presenter.enableElevation)
+            }
+        })
     }
 
     override fun afterFailedLoadAssets() {

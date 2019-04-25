@@ -12,7 +12,7 @@
         android:background="@color/basic50"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:translationZ="8dp"
+        android:translationZ="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -35,24 +35,22 @@
             <com.flyco.tablayout.SlidingTabLayout
                 android:id="@+id/stl_wallet"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                tl:tl_indicator_anim_enable="true"
-                tl:tl_indicator_bounce_enable="true"
+                tl:tl_tab_padding="12dp"
+                tl:tl_indicator_margin_left="12dp"
+                tl:tl_indicator_margin_right="48dp"
                 tl:tl_indicator_color="@color/submit400"
                 tl:tl_indicator_corner_radius="@dimen/tab_corner_radius"
                 tl:tl_indicator_style="NORMAL"
-                tl:tl_indicator_margin_left="6dp"
-                tl:tl_indicator_margin_right="40dp"
                 tl:tl_indicator_height="2dp"
-                tl:tl_tab_padding="6dp"
                 tl:tl_textSelectColor="@color/black"
                 tl:tl_textsize="14sp"
-                tl:tl_textUnselectColor="@color/basic500" />
+                tl:tl_textUnselectColor="@color/basic500"
+                tl:tl_textBold="BOTH"/>
 
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>

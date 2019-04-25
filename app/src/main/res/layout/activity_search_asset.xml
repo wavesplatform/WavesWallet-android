@@ -29,7 +29,7 @@
             <EditText
                 android:id="@+id/search_view"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="36dp"
                 android:background="@drawable/basic100_rounded"
                 android:drawableStart="@drawable/ic_search_24_black"
                 android:drawablePadding="8dp"
