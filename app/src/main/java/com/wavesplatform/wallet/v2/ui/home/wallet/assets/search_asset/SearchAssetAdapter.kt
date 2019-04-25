@@ -5,7 +5,6 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset
 
-import android.support.v7.widget.CardView
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.entity.MultiItemEntity
@@ -15,17 +14,15 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
 import com.wavesplatform.wallet.v2.util.getScaledAmount
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
-import com.wavesplatform.wallet.v2.util.setMargins
-import kotlinx.android.synthetic.main.wallet_asset_item.view.*
-import pers.victor.ext.dp2px
+import kotlinx.android.synthetic.main.item_wallet_asset.view.*
 import javax.inject.Inject
 
 class SearchAssetAdapter  @Inject constructor() :
         BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder>(null) {
 
     init {
-        addItemType(AssetsAdapter.TYPE_ASSET, R.layout.wallet_asset_item)
-        addItemType(AssetsAdapter.TYPE_HIDDEN_ASSET, R.layout.wallet_asset_item)
+        addItemType(AssetsAdapter.TYPE_ASSET, R.layout.item_wallet_asset)
+        addItemType(AssetsAdapter.TYPE_HIDDEN_ASSET, R.layout.item_wallet_asset)
         addItemType(AssetsAdapter.TYPE_HEADER, R.layout.hidden_header_item)
     }
 

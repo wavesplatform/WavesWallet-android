@@ -23,7 +23,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsAct
 import com.wavesplatform.wallet.v2.util.launchActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_search_asset.*
-import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -62,7 +62,7 @@ class SearchAssetActivity : BaseActivity(), SearchAssetView {
         adapter.bindToRecyclerView(recycle_assets)
 
         val emptyView = LayoutInflater.from(this)
-                .inflate(R.layout.address_book_empty_state, null)
+                .inflate(R.layout.content_address_book_empty_state, null)
         emptyView.text_empty.text = getString(R.string.search_asset_empty)
         adapter.emptyView = emptyView
 

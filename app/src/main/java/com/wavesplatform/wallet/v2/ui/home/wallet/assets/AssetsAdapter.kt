@@ -42,7 +42,7 @@ class AssetsAdapter @Inject constructor() :
         addItemType(TYPE_ASSET, R.layout.item_wallet_asset)
         addItemType(TYPE_HIDDEN_ASSET, R.layout.item_wallet_asset)
         addItemType(TYPE_SPAM_ASSET, R.layout.item_wallet_asset)
-        addItemType(TYPE_SEARCH, R.layout.wallet_asset_search_item)
+        addItemType(TYPE_SEARCH, R.layout.item_wallet_asset_search)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
