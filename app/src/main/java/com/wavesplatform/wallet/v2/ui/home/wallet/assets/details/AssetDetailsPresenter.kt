@@ -9,12 +9,13 @@ import com.arellomobile.mvp.InjectViewState
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.vicpin.krealmextensions.queryAll
 import com.vicpin.krealmextensions.queryAllAsSingle
+import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
-import com.wavesplatform.sdk.utils.RxUtil // todo check
+import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.util.findAssetBalanceInDb
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -28,16 +29,16 @@ class AssetDetailsPresenter @Inject constructor() : BasePresenter<AssetDetailsVi
     var isShow = true
     var scrollRange: Float = -1f
     var allTransaction: List<TransactionResponse> = emptyList()
-    private var findAssetList = listOf<AssetBalance>()
+    private var findAssetList = listOf<AssetBalanceResponse>()
 
 
     fun loadSearchAssets(query: String) {
         if (findAssetList.isEmpty()) {
-            findAssetList = queryAll()
+            findAssetList = AssetBalanceDb.convertFromDb(queryAll())
         }
         val find = findAssetBalanceInDb(query, findAssetList)
-        val result = mutableListOf<AssetBalance>()
-        val hiddenAssets = mutableListOf<AssetBalance>()
+        val result = mutableListOf<AssetBalanceResponse>()
+        val hiddenAssets = mutableListOf<AssetBalanceResponse>()
 
         find.forEach {
             if (it.isFavorite) {

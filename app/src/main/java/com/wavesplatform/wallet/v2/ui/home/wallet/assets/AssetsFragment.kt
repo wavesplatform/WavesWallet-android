@@ -184,7 +184,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
                     else -> position // no changes
                 }
                 launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
-                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.itemType) // todo check
+                    putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.getItemType())
                     putExtra(AssetDetailsActivity.BUNDLE_ASSET_POSITION, positionWithoutSection - 1)
                 }
             }

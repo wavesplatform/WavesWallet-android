@@ -638,7 +638,7 @@ fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): Strin
     return localizedContext.resources.getString(id)
 }
 
-fun findAssetBalanceInDb(query: String?, list: List<AssetBalance>): List<AssetBalance> {
+fun findAssetBalanceInDb(query: String?, list: List<AssetBalanceResponse>): List<AssetBalanceResponse> {
     return if (TextUtils.isEmpty(query)) {
         list.filter { !it.isSpam }
     } else {
@@ -649,7 +649,7 @@ fun findAssetBalanceInDb(query: String?, list: List<AssetBalance>): List<AssetBa
                             || it.getName().toLowerCase().contains(queryLower)
                             || it.issueTransaction?.name?.toLowerCase()?.contains(queryLower) ?: false
                             || it.issueTransaction?.assetId?.toLowerCase()?.contains(queryLower) ?: false
-                            || it.assetId == Constants.findByGatewayId(query.toUpperCase())?.assetId
+                            || it.assetId == findByGatewayId(query.toUpperCase())?.assetId
                 }
     }
 }

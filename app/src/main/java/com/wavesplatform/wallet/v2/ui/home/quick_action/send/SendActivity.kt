@@ -500,7 +500,7 @@ class SendActivity : BaseActivity(), SendView {
                     val result = IntentIntegrator.parseActivityResult(resultCode, data)
                             .contents
                             .replace(WAVES_PREFIX, "")
-                    parseDataFromQr(result)
+                    setDataFromUrl(result)
                 }
             }
 

@@ -258,7 +258,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                                             reissuable = assetsDetails.reissuable,
                                             timestamp = assetsDetails.issueTimestamp,
                                             sender = assetsDetails.issuer))
-                            assetBalance.save()
+                            AssetBalanceDb(assetBalance).save()
                             if (!TextUtils.isEmpty(url)) {
                                 viewState.setDataFromUrl(url)
                             } else {
