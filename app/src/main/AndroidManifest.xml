@@ -264,6 +264,10 @@
             android:name="com.wavesplatform.wallet.v2.ui.success.SuccessActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeV2.NoActionBar.Translucent.WhiteStatusBar" />
+        <activity
+            android:name=".v2.ui.home.profile.settings.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeV2.NoActionBar.Translucent.DarkStatusBar" />
 
         <service
             android:name=".v2.data.service.UpdateApiDataService"
