@@ -92,6 +92,11 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
     private fun logFirstOpen() {
         if (prefsUtil.getValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, true)) {
             prefsUtil.setValue(PrefsUtil.KEY_ACCOUNT_FIRST_OPEN, false)
+            prefsUtil.setValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, true)
+        } else {
+            if (!prefsUtil.getValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, false)) {
+                prefsUtil.setValue(PrefsUtil.KEY_IS_NEED_TO_SHOW_CLEARED_ALERT, true)
+            }
         }
     }
 
