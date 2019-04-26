@@ -33,31 +33,41 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
                                 .sortedBy { it.position }
                                 .sortedByDescending { it.isFavorite }
                                 .mapTo(mutableListOf()) {
-                                    AssetSortingItem(AssetSortingItem.TYPE_FAVORITE, it)
+                                    AssetSortingItem(AssetSortingItem.TYPE_FAVORITE_ITEM, it)
                                 }
                         val notFavoriteList = it.filter { !it.isFavorite && !it.isSpam && !it.isHidden }
                                 .sortedBy { it.position }
                                 .mapTo(mutableListOf()) {
-                                    AssetSortingItem(AssetSortingItem.TYPE_NOT_FAVORITE, it)
+                                    AssetSortingItem(AssetSortingItem.TYPE_DEFAULT_ITEM, it)
                                 }
 
                         val hiddenList = it.filter { it.isHidden }
                                 .sortedBy { it.position }
                                 .mapTo(mutableListOf()) {
-                                    AssetSortingItem(AssetSortingItem.TYPE_HIDDEN, it)
+                                    AssetSortingItem(AssetSortingItem.TYPE_HIDDEN_ITEM, it)
                                 }
 
-                        result.addAll(favoriteList)
-                        if (favoriteList.isNotEmpty() && notFavoriteList.isNotEmpty()) {
-                            result.add(AssetSortingItem(AssetSortingItem.TYPE_LINE))
+                        if (favoriteList.isNotEmpty()) {
+                            result.addAll(favoriteList)
+                        } else {
+                            result.add(AssetSortingItem(AssetSortingItem.TYPE_EMPTY_FAVORITE))
                         }
-                        result.addAll(notFavoriteList)
-                        result.add(AssetSortingItem(AssetSortingItem.TYPE_HIDDEN_HEADER))
-                        result.addAll(hiddenList)
 
-//                        result.forEach {
-//                            it.asset.configureVisibleState = screenType == AssetsSortingTabFragment.TYPE_VISIBILITY
-//                        }
+                        result.add(AssetSortingItem(AssetSortingItem.TYPE_FAVORITE_SEPARATOR))
+
+                        if (notFavoriteList.isNotEmpty()) {
+                            result.addAll(notFavoriteList)
+                        } else {
+                            result.add(AssetSortingItem(AssetSortingItem.TYPE_EMPTY_DEFAULT))
+                        }
+
+                        result.add(AssetSortingItem(AssetSortingItem.TYPE_HIDDEN_HEADER))
+
+                        if (hiddenList.isNotEmpty()) {
+                            result.addAll(hiddenList)
+                        } else {
+                            result.add(AssetSortingItem(AssetSortingItem.TYPE_EMPTY_DEFAULT))
+                        }
 
                         viewState.showAssets(result)
                     }, {
@@ -68,7 +78,7 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
 
     fun saveSortedPositions(data: MutableList<AssetSortingItem>) {
         data
-                .filter { it.type != AssetSortingItem.TYPE_LINE && it.type != AssetSortingItem.TYPE_HIDDEN_HEADER }
+                .filter { it.type != AssetSortingItem.TYPE_FAVORITE_SEPARATOR && it.type != AssetSortingItem.TYPE_HIDDEN_HEADER }
                 .mapIndexedTo(mutableListOf()) { position, item ->
                     item.asset.position = position
                     AssetBalanceStore(item.asset.assetId,

@@ -100,8 +100,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                     val asset = globalItem.asset
 
                     when (globalItem.itemType) {
-                        AssetSortingItem.TYPE_FAVORITE -> {
-                            val linePosition = getLinePosition()
+                        AssetSortingItem.TYPE_FAVORITE_ITEM -> {
+                            val linePosition = this.adapter.getLinePosition()
 
                             asset.isFavorite = false
                             asset.configureVisibleState = presenter.visibilityConfigurationActive
@@ -111,28 +111,32 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             this.adapter.notifyItemRemoved(position)
 
                             // add to not favorite list
-                            globalItem.type = AssetSortingItem.TYPE_NOT_FAVORITE
+                            globalItem.type = AssetSortingItem.TYPE_DEFAULT_ITEM
                             globalItem.asset = asset
+
                             this.adapter.addData(linePosition, globalItem)
+                            this.adapter.checkEmptyViews()
 
                             // Save to DB
                             asset.save()
                             AssetBalanceStore(asset.assetId, asset.isHidden, asset.position, asset.isFavorite).save()
                         }
-                        AssetSortingItem.TYPE_NOT_FAVORITE, AssetSortingItem.TYPE_HIDDEN -> {
+                        AssetSortingItem.TYPE_DEFAULT_ITEM, AssetSortingItem.TYPE_HIDDEN_ITEM -> {
                             // remove from current list
                             this.adapter.data.removeAt(position)
                             this.adapter.notifyItemRemoved(position)
 
-                            val linePosition = getLinePosition()
+                            val linePosition = this.adapter.getLinePosition()
 
                             asset.isFavorite = true
                             asset.isHidden = false
 
                             // add to favorite list
-                            globalItem.type = AssetSortingItem.TYPE_FAVORITE
+                            globalItem.type = AssetSortingItem.TYPE_FAVORITE_ITEM
                             globalItem.asset = asset
+
                             this.adapter.addData(linePosition, globalItem)
+                            this.adapter.checkEmptyViews()
 
                             // Save to DB
                             asset.save()
@@ -152,19 +156,21 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 adapter.data.removeAt(position)
                 adapter.notifyItemRemoved(position)
 
-                val linePosition = getHiddenLinePosition()
+                val linePosition = adapter.getHiddenLinePosition()
 
                 item.asset.isFavorite = false
                 item.asset.isHidden = !checked
 
                 if (checked) {
                     item.asset.isHidden = false
-                    item.type = AssetSortingItem.TYPE_NOT_FAVORITE
+                    item.type = AssetSortingItem.TYPE_DEFAULT_ITEM
                     adapter.addData(linePosition, item)
+                    adapter.checkEmptyViews()
                 } else {
                     item.asset.isHidden = true
-                    item.type = AssetSortingItem.TYPE_HIDDEN
+                    item.type = AssetSortingItem.TYPE_HIDDEN_ITEM
                     adapter.addData(linePosition + 1, item)
+                    adapter.checkEmptyViews()
                 }
 
                 // Save to DB
@@ -206,15 +212,15 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         item.type = type
 
         when (type) {
-            AssetSortingItem.TYPE_FAVORITE -> {
+            AssetSortingItem.TYPE_FAVORITE_ITEM -> {
                 item.asset.isFavorite = true
                 item.asset.isHidden = false
             }
-            AssetSortingItem.TYPE_NOT_FAVORITE -> {
+            AssetSortingItem.TYPE_DEFAULT_ITEM -> {
                 item.asset.isFavorite = false
                 item.asset.isHidden = false
             }
-            AssetSortingItem.TYPE_HIDDEN -> {
+            AssetSortingItem.TYPE_HIDDEN_ITEM -> {
                 item.asset.isFavorite = false
                 item.asset.isHidden = true
             }
@@ -223,6 +229,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         // disable animation before update item
         recycle_assets.itemAnimator = null
         adapter.setData(position, item)
+        adapter.checkEmptyViews()
         runDelayed(150) {
             recycle_assets.itemAnimator = itemAnimator
         }
@@ -238,15 +245,6 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             presenter.visibilityConfigurationActive = position == TYPE_VISIBILITY
         }
         adapter.notifyDataSetChanged()
-    }
-
-    private fun getLinePosition(): Int {
-        return adapter.data.indexOfFirst { it.itemType == AssetSortingItem.TYPE_LINE }
-    }
-
-
-    private fun getHiddenLinePosition(): Int {
-        return adapter.data.indexOfFirst { it.itemType == AssetSortingItem.TYPE_HIDDEN_HEADER }
     }
 
     override fun onBackPressed() {
