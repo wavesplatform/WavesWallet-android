@@ -22,7 +22,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.HistoryItem
 import com.wavesplatform.wallet.v2.util.*
-import kotlinx.android.synthetic.main.recycle_item_history.view.*
+import kotlinx.android.synthetic.main.item_history.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -35,9 +35,9 @@ class HistoryTabItemAdapter @Inject constructor() :
     lateinit var prefsUtil: PrefsUtil
 
     init {
-        addItemType(HistoryItem.TYPE_HEADER, R.layout.asset_header)
-        addItemType(HistoryItem.TYPE_DATA, R.layout.recycle_item_history)
-        addItemType(HistoryItem.TYPE_EMPTY, R.layout.layout_history_tab_header_space)
+        addItemType(HistoryItem.TYPE_HEADER, R.layout.content_asset_header)
+        addItemType(HistoryItem.TYPE_DATA, R.layout.item_history)
+        addItemType(HistoryItem.TYPE_EMPTY, R.layout.content_history_tab_header_space)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

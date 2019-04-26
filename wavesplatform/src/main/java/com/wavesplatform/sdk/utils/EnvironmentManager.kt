@@ -12,13 +12,13 @@ import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Log
 import com.google.gson.Gson
+import com.wavesplatform.sdk.net.HostSelectionInterceptor
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.net.model.response.GlobalConfigurationResponse
 import com.wavesplatform.sdk.net.model.response.IssueTransactionResponse
 import com.wavesplatform.sdk.net.service.ApiService
-import com.wavesplatform.sdk.net.HostSelectionInterceptor
+import com.wavesplatform.sdk.net.service.GithubService
 import com.wavesplatform.sdk.net.service.NodeService
-import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import pers.victor.ext.currentTimeMillis
 import java.io.IOException
@@ -30,6 +30,7 @@ class EnvironmentManager {
     private var application: Application? = null
     private var configurationDisposable: Disposable? = null
     private var timeDisposable: Disposable? = null
+    private var versionDisposable: Disposable? = null
     private var interceptor: HostSelectionInterceptor? = null
 
     class Environment internal constructor(val name: String, val url: String, jsonFileName: String) {
@@ -80,6 +81,7 @@ class EnvironmentManager {
         private const val GLOBAL_CURRENT_ENVIRONMENT_DATA = "global_current_environment_data"
         private const val GLOBAL_CURRENT_ENVIRONMENT = "global_current_environment"
         private const val GLOBAL_CURRENT_TIME_CORRECTION = "global_current_time_correction"
+        private const val GLOBAL_CURRENT_LAST_VERSION_APP = "global_current_last_version_app"
 
         @JvmStatic
         fun init(application: Application) {
@@ -113,14 +115,14 @@ class EnvironmentManager {
         }
 
         @JvmStatic
-        fun updateConfiguration(globalConfigurationObserver: Observable<GlobalConfigurationResponse>,
-                                apiService: ApiService,
-                                nodeService: NodeService) {
+        fun updateConfiguration(apiService: ApiService,
+                                nodeService: NodeService,
+                                githubService: GithubService) {
             if (instance == null) {
                 throw NullPointerException("EnvironmentManager must be init first!")
             }
 
-            instance!!.configurationDisposable = globalConfigurationObserver
+            instance!!.configurationDisposable = githubService.globalConfiguration(EnvironmentManager.environment.url)
                     .map { globalConfiguration ->
                         setConfiguration(globalConfiguration)
                         globalConfiguration.generalAssets.map { it.assetId }
@@ -183,6 +185,26 @@ class EnvironmentManager {
                         error.printStackTrace()
                         instance!!.timeDisposable!!.dispose()
                     })
+
+            instance!!.versionDisposable = githubService.loadLastAppVersion()
+                    .compose(RxUtil.applyObservableDefaultSchedulers())
+                    .subscribe({ version ->
+                        PreferenceManager
+                                .getDefaultSharedPreferences(instance!!.application)
+                                .edit()
+                                .putString(GLOBAL_CURRENT_LAST_VERSION_APP, version.lastVersion)
+                                .apply()
+                        instance!!.versionDisposable!!.dispose()
+                    }, { error ->
+                        error.printStackTrace()
+                        instance!!.timeDisposable!!.dispose()
+                    })
+        }
+
+        fun getLastAppVersion(): String {
+            return PreferenceManager
+                    .getDefaultSharedPreferences(instance!!.application)
+                    .getString(GLOBAL_CURRENT_LAST_VERSION_APP, "") ?: ""
         }
 
         private fun setConfiguration(globalConfiguration: GlobalConfigurationResponse) {

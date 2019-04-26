@@ -11,10 +11,10 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.notNull
-import kotlinx.android.synthetic.main.your_assets_item.view.*
+import kotlinx.android.synthetic.main.item_your_assets.view.*
 import javax.inject.Inject
 
-class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalanceResponse, BaseViewHolder>(R.layout.your_assets_item, null) {
+class YourAssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalanceResponse, BaseViewHolder>(R.layout.item_your_assets, null) {
 
     var allData: MutableList<AssetBalanceResponse> = arrayListOf()
     var currentAssetId: String? = null

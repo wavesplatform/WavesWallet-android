@@ -14,10 +14,10 @@ import com.wavesplatform.sdk.utils.transactionType
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.icon
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
-import kotlinx.android.synthetic.main.recycle_item_history.view.*
+import kotlinx.android.synthetic.main.item_history.view.*
 import javax.inject.Inject
 
-class LeasingActiveAdapter @Inject constructor() : BaseQuickAdapter<TransactionResponse, BaseViewHolder>(R.layout.recycle_item_history, null) {
+class LeasingActiveAdapter @Inject constructor() : BaseQuickAdapter<TransactionResponse, BaseViewHolder>(R.layout.item_history, null) {
 
     override fun convert(helper: BaseViewHolder, item: TransactionResponse) {
         helper.setGone(R.id.text_tag, true)

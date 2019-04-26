@@ -56,9 +56,9 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             }
             instance = Wavesplatform(application, factory)
             EnvironmentManager.updateConfiguration(
-                    getGithubService().globalConfiguration(EnvironmentManager.environment.url),
                     getApiService(),
-                    getNodeService())
+                    getNodeService(),
+                    getGithubService())
         }
 
         /**

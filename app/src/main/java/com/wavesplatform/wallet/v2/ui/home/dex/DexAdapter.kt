@@ -14,7 +14,7 @@ import pers.victor.ext.findDrawable
 import java.math.BigDecimal
 import javax.inject.Inject
 
-class DexAdapter @Inject constructor() : BaseQuickAdapter<WatchMarketResponse, BaseViewHolder>(R.layout.dex_layout_item, null) {
+class DexAdapter @Inject constructor() : BaseQuickAdapter<WatchMarketResponse, BaseViewHolder>(R.layout.item_dex_layout, null) {
 
     override fun convert(helper: BaseViewHolder, item: WatchMarketResponse) {
         if (item.pairResponse?.data != null) {

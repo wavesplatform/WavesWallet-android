@@ -36,6 +36,7 @@ import javax.inject.Inject
 @InjectViewState
 class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     var needToScroll: Boolean = false
+    var enableElevation: Boolean = false
 
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
         if (Wavesplatform.getWallet() == null) {
@@ -203,6 +204,11 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
             MutableList<AssetBalanceDb>>, withApiUpdate: Boolean, fromDb: Boolean) {
         val listToShow = arrayListOf<MultiItemEntity>()
 
+        val searchItem = MultiItemEntity {
+             AssetsAdapter.TYPE_SEARCH
+        }
+        listToShow.add(searchItem)
+
         // add all main assets
         val assetBalances = mutableListOf<AssetBalanceMultiItemEntity>()
         it.first.forEach {
@@ -215,7 +221,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
             val hiddenSection = WalletSectionItem(app.getString(R.string.wallet_assets_hidden_category,
                     it.second.size.toString()))
             it.second.forEach {
-                hiddenSection.addSubItem(it.convertFromDb())
+                hiddenSection.addSubItem(AssetBalanceMultiItemEntity(it))
             }
             listToShow.add(hiddenSection)
         }
@@ -227,7 +233,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                 val spamSection = WalletSectionItem(app.getString(R.string.wallet_assets_spam_category,
                         it.third.size.toString()))
                 it.third.forEach {
-                    spamSection.addSubItem(it.convertFromDb())
+                    spamSection.addSubItem(AssetBalanceMultiItemEntity(it))
                 }
                 listToShow.add(spamSection)
             }

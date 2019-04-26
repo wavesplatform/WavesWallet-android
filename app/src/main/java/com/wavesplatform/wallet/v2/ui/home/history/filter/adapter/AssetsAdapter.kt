@@ -9,12 +9,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
-import kotlinx.android.synthetic.main.history_asset_item.view.*
+import kotlinx.android.synthetic.main.item_history_asset.view.*
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
 import javax.inject.Inject
 
-class AssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalanceResponse, BaseViewHolder>(R.layout.history_asset_item, null) {
+class AssetsAdapter @Inject constructor() : BaseQuickAdapter<AssetBalanceResponse, BaseViewHolder>(R.layout.item_history_asset, null) {
 
     override fun convert(helper: BaseViewHolder, item: AssetBalanceResponse) {
         helper.setText(R.id.text_asset_name, item.getName())

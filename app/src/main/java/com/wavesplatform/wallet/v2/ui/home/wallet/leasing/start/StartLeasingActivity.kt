@@ -32,7 +32,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_start_leasing.*
-import kotlinx.android.synthetic.main.view_commission.*
+import kotlinx.android.synthetic.main.content_commission.*
 import pers.victor.ext.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

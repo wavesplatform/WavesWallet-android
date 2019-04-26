@@ -9,13 +9,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.R
 import com.wavesplatform.sdk.net.model.LanguageItem
-import kotlinx.android.synthetic.main.choose_language_item.view.*
+import kotlinx.android.synthetic.main.item_choose_language.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.setPaddingEnd
 import pers.victor.ext.setPaddingStart
 import javax.inject.Inject
 
-class LanguageAdapter @Inject constructor() : BaseQuickAdapter<LanguageItem, BaseViewHolder>(R.layout.choose_language_24dp_item, null) {
+class LanguageAdapter @Inject constructor() : BaseQuickAdapter<LanguageItem, BaseViewHolder>(R.layout.item_choose_language_24dp, null) {
 
     var changeRootPadding = false
 

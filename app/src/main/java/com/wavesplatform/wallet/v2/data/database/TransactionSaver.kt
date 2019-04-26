@@ -144,6 +144,16 @@ class TransactionSaver @Inject constructor() {
                                 trans.feeAssetObject = allAssets.firstOrNull { it.id == trans.feeAssetId }
                             }
 
+                            if (!trans.payment.isNullOrEmpty()) {
+                                trans.payment.first()?.let { payment ->
+                                    if (payment.assetId.isNullOrEmpty()) {
+                                        payment.asset = Constants.WAVES_ASSET_INFO
+                                    } else {
+                                        payment.asset = allAssets.firstOrNull { it.id == payment.assetId }
+                                    }
+                                }
+                            }
+
                             when {
                                 trans.recipient.isAlias() -> {
                                     val aliasName = trans.recipient.parseAlias()

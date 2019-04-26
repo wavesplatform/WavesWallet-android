@@ -20,7 +20,7 @@ import com.wavesplatform.wallet.v2.util.openUrlWithChromeTab
 import com.yarolegovich.slidingrootnav.SlidingRootNav
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 import com.yarolegovich.slidingrootnav.callback.DragStateListener
-import kotlinx.android.synthetic.main.menu_left_drawer.view.*
+import kotlinx.android.synthetic.main.content_menu_left_drawer.view.*
 import pers.victor.ext.*
 
 abstract class BaseDrawerActivity : BaseActivity() {
@@ -63,7 +63,7 @@ abstract class BaseDrawerActivity : BaseActivity() {
                 }
                 .withMenuOpened(false)
                 .withSavedState(savedInstanceState)
-                .withMenuLayout(R.layout.menu_left_drawer)
+                .withMenuLayout(R.layout.content_menu_left_drawer)
                 .inject()
 
         toolbar.navigationIcon = drawerIcon

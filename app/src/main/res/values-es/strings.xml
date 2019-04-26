@@ -214,9 +214,9 @@
   <string name="dex_trade_tab_last_trades">Últimas operaciones</string>
   <string name="dex_trade_tab_my_orders">Mis ordenes</string>
   <string name="dex_trade_tab_orderbook">Libro de órdenes</string>
-  <string name="confirm_card_tutorial_about_backup">I have read and agree with the Privacy Policy</string>
-  <string name="confirm_card_tutorial_about_fund_on_device">I understand that my funds are held securely on this device, not by a company. If this app is moved to another device or deleted, my Waves can only be recovered with the backup phrase.</string>
-  <string name="confirm_card_tutorial_about_terms">I have read and agree with the Terms and Conditions</string>
+  <string name="confirm_card_tutorial_about_backup">He leído y acepto la Política de Privacidad</string>
+  <string name="confirm_card_tutorial_about_fund_on_device">Entiendo que mis fondos se mantienen de forma segura en este dispositivo, no en una empresa. Si esta aplicación se mueve a otro dispositivo o se elimina, mis Waves solo se pueden recuperar con la frase de respaldo (SEED).</string>
+  <string name="confirm_card_tutorial_about_terms">He leído y acepto los Términos y Condiciones</string>
   <string name="confirm_card_tutorial_privacy_policy">Política de privacidad</string>
   <string name="dialog_processing">Espera…</string>
   <string name="edit_account_name">Editar nombre</string>
@@ -256,7 +256,7 @@
   <string name="history_active_now">Activo ahora</string>
   <string name="history_all">Todos</string>
   <string name="history_canceled">Cancelado</string>
-  <string name="history_data_type_title">Entrada en blockchain</string>
+  <string name="history_data_type_title">Escribiendo en el blockchain</string>
   <string name="history_details_active_now">ACTIVO AHORA</string>
   <string name="history_details_add_address">Guardar su dirección</string>
   <string name="history_details_amount_per_transaction">Cantidad por transacción</string>
@@ -272,7 +272,7 @@
   <string name="history_details_exchange_price">Precio</string>
   <string name="history_details_fee">Comisión </string>
   <string name="history_details_id">Activo ID</string>
-  <string name="history_details_leasing_from">Leasing from</string>
+  <string name="history_details_leasing_from">Arrendamiento de</string>
   <string name="history_details_leasing_to">Arrendamiento a</string>
   <string name="history_details_node_address">Dirección del nodo</string>
   <string name="history_details_not_reissuable">No re-emitible</string>
@@ -329,7 +329,7 @@
   <string name="history_type_token_generation">Token generados</string>
   <string name="history_type_token_reissue">Token Re-emitido</string>
   <string name="history_type_unrecognised">Transacción no reconocida</string>
-  <string name="history_type_update_asset_script">Establecer script de activos</string>
+  <string name="history_type_update_asset_script">Actualizar el script</string>
   <string name="import_account_click_show_pairing">Haga clic en «Mostrar código» para revelar un código QR</string>
   <string name="import_account_login_at_site">Inicie sesión en su Waves Client a través de su PC o Mac</string>
   <string name="import_account_scan_pairing_code">Escanear código de emparejamiento</string>
@@ -375,8 +375,8 @@
   <string name="network_save">Guardar</string>
   <string name="network_set_default">Establecer como predeterminado</string>
   <string name="network_spam_filter">Filtro sospechoso</string>
-  <string name="network_spam_url_validation_bad_url">Url incorrecto</string>
-  <string name="network_spam_url_validation_url_empty">Se requiere url</string>
+  <string name="network_spam_url_validation_bad_url">URL incorrecto</string>
+  <string name="network_spam_url_validation_url_empty">Se requiere URL</string>
   <string name="network_switch_off_spam_filtering">Filtrado sospechoso</string>
   <string name="network_toolbar_title">Red</string>
   <string name="new_account_account_name_hint">Nombre de la cuenta</string>
@@ -647,11 +647,20 @@
   <string name="dex_smart_pair_dialog_do_not_show_again">No volver a mostrar</string>
   <string name="enter_seed_manually_validation_seed_is_simple_title">La frase de SEED debe tener al menos 15 palabras con espacios entre cada palabra</string>
   <string name="enter_seed_manually_validation_seed_is_simple_description">La frase de SEED que ha introducido es demasiado corta. Asegúrese de no confunde la frase con una dirección de cartera. Usando una dirección con una frase de SEED puede resultar en pérdida de fondos.</string>
-  <string name="my_orders_details_type_buy">Buy: %1$s/%2$s</string>
-  <string name="my_orders_details_type_sell">Sell: %1$s/%2$s</string>
-  <string name="my_orders_details_cancel">Cancel order</string>
-  <string name="my_orders_details_canceled_status">Canceled (%1$s)</string>
-  <string name="my_orders_details_amount_hint">Amount</string>
+  <string name="my_orders_details_type_buy">Comprar: %1$s/%2$s</string>
+  <string name="my_orders_details_type_sell">Vender: %1$s/%2$s</string>
+  <string name="my_orders_details_cancel">Anular el pedido</string>
+  <string name="my_orders_details_canceled_status">%1$s\%% (Cancelado)</string>
+  <string name="my_orders_details_amount_hint">Cantidad</string>
   <string name="my_orders_details_price_hint">Precio</string>
   <string name="my_orders_details_total_hint">Total</string>
+  <string name="search_asset_hint">Buscar</string>
+  <string name="search_asset_cancel">Anular</string>
+  <string name="search_asset_empty">No tiene activos</string>
+  <string name="history_type_script_invocation">Invocación de script</string>
+  <string name="history_details_script_invocation_payment">Pago</string>
+  <string name="history_details_script_invocation_script_address">Dirección de script</string>
+  <string name="need_update_alert_title">¡Es el momento de actualizar su aplicación!</string>
+  <string name="need_update_alert_description">Trabajamos constantemente para hacer que Waves Wallet sea mejor y más útil. Actualiza tu aplicación para obtener acceso a nuevas funciones.</string>
+  <string name="search_asset_hidden_title">Activos ocultos</string>
 </resources>

@@ -9,6 +9,7 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -49,7 +50,9 @@ import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.net.model.response.ErrorResponse
 import com.wavesplatform.sdk.net.model.TransactionType
+import com.wavesplatform.sdk.net.model.response.OrderResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -62,6 +65,7 @@ import pers.victor.ext.Ext.ctx
 import pyxis.uzuki.live.richutilskt.utils.asDateString
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.io.File
+import java.util.*
 
 val filterStartWithDot = InputFilter { source, start, end, dest, dstart, dend ->
     if (dest.isNullOrEmpty() && source.startsWith(".")) {
@@ -466,7 +470,6 @@ inline fun <reified T : Any> Fragment.launchActivity(
     }
     if (withoutAnimation) {
         activity?.overridePendingTransition(0, 0)
-        // todo activity?.overridePendingTransition(R.anim.start_new_show,  R.anim.start_current_hide)
     }
 }
 
@@ -515,7 +518,7 @@ fun View.setMargins(
             left ?: lp.leftMargin,
             top ?: lp.topMargin,
             right ?: lp.rightMargin,
-            bottom ?: lp.rightMargin
+            bottom ?: lp.bottomMargin
     )
 
     layoutParams = lp
@@ -556,6 +559,12 @@ fun findByGatewayId(gatewayId: String): AssetBalanceResponse? { // ticker
         }
     }
     return null
+}
+
+fun AssetBalanceResponse.getMaxDigitsBeforeZero(): Int {
+    return MoneyUtil.getScaledText(this.quantity ?: 0, this.getDecimals())
+            .replace(",", "")
+            .split(".")[0].length
 }
 
 fun getDeviceId(): String {
@@ -620,4 +629,27 @@ fun restartApp() {
     val intent = Intent(App.getAppContext(), com.wavesplatform.wallet.v2.ui.splash.SplashActivity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
     App.getAppContext().startActivity(intent)
+}
+
+fun Context.getLocalizedString(@StringRes id: Int, desiredLocale: Locale): String {
+    val configuration = Configuration(resources.configuration)
+    configuration.setLocale(desiredLocale)
+    val localizedContext = createConfigurationContext(configuration)
+    return localizedContext.resources.getString(id)
+}
+
+fun findAssetBalanceInDb(query: String?, list: List<AssetBalanceResponse>): List<AssetBalanceResponse> {
+    return if (TextUtils.isEmpty(query)) {
+        list.filter { !it.isSpam }
+    } else {
+        val queryLower = query!!.toLowerCase()
+        list.filter { !it.isSpam }
+                .filter {
+                    it.assetId.toLowerCase().contains(queryLower)
+                            || it.getName().toLowerCase().contains(queryLower)
+                            || it.issueTransaction?.name?.toLowerCase()?.contains(queryLower) ?: false
+                            || it.issueTransaction?.assetId?.toLowerCase()?.contains(queryLower) ?: false
+                            || it.assetId == findByGatewayId(query.toUpperCase())?.assetId
+                }
+    }
 }

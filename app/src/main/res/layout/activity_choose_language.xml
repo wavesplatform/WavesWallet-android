@@ -1,3 +1,8 @@
+<!--
+  ~ Created by Eduard Zaydel on 22/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/relative_root"
     android:layout_width="match_parent"
@@ -9,7 +14,7 @@
         android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/view_splash_text_logo" />
+        layout="@layout/content_splash_text_logo" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_language"
@@ -18,7 +23,7 @@
         android:clipToPadding="false"
         android:overScrollMode="never"
         android:alpha="0"
-        android:paddingBottom="64dp" />
+        android:paddingBottom="88dp" />
 
     <FrameLayout
         android:id="@+id/frame_button_continue"

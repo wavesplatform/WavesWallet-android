@@ -66,7 +66,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
         presenter.assetBalance = arguments?.getParcelable(HistoryFragment.BUNDLE_ASSET)
 
         adapter.bindToRecyclerView(recycle_history)
-        adapter.emptyView = inflate(R.layout.layout_empty_data)
+        adapter.emptyView = inflate(R.layout.content_empty_data)
 
         skeletonScreen = Skeleton.bind(recycle_history)
                 .adapter(recycle_history.adapter)
@@ -105,7 +105,7 @@ class HistoryTabFragment : BaseFragment(), HistoryTabView {
 
         presenter.loadTransactions()
 
-        adapter.setEmptyView(R.layout.layout_empty_data)
+        adapter.setEmptyView(R.layout.content_empty_data)
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             if (position == 0) return@OnItemClickListener // handle click on empty space
 
