@@ -23,11 +23,13 @@ import com.ethanhua.skeleton.Skeleton
 import com.oushangfeng.pinnedsectionitemdecoration.PinnedHeaderItemDecoration
 import com.oushangfeng.pinnedsectionitemdecoration.callback.OnHeaderClickAdapter
 import com.vicpin.krealmextensions.queryFirst
+import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
-import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
@@ -35,9 +37,8 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.address.MyAddressQRActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.details.AssetDetailsActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset.SearchAssetActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting.AssetsSortingActivity
-import com.wavesplatform.sdk.utils.RxUtil
-import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
-import com.wavesplatform.wallet.v2.util.*
+import com.wavesplatform.wallet.v2.util.isMyServiceRunning
+import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.fragment_assets.*
 import kotlinx.android.synthetic.main.item_wallet_header.view.*
 import pers.victor.ext.dp2px
@@ -59,7 +60,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
     @Inject
     lateinit var adapter: AssetsAdapter
 
-    var elevationAppBarChangeListener : MainActivity.OnElevationAppBarChangeListener? = null
+    var elevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
     private var skeletonScreen: RecyclerViewSkeletonScreen? = null
     private var headerItemDecoration: PinnedHeaderItemDecoration? = null
@@ -172,17 +173,25 @@ class AssetsFragment : BaseFragment(), AssetsView {
                 if (item is AssetBalanceMultiItemEntity) {
                     val positionWithoutSection = when {
                         // minus hidden section header and all clear assets
-                        item.isHidden -> position - 1 - adapter.data.count {
-                            (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
+                        item.isHidden -> {
+                            position - 1
+                            -adapter.data.count {
+                                (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
+                            }
                         }
                         // minus hidden and spam sections header and all clear and hidden assets
-                        item.isSpam -> position - getCorrectionIndex() - adapter.data.count {
-                            (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
-                        } -
-                                adapter.data.count {
-                                    (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HIDDEN_ASSET
-                                }
-                        else -> position // no changes
+                        item.isSpam -> {
+                            position - getCorrectionIndex()
+                            -adapter.data.count {
+                                (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_ASSET
+                            }
+                            -adapter.data.count {
+                                (it as MultiItemEntity).itemType == AssetsAdapter.TYPE_HIDDEN_ASSET
+                            }
+                        }
+                        else -> {
+                            position
+                        }
                     }
                     launchActivity<AssetDetailsActivity>(REQUEST_ASSET_DETAILS) {
                         putExtra(AssetDetailsActivity.BUNDLE_ASSET_TYPE, item.getItemType())
