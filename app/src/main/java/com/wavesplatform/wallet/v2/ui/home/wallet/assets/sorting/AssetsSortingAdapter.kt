@@ -197,6 +197,8 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
         }
     }
 
+    addDa
+
     class ItemViewHolder(itemView: View) : BaseViewHolder(itemView), ItemTouchHelperViewHolder {
         override fun onItemSelected() {
             // change background to selected

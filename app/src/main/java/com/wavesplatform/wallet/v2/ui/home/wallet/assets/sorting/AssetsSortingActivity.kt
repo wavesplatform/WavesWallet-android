@@ -41,7 +41,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
     @Inject
     lateinit var adapter: AssetsSortingAdapter
     lateinit var mItemTouchHelper: ItemTouchHelper
-    var itemAnimator = FadeInWithoutDelayAnimator()
+    private var itemAnimator = FadeInWithoutDelayAnimator()
 
 
     private val tabs: ArrayList<CustomTabEntity> by lazy {
@@ -88,7 +88,6 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
         recycle_assets.layoutManager = LinearLayoutManager(this)
         recycle_assets.itemAnimator = itemAnimator
-
 
         adapter.bindToRecyclerView(recycle_assets)
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
@@ -226,10 +225,14 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             }
         }
 
-        // disable animation before update item
+        // disable animation before update item to fix blink bug
         recycle_assets.itemAnimator = null
+
+        // update item and empty views
         adapter.setData(position, item)
         adapter.checkEmptyViews()
+
+        // enable animation after update
         runDelayed(150) {
             recycle_assets.itemAnimator = itemAnimator
         }

@@ -47,22 +47,27 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
                                     AssetSortingItem(AssetSortingItem.TYPE_HIDDEN_ITEM, it)
                                 }
 
+                        // add favorite list or empty view
                         if (favoriteList.isNotEmpty()) {
                             result.addAll(favoriteList)
                         } else {
                             result.add(AssetSortingItem(AssetSortingItem.TYPE_EMPTY_FAVORITE))
                         }
 
+                        // add favorite and default items separator
                         result.add(AssetSortingItem(AssetSortingItem.TYPE_FAVORITE_SEPARATOR))
 
+                        // add default list or empty view
                         if (notFavoriteList.isNotEmpty()) {
                             result.addAll(notFavoriteList)
                         } else {
                             result.add(AssetSortingItem(AssetSortingItem.TYPE_EMPTY_DEFAULT))
                         }
 
+                        // add hidden header
                         result.add(AssetSortingItem(AssetSortingItem.TYPE_HIDDEN_HEADER))
 
+                        // add hidden list or empty view
                         if (hiddenList.isNotEmpty()) {
                             result.addAll(hiddenList)
                         } else {
