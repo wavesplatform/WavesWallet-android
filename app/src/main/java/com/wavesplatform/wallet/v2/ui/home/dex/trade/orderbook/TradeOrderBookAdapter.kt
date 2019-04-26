@@ -22,9 +22,9 @@ class TradeOrderBookAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Mu
     var market: MarketResponse = MarketResponse()
 
     init {
-        addItemType(LAST_PRICE_TYPE, R.layout.recycle_item_orderbook_last_price)
-        addItemType(BID_TYPE, R.layout.recycle_item_orderbook)
-        addItemType(ASK_TYPE, R.layout.recycle_item_orderbook)
+        addItemType(LAST_PRICE_TYPE, R.layout.item_orderbook_last_price)
+        addItemType(BID_TYPE, R.layout.item_orderbook)
+        addItemType(ASK_TYPE, R.layout.item_orderbook)
     }
 
     override fun convert(helper: BaseViewHolder, item: MultiItemEntity) {

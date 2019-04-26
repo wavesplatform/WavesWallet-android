@@ -11,7 +11,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.remote.response.MarketResponse
 import javax.inject.Inject
 
-class DexMarketsAdapter @Inject constructor() : BaseQuickAdapter<MarketResponse, BaseViewHolder>(R.layout.dex_markets_item, null) {
+class DexMarketsAdapter @Inject constructor() : BaseQuickAdapter<MarketResponse, BaseViewHolder>(R.layout.item_dex_markets, null) {
 
     var allData: MutableList<MarketResponse> = arrayListOf()
 

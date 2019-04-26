@@ -27,7 +27,7 @@ import com.wavesplatform.wallet.v2.util.makeStyled
 import com.wavesplatform.wallet.v2.util.notNull
 import com.wavesplatform.wallet.v2.util.showSuccess
 import kotlinx.android.synthetic.main.activity_choose_account.*
-import kotlinx.android.synthetic.main.layout_empty_data.view.*
+import kotlinx.android.synthetic.main.content_empty_data.view.*
 import pers.victor.ext.inflate
 import javax.inject.Inject
 
@@ -71,7 +71,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
     }
 
     private fun getEmptyView(): View {
-        val view = inflate(R.layout.layout_empty_data)
+        val view = inflate(R.layout.content_empty_data)
         view.text_empty.text = getString(R.string.choose_account_empty_state)
         return view
     }
@@ -101,7 +101,7 @@ class ChooseAccountActivity : BaseActivity(), ChooseAccountView, ChooseAccountOn
         alertDialog.setTitle(getString(R.string.choose_account_delete_title))
         alertDialog.setMessage(getString(R.string.choose_account_delete_msg))
         if (prefsUtil.getGuidValue(guid, PrefsUtil.KEY_SKIP_BACKUP, true)) {
-            alertDialog.setView(inflate(R.layout.delete_account_warning_layout, null))
+            alertDialog.setView(inflate(R.layout.content_delete_account_warning_layout, null))
         }
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                 getString(R.string.choose_account_yes)) { dialog, which ->

@@ -18,7 +18,7 @@ import pers.victor.ext.click
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
-class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUser, BaseViewHolder>(R.layout.choose_address_layout, null) {
+class ChooseAccountAdapter @Inject constructor() : BaseQuickAdapter<AddressBookUser, BaseViewHolder>(R.layout.content_choose_address_layout, null) {
 
     var chooseAccountOnClickListener: ChooseAccountOnClickListener? = null
     private val identicon = Identicon()

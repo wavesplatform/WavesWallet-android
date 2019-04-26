@@ -13,12 +13,12 @@ import com.wavesplatform.wallet.v2.data.model.remote.response.Alias
 import com.wavesplatform.wallet.v2.util.copyToClipboard
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.aliases_layout.view.*
+import kotlinx.android.synthetic.main.content_aliases_layout.view.*
 import pers.victor.ext.gone
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class AliasesAdapter @Inject constructor() : BaseQuickAdapter<Alias, BaseViewHolder>(R.layout.aliases_layout) {
+class AliasesAdapter @Inject constructor() : BaseQuickAdapter<Alias, BaseViewHolder>(R.layout.content_aliases_layout) {
 
     var subscriptions: CompositeDisposable? = null
 
