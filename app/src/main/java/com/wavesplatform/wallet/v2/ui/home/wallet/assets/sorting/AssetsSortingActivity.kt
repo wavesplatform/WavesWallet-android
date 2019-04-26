@@ -21,7 +21,6 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.wallet.v2.data.model.local.TabItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
@@ -29,7 +28,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
 import com.wavesplatform.wallet.v2.util.drag_helper.SimpleItemTouchHelperCallback
 import kotlinx.android.synthetic.main.activity_assets_sorting.*
-import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
+import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.*
 import javax.inject.Inject
 
@@ -42,6 +41,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
     @Inject
     lateinit var adapter: AssetsSortingAdapter
     lateinit var mItemTouchHelper: ItemTouchHelper
+    var itemAnimator = FadeInWithoutDelayAnimator()
 
 
     private val tabs: ArrayList<CustomTabEntity> by lazy {
@@ -87,7 +87,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         })
 
         recycle_assets.layoutManager = LinearLayoutManager(this)
-        recycle_assets.itemAnimator = FadeInWithoutDelayAnimator()
+        recycle_assets.itemAnimator = itemAnimator
+
 
         adapter.bindToRecyclerView(recycle_assets)
         adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
@@ -100,7 +101,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
                     when (globalItem.itemType) {
                         AssetSortingItem.TYPE_FAVORITE -> {
-                            val linePosition = getLinePosition(false)
+                            val linePosition = getLinePosition()
 
                             asset.isFavorite = false
                             asset.configureVisibleState = presenter.visibilityConfigurationActive
@@ -118,12 +119,12 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             asset.save()
                             AssetBalanceStore(asset.assetId, asset.isHidden, asset.position, asset.isFavorite).save()
                         }
-                        AssetSortingItem.TYPE_NOT_FAVORITE -> {
+                        AssetSortingItem.TYPE_NOT_FAVORITE, AssetSortingItem.TYPE_HIDDEN -> {
                             // remove from current list
                             this.adapter.data.removeAt(position)
                             this.adapter.notifyItemRemoved(position)
 
-                            val linePosition = getLinePosition(true)
+                            val linePosition = getLinePosition()
 
                             asset.isFavorite = true
                             asset.isHidden = false
@@ -144,12 +145,32 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         }
 
         adapter.onHiddenChangeListener = object : AssetsSortingAdapter.OnHiddenChangeListener {
-            override fun onHiddenStateChanged(item: AssetBalance, checked: Boolean) {
+            override fun onHiddenStateChanged(item: AssetSortingItem, checked: Boolean, position: Int) {
                 presenter.needToUpdate = true
-                item.isHidden = !checked
-                item.save()
-                AssetBalanceStore(item.assetId, item.isHidden, item.position,
-                        item.isFavorite).save()
+
+                // remove from current list
+                adapter.data.removeAt(position)
+                adapter.notifyItemRemoved(position)
+
+                val linePosition = getHiddenLinePosition()
+
+                item.asset.isFavorite = false
+                item.asset.isHidden = !checked
+
+                if (checked) {
+                    item.asset.isHidden = false
+                    item.type = AssetSortingItem.TYPE_NOT_FAVORITE
+                    adapter.addData(linePosition, item)
+                } else {
+                    item.asset.isHidden = true
+                    item.type = AssetSortingItem.TYPE_HIDDEN
+                    adapter.addData(linePosition + 1, item)
+                }
+
+                // Save to DB
+                item.asset.save()
+                AssetBalanceStore(item.asset.assetId, item.asset.isHidden, item.asset.position,
+                        item.asset.isFavorite).save()
             }
         }
 
@@ -161,18 +182,14 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         adapter.mDragStartListener = object : ItemDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder, position: Int) {
                 mItemTouchHelper.startDrag(viewHolder)
-
-                val originalPos = IntArray(2)
-                viewHolder.itemView.card_asset.getLocationOnScreen(originalPos)
             }
 
             override fun onMoved(fromHolder: View?, fromPosition: Int, toHolder: View?, toPosition: Int) {
                 presenter.needToUpdate = true
-                val originalPos = IntArray(2)
-                toHolder?.card_asset?.getLocationOnScreen(originalPos)
             }
 
-            override fun onEndDrag() {
+            override fun onEndDrag(viewHolder: RecyclerView.ViewHolder) {
+                applyCorrectCardBg(viewHolder)
             }
         }
 
@@ -181,27 +198,55 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         common_tab_layout.currentTab = 0
     }
 
+    private fun applyCorrectCardBg(holder: RecyclerView.ViewHolder) {
+        val position = holder.adapterPosition
+        val item = adapter.getItem(position) as AssetSortingItem
+        val type = adapter.resolveType(position)
+
+        item.type = type
+
+        when (type) {
+            AssetSortingItem.TYPE_FAVORITE -> {
+                item.asset.isFavorite = true
+                item.asset.isHidden = false
+            }
+            AssetSortingItem.TYPE_NOT_FAVORITE -> {
+                item.asset.isFavorite = false
+                item.asset.isHidden = false
+            }
+            AssetSortingItem.TYPE_HIDDEN -> {
+                item.asset.isFavorite = false
+                item.asset.isHidden = true
+            }
+        }
+
+        // disable animation before update item
+        recycle_assets.itemAnimator = null
+        adapter.setData(position, item)
+        runDelayed(150) {
+            recycle_assets.itemAnimator = itemAnimator
+        }
+
+        item.asset.save()
+        AssetBalanceStore(item.asset.assetId, item.asset.isHidden, item.asset.position,
+                item.asset.isFavorite).save()
+    }
+
     private fun setScreenType(position: Int) {
         adapter.data.forEach {
             it.asset.configureVisibleState = position == TYPE_VISIBILITY
+            presenter.visibilityConfigurationActive = position == TYPE_VISIBILITY
         }
         adapter.notifyDataSetChanged()
     }
 
-    private fun getLinePosition(toFavorite: Boolean): Int {
-        var position = adapter.data.indexOfFirst { it.itemType == AssetSortingItem.TYPE_LINE }
-        if (position == -1) {
-            // add line
-            val line = AssetSortingItem(AssetSortingItem.TYPE_LINE)
+    private fun getLinePosition(): Int {
+        return adapter.data.indexOfFirst { it.itemType == AssetSortingItem.TYPE_LINE }
+    }
 
-            if (toFavorite) {
-                adapter.addData(0, line)
-            } else {
-                adapter.addData(line)
-            }
-            position = adapter.data.indexOfFirst { it.itemType == AssetSortingItem.TYPE_LINE }
-        }
-        return position
+
+    private fun getHiddenLinePosition(): Int {
+        return adapter.data.indexOfFirst { it.itemType == AssetSortingItem.TYPE_HIDDEN_HEADER }
     }
 
     override fun onBackPressed() {

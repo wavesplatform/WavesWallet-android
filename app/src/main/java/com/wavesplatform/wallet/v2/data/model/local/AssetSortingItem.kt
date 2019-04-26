@@ -26,10 +26,10 @@ class AssetSortingItem : MultiItemEntity {
     }
 
     companion object {
-        val TYPE_FAVORITE = 1
-        val TYPE_NOT_FAVORITE = 2
-        val TYPE_HIDDEN = 3
-        val TYPE_HIDDEN_HEADER = 4
-        val TYPE_LINE = 5
+        const val TYPE_FAVORITE = 1
+        const val TYPE_NOT_FAVORITE = 2
+        const val TYPE_HIDDEN = 3
+        const val TYPE_HIDDEN_HEADER = 4
+        const val TYPE_LINE = 5
     }
 }

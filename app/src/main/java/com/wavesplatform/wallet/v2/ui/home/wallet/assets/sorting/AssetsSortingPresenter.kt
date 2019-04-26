@@ -68,7 +68,7 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
 
     fun saveSortedPositions(data: MutableList<AssetSortingItem>) {
         data
-                .filter { it.type != AssetSortingItem.TYPE_LINE }
+                .filter { it.type != AssetSortingItem.TYPE_LINE && it.type != AssetSortingItem.TYPE_HIDDEN_HEADER }
                 .mapIndexedTo(mutableListOf()) { position, item ->
                     item.asset.position = position
                     AssetBalanceStore(item.asset.assetId,

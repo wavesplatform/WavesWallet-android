@@ -5,13 +5,13 @@
 
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
+import android.support.v7.widget.RecyclerView
 import android.view.MotionEvent
 import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemTouchHelperAdapter
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemTouchHelperViewHolder
@@ -30,28 +30,50 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
         val movedItem = data.removeAt(fromPosition)
         data.add(toPosition, movedItem)
         notifyItemMoved(fromPosition, toPosition)
-        mDragStartListener?.onMoved(recyclerView.layoutManager?.findViewByPosition(fromPosition), fromPosition, recyclerView.layoutManager?.findViewByPosition(toPosition), toPosition)
+        mDragStartListener?.onMoved(recyclerView.layoutManager?.findViewByPosition(fromPosition),
+                fromPosition,
+                recyclerView.layoutManager?.findViewByPosition(toPosition),
+                toPosition)
         return true
     }
 
-    override fun onDragEnd() {
-        mDragStartListener?.onEndDrag()
+    fun resolveType(position: Int): Int {
+        val favoriteLinePosition = data.indexOfFirst { it.itemType == AssetSortingItem.TYPE_LINE }
+        val hiddenLinePosition = data.indexOfFirst { it.itemType == AssetSortingItem.TYPE_HIDDEN_HEADER }
+        return when (position) {
+            in 0..favoriteLinePosition -> {
+                AssetSortingItem.TYPE_FAVORITE
+            }
+            in favoriteLinePosition..hiddenLinePosition -> {
+                AssetSortingItem.TYPE_NOT_FAVORITE
+            }
+            in hiddenLinePosition until data.size -> {
+                AssetSortingItem.TYPE_HIDDEN
+            }
+            else -> {
+                AssetSortingItem.TYPE_FAVORITE
+            }
+        }
+    }
+
+    override fun onDragEnd(viewHolder: RecyclerView.ViewHolder) {
+        mDragStartListener?.onEndDrag(viewHolder)
     }
 
     init {
         addItemType(AssetSortingItem.TYPE_FAVORITE, com.wavesplatform.wallet.R.layout.wallet_asset_sorting_item)
         addItemType(AssetSortingItem.TYPE_NOT_FAVORITE, com.wavesplatform.wallet.R.layout.wallet_asset_sorting_item)
-        addItemType(AssetSortingItem.TYPE_LINE, com.wavesplatform.wallet.R.layout.wallet_asset_sorting_line_item)
         addItemType(AssetSortingItem.TYPE_HIDDEN, com.wavesplatform.wallet.R.layout.wallet_asset_sorting_item)
+        addItemType(AssetSortingItem.TYPE_LINE, com.wavesplatform.wallet.R.layout.wallet_asset_sorting_line_item)
         addItemType(AssetSortingItem.TYPE_HIDDEN_HEADER, com.wavesplatform.wallet.R.layout.content_asset_sorting_hidden_header)
     }
 
     var onHiddenChangeListener: OnHiddenChangeListener? = null
 
-    override fun convert(helper: ItemViewHolder, item: AssetSortingItem) {
+    override fun convert(helper: ItemViewHolder, globalItem: AssetSortingItem) {
         when (helper.itemViewType) {
             AssetSortingItem.TYPE_NOT_FAVORITE, AssetSortingItem.TYPE_FAVORITE, AssetSortingItem.TYPE_HIDDEN -> {
-                val item = item.asset
+                val item = globalItem.asset
                 helper.setText(com.wavesplatform.wallet.R.id.text_asset_name, item.getName())
                         .setImageResource(com.wavesplatform.wallet.R.id.image_favorite, if (item.isFavorite) com.wavesplatform.wallet.R.drawable.ic_favorite_14_submit_300 else com.wavesplatform.wallet.R.drawable.ic_favorite_14_disabled_400)
                         .addOnClickListener(com.wavesplatform.wallet.R.id.image_favorite)
@@ -66,7 +88,7 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
                                 helper.itemView.card_asset.setCardBackgroundColor(findColor(android.R.color.transparent))
                                 helper.itemView.card_asset.cardElevation = 0f
                             }
-                            onHiddenChangeListener?.onHiddenStateChanged(item, isChecked)
+                            onHiddenChangeListener?.onHiddenStateChanged(globalItem, isChecked, helper.adapterPosition)
                         }
                         .setGone(com.wavesplatform.wallet.R.id.switch_visible, item.configureVisibleState)
                         .setGone(com.wavesplatform.wallet.R.id.image_drag, !item.configureVisibleState)
@@ -107,6 +129,6 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
     }
 
     interface OnHiddenChangeListener {
-        fun onHiddenStateChanged(item: AssetBalance, checked: Boolean)
+        fun onHiddenStateChanged(item: AssetSortingItem, checked: Boolean, position: Int)
     }
 }

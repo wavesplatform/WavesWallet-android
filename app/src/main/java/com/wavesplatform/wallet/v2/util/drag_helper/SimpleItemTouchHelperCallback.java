@@ -61,9 +61,9 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
-        if (source.getItemViewType() != target.getItemViewType()) {
-            return false;
-        }
+//        if (source.getItemViewType() != target.getItemViewType()) {
+//            return false;
+//        }
 
         // Notify the adapter of the move
         return mAdapter.onItemMove(source.getAdapterPosition(), target.getAdapterPosition());
@@ -88,7 +88,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
-        mAdapter.onDragEnd();
+        mAdapter.onDragEnd(viewHolder);
 
         if (viewHolder instanceof ItemTouchHelperViewHolder) {
             // Tell the view holder it's time to restore the idle state
