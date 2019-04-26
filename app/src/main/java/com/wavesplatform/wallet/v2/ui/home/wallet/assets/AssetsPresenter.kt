@@ -221,7 +221,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
             val hiddenSection = WalletSectionItem(app.getString(R.string.wallet_assets_hidden_category,
                     it.second.size.toString()))
             it.second.forEach {
-                hiddenSection.addSubItem(it.convertFromDb())
+                hiddenSection.addSubItem(AssetBalanceMultiItemEntity(it))
             }
             listToShow.add(hiddenSection)
         }
@@ -233,7 +233,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                 val spamSection = WalletSectionItem(app.getString(R.string.wallet_assets_spam_category,
                         it.third.size.toString()))
                 it.third.forEach {
-                    spamSection.addSubItem(it.convertFromDb())
+                    spamSection.addSubItem(AssetBalanceMultiItemEntity(it))
                 }
                 listToShow.add(spamSection)
             }
