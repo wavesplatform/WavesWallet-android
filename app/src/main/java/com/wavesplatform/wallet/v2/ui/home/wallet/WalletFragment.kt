@@ -73,7 +73,7 @@ class WalletFragment : BaseFragment(), WalletView {
     private fun setupUI() {
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
-        setIndicatorMarge()
+        setIndicatorMargin()
 
         viewpager_wallet.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(p0: Int) {
@@ -97,7 +97,7 @@ class WalletFragment : BaseFragment(), WalletView {
         stl_wallet.setCurrentTab(0, false)
     }
 
-    private fun setIndicatorMarge() {
+    private fun setIndicatorMargin() {
         val dpWidthFirst = measureWidthDpText(adapter.titles[0])
         val dpWidthSecond = measureWidthDpText(adapter.titles[1])
 
