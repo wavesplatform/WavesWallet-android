@@ -652,6 +652,7 @@
     <string name="my_orders_details_cancel">Cancel order</string>
     <string name="my_orders_details_canceled_status">%1$s\%% (Cancelled)</string>
     <string name="my_orders_details_amount_hint">Amount</string>
+    <string name="my_orders_details_filled_hint">Filled</string>
     <string name="my_orders_details_price_hint">Price</string>
     <string name="my_orders_details_total_hint">Total</string>
     <string name="search_asset_hint">Search</string>

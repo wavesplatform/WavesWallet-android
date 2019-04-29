@@ -7,6 +7,7 @@ package com.wavesplatform.wallet.v2.data.model.remote.response
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.wallet.v2.data.Constants
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
@@ -43,5 +44,13 @@ open class AssetInfo(
 ) : Parcelable, RealmModel {
     fun isSponsored(): Boolean {
         return minSponsoredFee > 0
+    }
+
+    fun getTokenTicker(): String? {
+        return if (name == Constants.WAVES_ASSET_ID_FILLED) {
+            Constants.WAVES_ASSET_ID_FILLED
+        } else {
+            ticker
+        }
     }
 }
