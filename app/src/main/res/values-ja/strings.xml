@@ -654,8 +654,6 @@
   <string name="my_orders_details_amount_hint">数量</string>
   <string name="my_orders_details_price_hint">価格</string>
   <string name="my_orders_details_total_hint">合計</string>
-  <string name="RENAME.clean.title">もう整頓に困ることはありません。</string>
-  <string name="RENAME.clean.text">あなたがウォレットをクリーンで整頓することを可能にするためにアセットの表示方法を再設計しました。あなたは望むようにアセットリストをカスタマイズすることができます！</string>
   <string name="search_asset_hint">検索</string>
   <string name="search_asset_cancel">キャンセル</string>
   <string name="search_asset_empty">あなたはそのアセットを保有していません</string>

@@ -13,7 +13,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.wavesplatform.wallet.R
-import kotlinx.android.synthetic.main.layout_top_info_alert.view.*
+import kotlinx.android.synthetic.main.content_top_info_alert.view.*
 import pers.victor.ext.click
 import pers.victor.ext.gone
 import pers.victor.ext.visiable
@@ -34,7 +34,7 @@ class InfoAlert : FrameLayout {
 
     private fun inflate() {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        inflater.inflate(R.layout.layout_top_info_alert, this, true)
+        inflater.inflate(R.layout.content_top_info_alert, this, true)
     }
 
     fun setTitle(title: String) {
@@ -54,10 +54,12 @@ class InfoAlert : FrameLayout {
     }
 
     fun setIcon(icon: Bitmap) {
+        image_alert_icon.visiable()
         image_alert_icon.setImageBitmap(icon)
     }
 
     fun setIcon(@DrawableRes icon: Int) {
+        image_alert_icon.visiable()
         image_alert_icon.setImageResource(icon)
     }
 
@@ -82,10 +84,23 @@ class InfoAlert : FrameLayout {
     }
 
     fun show() {
+        this.alpha = 1f
         this.visiable()
     }
 
     fun hide() {
-        this.gone()
+        this.animate()
+                .alpha(0f)
+                .setDuration(350)
+                .withEndAction {
+                    this.gone()
+                }
+                .start()
+    }
+
+    override fun onDetachedFromWindow() {
+        this.animation?.cancel()
+        this.animation = null
+        super.onDetachedFromWindow()
     }
 }

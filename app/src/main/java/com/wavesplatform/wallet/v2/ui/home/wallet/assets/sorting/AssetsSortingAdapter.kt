@@ -15,8 +15,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemTouchHelperAdapter
+import kotlinx.android.synthetic.main.item_wallet_asset_sorting.view.*
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemTouchHelperViewHolder
-import kotlinx.android.synthetic.main.wallet_asset_sorting_item.view.*
 import pers.victor.ext.dp2px
 import pers.victor.ext.findColor
 import javax.inject.Inject
@@ -63,11 +63,11 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
 
     init {
         // items
-        addItemType(AssetSortingItem.TYPE_FAVORITE_ITEM, R.layout.wallet_asset_sorting_item)
-        addItemType(AssetSortingItem.TYPE_DEFAULT_ITEM, R.layout.wallet_asset_sorting_item)
-        addItemType(AssetSortingItem.TYPE_HIDDEN_ITEM, R.layout.wallet_asset_sorting_item)
+        addItemType(AssetSortingItem.TYPE_FAVORITE_ITEM, R.layout.item_wallet_asset_sorting)
+        addItemType(AssetSortingItem.TYPE_DEFAULT_ITEM, R.layout.item_wallet_assпіet_sorting)
+        addItemType(AssetSortingItem.TYPE_HIDDEN_ITEM, R.layout.item_wallet_asset_sorting)
         // separators
-        addItemType(AssetSortingItem.TYPE_FAVORITE_SEPARATOR, R.layout.wallet_asset_sorting_line_item)
+        addItemType(AssetSortingItem.TYPE_FAVORITE_SEPARATOR, R.layout.item_wallet_asset_sorting_line)
         addItemType(AssetSortingItem.TYPE_HIDDEN_HEADER, R.layout.content_asset_sorting_hidden_header)
         //empty
         addItemType(AssetSortingItem.TYPE_EMPTY_HIDDEN, R.layout.content_asset_sorting_empty)

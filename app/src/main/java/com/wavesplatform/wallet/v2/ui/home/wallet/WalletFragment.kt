@@ -13,6 +13,7 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
@@ -27,6 +28,7 @@ import javax.inject.Inject
 
 
 class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabBarVisibilityListener {
+
     @Inject
     @InjectPresenter
     lateinit var presenter: WalletPresenter
@@ -36,7 +38,7 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
     @ProvidePresenter
     fun providePresenter(): WalletPresenter = presenter
 
-    override fun configLayoutRes(): Int = com.wavesplatform.wallet.R.layout.fragment_wallet
+    override fun configLayoutRes(): Int = R.layout.fragment_wallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +64,7 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupUI()
 
-        presenter.checkNewAppUpdates()
+        presenter.showTopBannerIfNeed()
     }
 
     fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
@@ -115,7 +117,7 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
     }
 
     override fun afterCheckNewAppUpdates(needUpdate: Boolean) {
-        if (needUpdate){
+        if (needUpdate) {
             info_alert.apply {
                 setIcon(R.drawable.userimg_rocket_48)
                 setTitle(R.string.need_update_alert_title)
@@ -128,6 +130,19 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
         }
     }
 
+    override fun afterCheckClearedWallet() {
+        info_alert.apply {
+            setTitle(R.string.clean_banner_title)
+            setDescription(R.string.clean_banner_description)
+            setActionIcon(R.drawable.ic_clear_14_basic_300)
+            onAlertClick {
+                info_alert.hide()
+                presenter.prefsUtil.setValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, true)
+                presenter.showTopBannerIfNeed()
+            }
+        }.show()
+    }
+
     private fun openAppInPlayMarket() {
         val appPackageName = activity?.packageName
         try {
@@ -135,7 +150,5 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
         } catch (anfe: android.content.ActivityNotFoundException) {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
         }
-
-
     }
 }

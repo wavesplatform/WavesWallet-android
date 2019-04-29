@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 22/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,5 +12,5 @@
 
     <include
         android:id="@+id/layout_empty"
-        layout="@layout/layout_empty_data"/>
+        layout="@layout/content_empty_data"/>
 </FrameLayout>

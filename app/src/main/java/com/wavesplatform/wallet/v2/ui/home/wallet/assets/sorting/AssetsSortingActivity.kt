@@ -28,6 +28,8 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
 import com.wavesplatform.wallet.v2.util.drag_helper.SimpleItemTouchHelperCallback
 import kotlinx.android.synthetic.main.activity_assets_sorting.*
+import kotlinx.android.synthetic.main.item_wallet_asset_sorting.view.*
+import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.*
 import javax.inject.Inject
