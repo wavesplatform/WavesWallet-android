@@ -6,6 +6,9 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet
 
 import android.content.Intent
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
@@ -14,6 +17,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
@@ -69,14 +73,14 @@ class WalletFragment : BaseFragment(), WalletView {
     private fun setupUI() {
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
-        stl_wallet.currentTab = 0
+        setIndicatorMarge()
 
         viewpager_wallet.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(p0: Int) {
                 // do nothing
             }
 
-            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 // do nothing
             }
 
@@ -89,6 +93,35 @@ class WalletFragment : BaseFragment(), WalletView {
                 enableElevation(enable)
             }
         })
+
+        stl_wallet.setCurrentTab(0, false)
+    }
+
+    private fun setIndicatorMarge() {
+        val dpWidthFirst = measureWidthDpText(adapter.titles[0])
+        val dpWidthSecond = measureWidthDpText(adapter.titles[1])
+
+        val minIndicatorWidth = 16F
+        val marginRightToIndicator = if (dpWidthFirst > dpWidthSecond) {
+            dpWidthSecond - minIndicatorWidth
+        } else {
+            dpWidthFirst - minIndicatorWidth
+        }
+        val commonMargin = 12F
+        stl_wallet.setIndicatorMargin(
+                commonMargin,
+                0F,
+                commonMargin + marginRightToIndicator,
+                0F)
+    }
+
+    private fun measureWidthDpText(text: String): Float {
+        val paint = Paint()
+        paint.typeface = Typeface.DEFAULT_BOLD
+        paint.textSize = ViewUtils.convertDpToPixel(14F, activity)
+        val bounds = Rect()
+        paint.getTextBounds(text, 0, text.length, bounds)
+        return ViewUtils.convertPixelsToDp(bounds.width().toFloat(), activity)
     }
 
     private fun enableElevation(enable: Boolean) {
