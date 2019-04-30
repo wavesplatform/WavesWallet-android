@@ -107,7 +107,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         showBackUpSeedWarning()
         if (App.getAccessManager().getWallet() != null) {
             presenter.loadNews()
-            HistoryRepeatUpdater.start(Handler(), presenter.nodeDataManager, presenter.rxEventBus)
+            HistoryRepeatUpdater.start(presenter.nodeDataManager, presenter.rxEventBus)
         }
     }
 

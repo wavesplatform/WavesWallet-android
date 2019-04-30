@@ -181,7 +181,7 @@ class EnterPassCodeActivity : BaseActivity(), EnterPasscodeView {
         data.putExtra(KEY_INTENT_PASS_CODE, passCode)
         setResult(Constants.RESULT_OK, data)
         App.getAccessManager().setWallet(getGuid(), password)
-        HistoryRepeatUpdater.start(Handler(), presenter.nodeDataManager, presenter.rxEventBus)
+        HistoryRepeatUpdater.start(presenter.nodeDataManager, presenter.rxEventBus)
         exitFromScreen()
     }
 
