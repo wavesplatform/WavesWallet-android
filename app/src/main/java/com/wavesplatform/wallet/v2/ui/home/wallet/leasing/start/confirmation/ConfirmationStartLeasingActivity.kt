@@ -15,7 +15,9 @@ import com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
 import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.util.getScaledAmount
+import com.wavesplatform.wallet.v2.util.launchActivity
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.showError
 import kotlinx.android.synthetic.main.activity_confirm_leasing.*
@@ -80,8 +82,12 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
     }
 
     override fun onBackPressed() {
-        finish()
-        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        if (presenter.success) {
+            launchActivity<MainActivity>(clear = true)
+        } else {
+            finish()
+            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        }
     }
 
     override fun successStartLeasing() {

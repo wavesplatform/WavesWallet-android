@@ -28,12 +28,15 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
     var transactionId: String = ""
     var fee = 0L
 
+    var success = false
+
     fun cancelLeasing() {
         cancelLeasingRequest.leaseId = transactionId
         cancelLeasingRequest.fee = fee
         addSubscription(nodeDataManager.cancelLeasing(cancelLeasingRequest)
                 .compose(RxUtil.applyObservableDefaultSchedulers())
                 .subscribe({
+                    success = true
                     viewState.successCancelLeasing()
                     viewState.showProgressBar(false)
                 }, {
