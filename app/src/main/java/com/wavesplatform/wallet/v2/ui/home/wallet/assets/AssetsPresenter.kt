@@ -13,7 +13,6 @@ import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.ui.auth.EnvironmentManager
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.helpers.ClearAssetsHelper
@@ -48,38 +47,39 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         runAsync {
             val savedAssetPrefs = queryAll<AssetBalanceStore>()
             var dbAssets = mutableListOf<AssetBalance>()
-            addSubscription(queryAllAsSingle<AssetBalance>().toObservable()
+            var dbSpamAssets = mutableListOf<SpamAsset>()
+            addSubscription(Observable.zip(
+                    queryAllAsSingle<AssetBalance>().toObservable(),
+                    queryAllAsSingle<SpamAsset>().toObservable(),
+                    BiFunction { t1: List<AssetBalance>, t2: List<SpamAsset> ->
+                        return@BiFunction Pair(t1, t2)
+                    })
                     .subscribeOn(Schedulers.io())
-                    .map {
-                        val assetBalanceList = it.toMutableList()
-                        for (item in assetBalanceList) {
-                            val assetBalance = savedAssetPrefs.firstOrNull { it.assetId == item.assetId }
-                            assetBalance.notNull { storedAssetBalance ->
-                                item.isFavorite = storedAssetBalance.isFavorite
-                                item.position = storedAssetBalance.position
-                                item.isHidden = storedAssetBalance.isHidden
-                                item.save()
-                            }
+                    .map { pair ->
+                        dbSpamAssets = pair.second.toMutableList()
+                        dbAssets.forEach { item ->
+                            savedAssetPrefs
+                                    .firstOrNull { it.assetId == item.assetId }
+                                    .notNull { storedAssetBalance ->
+                                        item.isFavorite = storedAssetBalance.isFavorite
+                                        item.position = storedAssetBalance.position
+                                        item.isHidden = storedAssetBalance.isHidden
+                                        item.save()
+                                    }
                         }
-                        dbAssets = assetBalanceList
-                        return@map Observable.just(assetBalanceList)
-                    }
-                    .map {
-                        // clear wallet from unimportant assets
-                        dbAssets = ClearAssetsHelper.clearUnimportantAssets(prefsUtil, dbAssets)
+                        dbAssets = removeSpamAssets(
+                                ClearAssetsHelper.clearUnimportantAssets(
+                                        prefsUtil, pair.first.toMutableList()),
+                                pair.second.toMutableList())
                         return@map createTripleSortedLists(dbAssets)
                     }
                     .doOnNext { postSuccess(it, withApiUpdate, true) }
                     .flatMap { tryUpdateWithApi(withApiUpdate, dbAssets) }
-                    .map {
-                        // update settings of spam list and send event to update
-                        if (prefsUtil.getValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)) {
-                            rxEventBus.post(Events.SpamFilterUrlChanged(true))
-                        }
-                        prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)
-                        return@map it
+                    .map { netAssetDb ->
+                        updateSpamSettingsAndEvent()
+                        return@map removeSpamAssets(netAssetDb.toMutableList(), dbSpamAssets)
                     }
-                    .map { createTripleSortedLists(it.toMutableList()) }
+                    .map { createTripleSortedLists(it) }
                     .subscribe({
                         postSuccess(it, withApiUpdate, false)
                     }, {
@@ -95,47 +95,42 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         runAsync {
             addSubscription(Observable.zip(
                     queryAllAsSingle<AssetBalance>().toObservable(),
-                    queryAllAsSingle<SpamAsset>().toObservable()
-                            .map { spamListFromDb ->
-                                val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
-                                if (enableSpamFilter) {
-                                    return@map listOf<SpamAsset>()
-                                } else {
-                                    return@map spamListFromDb
-                                }
-                            },
+                    queryAllAsSingle<SpamAsset>().toObservable(),
                     BiFunction { t1: List<AssetBalance>, t2: List<SpamAsset> ->
                         return@BiFunction Pair(t1, t2)
                     })
                     .map { pairOfData ->
-                        val assetsListFromDb = pairOfData.first
-                        val spamListFromDb = pairOfData.second
-
-                        assetsListFromDb.forEach { asset ->
-                            asset.isSpam = spamListFromDb.any { it.assetId == asset.assetId }
-                            if (assetsListFromDb.any { it.position != -1 }) {
-                                if (asset.position == -1) {
-                                    asset.position = assetsListFromDb.size + 1
-                                }
-                            }
-                            if (asset.isSpam) {
-                                asset.isFavorite = false
-                            }
-                        }
-
-                        assetsListFromDb.saveAll()
-                        AssetBalanceStore.saveAssetBalanceStore(assetsListFromDb)
-                        return@map assetsListFromDb
+                        return@map removeSpamAssets(
+                                pairOfData.first.toMutableList(),
+                                pairOfData.second.toMutableList())
                     }
-                    .map { createTripleSortedLists(it.toMutableList()) }
+                    .map { createTripleSortedLists(it) }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
-                        postSuccess(it, false, true)
+                        postSuccess(it, withApiUpdate = false, fromDb = true)
                     }, {
                         it.printStackTrace()
                         viewState.afterFailedUpdateAssets()
                     }))
         }
+    }
+
+    private fun removeSpamAssets(assetBalances: MutableList<AssetBalance>, spams: MutableList<SpamAsset>)
+            : MutableList<AssetBalance> {
+        assetBalances.forEach { asset ->
+            asset.isSpam = spams.any { it.assetId == asset.assetId }
+            if (assetBalances.any { it.position != -1 }) {
+                if (asset.position == -1) {
+                    asset.position = assetBalances.size + 1
+                }
+            }
+            if (asset.isSpam) {
+                asset.isFavorite = false
+            }
+        }
+        assetBalances.saveAll()
+        AssetBalanceStore.saveAssetBalanceStore(assetBalances)
+        return assetBalances
     }
 
     fun reloadAssetsAfterSpamUrlChanged() {
@@ -151,31 +146,13 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                                 })
                     }
                     .map {
-                        if (prefsUtil.getValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)) {
-                            rxEventBus.post(Events.SpamFilterUrlChanged(true))
-                        }
-                        prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)
+                        updateSpamSettingsAndEvent()
                         return@map it
                     }
                     .map { pairOfData ->
-                        val spamListFromDb = pairOfData.second
-                        val assetsListFromDb = pairOfData.first
-
-                        assetsListFromDb.forEach { asset ->
-                            asset.isSpam = spamListFromDb.any { it.assetId == asset.assetId }
-                            if (assetsListFromDb.any { it.position != -1 }) {
-                                if (asset.position == -1) {
-                                    asset.position = assetsListFromDb.size + 1
-                                }
-                            }
-                            if (asset.isSpam) {
-                                asset.isFavorite = false
-                            }
-                        }
-
-                        assetsListFromDb.saveAll()
-                        AssetBalanceStore.saveAssetBalanceStore(assetsListFromDb)
-                        return@map assetsListFromDb
+                        return@map removeSpamAssets(
+                                pairOfData.first.toMutableList(),
+                                pairOfData.second.toMutableList())
                     }
                     .map { createTripleSortedLists(it.toMutableList()) }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
@@ -186,6 +163,13 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         viewState.afterFailedUpdateAssets()
                     }))
         }
+    }
+
+    private fun updateSpamSettingsAndEvent() {
+        if (prefsUtil.getValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)) {
+            rxEventBus.post(Events.SpamFilterUrlChanged(true))
+        }
+        prefsUtil.setValue(PrefsUtil.KEY_NEED_UPDATE_TRANSACTION_AFTER_CHANGE_SPAM_SETTINGS, false)
     }
 
     private fun tryUpdateWithApi(withApiUpdate: Boolean, it: List<AssetBalance>): Observable<List<AssetBalance>> {
@@ -216,15 +200,13 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         // check if spam assets exists and create section with them
 
         val enableSpamFilter = prefsUtil.getValue(PrefsUtil.KEY_ENABLE_SPAM_FILTER, true)
-        if (!enableSpamFilter) {
-            if (it.third.isNotEmpty()) {
-                val spamSection = WalletSectionItem(app.getString(R.string.wallet_assets_spam_category,
-                        it.third.size.toString()))
-                it.third.forEach {
-                    spamSection.addSubItem(it)
-                }
-                listToShow.add(spamSection)
+        if (!enableSpamFilter && it.third.isNotEmpty()) {
+            val spamSection = WalletSectionItem(app.getString(R.string.wallet_assets_spam_category,
+                    it.third.size.toString()))
+            it.third.forEach {
+                spamSection.addSubItem(it)
             }
+            listToShow.add(spamSection)
         }
 
         // show all assets with sections
