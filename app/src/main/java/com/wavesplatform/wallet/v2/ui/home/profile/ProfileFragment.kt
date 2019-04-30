@@ -35,6 +35,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysAct
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.settings.SettingsActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
@@ -42,6 +43,7 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 import pers.victor.ext.click
 import pers.victor.ext.finish
 import pers.victor.ext.telephonyManager
+import pers.victor.ext.visiable
 import javax.inject.Inject
 
 class ProfileFragment : BaseFragment(), ProfileView {
@@ -99,6 +101,14 @@ class ProfileFragment : BaseFragment(), ProfileView {
         card_feedback.click {
             sendFeedbackToSupport()
         }
+
+        if (BuildConfig.DEBUG) {
+            settings.visiable()
+            settings.click {
+                launchActivity<SettingsActivity>()
+            }
+        }
+
         button_delete_account.click {
             val alertDialog = AlertDialog.Builder(baseActivity).create()
             alertDialog.setTitle(getString(R.string.profile_general_delete_account_dialog_title))
