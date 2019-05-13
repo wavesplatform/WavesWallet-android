@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -28,8 +27,6 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.util.drag_helper.ItemDragListener
 import com.wavesplatform.wallet.v2.util.drag_helper.SimpleItemTouchHelperCallback
 import kotlinx.android.synthetic.main.activity_assets_sorting.*
-import kotlinx.android.synthetic.main.item_wallet_asset_sorting.view.*
-import pers.victor.ext.*
 import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import java.util.*
 import javax.inject.Inject
@@ -191,7 +188,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                 mItemTouchHelper.startDrag(viewHolder)
             }
 
-            override fun onMoved(fromHolder: View?, fromPosition: Int, toHolder: View?, toPosition: Int) {
+            override fun onMoved(fromHolder: RecyclerView.ViewHolder?, fromPosition: Int, toHolder: RecyclerView.ViewHolder?, toPosition: Int) {
                 presenter.needToUpdate = true
             }
 

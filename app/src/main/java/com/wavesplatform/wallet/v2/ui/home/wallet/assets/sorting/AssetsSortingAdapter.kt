@@ -31,9 +31,9 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
         val movedItem = data.removeAt(fromPosition)
         data.add(toPosition, movedItem)
         notifyItemMoved(fromPosition, toPosition)
-        mDragStartListener?.onMoved(recyclerView.layoutManager?.findViewByPosition(fromPosition),
+        mDragStartListener?.onMoved(recyclerView.findViewHolderForAdapterPosition(fromPosition),
                 fromPosition,
-                recyclerView.layoutManager?.findViewByPosition(toPosition),
+                recyclerView.findViewHolderForAdapterPosition(toPosition),
                 toPosition)
         return true
     }
@@ -64,7 +64,7 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
     init {
         // items
         addItemType(AssetSortingItem.TYPE_FAVORITE_ITEM, R.layout.item_wallet_asset_sorting)
-        addItemType(AssetSortingItem.TYPE_DEFAULT_ITEM, R.layout.item_wallet_assпіet_sorting)
+        addItemType(AssetSortingItem.TYPE_DEFAULT_ITEM, R.layout.item_wallet_asset_sorting)
         addItemType(AssetSortingItem.TYPE_HIDDEN_ITEM, R.layout.item_wallet_asset_sorting)
         // separators
         addItemType(AssetSortingItem.TYPE_FAVORITE_SEPARATOR, R.layout.item_wallet_asset_sorting_line)
