@@ -97,8 +97,10 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     object ProfileLogoutUpEvent : AnalyticEvents("Profile Logout Up")
     // Нажата кнопка "Logout of account" на экране Profile
     object ProfileLogoutDownEvent : AnalyticEvents("Profile Logout Down")
-    // Нажата кнопка "menu" на экранах Wallet, DEX, History, Profile, Enter
+    // Отлавливаем событие что меню было открыто (или по кнопке или свайпом)
     object WavesMenuPageEvent : AnalyticEvents("Waves Menu Page")
+    // Нажата ссылка "forum.wavesplatform.com" на экране Menu
+    object WavesMenuForumEvent : AnalyticEvents("Waves Menu Forum")
     // Нажата ссылка "Whitepaper" на экране Menu
     object WavesMenuWhitepaperEvent : AnalyticEvents("Waves Menu Whitepaper")
     // Нажата ссылка "Terms and conditions" на экране Menu
