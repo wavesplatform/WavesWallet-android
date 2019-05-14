@@ -131,6 +131,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
             }
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                     getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->
+                analytics.trackEvent(AnalyticEvents.ProfileDeleteAccountEvent)
+
                 App.getAccessManager().deleteCurrentWavesWallet()
 
                 presenter.prefsUtil.logOut()

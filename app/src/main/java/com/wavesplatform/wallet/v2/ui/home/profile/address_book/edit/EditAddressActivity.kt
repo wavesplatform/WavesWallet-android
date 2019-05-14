@@ -124,11 +124,11 @@ class EditAddressActivity : BaseActivity(), EditAddressView {
         }
 
         button_delete.click {
-            analytics.trackEvent(AnalyticEvents.ProfileAddressBookDeleteEvent)
             val alertDialog = AlertDialog.Builder(this).create()
             alertDialog.setTitle(getString(R.string.edit_address_delete_alert_title))
             alertDialog.setMessage(getString(R.string.edit_address_delete_alert_description))
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.edit_address_delete_alert_delete)) { dialog, which ->
+                analytics.trackEvent(AnalyticEvents.ProfileAddressBookDeleteEvent)
                 presenter.deleteAddress()
                 dialog.dismiss()
             }

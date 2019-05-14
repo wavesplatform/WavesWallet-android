@@ -71,7 +71,7 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     object ProfileAddressBookAddEvent : AnalyticEvents("Profile Address Book Add")
     // Нажата кнопка "Edit" на экране Address book
     object ProfileAddressBookEditEvent : AnalyticEvents("Profile Address Book Edit")
-    // Нажата кнопка "Delete address" на экране Edit Address
+    // Нажата кнопка "Delete" на алерте после "Delete address" на экране Edit Address
     object ProfileAddressBookDeleteEvent : AnalyticEvents("Profile Address Book Delete")
     // Нажата кнопка "Address, key" на экране Profile
     object ProfileAddressAndKeysEvent : AnalyticEvents("Profile Address And Keys")
@@ -91,7 +91,7 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     object ProfileFeedbackEvent : AnalyticEvents("Profile Feedback")
     // Нажата кнопка "Support Wavesplatform" на экране Profile
     object ProfileSupportEvent : AnalyticEvents("Profile Support")
-    // Нажата кнопка "Delete account from device" на экране Profile
+    // Нажата кнопка "Delete" на алерте после "Delete account from device" на экране Profile
     object ProfileDeleteAccountEvent : AnalyticEvents("Profile Delete Account")
     // Нажата кнопка "logout" в Navigation bar на экране Profile
     object ProfileLogoutUpEvent : AnalyticEvents("Profile Logout Up")
@@ -121,7 +121,7 @@ sealed class AnalyticEvents(private var eventName: String) : EventType {
     object StartImportManuallyEvent : AnalyticEvents("Start Import Manually")
     // Нажата кнопка "Edit" (карандаш) на экране Choose account
     object StartAccountEditEvent : AnalyticEvents("Start Account Edit")
-    // Нажата кнопка "Delete" (корзина) на экране Choose account
+    // Нажата кнопка "Delete" на алерте после "Delete" (корзина) на экране Choose account
     object StartAccountDeleteEvent : AnalyticEvents("Start Account Delete")
 
     override fun provideName(provider: ProviderType): String? {
