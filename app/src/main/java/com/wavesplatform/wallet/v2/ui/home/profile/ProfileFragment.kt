@@ -22,6 +22,8 @@ import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
@@ -69,6 +71,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 })
 
         card_address_book.click {
+            analytics.trackEvent(AnalyticEvents.ProfileAddressBookPageEvent)
             launchActivity<AddressBookActivity> { }
         }
         card_addresses_and_keys.click {
