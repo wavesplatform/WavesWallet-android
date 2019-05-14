@@ -31,7 +31,8 @@ android {
     buildToolsVersion '28.0.3'
     flavorDimensions "default"
     dexOptions {
-        javaMaxHeapSize "3g"
+        incremental true
+        javaMaxHeapSize "6g"
     }
     defaultConfig {
         applicationId "com.wavesplatform.wallet"
