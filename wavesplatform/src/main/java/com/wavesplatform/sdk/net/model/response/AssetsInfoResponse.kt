@@ -7,8 +7,9 @@ package com.wavesplatform.sdk.net.model.response
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.sdk.utils.Constants
 import kotlinx.android.parcel.Parcelize
-import java.util.* // todo check
+import java.util.*
 
 data class AssetsInfoResponse(
         @SerializedName("__type") var type: String = "list",

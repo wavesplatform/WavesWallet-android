@@ -16,15 +16,15 @@ import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.helpers.ClearAssetsHelper
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
+import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
-import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
@@ -70,20 +70,22 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                                         item.save()
                                     }
                         }
-                        // todo check
                         dbAssets = removeSpamAssets(
-                                ClearAssetsHelper.clearUnimportantAssets(
-                                        prefsUtil, pair.first.toMutableList()), // AssetBalanceDb.convertFromDb(dbAssets)
+                                AssetBalanceDb.convertToDb(
+                                        ClearAssetsHelper.clearUnimportantAssets(
+                                                prefsUtil,
+                                                AssetBalanceDb.convertFromDb(pair.first))),
                                 dbSpamAssets)
                         return@map createTripleSortedLists(dbAssets)
                     }
                     .doOnNext { postSuccess(it, withApiUpdate, true) }
-                    .flatMap { tryUpdateWithApi(withApiUpdate, dbAssets) }
+                    .flatMap { tryUpdateWithApi(
+                            withApiUpdate, AssetBalanceDb.convertFromDb(dbAssets)) }
                     .map { netAssetDb ->
                         updateSpamSettingsAndEvent()
-                        return@map removeSpamAssets(netAssetDb.toMutableList(), dbSpamAssets)
+                        return@map removeSpamAssets(AssetBalanceDb.convertToDb(netAssetDb), dbSpamAssets)
                     }
-                    .map { createTripleSortedLists(AssetBalanceDb.convertToDb(it)) }
+                    .map { createTripleSortedLists(it) }
                     .subscribe({
                         postSuccess(it, withApiUpdate, false)
                     }, {
@@ -104,7 +106,6 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
                         return@BiFunction Pair(t1, t2)
                     })
                     .map { pairOfData ->
-                        // todo check
                         return@map removeSpamAssets(
                                 pairOfData.first.toMutableList(),
                                 pairOfData.second.toMutableList())
@@ -120,8 +121,9 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         }
     }
 
-    private fun removeSpamAssets(assetsListFromDb: MutableList<AssetBalanceDb>, spamListFromDb: MutableList<SpamAssetDb>)
-            : MutableList<AssetBalance> {
+    private fun removeSpamAssets(assetsListFromDb: MutableList<AssetBalanceDb>,
+                                 spamListFromDb: MutableList<SpamAssetDb>)
+            : MutableList<AssetBalanceDb> {
         assetsListFromDb.forEach { asset ->
             asset.isSpam = spamListFromDb.any { it.assetId == asset.assetId }
             if (assetsListFromDb.any { it.position != -1 }) {
@@ -136,7 +138,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
 
         assetsListFromDb.saveAll()
         AssetBalanceStoreDb.saveAssetBalanceStore(AssetBalanceDb.convertFromDb(assetsListFromDb))
-        return@map assetsListFromDb
+        return assetsListFromDb
     }
 
     fun reloadAssetsAfterSpamUrlChanged() {
@@ -191,7 +193,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
         val listToShow = arrayListOf<MultiItemEntity>()
 
         val searchItem = MultiItemEntity {
-             AssetsAdapter.TYPE_SEARCH
+            AssetsAdapter.TYPE_SEARCH
         }
         listToShow.add(searchItem)
 

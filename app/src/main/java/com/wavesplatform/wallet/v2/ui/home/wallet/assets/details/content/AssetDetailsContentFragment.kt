@@ -150,7 +150,6 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         }
     }
 
-    // todo check
     private fun configureTabsAccordingTo(assetBalance: AssetBalanceResponse?): ArrayList<HistoryTab> {
         val tabs = arrayListOf<HistoryTab>()
         assetBalance?.let { asset ->
@@ -167,7 +166,7 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
         return tabs
     }
 
-    private fun fillInformation(assetBalance: AssetBalance?) {
+    private fun fillInformation(assetBalance: AssetBalanceResponse?) {
         formatter.timeZone = TimeZone.getTimeZone("UTC")
 
         text_available_balance.text = assetBalance?.getDisplayAvailableBalance()

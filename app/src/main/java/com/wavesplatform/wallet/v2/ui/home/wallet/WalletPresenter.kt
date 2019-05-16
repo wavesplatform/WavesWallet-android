@@ -32,7 +32,6 @@ class WalletPresenter @Inject constructor() : BasePresenter<WalletView>() {
         var needUpdate = false
 
         val currentVersion = BuildConfig.VERSION_NAME.split(".")
-        // todo check
         val lastAppVersion = EnvironmentManager.getLastAppVersion().split(".")
 
         for (index in 0 until currentVersion.size) {

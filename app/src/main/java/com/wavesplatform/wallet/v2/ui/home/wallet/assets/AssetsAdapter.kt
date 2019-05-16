@@ -11,11 +11,11 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
+import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
-import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
+import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
 import com.wavesplatform.wallet.v2.util.makeTextHalfBold
 import com.wavesplatform.wallet.v2.util.setMargins
 import kotlinx.android.synthetic.main.item_wallet_asset.view.*
@@ -98,8 +98,9 @@ class AssetsAdapter @Inject constructor() :
                                     == App.getAccessManager().getWallet().address)
                             .setGone(R.id.text_tag_spam, item.isSpam)
 
-                helper.itemView.image_asset_icon.setAsset(item)
-                helper.itemView.text_asset_value.makeTextHalfBold()
+                    helper.itemView.image_asset_icon.setAsset(item)
+                    helper.itemView.text_asset_value.makeTextHalfBold()
+                }
             }
         }
     }

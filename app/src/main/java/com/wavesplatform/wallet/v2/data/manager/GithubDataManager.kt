@@ -5,8 +5,6 @@
 
 package com.wavesplatform.wallet.v2.data.manager
 
-import com.wavesplatform.sdk.net.model.LastAppVersionResponse
-import com.wavesplatform.sdk.net.model.response.GlobalConfigurationResponse
 import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommissionResponse
 import com.wavesplatform.sdk.net.model.response.NewsResponse
 import com.wavesplatform.sdk.net.model.response.SpamAssetResponse
@@ -42,20 +40,12 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
         val newsUrl = if (preferencesHelper.useTestNews) {
             NewsResponse.URL_TEST
         } else {
-            NewsResponse.URL // todo check
+            NewsResponse.URL
         }
         return githubService.news(newsUrl)
     }
 
-    fun globalConfiguration(url: String): Observable<GlobalConfigurationResponse> {
-        return githubService.globalConfiguration(url)
-    }
-
     fun getGlobalCommission(): Observable<GlobalTransactionCommissionResponse> {
         return githubService.globalCommission()
-    }
-
-    fun loadLastAppVersion(): Observable<LastAppVersionResponse> {
-        return githubService.loadLastAppVersion()
     }
 }
