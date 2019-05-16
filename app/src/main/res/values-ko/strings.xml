@@ -20,7 +20,7 @@
   <string name="address_book_search">검색</string>
   <string name="address_book_success_deleted">주소가 삭제되었습니다</string>
   <string name="address_book_toolbar_title">주소록</string>
-  <string name="addresses">자산</string>
+  <string name="addresses">토큰</string>
   <string name="addresses_and_keys_aliases">Aliases</string>
   <string name="addresses_and_keys_private_key">프라이빗 키</string>
   <string name="addresses_and_keys_public_key">퍼블릭 키</string>
@@ -42,7 +42,7 @@
   <string name="asset_details_cryptocurrency">암호화폐</string>
   <string name="asset_details_decimal">소수점</string>
   <string name="asset_details_description">설명</string>
-  <string name="asset_details_error_perfom_transaction">해당 자산으로 트랜잭션을 할 수 없습니다</string>
+  <string name="asset_details_error_perfom_transaction">해당 토큰의 주소로 트랜잭션할 수 없습니다</string>
   <string name="asset_details_fiat_money">명목 화폐</string>
   <string name="asset_details_id">ID</string>
   <string name="asset_details_in_order">대기 주문</string>
@@ -200,9 +200,9 @@
   <string name="dex_last_update_value">최근 업데이트: %s</string>
   <string name="dex_market_empty">아무것도 없습니다</string>
   <string name="dex_market_toolbar_title">마켓</string>
-  <string name="dex_markets_info_dialog_amount_asset">자산 수량 — %s</string>
+  <string name="dex_markets_info_dialog_amount_asset">토큰 수량 — %s</string>
   <string name="dex_markets_info_dialog_popular">Popular</string>
-  <string name="dex_markets_info_dialog_price_asset">자산 가격 — %s</string>
+  <string name="dex_markets_info_dialog_price_asset">토큰 가격 — %s</string>
   <string name="dex_markets_list_search">검색</string>
   <string name="dex_markets_list_toolbar_title">마켓</string>
   <string name="dex_sorting_empty">아무것도 없습니다…</string>
@@ -260,7 +260,7 @@
   <string name="history_details_active_now">지금 활성화</string>
   <string name="history_details_add_address">주소 저장</string>
   <string name="history_details_amount_per_transaction">트랜잭셩 당 수량</string>
-  <string name="history_details_asset">자산</string>
+  <string name="history_details_asset">토큰</string>
   <string name="history_details_block">블록</string>
   <string name="history_details_cancel_leasing">Leasing 취소</string>
   <string name="history_details_completed">완료</string>
@@ -271,7 +271,7 @@
   <string name="history_details_edit_address">이름 편집</string>
   <string name="history_details_exchange_price">가격</string>
   <string name="history_details_fee">수수료</string>
-  <string name="history_details_id">자산 ID</string>
+  <string name="history_details_id">토큰 ID</string>
   <string name="history_details_leasing_from">Leasing하는 주소</string>
   <string name="history_details_leasing_to">Lease 받는 주소</string>
   <string name="history_details_node_address">노드 주소</string>
@@ -465,7 +465,7 @@
   <string name="receive_address_your_qr_code">귀하의 QR 코드</string>
   <string name="receive_amount">수량</string>
   <string name="receive_amount_title">받은 수량 %1$s</string>
-  <string name="receive_asset">자산</string>
+  <string name="receive_asset">토큰</string>
   <string name="receive_card">카드</string>
   <string name="receive_contact_msg">인증 또는 지불 처리에 문제가 있는 경우 Coinomat 지원 팀 (support@coinomat.com)에 문의하세요</string>
   <string name="receive_contact_msg_key">support@coinomat.com</string>
@@ -489,7 +489,7 @@
   <string name="receive_minimum_amount">최소 입금 금액은 %1$s %2$s 입니다</string>
   <string name="receive_not_verified">귀하의 계정이 인증되지 않았습니다</string>
   <string name="receive_payment_method">지불 방법</string>
-  <string name="receive_sellect_asset">귀하의 자산을 선택하거나 목록에서 고르세요</string>
+  <string name="receive_sellect_asset">귀하의 토큰을 선택하거나 목록에서 고르세요</string>
   <string name="receive_step_1">1 단계</string>
   <string name="receive_step_1_msg">SEPA transfer를 통해 Euro 화를 은행 계좌에서 바로 입금하려면 당사의 파트너사인 IDNow.eu에서 승인을 받아야 합니다</string>
   <string name="receive_step_1_msg_link">IDNow.eu</string>
@@ -503,8 +503,8 @@
   <string name="receive_warning_will_send">%1$s %2$s 미만의 자산을 보내면 귀하는 해당 자산을 잃게 됩니다.</string>
   <string name="receive_will_send_other_currency">해당 주소로 다른 화폐 및 코인을 보내면 귀하의 자산을 잃을 수 있습니다.</string>
   <string name="scripted_account_error_dialog_btn_txt">확인</string>
-  <string name="scripted_account_error_dialog_description">스크립트 된 계정/자산을 이용하기 위해 Waves 클라이언트를 사용하세요</string>
-  <string name="scripted_account_error_dialog_title">귀하의 계정 또는 자산에 스크립트가 설치되어 있습니다</string>
+  <string name="scripted_account_error_dialog_description">스크립트 된 계정/토큰을 이용하기 위해 Waves 클라이언트를 사용하세요</string>
+  <string name="scripted_account_error_dialog_title">귀하의 계정 또는 토큰에 스크립트가 설치되어 있습니다</string>
   <string name="secret_phrase_back_up_now">즉시 백업합니다</string>
   <string name="secret_phrase_do_it_later">다음에 백업합니다</string>
   <string name="secret_phrase_no_backup_no_money">백업을 하지 않으면 자산을 잃을 수 있습니다</string>
@@ -512,7 +512,7 @@
   <string name="sell_btn_txt">매도 %s</string>
   <string name="send_amount">수량</string>
   <string name="send_amount_error_insufficient_funds">자금이 부족합니다</string>
-  <string name="send_asset">자산</string>
+  <string name="send_asset">토큰</string>
   <string name="send_choose_from_address_book">주소록에서 선택</string>
   <string name="send_confirmation_confirm">승인</string>
   <string name="send_confirmation_description">설명</string>
@@ -540,10 +540,10 @@
   <string name="send_progress_sending">보내는 중…</string>
   <string name="send_recipient">수신자</string>
   <string name="send_recipient_address_hint">수신자 주소…</string>
-  <string name="send_recipient_asset_is_not_valid">이 자산은 유효하지 않습니다</string>
+  <string name="send_recipient_asset_is_not_valid">이 토큰은 유효하지 않습니다</string>
   <string name="send_recipient_the_address_is_not_valid">이 주소는 유효하지 않습니다</string>
   <string name="send_select_your_asset">자산을 선택하세요</string>
-  <string name="send_spam_error">검증되지 않은 자산으로 자금을 전송하는것은 불가합니다</string>
+  <string name="send_spam_error">검증되지 않은 토큰의 주소로 자산을 전송할 수 없습니다</string>
   <string name="send_success_do_you_want_to_save_this_address">이 주소를 저장하시겠습니까?</string>
   <string name="send_success_okay">확인</string>
   <string name="send_success_you_have_sent_sum">%1$s %2$s 을 보냈습니다</string>
@@ -595,10 +595,10 @@
   <string name="use_fingerprint_submit_txt">지문을 사용하세요</string>
   <string name="use_fingerprint_subtitle">지문을 사용하여 귀하의 계정에 빠르고 쉽게 액세스하세요</string>
   <string name="use_fingerprint_title">지문으로 로그인?</string>
-  <string name="wallet_assets">자산</string>
-  <string name="wallet_assets_hidden_category">숨긴 자산 (%1$s)</string>
-  <string name="wallet_assets_my_asset">/ 나의 자산</string>
-  <string name="wallet_assets_spam_category">검증되지 않은 자산 (%1$s)</string>
+  <string name="wallet_assets">토큰</string>
+  <string name="wallet_assets_hidden_category">숨긴 토큰 (%1$s)</string>
+  <string name="wallet_assets_my_asset">/ 나의 토큰</string>
+  <string name="wallet_assets_spam_category">검증되지 않은 토큰 (%1$s)</string>
   <string name="wallet_assets_spam_tag">검증되지 않은 자산</string>
   <string name="wallet_leasing">Leasing</string>
   <string name="wallet_leasing_active_now">지금 활성화 (%1$s)</string>
@@ -615,7 +615,7 @@
   <string name="wallet_sorting_toolbar_title">분류</string>
   <string name="wallet_sorting_toolbar_visibility_action">목록 편집</string>
   <string name="wallet_toolbar_title">지갑</string>
-  <string name="welcome_blockchain_description">빠르게 성장하는 암호화폐 세계의 일원이 되세요. 당신은 당신의 암호화 자산에 액세스 할 수 있는 유일한 사람입니다.</string>
+  <string name="welcome_blockchain_description">빠르게 성장하는 암호화폐 세계의 일원이 되세요. 당신은 당신의 암호화 토큰에 액세스 할 수 있는 유일한 사람입니다.</string>
   <string name="welcome_blockchain_title">블록체인 시작하기</string>
   <string name="welcome_create_import_description">페어링 코드를 이용하거나 수동으로</string>
   <string name="welcome_create_import_title">계정 가져오기</string>
@@ -626,7 +626,7 @@
   <string name="welcome_dex_title">탈중앙화 거래소</string>
   <string name="welcome_token_description">당신의 토큰을 발행해보세요. 이는 당신의 비즈니스에 내부적인 화폐로 통합될 뿐만 아니라 등급 시스템 또는 로열티 프로그램의 탈중앙화 방식 투표로 활용될 수 있습니다.</string>
   <string name="welcome_token_title">토큰 런처</string>
-  <string name="welcome_wallet_description">디지털 자산을 매우 쉽고 안전하게 전송하고 관리하고 보관하세요.</string>
+  <string name="welcome_wallet_description">디지털 토큰을 매우 쉽고 안전하게 전송하고 관리하고 보관하세요.</string>
   <string name="welcome_wallet_title">지갑</string>
   <string name="whats_new_next">다음</string>
   <string name="whats_new_okay">확인</string>
@@ -634,8 +634,8 @@
   <string name="your_address_your_qr_code">귀하의 QR 코드</string>
   <string name="your_asset_activity_all">모두</string>
   <string name="your_asset_activity_greater_zero">잔액과 함께</string>
-  <string name="your_assets_empty_state">아무것도 없습니다…\n자금이 있는 자산이 없습니다</string>
-  <string name="your_assets_toolbar_title">귀하의 자산</string>
+  <string name="your_assets_empty_state">아무것도 없습니다…\n자금을 보유하고 있는 토큰이 없습니다</string>
+  <string name="your_assets_toolbar_title">귀하의 토큰</string>
   <string name="confirm_card_tutorial_submit">시작</string>
   <string name="confirm_card_tutorial_title">승인하고 시작</string>
   <string name="confirm_card_tutorial_terms_and_conditions">이용 약관</string>
@@ -654,13 +654,16 @@
   <string name="my_orders_details_amount_hint">수량</string>
   <string name="my_orders_details_price_hint">가격</string>
   <string name="my_orders_details_total_hint">총</string>
+  <string name="clean_banner_title">깨끗하게 유지하세요!</string>
+  <string name="clean_banner_description">귀하의 지갑을 깨끗하고 깔끔하게 유지할 수 있도록 토큰 디스플레이를 재설계하였습니다. 토큰 목록은 사용자가 원하는 데로 직접 편집할 수 있습니다.</string>
   <string name="search_asset_hint">검색</string>
   <string name="search_asset_cancel">취소</string>
-  <string name="search_asset_empty">귀하는 그런 자산을 보유하고 있지 않습니다</string>
+  <string name="search_asset_empty">귀하는 해당 토큰을 보유하고 있지 않습니다</string>
   <string name="history_type_script_invocation">Script 발동</string>
   <string name="history_details_script_invocation_payment">지불</string>
   <string name="history_details_script_invocation_script_address">Script 주소</string>
   <string name="need_update_alert_title">앱을 업데이트 할 시간입니다!</string>
   <string name="need_update_alert_description">Waves 지갑을 보다 유용하게 만들기 위해 끊임없이 노력하고 있습니다. 새로운 기능에 액세스하려면 앱을 업데이트하십시오.</string>
-  <string name="search_asset_hidden_title">숨긴 자산</string>
+  <string name="search_asset_hidden_title">숨긴 토큰</string>
+  <string name="my_orders_details_filled_hint">체결 완료</string>
 </resources>
