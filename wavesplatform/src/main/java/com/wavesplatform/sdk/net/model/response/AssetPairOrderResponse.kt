@@ -65,7 +65,12 @@ class AssetPairOrderResponse {
     }
 
     fun getScaledFilled(amountAssetDecimals: Int?): String {
-        return MoneyUtil.getTextStripZeros(MoneyUtil.getTextStripZeros(filled,
+        val notScaledValue = if (getStatus() == OrderStatus.Filled) {
+            amount
+        } else {
+            filled
+        }
+        return MoneyUtil.getTextStripZeros(MoneyUtil.getTextStripZeros(notScaledValue,
                 amountAssetDecimals ?: 8))
     }
 
@@ -83,7 +88,7 @@ class AssetPairOrderResponse {
 
     companion object {
         const val API_BUY_TYPE = "buy"
-        const val  API_SELL_TYPE = "sell"
+        const val API_SELL_TYPE = "sell"
 
         const val API_STATUS_CANCELLED = "Cancelled"
         const val API_STATUS_ACCEPTED = "Accepted"

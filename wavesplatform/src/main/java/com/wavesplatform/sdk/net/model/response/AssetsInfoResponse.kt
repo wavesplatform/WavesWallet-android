@@ -8,7 +8,7 @@ package com.wavesplatform.sdk.net.model.response
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-import java.util.*
+import java.util.* // todo check
 
 data class AssetsInfoResponse(
         @SerializedName("__type") var type: String = "list",
@@ -38,5 +38,13 @@ open class AssetInfoResponse(
 ) : Parcelable {
     fun isSponsored(): Boolean {
         return minSponsoredFee > 0
+    }
+
+    fun getTokenTicker(): String? {
+        return if (name == Constants.WAVES_ASSET_ID_FILLED) {
+            Constants.WAVES_ASSET_ID_FILLED
+        } else {
+            ticker
+        }
     }
 }

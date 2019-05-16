@@ -39,7 +39,12 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun loadNews(): Observable<NewsResponse> {
-        return githubService.news(NewsResponse.URL)
+        val newsUrl = if (preferencesHelper.useTestNews) {
+            NewsResponse.URL_TEST
+        } else {
+            NewsResponse.URL // todo check
+        }
+        return githubService.news(newsUrl)
     }
 
     fun globalConfiguration(url: String): Observable<GlobalConfigurationResponse> {

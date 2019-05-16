@@ -100,8 +100,12 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
     }
 
     override fun onBackPressed() {
-        finish()
-        overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        if (presenter.success) {
+            launchActivity<MainActivity>(clear = true)
+        } else {
+            finish()
+            overridePendingTransition(R.anim.null_animation, R.anim.slide_out_right)
+        }
     }
 
     override fun onShowError(errorMessageRes: String) {

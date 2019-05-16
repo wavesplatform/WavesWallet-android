@@ -502,7 +502,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val view = inflater?.inflate(R.layout.fragment_bottom_sheet_script_invocation_layout, historyContainer, false)
 
                 view?.let {
-                    view.text_script_address_value?.text = transaction.dappAddress
+                    view.text_script_address_value?.text = transaction.dApp
 
                     val payment = transaction.payment.firstOrNull()
 

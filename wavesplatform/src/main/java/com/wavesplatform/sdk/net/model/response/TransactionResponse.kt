@@ -139,8 +139,8 @@ open class TransactionResponse(
         var minSponsoredAssetFee: String? = "",
         @SerializedName("payment")
         var payment: List<PaymentResponse> = mutableListOf(),
-        @SerializedName("dappAddress")
-        var dappAddress: String? = "",
+        @SerializedName("dApp")
+        var dApp: String? = "",
         var transactionTypeId: Int = 0,
         var asset: AssetInfoResponse? = AssetInfoResponse()
 ) {

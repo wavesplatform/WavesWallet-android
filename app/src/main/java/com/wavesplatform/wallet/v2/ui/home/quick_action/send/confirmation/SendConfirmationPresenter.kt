@@ -42,6 +42,8 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var blockchainCommission = 0L
     var feeAsset: AssetBalanceResponse = find(Constants.WAVES_ASSET_ID_EMPTY)!!
 
+    var success = false
+
     fun confirmSend() {
         val singed = signTransaction()
         if (singed != null) {
@@ -81,6 +83,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
                     .subscribe({ tx ->
                         tx.recipient = tx.recipient.parseAlias()
                         saveLastSentAddress(tx.recipient)
+                        success = true
                         viewState.onShowTransactionSuccess(tx)
                     }, {
                         if (it.errorBody()?.isSmartError() == true) {
