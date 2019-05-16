@@ -6,44 +6,47 @@
 package com.wavesplatform.wallet.v2.ui.custom
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.afterMeasured
-import kotlinx.android.synthetic.main.content_top_info_alert.view.*
-import kotlinx.android.synthetic.main.fragment_history_bottom_sheet_bottom_btns.view.*
 import pers.victor.ext.*
+
 
 class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
 
     private val leftEdge: View by lazy { View(context) }
     private val rightEdge: View  by lazy { View(context) }
 
+    private var opacityEdgeBlockWidth: Int = DEFAULT_WIDTH
+    private var opacityEdgeBlockHeight: Int = DEFAULT_HEIGHT
+
+    private var leftEdgeBlockBackground: Drawable? = findDrawable(R.drawable.bg_opacity_scroll_left_edge)
+    private var rightEdgeBlockBackground: Drawable? = findDrawable(R.drawable.bg_opacity_scroll_right_edge)
+
     constructor(context: Context) : super(context) {
-        inflate()
+        init(null)
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        inflate()
+        init(attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        inflate()
+        init(attrs)
     }
 
-    private fun inflate() {
+    private fun init(attrs: AttributeSet?) {
+        getAttributes(attrs)
+
         this.afterMeasured {
             val horizontalScrollView = children.firstOrNull()
             horizontalScrollView?.let {
                 // setup left opacity edge
                 leftEdge.apply {
-                    val leftEdgeLayoutParams = LayoutParams(48.dp, 80.dp)
+                    val leftEdgeLayoutParams = LayoutParams(opacityEdgeBlockWidth, opacityEdgeBlockHeight)
                     leftEdgeLayoutParams.addRule(ALIGN_BOTTOM, horizontalScrollView.id)
                     layoutParams = leftEdgeLayoutParams
                     setBackgroundResource(R.drawable.bg_opacity_scroll_left_edge)
@@ -51,7 +54,7 @@ class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
 
                 // setup right opacity edge
                 rightEdge.apply {
-                    val rightEdgeLayoutParams = LayoutParams(48.dp, 80.dp)
+                    val rightEdgeLayoutParams = LayoutParams(opacityEdgeBlockWidth, opacityEdgeBlockHeight)
                     rightEdgeLayoutParams.addRule(ALIGN_BOTTOM, horizontalScrollView.id)
                     rightEdgeLayoutParams.addRule(ALIGN_PARENT_RIGHT)
                     layoutParams = rightEdgeLayoutParams
@@ -72,6 +75,20 @@ class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
                 addView(leftEdge)
                 addView(rightEdge)
             }
+        }
+    }
+
+    private fun getAttributes(attrs: AttributeSet?) {
+        // obtain passed attributes of view
+        val a = context.theme.obtainStyledAttributes(
+                attrs, R.styleable.HorizontalScrollViewWrapperWithOpacityEdge, 0, 0)
+        try {
+            opacityEdgeBlockWidth = a.getDimensionPixelSize(R.styleable.HorizontalScrollViewWrapperWithOpacityEdge_edge_block_width, DEFAULT_WIDTH)
+            opacityEdgeBlockHeight = a.getDimensionPixelSize(R.styleable.HorizontalScrollViewWrapperWithOpacityEdge_edge_block_height, DEFAULT_HEIGHT)
+            leftEdgeBlockBackground = a.getDrawable(R.styleable.HorizontalScrollViewWrapperWithOpacityEdge_left_edge_block_background)
+            rightEdgeBlockBackground = a.getDrawable(R.styleable.HorizontalScrollViewWrapperWithOpacityEdge_right_edge_block_background)
+        } finally {
+            a.recycle()
         }
     }
 
@@ -96,5 +113,7 @@ class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
     companion object {
         const val LEFT_EDGE = -1
         const val RIGHT_EDGE = 1
+        val DEFAULT_WIDTH = 48.dp
+        val DEFAULT_HEIGHT = 80.dp
     }
 }
