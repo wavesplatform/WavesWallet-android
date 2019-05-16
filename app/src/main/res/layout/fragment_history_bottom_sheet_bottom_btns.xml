@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        app:left_edge_block_background="@drawable/bg_opacity_scroll_left_edge"
-        app:right_edge_block_background="@drawable/bg_opacity_scroll_right_edge">
+        app:left_edge_block_background="@drawable/bg_opacity_scroll_left_edge_white"
+        app:right_edge_block_background="@drawable/bg_opacity_scroll_right_edge_white">
 
         <HorizontalScrollView
             android:id="@+id/scroll_buttons"

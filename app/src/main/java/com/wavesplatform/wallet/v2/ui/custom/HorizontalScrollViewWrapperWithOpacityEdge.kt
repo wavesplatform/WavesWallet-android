@@ -23,8 +23,8 @@ class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
     private var opacityEdgeBlockWidth: Int = DEFAULT_WIDTH
     private var opacityEdgeBlockHeight: Int = DEFAULT_HEIGHT
 
-    private var leftEdgeBlockBackground: Drawable? = findDrawable(R.drawable.bg_opacity_scroll_left_edge)
-    private var rightEdgeBlockBackground: Drawable? = findDrawable(R.drawable.bg_opacity_scroll_right_edge)
+    private var leftEdgeBlockBackground: Drawable? = findDrawable(R.drawable.bg_opacity_scroll_left_edge_white)
+    private var rightEdgeBlockBackground: Drawable? = findDrawable(R.drawable.bg_opacity_scroll_right_edge_white)
 
     constructor(context: Context) : super(context) {
         init(null)
@@ -49,7 +49,7 @@ class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
                     val leftEdgeLayoutParams = LayoutParams(opacityEdgeBlockWidth, opacityEdgeBlockHeight)
                     leftEdgeLayoutParams.addRule(ALIGN_BOTTOM, horizontalScrollView.id)
                     layoutParams = leftEdgeLayoutParams
-                    setBackgroundResource(R.drawable.bg_opacity_scroll_left_edge)
+                    background = leftEdgeBlockBackground
                 }
 
                 // setup right opacity edge
@@ -58,7 +58,7 @@ class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
                     rightEdgeLayoutParams.addRule(ALIGN_BOTTOM, horizontalScrollView.id)
                     rightEdgeLayoutParams.addRule(ALIGN_PARENT_RIGHT)
                     layoutParams = rightEdgeLayoutParams
-                    setBackgroundResource(R.drawable.bg_opacity_scroll_right_edge)
+                    background = rightEdgeBlockBackground
                 }
 
                 // handle scroll and change visibility of edge opacity
