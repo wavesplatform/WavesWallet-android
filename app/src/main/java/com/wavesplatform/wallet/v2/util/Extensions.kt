@@ -595,22 +595,20 @@ fun View.setMargins(
     layoutParams = lp
 }
 
-fun TextView.makeTextHalfBold() {
-    val textBefore = this.text.toString().substringBefore(" ")
-    val textAfter = if (text.indexOf(" ") != -1) {
+fun TextView.makeTextHalfBold(boldWholeValue: Boolean = false) {
+    val value = this.text.toString().substringBefore(" ")
+    val tokenName = if (text.indexOf(" ") != -1) {
         this.text.toString().substringAfter(" ")
     } else {
         ""
     }
-    val str = SpannableStringBuilder(textBefore)
-    if (textBefore.indexOf(".") != -1) {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    } else if (textBefore.indexOf(" ") != -1) {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    } else {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    val str = SpannableStringBuilder(value)
+    when {
+        value.indexOf(".") != -1 && !boldWholeValue -> str.setSpan(StyleSpan(Typeface.BOLD), 0, value.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        value.indexOf(" ") != -1 -> str.setSpan(StyleSpan(Typeface.BOLD), 0, value.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        else -> str.setSpan(StyleSpan(Typeface.BOLD), 0, value.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
-    this.text = str.append(" $textAfter")
+    this.text = str.append(" $tokenName")
 }
 
 fun findMyOrder(first: Order, second: Order, address: String?): Order {

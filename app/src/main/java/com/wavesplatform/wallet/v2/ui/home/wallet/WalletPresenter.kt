@@ -23,7 +23,23 @@ class WalletPresenter @Inject constructor() : BasePresenter<WalletView>() {
     }
 
     private fun checkNewAppUpdates() {
-        val needUpdate = preferenceHelper.lastAppVersion != BuildConfig.VERSION_NAME
+        val needUpdate = compareVersions()
         viewState.afterCheckNewAppUpdates(needUpdate)
+    }
+
+    private fun compareVersions(): Boolean {
+        var needUpdate = false
+
+        val currentVersion = BuildConfig.VERSION_NAME.split(".")
+        val lastAppVersion = preferenceHelper.lastAppVersion.split(".")
+
+        for (index in 0 until currentVersion.size) {
+            if (currentVersion[index].toInt() < lastAppVersion[index].toInt()) {
+                needUpdate = true
+                break
+            }
+        }
+
+        return needUpdate
     }
 }

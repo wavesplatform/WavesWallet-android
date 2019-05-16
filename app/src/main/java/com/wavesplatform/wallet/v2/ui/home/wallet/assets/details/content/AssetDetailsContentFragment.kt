@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
@@ -127,15 +128,8 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             card_transaction.click {
                 launchActivity<HistoryActivity> {
                     val bundle = Bundle().apply {
-                        val tabs = arrayListOf(
-                                HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)),
-                                HistoryTab(HistoryTabFragment.send, getString(R.string.history_sent)),
-                                HistoryTab(HistoryTabFragment.received, getString(R.string.history_received)),
-                                HistoryTab(HistoryTabFragment.exchanged, getString(R.string.history_exchanged)),
-                                HistoryTab(HistoryTabFragment.leased, getString(R.string.history_leased)),
-                                HistoryTab(HistoryTabFragment.issued, getString(R.string.history_issued)))
                         putParcelable(HistoryFragment.BUNDLE_ASSET, presenter.assetBalance)
-                        putParcelableArrayList(HistoryFragment.BUNDLE_TABS, tabs)
+                        putParcelableArrayList(HistoryFragment.BUNDLE_TABS, configureTabsAccordingTo(presenter.assetBalance))
                     }
                     putExtras(bundle)
                 }
@@ -152,6 +146,22 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
             text_last_transaction_title.text = getString(R.string.asset_details_last_transactions_empty)
             card_transaction.click {}
         }
+    }
+
+    private fun configureTabsAccordingTo(assetBalance: AssetBalance?): ArrayList<HistoryTab> {
+        val tabs = arrayListOf<HistoryTab>()
+        assetBalance?.let { asset ->
+            tabs.add(HistoryTab(HistoryTabFragment.all, getString(R.string.history_all)))
+            tabs.add(HistoryTab(HistoryTabFragment.send, getString(R.string.history_sent)))
+            tabs.add(HistoryTab(HistoryTabFragment.received, getString(R.string.history_received)))
+            tabs.add(HistoryTab(HistoryTabFragment.exchanged, getString(R.string.history_exchanged)))
+            if (asset.isWaves()) {
+                tabs.add(HistoryTab(HistoryTabFragment.leased, getString(R.string.history_leased)))
+            } else {
+                tabs.add(HistoryTab(HistoryTabFragment.issued, getString(R.string.history_issued)))
+            }
+        }
+        return tabs
     }
 
     private fun fillInformation(assetBalance: AssetBalance?) {

@@ -150,8 +150,8 @@ open class Transaction(
         var minSponsoredAssetFee: String? = "",
         @SerializedName("payment")
         var payment: RealmList<Payment> = RealmList(),
-        @SerializedName("dappAddress")
-        var dappAddress: String? = "",
+        @SerializedName("dApp")
+        var dApp: String? = "",
         var transactionTypeId: Int = 0,
         var asset: AssetInfo? = AssetInfo()
 ) : RealmModel {
