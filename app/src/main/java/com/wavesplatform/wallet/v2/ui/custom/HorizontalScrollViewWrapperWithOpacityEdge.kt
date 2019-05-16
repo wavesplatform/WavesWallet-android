@@ -12,7 +12,11 @@ import android.view.View
 import android.widget.RelativeLayout
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.afterMeasured
-import pers.victor.ext.*
+import com.wavesplatform.wallet.v2.util.animateInvisible
+import com.wavesplatform.wallet.v2.util.animateVisible
+import pers.victor.ext.children
+import pers.victor.ext.dp
+import pers.victor.ext.findDrawable
 
 
 class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
@@ -50,6 +54,7 @@ class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
                     leftEdgeLayoutParams.addRule(ALIGN_BOTTOM, horizontalScrollView.id)
                     layoutParams = leftEdgeLayoutParams
                     background = leftEdgeBlockBackground
+                    isClickable = false
                 }
 
                 // setup right opacity edge
@@ -59,6 +64,7 @@ class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
                     rightEdgeLayoutParams.addRule(ALIGN_PARENT_RIGHT)
                     layoutParams = rightEdgeLayoutParams
                     background = rightEdgeBlockBackground
+                    isClickable = false
                 }
 
                 // handle scroll and change visibility of edge opacity
@@ -95,19 +101,25 @@ class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
     private fun checkScrollStates(horizontalScrollView: View) {
         if (horizontalScrollView.canScrollHorizontally(LEFT_EDGE)) {
             // can scroll to left, show opacity block
-            leftEdge.visiable()
+            leftEdge.animateVisible()
         } else {
             // end of left scroll, need hide opacity block
-            leftEdge.gone()
+            leftEdge.animateInvisible()
         }
 
         if (horizontalScrollView.canScrollHorizontally(RIGHT_EDGE)) {
             // can scroll to right, show opacity block
-            rightEdge.visiable()
+            rightEdge.animateVisible()
         } else {
             // end of right scroll, need hide opacity block
-            rightEdge.gone()
+            rightEdge.animateInvisible()
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        leftEdge.clearAnimation()
+        rightEdge.clearAnimation()
+        super.onDetachedFromWindow()
     }
 
     companion object {

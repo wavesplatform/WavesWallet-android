@@ -90,6 +90,20 @@ inline fun <T : View> T.afterMeasured(crossinline f: T.() -> Unit) {
     })
 }
 
+fun View.animateVisible() {
+    this.animate()
+            .alpha(Constants.View.FULL_VISIBILITY)
+            .setDuration(Constants.View.DEFAULT_ANIMATION_DURATION)
+            .start()
+}
+
+fun View.animateInvisible() {
+    this.animate()
+            .alpha(Constants.View.FULL_GONE)
+            .setDuration(Constants.View.DEFAULT_ANIMATION_DURATION)
+            .start()
+}
+
 fun EditText.applyFilterStartWithDot() {
     this.filters = arrayOf(filterStartWithDot)
 }
