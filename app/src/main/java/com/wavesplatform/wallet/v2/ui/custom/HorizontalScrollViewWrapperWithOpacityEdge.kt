@@ -11,9 +11,15 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.local.HorizontalScrollVisibilityState
 import com.wavesplatform.wallet.v2.util.afterMeasured
 import com.wavesplatform.wallet.v2.util.animateInvisible
 import com.wavesplatform.wallet.v2.util.animateVisible
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import pers.victor.ext.children
 import pers.victor.ext.dp
 import pers.victor.ext.findDrawable
@@ -29,6 +35,8 @@ class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
 
     private var leftEdgeBlockBackground: Drawable? = findDrawable(R.drawable.bg_opacity_scroll_left_edge_white)
     private var rightEdgeBlockBackground: Drawable? = findDrawable(R.drawable.bg_opacity_scroll_right_edge_white)
+
+    private val subscriptions: CompositeDisposable = CompositeDisposable()
 
     constructor(context: Context) : super(context) {
         init(null)
@@ -67,15 +75,36 @@ class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
                     isClickable = false
                 }
 
-                // handle scroll and change visibility of edge opacity
-                horizontalScrollView.viewTreeObserver?.addOnScrollChangedListener {
-                    checkScrollStates(horizontalScrollView)
-                }
+                subscriptions.add(Observable.create(ObservableOnSubscribe<HorizontalScrollVisibilityState> { subscriber ->
+                    // handle scroll and change visibility of edge opacity
+                    horizontalScrollView.viewTreeObserver?.addOnScrollChangedListener {
+                        checkScrollStates(horizontalScrollView, subscriber)
+                    }
 
-                // first state of edge opacity after measured
-                horizontalScrollView.afterMeasured {
-                    checkScrollStates(horizontalScrollView)
-                }
+                    // first state of edge opacity after measured
+                    horizontalScrollView.afterMeasured {
+                        checkScrollStates(horizontalScrollView, subscriber)
+                    }
+                })
+                        .distinctUntilChanged()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { visibilityState ->
+                            if (visibilityState.needShowLeftEdge) {
+                                // can scroll to left, show opacity block
+                                leftEdge.animateVisible()
+                            } else {
+                                // end of left scroll, need hide opacity block
+                                leftEdge.animateInvisible()
+                            }
+
+                            if (visibilityState.needShowRightEdge) {
+                                // can scroll to right, show opacity block
+                                rightEdge.animateVisible()
+                            } else {
+                                // end of right scroll, need hide opacity block
+                                rightEdge.animateInvisible()
+                            }
+                        })
 
                 // add views to parent
                 addView(leftEdge)
@@ -98,25 +127,15 @@ class HorizontalScrollViewWrapperWithOpacityEdge : RelativeLayout {
         }
     }
 
-    private fun checkScrollStates(horizontalScrollView: View) {
-        if (horizontalScrollView.canScrollHorizontally(LEFT_EDGE)) {
-            // can scroll to left, show opacity block
-            leftEdge.animateVisible()
-        } else {
-            // end of left scroll, need hide opacity block
-            leftEdge.animateInvisible()
-        }
-
-        if (horizontalScrollView.canScrollHorizontally(RIGHT_EDGE)) {
-            // can scroll to right, show opacity block
-            rightEdge.animateVisible()
-        } else {
-            // end of right scroll, need hide opacity block
-            rightEdge.animateInvisible()
-        }
+    private fun checkScrollStates(horizontalScrollView: View, subscriber: ObservableEmitter<HorizontalScrollVisibilityState>?) {
+        subscriber?.onNext(
+                HorizontalScrollVisibilityState(horizontalScrollView.canScrollHorizontally(LEFT_EDGE),
+                        horizontalScrollView.canScrollHorizontally(RIGHT_EDGE))
+        )
     }
 
     override fun onDetachedFromWindow() {
+        subscriptions.clear()
         leftEdge.clearAnimation()
         rightEdge.clearAnimation()
         super.onDetachedFromWindow()
