@@ -82,12 +82,18 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
 
         view?.let {
             view.text_amount_value.text = data.orderResponse.getScaledAmount(data.amountAssetInfo?.precision)
+            view.text_filled_value.text = data.orderResponse.getType().directionSign
+                    .plus(data.orderResponse.getScaledFilled(data.amountAssetInfo?.precision))
             view.text_price_value.text = data.orderResponse.getScaledPrice(data.amountAssetInfo?.precision, data.priceAssetInfo?.precision)
             view.text_total_value.text = data.orderResponse.getScaledTotal(data.priceAssetInfo?.precision)
 
             showTickerOrSimple(view.text_amount_value, view.text_amount_tag, data.amountAssetInfo)
+            showTickerOrSimple(view.text_filled_value, view.text_filled_tag, data.amountAssetInfo)
             showTickerOrSimple(view.text_price_value, view.text_price_tag, data.priceAssetInfo)
             showTickerOrSimple(view.text_total_value, view.text_total_tag, data.priceAssetInfo)
+
+            view.text_filled_value.makeTextHalfBold(true)
+            view.text_total_value.makeTextHalfBold(true)
         }
 
         return view
@@ -95,7 +101,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
 
     private fun showTickerOrSimple(valueView: AppCompatTextView, tickerView: AppCompatTextView, assetInfo: AssetInfo?) {
         if (isShowTicker(assetInfo?.id)) {
-            val ticker = assetInfo?.getTicker()
+            val ticker = assetInfo?.getTokenTicker()
             if (!ticker.isNullOrBlank()) {
                 tickerView.text = ticker
                 tickerView.visiable()
