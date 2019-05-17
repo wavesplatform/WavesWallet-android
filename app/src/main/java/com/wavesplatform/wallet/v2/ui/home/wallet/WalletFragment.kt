@@ -73,7 +73,6 @@ class WalletFragment : BaseFragment(), WalletView {
     private fun setupUI() {
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
-        setIndicatorMargin()
 
         viewpager_wallet.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(p0: Int) {
@@ -95,33 +94,6 @@ class WalletFragment : BaseFragment(), WalletView {
         })
 
         stl_wallet.setCurrentTab(0, false)
-    }
-
-    private fun setIndicatorMargin() {
-        val dpWidthFirst = measureWidthDpText(adapter.titles[0])
-        val dpWidthSecond = measureWidthDpText(adapter.titles[1])
-
-        val minIndicatorWidth = 16F
-        val marginRightToIndicator = if (dpWidthFirst > dpWidthSecond) {
-            dpWidthSecond - minIndicatorWidth
-        } else {
-            dpWidthFirst - minIndicatorWidth
-        }
-        val commonMargin = 12F
-        stl_wallet.setIndicatorMargin(
-                commonMargin,
-                0F,
-                commonMargin + marginRightToIndicator,
-                0F)
-    }
-
-    private fun measureWidthDpText(text: String): Float {
-        val paint = Paint()
-        paint.typeface = Typeface.DEFAULT_BOLD
-        paint.textSize = ViewUtils.convertDpToPixel(14F, activity)
-        val bounds = Rect()
-        paint.getTextBounds(text, 0, text.length, bounds)
-        return ViewUtils.convertPixelsToDp(bounds.width().toFloat(), activity)
     }
 
     private fun enableElevation(enable: Boolean) {
