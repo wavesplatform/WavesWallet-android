@@ -1,14 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/basic50"
+    android:descendantFocusability="blocksDescendants">
+
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/basic50"
+        android:elevation="0dp"
         android:stateListAnimator="@animator/toolbar_elevation">
 
         <android.support.v7.widget.Toolbar
@@ -19,62 +23,43 @@
             android:background="@color/basic50"
             android:fitsSystemWindows="true"
             android:fontFamily="@font/roboto"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
             app:titleTextAppearance="@style/Toolbar.Title" />
 
+        <com.flyco.tablayout.CommonTabLayout
+            android:id="@+id/common_tab_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:paddingStart="5dp"
+            android:layout_marginBottom="5dp"
+            app:tl_indicator_height="0dp"
+            app:tl_tab_padding="11dp"
+            app:tl_tab_space_equal="false"
+            tl:tl_iconGravity="LEFT"
+            tl:tl_iconHeight="18dp"
+            tl:tl_iconMargin="14dp"
+            tl:tl_iconWidth="18dp"
+            tl:tl_indicator_bounce_enable="false"
+            tl:tl_textSelectColor="@color/black"
+            tl:tl_textUnselectColor="@color/basic500"
+            tl:tl_textsize="14sp" />
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.CoordinatorLayout
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_assets"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/appbar_layout"
-        android:background="@color/basic50"
-        android:descendantFocusability="blocksDescendants">
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingTop="12dp"
+        android:paddingBottom="24dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:progress_image="@drawable/ic_loader_24_submit_400" />
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbar_layout_inside"
-            android:layout_width="match_parent"
-            android:elevation="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/basic50">
-
-            <com.flyco.tablayout.CommonTabLayout
-                android:id="@+id/common_tab_layout"
-                android:layout_width="wrap_content"
-                android:paddingStart="5dp"
-                android:layout_height="38dp"
-                app:tl_indicator_height="0dp"
-                app:tl_tab_padding="11dp"
-                app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
-                app:tl_tab_space_equal="false"
-                tl:tl_iconGravity="LEFT"
-                tl:tl_iconHeight="18dp"
-                tl:tl_iconMargin="14dp"
-                tl:tl_iconWidth="18dp"
-                tl:tl_indicator_bounce_enable="false"
-                tl:tl_textSelectColor="@color/black"
-                tl:tl_textUnselectColor="@color/basic500"
-                tl:tl_textsize="14sp" />
-        </android.support.design.widget.AppBarLayout>
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycle_assets"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            android:paddingTop="12dp"
-            android:paddingBottom="24dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-        <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:progress_image="@drawable/ic_loader_24_submit_400" />
-
-    </android.support.design.widget.CoordinatorLayout>
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

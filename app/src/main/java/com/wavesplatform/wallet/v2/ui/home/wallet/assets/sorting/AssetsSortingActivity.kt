@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.wallet.v2.data.model.local.TabItem
+import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.model.userdb.AssetBalanceStore
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
@@ -39,7 +40,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
     lateinit var presenter: AssetsSortingPresenter
     @Inject
     lateinit var adapter: AssetsSortingAdapter
-    lateinit var mItemTouchHelper: ItemTouchHelper
+    private lateinit var itemTouchHelper: ItemTouchHelper
     private var itemAnimator = FadeInWithoutDelayAnimator()
 
 
@@ -109,13 +110,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             this.adapter.notifyItemRemoved(position)
 
                             // add to not favorite list
-                            globalItem.type = AssetSortingItem.TYPE_DEFAULT_ITEM
-                            globalItem.asset = asset
+                            addToListOf(AssetSortingItem.TYPE_DEFAULT_ITEM, globalItem, asset, linePosition)
 
-                            this.adapter.addData(linePosition, globalItem)
-                            this.adapter.checkEmptyViews()
-
-                            // Save to DB
                             asset.save()
                             AssetBalanceStore(asset.assetId, asset.isHidden, asset.position, asset.isFavorite).save()
                         }
@@ -130,13 +126,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
                             asset.isHidden = false
 
                             // add to favorite list
-                            globalItem.type = AssetSortingItem.TYPE_FAVORITE_ITEM
-                            globalItem.asset = asset
+                            addToListOf(AssetSortingItem.TYPE_FAVORITE_ITEM, globalItem, asset, linePosition)
 
-                            this.adapter.addData(linePosition, globalItem)
-                            this.adapter.checkEmptyViews()
-
-                            // Save to DB
                             asset.save()
                             AssetBalanceStore(asset.assetId, asset.isHidden, asset.position,
                                     asset.isFavorite).save()
@@ -148,44 +139,47 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
 
         adapter.onHiddenChangeListener = object : AssetsSortingAdapter.OnHiddenChangeListener {
             override fun onHiddenStateChanged(item: AssetSortingItem, checked: Boolean, position: Int) {
-                presenter.needToUpdate = true
+                if (position != -1) {
 
-                // remove from current list
-                adapter.data.removeAt(position)
-                adapter.notifyItemRemoved(position)
+                    presenter.needToUpdate = true
 
-                val linePosition = adapter.getHiddenLinePosition()
+                    // remove from current list
+                    adapter.data.removeAt(position)
+                    adapter.notifyItemRemoved(position)
 
-                item.asset.isFavorite = false
-                item.asset.isHidden = !checked
+                    val linePosition = adapter.getHiddenLinePosition()
 
-                if (checked) {
-                    item.asset.isHidden = false
-                    item.type = AssetSortingItem.TYPE_DEFAULT_ITEM
-                    adapter.addData(linePosition, item)
-                    adapter.checkEmptyViews()
-                } else {
-                    item.asset.isHidden = true
-                    item.type = AssetSortingItem.TYPE_HIDDEN_ITEM
-                    adapter.addData(linePosition + 1, item)
-                    adapter.checkEmptyViews()
+                    item.asset.isFavorite = false
+                    item.asset.isHidden = !checked
+
+                    if (checked) {
+                        item.asset.isHidden = false
+                        item.type = AssetSortingItem.TYPE_DEFAULT_ITEM
+                        adapter.addData(linePosition, item)
+                        adapter.checkEmptyViews()
+                    } else {
+                        item.asset.isHidden = true
+                        item.type = AssetSortingItem.TYPE_HIDDEN_ITEM
+                        adapter.addData(linePosition + 1, item)
+                        adapter.checkEmptyViews()
+                    }
+
+                    // Save to DB
+                    item.asset.save()
+                    AssetBalanceStore(item.asset.assetId, item.asset.isHidden, item.asset.position,
+                            item.asset.isFavorite).save()
                 }
-
-                // Save to DB
-                item.asset.save()
-                AssetBalanceStore(item.asset.assetId, item.asset.isHidden, item.asset.position,
-                        item.asset.isFavorite).save()
             }
         }
 
         // configure drag and drop
         val callback = SimpleItemTouchHelperCallback(adapter)
-        mItemTouchHelper = ItemTouchHelper(callback)
-        mItemTouchHelper.attachToRecyclerView(recycle_assets)
+        itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(recycle_assets)
 
-        adapter.mDragStartListener = object : ItemDragListener {
+        adapter.dragStartListener = object : ItemDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder, position: Int) {
-                mItemTouchHelper.startDrag(viewHolder)
+                itemTouchHelper.startDrag(viewHolder)
             }
 
             override fun onMoved(fromHolder: RecyclerView.ViewHolder?, fromPosition: Int, toHolder: RecyclerView.ViewHolder?, toPosition: Int) {
@@ -200,6 +194,14 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         presenter.loadAssets()
 
         common_tab_layout.currentTab = 0
+    }
+
+    private fun addToListOf(listType: Int, globalItem: AssetSortingItem, asset: AssetBalance, linePosition: Int) {
+        globalItem.type = listType
+        globalItem.asset = asset
+
+        this.adapter.addData(linePosition, globalItem)
+        this.adapter.checkEmptyViews()
     }
 
     private fun applyCorrectCardBg(holder: RecyclerView.ViewHolder) {

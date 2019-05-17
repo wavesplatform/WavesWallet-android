@@ -25,13 +25,13 @@ import javax.inject.Inject
 class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<AssetSortingItem, AssetsSortingAdapter.ItemViewHolder>(null),
         ItemTouchHelperAdapter {
 
-    var mDragStartListener: ItemDragListener? = null
+    var dragStartListener: ItemDragListener? = null
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         val movedItem = data.removeAt(fromPosition)
         data.add(toPosition, movedItem)
         notifyItemMoved(fromPosition, toPosition)
-        mDragStartListener?.onMoved(recyclerView.findViewHolderForAdapterPosition(fromPosition),
+        dragStartListener?.onMoved(recyclerView.findViewHolderForAdapterPosition(fromPosition),
                 fromPosition,
                 recyclerView.findViewHolderForAdapterPosition(toPosition),
                 toPosition)
@@ -58,7 +58,7 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
     }
 
     override fun onDragEnd(viewHolder: RecyclerView.ViewHolder) {
-        mDragStartListener?.onEndDrag(viewHolder)
+        dragStartListener?.onEndDrag(viewHolder)
     }
 
     init {
@@ -103,7 +103,7 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
                 helper.itemView.image_drag.setOnTouchListener { v, event ->
                     when (event.action) {
                         MotionEvent.ACTION_DOWN -> {
-                            mDragStartListener?.onStartDrag(helper, helper.adapterPosition)
+                            dragStartListener?.onStartDrag(helper, helper.adapterPosition)
                         }
                     }
                     false
@@ -190,10 +190,10 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
             addData(getLinePosition(), AssetSortingItem(AssetSortingItem.TYPE_EMPTY_FAVORITE))
         }
         if (needAddDefaultEmptyView) {
-            addData(getLinePosition() + 1, AssetSortingItem(AssetSortingItem.TYPE_EMPTY_DEFAULT))
+            addData(getLinePosition() + HEADER_SEPARATOR_POSITION, AssetSortingItem(AssetSortingItem.TYPE_EMPTY_DEFAULT))
         }
         if (needAddHiddenEmptyView) {
-            addData(getHiddenLinePosition() + 1, AssetSortingItem(AssetSortingItem.TYPE_EMPTY_HIDDEN))
+            addData(getHiddenLinePosition() + HEADER_SEPARATOR_POSITION, AssetSortingItem(AssetSortingItem.TYPE_EMPTY_HIDDEN))
         }
     }
 
@@ -213,5 +213,6 @@ class AssetsSortingAdapter @Inject constructor() : BaseMultiItemQuickAdapter<Ass
 
     companion object {
         const val NOT_FOUND = -1
+        const val HEADER_SEPARATOR_POSITION = 1
     }
 }
