@@ -47,7 +47,8 @@ class HistoryRepeatUpdater {
                     .flatMap {
                         Observable.zip(
                                 nodeDataManager.nodeService.transactionList(
-                                        App.getAccessManager().getWallet()?.address, transactionLimit)?.map { it[0] },
+                                        App.getAccessManager().getWallet()?.address,
+                                        transactionLimit).map { it[0] },
                                 Companion.nodeDataManager?.currentBlocksHeight(),
                                 BiFunction { transactions: List<Transaction>, height: Height ->
                                     Timber.d("HistoryRepeatUpdater: Success load!")
@@ -65,9 +66,7 @@ class HistoryRepeatUpdater {
                         Timber.e("HistoryRepeatUpdater: doOnError() - $it")
                         cancelIfNeed()
                     }
-                    .retryWhen {
-                        it.delay(15, TimeUnit.SECONDS)
-                    }
+                    .retryWhen { it.delay(15, TimeUnit.SECONDS) }
                     .subscribe()
 
             Timber.d("HistoryRepeatUpdater: start()")
@@ -85,8 +84,8 @@ class HistoryRepeatUpdater {
 
         private fun saveToDb(transactions: List<Transaction>) {
             if (transactions.isNotEmpty()) {
-                transactionSaver?.saveTransactions(
-                        transactions.sortedByDescending { it.timestamp },
+                transactionSaver?.save(
+                        transactions,
                         transactionLimit,
                         object : TransactionSaver.OnTransactionLimitChangeListener {
                             override fun onChange(limit: Int) {

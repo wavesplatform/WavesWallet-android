@@ -176,7 +176,7 @@ class HistoryTabPresenter @Inject constructor() : BasePresenter<HistoryTabView>(
                         if (transactionSaver == null) {
                             transactionSaver = TransactionSaver(nodeDataManager, rxEventBus)
                         }
-                        transactionSaver!!.saveTransactions(list)
+                        transactionSaver!!.save(list)
                     }
                 }, {
                     viewState.onShowError(R.string.history_error_receive_data)
