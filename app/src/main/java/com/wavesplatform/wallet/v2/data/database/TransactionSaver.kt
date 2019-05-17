@@ -47,31 +47,32 @@ class TransactionSaver(private var nodeDataManager: NodeDataManager,
         }
 
         runAsync {
-            val lastTransactionId = sortTransactions[sortTransactions.size - 1].id
             val lastSavedTransaction = queryFirst<Transaction> {
-                equalTo("id", lastTransactionId)
+                equalTo("id", sortTransactions.last().id)
             }
             if (lastSavedTransaction == null) {
-                saveTransactions(sortTransactions)
+                saveTransactionsAndIncreaseLimit(sortTransactions)
             } else {
-                val firstTransactionId = sortTransactions[0].id
-                val firstSavedTransaction = queryFirst<Transaction> {
-                    equalTo("id", firstTransactionId)
-                }
-                if (firstSavedTransaction == null) {
-                    // new transactions less than limit
-                    checkAssetsUpdateBalance = true
-                    saveToDb(sortTransactions)
-                } else {
-                    runOnUiThread {
-                        rxEventBus.post(Events.StopUpdateHistoryScreen())
-                    }
-                }
+                saveTransactions(sortTransactions)
             }
         }
     }
 
-    private fun saveTransactions(transactions: List<Transaction>) {
+    private fun saveTransactions(sortTransactions: List<Transaction>) {
+        val firstSavedTransaction = queryFirst<Transaction> {
+            equalTo("id", sortTransactions[0].id)
+        }
+        if (firstSavedTransaction == null) {
+            checkAssetsUpdateBalance = true
+            saveToDb(sortTransactions)
+        } else {
+            runOnUiThread {
+                rxEventBus.post(Events.StopUpdateHistoryScreen())
+            }
+        }
+    }
+
+    private fun saveTransactionsAndIncreaseLimit(transactions: List<Transaction>) {
         if (currentLimit >= MAX_LIMIT) {
             currentLimit = 50
         }
