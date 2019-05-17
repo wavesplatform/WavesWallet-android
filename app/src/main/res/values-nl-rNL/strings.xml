@@ -20,7 +20,7 @@
   <string name="address_book_search">Zoeken</string>
   <string name="address_book_success_deleted">Adres verwijderd</string>
   <string name="address_book_toolbar_title">Adresboek</string>
-  <string name="addresses">Assets</string>
+  <string name="addresses">Tokens</string>
   <string name="addresses_and_keys_aliases">Aliassen</string>
   <string name="addresses_and_keys_private_key">Private key</string>
   <string name="addresses_and_keys_public_key">Public key</string>
@@ -42,7 +42,7 @@
   <string name="asset_details_cryptocurrency">Cryptovaluta</string>
   <string name="asset_details_decimal">Decimaalpunten</string>
   <string name="asset_details_description">Beschrijving</string>
-  <string name="asset_details_error_perfom_transaction">U kunt geen transacties met deze asset doen</string>
+  <string name="asset_details_error_perfom_transaction">U kunt geen transacties met deze token doen</string>
   <string name="asset_details_fiat_money">Fiat geld</string>
   <string name="asset_details_id">ID</string>
   <string name="asset_details_in_order">In orders</string>
@@ -200,9 +200,9 @@
   <string name="dex_last_update_value">Laatste update: %s</string>
   <string name="dex_market_empty">Niks hier…</string>
   <string name="dex_market_toolbar_title">Markten</string>
-  <string name="dex_markets_info_dialog_amount_asset">Hoeveelheid Asset — %s</string>
+  <string name="dex_markets_info_dialog_amount_asset">Hoeveelheid Token — %s</string>
   <string name="dex_markets_info_dialog_popular">Populair</string>
-  <string name="dex_markets_info_dialog_price_asset">Prijs Asset — %s</string>
+  <string name="dex_markets_info_dialog_price_asset">Prijs Token — %s</string>
   <string name="dex_markets_list_search">Zoeken</string>
   <string name="dex_markets_list_toolbar_title">Markten</string>
   <string name="dex_sorting_empty">Niks hier…</string>
@@ -260,7 +260,7 @@
   <string name="history_details_active_now">NU ACTIEF</string>
   <string name="history_details_add_address">Sla adres op</string>
   <string name="history_details_amount_per_transaction">Hoeveelheid per transactie</string>
-  <string name="history_details_asset">Asset</string>
+  <string name="history_details_asset">Token</string>
   <string name="history_details_block">Blokkeren</string>
   <string name="history_details_cancel_leasing">Annuleer leasing</string>
   <string name="history_details_completed">VOLTOOID</string>
@@ -271,7 +271,7 @@
   <string name="history_details_edit_address">Naam aanpassen</string>
   <string name="history_details_exchange_price">Prijs</string>
   <string name="history_details_fee">Transactiekosten</string>
-  <string name="history_details_id">Asset ID</string>
+  <string name="history_details_id">Token ID</string>
   <string name="history_details_leasing_from">Geleased van</string>
   <string name="history_details_leasing_to">Lease aan</string>
   <string name="history_details_node_address">Node adres</string>
@@ -415,7 +415,7 @@
   <string name="profile_general_addresses_and_keys">Adressen, sleutels</string>
   <string name="profile_general_addresses_book">Adresboek</string>
   <string name="profile_general_backup_phrase">Backup regel</string>
-  <string name="profile_general_change_passcode">Wachtwoord wijzigen</string>
+  <string name="profile_general_change_passcode">Pincode wijzigen</string>
   <string name="profile_general_change_password">Wachtwoord wijzigen</string>
   <string name="profile_general_current_height">Huidige hoogte</string>
   <string name="profile_general_current_version">Versie</string>
@@ -465,7 +465,7 @@
   <string name="receive_address_your_qr_code">Uw QR-code</string>
   <string name="receive_amount">Bedrag</string>
   <string name="receive_amount_title">Bedrag in %1$s</string>
-  <string name="receive_asset">Asset</string>
+  <string name="receive_asset">Token</string>
   <string name="receive_card">Kaart</string>
   <string name="receive_contact_msg">Neem in geval van problemen met verificatie of betalingsverwerking contact op met het ondersteuningsteam van Coinomat — support@coinomat.com</string>
   <string name="receive_contact_msg_key">support@coinomat.com</string>
@@ -489,7 +489,7 @@
   <string name="receive_minimum_amount">Het minimale stortingsbedrag is %1$s %2$s</string>
   <string name="receive_not_verified">Uw account is niet geverifieerd</string>
   <string name="receive_payment_method">Betalingsmethode</string>
-  <string name="receive_sellect_asset">Selecteer uw asset of kies uit de lijst</string>
+  <string name="receive_sellect_asset">Selecteer uw token of kies uit de lijst</string>
   <string name="receive_step_1">Stap 1</string>
   <string name="receive_step_1_msg">Om rechtstreeks Euro via SEPA overschrijving van uw bankrekening te storten, moet u worden geverifieerd door onze partner IDNow.eu</string>
   <string name="receive_step_1_msg_link">IDNow.eu</string>
@@ -503,8 +503,8 @@
   <string name="receive_warning_will_send">Als u minder dan %1$s %2$s stuurt, verliest u dat geld.</string>
   <string name="receive_will_send_other_currency">Het verzenden van een andere valuta naar dit adres kan resulteren in het verlies van uw storting.</string>
   <string name="scripted_account_error_dialog_btn_txt">Oké</string>
-  <string name="scripted_account_error_dialog_description">Om een scripted account/asset te gebruiken, gebruik Waves client</string>
-  <string name="scripted_account_error_dialog_title">Een script is geconfigureerd op uw account of asset</string>
+  <string name="scripted_account_error_dialog_description">Om een scripted account/token te gebruiken, gebruik Waves client</string>
+  <string name="scripted_account_error_dialog_title">Een script is geconfigureerd op uw account of token</string>
   <string name="secret_phrase_back_up_now">Nu backuppen</string>
   <string name="secret_phrase_do_it_later">Doe het later</string>
   <string name="secret_phrase_no_backup_no_money">Geen back-up, geen geld</string>
@@ -512,7 +512,7 @@
   <string name="sell_btn_txt">Verkoop %s</string>
   <string name="send_amount">Bedrag</string>
   <string name="send_amount_error_insufficient_funds">Onvoldoende funds</string>
-  <string name="send_asset">Asset</string>
+  <string name="send_asset">Token</string>
   <string name="send_choose_from_address_book">Kies uit adresboek</string>
   <string name="send_confirmation_confirm">Bevestigen</string>
   <string name="send_confirmation_description">Omschrijving</string>
@@ -540,10 +540,10 @@
   <string name="send_progress_sending">Bezig met verzenden…</string>
   <string name="send_recipient">Ontvanger</string>
   <string name="send_recipient_address_hint">Ontvanger adres…</string>
-  <string name="send_recipient_asset_is_not_valid">De asset is ongeldig</string>
+  <string name="send_recipient_asset_is_not_valid">De token is ongeldig</string>
   <string name="send_recipient_the_address_is_not_valid">Het adres is niet geldig</string>
   <string name="send_select_your_asset">Selecteer uw asset</string>
-  <string name="send_spam_error">Funds versturen naar verdachte asset is niet mogelijk</string>
+  <string name="send_spam_error">Funds versturen naar verdachte token is niet mogelijk</string>
   <string name="send_success_do_you_want_to_save_this_address">Wilt u dit adres opslaan?</string>
   <string name="send_success_okay">Oké</string>
   <string name="send_success_you_have_sent_sum">U hebt %1$s %2$s verzonden</string>
@@ -595,10 +595,10 @@
   <string name="use_fingerprint_submit_txt">Gebruik vingerafdruk</string>
   <string name="use_fingerprint_subtitle">Gebruik uw vingerafdruk voor snellere, eenvoudigere toegang tot uw account</string>
   <string name="use_fingerprint_title">Gebruik vingerafdruk om in te loggen?</string>
-  <string name="wallet_assets">Assets</string>
-  <string name="wallet_assets_hidden_category">Verborgen assets (%1$s)</string>
-  <string name="wallet_assets_my_asset">/ Mijn Asset</string>
-  <string name="wallet_assets_spam_category">Verdachte assets (%1$s)</string>
+  <string name="wallet_assets">Tokens</string>
+  <string name="wallet_assets_hidden_category">Verborgen tokens (%1$s)</string>
+  <string name="wallet_assets_my_asset">/ Mijn Token</string>
+  <string name="wallet_assets_spam_category">Verdachte tokens (%1$s)</string>
   <string name="wallet_assets_spam_tag">Verdacht</string>
   <string name="wallet_leasing">Geleased</string>
   <string name="wallet_leasing_active_now">Nu actief (%1$s)</string>
@@ -615,7 +615,7 @@
   <string name="wallet_sorting_toolbar_title">Sorteren</string>
   <string name="wallet_sorting_toolbar_visibility_action">Zichtbaarheid</string>
   <string name="wallet_toolbar_title">Portemonnee</string>
-  <string name="welcome_blockchain_description">Word onderdeel van een snelgroeiend deel van de crypto-wereld. U bent de enige persoon die toegang heeft tot uw crypto-assets.</string>
+  <string name="welcome_blockchain_description">Word onderdeel van een snelgroeiend deel van de crypto-wereld. U bent de enige persoon die toegang heeft tot uw crypto-tokens.</string>
   <string name="welcome_blockchain_title">Aan de slag met Blockchain</string>
   <string name="welcome_create_import_description">via koppelingscode of handmatig</string>
   <string name="welcome_create_import_title">Importeer account</string>
@@ -626,7 +626,7 @@
   <string name="welcome_dex_title">Gedecentraliseerde Exchange</string>
   <string name="welcome_token_description">Geef je eigen tokens uit. Deze kunnen in uw bedrijf worden geïntegreerd, niet alleen als een interne valuta, maar ook als een token voor gedecentraliseerd stemmen, als een beoordelingssysteem of een loyaliteitsprogramma.</string>
   <string name="welcome_token_title">Token Launcher</string>
-  <string name="welcome_wallet_description">Bewaar, beheer en ontvang rente op uw digitale assets, gemakkelijk en veilig.</string>
+  <string name="welcome_wallet_description">Bewaar, beheer en ontvang rente op uw digitale tokens, gemakkelijk en veilig.</string>
   <string name="welcome_wallet_title">Portemonnee</string>
   <string name="whats_new_next">Volgende</string>
   <string name="whats_new_okay">Oké</string>
@@ -634,8 +634,8 @@
   <string name="your_address_your_qr_code">Uw QR-Code</string>
   <string name="your_asset_activity_all">Alles</string>
   <string name="your_asset_activity_greater_zero">Met saldo</string>
-  <string name="your_assets_empty_state">Niets hier…\nU heeft geen assets met funds</string>
-  <string name="your_assets_toolbar_title">Uw assets</string>
+  <string name="your_assets_empty_state">Niets hier…\nU heeft geen tokens met funds</string>
+  <string name="your_assets_toolbar_title">Uw tokens</string>
   <string name="confirm_card_tutorial_submit">Begin</string>
   <string name="confirm_card_tutorial_title">Bevestig en begin</string>
   <string name="confirm_card_tutorial_terms_and_conditions">Voorwaarden</string>
@@ -654,13 +654,16 @@
   <string name="my_orders_details_amount_hint">Hoeveelheid</string>
   <string name="my_orders_details_price_hint">Prijs</string>
   <string name="my_orders_details_total_hint">Totaal</string>
+  <string name="clean_banner_title">Geen rommel meer!</string>
+  <string name="clean_banner_description">We hebben de weergave van items opnieuw vormgeven om uw wallet schoon en opgeruimd te houden. U kunt uw lijst met tokens aanpassen zoals u dat wilt!</string>
   <string name="search_asset_hint">Zoeken</string>
   <string name="search_asset_cancel">Annuleer</string>
-  <string name="search_asset_empty">U heeft niet zulke assets</string>
+  <string name="search_asset_empty">U heeft niet zulke tokens</string>
   <string name="history_type_script_invocation">Script Aanroep</string>
   <string name="history_details_script_invocation_payment">Betaling</string>
   <string name="history_details_script_invocation_script_address">Script adres</string>
   <string name="need_update_alert_title">Het is tijd om uw app te updaten!</string>
   <string name="need_update_alert_description">We werken er voortdurend aan om Waves Wallet beter en nuttiger te maken. Update uw app om toegang te krijgen tot nieuwe functies.</string>
-  <string name="search_asset_hidden_title">Verborgen assets</string>
+  <string name="search_asset_hidden_title">Verborgen tokens</string>
+  <string name="my_orders_details_filled_hint">Gevuld</string>
 </resources>
