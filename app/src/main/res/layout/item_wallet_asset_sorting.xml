@@ -80,7 +80,7 @@
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:padding="4dp"
+            android:padding="3dp"
             app:srcCompat="@drawable/ic_dragelem_22_disabled_400" />
 
 

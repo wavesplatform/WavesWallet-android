@@ -7,118 +7,128 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <HorizontalScrollView
-        android:id="@+id/scroll_buttons"
+
+    <com.wavesplatform.wallet.v2.ui.custom.HorizontalScrollViewWrapperWithOpacityEdge
+        android:id="@+id/relative_scroll_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:overScrollMode="never"
-        android:scrollbars="none">
+        app:left_edge_block_background="@drawable/bg_opacity_scroll_left_edge_white"
+        app:right_edge_block_background="@drawable/bg_opacity_scroll_right_edge_white">
 
-        <LinearLayout
-            android:id="@+id/linear_buttons"
-            android:layout_width="wrap_content"
+        <HorizontalScrollView
+            android:id="@+id/scroll_buttons"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:overScrollMode="never"
+            android:scrollbars="none">
 
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_send_again"
+            <LinearLayout
+                android:id="@+id/linear_buttons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/selector_btn_warning"
-                android:drawableStart="@drawable/ic_t_resend_18"
-                android:drawablePadding="8dp"
-                android:paddingStart="14dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="14dp"
-                android:paddingBottom="10dp"
-                android:text="@string/history_details_send_again"
-                android:textColor="@color/white"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                android:orientation="horizontal">
 
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_cancel_leasing"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/selector_btn_red"
-                android:drawableStart="@drawable/ic_t_closelease_18"
-                android:drawablePadding="8dp"
-                android:paddingStart="14dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="14dp"
-                android:paddingBottom="10dp"
-                android:text="@string/history_details_cancel_leasing"
-                android:textColor="@color/white"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_send_again"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/selector_btn_warning"
+                    android:drawableStart="@drawable/ic_t_resend_18"
+                    android:drawablePadding="8dp"
+                    android:paddingStart="14dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/history_details_send_again"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
 
-            <CheckBox
-                android:id="@+id/check_box_staging_on_explorer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="Staging"
-                android:visibility="gone" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_view_on_explorer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/selector_btn_basic_50"
-                android:drawableStart="@drawable/ic_viewexplorer_18_black"
-                android:drawablePadding="8dp"
-                android:paddingStart="14dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="14dp"
-                android:paddingBottom="10dp"
-                android:text="@string/history_details_view_on_explorer"
-                android:textColor="@color/black" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_cancel_leasing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/selector_btn_red"
+                    android:drawableStart="@drawable/ic_t_closelease_18"
+                    android:drawablePadding="8dp"
+                    android:paddingStart="14dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/history_details_cancel_leasing"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_copy_tx_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/selector_btn_basic_50"
-                android:drawableStart="@drawable/ic_copy_18_black"
-                android:drawablePadding="8dp"
-                android:paddingStart="14dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="14dp"
-                android:paddingBottom="10dp"
-                android:text="@string/history_details_copy_tx_id"
-                android:textColor="@color/black" />
+                <CheckBox
+                    android:id="@+id/check_box_staging_on_explorer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="Staging"
+                    android:visibility="gone" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_copy_all_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/selector_btn_basic_50"
-                android:drawableStart="@drawable/ic_copy_18_black"
-                android:drawablePadding="8dp"
-                android:paddingStart="14dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="14dp"
-                android:paddingBottom="10dp"
-                android:text="@string/history_details_copy_all_data"
-                android:textColor="@color/black" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_view_on_explorer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/selector_btn_basic_50"
+                    android:drawableStart="@drawable/ic_viewexplorer_18_black"
+                    android:drawablePadding="8dp"
+                    android:paddingStart="14dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/history_details_view_on_explorer"
+                    android:textColor="@color/black" />
 
-        </LinearLayout>
-    </HorizontalScrollView>
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_copy_tx_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/selector_btn_basic_50"
+                    android:drawableStart="@drawable/ic_copy_18_black"
+                    android:drawablePadding="8dp"
+                    android:paddingStart="14dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/history_details_copy_tx_id"
+                    android:textColor="@color/black" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_copy_all_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/selector_btn_basic_50"
+                    android:drawableStart="@drawable/ic_copy_18_black"
+                    android:drawablePadding="8dp"
+                    android:paddingStart="14dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/history_details_copy_all_data"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </com.wavesplatform.wallet.v2.ui.custom.HorizontalScrollViewWrapperWithOpacityEdge>
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_close"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_below="@+id/scroll_buttons"
+        android:layout_below="@+id/relative_scroll_wrapper"
         android:layout_alignParentEnd="true"
         android:layout_gravity="center"
         android:layout_marginTop="24dp"
