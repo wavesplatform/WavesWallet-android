@@ -182,8 +182,8 @@ android {
 
 
 sentry {
-    autoProguardConfig true
-    autoUpload true
+    autoProguardConfig false
+    autoUpload false
 }
 
 def getAppName() {
