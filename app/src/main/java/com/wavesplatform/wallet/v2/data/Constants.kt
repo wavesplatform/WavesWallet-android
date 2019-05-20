@@ -84,8 +84,14 @@ object Constants {
     const val VERSION = 2
     const val WAVES_ASSET_ID_EMPTY = ""
     const val WAVES_ASSET_ID_FILLED = "WAVES"
-    const val ENABLE_VIEW = 1f
-    const val DISABLE_VIEW = 0.3f
+
+    object View {
+        const val ENABLE_VIEW = 1f
+        const val DISABLE_VIEW = 0.3f
+        const val DEFAULT_ANIMATION_DURATION = 300L
+        const val FULL_VISIBILITY = 1f
+        const val FULL_GONE = 0f
+    }
 
     val alphabetColor = hashMapOf(
             Pair("a", R.color.a),
