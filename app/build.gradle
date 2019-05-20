@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
-apply plugin: 'io.sentry.android.gradle'
+//apply plugin: 'io.sentry.android.gradle'
 apply from: 'api-keys.properties'
 
 def getGitHash = { ->
@@ -181,10 +181,10 @@ android {
 }
 
 
-sentry {
-    autoProguardConfig true
-    autoUpload true
-}
+//sentry {
+//    autoProguardConfig true
+//    autoUpload true
+//}
 
 def getAppName() {
     def stringsFile = file("./src/main/res/values/strings.xml")
