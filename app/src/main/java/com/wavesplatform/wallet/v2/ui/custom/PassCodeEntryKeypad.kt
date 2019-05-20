@@ -152,12 +152,12 @@ class PassCodeEntryKeypad : LinearLayout, View.OnClickListener {
         if (isEnable) {
             allButtons.forEach { button ->
                 button.isClickable = true
-                button.alpha = Constants.ENABLE_VIEW
+                button.alpha = Constants.View.ENABLE_VIEW
             }
         } else {
             allButtons.forEach { button ->
                 button.isClickable = false
-                button.alpha = Constants.DISABLE_VIEW
+                button.alpha = Constants.View.DISABLE_VIEW
             }
         }
     }

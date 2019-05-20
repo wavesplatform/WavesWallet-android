@@ -152,20 +152,20 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onNetworkConnectionChanged(networkConnected: Boolean) {
         super.onNetworkConnectionChanged(networkConnected)
         if (networkConnected) {
-            frame_network.alpha = Constants.ENABLE_VIEW
-            frame_change_passcode.alpha = Constants.ENABLE_VIEW
-            frame_change_password.alpha = Constants.ENABLE_VIEW
-            frame_fingerprint.alpha = Constants.ENABLE_VIEW
+            frame_network.alpha = Constants.View.ENABLE_VIEW
+            frame_change_passcode.alpha = Constants.View.ENABLE_VIEW
+            frame_change_password.alpha = Constants.View.ENABLE_VIEW
+            frame_fingerprint.alpha = Constants.View.ENABLE_VIEW
             card_network.isClickable = true
             fingerprint_switch.isClickable = true
             card_change_passcode.isClickable = true
             card_fingerprint.isClickable = true
             card_change_password.isClickable = true
         } else {
-            frame_network.alpha = Constants.DISABLE_VIEW
-            frame_change_passcode.alpha = Constants.DISABLE_VIEW
-            frame_change_password.alpha = Constants.DISABLE_VIEW
-            frame_fingerprint.alpha = Constants.DISABLE_VIEW
+            frame_network.alpha = Constants.View.DISABLE_VIEW
+            frame_change_passcode.alpha = Constants.View.DISABLE_VIEW
+            frame_change_password.alpha = Constants.View.DISABLE_VIEW
+            frame_fingerprint.alpha = Constants.View.DISABLE_VIEW
             card_network.isClickable = false
             fingerprint_switch.isClickable = false
             card_change_passcode.isClickable = false

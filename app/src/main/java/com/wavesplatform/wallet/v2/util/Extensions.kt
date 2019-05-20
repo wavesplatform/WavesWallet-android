@@ -39,13 +39,15 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.util.Patterns
+import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.net.RetrofitException
+import com.wavesplatform.sdk.net.RetrofitException // todo check
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.net.model.response.ErrorResponse
@@ -79,6 +81,31 @@ val filterEmptySpace = InputFilter { source, start, end, dest, dstart, dend ->
         return@InputFilter ""
     }
     null
+}
+
+inline fun <T : View> T.afterMeasured(crossinline f: T.() -> Unit) {
+    viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            if (measuredWidth > 0 && measuredHeight > 0) {
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+                f()
+            }
+        }
+    })
+}
+
+fun View.animateVisible() {
+    this.animate()
+            .alpha(Constants.View.FULL_VISIBILITY)
+            .setDuration(Constants.View.DEFAULT_ANIMATION_DURATION)
+            .start()
+}
+
+fun View.animateInvisible() {
+    this.animate()
+            .alpha(Constants.View.FULL_GONE)
+            .setDuration(Constants.View.DEFAULT_ANIMATION_DURATION)
+            .start()
 }
 
 fun EditText.applyFilterStartWithDot() {
