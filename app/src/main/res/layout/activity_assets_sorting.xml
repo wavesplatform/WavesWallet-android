@@ -3,6 +3,7 @@
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/basic50"
     android:descendantFocusability="blocksDescendants">
 
@@ -53,7 +54,6 @@
         android:overScrollMode="never"
         android:paddingTop="12dp"
         android:paddingBottom="24dp"
-        tools:listitem="@layout/your_assets_item"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.wavesplatform.wallet.v2.ui.custom.ImageProgressBar

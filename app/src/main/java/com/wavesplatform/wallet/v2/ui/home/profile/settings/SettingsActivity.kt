@@ -4,8 +4,8 @@ import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
-import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
+import com.wavesplatform.wallet.v2.util.PrefsUtil
 import kotlinx.android.synthetic.main.activity_settings.*
 import pers.victor.ext.click
 import javax.inject.Inject

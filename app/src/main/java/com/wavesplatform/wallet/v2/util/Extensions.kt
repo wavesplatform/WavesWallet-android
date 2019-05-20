@@ -39,7 +39,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.util.Patterns
 import android.view.*
 import android.widget.Button
 import android.widget.EditText
@@ -47,17 +46,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.novoda.simplechromecustomtabs.SimpleChromeCustomTabs
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.net.RetrofitException // todo check
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.net.RetrofitException
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.net.model.response.ErrorResponse
 import com.wavesplatform.sdk.net.model.TransactionType
-import com.wavesplatform.sdk.net.model.response.OrderResponse
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsAdapter
@@ -574,7 +572,7 @@ fun TextView.makeTextHalfBold(boldWholeValue: Boolean = false) {
 }
 
 fun loadDbWavesBalance(): AssetBalanceResponse {
-    return find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    return find(com.wavesplatform.sdk.utils.Constants.WAVES_ASSET_ID_EMPTY)!!
 }
 
 fun find(assetId: String): AssetBalanceResponse? {

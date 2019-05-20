@@ -38,7 +38,7 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
                         val notFavoriteList = it.filter { !it.isFavorite && !it.isSpam && !it.isHidden }
                                 .sortedBy { it.position }
                                 .mapTo(mutableListOf()) {
-                                    AssetSortingItem(AssetSortingItem.TYPE_DEFAULT_ITEM, it)
+                                    AssetSortingItem(AssetSortingItem.TYPE_DEFAULT_ITEM, it.convertFromDb())
                                 }
 
                         val hiddenList = it.filter { it.isHidden }

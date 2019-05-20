@@ -23,7 +23,6 @@ import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.local.TabItem
-import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalanceResponse // todo check
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.custom.FadeInWithoutDelayAnimator
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
@@ -198,7 +197,7 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
         common_tab_layout.currentTab = 0
     }
 
-    private fun addToListOf(listType: Int, globalItem: AssetSortingItem, asset: AssetBalance, linePosition: Int) {
+    private fun addToListOf(listType: Int, globalItem: AssetSortingItem, asset: AssetBalanceResponse, linePosition: Int) {
         globalItem.type = listType
         globalItem.asset = asset
 
@@ -240,8 +239,8 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             recycle_assets.itemAnimator = itemAnimator
         }
 
-        item.asset.save()
-        AssetBalanceStore(item.asset.assetId, item.asset.isHidden, item.asset.position,
+        AssetBalanceDb(item.asset).save()
+        AssetBalanceStoreDb(item.asset.assetId, item.asset.isHidden, item.asset.position,
                 item.asset.isFavorite).save()
     }
 
