@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Eduard Zaydel on 16/5/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <gradient
+        android:angle="180"
+        android:startColor="#F8F9FB"
+        android:centerColor="#B3F8F9FB"
+        android:endColor="#00F8F9FB"/>
+
+</shape>

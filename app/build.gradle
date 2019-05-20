@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
-apply plugin: 'io.sentry.android.gradle'
+//apply plugin: 'io.sentry.android.gradle'
 apply from: 'api-keys.properties'
 
 def getGitHash = { ->
@@ -59,22 +59,8 @@ android {
     splits {
         // Configures multiple APKs based on ABI.
         abi {
-            def isReleaseBuild = false
-
-            gradle.startParameter.taskNames.find {
-                // Enable split for release builds in different build flavors
-                // (assembleProdRelease, assembleDevRelease, etc.).
-                if (it ==~ /:app:assemble.*Release/) {
-                    isReleaseBuild = true
-                    return true // break
-                }
-
-                return false // continue
-            }
-
             // Enables building multiple APKs per ABI.
-            enable isReleaseBuild
-//            enable true
+            enable true
 
             // By default all ABIs are included, so use reset() and include to specify that we only
             // want APKs for x86, armeabi-v7a, and mips.
@@ -91,9 +77,9 @@ android {
     buildTypes {
         release {
             debuggable false
-            minifyEnabled false
+            minifyEnabled true
             zipAlignEnabled true
-            shrinkResources false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled true
             signingConfig signingConfigs.config
@@ -196,10 +182,10 @@ android {
 }
 
 
-sentry {
-    autoProguardConfig true
-    autoUpload true
-}
+//sentry {
+//    autoProguardConfig false
+//    autoUpload false
+//}
 
 def getAppName() {
     def stringsFile = file("./src/main/res/values/strings.xml")

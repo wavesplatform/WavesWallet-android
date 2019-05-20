@@ -22,7 +22,6 @@ import android.os.Parcelable
 import android.provider.Settings
 import android.support.annotation.ColorRes
 import android.support.annotation.IdRes
-import android.support.annotation.NonNull
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -38,10 +37,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
 import android.util.Patterns
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -80,6 +76,31 @@ val filterEmptySpace = InputFilter { source, start, end, dest, dstart, dend ->
         return@InputFilter ""
     }
     null
+}
+
+inline fun <T : View> T.afterMeasured(crossinline f: T.() -> Unit) {
+    viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            if (measuredWidth > 0 && measuredHeight > 0) {
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+                f()
+            }
+        }
+    })
+}
+
+fun View.animateVisible() {
+    this.animate()
+            .alpha(Constants.View.FULL_VISIBILITY)
+            .setDuration(Constants.View.DEFAULT_ANIMATION_DURATION)
+            .start()
+}
+
+fun View.animateInvisible() {
+    this.animate()
+            .alpha(Constants.View.FULL_GONE)
+            .setDuration(Constants.View.DEFAULT_ANIMATION_DURATION)
+            .start()
 }
 
 fun EditText.applyFilterStartWithDot() {
@@ -601,22 +622,20 @@ fun View.setMargins(
     layoutParams = lp
 }
 
-fun TextView.makeTextHalfBold() {
-    val textBefore = this.text.toString().substringBefore(" ")
-    val textAfter = if (text.indexOf(" ") != -1) {
+fun TextView.makeTextHalfBold(boldWholeValue: Boolean = false) {
+    val value = this.text.toString().substringBefore(" ")
+    val tokenName = if (text.indexOf(" ") != -1) {
         this.text.toString().substringAfter(" ")
     } else {
         ""
     }
-    val str = SpannableStringBuilder(textBefore)
-    if (textBefore.indexOf(".") != -1) {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    } else if (textBefore.indexOf(" ") != -1) {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    } else {
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, textBefore.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    val str = SpannableStringBuilder(value)
+    when {
+        value.indexOf(".") != -1 && !boldWholeValue -> str.setSpan(StyleSpan(Typeface.BOLD), 0, value.indexOf("."), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        value.indexOf(" ") != -1 -> str.setSpan(StyleSpan(Typeface.BOLD), 0, value.indexOf(" "), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        else -> str.setSpan(StyleSpan(Typeface.BOLD), 0, value.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
-    this.text = str.append(" $textAfter")
+    this.text = str.append(" $tokenName")
 }
 
 fun findMyOrder(first: Order, second: Order, address: String?): Order {

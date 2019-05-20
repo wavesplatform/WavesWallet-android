@@ -20,7 +20,7 @@
   <string name="address_book_search">Ara</string>
   <string name="address_book_success_deleted">Adres silindi</string>
   <string name="address_book_toolbar_title">Adres defteri</string>
-  <string name="addresses">Kripto paralar</string>
+  <string name="addresses">Tokenler</string>
   <string name="addresses_and_keys_aliases">Takma adlar</string>
   <string name="addresses_and_keys_private_key">Özel anahtar</string>
   <string name="addresses_and_keys_public_key">Genel anahtar</string>
@@ -42,7 +42,7 @@
   <string name="asset_details_cryptocurrency">Kripto para</string>
   <string name="asset_details_decimal">Ondalık</string>
   <string name="asset_details_description">Tanım</string>
-  <string name="asset_details_error_perfom_transaction">Bu kripto para ile işlem yapamazsınız</string>
+  <string name="asset_details_error_perfom_transaction">Bu token ile işlem yapamazsınız</string>
   <string name="asset_details_fiat_money">İtibari para</string>
   <string name="asset_details_id">ID</string>
   <string name="asset_details_in_order">Emir girilmiş</string>
@@ -200,9 +200,9 @@
   <string name="dex_last_update_value">Son güncelleme: %s</string>
   <string name="dex_market_empty">Burada hiçbir şey yok…</string>
   <string name="dex_market_toolbar_title">Pazarlar</string>
-  <string name="dex_markets_info_dialog_amount_asset">Kripto para miktarı — %s</string>
+  <string name="dex_markets_info_dialog_amount_asset">Token miktarı — %s</string>
   <string name="dex_markets_info_dialog_popular">Popüler</string>
-  <string name="dex_markets_info_dialog_price_asset">Kripto para fiyatı — %s</string>
+  <string name="dex_markets_info_dialog_price_asset">Token fiyatı — %s</string>
   <string name="dex_markets_list_search">Ara</string>
   <string name="dex_markets_list_toolbar_title">Pazarlar</string>
   <string name="dex_sorting_empty">Burada hiçbir şey yok…</string>
@@ -260,7 +260,7 @@
   <string name="history_details_active_now">ŞU ANDA AKTİF</string>
   <string name="history_details_add_address">Adresi kaydet</string>
   <string name="history_details_amount_per_transaction">işlem başına düşen miktar</string>
-  <string name="history_details_asset">Kripto Para</string>
+  <string name="history_details_asset">Token</string>
   <string name="history_details_block">Blok</string>
   <string name="history_details_cancel_leasing">Kiralamayı İptal et</string>
   <string name="history_details_completed">TAMAMLANMIŞ</string>
@@ -271,7 +271,7 @@
   <string name="history_details_edit_address">Adı düzenle</string>
   <string name="history_details_exchange_price">Fiyat</string>
   <string name="history_details_fee">Komisyon</string>
-  <string name="history_details_id">Kripto Para ID</string>
+  <string name="history_details_id">Token ID</string>
   <string name="history_details_leasing_from">\'den gelen kiralama</string>
   <string name="history_details_leasing_to">Kiralanan</string>
   <string name="history_details_node_address">Tam düğüm adresi</string>
@@ -465,7 +465,7 @@
   <string name="receive_address_your_qr_code">QR kodun</string>
   <string name="receive_amount">Miktar</string>
   <string name="receive_amount_title">Miktar %1$s</string>
-  <string name="receive_asset">Kripto para</string>
+  <string name="receive_asset">Token</string>
   <string name="receive_card">Kredi Kartı</string>
   <string name="receive_contact_msg">Eğer doğrulama veya ödeme işlemlerinde bir problem ile karşılaşırsanız Coinomat destek ekibi ile irtibata geçin. — support@coinomat.com</string>
   <string name="receive_contact_msg_key">support@coinomat.com</string>
@@ -489,7 +489,7 @@
   <string name="receive_minimum_amount">Minimum yatırma miktarı %1$s %2$s</string>
   <string name="receive_not_verified">Hesabının doğrulanmamış</string>
   <string name="receive_payment_method">Ödeme metodu</string>
-  <string name="receive_sellect_asset">Listeden kripto parayı seçin</string>
+  <string name="receive_sellect_asset">Listeden tokeninizi seçin</string>
   <string name="receive_step_1">Aşama 1</string>
   <string name="receive_step_1_msg">SEPA transferi aracılığı ile EURO gönderebilmek için partnerimiz IDNow.eu tarafından onaylanmanız gerekmektedir.</string>
   <string name="receive_step_1_msg_link">IDNow.eu</string>
@@ -503,8 +503,8 @@
   <string name="receive_warning_will_send">Eğer %1$s %2$s den daha az gönderirseniz paranızı kaybedersiniz.</string>
   <string name="receive_will_send_other_currency">Bu adrese başka bir kripto para gönderilmesi kayıplara yol açabilir.</string>
   <string name="scripted_account_error_dialog_btn_txt">Tamam</string>
-  <string name="scripted_account_error_dialog_description">Scriptli bir hesap üzerinde çalışmak için Waves Client\'ı kullanın</string>
-  <string name="scripted_account_error_dialog_title">Hesabınıza script yüklendi</string>
+  <string name="scripted_account_error_dialog_description">Scriptli bir hesap/token üzerinde çalışmak için Waves Client\'ı kullanın</string>
+  <string name="scripted_account_error_dialog_title">Hesabınıza veya tokeninize script yüklendi</string>
   <string name="secret_phrase_back_up_now">Şimdi yedekle</string>
   <string name="secret_phrase_do_it_later">Daha sonra yap</string>
   <string name="secret_phrase_no_backup_no_money">Yedek yoksa, para da yok!</string>
@@ -512,7 +512,7 @@
   <string name="sell_btn_txt">Sat %s</string>
   <string name="send_amount">Miktar</string>
   <string name="send_amount_error_insufficient_funds">Yetersiz bakiye</string>
-  <string name="send_asset">Kripto para</string>
+  <string name="send_asset">Token</string>
   <string name="send_choose_from_address_book">Adres defterinden seç</string>
   <string name="send_confirmation_confirm">Onayla</string>
   <string name="send_confirmation_description">Tanım</string>
@@ -540,10 +540,10 @@
   <string name="send_progress_sending">Gönderiliyor…</string>
   <string name="send_recipient">Alıcı</string>
   <string name="send_recipient_address_hint">Alıcı adresi…</string>
-  <string name="send_recipient_asset_is_not_valid">Bu kripto para geçerli değil</string>
+  <string name="send_recipient_asset_is_not_valid">Bu token geçerli değil</string>
   <string name="send_recipient_the_address_is_not_valid">Adres geçerli değil</string>
   <string name="send_select_your_asset">Kripto paranızı seçin</string>
-  <string name="send_spam_error">Şüpheli olarak işaretlenen kripto paraya kaynak aktaramazsınız</string>
+  <string name="send_spam_error">Şüpheli olarak işaretlenen tokene kaynak aktaramazsınız</string>
   <string name="send_success_do_you_want_to_save_this_address">Bu adresi kaydetmek istiyor musunuz?</string>
   <string name="send_success_okay">Tamam</string>
   <string name="send_success_you_have_sent_sum">%1$s %2$s gönderdiniz</string>
@@ -595,10 +595,10 @@
   <string name="use_fingerprint_submit_txt">Parmak izi kullan</string>
   <string name="use_fingerprint_subtitle">Daha hızlı ve daha kolay giriş yapmak için parmak izini kullan</string>
   <string name="use_fingerprint_title">Giriş yapmak için parmak izi kullanılsın mı?</string>
-  <string name="wallet_assets">Kripto paralar</string>
-  <string name="wallet_assets_hidden_category">Gizlenmiş kripto paralar (%1$s)</string>
-  <string name="wallet_assets_my_asset">/ Benim kripto param</string>
-  <string name="wallet_assets_spam_category">Şüpheli kripto paralar (%1$s)</string>
+  <string name="wallet_assets">Tokenler</string>
+  <string name="wallet_assets_hidden_category">Gizlenmiş tokenler (%1$s)</string>
+  <string name="wallet_assets_my_asset">/ Benim tokenim</string>
+  <string name="wallet_assets_spam_category">Şüpheli tokenler (%1$s)</string>
   <string name="wallet_assets_spam_tag">Şüpheli</string>
   <string name="wallet_leasing">Kiralama</string>
   <string name="wallet_leasing_active_now">Şu anda aktif (%1$s)</string>
@@ -615,7 +615,7 @@
   <string name="wallet_sorting_toolbar_title">Sıralama</string>
   <string name="wallet_sorting_toolbar_visibility_action">Görülebilirlik</string>
   <string name="wallet_toolbar_title">Cüzdan</string>
-  <string name="welcome_blockchain_description">Kripto para dünyasının hızla büyüyen alanının bir parçası olun. Kripto paralarınıza sizden başkası erişemez.</string>
+  <string name="welcome_blockchain_description">Kripto para dünyasının hızla büyüyen alanının bir parçası olun. Tokenlerinize sizden başkası erişemez.</string>
   <string name="welcome_blockchain_title">Blok zincirinin bir parçası olun</string>
   <string name="welcome_create_import_description">Kod eşleme veya manuel</string>
   <string name="welcome_create_import_title">Hesabı içe aktar</string>
@@ -626,7 +626,7 @@
   <string name="welcome_dex_title">Merkezsiz Borsa</string>
   <string name="welcome_token_description">Üreteceğiniz kripto paralarınızı merkezsiz oylamalar, derecelendirme sistemleri veya sadakat programları gibi amaçlar için de kullanabilirsiniz.</string>
   <string name="welcome_token_title">Kendi Kripto Paranızı Yaratın</string>
-  <string name="welcome_wallet_description">Dijital varlıklarınızı kolay ve güvenli bir şekilde saklayın, yönetin veya kiralayın!</string>
+  <string name="welcome_wallet_description">Dijital tokenlerinizi kolay ve güvenli bir şekilde saklayın, yönetin veya kiralayın!</string>
   <string name="welcome_wallet_title">Cüzdan</string>
   <string name="whats_new_next">Sonraki</string>
   <string name="whats_new_okay">Tamam</string>
@@ -634,8 +634,8 @@
   <string name="your_address_your_qr_code">QR kodun</string>
   <string name="your_asset_activity_all">Tamamı</string>
   <string name="your_asset_activity_greater_zero">İçinde bakiye bulunan</string>
-  <string name="your_assets_empty_state">Burada bir şey yok…\nİçinde bakiye bulunan kripto paranız bulunmamaktadır.</string>
-  <string name="your_assets_toolbar_title">Kripto paraların</string>
+  <string name="your_assets_empty_state">Burada bir şey yok…\nİçinde bakiye bulunan tokeniniz bulunmamaktadır.</string>
+  <string name="your_assets_toolbar_title">Tokenleriniz</string>
   <string name="confirm_card_tutorial_submit">Başla</string>
   <string name="confirm_card_tutorial_title">Onayla ve Başla</string>
   <string name="confirm_card_tutorial_terms_and_conditions">Koşullar ve şartlar</string>
@@ -654,13 +654,16 @@
   <string name="my_orders_details_amount_hint">Miktar</string>
   <string name="my_orders_details_price_hint">Fiyat</string>
   <string name="my_orders_details_total_hint">Toplam</string>
+  <string name="clean_banner_title">Daha fazla karışıklık yok!</string>
+  <string name="clean_banner_description">Cüzdanınızı temiz ve düzenli tutmanız için tokenlerinizin gösterimini yeniden tasarladık! Tokenlerinizi istediğiniz gibi özelleştirebilirsiniz.</string>
   <string name="search_asset_hint">Ara</string>
   <string name="search_asset_cancel">İptal</string>
-  <string name="search_asset_empty">Böyle bir varlığınız bulunmamaktadır</string>
+  <string name="search_asset_empty">Böyle bir tokeniniz bulunmamaktadır</string>
   <string name="history_type_script_invocation">Script çağırma</string>
   <string name="history_details_script_invocation_payment">Ödeme</string>
   <string name="history_details_script_invocation_script_address">Script adresi</string>
   <string name="need_update_alert_title">Uygulamayı güncellemenin zamanı geldi!</string>
   <string name="need_update_alert_description">Waves cüzdanını daha iyi ve daha kullaşılı yapmak için çalışıyoruz. Yeni özellikler için uygulamayı güncelleyin.</string>
-  <string name="search_asset_hidden_title">Gizlenmiş kripto paralar</string>
+  <string name="search_asset_hidden_title">Gizlenmiş tokenler</string>
+  <string name="my_orders_details_filled_hint">Doldurulan</string>
 </resources>

@@ -13,6 +13,7 @@ import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
@@ -503,11 +504,11 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 val view = inflater?.inflate(R.layout.fragment_bottom_sheet_script_invocation_layout, historyContainer, false)
 
                 view?.let {
-                    view.text_script_address_value?.text = transaction.dappAddress
+                    view.text_script_address_value?.text = transaction.dApp
 
                     val payment = transaction.payment.firstOrNull()
 
-                    if (payment != null){
+                    if (payment != null) {
                         view.relative_payment.visiable()
                         if (isShowTicker(payment.assetId)) {
                             view.text_payment_value?.text = MoneyUtil.getScaledText(payment.amount, payment.asset).stripZeros()
@@ -519,7 +520,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                         } else {
                             view.text_payment_value?.text = "${MoneyUtil.getScaledText(payment.amount, payment.asset).stripZeros()} ${payment.asset?.name}"
                         }
-                    }else{
+                    } else {
                         view.relative_payment.gone()
                     }
 
