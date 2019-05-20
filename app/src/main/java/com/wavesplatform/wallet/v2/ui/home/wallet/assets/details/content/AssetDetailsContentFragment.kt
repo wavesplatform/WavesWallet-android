@@ -261,12 +261,12 @@ class AssetDetailsContentFragment : BaseFragment(), AssetDetailsContentView {
 
     private fun enableView(view: View) {
         view.isClickable = true
-        view.alpha = Constants.ENABLE_VIEW
+        view.alpha = Constants.View.ENABLE_VIEW
     }
 
     private fun disableView(view: View) {
         view.isClickable = false
-        view.alpha = Constants.DISABLE_VIEW
+        view.alpha = Constants.View.DISABLE_VIEW
     }
 
     override fun onDestroyView() {

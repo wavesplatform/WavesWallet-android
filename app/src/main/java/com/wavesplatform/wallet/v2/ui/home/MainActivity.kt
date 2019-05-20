@@ -344,10 +344,10 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
         super.onNetworkConnectionChanged(networkConnected)
         if (networkConnected) {
             // enable quick action tab
-            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.ENABLE_VIEW
+            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.View.ENABLE_VIEW
         } else {
             // disable quick action tab
-            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.DISABLE_VIEW
+            tab_navigation.getTabAt(QUICK_ACTION_SCREEN)?.customView?.alpha = Constants.View.DISABLE_VIEW
         }
     }
 
