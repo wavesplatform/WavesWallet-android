@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by Eduard Zaydel on 26/4/2019
+  ~ Copyright © 2019 Waves Platform. All rights reserved.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="44dp"
+    android:paddingBottom="44dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        tools:src="@drawable/ic_favorite_14_submit_300" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_empty"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="14dp"
+        android:textColor="@color/basic500"
+        android:textSize="12sp"
+        tools:text="@string/wallet_sorting_favorite_empty" />
+
+</LinearLayout>
