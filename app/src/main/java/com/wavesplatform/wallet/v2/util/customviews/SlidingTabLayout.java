@@ -1,4 +1,4 @@
-package com.wavesplatform.wallet.v1.ui.customviews;
+package com.wavesplatform.wallet.v2.util.customviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;

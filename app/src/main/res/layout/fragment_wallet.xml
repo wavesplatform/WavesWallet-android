@@ -26,7 +26,7 @@
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"/>
 
         <!--Custom realization, look original at com.flyco.tablayout-->
-        <com.wavesplatform.wallet.v1.ui.customviews.SlidingTabLayout
+        <com.wavesplatform.wallet.v2.util.customviews.SlidingTabLayout
             android:id="@+id/stl_wallet"
             android:layout_width="match_parent"
             android:layout_height="32dp"
