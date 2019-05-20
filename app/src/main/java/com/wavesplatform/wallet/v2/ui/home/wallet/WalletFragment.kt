@@ -6,13 +6,16 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet
 
 import android.content.Intent
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.R // todo check
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
@@ -69,14 +72,13 @@ class WalletFragment : BaseFragment(), WalletView {
     private fun setupUI() {
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
-        stl_wallet.currentTab = 0
 
         viewpager_wallet.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(p0: Int) {
                 // do nothing
             }
 
-            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 // do nothing
             }
 
@@ -89,6 +91,8 @@ class WalletFragment : BaseFragment(), WalletView {
                 enableElevation(enable)
             }
         })
+
+        stl_wallet.setCurrentTab(0, false)
     }
 
     private fun enableElevation(enable: Boolean) {

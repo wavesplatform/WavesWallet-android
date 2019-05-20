@@ -32,7 +32,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.settings.SettingsActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.settings.DevOptionsActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.ReceiveActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.about_redirection.AboutRedirectionActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
@@ -260,5 +260,5 @@ abstract class ActivityModule {
 
     @PerActivity
     @ContributesAndroidInjector
-    internal abstract fun settingsActivity(): SettingsActivity
+    internal abstract fun devOptionsActivity(): DevOptionsActivity
 }

@@ -5,6 +5,6 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
-class SettingsPresenter @Inject constructor() : BasePresenter<SettingsView>() {
+class DevOptionsPresenter @Inject constructor() : BasePresenter<DevOptionsView>() {
 
 }
