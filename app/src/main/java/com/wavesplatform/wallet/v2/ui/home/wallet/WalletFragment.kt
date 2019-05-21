@@ -6,9 +6,6 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet
 
 import android.content.Intent
-import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -18,7 +15,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
-import com.wavesplatform.wallet.v1.util.ViewUtils
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
@@ -95,8 +91,6 @@ class WalletFragment : BaseFragment(), WalletView {
         })
 
         stl_wallet.setCurrentTab(0, false)
-
-        afterCheckClearedWallet()
     }
 
     private fun enableElevation(enable: Boolean) {
