@@ -11,6 +11,7 @@ import android.graphics.Rect
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -94,6 +95,8 @@ class WalletFragment : BaseFragment(), WalletView {
         })
 
         stl_wallet.setCurrentTab(0, false)
+
+        afterCheckClearedWallet()
     }
 
     private fun enableElevation(enable: Boolean) {
@@ -115,6 +118,7 @@ class WalletFragment : BaseFragment(), WalletView {
                     openAppInPlayMarket()
                 }
             }.show()
+            setScrollAlert(true)
         }
     }
 
@@ -127,8 +131,20 @@ class WalletFragment : BaseFragment(), WalletView {
                 info_alert.hide()
                 presenter.prefsUtil.setValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, true)
                 presenter.showTopBannerIfNeed()
+                setScrollAlert(true)
             }
         }.show()
+        setScrollAlert(false)
+    }
+
+    private fun setScrollAlert(scroll: Boolean) {
+        val params = info_alert?.layoutParams as AppBarLayout.LayoutParams
+        params.scrollFlags = if (scroll) {
+            AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
+        } else {
+            AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+        }
+        info_alert.layoutParams = params
     }
 
     private fun openAppInPlayMarket() {
