@@ -116,13 +116,14 @@ class AssetAvatarView : AppCompatImageView {
 
     private fun getColorBackgroundBy(assetId: String): Int {
         if (TextUtils.isEmpty(assetId)) {
-            return Constants.alphabetColor[0]
+            return com.wavesplatform.wallet.v2.data.Constants.alphabetColor[0]
         }
         val sum = assetId.split("")
                 .filter { it != "" }
                 .map { char -> char.codePointAt(0) }
                 .reduce { acc, code -> acc + code }
-        return Constants.alphabetColor[sum % Constants.alphabetColor.size]
+        return com.wavesplatform.wallet.v2.data.Constants.alphabetColor[
+                sum % com.wavesplatform.wallet.v2.data.Constants.alphabetColor.size]
     }
 
     /*
