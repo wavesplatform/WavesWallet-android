@@ -167,6 +167,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             if (position == 0) {
+                analytics.trackEvent(AnalyticEvents.WalletTokenSearchEvent)
                 launchActivity<SearchAssetActivity>(withoutAnimation = true)
                 activity!!.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             } else {
