@@ -29,6 +29,7 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.net.CallAdapterFactory
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.RetrofitException
 import com.wavesplatform.wallet.App
@@ -37,7 +38,6 @@ import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.local.PreferencesHelper
 import com.wavesplatform.wallet.v2.data.manager.ErrorManager
-import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.ui.auth.passcode.enter.EnterPassCodeActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
@@ -48,11 +48,11 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
+import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.content_no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
@@ -86,7 +86,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
     @Inject
     lateinit var mErrorManager: ErrorManager
     @Inject
-    lateinit var nodeDataManager: NodeDataManager
+    lateinit var dataManager: BaseDataManager
     @Inject
     lateinit var preferencesHelper: PreferencesHelper
 
@@ -136,14 +136,17 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                     it.printStackTrace()
                 }))
 
-        Wavesplatform.setOnErrorListener(object : OnErrorListener {
+
+        val onErrorListener = object : OnErrorListener {
             override fun onError(exception: RetrofitException) {
                 // todo Check Errors to show or log
                 val retrySubject = PublishSubject.create<Events.RetryEvent>()
                 mErrorManager.handleError(exception, retrySubject)
                 SentryHelper.logException(exception)
             }
-        })
+        }
+        Wavesplatform.setOnErrorListener(onErrorListener)
+        dataManager.coinomatService = CoinomatManager.create(CallAdapterFactory(onErrorListener))
     }
 
     protected fun exit() {

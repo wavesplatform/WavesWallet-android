@@ -28,6 +28,8 @@ import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.service.*
 import com.wavesplatform.sdk.utils.EnvironmentManager
 import retrofit2.CallAdapter
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.util.*
 
 class Wavesplatform private constructor(var context: Application, factory: CallAdapter.Factory?) {
@@ -182,18 +184,20 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         }
 
         @JvmStatic
+        fun getMatcherService(): MatcherService {
+            return Wavesplatform.get().dataManager.matcherService
+        }
+
+        @JvmStatic
         fun getGithubService(): GithubService {
             return Wavesplatform.get().dataManager.githubService
         }
 
         @JvmStatic
-        fun getCoinomatService(): CoinomatService {
-            return Wavesplatform.get().dataManager.coinomatService
-        }
-
-        @JvmStatic
-        fun getMatcherService(): MatcherService {
-            return Wavesplatform.get().dataManager.matcherService
+        fun createService(baseUrl: String,
+                          adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create())
+                : Retrofit {
+            return Wavesplatform.get().dataManager.createRetrofit(baseUrl, adapterFactory)
         }
 
         /**

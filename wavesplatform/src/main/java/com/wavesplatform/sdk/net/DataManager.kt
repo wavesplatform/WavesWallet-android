@@ -34,7 +34,6 @@ open class DataManager(var context: Context,
     lateinit var apiService: ApiService
     lateinit var matcherService: MatcherService
     lateinit var githubService: GithubService
-    lateinit var coinomatService: CoinomatService
     private var cookies: HashSet<String> = hashSetOf()
 
     init {
@@ -44,33 +43,23 @@ open class DataManager(var context: Context,
     private fun createServices() {
         nodeService = createRetrofit(
                 Constants.URL_NODE,
-                createClient(),
-                adapterFactory ?: RxJava2CallAdapterFactory.create(),
-                createGsonFactory()).create(NodeService::class.java)
+                adapterFactory ?: RxJava2CallAdapterFactory.create())
+                .create(NodeService::class.java)
 
         apiService = createRetrofit(
                 Constants.URL_DATA,
-                createClient(),
-                adapterFactory ?: RxJava2CallAdapterFactory.create(),
-                createGsonFactory()).create(ApiService::class.java)
+                adapterFactory ?: RxJava2CallAdapterFactory.create())
+                .create(ApiService::class.java)
 
         matcherService = createRetrofit(
                 Constants.URL_MATCHER,
-                createClient(),
-                adapterFactory ?: RxJava2CallAdapterFactory.create(),
-                createGsonFactory()).create(MatcherService::class.java)
+                adapterFactory ?: RxJava2CallAdapterFactory.create())
+                .create(MatcherService::class.java)
 
         githubService = createRetrofit(
                 Constants.URL_SPAM_FILE,
-                createClient(),
-                adapterFactory ?: RxJava2CallAdapterFactory.create(),
-                createGsonFactory()).create(GithubService::class.java)
-
-        coinomatService = createRetrofit(
-                Constants.URL_COINOMAT,
-                createClient(),
-                adapterFactory ?: RxJava2CallAdapterFactory.create(),
-                createGsonFactory()).create(CoinomatService::class.java)
+                adapterFactory ?: RxJava2CallAdapterFactory.create())
+                .create(GithubService::class.java)
     }
 
     fun setCallAdapterFactory(adapterFactory: CallAdapter.Factory) {
@@ -78,17 +67,15 @@ open class DataManager(var context: Context,
         createServices()
     }
 
-    private fun createRetrofit(
+    fun createRetrofit(
             baseUrl: String,
-            client: OkHttpClient,
-            adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create(),
-            gsonFactory: GsonConverterFactory): Retrofit {
+            adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create()): Retrofit {
         val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .client(client)
+                .client(createClient())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(adapterFactory)
-                .addConverterFactory(gsonFactory)
+                .addConverterFactory(createGsonFactory())
                 .build()
         RetrofitCache.getInstance().addRetrofit(retrofit)
         return retrofit
