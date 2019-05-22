@@ -37,7 +37,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.addresses.AddressesAndKeysAct
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.settings.SettingsActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.settings.DevOptionsActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.welcome.WelcomeActivity
 import com.wavesplatform.wallet.v2.util.*
@@ -117,7 +117,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         if (BuildConfig.DEBUG) {
             settings.visiable()
             settings.click {
-                launchActivity<SettingsActivity>()
+                launchActivity<DevOptionsActivity>()
             }
         }
 
