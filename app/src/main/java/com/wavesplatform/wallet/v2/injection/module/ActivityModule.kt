@@ -32,7 +32,7 @@ import com.wavesplatform.wallet.v2.ui.home.profile.backup.BackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.backup.confirm.ConfirmBackupPhraseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.change_password.ChangePasswordActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.network.NetworkActivity
-import com.wavesplatform.wallet.v2.ui.home.profile.settings.SettingsActivity
+import com.wavesplatform.wallet.v2.ui.home.profile.settings.DevOptionsActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.ReceiveActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.about_redirection.AboutRedirectionActivity
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.address_view.ReceiveAddressViewActivity
@@ -49,6 +49,7 @@ import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.start.confirmation.Con
 import com.wavesplatform.wallet.v2.ui.home.wallet.your_assets.YourAssetsActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageActivity
 import com.wavesplatform.wallet.v2.ui.language.choose.ChooseLanguageActivity
+import com.wavesplatform.wallet.v2.ui.home.wallet.assets.search_asset.SearchAssetActivity
 import com.wavesplatform.wallet.v2.ui.splash.SplashActivity
 import com.wavesplatform.wallet.v2.ui.success.SuccessActivity
 import com.wavesplatform.wallet.v2.ui.tutorial.TutorialActivity
@@ -255,5 +256,9 @@ abstract class ActivityModule {
 
     @PerActivity
     @ContributesAndroidInjector
-    internal abstract fun settingsActivity(): SettingsActivity
+    internal abstract fun searchAssetActivity(): SearchAssetActivity
+
+    @PerActivity
+    @ContributesAndroidInjector
+    internal abstract fun devOptionsActivity(): DevOptionsActivity
 }

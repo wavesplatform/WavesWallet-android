@@ -9,31 +9,26 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
-import android.view.View
+import android.support.v4.view.ViewCompat
+import android.support.v4.view.ViewPager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
-import com.wavesplatform.wallet.v2.ui.home.history.tab.HistoryTabFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
-import com.wavesplatform.wallet.v2.util.notNull
 import kotlinx.android.synthetic.main.fragment_wallet.*
-import pers.victor.ext.gone
-import pers.victor.ext.visiable
-import pyxis.uzuki.live.richutilskt.utils.runDelayed
 import javax.inject.Inject
 
 
-class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabBarVisibilityListener {
+class WalletFragment : BaseFragment(), WalletView {
 
     @Inject
     @InjectPresenter
     lateinit var presenter: WalletPresenter
     private lateinit var adapter: WalletFragmentPageAdapter
-    private var onElevationAppBarChangeListener: MainActivity.OnElevationAppBarChangeListener? = null
 
     @ProvidePresenter
     fun providePresenter(): WalletPresenter = presenter
@@ -46,13 +41,19 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
         val assetsFragment = AssetsFragment.newInstance()
         val leasingFragment = LeasingFragment.newInstance()
 
-        assetsFragment.changeTabBarVisibilityListener = this
-        leasingFragment.changeTabBarVisibilityListener = this
+        val elevationAppBarChangeListener = object : MainActivity.OnElevationAppBarChangeListener {
+            override fun onChange(elevateEnable: Boolean) {
+                enableElevation(elevateEnable)
+            }
+        }
+
+        assetsFragment.elevationAppBarChangeListener = elevationAppBarChangeListener
+        leasingFragment.elevationAppBarChangeListener = elevationAppBarChangeListener
 
         adapter = WalletFragmentPageAdapter(
                 childFragmentManager,
                 arrayListOf(assetsFragment, leasingFragment),
-                arrayOf(getString(com.wavesplatform.wallet.R.string.wallet_assets), getString(com.wavesplatform.wallet.R.string.wallet_leasing)))
+                arrayOf(getString(R.string.wallet_assets), getString(R.string.wallet_leasing)))
     }
 
     companion object {
@@ -63,56 +64,40 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
 
     override fun onViewReady(savedInstanceState: Bundle?) {
         setupUI()
-
         presenter.showTopBannerIfNeed()
-    }
-
-    fun setOnElevationChangeListener(listener: MainActivity.OnElevationAppBarChangeListener) {
-        this.onElevationAppBarChangeListener = listener
     }
 
     private fun setupUI() {
         viewpager_wallet.adapter = adapter
         stl_wallet.setViewPager(viewpager_wallet)
-        stl_wallet.currentTab = 0
-        appbar_layout.addOnOffsetChangedListener(
-                AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
-                    onElevationAppBarChangeListener.notNull {
-                        presenter.hideShadow = verticalOffset == 0
-                        onElevationAppBarChangeListener?.onChange(presenter.hideShadow)
-                        viewpager_wallet.setPagingEnabled(presenter.hideShadow)
-                    }
-                })
-    }
 
-    override fun changeTabBarVisibility(show: Boolean, onlyExpand: Boolean) {
-        if (show) {
-            appbar_layout.setExpanded(true, false)
-            if (!onlyExpand) {
-                appbar_layout.visiable()
+        viewpager_wallet.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(p0: Int) {
+                // do nothing
             }
-        } else {
-            if (appbar_layout.visibility != View.GONE) {
-                appbar_layout.setExpanded(false, false)
-                if (!onlyExpand) {
-                    runDelayed(100) {
-                        appbar_layout.gone()
-                    }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                // do nothing
+            }
+
+            override fun onPageSelected(position: Int) {
+                val enable = if (position == 0) {
+                    (adapter.fragments[position] as AssetsFragment).presenter.enableElevation
+                } else {
+                    (adapter.fragments[position] as LeasingFragment).presenter.enableElevation
                 }
+                enableElevation(enable)
             }
-        }
+        })
+
+        stl_wallet.setCurrentTab(0, false)
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        if (!hidden) {
-            applyElevation()
-        }
-    }
-
-    private fun applyElevation() {
-        onElevationAppBarChangeListener?.let {
-            onElevationAppBarChangeListener?.onChange(presenter.hideShadow)
+    private fun enableElevation(enable: Boolean) {
+        if (enable) {
+            ViewCompat.setZ(wallet_appbar_layout, 8F)
+        } else {
+            ViewCompat.setZ(wallet_appbar_layout, 0F)
         }
     }
 
@@ -127,6 +112,7 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
                     openAppInPlayMarket()
                 }
             }.show()
+            setScrollAlert(true)
         }
     }
 
@@ -139,8 +125,20 @@ class WalletFragment : BaseFragment(), WalletView, HistoryTabFragment.ChangeTabB
                 info_alert.hide()
                 presenter.prefsUtil.setValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, true)
                 presenter.showTopBannerIfNeed()
+                setScrollAlert(false)
             }
         }.show()
+        setScrollAlert(true)
+    }
+
+    private fun setScrollAlert(scroll: Boolean) {
+        val params = info_alert?.layoutParams as AppBarLayout.LayoutParams
+        params.scrollFlags = if (scroll) {
+            AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+        } else {
+            AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
+        }
+        info_alert.layoutParams = params
     }
 
     private fun openAppInPlayMarket() {
