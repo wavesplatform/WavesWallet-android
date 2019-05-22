@@ -62,7 +62,7 @@ android {
         // Configures multiple APKs based on ABI.
         abi {
             // Enables building multiple APKs per ABI.
-            enable false
+            enable true
 
             // By default all ABIs are included, so use reset() and include to specify that we only
             // want APKs for x86, armeabi-v7a, and mips.
@@ -190,8 +190,8 @@ android {
 
 
 sentry {
-    autoProguardConfig true
-    autoUpload true
+    autoProguardConfig false
+    autoUpload false
 }
 
 def getAppName() {
