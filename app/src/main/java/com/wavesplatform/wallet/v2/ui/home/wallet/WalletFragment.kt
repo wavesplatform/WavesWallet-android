@@ -125,18 +125,18 @@ class WalletFragment : BaseFragment(), WalletView {
                 info_alert.hide()
                 presenter.prefsUtil.setValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, true)
                 presenter.showTopBannerIfNeed()
-                setScrollAlert(true)
+                setScrollAlert(false)
             }
         }.show()
-        setScrollAlert(false)
+        setScrollAlert(true)
     }
 
     private fun setScrollAlert(scroll: Boolean) {
         val params = info_alert?.layoutParams as AppBarLayout.LayoutParams
         params.scrollFlags = if (scroll) {
-            AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
-        } else {
             AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+        } else {
+            AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
         }
         info_alert.layoutParams = params
     }
