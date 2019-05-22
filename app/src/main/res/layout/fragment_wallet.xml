@@ -23,7 +23,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:visibility="gone"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"/>
+            app:layout_scrollFlags="snap"/>
 
         <!--Custom realization, look original at com.flyco.tablayout-->
         <com.wavesplatform.wallet.v2.util.customviews.SlidingTabLayout

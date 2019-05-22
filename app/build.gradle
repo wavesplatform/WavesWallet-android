@@ -7,7 +7,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "io.gitlab.arturbosch.detekt"
 apply plugin: 'realm-android'
-apply plugin: 'io.sentry.android.gradle'
+//apply plugin: 'io.sentry.android.gradle'
 apply from: 'api-keys.properties'
 apply from: "$rootDir/ktlint.gradle"
 apply from: "$rootDir/detekt.gradle"
@@ -62,7 +62,7 @@ android {
         // Configures multiple APKs based on ABI.
         abi {
             // Enables building multiple APKs per ABI.
-            enable true
+            enable gradle.startParameter.taskNames.contains("assembleProdRelease")
 
             // By default all ABIs are included, so use reset() and include to specify that we only
             // want APKs for x86, armeabi-v7a, and mips.
@@ -189,10 +189,10 @@ android {
 }
 
 
-sentry {
-    autoProguardConfig false
-    autoUpload false
-}
+//sentry {
+//    autoProguardConfig false
+//    autoUpload false
+//}
 
 def getAppName() {
     def stringsFile = file("./src/main/res/values/strings.xml")

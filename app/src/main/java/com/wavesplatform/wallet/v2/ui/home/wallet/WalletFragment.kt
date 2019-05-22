@@ -8,6 +8,7 @@ package com.wavesplatform.wallet.v2.ui.home.wallet
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -17,7 +18,7 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
 import com.wavesplatform.wallet.v2.ui.home.wallet.leasing.LeasingFragment
-import com.wavesplatform.wallet.v2.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.PrefsUtil // todo check
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import javax.inject.Inject
 
@@ -111,6 +112,7 @@ class WalletFragment : BaseFragment(), WalletView {
                     openAppInPlayMarket()
                 }
             }.show()
+            setScrollAlert(true)
         }
     }
 
@@ -123,8 +125,20 @@ class WalletFragment : BaseFragment(), WalletView {
                 info_alert.hide()
                 presenter.prefsUtil.setValue(PrefsUtil.KEY_IS_CLEARED_ALERT_ALREADY_SHOWN, true)
                 presenter.showTopBannerIfNeed()
+                setScrollAlert(false)
             }
         }.show()
+        setScrollAlert(true)
+    }
+
+    private fun setScrollAlert(scroll: Boolean) {
+        val params = info_alert?.layoutParams as AppBarLayout.LayoutParams
+        params.scrollFlags = if (scroll) {
+            AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+        } else {
+            AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
+        }
+        info_alert.layoutParams = params
     }
 
     private fun openAppInPlayMarket() {
