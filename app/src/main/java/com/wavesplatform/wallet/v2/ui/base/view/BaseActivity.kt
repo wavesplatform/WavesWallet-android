@@ -136,10 +136,9 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                     it.printStackTrace()
                 }))
 
-
+        // todo refactor without clients recreation & Check Errors to show or log
         val onErrorListener = object : OnErrorListener {
             override fun onError(exception: RetrofitException) {
-                // todo Check Errors to show or log
                 val retrySubject = PublishSubject.create<Events.RetryEvent>()
                 mErrorManager.handleError(exception, retrySubject)
                 SentryHelper.logException(exception)

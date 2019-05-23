@@ -88,7 +88,7 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         @JvmStatic
         @Throws(NullPointerException::class)
         fun generateSeed(): String {
-            return WalletManager.createWalletSeed(Wavesplatform.get().context)
+            return WalletManager.createWalletSeed()
         }
 
         /**
@@ -193,13 +193,6 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             return Wavesplatform.get().dataManager.githubService
         }
 
-        @JvmStatic
-        fun createService(baseUrl: String,
-                          adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create())
-                : Retrofit {
-            return Wavesplatform.get().dataManager.createRetrofit(baseUrl, adapterFactory)
-        }
-
         /**
          * Returns service for working with nodes
          * @see com.wavesplatform.sdk.net.service.NodeService
@@ -207,6 +200,13 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         @JvmStatic
         fun getNodeService(): NodeService {
             return Wavesplatform.get().dataManager.nodeService
+        }
+
+        @JvmStatic
+        fun createService(baseUrl: String,
+                          adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create())
+                : Retrofit {
+            return Wavesplatform.get().dataManager.createRetrofit(baseUrl, adapterFactory)
         }
 
         @JvmStatic

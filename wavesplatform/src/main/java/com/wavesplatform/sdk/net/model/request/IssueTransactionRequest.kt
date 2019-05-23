@@ -38,7 +38,7 @@ class IssueTransactionRequest(val senderPublicKey: String, val name: String?, de
                 ?: ArrayUtils.EMPTY_BYTE_ARRAY
         this.description = description ?: ""
         this.fee = MinFee.toLong()
-        this.id = Base58.encode(Hash.fastHash(toSignBytes()))
+        this.id = Base58.encode(Hash.blake2b(toSignBytes()))
     }
 
     fun toSignBytes(): ByteArray {

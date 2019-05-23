@@ -301,7 +301,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
 
             val key = addressBytes.slice(IntRange(0, 21))
             val check = addressBytes.slice(IntRange(22, 25))
-            val keyHash = Hash.secureHash(key.toByteArray())
+            val keyHash = Hash.keccak(key.toByteArray())
                     .toList()
                     .slice(IntRange(0, 3))
 
