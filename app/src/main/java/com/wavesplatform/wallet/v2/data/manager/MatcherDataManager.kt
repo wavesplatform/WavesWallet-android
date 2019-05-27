@@ -16,7 +16,7 @@ import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
 import com.wavesplatform.sdk.net.model.request.CancelOrderRequest
 import com.wavesplatform.sdk.net.model.request.OrderRequest
 import com.wavesplatform.sdk.net.model.response.*
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.util.PrefsUtil

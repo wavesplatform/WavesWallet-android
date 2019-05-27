@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.PrefsUtil

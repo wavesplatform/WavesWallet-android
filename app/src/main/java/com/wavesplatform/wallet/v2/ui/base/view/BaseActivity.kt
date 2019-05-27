@@ -32,6 +32,7 @@ import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.net.CallAdapterFactory
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.RetrofitException
+import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
@@ -53,6 +54,7 @@ import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.v2.data.helpers.SentryHelper
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
+import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.content_no_internet_bottom_message_layout.view.*
 import org.fingerlinks.mobile.android.navigator.Navigator
@@ -96,6 +98,8 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     private var noInternetLayout: View? = null
 
+    private var onErrorListener: OnErrorListener? = null
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return supportFragmentInjector
     }
@@ -136,16 +140,13 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                     it.printStackTrace()
                 }))
 
-        // todo refactor without clients recreation & Check Errors to show or log
-        val onErrorListener = object : OnErrorListener {
+        onErrorListener = object : OnErrorListener {
             override fun onError(exception: RetrofitException) {
                 val retrySubject = PublishSubject.create<Events.RetryEvent>()
                 mErrorManager.handleError(exception, retrySubject)
                 SentryHelper.logException(exception)
             }
         }
-        Wavesplatform.setOnErrorListener(onErrorListener)
-        dataManager.coinomatService = CoinomatManager.create(CallAdapterFactory(onErrorListener))
     }
 
     protected fun exit() {
@@ -172,9 +173,20 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
                 }, { t: Throwable? -> t?.printStackTrace() }))
     }
 
+    private fun addErrorListener() {
+        // todo check refactor without clients recreation & Check Errors to show or log
+        Wavesplatform.net().addOnErrorListener(onErrorListener!!)
+        // todo check coinomat & github
+        dataManager.coinomatService = CoinomatManager.create(CallAdapterFactory(onErrorListener!!))
+        dataManager.githubService = GithubDataManager.create(
+                CallAdapterFactory(onErrorListener!!),
+                Constants.URL_GITHUB_CONFIG)
+    }
+
     public override fun onPause() {
         mCompositeDisposable.clear()
         super.onPause()
+        Wavesplatform.net().removeOnErrorListener(onErrorListener!!)
     }
 
     override fun onDestroy() {

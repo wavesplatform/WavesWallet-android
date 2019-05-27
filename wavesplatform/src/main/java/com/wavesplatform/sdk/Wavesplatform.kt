@@ -20,13 +20,12 @@ package com.wavesplatform.sdk
 
 import android.app.Application
 import android.util.Log
-import com.wavesplatform.sdk.crypto.WalletManager
-import com.wavesplatform.sdk.crypto.WavesWallet
+import com.wavesplatform.sdk.crypto.*
 import com.wavesplatform.sdk.net.CallAdapterFactory
 import com.wavesplatform.sdk.net.DataManager
 import com.wavesplatform.sdk.net.OnErrorListener
-import com.wavesplatform.sdk.net.service.*
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.utils.Servers
+import pers.victor.ext.currentTimeMillis
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -34,9 +33,12 @@ import java.util.*
 
 class Wavesplatform private constructor(var context: Application, factory: CallAdapter.Factory?) {
 
-    private var dataManager: DataManager = DataManager(context, factory)
+    private val crypto = WavesCryptoImpl()
+    private var net: DataManager = DataManager(context, factory)
     private var wavesWallet: WavesWallet? = null
     private var guid: String = UUID.randomUUID().toString()
+    private var netCode: Byte = 'W'.toByte()
+    private var timeCorrection = 0L
 
     companion object {
 
@@ -52,15 +54,7 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
          */
         @JvmStatic
         fun init(application: Application, mainNet: Boolean = true, factory: CallAdapterFactory? = null) {
-            EnvironmentManager.init(application)
-            if (!mainNet) {
-                EnvironmentManager.setCurrentEnvironment(EnvironmentManager.Environment.TEST_NET)
-            }
             instance = Wavesplatform(application, factory)
-            EnvironmentManager.updateConfiguration(
-                    getApiService(),
-                    getNodeService(),
-                    getGithubService())
         }
 
         /**
@@ -79,6 +73,22 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
                 throw NullPointerException("Wavesplatform must be init first!")
             }
             return instance!!
+        }
+
+        /**
+         * Access to crypto-methods
+         */
+        @JvmStatic
+        fun crypto(): WavesCrypto {
+            return get().crypto
+        }
+
+        /**
+         * Access to net
+         */
+        @JvmStatic
+        fun net(): DataManager {
+            return get().net
         }
 
         /**
@@ -178,40 +188,29 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             return Wavesplatform.getWallet().publicKeyStr
         }
 
-        @JvmStatic
-        fun getApiService(): ApiService {
-            return Wavesplatform.get().dataManager.apiService
+        fun getNetCode(): Byte {
+            return Wavesplatform.get().netCode
         }
 
-        @JvmStatic
-        fun getMatcherService(): MatcherService {
-            return Wavesplatform.get().dataManager.matcherService
+        fun getTime(): Long {
+            return currentTimeMillis + Wavesplatform.get().timeCorrection
         }
 
-        @JvmStatic
-        fun getGithubService(): GithubService {
-            return Wavesplatform.get().dataManager.githubService
+        fun setTimeCorrection(timeCorrection: Long) {
+            Wavesplatform.get().timeCorrection = timeCorrection
         }
 
-        /**
-         * Returns service for working with nodes
-         * @see com.wavesplatform.sdk.net.service.NodeService
-         */
-        @JvmStatic
-        fun getNodeService(): NodeService {
-            return Wavesplatform.get().dataManager.nodeService
-        }
 
-        @JvmStatic
         fun createService(baseUrl: String,
                           adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create())
                 : Retrofit {
-            return Wavesplatform.get().dataManager.createRetrofit(baseUrl, adapterFactory)
+            return Wavesplatform.net().createRetrofit(baseUrl, adapterFactory)
         }
 
-        @JvmStatic
-        fun setOnErrorListener(errorListener: OnErrorListener) {
-            Wavesplatform.get().dataManager.setCallAdapterFactory(CallAdapterFactory(errorListener))
+        fun setServers(servers: Servers) {
+            Wavesplatform.net().servers = servers
+            Wavesplatform.get().netCode = servers.netCode
+            Wavesplatform.net().createServices()
         }
     }
 }

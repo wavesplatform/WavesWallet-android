@@ -13,7 +13,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.asksira.loopingviewpager.LoopingViewPager
 import com.wavesplatform.sdk.net.model.Language
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
@@ -23,6 +23,7 @@ import com.wavesplatform.wallet.v2.ui.auth.import_account.ImportAccountActivity
 import com.wavesplatform.wallet.v2.ui.auth.new_account.NewAccountActivity
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.language.change_welcome.ChangeLanguageBottomSheetFragment
+import com.wavesplatform.wallet.v2.util.Environment
 import com.wavesplatform.wallet.v2.util.launchActivity
 import kotlinx.android.synthetic.main.activity_welcome.*
 import pers.victor.ext.click
@@ -99,17 +100,17 @@ class WelcomeActivity : BaseDrawerActivity(), WelcomeView {
         if (BuildConfig.DEBUG) {
             button_switch_net.visiable()
             val newEnvironment = when (EnvironmentManager.environmentName) {
-                EnvironmentManager.KEY_ENV_MAIN_NET -> {
+                Environment.KEY_ENV_MAIN_NET -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_test)
-                    EnvironmentManager.Environment.TEST_NET
+                    Environment.TEST_NET
                 }
-                EnvironmentManager.KEY_ENV_TEST_NET -> {
+                Environment.KEY_ENV_TEST_NET -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_prod)
-                    EnvironmentManager.Environment.MAIN_NET
+                    Environment.MAIN_NET
                 }
                 else -> {
                     button_switch_net.text = getString(R.string.welcome_switch_to_test)
-                    EnvironmentManager.Environment.TEST_NET
+                    Environment.TEST_NET
                 }
             }
             button_switch_net.click {

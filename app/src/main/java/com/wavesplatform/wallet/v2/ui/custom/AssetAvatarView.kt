@@ -21,7 +21,8 @@ import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
-import com.wavesplatform.wallet.R // todo check
+import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants.defaultAssetsAvatar
 import pers.victor.ext.resize
 import pers.victor.ext.sp
 import pyxis.uzuki.live.richutilskt.utils.drawableToBitmap
@@ -131,8 +132,8 @@ class AssetAvatarView : AppCompatImageView {
     * */
     private fun setValues(assetId: String, name: String, isSponsoredAsset: Boolean, isScriptAsset: Boolean) {
         val avatar = when (assetId) {
-            "" -> Constants.defaultAssetsAvatar()[Constants.WAVES_ASSET_ID_FILLED]
-            else -> Constants.defaultAssetsAvatar()[assetId]
+            "" -> defaultAssetsAvatar()[Constants.WAVES_ASSET_ID_FILLED]
+            else -> defaultAssetsAvatar()[assetId]
         }
 
         paint.color = ContextCompat.getColor(context, getColorBackgroundBy(assetId))

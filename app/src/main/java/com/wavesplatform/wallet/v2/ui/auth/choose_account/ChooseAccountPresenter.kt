@@ -6,7 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.auth.choose_account
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.addressFromPublicKey
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.model.local.WalletItem

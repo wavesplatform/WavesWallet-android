@@ -1,4 +1,4 @@
-package com.wavesplatform.sdk.net.service
+package com.wavesplatform.wallet.v2.data.manager.service
 
 import com.wavesplatform.sdk.net.model.response.coinomat.XRateResponse
 import com.wavesplatform.sdk.net.model.response.coinomat.CreateTunnelResponse

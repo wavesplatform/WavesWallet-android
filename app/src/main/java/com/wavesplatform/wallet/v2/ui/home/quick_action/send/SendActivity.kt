@@ -656,7 +656,7 @@ class SendActivity : BaseActivity(), SendView {
     }
 
     private fun loadGatewayXRate(assetId: String) {
-        if (AssetBalanceResponse.isGateway(assetId)) {
+        if (isGateway(assetId)) {
             relative_do_not_withdraw.visiable()
             relative_gateway_fee.visiable()
             if (xRateSkeletonView == null) {

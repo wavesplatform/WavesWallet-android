@@ -113,31 +113,6 @@ open class AssetBalanceResponse(
     fun isWaves(): Boolean {
         return assetId.isNullOrEmpty()
     }
-
-    companion object {
-
-        fun isFiat(assetId: String): Boolean {
-            for (fiat in Constants.defaultFiat()) {
-                if (assetId == fiat) {
-                    return true
-                }
-            }
-            return false
-        }
-
-        fun isGateway(assetId: String): Boolean {
-            if (assetId == "") {
-                return false
-            }
-
-            for (fiat in Constants.defaultCrypto()) {
-                if (assetId == fiat) {
-                    return true
-                }
-            }
-            return false
-        }
-    }
 }
 
 @Parcelize

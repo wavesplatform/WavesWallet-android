@@ -14,7 +14,7 @@ import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.net.model.OrderType
 import com.wavesplatform.sdk.net.model.response.OrderBookResponse
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.Wavesplatform
 
 data class OrderRequest(
         @SerializedName("matcherPublicKey") var matcherPublicKey: String = "",
@@ -23,7 +23,7 @@ data class OrderRequest(
         @SerializedName("orderType") var orderType: OrderType = OrderType.BUY,
         @SerializedName("price") var price: Long = 0L,
         @SerializedName("amount") var amount: Long = 0L,
-        @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
+        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getTime(),
         @SerializedName("expiration") var expiration: Long = 0L,
         @SerializedName("matcherFee") var matcherFee: Long = 300000,
         @SerializedName("version") var version: Int = Constants.VERSION,

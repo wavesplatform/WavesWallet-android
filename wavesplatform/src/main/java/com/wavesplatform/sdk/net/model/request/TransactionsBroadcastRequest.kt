@@ -9,6 +9,7 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.utils.*
@@ -60,7 +61,7 @@ class TransactionsBroadcastRequest(
     private fun getRecipientBytes(recipient: String): ByteArray {
         return if (recipient.length <= 30) {
             Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                    byteArrayOf(EnvironmentManager.netCode),
+                    byteArrayOf(Wavesplatform.getNetCode()),
                     recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
         } else {
             Base58.decode(recipient)

@@ -131,11 +131,3 @@ fun randomString(): String {
     random.nextBytes(bytes)
     return String(Hex.encode(bytes), charset("UTF-8"))
 }
-
-fun isShowTicker(assetId: String?): Boolean {
-    return assetId.isNullOrEmpty() || EnvironmentManager.globalConfiguration.generalAssets
-            .plus(EnvironmentManager.globalConfiguration.assets)
-            .any {
-                it.assetId == assetId
-            }
-}

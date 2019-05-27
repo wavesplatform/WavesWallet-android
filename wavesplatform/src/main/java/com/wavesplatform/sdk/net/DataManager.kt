@@ -7,9 +7,12 @@ import com.google.gson.GsonBuilder
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.sdk.BuildConfig
-import com.wavesplatform.sdk.net.service.*
+import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.net.service.ApiService
+import com.wavesplatform.sdk.net.service.MatcherService
+import com.wavesplatform.sdk.net.service.NodeService
 import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.sdk.utils.Servers
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -33,45 +36,50 @@ open class DataManager(var context: Context,
     lateinit var nodeService: NodeService
     lateinit var apiService: ApiService
     lateinit var matcherService: MatcherService
-    lateinit var githubService: GithubService
     private var cookies: HashSet<String> = hashSetOf()
+    var servers: Servers = Servers.DEFAULT
+    private val onErrorListeners = mutableListOf<OnErrorListener>()
 
     init {
+        adapterFactory = CallAdapterFactory(object : OnErrorListener{
+            override fun onError(exception: RetrofitException) {
+                onErrorListeners.forEach { it.onError(exception) }
+            }
+        })
         createServices()
     }
 
-    private fun createServices() {
+    fun createServices() {
         nodeService = createRetrofit(
-                Constants.URL_NODE,
+                addSlash(servers.nodeUrl),
                 adapterFactory ?: RxJava2CallAdapterFactory.create())
                 .create(NodeService::class.java)
 
         apiService = createRetrofit(
-                Constants.URL_DATA,
+                addSlash(servers.dataUrl),
                 adapterFactory ?: RxJava2CallAdapterFactory.create())
                 .create(ApiService::class.java)
 
         matcherService = createRetrofit(
-                Constants.URL_MATCHER,
+                addSlash(servers.matcherUrl),
                 adapterFactory ?: RxJava2CallAdapterFactory.create())
                 .create(MatcherService::class.java)
-
-        githubService = createRetrofit(
-                Constants.URL_SPAM_FILE,
-                adapterFactory ?: RxJava2CallAdapterFactory.create())
-                .create(GithubService::class.java)
     }
 
-    fun setCallAdapterFactory(adapterFactory: CallAdapter.Factory) {
-        this.adapterFactory = adapterFactory
-        createServices()
+
+    fun addOnErrorListener(errorListener: OnErrorListener) {
+        onErrorListeners.add(errorListener)
+    }
+
+    fun removeOnErrorListener(errorListener: OnErrorListener) {
+        onErrorListeners.remove(errorListener)
     }
 
     fun createRetrofit(
             baseUrl: String,
             adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create()): Retrofit {
         val retrofit = Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(addSlash(baseUrl))
                 .client(createClient())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(adapterFactory)
@@ -79,6 +87,14 @@ open class DataManager(var context: Context,
                 .build()
         RetrofitCache.getInstance().addRetrofit(retrofit)
         return retrofit
+    }
+
+    private fun addSlash(url: String): String {
+        return if (url.endsWith("/")) {
+            url
+        } else {
+            "$url/"
+        }
     }
 
     private fun createClient(timeout: Long = 30L): OkHttpClient {
@@ -89,7 +105,7 @@ open class DataManager(var context: Context,
                 .addInterceptor(receivedCookiesInterceptor())
                 .addInterceptor(addCookiesInterceptor())
                 .addInterceptor(CacheForceInterceptorNoNet())
-                .addInterceptor(EnvironmentManager.createHostInterceptor())
+                .addInterceptor(createHostInterceptor())
                 .addNetworkInterceptor(CacheInterceptorOnNet())
                 .addInterceptor(LoggingInterceptor.Builder()
                         .loggable(BuildConfig.DEBUG)
@@ -129,6 +145,10 @@ open class DataManager(var context: Context,
                 chain.proceed(chain.request())
             }
         }
+    }
+
+    private fun createHostInterceptor(): HostSelectionInterceptor {
+        return HostSelectionInterceptor(servers)
     }
 
     private fun createCache(): Cache {

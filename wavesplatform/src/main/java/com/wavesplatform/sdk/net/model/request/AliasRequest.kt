@@ -9,11 +9,11 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
+import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.net.model.response.TransactionResponse
-import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.arrayWithSize
 import java.nio.charset.Charset
 
@@ -21,7 +21,7 @@ data class AliasRequest(
         @SerializedName("type") val type: Int = TransactionResponse.CREATE_ALIAS,
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("fee") var fee: Long = 0,
-        @SerializedName("timestamp") var timestamp: Long = EnvironmentManager.getTime(),
+        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getTime(),
         @SerializedName("version") var version: Int = Constants.VERSION,
         @SerializedName("proofs") var proofs: MutableList<String?>? = null,
         @SerializedName("alias") var alias: String? = ""
@@ -30,10 +30,10 @@ data class AliasRequest(
     fun toSignBytes(): ByteArray {
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(EnvironmentManager.netCode),
+                    byteArrayOf(Wavesplatform.getNetCode()),
                     Base58.decode(senderPublicKey),
                     Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                            byteArrayOf(EnvironmentManager.netCode),
+                            byteArrayOf(Wavesplatform.getNetCode()),
                             alias?.toByteArray(Charset.forName("UTF-8"))?.arrayWithSize())
                             .arrayWithSize(),
                     Longs.toByteArray(fee),

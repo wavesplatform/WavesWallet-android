@@ -21,6 +21,7 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.find
 import com.wavesplatform.wallet.v2.util.findByGatewayId
 import com.wavesplatform.wallet.v2.util.isSpamConsidered
@@ -152,9 +153,9 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
     }
 
     fun loadXRate(assetId: String) {
-        val currencyTo = Constants.coinomatCryptoCurrencies()[assetId]
+        val currencyTo = com.wavesplatform.wallet.v2.data.Constants.coinomatCryptoCurrencies()[assetId]
         if (currencyTo.isNullOrEmpty()) {
-            type = SendPresenter.Type.UNKNOWN
+            type = Type.UNKNOWN
             runOnUiThread {
                 viewState.showXRateError()
             }

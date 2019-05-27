@@ -13,7 +13,7 @@ import com.wavesplatform.sdk.net.model.response.AliasResponse
 import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.sdk.net.model.response.CandlesResponse
 import com.wavesplatform.sdk.net.model.response.LastTradesResponse
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager

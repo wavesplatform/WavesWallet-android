@@ -29,8 +29,8 @@ class NewsResponse {
     }
 
     companion object {
-        const val URL = "https://github-proxy.wvservices.com/wavesplatform/waves-client-config/mobile/v2.2/notifications_android.json"
-        const val URL_TEST = "https://github-proxy.wvservices.com/wavesplatform/waves-client-config/mobile/v2.3/notifications_test_android.json"
+        const val URL = "mobile/v2.2/notifications_android.json"
+        const val URL_TEST = "mobile/v2.3/notifications_test_android.json"
         private const val DEFAULT_LANG_CODE = "en"
 
         fun getTitle(langCode: String, notification: NotificationResponse): String {

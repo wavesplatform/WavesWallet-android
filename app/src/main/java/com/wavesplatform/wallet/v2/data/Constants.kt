@@ -39,10 +39,6 @@ object Constants {
     const val RESULT_OK_NO_RESULT = 204
     const val RESULT_SMART_ERROR = 307
 
-    const val VERSION = 2
-    const val WAVES_ASSET_ID_EMPTY = ""
-    const val WAVES_ASSET_ID_FILLED = "WAVES"
-
     object View {
         const val ENABLE_VIEW = 1f
         const val DISABLE_VIEW = 0.3f
@@ -78,4 +74,30 @@ object Constants {
             R.color.x,
             R.color.y,
             R.color.z)
+
+    fun defaultAssetsAvatar(): MutableMap<String, String> {
+        val allConfigAssets = com.wavesplatform.wallet.v2.util.EnvironmentManager.globalConfiguration.generalAssets
+                .plus(com.wavesplatform.wallet.v2.util.EnvironmentManager.globalConfiguration.assets)
+        return allConfigAssets.associateBy({ it.assetId }, { it.iconUrls.default }).toMutableMap()
+    }
+
+    fun coinomatCryptoCurrencies(): MutableMap<String, String> {
+        return com.wavesplatform.wallet.v2.util.EnvironmentManager.globalConfiguration.generalAssets
+                .associateBy({ it.assetId }, { it.gatewayId })
+                .toMutableMap()
+    }
+
+    fun defaultCrypto(): Array<String> {
+        return com.wavesplatform.wallet.v2.util.EnvironmentManager.defaultAssets
+                .filter { !it.isFiatMoney }
+                .map { it.assetId }
+                .toTypedArray()
+    }
+
+    fun defaultFiat(): Array<String> {
+        return com.wavesplatform.wallet.v2.util.EnvironmentManager.defaultAssets
+                .filter { it.isFiatMoney }
+                .map { it.assetId }
+                .toTypedArray()
+    }
 }

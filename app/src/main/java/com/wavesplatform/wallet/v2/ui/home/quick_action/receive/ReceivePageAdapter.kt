@@ -15,6 +15,8 @@ import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.card.CardFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency.CryptoCurrencyFragment
 import com.wavesplatform.wallet.v2.ui.home.quick_action.receive.invoice.InvoiceFragment
+import com.wavesplatform.wallet.v2.util.isFiat
+import com.wavesplatform.wallet.v2.util.isGateway
 
 class ReceivePageAdapter(
     fm: FragmentManager?,
@@ -45,13 +47,13 @@ class ReceivePageAdapter(
                         context.getString(R.string.receive_invoice),
                         context.getString(R.string.receive_card))
             }
-            AssetBalanceResponse.isFiat(assetBalance!!.assetId!!) -> {
+            isFiat(assetBalance!!.assetId!!) -> {
                 data = arrayListOf(
                         InvoiceFragment.newInstance(assetBalance))
                 titles = arrayOf(
                         context.getString(R.string.receive_invoice))
             }
-            AssetBalanceResponse.isGateway(assetBalance!!.assetId!!) -> {
+            isGateway(assetBalance!!.assetId!!) -> {
                 data = arrayListOf(
                         CryptoCurrencyFragment.newInstance(assetBalance),
                         InvoiceFragment.newInstance(assetBalance))

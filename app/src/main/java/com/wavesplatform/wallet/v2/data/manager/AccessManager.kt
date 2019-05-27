@@ -11,7 +11,7 @@ import com.vicpin.krealmextensions.RealmConfigStore
 import com.wavesplatform.sdk.crypto.WavesWallet
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.crypto.AESUtil
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.addressFromPublicKey
 import com.wavesplatform.sdk.utils.randomString

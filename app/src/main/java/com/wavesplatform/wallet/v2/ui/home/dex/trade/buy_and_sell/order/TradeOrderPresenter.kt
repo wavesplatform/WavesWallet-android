@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.data.model.local.OrderExpiration
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.ui.home.dex.trade.buy_and_sell.TradeBuyAndSellBottomSheetFragment
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.errorBody
 import java.math.RoundingMode
 import javax.inject.Inject

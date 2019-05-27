@@ -13,7 +13,6 @@ import android.support.v7.widget.AppCompatTextView
 import android.text.TextUtils
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
@@ -22,7 +21,7 @@ import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.net.model.OrderType
 import com.wavesplatform.sdk.net.model.TransactionType
 import com.wavesplatform.sdk.net.model.response.*
-import com.wavesplatform.sdk.net.service.CoinomatService
+import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.BuildConfig

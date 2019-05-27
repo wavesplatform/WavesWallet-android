@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.data.helpers
 import com.vicpin.krealmextensions.RealmConfigStore
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.data.database.DBHelper
 import com.wavesplatform.wallet.v2.data.database.realm.migration.UserDataMigration
 import com.wavesplatform.wallet.v2.data.database.realm.module.DataModule

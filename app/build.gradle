@@ -230,9 +230,9 @@ dependencies {
     implementation "com.android.support:preference-v7:$supportVersion"
     implementation "com.android.support:preference-v14:$supportVersion"
     // Enable crash reporting only for release version
-    implementation "com.google.firebase:firebase-core:16.0.8"
-    implementation "com.google.firebase:firebase-database:16.1.0"
-    implementation "com.google.firebase:firebase-messaging:17.6.0"
+    implementation "com.google.firebase:firebase-core:16.0.9"
+    implementation "com.google.firebase:firebase-database:17.0.0"
+    implementation "com.google.firebase:firebase-messaging:18.0.0"
     implementation "com.google.firebase:firebase-inappmessaging-display:17.1.1"
     releaseImplementation "com.google.firebase:firebase-crash:16.2.1"
     implementation 'commons-io:commons-io:2.4'

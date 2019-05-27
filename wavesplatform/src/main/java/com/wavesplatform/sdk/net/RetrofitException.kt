@@ -16,10 +16,10 @@ class RetrofitException internal constructor(
     /** Response object containing status code, headers, body, etc.  */
     val response: Response<*>?,
     /** The event kind which triggered this error.  */
-    val kind: RetrofitException.Kind,
+    val kind: Kind,
     exception: Throwable?,
     /** The Retrofit this request was executed on  */
-    val retrofit: Retrofit?
+    private val retrofit: Retrofit?
 ) : RuntimeException(message, exception) {
 
     /** Identifies the event kind which triggered a [RetrofitException].  */
@@ -48,7 +48,7 @@ class RetrofitException internal constructor(
      * }
      */
     fun <T> getErrorBodyAs(type: Class<T>): T? {
-        if (response == null || response.errorBody() == null) {
+        if (response?.errorBody() == null) {
             return null
         }
         val converter = retrofit?.responseBodyConverter<T>(type, arrayOfNulls<Annotation>(0))

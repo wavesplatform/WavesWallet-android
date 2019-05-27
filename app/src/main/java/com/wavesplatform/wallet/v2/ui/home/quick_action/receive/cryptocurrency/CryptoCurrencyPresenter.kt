@@ -6,12 +6,12 @@
 package com.wavesplatform.wallet.v2.ui.home.quick_action.receive.cryptocurrency
 
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.utils.Constants.Companion.coinomatCryptoCurrencies
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnelResponse
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants.coinomatCryptoCurrencies
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import javax.inject.Inject

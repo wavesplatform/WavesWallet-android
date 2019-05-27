@@ -50,7 +50,6 @@ import com.wavesplatform.sdk.net.RetrofitException
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.net.model.response.ErrorResponse
 import com.wavesplatform.sdk.net.model.TransactionType
-import com.wavesplatform.sdk.utils.EnvironmentManager
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
@@ -679,4 +678,34 @@ fun findAssetBalanceInDb(query: String?, list: List<AssetBalanceResponse>): List
                             || it.assetId == findByGatewayId(query.toUpperCase())?.assetId
                 }
     }
+}
+
+fun isShowTicker(assetId: String?): Boolean {
+    return assetId.isNullOrEmpty() || com.wavesplatform.wallet.v2.util.EnvironmentManager.globalConfiguration.generalAssets
+            .plus(com.wavesplatform.wallet.v2.util.EnvironmentManager.globalConfiguration.assets)
+            .any {
+                it.assetId == assetId
+            }
+}
+
+fun isFiat(assetId: String): Boolean {
+    for (fiat in Constants.defaultFiat()) {
+        if (assetId == fiat) {
+            return true
+        }
+    }
+    return false
+}
+
+fun isGateway(assetId: String): Boolean {
+    if (assetId == "") {
+        return false
+    }
+
+    for (fiat in Constants.defaultCrypto()) {
+        if (assetId == fiat) {
+            return true
+        }
+    }
+    return false
 }

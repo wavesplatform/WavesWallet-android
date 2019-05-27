@@ -12,7 +12,7 @@ import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.sdk.net.model.request.*
 import com.wavesplatform.sdk.net.model.response.*
-import com.wavesplatform.sdk.utils.EnvironmentManager
+import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.sumByLong
