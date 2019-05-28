@@ -17,11 +17,11 @@ import com.wavesplatform.sdk.net.model.response.TransactionResponse
 
 data class BurnRequest(
         @SerializedName("assetId") val assetId: String = "",
-        @SerializedName("chainId") val chainId: Byte = Wavesplatform.getNetCode(),
+        @SerializedName("chainId") val chainId: Byte = Wavesplatform.getServers().netCode,
         @SerializedName("fee") var fee: Long = 100000L,
         @SerializedName("quantity") var quantity: Long = 1,
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
-        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getTime(),
+        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getServers().getTime(),
         @SerializedName("type") val type: Int = TransactionResponse.BURN,
         @SerializedName("version") val version: Int = Constants.VERSION,
         @SerializedName("proofs") var proofs: MutableList<String?>? = null,
@@ -32,7 +32,7 @@ data class BurnRequest(
         return try {
             Bytes.concat(
                     byteArrayOf(TransactionResponse.BURN.toByte()),
-                    byteArrayOf(Wavesplatform.getNetCode()),
+                    byteArrayOf(Wavesplatform.getServers().netCode),
                     byteArrayOf(chainId),
                     Base58.decode(senderPublicKey),
                     Base58.decode(assetId),

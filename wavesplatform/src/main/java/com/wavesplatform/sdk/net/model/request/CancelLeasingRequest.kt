@@ -17,10 +17,10 @@ import com.wavesplatform.sdk.Wavesplatform
 
 data class CancelLeasingRequest(
         @SerializedName("type") val type: Int = TransactionResponse.LEASE_CANCEL,
-        @SerializedName("chainId") var scheme: Int? = Wavesplatform.getNetCode().toInt(),
+        @SerializedName("chainId") var scheme: Int? = Wavesplatform.getServers().netCode.toInt(),
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("leaseId") var leaseId: String = "",
-        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getTime(),
+        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getServers().getTime(),
         @SerializedName("fee") var fee: Long = 0,
         @SerializedName("version") var version: Int = Constants.VERSION,
         @SerializedName("proofs") var proofs: MutableList<String?>? = null
@@ -30,7 +30,7 @@ data class CancelLeasingRequest(
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
                     byteArrayOf(Constants.VERSION.toByte()),
-                    byteArrayOf(Wavesplatform.getNetCode()),
+                    byteArrayOf(Wavesplatform.getServers().netCode),
                     Base58.decode(senderPublicKey),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp),

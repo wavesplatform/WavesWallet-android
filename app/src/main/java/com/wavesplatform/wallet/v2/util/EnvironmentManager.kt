@@ -113,12 +113,16 @@ class EnvironmentManager(var current: Environment) {
             instance = EnvironmentManager(initEnvironment)
 
 
+            val timeCorrection = PreferenceManager
+                    .getDefaultSharedPreferences(App.getAppContext())
+                    .getLong(GLOBAL_CURRENT_TIME_CORRECTION, 0)
             val config = getLocalSavedConfig()
             val servers = Servers(
                     config.servers.nodeUrl,
                     config.servers.dataUrl,
                     config.servers.matcherUrl,
-                    config.scheme[0].toByte())
+                    config.scheme[0].toByte(),
+                    timeCorrection)
 
             Wavesplatform.setServers(servers)
 

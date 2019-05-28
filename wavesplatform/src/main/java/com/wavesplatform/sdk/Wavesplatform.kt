@@ -27,10 +27,9 @@ import pers.victor.ext.currentTimeMillis
 
 class Wavesplatform private constructor(var context: Application) {
 
+    private var servers: Servers = Servers.DEFAULT
     private val crypto = WavesCryptoImpl()
     private var service: DataManager = DataManager(context)
-    private var netCode: Byte = 'W'.toByte()
-    private var timeCorrection = 0L
 
     companion object {
 
@@ -70,21 +69,16 @@ class Wavesplatform private constructor(var context: Application) {
             return get().service
         }
 
-        fun getNetCode(): Byte {
-            return Wavesplatform.get().netCode
-        }
-
-        fun getTime(): Long {
-            return currentTimeMillis + Wavesplatform.get().timeCorrection
+        fun getServers(): Servers {
+            return Wavesplatform.get().servers
         }
 
         fun setTimeCorrection(timeCorrection: Long) {
-            Wavesplatform.get().timeCorrection = timeCorrection
+            Wavesplatform.get().servers.timeCorrection = timeCorrection
         }
 
         fun setServers(servers: Servers) {
-            Wavesplatform.service().servers = servers
-            Wavesplatform.get().netCode = servers.netCode
+            Wavesplatform.get().servers = servers
             Wavesplatform.service().createServices()
         }
     }

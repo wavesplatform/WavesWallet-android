@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.sdk.BuildConfig
+import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.net.service.ApiService
 import com.wavesplatform.sdk.net.service.MatcherService
 import com.wavesplatform.sdk.net.service.NodeService
@@ -35,7 +36,6 @@ open class DataManager(var context: Context) {
     lateinit var apiService: ApiService
     lateinit var matcherService: MatcherService
     private var cookies: HashSet<String> = hashSetOf()
-    var servers: Servers = Servers.DEFAULT
     private var adapterFactory: CallAdapter.Factory
     private val onErrorListeners = mutableListOf<OnErrorListener>()
 
@@ -49,13 +49,13 @@ open class DataManager(var context: Context) {
     }
 
     fun createServices() {
-        nodeService = createService(addSlash(servers.nodeUrl), adapterFactory)
+        nodeService = createService(addSlash(Wavesplatform.getServers().nodeUrl), adapterFactory)
                 .create(NodeService::class.java)
 
-        apiService = createService(addSlash(servers.dataUrl), adapterFactory)
+        apiService = createService(addSlash(Wavesplatform.getServers().dataUrl), adapterFactory)
                 .create(ApiService::class.java)
 
-        matcherService = createService(addSlash(servers.matcherUrl), adapterFactory)
+        matcherService = createService(addSlash(Wavesplatform.getServers().matcherUrl), adapterFactory)
                 .create(MatcherService::class.java)
     }
 
@@ -141,7 +141,7 @@ open class DataManager(var context: Context) {
     }
 
     private fun createHostInterceptor(): HostSelectionInterceptor {
-        return HostSelectionInterceptor(servers)
+        return HostSelectionInterceptor(Wavesplatform.getServers())
     }
 
     private fun createCache(): Cache {

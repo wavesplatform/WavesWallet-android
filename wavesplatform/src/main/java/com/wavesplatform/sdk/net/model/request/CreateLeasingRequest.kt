@@ -19,11 +19,11 @@ import java.nio.charset.Charset
 data class CreateLeasingRequest(
         @SerializedName("type") val type: Int = TransactionResponse.LEASE,
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
-        @SerializedName("scheme") var scheme: String? = Wavesplatform.getNetCode().toString(),
+        @SerializedName("scheme") var scheme: String? = Wavesplatform.getServers().netCode.toString(),
         @SerializedName("amount") var amount: Long = 0,
         @SerializedName("fee") var fee: Long = 0,
         @SerializedName("recipient") var recipient: String = "",
-        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getTime(),
+        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getServers().getTime(),
         @SerializedName("version") var version: Int = Constants.VERSION,
         @SerializedName("proofs") var proofs: MutableList<String?>? = null
 ) {
@@ -47,7 +47,7 @@ data class CreateLeasingRequest(
     private fun resolveRecipientBytes(recipientIsAlias: Boolean): ByteArray? {
         return if (recipientIsAlias) {
             Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                    byteArrayOf(Wavesplatform.getNetCode()),
+                    byteArrayOf(Wavesplatform.getServers().netCode),
                     recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
         } else {
             Base58.decode(recipient)

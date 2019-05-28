@@ -21,7 +21,7 @@ data class AliasRequest(
         @SerializedName("type") val type: Int = TransactionResponse.CREATE_ALIAS,
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("fee") var fee: Long = 0,
-        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getTime(),
+        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getServers().getTime(),
         @SerializedName("version") var version: Int = Constants.VERSION,
         @SerializedName("proofs") var proofs: MutableList<String?>? = null,
         @SerializedName("alias") var alias: String? = ""
@@ -30,10 +30,10 @@ data class AliasRequest(
     fun toSignBytes(): ByteArray {
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(Wavesplatform.getNetCode()),
+                    byteArrayOf(Wavesplatform.getServers().netCode),
                     Base58.decode(senderPublicKey),
                     Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                            byteArrayOf(Wavesplatform.getNetCode()),
+                            byteArrayOf(Wavesplatform.getServers().netCode),
                             alias?.toByteArray(Charset.forName("UTF-8"))?.arrayWithSize())
                             .arrayWithSize(),
                     Longs.toByteArray(fee),
