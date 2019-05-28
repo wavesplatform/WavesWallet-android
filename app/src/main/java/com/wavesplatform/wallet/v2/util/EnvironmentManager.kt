@@ -123,9 +123,9 @@ class EnvironmentManager(var current: Environment) {
             Wavesplatform.setServers(servers)
 
             loadConfiguration(
-                    Wavesplatform.net().apiService,
-                    Wavesplatform.net().nodeService,
-                    GithubDataManager.create(null, url = Constants.URL_GITHUB_CONFIG))
+                    Wavesplatform.service().apiService,
+                    Wavesplatform.service().nodeService,
+                    GithubDataManager.create(null))
         }
 
         private fun loadConfiguration(apiService: ApiService,

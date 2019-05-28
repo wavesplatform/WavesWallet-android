@@ -29,10 +29,8 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.net.CallAdapterFactory
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.RetrofitException
-import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
@@ -175,18 +173,17 @@ abstract class BaseActivity : MvpAppCompatActivity(), BaseView, BaseMvpView, Has
 
     private fun addErrorListener() {
         // todo check refactor without clients recreation & Check Errors to show or log
-        Wavesplatform.net().addOnErrorListener(onErrorListener!!)
-        // todo check coinomat & github
-        dataManager.coinomatService = CoinomatManager.create(CallAdapterFactory(onErrorListener!!))
-        dataManager.githubService = GithubDataManager.create(
-                CallAdapterFactory(onErrorListener!!),
-                Constants.URL_GITHUB_CONFIG)
+        Wavesplatform.service().addOnErrorListener(onErrorListener!!)
+        dataManager.coinomatService = CoinomatManager.create(onErrorListener)
+        dataManager.githubService = GithubDataManager.create(onErrorListener)
     }
 
     public override fun onPause() {
         mCompositeDisposable.clear()
         super.onPause()
-        Wavesplatform.net().removeOnErrorListener(onErrorListener!!)
+        Wavesplatform.service().removeOnErrorListener(onErrorListener!!)
+        CoinomatManager.removeOnErrorListener()
+        GithubDataManager.removeOnErrorListener()
     }
 
     override fun onDestroy() {

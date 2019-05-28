@@ -6,6 +6,9 @@
 package com.wavesplatform.wallet.v2.data.manager
 
 import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.net.CallAdapterFactory
+import com.wavesplatform.sdk.net.OnErrorListener
+import com.wavesplatform.sdk.net.RetrofitException
 import com.wavesplatform.sdk.net.model.response.coinomat.CreateTunnelResponse
 import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnelResponse
 import com.wavesplatform.sdk.net.model.response.coinomat.LimitResponse
@@ -14,8 +17,6 @@ import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
 import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import io.reactivex.Observable
-import retrofit2.CallAdapter
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -48,10 +49,22 @@ class CoinomatManager @Inject constructor() : BaseDataManager() {
     }
 
     companion object {
-        fun create(adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create())
-                : CoinomatService {
-            return Wavesplatform.net().createService(Constants.URL_COINOMAT, adapterFactory)
+
+        private var onErrorListener: OnErrorListener? = null
+
+        fun create(onErrorListener: OnErrorListener? = null): CoinomatService {
+            this.onErrorListener = onErrorListener
+            val adapterFactory = CallAdapterFactory(object : OnErrorListener{
+                override fun onError(exception: RetrofitException) {
+                    CoinomatManager.onErrorListener?.onError(exception)
+                }
+            })
+            return Wavesplatform.service().createService(Constants.URL_COINOMAT, adapterFactory)
                     .create(CoinomatService::class.java)
+        }
+
+        fun removeOnErrorListener() {
+            onErrorListener = null
         }
     }
 }

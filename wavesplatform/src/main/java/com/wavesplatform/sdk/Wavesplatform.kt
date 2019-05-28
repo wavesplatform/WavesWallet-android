@@ -19,17 +19,16 @@
 package com.wavesplatform.sdk
 
 import android.app.Application
-import com.wavesplatform.sdk.crypto.*
-import com.wavesplatform.sdk.net.CallAdapterFactory
+import com.wavesplatform.sdk.crypto.WavesCrypto
+import com.wavesplatform.sdk.crypto.WavesCryptoImpl
 import com.wavesplatform.sdk.net.DataManager
 import com.wavesplatform.sdk.utils.Servers
 import pers.victor.ext.currentTimeMillis
-import retrofit2.CallAdapter
 
-class Wavesplatform private constructor(var context: Application, factory: CallAdapter.Factory?) {
+class Wavesplatform private constructor(var context: Application) {
 
     private val crypto = WavesCryptoImpl()
-    private var net: DataManager = DataManager(context, factory)
+    private var service: DataManager = DataManager(context)
     private var netCode: Byte = 'W'.toByte()
     private var timeCorrection = 0L
 
@@ -40,23 +39,10 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         /**
          * Initialisation Wavesplatform method must be call first.
          * @param application Application context ot the app
-         * @param mainNet Optional parameter. Default true. Define net to use.
-         * Default true means use MainNet. False - TestNet
-         * @param factory Optional parameter. Add a call adapter factory
-         * for supporting service method return types other than Call
-         */
-        @JvmStatic
-        fun init(application: Application, mainNet: Boolean = true, factory: CallAdapterFactory? = null) {
-            instance = Wavesplatform(application, factory)
-        }
-
-        /**
-         * Initialisation Wavesplatform method must be call first.
-         * @param application Application context ot the app
          */
         @JvmStatic
         fun init(application: Application) {
-            init(application, true, null)
+            instance = Wavesplatform(application)
         }
 
         @JvmStatic
@@ -80,8 +66,8 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
          * Access to net
          */
         @JvmStatic
-        fun net(): DataManager {
-            return get().net
+        fun service(): DataManager {
+            return get().service
         }
 
         fun getNetCode(): Byte {
@@ -97,9 +83,9 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
         }
 
         fun setServers(servers: Servers) {
-            Wavesplatform.net().servers = servers
+            Wavesplatform.service().servers = servers
             Wavesplatform.get().netCode = servers.netCode
-            Wavesplatform.net().createServices()
+            Wavesplatform.service().createServices()
         }
     }
 }

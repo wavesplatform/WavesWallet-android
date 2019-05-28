@@ -29,18 +29,18 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Singleton
-open class DataManager(var context: Context,
-                       private var adapterFactory: CallAdapter.Factory? = RxJava2CallAdapterFactory.create()) {
+open class DataManager(var context: Context) {
 
     lateinit var nodeService: NodeService
     lateinit var apiService: ApiService
     lateinit var matcherService: MatcherService
     private var cookies: HashSet<String> = hashSetOf()
     var servers: Servers = Servers.DEFAULT
+    private var adapterFactory: CallAdapter.Factory
     private val onErrorListeners = mutableListOf<OnErrorListener>()
 
     init {
-        adapterFactory = CallAdapterFactory(object : OnErrorListener{
+        adapterFactory = CallAdapterFactory(object : OnErrorListener {
             override fun onError(exception: RetrofitException) {
                 onErrorListeners.forEach { it.onError(exception) }
             }
@@ -49,19 +49,13 @@ open class DataManager(var context: Context,
     }
 
     fun createServices() {
-        nodeService = createService(
-                addSlash(servers.nodeUrl),
-                adapterFactory ?: RxJava2CallAdapterFactory.create())
+        nodeService = createService(addSlash(servers.nodeUrl), adapterFactory)
                 .create(NodeService::class.java)
 
-        apiService = createService(
-                addSlash(servers.dataUrl),
-                adapterFactory ?: RxJava2CallAdapterFactory.create())
+        apiService = createService(addSlash(servers.dataUrl), adapterFactory)
                 .create(ApiService::class.java)
 
-        matcherService = createService(
-                addSlash(servers.matcherUrl),
-                adapterFactory ?: RxJava2CallAdapterFactory.create())
+        matcherService = createService(addSlash(servers.matcherUrl), adapterFactory)
                 .create(MatcherService::class.java)
     }
 
@@ -74,9 +68,9 @@ open class DataManager(var context: Context,
         onErrorListeners.remove(errorListener)
     }
 
-    fun createService(
-            baseUrl: String,
-            adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create()): Retrofit {
+    fun createService(baseUrl: String,
+                      adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create())
+            : Retrofit {
         val retrofit = Retrofit.Builder()
                 .baseUrl(addSlash(baseUrl))
                 .client(createClient())
