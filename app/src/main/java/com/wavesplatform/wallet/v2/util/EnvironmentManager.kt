@@ -136,26 +136,6 @@ class EnvironmentManager(var current: ClientEnvironment) {
         private fun loadConfiguration(apiService: ApiService,
                                       nodeService: NodeService,
                                       githubService: GithubService) {
-            /*instance!!.configurationDisposable = githubService.globalConfiguration(environment.url)
-                    .map { globalConfiguration ->
-                        setConfiguration(globalConfiguration)
-                        globalConfiguration.generalAssets.map { it.assetId }
-                    }
-                    .flatMap { apiService.assetsInfoByIds(it) }
-                    .map { info ->
-                        setDefaultAssets(info)
-                        instance!!.configurationDisposable!!.dispose()
-                    }
-                    .compose(RxUtil.applyObservableDefaultSchedulers())
-                    .subscribe({
-                        instance!!.configurationDisposable!!.dispose()
-                    }, { error ->
-                        Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration!")
-                        error.printStackTrace()
-                        setConfiguration(environment.configuration)
-                        instance!!.configurationDisposable!!.dispose()
-                    })*/
-
             instance!!.configurationDisposable =
                     Observable.zip(
                             githubService.globalConfiguration(environment.url),
@@ -194,17 +174,6 @@ class EnvironmentManager(var current: ClientEnvironment) {
                                 setConfiguration(environment.configuration)
                                 instance!!.configurationDisposable!!.dispose()
                             })
-
-            /*instance!!.timeDisposable = nodeService.utilsTime()
-                    .compose(RxUtil.applyObservableDefaultSchedulers())
-                    .subscribe({
-                        setTimeCorrection(it)
-                        instance!!.timeDisposable!!.dispose()
-                    }, { error ->
-                        Timber.e(error, "EnvironmentManager: Can't download time correction!")
-                        error.printStackTrace()
-                        instance!!.timeDisposable!!.dispose()
-                    })*/
 
             instance!!.versionDisposable = githubService.loadLastAppVersion(WavesConstants.URL_GITHUB_CONFIG_VERSION)
                     .compose(RxUtil.applyObservableDefaultSchedulers())

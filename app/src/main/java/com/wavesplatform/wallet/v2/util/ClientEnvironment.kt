@@ -20,10 +20,6 @@ class ClientEnvironment internal constructor(
                 GlobalConfigurationResponse::class.java)
     }
 
-    internal fun setConfiguration(configuration: GlobalConfigurationResponse) {
-        this.configuration = configuration
-    }
-
     private fun loadJsonFromAsset(application: Application, fileName: String): String {
         return try {
             val inputStream = application.assets.open(fileName)
