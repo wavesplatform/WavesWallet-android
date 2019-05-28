@@ -29,7 +29,7 @@ class TransactionsBroadcastRequest(
     @SerializedName("type")
     val type: Int = 4
     @SerializedName("version")
-    val version: Int = Constants.VERSION
+    val version: Int = WavesConstants.VERSION
     @SerializedName("proofs")
     var proofs = arrayOf("")
     @SerializedName("signature")
@@ -60,8 +60,8 @@ class TransactionsBroadcastRequest(
 
     private fun getRecipientBytes(recipient: String): ByteArray {
         return if (recipient.length <= 30) {
-            Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                    byteArrayOf(Wavesplatform.getServers().netCode),
+            Bytes.concat(byteArrayOf(WavesConstants.VERSION.toByte()),
+                    byteArrayOf(Wavesplatform.getEnvironment().scheme),
                     recipient.parseAlias().toByteArray(Charset.forName("UTF-8")).arrayWithSize())
         } else {
             Base58.decode(recipient)

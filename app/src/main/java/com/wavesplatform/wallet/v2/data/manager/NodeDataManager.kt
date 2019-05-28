@@ -9,7 +9,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ProcessLifecycleOwner
 import android.text.TextUtils
 import com.vicpin.krealmextensions.*
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.net.model.request.*
 import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
@@ -237,7 +237,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 // load in order balance
                 matcherDataManager.loadReservedBalances()
                         .map {
-                            return@map it[Constants.WAVES_ASSET_INFO.name] ?: 0L
+                            return@map it[WavesConstants.WAVES_ASSET_INFO.name] ?: 0L
                         },
                 Function3 { totalBalance: Long, leasedBalance: Long, inOrderBalance: Long ->
                     val currentWaves = loadDbWavesBalance()
@@ -340,10 +340,10 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
         return nodeService.activeLeasing(getAddress())
                 .map {
                     return@map it.filter {
-                        it.asset = Constants.WAVES_ASSET_INFO
+                        it.asset = WavesConstants.WAVES_ASSET_INFO
                         it.transactionTypeId = TransactionUtil.getTransactionType(
                                 it, WavesWallet.getAddress())
-                        it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
+                        it.transactionTypeId == WavesConstants.ID_STARTED_LEASING_TYPE
                                 && it.sender == App.getAccessManager().getWallet()?.address
                     }
                 }
@@ -380,8 +380,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
     }
 
     fun assetDetails(assetId: String?): Observable<AssetsDetailsResponse> {
-        return if (TextUtils.isEmpty(assetId) || assetId == Constants.WAVES_ASSET_ID_FILLED) {
-            Observable.just(AssetsDetailsResponse(assetId = Constants.WAVES_ASSET_ID_FILLED, scripted = false))
+        return if (TextUtils.isEmpty(assetId) || assetId == WavesConstants.WAVES_ASSET_ID_FILLED) {
+            Observable.just(AssetsDetailsResponse(assetId = WavesConstants.WAVES_ASSET_ID_FILLED, scripted = false))
         } else {
             nodeService.assetDetails(assetId!!)
         }

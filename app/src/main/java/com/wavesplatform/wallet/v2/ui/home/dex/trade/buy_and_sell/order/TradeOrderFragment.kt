@@ -13,7 +13,7 @@ import android.widget.EditText
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.model.local.BuySellData
@@ -584,7 +584,7 @@ class TradeOrderFragment : BaseFragment(), TradeOrderView {
     override fun showCommissionSuccess(unscaledAmount: Long) {
         fillInputsWithValues()
         text_fee_value.text = "${getScaledAmount(unscaledAmount, 8)} " +
-                "${Constants.WAVES_ASSET_INFO.name}"
+                "${WavesConstants.WAVES_ASSET_INFO.name}"
         progress_bar_fee_transaction.hide()
         text_fee_value.visiable()
     }

@@ -674,11 +674,11 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 .subscribe {
                     if (view.check_box_staging_on_explorer.isChecked) {
                         openUrlWithChromeTab(String.format(
-                                com.wavesplatform.sdk.utils.Constants.URL_WAVES_STAGE_EXPLORER,
+                                com.wavesplatform.sdk.utils.WavesConstants.URL_WAVES_STAGE_EXPLORER,
                                 transaction.id))
                     } else {
                         openUrlWithChromeTab(String.format(
-                                com.wavesplatform.sdk.utils.Constants.URL_WAVES_EXPLORER,
+                                com.wavesplatform.sdk.utils.WavesConstants.URL_WAVES_EXPLORER,
                                 transaction.id))
                     }
                 })
@@ -763,7 +763,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
         val amountValue = getScaledAmount(transaction.amount,
                 amountAsset.precision)
 
-        if (myOrder.orderType == com.wavesplatform.sdk.utils.Constants.SELL_ORDER_TYPE) {
+        if (myOrder.orderType == com.wavesplatform.sdk.utils.WavesConstants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell
             directionSign = "-"
         } else {
@@ -776,8 +776,8 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)
 
-        val amountAssetTicker = if (amountAsset.name == com.wavesplatform.sdk.utils.Constants.WAVES_ASSET_ID_FILLED) {
-            com.wavesplatform.sdk.utils.Constants.WAVES_ASSET_ID_FILLED
+        val amountAssetTicker = if (amountAsset.name == com.wavesplatform.sdk.utils.WavesConstants.WAVES_ASSET_ID_FILLED) {
+            com.wavesplatform.sdk.utils.WavesConstants.WAVES_ASSET_ID_FILLED
         } else {
             amountAsset.ticker
         }

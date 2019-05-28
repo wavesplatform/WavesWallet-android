@@ -121,7 +121,7 @@ class MyOrderDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<MyO
             view.relative_confirmations.gone()
 
             // fill fee field
-            view.text_fee?.text = MoneyUtil.getScaledText(data.fee, Constants.WAVES_ASSET_INFO.precision).stripZeros()
+            view.text_fee?.text = MoneyUtil.getScaledText(data.fee, WavesConstants.WAVES_ASSET_INFO.precision).stripZeros()
             view.text_base_info_tag.visiable()
 
             // fill time field

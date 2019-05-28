@@ -20,69 +20,69 @@ class TransactionUtil @Inject constructor() {
                 if (transaction.type == TransactionResponse.TRANSFER &&
                         transaction.sender != address &&
                         transaction.asset?.isSpam == true) {
-                    Constants.ID_SPAM_RECEIVE_TYPE
+                    WavesConstants.ID_SPAM_RECEIVE_TYPE
                 } else if (transaction.type == TransactionResponse.TRANSFER &&
                         transaction.sender != address &&
                         transaction.recipientAddress != address) {
-                    Constants.ID_RECEIVE_SPONSORSHIP_TYPE
+                    WavesConstants.ID_RECEIVE_SPONSORSHIP_TYPE
                 } else if (transaction.type == TransactionResponse.MASS_TRANSFER &&
                         transaction.sender != address &&
                         transaction.asset?.isSpam == true) {
-                    Constants.ID_MASS_SPAM_RECEIVE_TYPE
+                    WavesConstants.ID_MASS_SPAM_RECEIVE_TYPE
                 } else if (transaction.type == TransactionResponse.LEASE_CANCEL &&
                         !transaction.leaseId.isNullOrEmpty()) {
-                    Constants.ID_CANCELED_LEASING_TYPE
+                    WavesConstants.ID_CANCELED_LEASING_TYPE
                 } else if ((transaction.type == TransactionResponse.TRANSFER || transaction.type == 9) &&
                         transaction.sender != address) {
-                    Constants.ID_RECEIVED_TYPE
+                    WavesConstants.ID_RECEIVED_TYPE
                 } else if (transaction.type == TransactionResponse.TRANSFER &&
                         transaction.sender == transaction.recipientAddress) {
-                    Constants.ID_SELF_TRANSFER_TYPE
+                    WavesConstants.ID_SELF_TRANSFER_TYPE
                 } else if (transaction.type == TransactionResponse.TRANSFER &&
                         transaction.sender == address) {
-                    Constants.ID_SENT_TYPE
+                    WavesConstants.ID_SENT_TYPE
                 } else if (transaction.type == TransactionResponse.LEASE &&
                         transaction.recipientAddress != address) {
-                    Constants.ID_STARTED_LEASING_TYPE
+                    WavesConstants.ID_STARTED_LEASING_TYPE
                 } else if (transaction.type == TransactionResponse.EXCHANGE) {
-                    Constants.ID_EXCHANGE_TYPE
+                    WavesConstants.ID_EXCHANGE_TYPE
                 } else if (transaction.type == TransactionResponse.ISSUE) {
-                    Constants.ID_TOKEN_GENERATION_TYPE
+                    WavesConstants.ID_TOKEN_GENERATION_TYPE
                 } else if (transaction.type == TransactionResponse.BURN) {
-                    Constants.ID_TOKEN_BURN_TYPE
+                    WavesConstants.ID_TOKEN_BURN_TYPE
                 } else if (transaction.type == TransactionResponse.REISSUE) {
-                    Constants.ID_TOKEN_REISSUE_TYPE
+                    WavesConstants.ID_TOKEN_REISSUE_TYPE
                 } else if (transaction.type == TransactionResponse.CREATE_ALIAS) {
-                    Constants.ID_CREATE_ALIAS_TYPE
+                    WavesConstants.ID_CREATE_ALIAS_TYPE
                 } else if (transaction.type == TransactionResponse.LEASE &&
                         transaction.recipientAddress == address) {
-                    Constants.ID_INCOMING_LEASING_TYPE
+                    WavesConstants.ID_INCOMING_LEASING_TYPE
                 } else if (transaction.type == TransactionResponse.MASS_TRANSFER &&
                         transaction.sender == address) {
-                    Constants.ID_MASS_SEND_TYPE
+                    WavesConstants.ID_MASS_SEND_TYPE
                 } else if (transaction.type == TransactionResponse.MASS_TRANSFER &&
                         transaction.sender != address) {
-                    Constants.ID_MASS_RECEIVE_TYPE
+                    WavesConstants.ID_MASS_RECEIVE_TYPE
                 } else if (transaction.type == TransactionResponse.DATA) {
-                    Constants.ID_DATA_TYPE
+                    WavesConstants.ID_DATA_TYPE
                 } else if (transaction.type == TransactionResponse.ADDRESS_SCRIPT) {
                     if (transaction.script == null) {
-                        Constants.ID_CANCEL_ADDRESS_SCRIPT_TYPE
+                        WavesConstants.ID_CANCEL_ADDRESS_SCRIPT_TYPE
                     } else {
-                        Constants.ID_SET_ADDRESS_SCRIPT_TYPE
+                        WavesConstants.ID_SET_ADDRESS_SCRIPT_TYPE
                     }
                 } else if (transaction.type == TransactionResponse.SPONSORSHIP) {
                     if (transaction.minSponsoredAssetFee == null) {
-                        Constants.ID_CANCEL_SPONSORSHIP_TYPE
+                        WavesConstants.ID_CANCEL_SPONSORSHIP_TYPE
                     } else {
-                        Constants.ID_SET_SPONSORSHIP_TYPE
+                        WavesConstants.ID_SET_SPONSORSHIP_TYPE
                     }
                 } else if (transaction.type == TransactionResponse.ASSET_SCRIPT) {
-                    Constants.ID_UPDATE_ASSET_SCRIPT_TYPE
+                    WavesConstants.ID_UPDATE_ASSET_SCRIPT_TYPE
                 } else if (transaction.type == TransactionResponse.SCRIPT_INVOCATION) {
-                    Constants.ID_SCRIPT_INVOCATION_TYPE
+                    WavesConstants.ID_SCRIPT_INVOCATION_TYPE
                 } else {
-                    Constants.ID_UNRECOGNISED_TYPE
+                    WavesConstants.ID_UNRECOGNISED_TYPE
                 }
 
         fun getTransactionAmount(transaction: TransactionResponse, decimals: Int = 8, round: Boolean = true): String {

@@ -16,22 +16,21 @@ import com.wavesplatform.sdk.net.model.LastAppVersionResponse
 import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.sdk.net.service.ApiService
 import com.wavesplatform.sdk.net.service.NodeService
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.sdk.utils.Environment
 import com.wavesplatform.sdk.utils.RxUtil
-import com.wavesplatform.sdk.utils.Servers
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
 import com.wavesplatform.wallet.v2.data.manager.service.GithubService
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Function3
+import io.reactivex.functions.BiFunction
 import pers.victor.ext.currentTimeMillis
 import timber.log.Timber
 
-class EnvironmentManager(var current: Environment) {
+class EnvironmentManager(var current: ClientEnvironment) {
 
     private var configurationDisposable: Disposable? = null
-    private var timeDisposable: Disposable? = null
     private var versionDisposable: Disposable? = null
 
     companion object {
@@ -62,7 +61,7 @@ class EnvironmentManager(var current: Environment) {
 
         val defaultAssets = mutableListOf<AssetBalanceResponse>()
 
-        val environment: Environment
+        val environment: ClientEnvironment
             get() = instance!!.current
 
         val environmentName: String?
@@ -70,7 +69,7 @@ class EnvironmentManager(var current: Environment) {
                 val preferenceManager = PreferenceManager
                         .getDefaultSharedPreferences(App.getAppContext())
                 return preferenceManager.getString(
-                        GLOBAL_CURRENT_ENVIRONMENT, Environment.MAIN_NET.name)
+                        GLOBAL_CURRENT_ENVIRONMENT, ClientEnvironment.MAIN_NET.name)
             }
 
 
@@ -91,7 +90,7 @@ class EnvironmentManager(var current: Environment) {
             return currentTimeMillis + timeCorrection
         }
 
-        fun setCurrentEnvironment(current: Environment) {
+        fun setCurrentEnvironment(current: ClientEnvironment) {
             PreferenceManager.getDefaultSharedPreferences(App.getAppContext())
                     .edit()
                     .putString(GLOBAL_CURRENT_ENVIRONMENT, current.name)
@@ -103,8 +102,8 @@ class EnvironmentManager(var current: Environment) {
 
         @JvmStatic
         fun update() {
-            var initEnvironment: Environment = Environment.MAIN_NET
-            for (environment in Environment.environments) {
+            var initEnvironment: ClientEnvironment = ClientEnvironment.MAIN_NET
+            for (environment in ClientEnvironment.environments) {
                 if (environmentName!!.equals(environment.name, ignoreCase = true)) {
                     initEnvironment = environment
                     break
@@ -117,14 +116,16 @@ class EnvironmentManager(var current: Environment) {
                     .getDefaultSharedPreferences(App.getAppContext())
                     .getLong(GLOBAL_CURRENT_TIME_CORRECTION, 0)
             val config = getLocalSavedConfig()
-            val servers = Servers(
-                    config.servers.nodeUrl,
-                    config.servers.dataUrl,
-                    config.servers.matcherUrl,
-                    config.scheme[0].toByte(),
+
+            val environment = Environment(
+                    Environment.Server.Custom(
+                            config.servers.nodeUrl,
+                            config.servers.matcherUrl,
+                            config.servers.dataUrl,
+                            config.scheme[0].toByte()),
                     timeCorrection)
 
-            Wavesplatform.setServers(servers)
+            Wavesplatform.setEnvironment(environment)
 
             loadConfiguration(
                     Wavesplatform.service().apiService,
@@ -135,7 +136,7 @@ class EnvironmentManager(var current: Environment) {
         private fun loadConfiguration(apiService: ApiService,
                                       nodeService: NodeService,
                                       githubService: GithubService) {
-            instance!!.configurationDisposable = githubService.globalConfiguration(environment.url)
+            /*instance!!.configurationDisposable = githubService.globalConfiguration(environment.url)
                     .map { globalConfiguration ->
                         setConfiguration(globalConfiguration)
                         globalConfiguration.generalAssets.map { it.assetId }
@@ -153,9 +154,48 @@ class EnvironmentManager(var current: Environment) {
                         error.printStackTrace()
                         setConfiguration(environment.configuration)
                         instance!!.configurationDisposable!!.dispose()
-                    })
+                    })*/
 
-            instance!!.timeDisposable = nodeService.utilsTime()
+            instance!!.configurationDisposable =
+                    Observable.zip(
+                            githubService.globalConfiguration(environment.url),
+                            nodeService.utilsTime(),
+                            BiFunction { conf: GlobalConfigurationResponse, time: UtilsTimeResponse ->
+                                return@BiFunction Pair(conf, time)
+                            })
+                            .map { pair ->
+                                val timeCorrection = pair.second.ntp - currentTimeMillis
+                                setTimeCorrection(timeCorrection)
+                                setConfiguration(pair.first)
+
+                                val environment = Environment(
+                                        Environment.Server.Custom(
+                                                pair.first.servers.nodeUrl,
+                                                pair.first.servers.matcherUrl,
+                                                pair.first.servers.dataUrl,
+                                                pair.first.scheme[0].toByte()),
+                                        timeCorrection)
+
+                                Wavesplatform.setEnvironment(environment)
+
+                                globalConfiguration.generalAssets.map { it.assetId }
+                            }
+                            .flatMap { apiService.assetsInfoByIds(it) }
+                            .map { info ->
+                                setDefaultAssets(info)
+                                instance!!.configurationDisposable!!.dispose()
+                            }
+                            .compose(RxUtil.applyObservableDefaultSchedulers())
+                            .subscribe({
+                                instance!!.configurationDisposable!!.dispose()
+                            }, { error ->
+                                Timber.e(error, "EnvironmentManager: Can't download GlobalConfiguration!")
+                                error.printStackTrace()
+                                setConfiguration(environment.configuration)
+                                instance!!.configurationDisposable!!.dispose()
+                            })
+
+            /*instance!!.timeDisposable = nodeService.utilsTime()
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
                         setTimeCorrection(it)
@@ -164,16 +204,16 @@ class EnvironmentManager(var current: Environment) {
                         Timber.e(error, "EnvironmentManager: Can't download time correction!")
                         error.printStackTrace()
                         instance!!.timeDisposable!!.dispose()
-                    })
+                    })*/
 
-            instance!!.versionDisposable = githubService.loadLastAppVersion(Constants.URL_GITHUB_CONFIG_VERSION)
+            instance!!.versionDisposable = githubService.loadLastAppVersion(WavesConstants.URL_GITHUB_CONFIG_VERSION)
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({ version ->
                         setLastAppVersion(version)
                         instance!!.versionDisposable!!.dispose()
                     }, { error ->
                         error.printStackTrace()
-                        instance!!.timeDisposable!!.dispose()
+                        instance!!.versionDisposable!!.dispose()
                     })
         }
 
@@ -187,16 +227,16 @@ class EnvironmentManager(var current: Environment) {
 
             val preferences = PreferenceManager.getDefaultSharedPreferences(App.getAppContext())
             val currentEnvName = preferences.getString(
-                    GLOBAL_CURRENT_ENVIRONMENT, Environment.MAIN_NET.name)
+                    GLOBAL_CURRENT_ENVIRONMENT, ClientEnvironment.MAIN_NET.name)
 
             return when (currentEnvName) {
-                Environment.MAIN_NET.name -> getConfiguration(preferences, Environment.MAIN_NET)
-                Environment.TEST_NET.name -> getConfiguration(preferences, Environment.TEST_NET)
-                else -> getConfiguration(preferences, Environment.MAIN_NET)
+                ClientEnvironment.MAIN_NET.name -> getConfiguration(preferences, ClientEnvironment.MAIN_NET)
+                ClientEnvironment.TEST_NET.name -> getConfiguration(preferences, ClientEnvironment.TEST_NET)
+                else -> getConfiguration(preferences, ClientEnvironment.MAIN_NET)
             }
         }
 
-        private fun getConfiguration(preferences: SharedPreferences, environment: Environment)
+        private fun getConfiguration(preferences: SharedPreferences, environment: ClientEnvironment)
                 : GlobalConfigurationResponse {
             return if (preferences.contains(GLOBAL_CURRENT_ENVIRONMENT_DATA)) {
                 val json = preferences.getString(
@@ -216,10 +256,8 @@ class EnvironmentManager(var current: Environment) {
                     .apply()
         }
 
-        private fun setTimeCorrection(time: UtilsTimeResponse) {
-            val timeCorrection = time.ntp - currentTimeMillis
+        private fun setTimeCorrection(timeCorrection: Long) {
             if (Math.abs(timeCorrection) > 30_000) {
-                Wavesplatform.setTimeCorrection(timeCorrection)
                 PreferenceManager
                         .getDefaultSharedPreferences(App.getAppContext())
                         .edit()
@@ -233,13 +271,13 @@ class EnvironmentManager(var current: Environment) {
             defaultAssets.clear()
             for (assetInfo in info.data) {
                 val assetBalance = AssetBalanceResponse(
-                        assetId = if (assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED) {
-                            Constants.WAVES_ASSET_ID_EMPTY
+                        assetId = if (assetInfo.assetInfo.id == WavesConstants.WAVES_ASSET_ID_FILLED) {
+                            WavesConstants.WAVES_ASSET_ID_EMPTY
                         } else {
                             assetInfo.assetInfo.id
                         },
                         quantity = assetInfo.assetInfo.quantity,
-                        isFavorite = assetInfo.assetInfo.id == Constants.WAVES_ASSET_ID_FILLED,
+                        isFavorite = assetInfo.assetInfo.id == WavesConstants.WAVES_ASSET_ID_FILLED,
                         issueTransaction = IssueTransactionResponse(
                                 id = assetInfo.assetInfo.id,
                                 assetId = assetInfo.assetInfo.id,
@@ -266,12 +304,7 @@ class EnvironmentManager(var current: Environment) {
                     .putString(GLOBAL_CURRENT_ENVIRONMENT_DATA,
                             Gson().toJson(globalConfiguration))
                     .apply()
-            instance!!.current.setConfiguration(globalConfiguration)
-            Wavesplatform.setServers(Servers(
-                    globalConfiguration.servers.nodeUrl,
-                    globalConfiguration.servers.dataUrl,
-                    globalConfiguration.servers.matcherUrl,
-                    globalConfiguration.scheme[0].toByte()))
+            instance!!.current.configuration = globalConfiguration
         }
 
         private fun restartApp(application: Application) {

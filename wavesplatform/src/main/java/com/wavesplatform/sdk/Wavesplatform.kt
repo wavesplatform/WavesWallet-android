@@ -21,15 +21,14 @@ package com.wavesplatform.sdk
 import android.app.Application
 import com.wavesplatform.sdk.crypto.WavesCrypto
 import com.wavesplatform.sdk.crypto.WavesCryptoImpl
-import com.wavesplatform.sdk.net.DataManager
-import com.wavesplatform.sdk.utils.Servers
-import pers.victor.ext.currentTimeMillis
+import com.wavesplatform.sdk.net.WavesService
+import com.wavesplatform.sdk.utils.Environment
 
-class Wavesplatform private constructor(var context: Application) {
+class Wavesplatform {
 
-    private var servers: Servers = Servers.DEFAULT
-    private val crypto = WavesCryptoImpl()
-    private var service: DataManager = DataManager(context)
+    private lateinit var environment: Environment
+    private lateinit var crypto: WavesCrypto
+    private lateinit var service: WavesService
 
     companion object {
 
@@ -41,16 +40,10 @@ class Wavesplatform private constructor(var context: Application) {
          */
         @JvmStatic
         fun init(application: Application) {
-            instance = Wavesplatform(application)
-        }
-
-        @JvmStatic
-        @Throws(NullPointerException::class)
-        private fun get(): Wavesplatform {
-            if (instance == null) {
-                throw NullPointerException("Wavesplatform must be init first!")
-            }
-            return instance!!
+            instance = Wavesplatform()
+            instance!!.environment = Environment.DEFAULT
+            instance!!.service = WavesService(application)
+            instance!!.crypto = WavesCryptoImpl()
         }
 
         /**
@@ -65,21 +58,26 @@ class Wavesplatform private constructor(var context: Application) {
          * Access to net
          */
         @JvmStatic
-        fun service(): DataManager {
+        fun service(): WavesService {
             return get().service
         }
 
-        fun getServers(): Servers {
-            return Wavesplatform.get().servers
+        @JvmStatic
+        fun getEnvironment(): Environment {
+            return get().environment
         }
 
-        fun setTimeCorrection(timeCorrection: Long) {
-            Wavesplatform.get().servers.timeCorrection = timeCorrection
+        @JvmStatic
+        fun setEnvironment(environment: Environment) {
+            get().environment = environment
+            service().createServices()
         }
 
-        fun setServers(servers: Servers) {
-            Wavesplatform.get().servers = servers
-            Wavesplatform.service().createServices()
+        private fun get(): Wavesplatform {
+            if (instance == null) {
+                throw NullPointerException("Wavesplatform must be init first!")
+            }
+            return instance!!
         }
     }
 }

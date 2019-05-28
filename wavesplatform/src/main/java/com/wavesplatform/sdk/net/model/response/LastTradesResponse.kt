@@ -6,7 +6,7 @@
 package com.wavesplatform.sdk.net.model.response
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.net.model.OrderType
 
 data class LastTradesResponse(
@@ -89,8 +89,8 @@ data class LastTradesResponse(
 
                 fun getType(): OrderType {
                     return when (orderType) {
-                        Constants.BUY_ORDER_TYPE -> OrderType.BUY
-                        Constants.SELL_ORDER_TYPE -> OrderType.SELL
+                        WavesConstants.BUY_ORDER_TYPE -> OrderType.BUY
+                        WavesConstants.SELL_ORDER_TYPE -> OrderType.SELL
                         else -> OrderType.BUY
                     }
                 }

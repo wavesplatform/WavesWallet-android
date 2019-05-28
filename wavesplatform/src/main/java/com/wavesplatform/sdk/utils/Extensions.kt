@@ -12,7 +12,7 @@ import java.security.SecureRandom
 
 
 fun String.isWaves(): Boolean {
-    return this.toLowerCase() == Constants.WAVES_ASSET_INFO.name.toLowerCase()
+    return this.toLowerCase() == WavesConstants.WAVES_ASSET_INFO.name.toLowerCase()
 }
 
 fun String.withWavesIdConvert(): String {
@@ -23,13 +23,13 @@ fun String.withWavesIdConvert(): String {
 }
 
 fun getWavesDexFee(fee: Long): BigDecimal {
-    return MoneyUtil.getScaledText(fee, Constants.WAVES_ASSET_INFO.precision)
+    return MoneyUtil.getScaledText(fee, WavesConstants.WAVES_ASSET_INFO.precision)
             .clearBalance()
             .toBigDecimal()
 }
 
 fun String.isWavesId(): Boolean {
-    return this.toLowerCase() == Constants.WAVES_ASSET_INFO.id
+    return this.toLowerCase() == WavesConstants.WAVES_ASSET_INFO.id
 }
 
 fun ByteArray.arrayWithSize(): ByteArray {
@@ -98,7 +98,7 @@ fun ErrorResponse.isSmartError(): Boolean {
 fun AssetInfoResponse.getTicker(): String {
 
     if (this.id.isWavesId()) {
-        return Constants.WAVES_ASSET_INFO.name
+        return WavesConstants.WAVES_ASSET_INFO.name
     }
 
     return this.ticker ?: this.name

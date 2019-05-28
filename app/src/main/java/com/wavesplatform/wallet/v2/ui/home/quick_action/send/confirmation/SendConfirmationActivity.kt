@@ -13,7 +13,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.net.model.request.TransactionsBroadcastRequest
 import com.wavesplatform.sdk.utils.MoneyUtil
 import com.wavesplatform.sdk.utils.getScaledAmount
@@ -73,7 +73,7 @@ class SendConfirmationActivity : BaseActivity(), SendConfirmationView {
         presenter.type = intent!!.extras!!.getSerializable(KEY_INTENT_TYPE) as SendPresenter.Type
         presenter.blockchainCommission = intent!!.extras!!.getLong(KEY_INTENT_BLOCKCHAIN_COMMISSION)
         presenter.feeAsset = intent!!.extras!!.getParcelable(KEY_INTENT_FEE_ASSET)
-                ?: find(Constants.WAVES_ASSET_ID_EMPTY)!!
+                ?: find(WavesConstants.WAVES_ASSET_ID_EMPTY)!!
 
         if (presenter.type == SendPresenter.Type.GATEWAY) {
             presenter.gatewayCommission = BigDecimal(

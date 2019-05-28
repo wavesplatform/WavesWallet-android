@@ -94,7 +94,7 @@ class YourAssetsPresenter @Inject constructor() : BasePresenter<YourAssetsView>(
                             assets.addAll(cryptoAssets)
                         } else {
                             assets.addAll(cryptoAssets.filter {
-                                it.assetId != com.wavesplatform.sdk.utils.Constants.WAVES_ASSET_ID_EMPTY
+                                it.assetId != com.wavesplatform.sdk.utils.WavesConstants.WAVES_ASSET_ID_EMPTY
                             })
                         }
                         runOnUiThread {

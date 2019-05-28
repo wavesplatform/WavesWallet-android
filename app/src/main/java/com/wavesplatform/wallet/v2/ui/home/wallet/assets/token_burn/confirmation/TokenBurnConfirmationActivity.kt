@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.net.model.request.BurnRequest
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R
@@ -66,7 +66,7 @@ class TokenBurnConfirmationActivity : BaseActivity(), TokenBurnConfirmationView 
         text_description.text = presenter.assetBalance!!.getDescription()
 
         text_fee_value.text = "${getScaledAmount(presenter.fee, 8)} " +
-                "${Constants.CUSTOM_FEE_ASSET_NAME}"
+                "${WavesConstants.CUSTOM_FEE_ASSET_NAME}"
 
         button_confirm.click {
             analytics.trackEvent(AnalyticEvents.BurnTokenConfirmTapEvent)

@@ -6,8 +6,7 @@
 package com.wavesplatform.sdk.net.model.response
 
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.net.model.OrderType
 import com.wavesplatform.sdk.net.model.TransactionType
@@ -48,8 +47,8 @@ open class OrderResponse(
 
     fun getType(): OrderType {
         return when (orderType) {
-            Constants.BUY_ORDER_TYPE -> OrderType.BUY
-            Constants.SELL_ORDER_TYPE -> OrderType.SELL
+            WavesConstants.BUY_ORDER_TYPE -> OrderType.BUY
+            WavesConstants.SELL_ORDER_TYPE -> OrderType.SELL
             else -> OrderType.BUY
         }
     }
@@ -243,10 +242,10 @@ open class TransactionResponse(
                             if (findMyOrder(transaction.order1!!,
                                             transaction.order2!!,
                                             address)
-                                            .orderType == Constants.SELL_ORDER_TYPE) {
-                                "-${Constants.SELL_ORDER_TYPE})\n"
+                                            .orderType == WavesConstants.SELL_ORDER_TYPE) {
+                                "-${WavesConstants.SELL_ORDER_TYPE})\n"
                             } else {
-                                "-${Constants.BUY_ORDER_TYPE})\n"
+                                "-${WavesConstants.BUY_ORDER_TYPE})\n"
                             }
                         } else {
                             ")\n"

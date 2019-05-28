@@ -14,7 +14,7 @@ import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.oushangfeng.pinnedsectionitemdecoration.utils.FullSpanUtil
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.sdk.net.model.TransactionType
 import com.wavesplatform.sdk.utils.*
@@ -196,7 +196,7 @@ class HistoryTabItemAdapter @Inject constructor() :
         val amountValue = getScaledAmount(transaction.amount,
                 amountAsset.precision)
 
-        if (myOrder.orderType == Constants.SELL_ORDER_TYPE) {
+        if (myOrder.orderType == WavesConstants.SELL_ORDER_TYPE) {
             directionStringResId = R.string.history_my_dex_intent_sell
             directionSign = "-"
         } else {
@@ -209,8 +209,8 @@ class HistoryTabItemAdapter @Inject constructor() :
                 amountAsset.name,
                 secondOrder.assetPair?.priceAssetObject?.name)
 
-        val amountAssetTicker = if (amountAsset.name == Constants.WAVES_ASSET_ID_FILLED) {
-            Constants.WAVES_ASSET_ID_FILLED
+        val amountAssetTicker = if (amountAsset.name == WavesConstants.WAVES_ASSET_ID_FILLED) {
+            WavesConstants.WAVES_ASSET_ID_FILLED
         } else {
             amountAsset.ticker
         }

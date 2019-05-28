@@ -18,7 +18,7 @@ import android.util.AttributeSet
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.wallet.R
@@ -132,7 +132,7 @@ class AssetAvatarView : AppCompatImageView {
     * */
     private fun setValues(assetId: String, name: String, isSponsoredAsset: Boolean, isScriptAsset: Boolean) {
         val avatar = when (assetId) {
-            "" -> defaultAssetsAvatar()[Constants.WAVES_ASSET_ID_FILLED]
+            "" -> defaultAssetsAvatar()[WavesConstants.WAVES_ASSET_ID_FILLED]
             else -> defaultAssetsAvatar()[assetId]
         }
 

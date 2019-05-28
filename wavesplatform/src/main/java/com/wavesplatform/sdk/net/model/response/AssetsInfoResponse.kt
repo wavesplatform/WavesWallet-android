@@ -7,7 +7,7 @@ package com.wavesplatform.sdk.net.model.response
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
@@ -42,8 +42,8 @@ open class AssetInfoResponse(
     }
 
     fun getTokenTicker(): String? {
-        return if (name == Constants.WAVES_ASSET_ID_FILLED) {
-            Constants.WAVES_ASSET_ID_FILLED
+        return if (name == WavesConstants.WAVES_ASSET_ID_FILLED) {
+            WavesConstants.WAVES_ASSET_ID_FILLED
         } else {
             ticker
         }

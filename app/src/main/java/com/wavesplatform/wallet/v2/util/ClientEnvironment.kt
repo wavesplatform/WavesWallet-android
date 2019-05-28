@@ -7,7 +7,7 @@ import com.wavesplatform.wallet.App
 import java.io.IOException
 import java.nio.charset.Charset
 
-class Environment internal constructor(
+class ClientEnvironment internal constructor(
         val name: String,
         val url: String,
         jsonFileName: String) {
@@ -51,10 +51,10 @@ class Environment internal constructor(
         private const val URL_CONFIG_TEST_NET = "https://github-proxy.wvservices.com/" +
                 "wavesplatform/waves-client-config/${EnvironmentManager.BRANCH}/environment_testnet.json"
 
-        var TEST_NET = Environment(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, FILENAME_TEST_NET)
-        var MAIN_NET = Environment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, FILENAME_MAIN_NET)
+        var TEST_NET = ClientEnvironment(KEY_ENV_TEST_NET, URL_CONFIG_TEST_NET, FILENAME_TEST_NET)
+        var MAIN_NET = ClientEnvironment(KEY_ENV_MAIN_NET, URL_CONFIG_MAIN_NET, FILENAME_MAIN_NET)
 
-        internal var environments: MutableList<Environment> = mutableListOf()
+        internal var environments: MutableList<ClientEnvironment> = mutableListOf()
 
         init {
             environments.add(TEST_NET)

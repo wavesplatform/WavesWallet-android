@@ -4,13 +4,18 @@ import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.sdk.net.model.response.GlobalConfigurationResponse
 
 
-class Constants {
+class WavesConstants {
 
     companion object {
 
         const val URL_NODE = "https://nodes.wavesnodes.com/"
         const val URL_DATA = "https://api.wavesplatform.com/"
         const val URL_MATCHER = "https://matcher.wavesplatform.com/"
+
+        const val URL_NODE_TEST = "https://pool.testnet.wavesnodes.com/"
+        const val URL_DATA_TEST = "api.testnet.wavesplatform.com/"
+        const val URL_MATCHER_TEST = "https://matcher.testnet.wavesnodes.com/"
+
         const val URL_COINOMAT = "https://coinomat.com/api/"
         const val URL_GITHUB_CONFIG = "https://github-proxy.wvservices.com/wavesplatform/waves-client-config/"
         const val URL_WAVES_EXPLORER = "http://wavesexplorer.com/tx/%s"

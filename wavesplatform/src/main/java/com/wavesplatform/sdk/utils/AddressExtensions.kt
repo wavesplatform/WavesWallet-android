@@ -18,7 +18,7 @@ fun String?.isValidWavesAddress(): Boolean {
         val bytes = Base58.decode(this)
         if (bytes.size == ADDRESS_LENGTH &&
                 bytes[0] == ADDRESS_VERSION &&
-                bytes[1] == Wavesplatform.getServers().netCode) {
+                bytes[1] == Wavesplatform.getEnvironment().scheme) {
             val checkSum = Arrays.copyOfRange(bytes, bytes.size - CHECK_SUM_LENGTH, bytes.size)
             val checkSumGenerated = calcCheckSum(bytes.copyOf(bytes.size - CHECK_SUM_LENGTH))
             Arrays.equals(checkSum, checkSumGenerated)
@@ -35,7 +35,7 @@ fun String.isAlias(): Boolean {
 }
 
 fun String.makeAsAlias(): String {
-    return "alias:${Wavesplatform.getServers().netCode.toChar()}:$this"
+    return "alias:${Wavesplatform.getEnvironment().scheme.toChar()}:$this"
 }
 
 fun String.parseAlias(): String {
@@ -54,7 +54,7 @@ fun addressFromPublicKey(publicKey: ByteArray): String {
     return try {
         val publicKeyHash = Hash.keccak(publicKey).copyOf(HASH_LENGTH)
         val withoutChecksum = Bytes.concat(
-                byteArrayOf(ADDRESS_VERSION, Wavesplatform.getServers().netCode),
+                byteArrayOf(ADDRESS_VERSION, Wavesplatform.getEnvironment().scheme),
                 publicKeyHash)
         Base58.encode(Bytes.concat(withoutChecksum, calcCheckSum(withoutChecksum)))
     } catch (e: Exception) {

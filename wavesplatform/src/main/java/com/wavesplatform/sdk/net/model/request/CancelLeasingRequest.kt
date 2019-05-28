@@ -9,7 +9,7 @@ import android.util.Log
 import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.net.model.response.TransactionResponse
@@ -17,20 +17,20 @@ import com.wavesplatform.sdk.Wavesplatform
 
 data class CancelLeasingRequest(
         @SerializedName("type") val type: Int = TransactionResponse.LEASE_CANCEL,
-        @SerializedName("chainId") var scheme: Int? = Wavesplatform.getServers().netCode.toInt(),
+        @SerializedName("chainId") var scheme: Int? = Wavesplatform.getEnvironment().scheme.toInt(),
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("leaseId") var leaseId: String = "",
-        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getServers().getTime(),
+        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getEnvironment().getTime(),
         @SerializedName("fee") var fee: Long = 0,
-        @SerializedName("version") var version: Int = Constants.VERSION,
+        @SerializedName("version") var version: Int = WavesConstants.VERSION,
         @SerializedName("proofs") var proofs: MutableList<String?>? = null
 ) {
 
     fun toSignBytes(): ByteArray {
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(Constants.VERSION.toByte()),
-                    byteArrayOf(Wavesplatform.getServers().netCode),
+                    byteArrayOf(WavesConstants.VERSION.toByte()),
+                    byteArrayOf(Wavesplatform.getEnvironment().scheme),
                     Base58.decode(senderPublicKey),
                     Longs.toByteArray(fee),
                     Longs.toByteArray(timestamp),

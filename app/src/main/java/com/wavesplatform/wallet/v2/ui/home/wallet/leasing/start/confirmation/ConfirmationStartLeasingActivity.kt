@@ -9,7 +9,7 @@ import android.app.Activity
 import android.os.Bundle
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.getScaledAmount
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants.RESULT_SMART_ERROR
@@ -53,11 +53,11 @@ class ConfirmationStartLeasingActivity : BaseActivity(), ConfirmationStartLeasin
 
         text_leasing_value.text = presenter.amount
         text_leasing_value.makeTextHalfBold()
-        text_free_value.text = "${getScaledAmount(presenter.fee, 8)} ${Constants.WAVES_ASSET_INFO.name}"
+        text_free_value.text = "${getScaledAmount(presenter.fee, 8)} ${WavesConstants.WAVES_ASSET_INFO.name}"
 
         text_node_address.text = presenter.address
 
-        text_leasing_result_value.text = getString(R.string.confirm_leasing_result_value, presenter.amount, Constants.WAVES_ASSET_INFO.name)
+        text_leasing_result_value.text = getString(R.string.confirm_leasing_result_value, presenter.amount, WavesConstants.WAVES_ASSET_INFO.name)
 
         button_confirm.click {
             analytics.trackEvent(AnalyticEvents.LeasingConfirmTapEvent)

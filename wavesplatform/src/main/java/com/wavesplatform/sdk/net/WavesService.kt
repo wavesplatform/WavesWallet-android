@@ -11,8 +11,7 @@ import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.net.service.ApiService
 import com.wavesplatform.sdk.net.service.MatcherService
 import com.wavesplatform.sdk.net.service.NodeService
-import com.wavesplatform.sdk.utils.Constants
-import com.wavesplatform.sdk.utils.Servers
+import com.wavesplatform.sdk.utils.WavesConstants
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -30,7 +29,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Singleton
-open class DataManager(var context: Context) {
+open class WavesService(var context: Context) {
 
     lateinit var nodeService: NodeService
     lateinit var apiService: ApiService
@@ -49,13 +48,13 @@ open class DataManager(var context: Context) {
     }
 
     fun createServices() {
-        nodeService = createService(addSlash(Wavesplatform.getServers().nodeUrl), adapterFactory)
+        nodeService = createService(addSlash(Wavesplatform.getEnvironment().nodeUrl), adapterFactory)
                 .create(NodeService::class.java)
 
-        apiService = createService(addSlash(Wavesplatform.getServers().dataUrl), adapterFactory)
+        apiService = createService(addSlash(Wavesplatform.getEnvironment().dataUrl), adapterFactory)
                 .create(ApiService::class.java)
 
-        matcherService = createService(addSlash(Wavesplatform.getServers().matcherUrl), adapterFactory)
+        matcherService = createService(addSlash(Wavesplatform.getEnvironment().matcherUrl), adapterFactory)
                 .create(MatcherService::class.java)
     }
 
@@ -114,7 +113,7 @@ open class DataManager(var context: Context) {
         return Interceptor { chain ->
             val originalResponse = chain.proceed(chain.request())
             if (originalResponse.request().url().url().toString()
-                            .contains(Constants.URL_NODE)
+                            .contains(WavesConstants.URL_NODE)
                     && originalResponse.headers("Set-Cookie").isNotEmpty()
                     && this.cookies.isEmpty()) {
                 val cookies = originalResponse.headers("Set-Cookie")
@@ -128,7 +127,7 @@ open class DataManager(var context: Context) {
     private fun addCookiesInterceptor(): Interceptor {
         return Interceptor { chain ->
             if (this.cookies.isNotEmpty() && chain.request().url().url().toString()
-                            .contains(Constants.URL_NODE)) {
+                            .contains(WavesConstants.URL_NODE)) {
                 val builder = chain.request().newBuilder()
                 this.cookies.forEach {
                     builder.addHeader("Cookie", it)
@@ -141,7 +140,7 @@ open class DataManager(var context: Context) {
     }
 
     private fun createHostInterceptor(): HostSelectionInterceptor {
-        return HostSelectionInterceptor(Wavesplatform.getServers())
+        return HostSelectionInterceptor(Wavesplatform.getEnvironment())
     }
 
     private fun createCache(): Cache {

@@ -10,7 +10,7 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.annotations.SerializedName
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.net.model.response.TransactionResponse
@@ -21,8 +21,8 @@ data class AliasRequest(
         @SerializedName("type") val type: Int = TransactionResponse.CREATE_ALIAS,
         @SerializedName("senderPublicKey") var senderPublicKey: String = "",
         @SerializedName("fee") var fee: Long = 0,
-        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getServers().getTime(),
-        @SerializedName("version") var version: Int = Constants.VERSION,
+        @SerializedName("timestamp") var timestamp: Long = Wavesplatform.getEnvironment().getTime(),
+        @SerializedName("version") var version: Int = WavesConstants.VERSION,
         @SerializedName("proofs") var proofs: MutableList<String?>? = null,
         @SerializedName("alias") var alias: String? = ""
 ) {
@@ -30,10 +30,10 @@ data class AliasRequest(
     fun toSignBytes(): ByteArray {
         return try {
             Bytes.concat(byteArrayOf(type.toByte()),
-                    byteArrayOf(Wavesplatform.getServers().netCode),
+                    byteArrayOf(Wavesplatform.getEnvironment().scheme),
                     Base58.decode(senderPublicKey),
-                    Bytes.concat(byteArrayOf(Constants.VERSION.toByte()),
-                            byteArrayOf(Wavesplatform.getServers().netCode),
+                    Bytes.concat(byteArrayOf(WavesConstants.VERSION.toByte()),
+                            byteArrayOf(Wavesplatform.getEnvironment().scheme),
                             alias?.toByteArray(Charset.forName("UTF-8"))?.arrayWithSize())
                             .arrayWithSize(),
                     Longs.toByteArray(fee),

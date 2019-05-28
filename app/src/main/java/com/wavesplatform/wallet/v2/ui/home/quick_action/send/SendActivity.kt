@@ -20,7 +20,7 @@ import com.ethanhua.skeleton.SkeletonScreen
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.net.model.response.coinomat.XRateResponse
 import com.wavesplatform.sdk.utils.*
@@ -552,7 +552,7 @@ class SendActivity : BaseActivity(), SendView {
                     .replace("/%23send/", "/send/"))
             try {
                 var assetId = uri.path.split("/")[2]
-                if (Constants.WAVES_ASSET_ID_FILLED.equalsIgnoreCase(assetId)) {
+                if (WavesConstants.WAVES_ASSET_ID_FILLED.equalsIgnoreCase(assetId)) {
                     assetId = ""
                 }
                 val assetBalance = queryFirst<AssetBalanceDb> {

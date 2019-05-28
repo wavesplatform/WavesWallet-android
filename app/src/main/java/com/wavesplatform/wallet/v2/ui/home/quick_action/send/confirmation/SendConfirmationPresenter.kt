@@ -7,7 +7,7 @@ package com.wavesplatform.wallet.v2.ui.home.quick_action.send.confirmation
 
 import com.arellomobile.mvp.InjectViewState
 import com.vicpin.krealmextensions.queryFirst
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.net.model.request.TransactionsBroadcastRequest
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
@@ -42,7 +42,7 @@ class SendConfirmationPresenter @Inject constructor() : BasePresenter<SendConfir
     var type: SendPresenter.Type = SendPresenter.Type.UNKNOWN
     var gatewayCommission: BigDecimal = BigDecimal.ZERO
     var blockchainCommission = 0L
-    var feeAsset: AssetBalanceResponse = find(Constants.WAVES_ASSET_ID_EMPTY)!!
+    var feeAsset: AssetBalanceResponse = find(WavesConstants.WAVES_ASSET_ID_EMPTY)!!
 
     var success = false
 

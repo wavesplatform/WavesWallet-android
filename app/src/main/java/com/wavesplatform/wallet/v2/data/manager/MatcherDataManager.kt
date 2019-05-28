@@ -9,7 +9,7 @@ import com.google.common.primitives.Bytes
 import com.google.common.primitives.Longs
 import com.google.gson.internal.LinkedTreeMap
 import com.vicpin.krealmextensions.queryAllAsSingle
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.crypto.Base58
 import com.wavesplatform.sdk.crypto.CryptoProvider
 import com.wavesplatform.sdk.net.model.response.WatchMarketResponse
@@ -97,8 +97,8 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
             return Observable.zip(Observable.just(EnvironmentManager.globalConfiguration)
                     .map {
                         val globalAssets = it.generalAssets.toMutableList()
-                        globalAssets.add(Constants.MRTGeneralAsset)
-                        globalAssets.add(Constants.WCTGeneralAsset)
+                        globalAssets.add(WavesConstants.MRTGeneralAsset)
+                        globalAssets.add(WavesConstants.WCTGeneralAsset)
                         return@map globalAssets.associateBy { it.assetId }
                     },
                     matcherService.getAllMarkets()

@@ -14,7 +14,7 @@ import android.text.TextUtils
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wavesplatform.sdk.utils.Constants
+import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.v2.util.safeLet
@@ -133,7 +133,7 @@ class InvoiceFragment : BaseFragment(), InvoiceView {
         }
 
         val assetId = if (presenter.assetBalance?.assetId.isNullOrEmpty()) {
-            Constants.WAVES_ASSET_ID_FILLED
+            WavesConstants.WAVES_ASSET_ID_FILLED
         } else {
             presenter.assetBalance!!.assetId!!
         }

@@ -571,7 +571,7 @@ fun TextView.makeTextHalfBold(boldWholeValue: Boolean = false) {
 }
 
 fun loadDbWavesBalance(): AssetBalanceResponse {
-    return find(com.wavesplatform.sdk.utils.Constants.WAVES_ASSET_ID_EMPTY)!!
+    return find(com.wavesplatform.sdk.utils.WavesConstants.WAVES_ASSET_ID_EMPTY)!!
 }
 
 fun find(assetId: String): AssetBalanceResponse? {
