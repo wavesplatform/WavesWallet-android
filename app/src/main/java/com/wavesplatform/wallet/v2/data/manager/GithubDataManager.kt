@@ -9,7 +9,6 @@ import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommissionResponse
 import com.wavesplatform.sdk.net.model.response.NewsResponse
 import com.wavesplatform.sdk.net.model.response.SpamAssetResponse
-import com.wavesplatform.sdk.utils.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.manager.service.GithubService
 import io.reactivex.Observable
@@ -57,7 +56,7 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
     companion object {
         fun create(adapterFactory: CallAdapter.Factory?, url: String)
                 : GithubService {
-            return Wavesplatform.createService(url,
+            return Wavesplatform.net().createService(url,
                     adapterFactory ?: RxJava2CallAdapterFactory.create())
                     .create(GithubService::class.java)
         }

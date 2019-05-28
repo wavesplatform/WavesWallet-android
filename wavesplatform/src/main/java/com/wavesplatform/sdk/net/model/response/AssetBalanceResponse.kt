@@ -47,8 +47,8 @@ open class AssetBalanceResponse(
         return !issueTransaction?.script.isNullOrEmpty()
     }
 
-    fun isMyWavesToken(): Boolean {
-        return issueTransaction?.sender == Wavesplatform.getWallet().address
+    fun isMyWavesToken(address: String): Boolean {
+        return issueTransaction?.sender == address
     }
 
     fun getDecimals(): Int {

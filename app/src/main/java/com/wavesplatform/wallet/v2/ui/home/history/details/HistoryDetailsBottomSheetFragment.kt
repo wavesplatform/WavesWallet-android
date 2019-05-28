@@ -659,7 +659,8 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
                 .throttleFirst(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    copyToClipboard(TransactionResponse.getInfo(transaction), view.text_copy_all_data,
+                    copyToClipboard(TransactionResponse.getInfo(transaction,
+                            WavesWallet.getAddress()), view.text_copy_all_data,
                             R.string.history_details_copy_all_data)
                 })
 

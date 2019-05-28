@@ -6,7 +6,6 @@
 package com.wavesplatform.sdk.utils
 
 
-import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
 import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommissionResponse
 import com.wavesplatform.sdk.net.model.response.TransactionResponse
@@ -17,33 +16,33 @@ class TransactionUtil @Inject constructor() {
 
     companion object {
 
-        fun getTransactionType(transaction: TransactionResponse): Int =
+        fun getTransactionType(transaction: TransactionResponse, address: String): Int =
                 if (transaction.type == TransactionResponse.TRANSFER &&
-                        transaction.sender != Wavesplatform.getWallet().address &&
+                        transaction.sender != address &&
                         transaction.asset?.isSpam == true) {
                     Constants.ID_SPAM_RECEIVE_TYPE
                 } else if (transaction.type == TransactionResponse.TRANSFER &&
-                        transaction.sender != Wavesplatform.getWallet().address &&
-                        transaction.recipientAddress != Wavesplatform.getWallet().address) {
+                        transaction.sender != address &&
+                        transaction.recipientAddress != address) {
                     Constants.ID_RECEIVE_SPONSORSHIP_TYPE
                 } else if (transaction.type == TransactionResponse.MASS_TRANSFER &&
-                        transaction.sender != Wavesplatform.getWallet().address &&
+                        transaction.sender != address &&
                         transaction.asset?.isSpam == true) {
                     Constants.ID_MASS_SPAM_RECEIVE_TYPE
                 } else if (transaction.type == TransactionResponse.LEASE_CANCEL &&
                         !transaction.leaseId.isNullOrEmpty()) {
                     Constants.ID_CANCELED_LEASING_TYPE
                 } else if ((transaction.type == TransactionResponse.TRANSFER || transaction.type == 9) &&
-                        transaction.sender != Wavesplatform.getWallet().address) {
+                        transaction.sender != address) {
                     Constants.ID_RECEIVED_TYPE
                 } else if (transaction.type == TransactionResponse.TRANSFER &&
                         transaction.sender == transaction.recipientAddress) {
                     Constants.ID_SELF_TRANSFER_TYPE
                 } else if (transaction.type == TransactionResponse.TRANSFER &&
-                        transaction.sender == Wavesplatform.getWallet().address) {
+                        transaction.sender == address) {
                     Constants.ID_SENT_TYPE
                 } else if (transaction.type == TransactionResponse.LEASE &&
-                        transaction.recipientAddress != Wavesplatform.getWallet().address) {
+                        transaction.recipientAddress != address) {
                     Constants.ID_STARTED_LEASING_TYPE
                 } else if (transaction.type == TransactionResponse.EXCHANGE) {
                     Constants.ID_EXCHANGE_TYPE
@@ -56,13 +55,13 @@ class TransactionUtil @Inject constructor() {
                 } else if (transaction.type == TransactionResponse.CREATE_ALIAS) {
                     Constants.ID_CREATE_ALIAS_TYPE
                 } else if (transaction.type == TransactionResponse.LEASE &&
-                        transaction.recipientAddress == Wavesplatform.getWallet().address) {
+                        transaction.recipientAddress == address) {
                     Constants.ID_INCOMING_LEASING_TYPE
                 } else if (transaction.type == TransactionResponse.MASS_TRANSFER &&
-                        transaction.sender == Wavesplatform.getWallet().address) {
+                        transaction.sender == address) {
                     Constants.ID_MASS_SEND_TYPE
                 } else if (transaction.type == TransactionResponse.MASS_TRANSFER &&
-                        transaction.sender != Wavesplatform.getWallet().address) {
+                        transaction.sender != address) {
                     Constants.ID_MASS_RECEIVE_TYPE
                 } else if (transaction.type == TransactionResponse.DATA) {
                     Constants.ID_DATA_TYPE

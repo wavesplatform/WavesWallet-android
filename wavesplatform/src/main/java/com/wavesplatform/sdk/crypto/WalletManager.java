@@ -16,6 +16,10 @@ import java.util.List;
 public class WalletManager {
     private static WalletManager instance;
 
+    /**
+     * @return Generated random secret seed-phrase, seed recovery phrase or backup seed phrase
+     * and contains 15 different words from dictionary.
+     */
     public static String createWalletSeed() {
         try {
             int nbWords = 15;

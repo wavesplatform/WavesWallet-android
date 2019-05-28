@@ -8,8 +8,7 @@ package com.wavesplatform.wallet.v2.data.manager
 import android.content.Intent
 import android.text.TextUtils
 import com.vicpin.krealmextensions.RealmConfigStore
-import com.wavesplatform.sdk.crypto.WavesWallet
-import com.wavesplatform.sdk.Wavesplatform
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.sdk.crypto.AESUtil
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.RxUtil
@@ -95,14 +94,14 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
 
     fun storeWalletData(seed: String, password: String, walletName: String, skipBackup: Boolean): String {
         try {
-            loggedInGuid = Wavesplatform.createWallet(seed)
+            loggedInGuid = WavesWallet.createWallet(seed)
             prefs.setGlobalValue(PrefsUtil.GLOBAL_LAST_LOGGED_IN_GUID, loggedInGuid)
             prefs.addGlobalListValue(EnvironmentManager.name +
                     PrefsUtil.LIST_WALLET_GUIDS, loggedInGuid)
-            prefs.setValue(PrefsUtil.KEY_PUB_KEY, Wavesplatform.getWallet().publicKeyStr)
+            prefs.setValue(PrefsUtil.KEY_PUB_KEY, WavesWallet.getWallet()!!.publicKeyStr)
             prefs.setValue(PrefsUtil.KEY_WALLET_NAME, walletName)
-            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, Wavesplatform.getWallet().getEncryptedData(password))
-            authHelper.configureDB(Wavesplatform.getWallet().address, loggedInGuid)
+            prefs.setValue(PrefsUtil.KEY_ENCRYPTED_WALLET, WavesWallet.getWallet()!!.getEncryptedData(password))
+            authHelper.configureDB(WavesWallet.getWallet()!!.address, loggedInGuid)
             MigrationUtil.checkOldAddressBook(prefs, loggedInGuid)
             prefs.setValue(PrefsUtil.KEY_SKIP_BACKUP, skipBackup)
             return loggedInGuid
@@ -182,23 +181,23 @@ class AccessManager(private var prefs: PrefsUtil, private var authHelper: AuthHe
 
     fun resetWallet() {
         clearRealmConfiguration()
-        Wavesplatform.resetWallet()
+        WavesWallet.resetWallet()
         loggedInGuid = ""
     }
 
     fun setWallet(guid: String, password: String) {
-        Wavesplatform.createWallet(getWalletData(guid), password, guid)
+        WavesWallet.createWallet(getWalletData(guid), password, guid)
         setLastLoggedInGuid(guid)
         authHelper.configureDB(getWallet().address, guid)
         MigrationUtil.checkOldAddressBook(prefs, guid)
     }
 
     fun isAuthenticated(): Boolean {
-        return Wavesplatform.isAuthenticated()
+        return WavesWallet.isAuthenticated()
     }
 
     fun getWallet(): WavesWallet {
-        return Wavesplatform.getWallet()
+        return WavesWallet.getWallet()!!
     }
 
     private fun createAddressBookCurrentAccount(): AddressBookUserDb? {

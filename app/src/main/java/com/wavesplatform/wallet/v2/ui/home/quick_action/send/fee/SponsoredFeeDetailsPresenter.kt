@@ -14,6 +14,7 @@ import com.wavesplatform.sdk.utils.stripZeros
 import com.wavesplatform.wallet.v2.data.model.local.SponsoredAssetItem
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import javax.inject.Inject
 
 @InjectViewState
@@ -46,16 +47,18 @@ class SponsoredFeeDetailsPresenter @Inject constructor() : BasePresenter<Sponsor
     private fun isValidBalanceForSponsoring(item: AssetBalanceResponse, fee: String): Boolean {
         val sponsorBalance = MoneyUtil.getScaledText(item.getSponsorBalance(), Constants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal()
         val feeDecimalValue = fee.clearBalance().toBigDecimal()
-        val availableBalance = MoneyUtil.getScaledText(item.getAvailableBalance()
-                ?: 0, item.getDecimals()).clearBalance().toBigDecimal()
+        val availableBalance = MoneyUtil.getScaledText(
+                item.getAvailableBalance(), item.getDecimals()).clearBalance().toBigDecimal()
 
-        return ((sponsorBalance >= Constants.MIN_WAVES_SPONSORED_BALANCE.toBigDecimal() && availableBalance >= feeDecimalValue) ||
-
-                (sponsorBalance >= MoneyUtil.getScaledText(wavesFee, Constants.WAVES_ASSET_INFO.precision).clearBalance().toBigDecimal() &&
-                        availableBalance >= feeDecimalValue &&
-                        item.isMyWavesToken()) ||
-
-                item.isWaves())
+        return ((sponsorBalance >= Constants.MIN_WAVES_SPONSORED_BALANCE.toBigDecimal()
+                && availableBalance >= feeDecimalValue)
+                || (sponsorBalance >= MoneyUtil.getScaledText(
+                        wavesFee, Constants.WAVES_ASSET_INFO.precision)
+                        .clearBalance()
+                        .toBigDecimal()
+                        && availableBalance >= feeDecimalValue
+                        && item.isMyWavesToken(WavesWallet.getAddress()))
+                || item.isWaves())
     }
 
     private fun getFee(item: AssetBalanceResponse): String {

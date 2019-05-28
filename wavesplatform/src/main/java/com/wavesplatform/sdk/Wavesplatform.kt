@@ -19,24 +19,17 @@
 package com.wavesplatform.sdk
 
 import android.app.Application
-import android.util.Log
 import com.wavesplatform.sdk.crypto.*
 import com.wavesplatform.sdk.net.CallAdapterFactory
 import com.wavesplatform.sdk.net.DataManager
-import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.utils.Servers
 import pers.victor.ext.currentTimeMillis
 import retrofit2.CallAdapter
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import java.util.*
 
 class Wavesplatform private constructor(var context: Application, factory: CallAdapter.Factory?) {
 
     private val crypto = WavesCryptoImpl()
     private var net: DataManager = DataManager(context, factory)
-    private var wavesWallet: WavesWallet? = null
-    private var guid: String = UUID.randomUUID().toString()
     private var netCode: Byte = 'W'.toByte()
     private var timeCorrection = 0L
 
@@ -91,103 +84,6 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
             return get().net
         }
 
-        /**
-         * @return Generated random secret seed-phrase, seed recovery phrase or backup seed phrase
-         * and contains 15 different words from dictionary.
-         */
-        @JvmStatic
-        @Throws(NullPointerException::class)
-        fun generateSeed(): String {
-            return WalletManager.createWalletSeed()
-        }
-
-        /**
-         * Create wallet from secret seed-phrase.
-         * @param seed secret seed-phrase
-         * @param guid
-         */
-        @JvmStatic
-        fun createWallet(seed: String,
-                         guid: String = UUID.randomUUID().toString()): String {
-            return try {
-                get().wavesWallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
-                get().guid = guid
-                guid
-            } catch (e: Exception) {
-                Log.e("Wavesplatform", "Error create Wavesplatform wallet from seed: ", e)
-                e.printStackTrace()
-                ""
-            }
-        }
-
-        /**
-         * Create wallet.
-         * @param encrypted Encrypted seed by password
-         * @param password Password of seed
-         * @param guid Optional. Set your specific id for the wallet
-         * @return New generated guid or return from {@code guid} parameter
-         */
-        @JvmStatic
-        fun createWallet(encrypted: String,
-                         password: String,
-                         guid: String = UUID.randomUUID().toString()): String {
-            return try {
-                get().wavesWallet = WavesWallet(encrypted, password)
-                get().guid = guid
-                guid
-            } catch (e: Exception) {
-                Log.e("Wavesplatform", "Error create Wavesplatform wallet from encrypted data: ", e)
-                e.printStackTrace()
-                ""
-            }
-        }
-
-        /**
-         * @see com.wavesplatform.sdk.crypto.WavesWallet
-         * @return Current Waveswallet
-         */
-        @JvmStatic
-        @Throws(NullPointerException::class)
-        fun getWallet(): WavesWallet {
-            if (get().wavesWallet == null) {
-                throw NullPointerException("Wavesplatform wallet must be created first!")
-            } else {
-                return get().wavesWallet!!
-            }
-        }
-
-        /**
-         * Resets current wallet and loosing any data of it
-         */
-        @JvmStatic
-        fun resetWallet() {
-            get().wavesWallet = null
-        }
-
-        /**
-         * @return Checks is platform set any active wallet
-         */
-        @JvmStatic
-        fun isAuthenticated(): Boolean {
-            return get().wavesWallet != null
-        }
-
-        /**
-         * @return Address of current wallet
-         */
-        @JvmStatic
-        fun getAddress(): String {
-            return Wavesplatform.getWallet().address
-        }
-
-        /**
-         * @return Public key of current wallet
-         */
-        @JvmStatic
-        fun getPublicKeyStr(): String {
-            return Wavesplatform.getWallet().publicKeyStr
-        }
-
         fun getNetCode(): Byte {
             return Wavesplatform.get().netCode
         }
@@ -198,13 +94,6 @@ class Wavesplatform private constructor(var context: Application, factory: CallA
 
         fun setTimeCorrection(timeCorrection: Long) {
             Wavesplatform.get().timeCorrection = timeCorrection
-        }
-
-
-        fun createService(baseUrl: String,
-                          adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create())
-                : Retrofit {
-            return Wavesplatform.net().createRetrofit(baseUrl, adapterFactory)
         }
 
         fun setServers(servers: Servers) {

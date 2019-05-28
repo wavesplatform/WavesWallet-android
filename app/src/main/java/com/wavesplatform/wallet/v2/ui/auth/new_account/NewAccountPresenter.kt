@@ -8,7 +8,7 @@ package com.wavesplatform.wallet.v2.ui.auth.new_account
 import android.annotation.SuppressLint
 import android.support.v7.widget.AppCompatImageView
 import com.arellomobile.mvp.InjectViewState
-import com.wavesplatform.sdk.crypto.WavesWallet
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.Identicon
@@ -33,7 +33,7 @@ class NewAccountPresenter @Inject constructor() : BasePresenter<NewAccountView>(
     fun generateSeeds(children: List<AppCompatImageView>) {
         Observable.fromIterable(children)
                 .map {
-                    val seed = Wavesplatform.generateSeed()
+                    val seed = Wavesplatform.crypto().randomSeed()
                     val wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
                     return@map Triple(seed, identicon.create(wallet.address), it)
                 }

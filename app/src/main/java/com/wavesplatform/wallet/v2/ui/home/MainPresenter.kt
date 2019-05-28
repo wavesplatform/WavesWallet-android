@@ -18,6 +18,7 @@ import com.wavesplatform.wallet.v2.data.model.db.AssetInfoDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.Function3
@@ -91,7 +92,8 @@ class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
                             } else {
                                 assetsInfoListFromDb.firstOrNull { it.id == transaction.assetId }
                             }
-                            transaction.transactionTypeId = TransactionUtil.getTransactionType(transaction.convertFromDb())
+                            transaction.transactionTypeId = TransactionUtil.getTransactionType(
+                                    transaction.convertFromDb(), WavesWallet.getAddress())
                         }
 
                         transactionListFromDb.saveAll()

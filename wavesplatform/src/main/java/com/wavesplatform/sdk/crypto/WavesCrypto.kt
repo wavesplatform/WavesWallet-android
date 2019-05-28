@@ -81,21 +81,23 @@ class WavesCryptoImpl : WavesCrypto {
     }
 
     override fun keyPair(seed: Seed): KeyPair {
-        val wallet = WavesWallet(seed.toByteArray(Charsets.UTF_8))
+        val account = PrivateKeyAccount(seed.toByteArray(Charsets.UTF_8))
         return object : KeyPair {
             override val publicKey: PublicKey
-                get() = wallet.publicKeyStr
+                get() = account.publicKeyStr
             override val privateKey: PrivateKey
-                get() = wallet.privateKeyStr
+                get() = account.privateKeyStr
         }
     }
 
     override fun publicKey(seed: Seed): PublicKey {
-        return WavesWallet(seed.toByteArray(Charsets.UTF_8)).publicKeyStr
+        val account = PrivateKeyAccount(seed.toByteArray(Charsets.UTF_8))
+        return account.publicKeyStr
     }
 
     override fun privateKey(seed: Seed): PrivateKey {
-        return WavesWallet(seed.toByteArray(Charsets.UTF_8)).privateKeyStr
+        val account = PrivateKeyAccount(seed.toByteArray(Charsets.UTF_8))
+        return account.privateKeyStr
     }
 
     override fun addressByPublicKey(publicKey: PublicKey, chainId: String?): Address {
@@ -115,7 +117,8 @@ class WavesCryptoImpl : WavesCrypto {
     }
 
     override fun signBytesWithSeed(bytes: Bytes, seed: Seed): Bytes {
-        return CryptoProvider.sign(WavesWallet(seed.toByteArray(Charsets.UTF_8)).privateKey, bytes)
+        val account = PrivateKeyAccount(seed.toByteArray(Charsets.UTF_8))
+        return CryptoProvider.sign(account.privateKey, bytes)
     }
 
     override fun verifySignature(publicKey: PublicKey, bytes: Bytes, signature: Bytes): Boolean {

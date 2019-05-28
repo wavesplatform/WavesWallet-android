@@ -220,29 +220,29 @@ open class TransactionResponse(
             }
         }
 
-        fun getInfo(transaction: TransactionResponse): String {
+        fun getInfo(transaction: TransactionResponse, address: String): String {
             val feeAssetId = if (transaction.feeAssetId == null) {
                 ""
             } else {
                 " (${transaction.feeAssetId})"
             }
             return "Transaction ID: ${transaction.id}\n" +
-                    type(transaction) +
+                    type(transaction, address) +
                     "Date: ${transaction.timestamp.date("MM/dd/yyyy HH:mm")}\n" +
                     "Sender: ${transaction.sender}\n" +
                     recipient(transaction) +
                     amount(transaction) +
-                    exchangePrice(transaction) +
+                    exchangePrice(transaction, address) +
                     fee(transaction, feeAssetId) +
                     attachment(transaction)
         }
 
-        private fun type(transaction: TransactionResponse) =
+        private fun type(transaction: TransactionResponse, address: String) =
                 "Type: ${transaction.type} (${getNameBy(transaction.type).toLowerCase()}" +
                         if (transaction.type == EXCHANGE) {
                             if (findMyOrder(transaction.order1!!,
                                             transaction.order2!!,
-                                            Wavesplatform.getWallet().address)
+                                            address)
                                             .orderType == Constants.SELL_ORDER_TYPE) {
                                 "-${Constants.SELL_ORDER_TYPE})\n"
                             } else {
@@ -288,10 +288,9 @@ open class TransactionResponse(
                     }
         }
 
-        private fun exchangePrice(transaction: TransactionResponse): String {
+        private fun exchangePrice(transaction: TransactionResponse, address: String): String {
             return if (transaction.type == EXCHANGE) {
-                val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!,
-                        Wavesplatform.getWallet().address)
+                val myOrder = findMyOrder(transaction.order1!!, transaction.order2!!, address)
                 val priceAsset = myOrder.assetPair?.priceAssetObject
                 val priceValue = MoneyUtil.getScaledText(
                         transaction.amount.times(transaction.price).div(100000000),

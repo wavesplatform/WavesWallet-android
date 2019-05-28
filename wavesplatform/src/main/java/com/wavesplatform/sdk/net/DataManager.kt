@@ -7,7 +7,6 @@ import com.google.gson.GsonBuilder
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.wavesplatform.sdk.BuildConfig
-import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.net.service.ApiService
 import com.wavesplatform.sdk.net.service.MatcherService
 import com.wavesplatform.sdk.net.service.NodeService
@@ -50,17 +49,17 @@ open class DataManager(var context: Context,
     }
 
     fun createServices() {
-        nodeService = createRetrofit(
+        nodeService = createService(
                 addSlash(servers.nodeUrl),
                 adapterFactory ?: RxJava2CallAdapterFactory.create())
                 .create(NodeService::class.java)
 
-        apiService = createRetrofit(
+        apiService = createService(
                 addSlash(servers.dataUrl),
                 adapterFactory ?: RxJava2CallAdapterFactory.create())
                 .create(ApiService::class.java)
 
-        matcherService = createRetrofit(
+        matcherService = createService(
                 addSlash(servers.matcherUrl),
                 adapterFactory ?: RxJava2CallAdapterFactory.create())
                 .create(MatcherService::class.java)
@@ -75,7 +74,7 @@ open class DataManager(var context: Context,
         onErrorListeners.remove(errorListener)
     }
 
-    fun createRetrofit(
+    fun createService(
             baseUrl: String,
             adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create()): Retrofit {
         val retrofit = Retrofit.Builder()

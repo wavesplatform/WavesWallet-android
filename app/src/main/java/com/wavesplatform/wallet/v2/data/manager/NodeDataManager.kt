@@ -28,6 +28,7 @@ import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.v2.util.loadDbWavesBalance
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -168,7 +169,9 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
 
                                     if (savedAssetPrefs.isEmpty()) {
                                         mapDbAssets?.let {
-                                            if (mapDbAssets[assetBalance.assetId] == null && assetBalance.isMyWavesToken()) {
+                                            if (mapDbAssets[assetBalance.assetId] == null
+                                                    && assetBalance.isMyWavesToken(
+                                                            WavesWallet.getAddress())) {
                                                 assetBalance.isFavorite = true
                                             }
                                         }
@@ -338,7 +341,8 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 .map {
                     return@map it.filter {
                         it.asset = Constants.WAVES_ASSET_INFO
-                        it.transactionTypeId = TransactionUtil.getTransactionType(it)
+                        it.transactionTypeId = TransactionUtil.getTransactionType(
+                                it, WavesWallet.getAddress())
                         it.transactionTypeId == Constants.ID_STARTED_LEASING_TYPE
                                 && it.sender == App.getAccessManager().getWallet()?.address
                     }

@@ -25,6 +25,7 @@ import com.wavesplatform.wallet.v2.data.model.local.AssetBalanceMultiItemEntity
 import com.wavesplatform.wallet.v2.data.model.local.WalletSectionItem
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.PrefsUtil
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
@@ -39,7 +40,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     var enableElevation: Boolean = false
 
     fun loadAssetsBalance(withApiUpdate: Boolean = true) {
-        if (Wavesplatform.getWallet() == null) {
+        if (!WavesWallet.isAuthenticated()) {
             runOnUiThread {
                 viewState.afterFailedLoadAssets()
             }
@@ -252,7 +253,7 @@ class AssetsPresenter @Inject constructor() : BasePresenter<AssetsView>() {
     }
 
     fun loadAliases() {
-        if (Wavesplatform.isAuthenticated()) {
+        if (WavesWallet.isAuthenticated()) {
             addSubscription(apiDataManager.loadAliases()
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe {})

@@ -16,6 +16,7 @@ import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
 import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
 import com.wavesplatform.wallet.v2.data.manager.service.GithubService
 import com.wavesplatform.wallet.v2.util.RxEventBus
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import javax.inject.Inject
 
 open class BaseDataManager @Inject constructor() {
@@ -31,10 +32,10 @@ open class BaseDataManager @Inject constructor() {
 
 
     fun getAddress(): String {
-        return Wavesplatform.getAddress()
+        return WavesWallet.getAddress()
     }
 
     fun getPublicKeyStr(): String {
-        return Wavesplatform.getPublicKeyStr()
+        return WavesWallet.getPublicKeyStr()
     }
 }

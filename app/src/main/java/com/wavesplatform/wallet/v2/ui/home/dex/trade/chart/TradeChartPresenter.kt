@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.v2.data.model.local.ChartModel
 import com.wavesplatform.wallet.v2.data.model.local.ChartTimeFrame
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
+import com.wavesplatform.wallet.v2.util.WavesWallet
 import io.reactivex.Observable
 import java.lang.Exception
 import java.text.SimpleDateFormat
@@ -40,7 +41,7 @@ class TradeChartPresenter @Inject constructor() : BasePresenter<TradeChartView>(
     private var barEntries: ArrayList<BarEntry> = ArrayList()
     var currentTimeFrame: Int = 30
         set(value) {
-            if (Wavesplatform.getWallet() == null) {
+            if (!WavesWallet.isAuthenticated()) {
                 return
             }
             field = value

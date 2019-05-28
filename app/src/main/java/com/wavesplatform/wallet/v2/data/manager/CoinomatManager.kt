@@ -50,7 +50,7 @@ class CoinomatManager @Inject constructor() : BaseDataManager() {
     companion object {
         fun create(adapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create())
                 : CoinomatService {
-            return Wavesplatform.createService(Constants.URL_COINOMAT, adapterFactory)
+            return Wavesplatform.net().createService(Constants.URL_COINOMAT, adapterFactory)
                     .create(CoinomatService::class.java)
         }
     }
