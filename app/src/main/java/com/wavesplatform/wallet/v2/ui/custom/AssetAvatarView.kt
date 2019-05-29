@@ -134,7 +134,7 @@ class AssetAvatarView : AppCompatImageView {
             else -> Constants.defaultAssetsAvatar()[assetId]
         }
 
-        paint.color = ContextCompat.getColor(context, getColorBackgroundBy(assetId))
+        paint.color = getColorBackgroundBy(assetId)
         text = getInitial(name)
 
         setDrawable(isSponsoredAsset, isScriptAsset)
