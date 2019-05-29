@@ -1,9 +1,9 @@
 package com.wavesplatform.wallet.v2.data.manager.service
 
-import com.wavesplatform.sdk.net.model.response.coinomat.XRateResponse
-import com.wavesplatform.sdk.net.model.response.coinomat.CreateTunnelResponse
-import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnelResponse
-import com.wavesplatform.sdk.net.model.response.coinomat.LimitResponse
+import com.wavesplatform.wallet.v2.data.model.service.coinomat.XRateResponse
+import com.wavesplatform.wallet.v2.data.model.service.coinomat.CreateTunnelResponse
+import com.wavesplatform.wallet.v2.data.model.service.coinomat.GetTunnelResponse
+import com.wavesplatform.wallet.v2.data.model.service.coinomat.LimitResponse
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query

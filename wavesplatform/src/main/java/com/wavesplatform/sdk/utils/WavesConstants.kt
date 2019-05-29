@@ -1,7 +1,7 @@
 package com.wavesplatform.sdk.utils
 
 import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
-import com.wavesplatform.sdk.net.model.response.GlobalConfigurationResponse
+import com.wavesplatform.wallet.v2.data.model.cofigs.GlobalConfigurationResponse
 
 
 class WavesConstants {
@@ -16,14 +16,8 @@ class WavesConstants {
         const val URL_DATA_TEST = "api.testnet.wavesplatform.com/"
         const val URL_MATCHER_TEST = "https://matcher.testnet.wavesnodes.com/"
 
-        const val URL_COINOMAT = "https://coinomat.com/api/"
-        const val URL_GITHUB_CONFIG = "https://github-proxy.wvservices.com/wavesplatform/waves-client-config/"
         const val URL_WAVES_EXPLORER = "http://wavesexplorer.com/tx/%s"
         const val URL_WAVES_STAGE_EXPLORER = "http://stage.wavesexplorer.com/tx/%s"
-
-        const val URL_GITHUB_CONFIG_VERSION = "master/version_android.json"
-        const val URL_GITHUB_CONFIG_SPAM_FILE = "master/Scam%20tokens%20according%20to%20the%20opinion%20of%20Waves%20Community.csv/"
-
 
         const val VERSION: Int = 2
         const val WAVES_ASSET_ID_EMPTY = ""
@@ -40,12 +34,12 @@ class WavesConstants {
                 name = "WAVES",
                 quantity = 10000000000000000L)
 
-        var MRTGeneralAsset = GlobalConfigurationResponse.ConfigAsset(
+        var MRTGeneralAsset = com.wavesplatform.wallet.v2.data.model.cofigs.GlobalConfigurationResponse.ConfigAsset(
                 assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
                 gatewayId = "MRT",
                 displayName = "MinersReward")
 
-        var WCTGeneralAsset = GlobalConfigurationResponse.ConfigAsset(
+        var WCTGeneralAsset = com.wavesplatform.wallet.v2.data.model.cofigs.GlobalConfigurationResponse.ConfigAsset(
                 assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
                 gatewayId = "WCT",
                 displayName = "WavesCommunity")

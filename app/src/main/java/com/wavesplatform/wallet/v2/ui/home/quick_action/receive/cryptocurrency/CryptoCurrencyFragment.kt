@@ -16,7 +16,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnelResponse
+import com.wavesplatform.wallet.v2.data.model.service.coinomat.GetTunnelResponse
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents

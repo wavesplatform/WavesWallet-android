@@ -1,4 +1,4 @@
-package com.wavesplatform.sdk.net.model.response.coinomat
+package com.wavesplatform.wallet.v2.data.model.service.coinomat
 
 import com.google.gson.annotations.SerializedName
 

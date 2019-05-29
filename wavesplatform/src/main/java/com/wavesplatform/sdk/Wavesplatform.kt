@@ -40,8 +40,13 @@ class Wavesplatform {
          */
         @JvmStatic
         fun init(application: Application) {
+            init(application, Environment.DEFAULT)
+        }
+
+        @JvmStatic
+        fun init(application: Application, environment: Environment) {
             instance = Wavesplatform()
-            instance!!.environment = Environment.DEFAULT
+            instance!!.environment = environment
             instance!!.service = WavesService(application)
             instance!!.crypto = WavesCryptoImpl()
         }

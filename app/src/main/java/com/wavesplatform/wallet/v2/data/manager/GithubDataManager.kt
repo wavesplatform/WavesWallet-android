@@ -9,10 +9,10 @@ import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.net.CallAdapterFactory
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.RetrofitException
-import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommissionResponse
-import com.wavesplatform.sdk.net.model.response.NewsResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.NewsResponse
 import com.wavesplatform.sdk.net.model.response.SpamAssetResponse
-import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import com.wavesplatform.wallet.v2.data.manager.service.GithubService
 import io.reactivex.Observable
@@ -66,7 +66,7 @@ class GithubDataManager @Inject constructor() : BaseDataManager() {
                     GithubDataManager.onErrorListener?.onError(exception)
                 }
             })
-            return Wavesplatform.service().createService(WavesConstants.URL_GITHUB_CONFIG, adapterFactory)
+            return Wavesplatform.service().createService(Constants.URL_GITHUB_CONFIG, adapterFactory)
                     .create(GithubService::class.java)
         }
 

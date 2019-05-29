@@ -7,7 +7,7 @@ package com.wavesplatform.sdk.utils
 
 
 import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
-import com.wavesplatform.sdk.net.model.response.GlobalTransactionCommissionResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.sdk.net.model.response.TransactionResponse
 import com.wavesplatform.sdk.net.model.TransactionType
 import javax.inject.Inject
@@ -126,8 +126,8 @@ class TransactionUtil @Inject constructor() {
         }
 
         fun countCommission(
-                commission: GlobalTransactionCommissionResponse,
-                params: GlobalTransactionCommissionResponse.ParamsResponse
+                commission: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse,
+                params: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse.ParamsResponse
         ): Long {
 
             val type = params.transactionType!!
@@ -169,9 +169,9 @@ class TransactionUtil @Inject constructor() {
         }
 
         private fun getDataCommission(
-                params: GlobalTransactionCommissionResponse.ParamsResponse,
-                feeRules: GlobalTransactionCommissionResponse.FeeRulesResponse,
-                commission: GlobalTransactionCommissionResponse
+                params: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse.ParamsResponse,
+                feeRules: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse.FeeRulesResponse,
+                commission: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
         ): Long {
             var total = 0.0
             total += Math.floor(1 + (params.bytesCount!!.toDouble() - 1) / 1024) * feeRules.fee
@@ -182,9 +182,9 @@ class TransactionUtil @Inject constructor() {
         }
 
         private fun getMassTransferCommission(
-                feeRules: GlobalTransactionCommissionResponse.FeeRulesResponse,
-                params: GlobalTransactionCommissionResponse.ParamsResponse,
-                commission: GlobalTransactionCommissionResponse
+                feeRules: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse.FeeRulesResponse,
+                params: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse.ParamsResponse,
+                commission: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
         ): Long {
             val total = getAssetAccountCommission(feeRules, params, commission)
             var transfersPrice = (params.transfersCount!! * feeRules.pricePerTransfer!!).toDouble()
@@ -196,9 +196,9 @@ class TransactionUtil @Inject constructor() {
         }
 
         private fun getExchangeCommission(
-                feeRules: GlobalTransactionCommissionResponse.FeeRulesResponse,
-                params: GlobalTransactionCommissionResponse.ParamsResponse,
-                commission: GlobalTransactionCommissionResponse
+                feeRules: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse.FeeRulesResponse,
+                params: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse.ParamsResponse,
+                commission: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
         ): Long {
             var total = feeRules.fee
             if (params.smartPriceAsset!!) {
@@ -211,9 +211,9 @@ class TransactionUtil @Inject constructor() {
         }
 
         private fun getAccountCommission(
-                feeRules: GlobalTransactionCommissionResponse.FeeRulesResponse,
-                params: GlobalTransactionCommissionResponse.ParamsResponse,
-                commission: GlobalTransactionCommissionResponse
+                feeRules: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse.FeeRulesResponse,
+                params: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse.ParamsResponse,
+                commission: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
         ): Long {
             var total = feeRules.fee
             if (params.smartAccount!!) {
@@ -223,9 +223,9 @@ class TransactionUtil @Inject constructor() {
         }
 
         private fun getAssetAccountCommission(
-                feeRules: GlobalTransactionCommissionResponse.FeeRulesResponse,
-                params: GlobalTransactionCommissionResponse.ParamsResponse,
-                commission: GlobalTransactionCommissionResponse
+                feeRules: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse.FeeRulesResponse,
+                params: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse.ParamsResponse,
+                commission: com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
         ): Long {
             var total = feeRules.fee
             if (params.smartAccount!!) {

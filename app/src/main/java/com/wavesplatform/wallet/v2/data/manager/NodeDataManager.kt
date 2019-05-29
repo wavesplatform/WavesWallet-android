@@ -28,6 +28,7 @@ import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import com.wavesplatform.wallet.v2.util.loadDbWavesBalance
 import io.reactivex.Observable

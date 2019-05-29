@@ -22,6 +22,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
 import com.wavesplatform.wallet.v2.data.model.db.userdb.MarketResponseDb
 import com.wavesplatform.wallet.v2.data.model.db.SpamAssetDb
 import io.reactivex.Observable

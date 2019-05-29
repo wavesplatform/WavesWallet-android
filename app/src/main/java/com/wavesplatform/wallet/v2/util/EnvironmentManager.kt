@@ -12,7 +12,7 @@ import android.os.Handler
 import android.preference.PreferenceManager
 import com.google.gson.Gson
 import com.wavesplatform.sdk.Wavesplatform
-import com.wavesplatform.sdk.net.model.LastAppVersionResponse
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.LastAppVersionResponse
 import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.sdk.net.service.ApiService
 import com.wavesplatform.sdk.net.service.NodeService
@@ -20,8 +20,10 @@ import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.utils.Environment
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.GithubDataManager
 import com.wavesplatform.wallet.v2.data.manager.service.GithubService
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
@@ -175,7 +177,7 @@ class EnvironmentManager(var current: ClientEnvironment) {
                                 instance!!.configurationDisposable!!.dispose()
                             })
 
-            instance!!.versionDisposable = githubService.loadLastAppVersion(WavesConstants.URL_GITHUB_CONFIG_VERSION)
+            instance!!.versionDisposable = githubService.loadLastAppVersion(Constants.URL_GITHUB_CONFIG_VERSION)
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({ version ->
                         setLastAppVersion(version)

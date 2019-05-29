@@ -22,7 +22,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
-import com.wavesplatform.sdk.net.model.response.coinomat.XRateResponse
+import com.wavesplatform.wallet.v2.data.model.service.coinomat.XRateResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil

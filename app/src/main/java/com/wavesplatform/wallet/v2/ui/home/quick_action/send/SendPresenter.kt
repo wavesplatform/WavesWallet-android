@@ -20,6 +20,7 @@ import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.wallet.v2.util.find

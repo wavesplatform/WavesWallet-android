@@ -9,12 +9,12 @@ import com.wavesplatform.sdk.Wavesplatform
 import com.wavesplatform.sdk.net.CallAdapterFactory
 import com.wavesplatform.sdk.net.OnErrorListener
 import com.wavesplatform.sdk.net.RetrofitException
-import com.wavesplatform.sdk.net.model.response.coinomat.CreateTunnelResponse
-import com.wavesplatform.sdk.net.model.response.coinomat.GetTunnelResponse
-import com.wavesplatform.sdk.net.model.response.coinomat.LimitResponse
-import com.wavesplatform.sdk.net.model.response.coinomat.XRateResponse
+import com.wavesplatform.wallet.v2.data.model.service.coinomat.CreateTunnelResponse
+import com.wavesplatform.wallet.v2.data.model.service.coinomat.GetTunnelResponse
+import com.wavesplatform.wallet.v2.data.model.service.coinomat.LimitResponse
+import com.wavesplatform.wallet.v2.data.model.service.coinomat.XRateResponse
 import com.wavesplatform.wallet.v2.data.manager.service.CoinomatService
-import com.wavesplatform.sdk.utils.WavesConstants
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -59,7 +59,7 @@ class CoinomatManager @Inject constructor() : BaseDataManager() {
                     CoinomatManager.onErrorListener?.onError(exception)
                 }
             })
-            return Wavesplatform.service().createService(WavesConstants.URL_COINOMAT, adapterFactory)
+            return Wavesplatform.service().createService(Constants.URL_COINOMAT, adapterFactory)
                     .create(CoinomatService::class.java)
         }
 
