@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.ui.home.wallet.assets.sorting
 
 import com.arellomobile.mvp.InjectViewState
+import com.google.common.base.Predicates.equalTo
 import com.vicpin.krealmextensions.queryAllAsSingle
 import com.vicpin.krealmextensions.save
 import com.vicpin.krealmextensions.saveAll
@@ -24,7 +25,9 @@ class AssetsSortingPresenter @Inject constructor() : BasePresenter<AssetsSorting
 
     fun loadAssets() {
         runAsync {
-            addSubscription(queryAllAsSingle<AssetBalance>().toObservable()
+            addSubscription(queryAllAsSingle<AssetBalance>()
+                    .toObservable()
+                    .map { it.filter { list -> !list.isSpam } }
                     .compose(RxUtil.applyObservableDefaultSchedulers())
                     .subscribe({
                         val result = mutableListOf<AssetSortingItem>()
