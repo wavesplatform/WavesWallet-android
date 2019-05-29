@@ -16,4 +16,5 @@
     <string name="choose_language_russia" translatable="false">Русский</string>
     <string name="choose_language_spain" translatable="false">Español</string>
     <string name="choose_language_turkey" translatable="false">Türkçe</string>
+    <string name="choose_language_french" translatable="false">Français</string>
 </resources>
