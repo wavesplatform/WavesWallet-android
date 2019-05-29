@@ -19,6 +19,7 @@ import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.App
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.manager.base.BaseDataManager
@@ -98,8 +99,8 @@ class MatcherDataManager @Inject constructor() : BaseDataManager() {
             return Observable.zip(Observable.just(EnvironmentManager.globalConfiguration)
                     .map {
                         val globalAssets = it.generalAssets.toMutableList()
-                        globalAssets.add(WavesConstants.MRTGeneralAsset)
-                        globalAssets.add(WavesConstants.WCTGeneralAsset)
+                        globalAssets.add(Constants.MRTGeneralAsset)
+                        globalAssets.add(Constants.WCTGeneralAsset)
                         return@map globalAssets.associateBy { it.assetId }
                     },
                     matcherService.getAllMarkets()

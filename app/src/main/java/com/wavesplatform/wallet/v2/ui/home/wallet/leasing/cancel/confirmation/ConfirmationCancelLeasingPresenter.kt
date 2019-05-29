@@ -14,6 +14,7 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.sdk.utils.isSmartError
+import com.wavesplatform.wallet.v2.util.TransactionCommissionUtil
 import com.wavesplatform.wallet.v2.util.errorBody
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -71,7 +72,7 @@ class ConfirmationCancelLeasingPresenter @Inject constructor() : BasePresenter<C
                     val params = GlobalTransactionCommissionResponse.ParamsResponse()
                     params.transactionType = TransactionResponse.LEASE_CANCEL
                     params.smartAccount = scriptInfo.extraFee != 0L
-                    fee = TransactionUtil.countCommission(commission, params)
+                    fee = TransactionCommissionUtil.countCommission(commission, params)
                     viewState.showCommissionSuccess(fee)
                 }, {
                     it.printStackTrace()

@@ -1,8 +1,6 @@
 package com.wavesplatform.sdk.utils
 
 import com.wavesplatform.sdk.net.model.response.AssetInfoResponse
-import com.wavesplatform.wallet.v2.data.model.cofigs.GlobalConfigurationResponse
-
 
 class WavesConstants {
 
@@ -33,17 +31,6 @@ class WavesConstants {
                 precision = 8,
                 name = "WAVES",
                 quantity = 10000000000000000L)
-
-        var MRTGeneralAsset = com.wavesplatform.wallet.v2.data.model.cofigs.GlobalConfigurationResponse.ConfigAsset(
-                assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
-                gatewayId = "MRT",
-                displayName = "MinersReward")
-
-        var WCTGeneralAsset = com.wavesplatform.wallet.v2.data.model.cofigs.GlobalConfigurationResponse.ConfigAsset(
-                assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
-                gatewayId = "WCT",
-                displayName = "WavesCommunity")
-
 
         // TransactionResponse view types non TransactionResponse block-chain type
         const val ID_RECEIVED_TYPE = 0

@@ -6,6 +6,7 @@
 package com.wavesplatform.wallet.v2.data
 
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalConfigurationResponse
 
 object Constants {
 
@@ -101,4 +102,14 @@ object Constants {
                 .map { it.assetId }
                 .toTypedArray()
     }
+
+    var MRTGeneralAsset = GlobalConfigurationResponse.ConfigAsset(
+            assetId = "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
+            gatewayId = "MRT",
+            displayName = "MinersReward")
+
+    var WCTGeneralAsset = GlobalConfigurationResponse.ConfigAsset(
+            assetId = "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
+            gatewayId = "WCT",
+            displayName = "WavesCommunity")
 }

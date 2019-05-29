@@ -12,12 +12,10 @@ import com.vicpin.krealmextensions.*
 import com.wavesplatform.sdk.utils.WavesConstants
 import com.wavesplatform.sdk.net.model.request.*
 import com.wavesplatform.sdk.net.model.response.*
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
 import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.sdk.utils.sumByLong
 import com.wavesplatform.wallet.App
-import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.analytics.AnalyticAssetManager
 import com.wavesplatform.wallet.v2.data.helpers.ClearAssetsHelper
@@ -29,8 +27,7 @@ import com.wavesplatform.wallet.v2.data.model.db.TransactionDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
-import com.wavesplatform.wallet.v2.util.WavesWallet
-import com.wavesplatform.wallet.v2.util.loadDbWavesBalance
+import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
@@ -406,7 +403,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                     params.transactionType = TransactionResponse.EXCHANGE
                     params.smartPriceAsset = priceAssetsDetails.scripted
                     params.smartAmountAsset = amountAssetsDetails.scripted
-                    return@flatMap Observable.just(TransactionUtil.countCommission(commission, params))
+                    return@flatMap Observable.just(TransactionCommissionUtil.countCommission(commission, params))
                 }
 
     }

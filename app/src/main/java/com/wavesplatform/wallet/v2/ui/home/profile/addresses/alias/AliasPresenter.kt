@@ -15,6 +15,7 @@ import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
 import com.wavesplatform.sdk.utils.RxUtil
 import com.wavesplatform.sdk.utils.TransactionUtil
 import com.wavesplatform.wallet.v2.data.model.db.AliasDb
+import com.wavesplatform.wallet.v2.util.TransactionCommissionUtil
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -55,7 +56,7 @@ class AliasPresenter @Inject constructor() : BasePresenter<AliasView>() {
                     val params = GlobalTransactionCommissionResponse.ParamsResponse()
                     params.transactionType = TransactionResponse.CREATE_ALIAS
                     params.smartAccount = scriptInfo.extraFee != 0L
-                    fee = TransactionUtil.countCommission(commission, params)
+                    fee = TransactionCommissionUtil.countCommission(commission, params)
                     callback.showCommissionSuccess(fee)
                 }, {
                     it.printStackTrace()

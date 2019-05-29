@@ -14,7 +14,6 @@ import com.wavesplatform.sdk.net.model.request.TransactionsBroadcastRequest
 import com.wavesplatform.sdk.net.model.request.TransferTransactionRequest
 import com.wavesplatform.sdk.net.model.response.*
 import com.wavesplatform.sdk.utils.*
-import com.wavesplatform.sdk.utils.TransactionUtil.Companion.countCommission
 import com.vicpin.krealmextensions.save
 import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.R
@@ -22,10 +21,7 @@ import com.wavesplatform.wallet.v2.data.manager.CoinomatManager
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.service.cofigs.GlobalTransactionCommissionResponse
 import com.wavesplatform.wallet.v2.ui.base.presenter.BasePresenter
-import com.wavesplatform.wallet.v2.util.EnvironmentManager
-import com.wavesplatform.wallet.v2.util.find
-import com.wavesplatform.wallet.v2.util.findByGatewayId
-import com.wavesplatform.wallet.v2.util.isSpamConsidered
+import com.wavesplatform.wallet.v2.util.*
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -232,7 +228,7 @@ class SendPresenter @Inject constructor() : BasePresenter<SendView>() {
                     params.transactionType = TransactionResponse.TRANSFER
                     params.smartAccount = scriptInfo.extraFee != 0L
                     params.smartAsset = assetsDetails.scripted
-                    fee = countCommission(commission, params)
+                    fee = TransactionCommissionUtil.countCommission(commission, params)
                     feeWaves = fee
                     viewState.showCommissionSuccess(fee)
                 }, {
