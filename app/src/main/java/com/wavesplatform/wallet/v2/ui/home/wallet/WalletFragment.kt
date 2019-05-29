@@ -15,6 +15,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v1.util.PrefsUtil
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
 import com.wavesplatform.wallet.v2.ui.home.MainActivity
 import com.wavesplatform.wallet.v2.ui.home.wallet.assets.AssetsFragment
@@ -109,6 +111,7 @@ class WalletFragment : BaseFragment(), WalletView {
                 setDescription(R.string.need_update_alert_description)
                 setActionIcon(R.drawable.ic_arrowright_14_basic_200)
                 onAlertClick {
+                    analytics.trackEvent(AnalyticEvents.WalletUpdateBannerEvent)
                     openAppInPlayMarket()
                 }
             }.show()

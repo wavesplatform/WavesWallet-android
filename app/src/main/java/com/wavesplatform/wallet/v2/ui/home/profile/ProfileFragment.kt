@@ -22,6 +22,8 @@ import com.wavesplatform.wallet.BuildConfig
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.manager.NodeDataManager
 import com.wavesplatform.wallet.v2.data.model.local.Language
 import com.wavesplatform.wallet.v2.ui.auth.fingerprint.FingerprintAuthDialogFragment
@@ -69,36 +71,46 @@ class ProfileFragment : BaseFragment(), ProfileView {
                 })
 
         card_address_book.click {
+            analytics.trackEvent(AnalyticEvents.ProfileAddressBookPageEvent)
             launchActivity<AddressBookActivity> { }
         }
         card_addresses_and_keys.click {
+            analytics.trackEvent(AnalyticEvents.ProfileAddressAndKeysEvent)
             launchActivity<AddressesAndKeysActivity> { }
         }
         card_backup_phrase.click {
+            analytics.trackEvent(AnalyticEvents.ProfileBackupPhraseEvent)
             launchActivity<BackupPhraseActivity> {
                 putExtra(KEY_INTENT_SET_BACKUP, true)
             }
         }
         card_language.click {
+            analytics.trackEvent(AnalyticEvents.ProfileLanguageEvent)
             launchActivity<ChangeLanguageActivity>()
         }
         card_change_password.click {
+            analytics.trackEvent(AnalyticEvents.ProfileChangePasswordEvent)
             launchActivity<ChangePasswordActivity>(requestCode = REQUEST_CHANGE_PASSWORD) { }
         }
         card_change_passcode.click {
+            analytics.trackEvent(AnalyticEvents.ProfileChangePasscodeEvent)
             launchActivity<EnterPassCodeActivity>(
                     requestCode = REQUEST_ENTER_PASS_CODE_FOR_CHANGE)
         }
         card_network.click {
+            analytics.trackEvent(AnalyticEvents.ProfileNetworkEvent)
             launchActivity<NetworkActivity> { }
         }
         card_support.click {
+            analytics.trackEvent(AnalyticEvents.ProfileSupportEvent)
             openUrlWithChromeTab(Constants.SUPPORT_SITE)
         }
         card_rate_app.click {
+            analytics.trackEvent(AnalyticEvents.ProfileRateAppEvent)
             openAppInPlayMarket()
         }
         card_feedback.click {
+            analytics.trackEvent(AnalyticEvents.ProfileFeedbackEvent)
             sendFeedbackToSupport()
         }
 
@@ -119,6 +131,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
             }
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                     getString(R.string.profile_general_delete_account_dialog_delete)) { dialog, _ ->
+                analytics.trackEvent(AnalyticEvents.ProfileDeleteAccountEvent)
+
                 App.getAccessManager().deleteCurrentWavesWallet()
 
                 presenter.prefsUtil.logOut()
@@ -133,6 +147,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
 
         button_logout.click {
+            analytics.trackEvent(AnalyticEvents.ProfileLogoutDownEvent)
             logout()
         }
 
@@ -275,6 +290,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_logout -> {
+                analytics.trackEvent(AnalyticEvents.ProfileLogoutUpEvent)
                 logout()
             }
         }

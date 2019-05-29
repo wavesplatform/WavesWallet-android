@@ -26,6 +26,8 @@ import com.vicpin.krealmextensions.queryFirst
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance
 import com.wavesplatform.wallet.v2.data.service.UpdateApiDataService
 import com.wavesplatform.wallet.v2.ui.base.view.BaseFragment
@@ -165,6 +167,7 @@ class AssetsFragment : BaseFragment(), AssetsView {
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             if (position == 0) {
+                analytics.trackEvent(AnalyticEvents.WalletTokenSearchEvent)
                 launchActivity<SearchAssetActivity>(withoutAnimation = true)
                 activity!!.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             } else {
@@ -283,9 +286,11 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_sorting -> {
+                analytics.trackEvent(AnalyticEvents.WalletTokenSortingPageEvent)
                 launchActivity<AssetsSortingActivity>(REQUEST_SORTING)
             }
             R.id.action_your_address -> {
+                analytics.trackEvent(AnalyticEvents.WalletQRCardEvent)
                 launchActivity<MyAddressQRActivity>()
             }
         }
