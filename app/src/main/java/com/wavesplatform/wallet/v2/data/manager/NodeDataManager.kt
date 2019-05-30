@@ -208,11 +208,13 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
             offsetAsset?.forEach { id ->
                 if (id.isNotEmpty()) {
                     val assetBalance = queryFirst<AssetBalance> { equalTo("assetId", id) }
-                    if (assetBalance?.isGateway == false) {
-                        assetBalance.delete { equalTo("assetId", id) }
-                    } else {
-                        assetBalance?.balance = 0
-                        assetBalance?.save()
+                    assetBalance.notNull {
+                        if (AssetBalance.isGateway(it.assetId)) {
+                            it.balance = 0
+                            it.save()
+                        } else {
+                            it.delete { equalTo("assetId", id) }
+                        }
                     }
                 }
             }
