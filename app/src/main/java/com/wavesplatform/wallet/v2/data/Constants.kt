@@ -93,33 +93,7 @@ object Constants {
         const val FULL_GONE = 0f
     }
 
-    val alphabetColor = mutableListOf(
-            R.color.a,
-            R.color.b,
-            R.color.c,
-            R.color.d,
-            R.color.e,
-            R.color.f,
-            R.color.g,
-            R.color.h,
-            R.color.i,
-            R.color.j,
-            R.color.k,
-            R.color.l,
-            R.color.m,
-            R.color.n,
-            R.color.o,
-            R.color.p,
-            R.color.q,
-            R.color.r,
-            R.color.s,
-            R.color.t,
-            R.color.u,
-            R.color.v,
-            R.color.w,
-            R.color.x,
-            R.color.y,
-            R.color.z)
+    val alphabetColor: IntArray = App.getAppContext().resources.getIntArray(R.array.abc_colors)
 
     val wavesAssetInfo = AssetInfo(id = WAVES_ASSET_ID_EMPTY, precision = 8, name = "WAVES", quantity = 10000000000000000L)
 
