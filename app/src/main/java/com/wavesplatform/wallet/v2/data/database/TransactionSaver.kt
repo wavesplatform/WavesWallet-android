@@ -19,6 +19,7 @@ import com.wavesplatform.wallet.v2.data.model.db.TransferDb
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.util.RxEventBus
 import com.wavesplatform.sdk.utils.TransactionUtil.Companion.getTransactionType
+import com.wavesplatform.wallet.App
 import com.wavesplatform.wallet.v2.util.WavesWallet
 import io.reactivex.disposables.CompositeDisposable
 import pyxis.uzuki.live.richutilskt.utils.runAsync
@@ -252,7 +253,7 @@ class TransactionSaver @Inject constructor() {
     }
 
     private fun loadAliasAddress(alias: String?, listener: (String?) -> Unit) {
-        if (App.getAccessManager().getWallet() != null) {
+        if (App.getAccessManager().isAuthenticated()) {
             alias.notNull {
                 subscriptions.add(apiDataManager.loadAlias(it)
                         .compose(RxUtil.applyObservableDefaultSchedulers())

@@ -25,6 +25,7 @@ import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.v2.data.model.service.coinomat.XRateResponse
 import com.wavesplatform.sdk.utils.*
 import com.wavesplatform.wallet.R
+import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
@@ -81,7 +82,7 @@ class SendActivity : BaseActivity(), SendView {
         setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title),
                 R.drawable.ic_toolbar_back_black)
-        presenter.feeAsset = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)
+        presenter.feeAsset = find(WavesConstants.WAVES_ASSET_ID_EMPTY)
         checkRecipient(edit_address.text.toString())
 
         setupCommissionBlock()

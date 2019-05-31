@@ -145,6 +145,13 @@ class EnvironmentManager(var current: ClientEnvironment) {
                             BiFunction { conf: GlobalConfigurationResponse, time: UtilsTimeResponse ->
                                 return@BiFunction Pair(conf, time)
                             })
+                            .onErrorReturn {
+                                Timber.e(it, "EnvironmentManager: Can't download global configuration!")
+                                val time = currentTimeMillis + PreferenceManager
+                                        .getDefaultSharedPreferences(App.getAppContext())
+                                        .getLong(GLOBAL_CURRENT_TIME_CORRECTION, 0L)
+                                Pair(environment.configuration, UtilsTimeResponse(time, time))
+                            }
                             .map { pair ->
                                 val timeCorrection = pair.second.ntp - currentTimeMillis
                                 setTimeCorrection(timeCorrection)

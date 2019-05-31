@@ -13,6 +13,7 @@ import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.util.WavesWallet
+import com.wavesplatform.wallet.v2.util.isGateway
 
 class ClearAssetsHelper {
     companion object {
@@ -42,13 +43,13 @@ class ClearAssetsHelper {
 
             // filter unimportant assets
             val allUnimportantAssets = assets.filter { asset ->
-                !asset.isWaves() && !AssetBalance.isGateway(asset.assetId) && !asset.isFavorite
+                !asset.isWaves() && !isGateway(asset.assetId) && !asset.isFavorite
                         && !asset.isMyWavesToken(WavesWallet.getAddress())
             }
 
             // filter general assets with zero balance
             val generalAssetsWithZeroBalance = assets.filter { asset ->
-                AssetBalance.isGateway(asset.assetId) && !asset.isWaves() && !asset.isFavorite && asset.balance == 0L
+                isGateway(asset.assetId) && !asset.isWaves() && !asset.isFavorite && asset.balance == 0L
             }
 
             // merge two list, clear and save

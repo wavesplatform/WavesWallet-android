@@ -106,12 +106,16 @@ class MoneyUtil private constructor() {
         }
 
         fun getUnscaledValue(amount: String?, decimals: Int): Long {
+            return getUnscaledValue(amount, decimals, RoundingMode.HALF_EVEN)
+        }
+
+        fun getUnscaledValue(amount: String?, decimals: Int, roundingMod: RoundingMode): Long {
             if (amount == null)
                 return 0L
             return try {
                 val value = get().getFormatter(decimals).parse(amount)
                 (value as? BigDecimal)?.setScale(decimals,
-                        RoundingMode.HALF_EVEN)?.unscaledValue()?.toLong() ?: 0L
+                        roundingMod)?.unscaledValue()?.toLong() ?: 0L
             } catch (ex: Exception) {
                 0L
             }

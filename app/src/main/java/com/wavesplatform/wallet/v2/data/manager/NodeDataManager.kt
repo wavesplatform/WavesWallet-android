@@ -212,7 +212,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                 if (id.isNotEmpty()) {
                     val assetBalance = queryFirst<AssetBalanceDb> { equalTo("assetId", id) }
                     assetBalance.notNull {
-                        if (AssetBalance.isGateway(it.assetId) || AssetBalance.isFiat(it.assetId)) {
+                        if (isGateway(it.assetId) || isFiat(it.assetId)) {
                             it.balance = 0
                             it.save()
                         } else {
