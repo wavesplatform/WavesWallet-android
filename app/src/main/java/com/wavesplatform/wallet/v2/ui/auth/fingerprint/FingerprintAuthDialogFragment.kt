@@ -153,8 +153,8 @@ class FingerprintAuthDialogFragment : DialogFragment() {
             handler.postDelayed({
                 context.notNull {
                     fingerPrintDialogListener?.onSuccessRecognizedFingerprint(decryptedMessage)
+                    dismissAllowingStateLoss()
                 }
-                dismissAllowingStateLoss()
             }, DELAY_TO_CHANGE_STATE)
         } catch (throwable: SecureStorageException) {
             onErrorGetKey(throwable, "decrypt")

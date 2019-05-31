@@ -307,7 +307,7 @@ class StartLeasingActivity : BaseActivity(), StartLeasingView {
 
     override fun showCommissionError() {
         text_fee_transaction.text = "-"
-        showError(R.string.common_error_commission_receiving, R.id.root)
+        showError(R.string.common_error_commission_receiving, R.id.root_view)
         progress_bar_fee_transaction.hide()
         text_fee_transaction.visiable()
         makeButtonEnableIfValid()
