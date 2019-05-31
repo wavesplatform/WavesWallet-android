@@ -82,6 +82,7 @@ class SendActivity : BaseActivity(), SendView {
         setNavigationBarColor(R.color.basic50)
         setupToolbar(toolbar_view, true, getString(R.string.send_toolbar_title),
                 R.drawable.ic_toolbar_back_black)
+        presenter.feeAsset = Constants.find(Constants.WAVES_ASSET_ID_EMPTY)
         checkRecipient(edit_address.text.toString())
 
         setupCommissionBlock()
@@ -180,13 +181,13 @@ class SendActivity : BaseActivity(), SendView {
         image_arrows.visiable()
         commission_card.click {
             val dialog = SponsoredFeeBottomSheetFragment()
-            dialog.configureData(presenter.feeAsset.assetId, presenter.feeWaves)
+            dialog.configureData(presenter.feeAsset?.assetId ?: "", presenter.feeWaves)
             dialog.onSelectedAssetListener = object : SponsoredFeeBottomSheetFragment.SponsoredAssetSelectedListener {
                 override fun onSelected(asset: AssetBalance, fee: Long) {
                     presenter.feeAsset = asset
                     presenter.fee = fee
 
-                    if (presenter.feeAsset.assetId.isWaves()) {
+                    if (presenter.feeAsset?.assetId?.isWaves() != false) {
                         text_fee_transaction.text = MoneyUtil.getScaledText(fee, asset).stripZeros()
                         commission_asset_name_text.visiable()
                     } else {
@@ -303,7 +304,8 @@ class SendActivity : BaseActivity(), SendView {
                 horizontal_amount_suggestion.gone()
                 text_amount_fee_error.text = getString(
                         R.string.send_error_you_don_t_have_enough_funds_to_pay_the_required_fees,
-                        "${getScaledAmount(presenter.fee, presenter.feeAsset.getDecimals())} ${presenter.feeAsset.getName()}",
+                        "${getScaledAmount(
+                                presenter.fee, presenter.feeAsset?.getDecimals() ?: 8)} ${presenter.feeAsset?.getName() ?: ""}",
                         presenter.gatewayCommission.toPlainString(),
                         assetBalance.getName() ?: "")
                 presenter.amount = BigDecimal.ZERO

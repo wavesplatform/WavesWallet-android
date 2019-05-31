@@ -222,8 +222,8 @@ class AssetsFragment : BaseFragment(), AssetsView {
     override fun startServiceToLoadData() {
         runOnUiThread {
             if (!isMyServiceRunning(UpdateApiDataService::class.java)) {
-                val intent = Intent(activity, UpdateApiDataService::class.java)
                 activity?.let {
+                    val intent = Intent(activity, UpdateApiDataService::class.java)
                     ContextCompat.startForegroundService(it, intent)
                 }
             }
