@@ -113,7 +113,7 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
                                 val mapDbAssets = assetsFromDb?.associateBy { it.assetId }
                                 val savedAssetPrefs = queryAll<AssetBalanceStoreDb>()
 
-                                if (assetsFromDb != null && !assetsFromDb.isEmpty()) {
+                                if (assetsFromDb != null && assetsFromDb.isNotEmpty()) {
                                     // merge db data and API data
                                     tripple.third.balances.forEachIndexed { index, assetBalance ->
                                         val dbAsset = mapDbAssets?.get(assetBalance.assetId)
@@ -211,11 +211,13 @@ class NodeDataManager @Inject constructor() : BaseDataManager() {
             offsetAsset?.forEach { id ->
                 if (id.isNotEmpty()) {
                     val assetBalance = queryFirst<AssetBalanceDb> { equalTo("assetId", id) }
-                    if (assetBalance?.isGateway == false) {
-                        assetBalance.delete { equalTo("assetId", id) }
-                    } else {
-                        assetBalance?.balance = 0
-                        assetBalance?.save()
+                    assetBalance.notNull {
+                        if (AssetBalance.isGateway(it.assetId) || AssetBalance.isFiat(it.assetId)) {
+                            it.balance = 0
+                            it.save()
+                        } else {
+                            it.delete { equalTo("assetId", id) }
+                        }
                     }
                 }
             }

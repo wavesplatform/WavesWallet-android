@@ -252,12 +252,14 @@ class TransactionSaver @Inject constructor() {
     }
 
     private fun loadAliasAddress(alias: String?, listener: (String?) -> Unit) {
-        alias.notNull {
-            subscriptions.add(apiDataManager.loadAlias(it)
-                    .compose(RxUtil.applyObservableDefaultSchedulers())
-                    .subscribe {
-                        listener.invoke(it.address)
-                    })
+        if (App.getAccessManager().getWallet() != null) {
+            alias.notNull {
+                subscriptions.add(apiDataManager.loadAlias(it)
+                        .compose(RxUtil.applyObservableDefaultSchedulers())
+                        .subscribe {
+                            listener.invoke(it.address)
+                        })
+            }
         }
     }
 

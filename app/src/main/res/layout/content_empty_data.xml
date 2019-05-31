@@ -11,12 +11,12 @@
         android:layout_gravity="center"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/image_empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:srcCompat="@drawable/ic_userimg_empty_80_multi" />
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/ic_userimg_empty_80" />
 
         <TextView
             android:id="@+id/text_empty"

@@ -25,6 +25,7 @@ enum class Language(
     DUTCH(R.drawable.ic_flag_18_nederland, R.string.choose_language_nederlands, "nl_NL", "NL", "nl"),
     HINDI(R.drawable.ic_flag_18_hindi, R.string.choose_language_hindi, "hi_IN", "HI", "hi"),
     SPANISH(R.drawable.ic_flag_18_spain, R.string.choose_language_spain, "es", "ES"),
+    FRENCH(R.drawable.ic_flag_18_france, R.string.choose_language_french, "fr", "FR"),
     PORTUGUESE(R.drawable.ic_flag_18_portugal, R.string.choose_language_portuguese, "pt_PT", "PT", "pt"),
     BRAZILIAN(R.drawable.ic_flag_18_brazil, R.string.choose_language_brazilian, "pt_BR", "BR"),
     POLISH(R.drawable.ic_flag_18_polszczyzna, R.string.choose_language_polish, "pl", "PL"),
@@ -38,20 +39,20 @@ enum class Language(
     companion object {
 
         fun getLanguagesItems(): ArrayList<LanguageItem> {
-            return Language.values().mapTo(ArrayList()) { LanguageItem(it, false) }
+            return values().mapTo(ArrayList()) { LanguageItem(it, false) }
         }
 
         fun getLanguageItemByCode(code: String): LanguageItem {
-            Language.values().forEach {
+            values().forEach {
                 if (it.code == code || it.oldCode == code) {
                     return LanguageItem(it, false)
                 }
             }
-            return LanguageItem(Language.ENGLISH, false)
+            return LanguageItem(ENGLISH, false)
         }
 
         fun getLanguageByCode(code: String): Language {
-            return Language.values().firstOrNull { it.code == code || it.oldCode == code } ?: Language.ENGLISH
+            return values().firstOrNull { it.code == code || it.oldCode == code } ?: ENGLISH
         }
 
         fun getLocale(code: String): Locale {

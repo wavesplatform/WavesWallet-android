@@ -175,6 +175,7 @@ class LeasingFragment : BaseFragment(), LeasingView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_your_address -> {
+                analytics.trackEvent(AnalyticEvents.WalletQRCardEvent)
                 launchActivity<MyAddressQRActivity>()
             }
         }

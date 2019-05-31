@@ -83,34 +83,47 @@
 
     <color name="qr_scanner_mask">#99001a39</color>
 
-    <color name="a">#38a12d</color>
-    <color name="b">#69727b</color>
-    <color name="c">#e49516</color>
-    <color name="d">#008ca7</color>
-    <color name="e">#ff5b38</color>
-    <color name="f">#ff6a00</color>
-    <color name="g">#c74124</color>
-    <color name="h">#00a78e</color>
-    <color name="i">#b01e53</color>
-    <color name="j">#e0c61b</color>
-    <color name="k">#5a81ea</color>
-    <color name="l">#72b7d2</color>
-    <color name="m">#a5b5c3</color>
-    <color name="n">#81c926</color>
-    <color name="o">#86a3bd</color>
-    <color name="p">#c1d82f</color>
-    <color name="q">#5c84a8</color>
-    <color name="r">#267e1b</color>
-    <color name="s">#fcb034</color>
-    <color name="t">#ff846a</color>
-    <color name="u">#47c1ff</color>
-    <color name="v">#00a0af</color>
-    <color name="w">#85d7c6</color>
-    <color name="x">#8a7967</color>
-    <color name="y">#26c1c9</color>
-    <color name="z">#72d28b</color>
     <color name="persist">#96bca0</color>
     <color name="overlayDark">#33001a39</color>
     <color name="no_network_msg_bg">#bd001a39</color>
+
+    <array name="abc_colors">
+        <item>#39a12c</item>
+        <item>#6a737b</item>
+        <item>#e49616</item>
+        <item>#008ca7</item>
+        <item>#ff5b38</item>
+        <item>#ff6a00</item>
+        <item>#c74124</item>
+        <item>#00a78e</item>
+        <item>#b01e53</item>
+        <item>#e0c61b</item>
+        <item>#5a81ea</item>
+        <item>#72b7d2</item>
+        <item>#a5b5c3</item>
+        <item>#81c926</item>
+        <item>#86a3bd</item>
+        <item>#c1d82f</item>
+        <item>#5c84a8</item>
+        <item>#267e1b</item>
+        <item>#fbb034</item>
+        <item>#ff846a</item>
+        <item>#47c1ff</item>
+        <item>#00a0af</item>
+        <item>#85d7c6</item>
+        <item>#8a7967</item>
+        <item>#26c1c9</item>
+        <item>#72d28b</item>
+        <item>#5B1909</item>
+        <item>#264764</item>
+        <item>#270774</item>
+        <item>#8763DE</item>
+        <item>#F04085</item>
+        <item>#1E6AFD</item>
+        <item>#FF1E43</item>
+        <item>#D3002D</item>
+        <item>#967400</item>
+        <item>#264163</item>
+    </array>
 
 </resources>

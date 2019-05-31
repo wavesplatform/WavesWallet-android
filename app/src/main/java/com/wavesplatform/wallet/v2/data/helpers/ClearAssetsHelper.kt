@@ -42,13 +42,13 @@ class ClearAssetsHelper {
 
             // filter unimportant assets
             val allUnimportantAssets = assets.filter { asset ->
-                !asset.isWaves() && !asset.isGateway && !asset.isFavorite
+                !asset.isWaves() && !AssetBalance.isGateway(asset.assetId) && !asset.isFavorite
                         && !asset.isMyWavesToken(WavesWallet.getAddress())
             }
 
             // filter general assets with zero balance
             val generalAssetsWithZeroBalance = assets.filter { asset ->
-                asset.isGateway && !asset.isWaves() && !asset.isFavorite && asset.balance == 0L
+                AssetBalance.isGateway(asset.assetId) && !asset.isWaves() && !asset.isFavorite && asset.balance == 0L
             }
 
             // merge two list, clear and save

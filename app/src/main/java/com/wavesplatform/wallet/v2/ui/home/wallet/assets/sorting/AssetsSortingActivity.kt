@@ -20,6 +20,8 @@ import com.wavesplatform.sdk.net.model.response.AssetBalanceResponse
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.AssetSortingItem
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AssetBalanceStoreDb
 import com.wavesplatform.wallet.v2.data.model.local.TabItem
@@ -250,6 +252,19 @@ class AssetsSortingActivity : BaseActivity(), AssetsSortingView {
             presenter.visibilityConfigurationActive = position == TYPE_VISIBILITY
         }
         adapter.notifyDataSetChanged()
+
+        logAnalyticEvents(position)
+    }
+
+    private fun logAnalyticEvents(position: Int) {
+        when (position) {
+            TYPE_POSITION -> {
+                analytics.trackEvent(AnalyticEvents.WalletTokenSortingPositionEvent)
+            }
+            TYPE_VISIBILITY -> {
+                analytics.trackEvent(AnalyticEvents.WalletTokenSortingVisabilityEvent)
+            }
+        }
     }
 
     override fun onBackPressed() {

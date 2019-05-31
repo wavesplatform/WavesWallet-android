@@ -29,6 +29,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.util.PrefsUtil
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.HistoryTab
 import com.wavesplatform.wallet.v2.ui.base.view.BaseDrawerActivity
 import com.wavesplatform.wallet.v2.ui.home.dex.DexFragment
@@ -218,6 +220,7 @@ class MainActivity : BaseDrawerActivity(), MainView, TabLayout.OnTabSelectedList
 
     private fun showQuickActionDialog() {
         if (isNetworkConnected()) {
+            analytics.trackEvent(AnalyticEvents.WavesActionPanelEvent)
             val quickActionDialog = QuickActionBottomSheetFragment.newInstance()
             val ft = supportFragmentManager.beginTransaction()
             ft.add(quickActionDialog, quickActionDialog::class.java.simpleName)

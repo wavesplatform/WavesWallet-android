@@ -29,6 +29,8 @@ import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.Events
 import com.wavesplatform.wallet.v2.data.model.db.AssetBalanceDb
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.data.model.local.LeasingStatus
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
 import com.wavesplatform.wallet.v2.ui.base.view.BaseTransactionBottomSheetFragment
@@ -810,6 +812,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             textAddressAction?.text = getString(R.string.history_details_add_address)
 
             textAddressAction?.click {
+                analytics.trackEvent(AnalyticEvents.TransactionAddressSaveEvent)
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
                     putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), ""))
@@ -825,6 +828,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             textAddressAction?.text = getString(R.string.history_details_edit_address)
 
             textAddressAction?.click {
+                analytics.trackEvent(AnalyticEvents.TransactionAddressEditEvent)
                 launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
                     putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), addressBookUser.name))
@@ -861,6 +865,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             imageAddressAction?.setImageResource(R.drawable.ic_add_address_submit_300)
 
             imageAddressAction?.click {
+                analytics.trackEvent(AnalyticEvents.TransactionAddressSaveEvent)
                 launchActivity<AddAddressActivity>(AddressBookActivity.REQUEST_ADD_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
                     putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), ""))
@@ -875,6 +880,7 @@ class HistoryDetailsBottomSheetFragment : BaseTransactionBottomSheetFragment<Tra
             imageAddressAction?.setImageResource(R.drawable.ic_edit_address_submit_300)
 
             imageAddressAction?.click {
+                analytics.trackEvent(AnalyticEvents.TransactionAddressEditEvent)
                 launchActivity<EditAddressActivity>(AddressBookActivity.REQUEST_EDIT_ADDRESS) {
                     putExtra(AddressBookActivity.BUNDLE_TYPE, AddressBookActivity.SCREEN_TYPE_NOT_EDITABLE)
                     putExtra(AddressBookActivity.BUNDLE_ADDRESS_ITEM, AddressBookUserDb(textViewAddress?.text.toString(), addressBookUser.name))

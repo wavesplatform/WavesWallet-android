@@ -24,6 +24,8 @@ import com.wavesplatform.sdk.utils.notNull
 import com.wavesplatform.wallet.R
 import com.wavesplatform.wallet.v2.data.Constants
 import com.wavesplatform.wallet.v2.data.model.db.userdb.AddressBookUserDb
+import com.wavesplatform.wallet.v2.data.analytics.AnalyticEvents
+import com.wavesplatform.wallet.v2.data.analytics.analytics
 import com.wavesplatform.wallet.v2.ui.base.view.BaseActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.add.AddAddressActivity
 import com.wavesplatform.wallet.v2.ui.home.profile.address_book.edit.EditAddressActivity
@@ -97,6 +99,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as AddressBookUserDb
             if (this.adapter.screenType == AddressBookScreenType.EDIT.type) {
+                analytics.trackEvent(AnalyticEvents.ProfileAddressBookEditEvent)
                 launchActivity<EditAddressActivity>(REQUEST_EDIT_ADDRESS) {
                     putExtra(BUNDLE_ADDRESS_ITEM, item)
                     putExtra(BUNDLE_POSITION, position)
@@ -172,6 +175,7 @@ class AddressBookActivity : BaseActivity(), AddressBookView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_add_address -> {
+                analytics.trackEvent(AnalyticEvents.ProfileAddressBookAddEvent)
                 launchActivity<AddAddressActivity>(REQUEST_ADD_ADDRESS) {
                     putExtra(BUNDLE_TYPE, SCREEN_TYPE_EDITABLE)
                 }
