@@ -1,11 +1,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,7 +47,8 @@
                     android:text="@string/buy_and_sell_not_enough"
                     android:textColor="@color/error500"
                     android:textSize="12sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:visibility="visible" />
 
 
             </RelativeLayout>
@@ -121,7 +122,8 @@
                 android:layout_marginStart="14sp"
                 android:text="@string/buy_and_sell_fee_error"
                 android:textColor="@color/error500"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:visibility="visible" />
 
         </LinearLayout>
 
@@ -241,7 +243,8 @@
                     android:text="@string/buy_and_sell_required"
                     android:textColor="@color/error500"
                     android:textSize="12sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:visibility="visible" />
 
 
             </RelativeLayout>
@@ -387,8 +390,8 @@
                     android:text="@string/buy_and_sell_required"
                     android:textColor="@color/error500"
                     android:textSize="12sp"
-                    android:visibility="gone" />
-
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
 
             </RelativeLayout>
 

@@ -118,19 +118,22 @@ public class MoneyUtil {
         return getTextStripZeros(amount, 8);
     }
 
-    public static long getUnscaledValue(
-            String amount, com.wavesplatform.wallet.v2.data.model.remote.response.AssetBalance ab) {
-        return getUnscaledValue(amount, ab.getDecimals());
+    public static long getUnscaledValue(String amount, AssetBalance ab) {
+        return getUnscaledValue(amount, ab.getDecimals(), RoundingMode.HALF_EVEN);
     }
 
     public static long getUnscaledValue(String amount, int decimals) {
+        return getUnscaledValue(amount, decimals, RoundingMode.HALF_EVEN);
+    }
+
+    public static long getUnscaledValue(String amount, int decimals, RoundingMode roundingMod) {
         if (amount == null)
             return 0L;
         try {
             Number value = get().getFormatter(decimals).parse(amount);
             if (value instanceof BigDecimal) {
                 return ((BigDecimal) value).setScale(decimals,
-                        RoundingMode.HALF_EVEN).unscaledValue().longValue();
+                        roundingMod).unscaledValue().longValue();
             } else {
                 return 0L;
             }
